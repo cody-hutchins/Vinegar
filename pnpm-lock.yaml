@@ -142,8 +142,8 @@ importers:
         specifier: ^0.4.14
         version: 0.4.14
       electron:
-        specifier: github:castlabs/electron-releases#v32.2.6+wvcus
-        version: https://codeload.github.com/castlabs/electron-releases/tar.gz/0e8653a27f52686b86326ab3be0550a1a8ccabcc
+        specifier: ^32.2.6
+        version: 32.2.6
       electron-builder:
         specifier: ^26.7.0
         version: 26.7.0(electron-builder-squirrel-windows@26.7.0)
@@ -3245,9 +3245,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@https://codeload.github.com/castlabs/electron-releases/tar.gz/0e8653a27f52686b86326ab3be0550a1a8ccabcc:
-    resolution: {tarball: https://codeload.github.com/castlabs/electron-releases/tar.gz/0e8653a27f52686b86326ab3be0550a1a8ccabcc}
-    version: 32.2.6
+  electron@32.2.6:
+    resolution: {integrity: sha512-aGG1MLvWCf+ECUFBCmaCF52F8312OPAJfph2D0FSsFmlbfnJuNevZCbty2lFzsiIMtU7/QRo6d0ksbgR4s7y3w==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -11506,7 +11505,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@https://codeload.github.com/castlabs/electron-releases/tar.gz/0e8653a27f52686b86326ab3be0550a1a8ccabcc:
+  electron@32.2.6:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.19.33
