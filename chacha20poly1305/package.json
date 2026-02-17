@@ -1,0 +1,35 @@
+{
+  "name": "chacha-js",
+  "version": "2.1.1",
+  "description": "Fork of Calvin Metcalf's ChaCha20 Poly1305 auth cipher as pure Javascript only",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js | tspec"
+  },
+  "keywords": [
+    "chacha20",
+    "chacha",
+    "poly1305",
+    "cipher",
+    "hmac",
+    "crypto"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/davidwu226/chacha20poly1305.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davidwu226/chacha20poly1305/issues"
+  },
+  "homepage": "https://github.com/davidwu226/chacha20poly1305",
+  "devDependencies": {
+    "tap-spec": "^1.0.1",
+    "tape": "^3.0.3"
+  },
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "readable-stream": "^1.0.33"
+  },
+  "packageManager": "pnpm@10.29.3"
+}

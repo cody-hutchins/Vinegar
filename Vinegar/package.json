@@ -1,0 +1,219 @@
+{
+  "name": "cider",
+  "applicationId": "Cider",
+  "productName": "Cider",
+  "version": "1.6.4",
+  "description": "A new cross-platform Apple Music experience based on Electron and Vue.js written from scratch with performance in mind.",
+  "license": "AGPL-3.0",
+  "exports": "./build/index.js",
+  "main": "./build/index.js",
+  "author": "Cider Collective <development@cider.sh> (https://cider.sh)",
+  "repository": "github:cody-hutchins/Cider",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ciderapp/Cider/issues?q=is%3Aopen+is%3Aissue+label%3Abug"
+  },
+  "homepage": "https://cider.sh/",
+  "buildResources": "resources",
+  "scripts": {
+    "bootstrap": "npx -y check-engine && pnpm i",
+    "build": "tsc && lessc ./src/renderer/style.less ./src/renderer/style.css",
+    "start": "npm run build && electron ./build/index.js",
+    "dist": "npm run build && electron-builder --publish=never",
+    "dist:win": "npm run build && electron-builder --win --publish=never",
+    "dist:linux": "npm run build && electron-builder --linux --publish=never",
+    "dist:all": "npm run build && electron-builder -wl --publish=never",
+    "dist:universalNotWorking": "npm run build && electron-builder --mac --universal --publish:never",
+    "winget": "npm run build && electron-builder --win -c winget.json",
+    "msft": "npm run build && electron-builder -c msft-package.json",
+    "mstest": "npm run build && electron-builder -c msft-test.json",
+    "steamdeck": "npm run build && electron-builder --linux -c steam-deck.json",
+    "format:check": "npx prettier --check \"src/**/*.{js,json,ts,less}\"",
+    "format:write": "npx prettier --write \"src/**/*.{js,json,ts,less}\""
+  },
+  "dependencies": {
+    "@crowdin/ota-client": "^2.0.2",
+    "@electron/notarize": "^3.1.1",
+    "adm-zip": "^0.5.16",
+    "airtunes2": "workspace:*",
+    "axios": "^1.13.5",
+    "castv2-client": "workspace:*",
+    "chokidar": "^3.6.0",
+    "discord-auto-rpc": "^1.0.17",
+    "ejs": "^3.1.10",
+    "electron-log": "^5.4.3",
+    "electron-store": "^11.0.1",
+    "electron-window-state": "^5.0.3",
+    "express": "^4.22.1",
+    "get-port": "7.1.0",
+    "jimp": "^1.6.0",
+    "lastfmapi": "^0.1.1",
+    "mdns-js": "workspace:*",
+    "mpris-service": "workspace:*",
+    "music-metadata": "11.12.0",
+    "node-fetch": "^3.3.2",
+    "node-ssdp": "^4.0.1",
+    "source-map-support": "^0.5.21",
+    "ts-md5": "2.0.1",
+    "upnp-mediarenderer-client": "workspace:*",
+    "v8-compile-cache": "^2.4.0",
+    "wallpaper": "7.2.1",
+    "ws": "^8.19.0",
+    "xml2js": "^0.6.2",
+    "youtube-search-without-api-key": "^2.0.7"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/discord-rpc": "4.0.8",
+    "@types/express": "^4.17.25",
+    "@types/musickit": "workspace:*",
+    "@types/node": "^20.19.33",
+    "@types/node-ssdp": "^4.0.5",
+    "@types/upnp-mediarenderer-client": "^1.4.3",
+    "@types/ws": "^8.18.1",
+    "@types/xml2js": "^0.4.14",
+    "electron": "github:castlabs/electron-releases#v32.2.6+wvcus",
+    "electron-builder": "^26.7.0",
+    "less": "^4.5.1",
+    "prettier": "3.8.1",
+    "typescript": "^5.9.3",
+    "vue-devtools": "^5.1.4",
+    "webpack": "~5.105.2"
+  },
+  "fileAssociations": [
+    {
+      "name": "Cider",
+      "mimeType": "x-scheme-handler/ame;x-scheme-handler/itms;x-scheme-handler/itmss;x-scheme-handler/musics;x-scheme-handler/music;",
+      "schemes": [
+        "ame",
+        "cider",
+        "itms",
+        "itmss",
+        "musics",
+        "music"
+      ],
+      "protocols": [
+        "ame",
+        "cider",
+        "itms",
+        "itmss",
+        "musics",
+        "music"
+      ]
+    }
+  ],
+  "build": {
+    "electronDownload": {
+      "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
+    },
+    "appId": "cider",
+    "afterPack": "./resources/afterPack.cjs",
+    "afterSign": "./resources/notarize.cjs",
+    "protocols": [
+      {
+        "name": "Cider",
+        "schemes": [
+          "ame",
+          "cider",
+          "itms",
+          "itmss",
+          "musics",
+          "music"
+        ]
+      }
+    ],
+    "extends": null,
+    "files": [
+      "./build/**/*",
+      "./src/**/*",
+      "./resources/icons/**/*"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "synopsis": "A new look into listening and enjoying music in style and performance. ",
+      "category": "AudioVideo",
+      "icon": "cider",
+      "executableName": "cider"
+    },
+    "appx": {
+      "applicationId": "Cider",
+      "displayName": "Cider",
+      "identityName": "Cider",
+      "publisherDisplayName": "Cider Collective",
+      "backgroundColor": "transparent",
+      "setBuildNumber": true
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "license": "LICENSE",
+      "deleteAppDataOnUninstall": true,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "pkg": {
+      "installLocation": "/Applications",
+      "background": {
+        "file": "./resources/bg.png",
+        "alignment": "bottomleft"
+      },
+      "allowAnywhere": true,
+      "allowCurrentUserHome": true,
+      "allowRootDirectory": true,
+      "license": "./LICENSE",
+      "isVersionChecked": false,
+      "isRelocatable": false,
+      "overwriteAction": "upgrade"
+    },
+    "snap": {
+      "slots": [
+        {
+          "mpris": {
+            "interface": "mpris"
+          }
+        }
+      ]
+    },
+    "dmg": {
+      "background": "./resources/bg.tiff",
+      "icon": "resources/icons/icon.ico"
+    },
+    "mas": {
+      "entitlements": "./resources/entitlements.mac.plist",
+      "entitlementsInherit": "./resources/entitlements.mac.plist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "resources/icons/icon.ico"
+    },
+    "directories": {
+      "buildResources": ".",
+      "output": "dist"
+    },
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "icon": "./resources/icons/icon.icns",
+      "category": "public.app-category.music",
+      "entitlements": "./resources/entitlements.mac.plist",
+      "entitlementsInherit": "./resources/entitlements.mac.plist",
+      "darkModeSupport": true,
+      "target": [
+        "dmg"
+      ],
+      "extendInfo": {
+        "NSUserNotificationAlertStyle": "alert"
+      }
+    }
+  },
+  "electronWebpack": {
+    "devtool": "source-map"
+  },
+  "packageManager": "pnpm@10.29.3"
+}

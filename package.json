@@ -1,0 +1,27 @@
+{
+  "name": "cider-mono",
+  "version": "0.0.1",
+  "main": "app.js",
+  "scripts": {
+    "test": "pnpm --recursive test",
+    "test:unit": "pnpm --recursive test:unit",
+    "format": "pnpm prettier --write --ignore-path ./.prettierignore .",
+    "lint": "pnpm --recursive lint",
+    "lint-staged": "pnpm --recursive lint-staged",
+    "build": "pnpm --recursive build",
+    "precommit": "pnpm --recursive precommit"
+  },
+  "packageManager": "pnpm@10.29.3",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0",
+    "npm": ">=11.0.0"
+  },
+  "devDependencies": {
+    "globals": "^17.3.0",
+    "husky": "^9.1.7",
+    "knip": "^5.83.1",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3"
+  }
+}
