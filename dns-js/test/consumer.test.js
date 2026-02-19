@@ -1,5 +1,5 @@
-var Code = require('code');   // assertion library
-var Lab = require('lab');
+var Code = require('@hapi/code');   // assertion library
+var Lab = require('@hapi/lab');
 var lab = exports.lab = Lab.script();
 
 var describe = lab.describe;

@@ -21,13 +21,13 @@
   },
   "homepage": "https://github.com/mdns-js/node-dns-js",
   "dependencies": {
-    "debug": "^2.1.0",
-    "qap": "^3.1.2"
+    "debug": "^4.4.3",
+    "qap": "^3.3.1"
   },
   "devDependencies": {
-    "code": "*",
-    "eslint": "*",
-    "lab": "*",
+    "@hapi/code": "^9.0.3",
+    "eslint": "^10.0.0",
+    "@hapi/lab": "^26.0.0",
     "native-dns-packet": "0.1.1"
   },
   "packageManager": "pnpm@10.29.3"

@@ -7,9 +7,9 @@
   "main": "index.js",
   "dependencies": {
     "concat-stream": "^1.4.8",
-    "debug": "^2.1.3",
+    "debug": "^4.4.3",
     "elementtree": "~0.1.6",
-    "network-address": "^1.0.0"
+    "network-address": "^1.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const encryption_1 = require("./encryption");
-const number_1 = require("./number");
 const struct = require('python-struct');
-const crypto = require('crypto');
 class Credentials {
     constructor(uniqueIdentifier, identifier, pairingId, publicKey, encryptionKey) {
         this.uniqueIdentifier = uniqueIdentifier;

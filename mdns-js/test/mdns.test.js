@@ -1,9 +1,9 @@
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const { after, before, describe,  it } = exports.lab = Lab.script();
-const { expect } = require('code');
+const { expect } = require('@hapi/code');
 
 
-// var Code = require('code');   // assertion library
+// var Code = require('@hapi/code');   // assertion library
 // var expect = Code.expect;
 var mdns = require('../');
 

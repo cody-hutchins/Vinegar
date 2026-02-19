@@ -16,15 +16,15 @@
   },
   "main": "index.js",
   "dependencies": {
-    "debug": "^4.1.1",
+    "debug": "^4.4.3",
     "dns-js": "workspace:*",
-    "semver": "^7.2.3"
+    "semver": "^7.7.4"
   },
   "devDependencies": {
-    "code": "^5.2.4",
-    "eslint": "^5.10.0",
-    "joi": "^14.3.0",
-    "lab": "^18.0.2"
+    "@hapi/code": "^9.0.3",
+    "eslint": "^10.0.0",
+    "joi": "^18.0.2",
+    "@hapi/lab": "^26.0.0"
   },
   "scripts": {
     "pretest": "node ./bin/testversion.js",

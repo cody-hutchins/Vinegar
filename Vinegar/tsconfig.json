@@ -24,7 +24,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitThis": true,
     "skipLibCheck": true /* Skip type checking of declaration files. */,
-    "typeRoots": ["node_modules/musickit-typescript", "node_modules/@types"],
+    "typeRoots": ["node_modules/@types/musickit-js", "node_modules/@types"],
   },
   "include": ["src/**/*.ts"],
 }
