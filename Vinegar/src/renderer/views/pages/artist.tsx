@@ -1,0 +1,354 @@
+export const Component = () => {
+  Vue.component("cider-artist", {
+    template: "#cider-artist",
+    props: ["data"],
+    data: function () {
+      return {
+        topSongsExpanded: false,
+        app: this.$root,
+        headerVisible: true,
+      };
+    },
+    methods: {
+      hasAnimated() {
+        if (this.data.attributes?.editorialVideo && (this.data.attributes?.editorialVideo?.motionArtistWide16x9 || this.data.attributes?.editorialVideo?.motionArtistFullscreen16x9)) {
+          return true;
+        }
+        return false;
+      },
+      hasHero() {
+        if (this.data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
+          return this.data.attributes?.editorialArtwork?.centeredFullscreenBackground.url;
+        } else if (this.data.attributes?.editorialArtwork?.bannerUber) {
+          return this.data.attributes?.editorialArtwork?.bannerUber.url;
+        } else if (this.data.attributes?.editorialArtwork?.subscriptionHero) {
+          return this.data.attributes?.editorialArtwork?.subscriptionHero.url;
+        }
+        return false;
+      },
+      hasHeroObject() {
+        if (this.data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
+          return this.data.attributes?.editorialArtwork?.centeredFullscreenBackground;
+        } else if (this.data.attributes?.editorialArtwork?.bannerUber) {
+          return this.data.attributes?.editorialArtwork?.bannerUber;
+        } else if (this.data.attributes?.editorialArtwork?.subscriptionHero) {
+          return this.data.attributes?.editorialArtwork?.subscriptionHero;
+        }
+        return [];
+      },
+      isHeaderVisible(visible) {
+        this.headerVisible = visible;
+      },
+      async artistMenu(event) {
+        let self = this;
+        let followAction = "follow";
+        let followActions = {
+          follow: {
+            icon: "./assets/feather/plus-circle.svg",
+            name: app.getLz("action.follow"),
+            action: () => {
+              self.app.cfg.home.followedArtists.push(self.data.id);
+            },
+          },
+          unfollow: {
+            icon: "./assets/feather/x-circle.svg",
+            name: app.getLz("action.unfollow"),
+            action: () => {
+              let index = self.app.cfg.home.followedArtists.indexOf(self.data.id);
+              if (index > -1) {
+                self.app.cfg.home.followedArtists.splice(index, 1);
+              }
+            },
+          },
+        };
+        let favoriteActions = {
+          favorite: {
+            icon: "./assets/star.svg",
+            name: app.getLz("action.favorite"),
+            action: () => {
+              app.setArtistFavorite(app.artistPage.data.id, true);
+            },
+          },
+          removeFavorite: {
+            icon: "./assets/star.svg",
+            name: app.getLz("action.removeFavorite"),
+            action: () => {
+              app.setArtistFavorite(app.artistPage.data.id, false);
+            },
+          },
+        };
+        if (this.app.cfg.home.followedArtists.includes(self.data.id)) {
+          followAction = "unfollow";
+        }
+        const inFavorites = (
+          await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${app.artistPage.data.id}`, {
+            "fields[artists]": "inFavorites",
+          })
+        ).data.data[0].attributes?.inFavorites;
+        app.showMenuPanel(
+          {
+            items: [
+              {
+                icon: "./assets/feather/play.svg",
+                name: app.getLz("action.startRadio"),
+                action: () => {
+                  app.mk.setStationQueue({ artist: self.data.id }).then(() => {
+                    app.mk.play();
+                  });
+                },
+              },
+              favoriteActions[inFavorites ? "removeFavorite" : "favorite"],
+              // followActions[followAction],
+              {
+                icon: "./assets/feather/share.svg",
+                name: app.getLz("term.share"),
+                action: () => {
+                  self.app.copyToClipboard(self.data.attributes.url);
+                },
+              },
+            ],
+          },
+          event,
+        );
+      },
+      getArtistPalette(artist) {
+        if (artist["attributes"]["artwork"]) {
+          return {
+            background: "#" + artist["attributes"]["artwork"]["bgColor"],
+            color: "#" + artist["attributes"]["artwork"]["textColor1"],
+          };
+        } else {
+          return {
+            background: "#000000",
+            color: "#ffffff",
+          };
+        }
+      },
+      getTopResult() {
+        if (this.search.results["meta"]) {
+          return this.search.results[this.search.results.meta.results.order[0]]["data"][0];
+        } else {
+          return false;
+        }
+      },
+    },
+  });
+  return (
+    <div id="cider-artist">
+      <div
+        className="content-inner artist-page"
+        className="[(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9) || hasHero()) ? 'animated' : '']">
+        <div
+          className="['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"
+          key="data.id"
+          v-observe-visibility="{callback: isHeaderVisible}">
+          <animatedartwork-view
+            priority="true"
+            v-if="hasAnimated()"
+            video="data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"></animatedartwork-view>
+          <div
+            className="header-content"
+            style="pointer-events: all;">
+            <div className="row">
+              <div
+                className="col-auto"
+                style="width: auto;">
+                <div
+                  className="artist-image"
+                  v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9))&& !hasHero()">
+                  <mediaitem-artwork
+                    shadow="large"
+                    url="data.attributes.artwork ? data.attributes.artwork.url : ''"
+                    size="190"
+                    type="artists"></mediaitem-artwork>
+                  <button
+                    className="overlay-play"
+                    click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
+                            app.mk.play()
+                        })"
+                    aria-label="app.getLz('term.play')">
+                    {import("../svg/play.svg")}
+                  </button>
+                </div>
+              </div>
+              <div
+                className="col cider-flex-center artist-title"
+                className="{'artist-animation-on': (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() }"
+                style="{ 'color': '#' +hasHeroObject()?.textColor1 ?? ''}">
+                <button
+                  className="artist-play"
+                  click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
+                        app.mk.play()
+                    })"
+                  aria-label="app.getLz('term.play')">
+                  {import("../svg/play.svg")}
+                </button>
+                <h1>{data.attributes.name}</h1>
+              </div>
+            </div>
+            <button
+              className="more-btn-round favorite"
+              click="artistMenu"
+              style="pointer-events: all;"
+              aria-label="app.getLz('term.more')">
+              <div className="svg-icon"></div>
+            </button>
+            <button
+              className="more-btn-round menu"
+              click="artistMenu"
+              style="pointer-events: all;"
+              aria-label="app.getLz('term.more')">
+              <div className="svg-icon"></div>
+            </button>
+          </div>
+          <div
+            className="artworkContainer"
+            v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()">
+            <artwork-material
+              url="data.attributes.artwork.url"
+              size="190"
+              images="1"></artwork-material>
+          </div>
+          <div
+            className="artist-hero"
+            v-if="hasHero() && !hasAnimated()">
+            <mediaitem-artwork
+              shadow="none"
+              url="hasHero()"
+              size="2048"
+            />
+          </div>
+        </div>
+        <div
+          className="floating-header"
+          style="{opacity: (headerVisible ? 0 : 1),'pointer-events': (headerVisible ? 'none' : '')}">
+          <div className="row">
+            <div className="col-auto cider-flex-center">
+              <button
+                className="artist-play"
+                style="display:block;"
+                click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
+                        app.mk.play()
+                    })"
+                aria-label="app.getLz('term.play')">
+                {import("../svg/play.svg")}
+              </button>
+            </div>
+            <div className="col">
+              <h3>{data.attributes.name}</h3>
+            </div>
+            <div className="col-auto cider-flex-center">
+              <button
+                className="more-btn-round menu"
+                click="artistMenu"
+                aria-label="app.getLz('term.more')">
+                <div className="svg-icon"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="artist-body">
+          <div
+            className="arow well"
+            className="{arowb: data.views['latest-release'].data.length == 0}">
+            <div
+              className="latestRelease"
+              v-if="data.views['latest-release'].data.length != 0">
+              <h3>{app.getLz("term.latestReleases")}</h3>
+              <div style="width: auto;margin: 0 auto;">
+                <mediaitem-square
+                  kind="card"
+                  no-scale="true"
+                  v-for="song in data.views['latest-release'].data"
+                  item="song"></mediaitem-square>
+              </div>
+            </div>
+            <div
+              className="topSongs"
+              v-if="data.views['top-songs']">
+              <div className="row">
+                <div
+                  className="col"
+                  style="padding:0;">
+                  <h3>{app.getLz("term.topSongs")}</h3>
+                </div>
+                <div
+                  className="col-auto cider-flex-center"
+                  v-if="data.views['top-songs'].data.length >= 20"
+                  style="padding:0;">
+                  <button
+                    className="cd-btn-seeall"
+                    click="app.showArtistView(data.id, data.attributes.name + ' - Top Songs', 'top-songs')">
+                    {app.getLz("term.seeAll")}
+                  </button>
+                </div>
+              </div>
+              <div className="row">
+                <div
+                  className="col cider-flex-center"
+                  style="padding:0;">
+                  <div className="mediaitem-list-item__grid">
+                    <listitem-horizontal items="data.views['top-songs'].data.limit(20)"></listitem-horizontal>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row well">
+            <div className="col">
+              <template
+                v-for="(view) in data.meta.views.order"
+                v-if="(data.views[view].data.length != 0) && (view != 'latest-release') && (view != 'top-songs')">
+                <div className="row">
+                  <div className="col">
+                    <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
+                  </div>
+                  <div
+                    className="col-auto cider-flex-center"
+                    v-if="data.views[view].data.length >= 10">
+                    <button
+                      className="cd-btn-seeall"
+                      click="app.showArtistView(data.id, data.attributes.name + ' - ' + data.views[view].attributes.title, view)">
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                </div>
+                <template
+                  v-if="!((data.views[view].attributes.title ?
+                        data.views[view].attributes.title : '???').includes('Video') || (data.views[view].attributes.title ?
+                        data.views[view].attributes.title : '???').includes('More To See'))">
+                  <mediaitem-scroller-horizontal-large items="data.views[view].data.limit(10)"></mediaitem-scroller-horizontal-large>
+                </template>
+                <template v-else>
+                  <mediaitem-scroller-horizontal-mvview items="data.views[view].data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                </template>
+              </template>
+              <div className="row">
+                <div
+                  className="col"
+                  v-if="data.attributes.artistBio">
+                  <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
+                  <p v-html="data.attributes.artistBio"></p>
+                </div>
+                <div className="col">
+                  <div v-if="data.attributes.origin">
+                    <h3>{data.attributes.isGroup ? "Origin" : "Hometown"}</h3>
+                    {data.attributes.origin}
+                  </div>
+                  <div v-if="data.attributes.bornOrFormed">
+                    <h3>{data.attributes.isGroup ? "Formed" : "Born"}</h3>
+                    {data.attributes.bornOrFormed}
+                  </div>
+                  <div v-if="data.attributes.genreNames">
+                    <h3>{app.getLz("term.sortBy.genre")}</h3>
+                    {data.attributes.genreNames.join(", ")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

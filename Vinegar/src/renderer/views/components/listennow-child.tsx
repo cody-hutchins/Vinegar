@@ -1,0 +1,115 @@
+export const Component = () => {
+  Vue.component("listennow-child", {
+    template: "#listennow-child",
+    props: ["recom", "index"],
+    data: function () {
+      return {
+        isVisible: true,
+        app: this.$root,
+      };
+    },
+    methods: {
+      visibilityChanged: function (isVisible, entry) {
+        // this.isVisible = isVisible
+      },
+      showCollection: function (recom) {
+        console.debug(recom);
+        app.showCollection(recom.relationships.contents, recom.attributes.title ? recom.attributes.title.stringForDisplay : "", "listen_now");
+      },
+      navigateContent: async function (id) {
+        if (typeof id != "string") {
+          app.routeView(id);
+        } else {
+          try {
+            let a = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[albums]=${id}`);
+            let q1 = a.data?.data[0];
+            if (q1) {
+              app.routeView(q1);
+            } else {
+              let b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
+              let q2 = b.data?.data[0];
+              if (q2) {
+                app.routeView(q2);
+              } else {
+                let c = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[playlists]=${id}`);
+                let q3 = c.data?.data[0];
+                if (q3) {
+                  app.routeView(q3);
+                }
+              }
+            }
+          } catch (e) {
+            let b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
+            let q2 = b.data?.data[0];
+            if (q2) {
+              app.routeView(q2);
+            }
+          }
+        }
+      },
+    },
+  });
+  return (
+    <div id="listennow-child">
+      <div v-observe-visibility="{callback: visibilityChanged}">
+        <template v-if="isVisible && recom.attributes.display.kind != 'MusicSuperHeroShelf'">
+          <div className="row">
+            <div
+              className="col"
+              v-if="recom?.relationships['primary-content']?.data?.length > 0"
+              style="display: flex; margin-block:1rem;">
+              <div
+                click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
+                className="listennow-chip"
+                style="height: 40px;width: 40px;align-self: center;margin-right: 10px;"
+                className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type == 'artists'  }">
+                <mediaitem-artwork
+                  v-if="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork != null"
+                  url="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork?.url"
+                  size="100"></mediaitem-artwork>
+              </div>
+              <div
+                click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
+                style="width: fit-content;"
+                className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
+                <span style="opacity: 0.5; font-weight: bold;"> {recom.attributes.titleWithoutName.stringForDisplay} </span>
+                <h3 style="margin-block: 0"> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
+              </div>
+            </div>
+            <div
+              className="col"
+              v-else
+              style="display: flex; margin-block:1rem;">
+              <h3
+                click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
+                style="width: fit-content; margin-block:0;"
+                className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
+                {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
+              </h3>
+            </div>
+            <div
+              className="col-auto cider-flex-center"
+              v-if="recom.relationships.contents.data.length >= 10">
+              <button
+                className="cd-btn-seeall"
+                click="showCollection(recom)">
+                {app.getLz("term.seeAll")}
+              </button>
+            </div>
+          </div>
+          <template v-if="recom.attributes.display.kind == 'MusicCoverShelf' || recom.attributes.display.kind == 'MusicCircleCoverShelf'">
+            <mediaitem-scroller-horizontal-large items="recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-large>
+          </template>
+          <template v-else>
+            <mediaitem-scroller-horizontal-sp
+              withReason="index==0"
+              items="recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-sp>
+          </template>
+        </template>
+        <template v-else-if="recom.attributes.display.kind != 'MusicSuperHeroShelf'">
+          <div style="height:330px"></div>
+        </template>
+      </div>
+    </div>
+  );
+};

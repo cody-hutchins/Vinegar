@@ -1,0 +1,37 @@
+export const Component = () => {
+  Vue.component("mediaitem-scroller-horizontal", {
+    template: "#mediaitem-scroller-horizontal",
+    props: {
+      items: {
+        type: Array,
+        required: false,
+      },
+      kind: {
+        type: String,
+        required: false,
+        defualt: "",
+      },
+    },
+    data: function () {
+      return {
+        app: this.$root,
+      };
+    },
+    mounted() {
+      // this.$refs.horizontal.refresh()
+    },
+    methods: {},
+  });
+  return (
+    <div id="mediaitem-scroller-horizontal">
+      <vue-horizontal ref="horizontal">
+        <slot></slot>
+        <mediaitem-square
+          key="item?.id ?? ''"
+          kind="kind"
+          item="item"
+          v-for="item in items"></mediaitem-square>
+      </vue-horizontal>
+    </div>
+  );
+};

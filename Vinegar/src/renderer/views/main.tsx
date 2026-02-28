@@ -1,11 +1,4 @@
-import CiderRound from "../assets/cider-round.svg";
-import panels from "./app/panels";
-import chromeTop from "./app/chrome-top";
-import appNavigation from "./app/app-navigation";
-import chromeBottom from "./app/chrome-bottom";
-import { ReactElement } from "react";
-
-export default function App(): ReactElement {
+export const Main = () => {
   window.quasarConfig = {
     brand: {
       primary: "#fc3c44",
@@ -15,55 +8,56 @@ export default function App(): ReactElement {
     },
     loadingBar: { skipHijack: true },
   };
+
   return (
-    <div>
+    <html lang="en">
       <head>
         <link
           rel="preconnect"
           href="https://amp-api.music.apple.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://api.music.apple.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://is1-ssl.mzstatic.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://is2-ssl.mzstatic.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://is3-ssl.mzstatic.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://is4-ssl.mzstatic.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://is5-ssl.mzstatic.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://play.itunes.apple.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
         <link
           rel="preconnect"
           href="https://aod-ssl.itunes.apple.com/"
-          crossOrigin="anonymous"
+          crossorigin
         />
-        <meta charSet="UTF-8" />
+        <meta charset="UTF-8" />
         <meta
           http-equiv="X-UA-Compatible"
           content="IE=edge"
@@ -76,9 +70,9 @@ export default function App(): ReactElement {
         <link
           rel={process.env.dev ? " stylesheet" : "stylesheet/less"}
           type="text/css"
-          href={`style.${process.env.dev ? "css" : "less"}`}
+          href={`style.{(env.dev ? "css" : "less")}`}
         />
-        {/* <link rel="stylesheet/less" type="text/css" id="userTheme" href="themes/default.less"/> */}
+        {/*    <link rel="stylesheet/less" type="text/css" id="userTheme" href="themes/default.less"/> */}
         <script src="./lib/less.js"></script>
         <script src={process.env.dev ? " ./lib/vue.js" : "./lib/vue.dev.js"}></script>
         <script src="./lib/smoothscroll.js"></script>
@@ -99,8 +93,8 @@ export default function App(): ReactElement {
         <script src="./lib/resonance-audio.min.js"></script>
         <script src="./lib/stackblur.min.js"></script>
 
-        <style>
-          {```#LOADER {
+        {/* <style>
+        #LOADER {
           position: fixed;
           top: 0;
           left: 0;
@@ -121,15 +115,15 @@ export default function App(): ReactElement {
           #LOADER {
             background-color: #eee;
           }
-        }```}
-        </style>
+        }
+      </style> */}
       </head>
 
       <body
         className="notransparency"
-        onContextMenu={() => false}
-        os-release={parseInt(process.env.osRelease || "0")}
+        oncontextmenu="return false;"
         loading="1"
+        os-release={parseInt(process.env.osRelease || "0")}
         platform={process.env.platform}>
         <script src="./lib/vue-horizontal.js"></script>
         <script src="./lib/bootstrap-vue.min.js"></script>
@@ -137,80 +131,80 @@ export default function App(): ReactElement {
         <script src="./lib/sortable.min.js"></script>
         <script src="./lib/vue-observe-visibility.min.js"></script>
         <script src="./lib/vuedraggable.umd.min.js"></script>
-        {/* <script src="./lib/quasar/quasar.umd.min.js"></script> */}
+
+        {/* <script src="./lib/quasar/quasar.umd.min.js"></div>  */}
         <script
           type="module"
           src="./main/app.js"></script>
 
-        <div id="LOADER">
-          <CiderRound />
-        </div>
+        <div id="LOADER">{import("../assets/cider-round.svg")}</div>
         <div
           id="app"
-          className={getAppClasses()}
+          className="getAppClasses()"
           v-if="appVisible"
-          window-state={chrome.windowState}
-          style={getAppStyle()}
-          library-visible={chrome.sidebarCollapsed ? 0 : 1}
-          window-style={cfg.visual.directives.windowLayout}>
-          <ViewTransition name="fsModeSwitch">
-            {appMode === "player" && (
-              <div id="app-main">
-                <chromeTop />
-                <appNavigation />
-                <chromeBottom />
-              </div>
-            )}
-          </ViewTransition>
-          <ViewTransition name="fsModeSwitch">
-            {appMode === "fullscreen" && (
-              <div className="fullscreen-view-container">
-                <fullscreen-view
-                  ref="fsView"
-                  image="currentArtUrlRaw"
-                  time={mk.currentPlaybackTime - lyricOffset}
-                  lyrics="lyrics"
-                  richlyrics="richlyrics"
-                />
-              </div>
-            )}
-          </ViewTransition>
-          <ViewTransition name="fsModeSwitch">
-            {appMode === "mini" && (
-              <div className="fullscreen-view-container">
-                <mini-view
-                  image="currentArtUrlRaw"
-                  time={mk.currentPlaybackTime - lyricOffset}
-                  lyrics="lyrics"
-                  richlyrics="richlyrics"></mini-view>
-              </div>
-            )}
-          </ViewTransition>
-          <ViewTransition name="fsModeSwitch">
-            {appMode === "oobe" && (
-              <div className="fullscreen-view-container oobe">
-                <cider-oobe />
-              </div>
-            )}
-          </ViewTransition>
-          <panels />
+          window-state="chrome.windowState"
+          style="getAppStyle()"
+          library-visible="(chrome.sidebarCollapsed ? 0 : 1)"
+          window-style="cfg.visual.directives.windowLayout">
+          <transition name="fsModeSwitch">
+            <div
+              id="app-main"
+              v-show="appMode == 'player'">
+              {import("app/chrome-top")}
+              {import("app/app-navigation")}
+              {import("app/chrome-bottom")}
+            </div>
+          </transition>
+          <transition name="fsModeSwitch">
+            <div
+              className="fullscreen-view-container"
+              v-if="appMode == 'fullscreen'">
+              <fullscreen-view
+                ref="fsView"
+                image="currentArtUrlRaw"
+                time="mk.currentPlaybackTime - lyricOffset"
+                lyrics="lyrics"
+                richlyrics="richlyrics"></fullscreen-view>
+            </div>
+          </transition>
+          <transition name="fsModeSwitch">
+            <div
+              className="fullscreen-view-container"
+              v-if="appMode == 'mini'">
+              <mini-view
+                image="currentArtUrlRaw"
+                time="mk.currentPlaybackTime - lyricOffset"
+                lyrics="lyrics"
+                richlyrics="richlyrics"></mini-view>
+            </div>
+          </transition>
+          <transition name="fsModeSwitch">
+            <div
+              className="fullscreen-view-container oobe"
+              v-if="appMode == 'oobe'">
+              <cider-oobe></cider-oobe>
+            </div>
+          </transition>
+          {import("app/panels")}
           <div
             className="cursor"
-            v-if="chrome.showCursor"
-          />
+            v-if="chrome.showCursor"></div>
         </div>
 
-        {process.env.components as unknown as ReactElement[]}
+        {Object.keys(process.env.components).map((comp) => import(comp))}
 
         <script
           async
-          src="https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js"
+          src={process.env.useV3 ? "https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js" : "https://js-cdn.music.apple.com/musickit/v2/amp/musickit.js"}
           data-web-components></script>
         <script src="index.js?v=1"></script>
+
         <div id="am-musiccovershelf">
           <h1>{component.attributes.title.stringForDisplay}</h1>
         </div>
       </body>
-    </div>
+    </html>
   );
-}
+};
+
+export default Main;
