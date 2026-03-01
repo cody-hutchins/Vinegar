@@ -148,11 +148,11 @@ export const Component = () => {
             video="data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"></animatedartwork-view>
           <div
             className="header-content"
-            style="pointer-events: all;">
+            style={{ pointerEvents: all }}>
             <div className="row">
               <div
                 className="col-auto"
-                style="width: auto;">
+                style={{ width: auto }}>
                 <div
                   className="artist-image"
                   v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9))&& !hasHero()">
@@ -174,7 +174,7 @@ export const Component = () => {
               <div
                 className="col cider-flex-center artist-title"
                 className="{'artist-animation-on': (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() }"
-                style="{ 'color': '#' +hasHeroObject()?.textColor1 ?? ''}">
+                style={{ color: "#" + hasHeroObject()?.textColor1 ?? "" }}>
                 <button
                   className="artist-play"
                   click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
@@ -189,14 +189,14 @@ export const Component = () => {
             <button
               className="more-btn-round favorite"
               click="artistMenu"
-              style="pointer-events: all;"
+              style={{ pointerEvents: all }}
               aria-label="app.getLz('term.more')">
               <div className="svg-icon"></div>
             </button>
             <button
               className="more-btn-round menu"
               click="artistMenu"
-              style="pointer-events: all;"
+              style={{ pointerEvents: all }}
               aria-label="app.getLz('term.more')">
               <div className="svg-icon"></div>
             </button>
@@ -221,12 +221,12 @@ export const Component = () => {
         </div>
         <div
           className="floating-header"
-          style="{opacity: (headerVisible ? 0 : 1),'pointer-events': (headerVisible ? 'none' : '')}">
+          style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
           <div className="row">
             <div className="col-auto cider-flex-center">
               <button
                 className="artist-play"
-                style="display:block;"
+                style={{ display: "block" }}
                 click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
                         app.mk.play()
                     })"
@@ -255,7 +255,7 @@ export const Component = () => {
               className="latestRelease"
               v-if="data.views['latest-release'].data.length != 0">
               <h3>{app.getLz("term.latestReleases")}</h3>
-              <div style="width: auto;margin: 0 auto;">
+              <div style={{ width: "auto", margin: "0 auto" }}>
                 <mediaitem-square
                   kind="card"
                   no-scale="true"
@@ -269,13 +269,13 @@ export const Component = () => {
               <div className="row">
                 <div
                   className="col"
-                  style="padding:0;">
+                  style={{ padding: 0 }}>
                   <h3>{app.getLz("term.topSongs")}</h3>
                 </div>
                 <div
                   className="col-auto cider-flex-center"
                   v-if="data.views['top-songs'].data.length >= 20"
-                  style="padding:0;">
+                  style={{ padding: 0 }}>
                   <button
                     className="cd-btn-seeall"
                     click="app.showArtistView(data.id, data.attributes.name + ' - Top Songs', 'top-songs')">
@@ -286,7 +286,7 @@ export const Component = () => {
               <div className="row">
                 <div
                   className="col cider-flex-center"
-                  style="padding:0;">
+                  style={{ padding: 0 }}>
                   <div className="mediaitem-list-item__grid">
                     <listitem-horizontal items="data.views['top-songs'].data.limit(20)"></listitem-horizontal>
                   </div>

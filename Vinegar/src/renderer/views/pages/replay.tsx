@@ -76,7 +76,7 @@ export const Component = () => {
   return (
     <div id="replay-page">
       <div className="content-inner replay-page">
-        <vue-horizontal style="height: 300px;">
+        <vue-horizontal style={{ height: "300px" }}>
           <div
             className="replay-period"
             v-for="year in years"
@@ -188,7 +188,7 @@ export const Component = () => {
                 <div className="genre-count">
                   <div
                     className="genre-count-bar"
-                    style="{'width': genre.count + '%'}">
+                    style={{ width: genre.count + "%" }}>
                     {genre.count}%
                   </div>
                 </div>

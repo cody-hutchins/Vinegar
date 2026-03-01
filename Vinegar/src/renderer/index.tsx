@@ -22,41 +22,32 @@ Array.prototype.limit = function (n) {
   return this.slice(0, n);
 };
 
-Vue.component("animated-number", {
-  template: "<div style='display: inline-block;'>{{ displayNumber }}</div>",
-  props: { number: { default: 0 } },
+export const AnimatedNumber = ({ number }: { number: 0}) => {
+  let displayNumber = number ? number : 0;
+  let interval = -1;
 
-  data() {
-    return {
-      displayNumber: 0,
-      interval: false,
-    };
-  },
-
-  ready() {
-    this.displayNumber = this.number ? this.number : 0;
-  },
-
-  watch: {
+  const watch = {
     number() {
-      clearInterval(this.interval);
+      clearInterval(interval);
 
-      if (this.number == this.displayNumber) {
+      if (number == displayNumber) {
         return;
       }
 
-      this.interval = window.setInterval(() => {
-        if (this.displayNumber != this.number) {
-          var change = (this.number - this.displayNumber) / 10;
+      interval = window.setInterval(() => {
+        if (displayNumber !== number) {
+          let change = (number - displayNumber) / 10;
           change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.displayNumber = this.displayNumber + change;
+          displayNumber = displayNumber + change;
         }
       }, 20);
-    },
-  },
-});
+    }
+  };
 
-function initMusicKit() {
+  return (<div style={{display: 'inline-block'}}>{displayNumber}</div>);
+};
+
+const initMusicKit = () => {
   if (!this.responseText) {
     console.log("Using stored token");
     this.responseText = JSON.stringify({
@@ -89,7 +80,7 @@ function initMusicKit() {
   });
 }
 
-function capiInit() {
+const capiInit = () => {
   const request = new XMLHttpRequest();
   request.timeout = 5000;
   request.addEventListener("load", initMusicKit);
@@ -112,9 +103,11 @@ document.addEventListener("musickitloaded", function () {
   // MusicKit global is now defined
   capiInit();
 });
+
 window.addEventListener("drmUnsupported", function () {
   initMusicKit();
 });
+
 if ("serviceWorker" in navigator) {
   // Use the window load event to keep the page load performant
   window.addEventListener("load", () => {
@@ -122,7 +115,7 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-const getBase64FromUrl = async (url) => {
+const getBase64FromUrl = async (url: string | URL | Request) => {
   const data = await fetch(url);
   const blob = await data.blob();
   return new Promise((resolve) => {
@@ -135,15 +128,15 @@ const getBase64FromUrl = async (url) => {
   });
 };
 
-function Clone(obj) {
+const Clone = (obj: object) => {
   return JSON.parse(JSON.stringify(obj));
 }
 
-function uuidv4() {
+const uuidv4 = () => {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 }
 
-function xmlToJson(xml) {
+const xmlToJson = (xml) => {
   // Create the return object
   let obj = {};
 
@@ -183,13 +176,13 @@ function xmlToJson(xml) {
   return obj;
 }
 
-async function asyncForEach(array, callback) {
+const asyncForEach = (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
 }
 
-var checkIfScrollIsStatic = setInterval(() => {
+const checkIfScrollIsStatic = setInterval(() => {
   try {
     if (position === document.getElementsByClassName("lyric-body")[0].scrollTop) {
       clearInterval(checkIfScrollIsStatic);
@@ -200,7 +193,7 @@ var checkIfScrollIsStatic = setInterval(() => {
 }, 50);
 
 // WebGPU Console Notification
-async function webGPU() {
+const webGPU = async () => {
   try {
     const currentGPU = await navigator.gpu.requestAdapter();
     console.log("WebGPU enabled on", currentGPU.name, "with feature ID", currentGPU.features.size);
@@ -209,7 +202,7 @@ async function webGPU() {
   }
 }
 
-function isJson(item) {
+const isJson = (item) => {
   item = typeof item !== "string" ? JSON.stringify(item) : item;
 
   try {
@@ -227,7 +220,7 @@ function isJson(item) {
 
 webGPU().then();
 
-function showOobe() {
+const showOobe = () => {
   if (localStorage.getItem("music.ampwebplay.media-user-token") && localStorage.getItem("seenOOBE")) {
     return false;
   } else {

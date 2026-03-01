@@ -14,7 +14,7 @@ export const AppContent = () => {
         id="app-content"
         scrollpos="$root.chrome.contentScrollPosY"
         scrollaxis="y"
-        style="{'overflow': ($root.chrome.contentAreaScrolling ? '' : 'hidden')}">
+        style={{ overflow: $root.chrome.contentAreaScrolling ? "" : "hidden" }}>
         <div
           id="navigation-bar"
           v-if="$root.getThemeDirective('appNavigation') == 'seperate'">

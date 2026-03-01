@@ -8,7 +8,7 @@
       <div className="usermenu-body">
         <button
           className="app-sidebar-button"
-          style="width: 100%"
+          style={{ width: "100%" }}
           click="appRoute('apple-account-settings')">
           <img
             className="sidebar-user-icon"
@@ -84,7 +84,7 @@
           click="entry.onClick()">
           <span
             className="usermenu-item-icon"
-            style="right: 2.5px">
+            style={{ right: "2.5px" }}>
             {import("../svg/grid.svg")}
           </span>
           <span className="usermenu-item-name">{entry.name}</span>
@@ -94,7 +94,7 @@
           click="unauthorize()">
           <span
             className="usermenu-item-icon"
-            style="right: 2.5px">
+            style={{ right: "2.5px" }}>
             {import("../svg/log-out.svg")}
           </span>
           <span className="usermenu-item-name">{$root.getLz("term.logout")}</span>
@@ -104,7 +104,7 @@
           click="quit()">
           <span
             className="usermenu-item-icon"
-            style="right: 2.5px">
+            style={{ right: "2.5px" }}>
             {import("../svg/x.svg")}
           </span>
           <span className="usermenu-item-name">{$root.getLz("term.quit")}</span>
@@ -115,11 +115,11 @@
           click="c2offer()">
           <span
             className="usermenu-item-icon"
-            style="right: 1.5px">
+            style={{ right: "1.5px" }}>
             <img
               className="sidebar-user-icon"
               loading="lazy"
-              style="height: 16px; width: 16px"
+              style={{ height: "16px", width: "16px" }}
               src="./assets/logocut.png"
             />
           </span>

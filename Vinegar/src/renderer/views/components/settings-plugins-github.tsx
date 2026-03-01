@@ -147,7 +147,7 @@ export const Component = () => {
               <li
                 click="showRepo(repo)"
                 className="list-group-item list-group-item-dark"
-                style="{'background': (repo.id == openRepo.id) ? 'var(--keyColor)' : '', 'border-radius': '5px'}"
+                style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "", borderRadius: "5px" }}
                 v-for="repo in repos">
                 <div className="row">
                   <div className="col cider-flex-center">
@@ -172,7 +172,7 @@ export const Component = () => {
                     <div>
                       <div
                         className="svg-icon inline"
-                        style="{'--url': 'url(\'./assets/github.svg\')'}"></div>
+                        style={{ "--url": "url('./assets/github.svg')" }}></div>
                       <a
                         className="repo-url"
                         target="_blank"

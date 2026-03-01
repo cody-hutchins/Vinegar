@@ -106,7 +106,7 @@ export const Component = () => {
 
         let updateFields = document.getElementsByClassName("update-check");
         for (let i = 0; i < updateFields.length; i++) {
-          updateFields[i].style = "opacity: 0.5; pointer-events: none;";
+          updateFields[i].style = "opacity: 0.5; pointerEvents: none;";
           updateFields[i].title = "Not available on this type of build";
         }
       },
@@ -295,7 +295,7 @@ export const Component = () => {
                         <label>
                           <select
                             className="md-select"
-                            style="width:180px;"
+                            style={{ width: "180px" }}
                             v-model="$root.cfg.general.resumeOnStartupBehavior">
                             <option value="disabled">{$root.getLz("term.disabled")}</option>
                             <option value="local">{$root.getLz("settings.option.general.resumebehavior.locally")}</option>
@@ -319,7 +319,7 @@ export const Component = () => {
                         <label>
                           <select
                             className="md-select"
-                            style="width:180px;"
+                            style={{ width: "180px" }}
                             v-model="$root.cfg.general.resumeTabs.tab">
                             <option value="dynamic">{$root.getLz("settings.option.general.resumetabs.dynamic")}</option>
                             <option value="home">{$root.getLz("home.title")}</option>
@@ -475,7 +475,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template title="#">
                 <div>
                   <svg-icon
                     url="./assets/feather/headphones.svg"
@@ -498,7 +498,7 @@ export const Component = () => {
                         <label>
                           <select
                             className="md-select"
-                            style="width:180px;"
+                            style={{ width: "180px" }}
                             v-model="app.cfg.audio.quality"
                             v-on:change="changeAudioQuality">
                             {/* // <option value="">{$root.getLz('settings.header.audio.quality.hireslossless')}</option>  */}
@@ -559,7 +559,7 @@ export const Component = () => {
                     <div className="md-option-line">
                       <div
                         className="md-option-segment"
-                        style="white-space: pre-line;">
+                        style={{ whiteSpace: "pre-line" }}>
                         {$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
                         <small>{app.cfg.audio.equalizer.vibrantBass != 0 || app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
                       </div>
@@ -615,7 +615,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/zap.svg"
@@ -630,7 +630,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/style.svg"
@@ -645,7 +645,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/pen-tool.svg"
@@ -785,7 +785,7 @@ export const Component = () => {
                         <label>
                           <select
                             className="md-select"
-                            style="width:180px;"
+                            style={{ width: " 180px" }}
                             v-model="app.cfg.visual.hw_acceleration"
                             change="promptForRelaunch()">
                             <option value="default">{$root.getLz("settings.header.visual.hardwareAcceleration.default")}</option>
@@ -936,7 +936,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/plugins.svg"
@@ -951,7 +951,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/mic.svg"
@@ -1300,7 +1300,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/radio.svg"
@@ -1611,7 +1611,7 @@ export const Component = () => {
               </div>
             </b-tab>
             <b-tab>
-              <template #title>
+              <template>
                 <div>
                   <svg-icon
                     url="./assets/feather/hard-drive.svg"
@@ -1823,7 +1823,7 @@ export const Component = () => {
                         <label>
                           <select
                             className="md-select"
-                            style="width:180px;"
+                            style={{ width: "180px" }}
                             v-modelnumber="$root.cfg.libraryPrefs.pageSize"
                             type="number">
                             <option value="50">50</option>
@@ -1884,13 +1884,13 @@ export const Component = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <button className="md-btn" id='settings.option.general.updateCider.check'
-                                            click="logoutCC()" style="display: flex;align-items: center;gap: 0.4em;">
+                                            click="logoutCC()" style={{display: flex,alignItems: center,gap: 0.4em}}>
                                         {import("../svg/check.svg") }
                                         <div v>Connected</div>
                                     </button>
                                 </div>
                             </div>
-                            <div className="md-option-header" style="margin-left: -0.55em;">
+                            <div className="md-option-header" style={{marginLeft: -0.55em}}>
                                 <span>{app.cfg.connectUser.username}</span>
                                 <img src="'https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32'"
                                      alt="Discord Avatar"></img>

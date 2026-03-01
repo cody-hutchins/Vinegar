@@ -98,17 +98,17 @@ export const Main = () => {
           position: fixed;
           top: 0;
           left: 0;
-          width: 100%;
-          height: 100%;
+          width: '100%';
+          height: '100%';
           background-color: #1E1E1E;
           z-index: 99999;
           display: flex;
           justify-content: center;
-          align-items: center;
+          alignItems: center;
         }
 
         #LOADER > svg {
-          width: 128px;
+          width: '128px;
         }
 
         media (prefers-color-scheme: light) {
@@ -143,9 +143,9 @@ export const Main = () => {
           className="getAppClasses()"
           v-if="appVisible"
           window-state="chrome.windowState"
-          style="getAppStyle()"
+          style={getAppStyle()}
           library-visible="(chrome.sidebarCollapsed ? 0 : 1)"
-          window-style="cfg.visual.directives.windowLayout">
+          window-style={cfg.visual.directives.windowLayout}>
           <transition name="fsModeSwitch">
             <div
               id="app-main"

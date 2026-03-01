@@ -42,28 +42,28 @@ export const Component = () => {
               <button
                 className="playlist-item"
                 click="openEqualizer()"
-                style="width:100%;">
+                style={{ width: 100 % "" }}>
                 <div className="icon">{import("../svg/speaker.svg")}</div>
                 <div className="name">{app.getLz("term.equalizer")}</div>
               </button>
               <button
                 className="playlist-item"
                 click="openAudioControls()"
-                style="width:100%;">
+                style={{ width: 100 % "" }}>
                 <div className="icon">{import("../svg/speaker.svg")}</div>
                 <div className="name">{app.getLz("term.audioControls")}</div>
               </button>
               <button
                 className="playlist-item"
                 click="openAudioPlaybackRate()"
-                style="width:100%;">
+                style={{ width: 100 % "" }}>
                 <div className="icon">{import("../svg/speaker.svg")}</div>
                 <div className="name">{app.getLz("settings.option.audio.changePlaybackRate")}</div>
               </button>
               <button
                 className="playlist-item"
                 click="$root.openSettingsPage('audiolabs')"
-                style="width:100%;">
+                style={{ width: 100 % "" }}>
                 <div className="icon">{import("../svg/speaker.svg")}</div>
                 <div className="name">{app.getLz("settings.option.audio.audioLab")}</div>
               </button>

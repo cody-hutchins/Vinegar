@@ -69,7 +69,7 @@ export const Component = () => {
               <button
                 className="playlist-item"
                 click="app.addSelectedToNewPlaylist()"
-                style="width:100%;">
+                style={{ width: "100%" }}>
                 <div className="icon">{import("../svg/plus.svg")}</div>
                 <div className="name">{app.getLz("action.createPlaylist")}</div>
               </button>
@@ -82,12 +82,12 @@ export const Component = () => {
             <div className="modal-search">
               <div
                 className="search-input-container"
-                style="width:100%;margin: 16px 0;">
+                style={{ width: "100%", margin: "16px 0" }}>
                 <div className="search-input--icon"></div>
                 <input
                   type="search"
                   ref="searchInput"
-                  style="width:100%;"
+                  style={{ width: "100%" }}
                   spellcheck="false"
                   placeholder="app.getLz('term.search') + '...'"
                   v-model="searchQuery"

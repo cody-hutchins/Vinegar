@@ -102,18 +102,18 @@ export const Component = () => {
                 id="gradient-0">
                 <stop
                   offset="0"
-                  style="stop-color: rgba(168, 163, 163, 1)"
+                  style={{ stopColor: "rgba(168, 163, 163, 1)" }}
                 />
                 <stop
                   offset="1"
-                  style="stop-color: rgba(118, 111, 111, 1)"
+                  style={{ stopColor: "rgba(118, 111, 111, 1)" }}
                 />
               </radialGradient>
             </defs>
             <path
               d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
               fill-rule="nonzero"
-              style="stroke-miterlimit: 11; vector-effect: non-scaling-stroke; stroke-width: 31px; fill: url(#gradient-0);"
+              style={{ strokeMiterlimit: 11, vectorEffect: "non-scaling-stroke", strokeWidth: "31px", fill: "url(#gradient-0)" }}
             />
           </svg>
         </div>
@@ -134,16 +134,16 @@ export const Component = () => {
                 contextmenu="app.nowPlayingContextMenu">
                 <div className="playback-info">
                   <div className="song-name">{app.mk.nowPlayingItem["attributes"]["name"]}</div>
-                  <div style="display: inline-block; -webkit-box-orient: horizontal; white-space: nowrap; margin-top: 0.25vh; overflow: hidden; margin-bottom: 5px;">
+                  <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden", marginBottom: "5px" }}>
                     <div
                       className="item-navigate song-artist"
-                      style="display: inline-block;"
+                      style={{ display: "inline-block" }}
                       click="app.getNowPlayingItemDetailed(`artist`)">
                       {app.mk.nowPlayingItem["attributes"]["artistName"]}
                     </div>
                     <div
                       className="song-artist item-navigate"
-                      style="display: inline-block;"
+                      style={{ display: "inline-block" }}
                       click="app.getNowPlayingItemDetailed('album')">
                       {app.mk.nowPlayingItem["attributes"]["albumName"] ? " — " + app.mk.nowPlayingItem["attributes"]["albumName"] : ""}
                     </div>
@@ -152,17 +152,16 @@ export const Component = () => {
                   <div className="song-progress">
                     <div
                       className="song-duration"
-                      style="justify-content: space-between; height: 1px; margin-bottom: 1px;"
-                      style="[app.chrome.progresshover ? {'display': 'flex'} : {'display' : 'none'} ]">
-                      <p style="width: auto">{app.convertTime(app.getSongProgress())}</p>
-                      <p style="width: auto">{app.convertTime(app.mk.currentPlaybackDuration)}</p>
+                      style={{ justifyContent: "space-between", height: "1px", marginBottom: "1px", display: app.chrome.progresshover ? "flex" : "none" }}>
+                      <p style={{ width: "auto" }}>{app.convertTime(app.getSongProgress())}</p>
+                      <p style={{ width: "auto" }}>{app.convertTime(app.mk.currentPlaybackDuration)}</p>
                     </div>
 
                     <input
                       type="range"
                       step="0.01"
                       min="0"
-                      style="app.progressBarStyle()"
+                      style={app.progressBarStyle()}
                       input="app.playerLCD.desiredDuration = $event.target.value;app.playerLCD.userInteraction = true"
                       mouseup="app.mk.seekToTime($event.target.value);app.playerLCD.desiredDuration = 0;app.playerLCD.userInteraction = false"
                       max="app.mk.currentPlaybackDuration"

@@ -13,11 +13,11 @@ export const Component = () => {
   });
   return (
     <div id="remote-pair">
-      <div style="display:flex;width:100%;height:100%;padding-top: var(--navigationBarHeight);position:absolute;top:0;left:0;">
+      <div style={{ display: "flex", width: "100%", height: "100%", paddingTop: "var(--navigationBarHeight)", position: "absolute", top: 0, left: 0 }}>
         <webview
           id="foo"
           src="https://cider.sh"
-          style="display:inline-flex; width:100%;"></webview>
+          style={{ display: "inline-flex", width: "100%" }}></webview>
       </div>
     </div>
   );

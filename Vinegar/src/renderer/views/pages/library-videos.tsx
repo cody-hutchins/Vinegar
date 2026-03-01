@@ -21,7 +21,7 @@ export const Component = () => {
         <div className="row">
           <div
             className="col"
-            style="padding:0">
+            style={{ padding: 0 }}>
             <h1 className="header-text">{$root.getLz("term.videos")}</h1>
           </div>
         </div>

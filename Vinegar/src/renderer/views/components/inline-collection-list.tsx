@@ -127,7 +127,7 @@ export const Component = () => {
           </template>
           <button
             v-if="triggerEnabled"
-            style="opacity:0;height: 32px;"
+            style={{ opacity: 0, height: "32px" }}
             v-observe-visibility="{callback: visibilityChanged}">
             {this.app.getLz("term.showMore")}
           </button>

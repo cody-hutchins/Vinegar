@@ -40,7 +40,7 @@ export const ArtistChip = () => {
         <div
           className="artist-chip__image"
           v-if="image"
-          style="{backgroundColor: '#' + (artist.attributes.artwork?.bgColor ?? '000')}">
+          style={{ backgroundColor: "#" + (artist.attributes.artwork?.bgColor ?? "000") }}>
           <mediaitem-artwork
             v-if="artist.id != null"
             url="artist.attributes.artwork.url"

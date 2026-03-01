@@ -62,7 +62,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto percent">
                 <input
                   type="number"
-                  style="width: 100%; text-align: center; margin-right: 5px;"
+                  style={{ width: "100%", textAlign: "center", marginRight: "5px" }}
                   min="0"
                   step="2"
                   v-model="volume"
@@ -74,7 +74,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto percent">
                 <input
                   type="number"
-                  style="width: 100%; text-align: center; margin-right: 5px;"
+                  style={{ width: "100%", textAlign: "center", marginRight: "5px" }}
                   min="0"
                   v-model="volumeStep"
                 />
@@ -85,7 +85,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto percent">
                 <input
                   type="number"
-                  style="width: 100%; text-align: center; margin-right: 5px;"
+                  style={{ width: "100%", textAlign: "center", marginRight: "5px" }}
                   min="0"
                   v-model="maxVolume"
                 />

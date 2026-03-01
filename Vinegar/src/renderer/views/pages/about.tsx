@@ -123,16 +123,16 @@ export const Component = () => {
             <img
               src="assets/banner.png"
               alt="Cider Logo"
-              style="display:block;margin:0 auto;width: 500px;"
+              style={{ display: "block", margin: "0 auto", width: "500px" }}
             />
             <p
-              style="text-align: center"
+              style={{ textAlign: "center" }}
               id="version">
               {$root.getLz("term.version")} {$root.version}
             </p>
-            <p style="text-align: center"> {$root.getLz("about.thanks")} </p>
+            <p style={{ textAlign: "center" }}> {$root.getLz().about.thanks()} </p>
 
-            <p style="text-align: center">
+            <p style={{ textAlign: "center" }}>
               "{$root.getLz("term.appleMusic")}" - {$root.getLz("term.copyright")} © 2022{" "}
               <a
                 href="https://www.apple.com/"
@@ -175,7 +175,7 @@ export const Component = () => {
               onclick="window.open('https://discord.gg/applemusic')"
               className="md-btn sponsorBtn discordBtn">
               <img
-                style="height: 26px;"
+                style={{ height: "26px" }}
                 src="./assets/discord.svg"
               />
               {$root.getLz("term.discord")}
@@ -204,15 +204,15 @@ export const Component = () => {
                   <img src="member.avatar" />
                   <div
                     className="row"
-                    style="width:100%;">
+                    style={{ width: "100%" }}>
                     <div
                       className="col"
-                      style="text-align: left;">
+                      style={{ textAlign: "left" }}>
                       {member.name}
                     </div>
                     <div
                       className="col"
-                      style="text-align: right">
+                      style={{ textAlign: "right" }}>
                       <button
                         clickstop="window.open(member.twitter)"
                         className="social-btn"
@@ -222,8 +222,7 @@ export const Component = () => {
                           width="24"
                           height="24"
                           viewBox="0 0 24 24"
-                          fill="white"
-                          style="">
+                          fill="white">
                           <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
                         </svg>
                       </button>
@@ -242,7 +241,7 @@ export const Component = () => {
               <h3>{$root.getLz("term.contributors")}</h3>
               <img
                 className="md-contributors"
-                style="cursor:pointer;width:100%;"
+                style={{ cursor: pointer, width: "100%" }}
                 onclick="window.open('https://github.com/ciderapp/Cider/graphs/contributors')"
                 src="https://contrib.rocks/image?repo=ciderapp/Cider&columns=25"
               />

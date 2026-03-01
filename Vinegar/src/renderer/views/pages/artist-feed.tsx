@@ -98,25 +98,25 @@ export const Component = () => {
                   </button>
                   <div
                     className="spinner"
-                    style="height: 26px;"
+                    style={{ height: "26px" }}
                     v-else></div>
                 </div>
               </div>
               <vue-horizontal>
                 <div
                   v-for="artist in artists"
-                  style="margin: 6px;">
+                  style={{ margin: "6px" }}>
                   <mediaitem-square
                     item="artist"
                     kind="small"></mediaitem-square>
                   <button
                     click="unfollow(artist.id)"
                     className="md-btn md-btn-glyph"
-                    style="display:flex;">
+                    style={{ display: flex }}>
                     <div className="sidebar-icon">
                       <div
                         className="svg-icon"
-                        style="{'--url': 'url(./assets/feather/x-circle.svg)'}"></div>
+                        style={{ "--url": "url(./assets/feather/x-circle.svg)" }}></div>
                     </div>
                     {app.getLz("action.removeFavorite")}
                   </button>
@@ -136,7 +136,7 @@ export const Component = () => {
               </div>
               <div
                 className="well"
-                style="margin-top:0;">
+                style={{ marginTop: 0 }}>
                 <template v-if="artistFeed.length > 0">
                   <mediaitem-list-item
                     v-for="item in artistFeed"

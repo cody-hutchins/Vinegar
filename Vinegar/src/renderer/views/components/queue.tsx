@@ -144,7 +144,7 @@ export const Component = () => {
           <div className="col-auto cider-flex-center">
             <button
               className="autoplay"
-              style="{'background': app.mk.autoplayEnabled ? 'var(--keyColor)' : ''}"
+              style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
               click="app.mk.autoplayEnabled = !app.mk.autoplayEnabled"
               title="app.getLz('term.autoplay')"
               v-b-tooltiphover>
@@ -210,7 +210,7 @@ export const Component = () => {
         <div className="queue-footer">
           <div
             className="btn-group"
-            style="width:100%;">
+            style={{ width: "100%" }}>
             <button
               className="md-btn md-btn-small"
               className="{'md-btn-primary': (page == 'queue')}"
@@ -226,7 +226,7 @@ export const Component = () => {
           </div>
           <button
             className="md-btn md-btn-small"
-            style="width:100%;margin-top:6px;"
+            style={{ width: "100%", marginTop: "6px" }}
             v-if="queueItems.length > 1"
             click="app.mk.clearQueue();updateQueue()">
             {app.getLz("term.clearAll")}

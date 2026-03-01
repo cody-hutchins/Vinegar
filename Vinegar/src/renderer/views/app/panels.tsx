@@ -95,10 +95,10 @@ export const Component = () => {
             <div
               className="song-artist-album-content"
               v-if="mvViewMode == 'full'"
-              style="display: inline-block; -webkit-box-orient: horizontal; white-space: nowrap">
+              style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap" }}>
               <div
                 className="song-artist"
-                style="display: inline-block">
+                style={{ display: "inline-block" }}>
                 {mk.nowPlayingItem?.attributes?.artistName ?? ""}
               </div>
             </div>
@@ -109,25 +109,25 @@ export const Component = () => {
               <div
                 className="explicit-icon"
                 v-if="mk.nowPlayingItem?.attributes?.contentRating == 'explicit'"
-                style="display: inline-block"></div>
+                style={{ display: "inline-block" }}></div>
             </div>
             <div
               className="song-progress"
               v-if="mvViewMode == 'full'">
-              <p style="width: auto">{convertTime(getSongProgress())}</p>
+              <p style={{ width: "auto" }}>{convertTime(getSongProgress())}</p>
               <input
                 type="range"
                 step="0.01"
                 min="0"
-                style="progressBarStyle()"
-                style="width: 95%"
+                style={progressBarStyle()}
+                style={{ width: "95%" }}
                 input="playerLCD.desiredDuration = $event.target.value;playerLCD.userInteraction = true"
                 mouseup="mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);"
                 touchend="mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);"
                 max="mk.currentPlaybackDuration"
                 value="getSongProgress()"
               />
-              <p style="width: auto">{convertTime(mk.currentPlaybackDuration)}</p>
+              <p style={{ width: "auto" }}>{convertTime(mk.currentPlaybackDuration)}</p>
             </div>
 
             <div className="app-chrome-item display--large">
@@ -181,7 +181,7 @@ export const Component = () => {
                 <template v-else>
                   <button
                     className="playback-button--small lyrics"
-                    style="{'opacity': 0.3, 'pointer-events': 'none'}"></button>
+                    style={{ opacity: 0.3, pointerEvents: "none" }}></button>
                 </template>
               </div>
               <div

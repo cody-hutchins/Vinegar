@@ -218,7 +218,7 @@ export const Component = () => {
                   </button>
                   <div
                     className="spinner"
-                    style="height: 26px;"
+                    style={{ height: "26px" }}
                     v-else></div>
                   <button
                     className="cd-btn-seeall"
@@ -229,7 +229,7 @@ export const Component = () => {
               </div>
               <div
                 className="well artistfeed-well"
-                style="margin-top:0;">
+                style={{ marginTop: 0 }}>
                 <template v-if="artistFeed.length > 0">
                   <mediaitem-list-item
                     v-for="item in artistFeed.limit(6)"

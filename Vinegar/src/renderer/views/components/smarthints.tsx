@@ -473,13 +473,13 @@ export const Component = () => {
               <mediaitem-artwork
                 url="item.attributes.artwork ? item.attributes.artwork.url : ''"
                 size="32"
-                style="{'position': 'relative', 'z-index': '-1'}"></mediaitem-artwork>
+                style={{ position: "relative", zIndex: "-1" }}></mediaitem-artwork>
               <button
                 className="circular-play-button"
                 clickstop="playTrack(item)">
                 <div
                   className="_svg-icon"
-                  style="--icon:url(\.\/assets\/play\.svg); width: 15px;"></div>
+                  style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}></div>
               </button>
             </div>
           </div>

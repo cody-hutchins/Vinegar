@@ -54,7 +54,7 @@ export const Component = () => {
     <div id="cider-library-artists">
       <div className="content-inner library-artists-page">
         {/* <div className="row">
-                <div className="col" style="padding:0;">
+                <div className="col" style={{padding:0}}>
                     <h1 className="header-text">{$root.getLz('term.artists')}</h1>
                 </div>
 
@@ -63,14 +63,14 @@ export const Component = () => {
           <div className="list-container">
             <div
               className="col"
-              style="padding:0;">
+              style={{ padding: 0 }}>
               <div
                 className="search-input-container"
-                style="width:calc(100%-20px);margin: 16px 10px 10px 10px;">
+                style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
                 <div className="search-input--icon"></div>
                 <input
                   type="search"
-                  style="width:100%;"
+                  style={{ width: "100%" }}
                   spellcheck="false"
                   placeholder="$root.getLz('term.search') + '...'"
                   input="$root.searchLibraryArtists"
@@ -299,7 +299,7 @@ export const Component2 = () => {
           </div>
           <div
             className="info-rect"
-            style="{'padding-left': (showArtwork ? '' : '16px')}"
+            style={{ paddingLeft: showArtwork ? "" : "16px" }}
             dblclick="select">
             <div className="title text-overflow-elipsis">{item.attributes.name}</div>
           </div>

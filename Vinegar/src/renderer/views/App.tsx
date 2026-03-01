@@ -104,17 +104,17 @@ export default function App(): ReactElement {
           position: fixed;
           top: 0;
           left: 0;
-          width: 100%;
-          height: 100%;
+          width: '100%';
+          height: '100%';
           background-color: #1E1E1E;
           z-index: 99999;
           display: flex;
           justify-content: center;
-          align-items: center;
+          alignItems: center;
         }
 
         #LOADER > svg {
-          width: 128px;
+          width: '128px;
         }
 
         media (prefers-color-scheme: light) {

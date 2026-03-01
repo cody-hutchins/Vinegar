@@ -130,7 +130,7 @@ export const Component = () => {
               </div>
               <div
                 v-else
-                style="text-align: center">
+                style={{ textAlign: center }}>
                 <h3>{app.getLz("error.noResults")}</h3>
                 <p>{app.getLz("error.noResults.description")}</p>
               </div>

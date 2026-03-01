@@ -36,11 +36,11 @@ export const Component = () => {
       <div className="content-inner artist-page profile-page">
         <div
           className="artist-header"
-          style="getArtistPalette(data)">
+          style={getArtistPalette(data)}>
           <div className="row">
             <div
               className="col-sm"
-              style="width: auto;">
+              style={{ width: auto }}>
               <div className="artist-image">
                 <mediaitem-artwork
                   shadow="large"

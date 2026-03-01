@@ -132,11 +132,11 @@ export const Component = () => {
             <div className="podcasts-search">
               <div
                 className="search-input-container"
-                style="width:100%;">
+                style={{ width: "100%" }}>
                 <div className="search-input--icon"></div>
                 <input
                   type="search"
-                  style="width:100%;"
+                  style={{ width: "100%" }}
                   spellcheck="false"
                   placeholder="$root.getLz('term.search') + '...'"
                   change="searchPodcasts();librarySearch()"
@@ -303,7 +303,7 @@ export const Component = () => {
           className="{'mediaitem-selected': isselected}">
           <div
             className="info-rect"
-            style="{'padding-left':'16px'}">
+            style={{ paddingLeft: "16px" }}>
             <div className="title text-overflow-elipsis">{item.attributes.name}</div>
             <div className="subtitle text-overflow-elipsis">{item.attributes.description.standard}</div>
             <div className="subtitle text-overflow-elipsis">

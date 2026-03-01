@@ -204,7 +204,7 @@ export const Component = () => {
             clickstop="switchArtworkDisplayLayout()"
             className="artwork"
             id="artworkLCD"
-            style="position:sticky;bottom:0px">
+            style={{ position: "sticky", bottom: "0px" }}>
             <mediaitem-artwork url="$root.currentArtUrl"></mediaitem-artwork>
           </div>
         </div>

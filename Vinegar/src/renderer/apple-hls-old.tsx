@@ -65,7 +65,7 @@
                         f = c[2],
                         m = c[3];
                     let i, r;
-                    for (e = 0; e < a; e++) e < s ? i = o[e] = n[e] : (r = i, e % s == 0 ? (r = r << 8 | r >>> 24, r = d[r >>> 24] << 24 | d[r >>> 16 & 255] << 16 | d[r >>> 8 & 255] << 8 | d[255 & r], r ^= u[e / s | 0] << 24) : 6 < s && e % s == 4 && (r = d[r >>> 24] << 24 | d[r >>> 16 & 255] << 16 | d[r >>> 8 & 255] << 8 | d[255 & r]), o[e] = i = (o[e - s] ^ r) >>> 0);
+                    for (e = 0; e < a; e++) e < s ? i = o[e] = n[e] : '(r = i, e % s == 0 ? (r = r << 8 | r >>> 24, r = d[r >>> 24] << 24 | d[r >>> 16 & 255] << 16 | d[r >>> 8 & 255] << 8 | d[255 & r], r ^= u[e / s | 0] << 24) : 6 < s && e % s == 4 && (r = d[r >>> 24] << 24 | d[r >>> 16 & 255] << 16 | d[r >>> 8 & 255] << 8 | d[255 & r]), o[e] = i = (o[e - s] ^ r) >>> 0);
                     for (t = 0; t < a; t++) e = a - t, r = 3 & t ? o[e] : o[e - 4], l[t] = t < 4 || e <= 4 ? r : h[d[r >>> 24]] ^ p[d[r >>> 16 & 255]] ^ f[d[r >>> 8 & 255]] ^ m[d[255 & r]], l[t] = l[t] >>> 0
                 }
             }
@@ -6370,7 +6370,7 @@
                 var t = this.ring,
                     i = this.total,
                     r = this.count++;
-                t.length < i ? t.push(e) : t[r % i] = e
+                t.length < i ? t.push(e) : 't[r % i] = e
             }, Ys.prototype._complete = function() {
                 var e = this.destination,
                     t = this.count;
@@ -13715,7 +13715,7 @@
                 if (!e) return null;
                 this.window = e, this.overlay = t, this.loggingEnabled = i, this.foregroundStyleOptions = {
                     fontFamily: "Helvetica",
-                    fontSize: "36px",
+                    fontSize: '"36px",
                     color: "rgba(255, 255, 255, 1)",
                     textShadow: "",
                     backgroundColor: "rgba(0, 0, 0, 0)"

@@ -63,7 +63,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <select
                   className="md-select"
-                  style="width:180px;"
+                  style={{ width: "180px" }}
                   v-model="app.cfg.audio.maikiwiAudio.ciderPPE_value"
                   v-on:change="CiderAudio.hierarchical_loading()">
                   <option
@@ -84,7 +84,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <select
                   className="md-select"
-                  style="width:180px;"
+                  style={{ width: "180px" }}
                   v-model="app.cfg.audio.maikiwiAudio.opportunisticCorrection_state"
                   v-on:change="CiderAudio.hierarchical_loading()">
                   <option value="OFF">OFF</option>
@@ -118,7 +118,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <select
                   className="md-select"
-                  style="width:230px;"
+                  style={{ width: "230px" }}
                   v-model="$root.cfg.audio.maikiwiAudio.atmosphereRealizer1_value"
                   v-on:change="CiderAudio.hierarchical_loading();">
                   <option
@@ -155,7 +155,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <select
                   className="md-select"
-                  style="width:230px;"
+                  style={{ width: "230px" }}
                   v-model="$root.cfg.audio.maikiwiAudio.atmosphereRealizer2_value"
                   v-on:change="CiderAudio.hierarchical_loading();">
                   <option
@@ -192,7 +192,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <select
                   className="md-select"
-                  style="width:180px;"
+                  style={{ width: "180px" }}
                   v-model="$root.cfg.audio.maikiwiAudio.spatialProfile"
                   v-on:change="CiderAudio.hierarchical_loading();">
                   <option

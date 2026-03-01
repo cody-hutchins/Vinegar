@@ -38,7 +38,7 @@ export const Component = () => {
         <div className="row">
           <div
             className="col"
-            style="padding:0;">
+            style={{ padding: 0 }}>
             <h1 className="header-text">{$root.getLz("term.albums")}</h1>
           </div>
           <div className="col-auto">
@@ -54,14 +54,14 @@ export const Component = () => {
         <div className="album-header">
           <div
             className="col"
-            style="padding:0;">
+            style={{ padding: 0 }}>
             <div
               className="search-input-container"
-              style="width:100%;margin: 16px 0;">
+              style={{ width: "100%", margin: "16px 0" }}>
               <div className="search-input--icon"></div>
               <input
                 type="search"
-                style="width:100%;"
+                style={{ width: "100%" }}
                 spellcheck="false"
                 placeholder="$root.getLz('term.search') + '...'"
                 input="$root.searchLibraryAlbums"
@@ -125,7 +125,7 @@ export const Component = () => {
             scroll="prefs.scroll"
             scrollSelector="#app-content"
             onRangeChange="onRangeChange"
-            style="margin-bottom: 0;"
+            style={{ marginBottom: 0 }}
           />
         </div>
         <div className="well">

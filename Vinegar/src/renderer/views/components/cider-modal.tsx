@@ -65,7 +65,7 @@ export const Component = () => {
                 className="playlist-item"
                 className="{ focused: playlist.id == focused }"
                 click="addToPlaylist(playlist.id)"
-                style="width:100%;"
+                style={{ width: "100%" }}
                 v-for="playlist in playlistSorted"
                 v-if="playlist.attributes.canEdit && playlist.type != 'library-playlist-folders'">
                 <div className="icon">{import("../svg/playlist.svg")}</div>
@@ -75,12 +75,12 @@ export const Component = () => {
             <div className="modal-search">
               <div
                 className="search-input-container"
-                style="width:100%;margin: 16px 0;">
+                style={{ width: "100%", margin: "16px 0" }}>
                 <div className="search-input--icon"></div>
                 <input
                   type="search"
                   ref="searchInput"
-                  style="width:100%;"
+                  style={{ width: "100%" }}
                   spellcheck="false"
                   placeholder="app.getLz('term.search') + '...'"
                   v-model="searchQuery"

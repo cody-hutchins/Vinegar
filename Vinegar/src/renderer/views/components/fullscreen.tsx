@@ -171,21 +171,21 @@ export const Component = () => {
                 contextmenu="app.nowPlayingContextMenu">
                 <div className="playback-info">
                   <div className="song-name">{app.mk.nowPlayingItem["attributes"]["name"]}</div>
-                  <div style="display: inline-block; -webkit-box-orient: horizontal; white-space: nowrap; margin-top: 0.25vh; overflow: hidden;">
+                  <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden" }}>
                     <div
                       className="item-navigate song-artist"
-                      style="display: inline-block;"
+                      style={{ display: "inline-block" }}
                       click="app.getNowPlasssyingItemDetailed(`artist`) && app.fullscreen(false)">
                       {app.mk.nowPlayingItem["attributes"]["artistName"]}
                     </div>
                     <div
                       className="song-artist"
-                      style="display: inline-block;">
+                      style={{ display: "inline-block" }}>
                       {app.mk.nowPlayingItem["attributes"]["albumName"] ? " — " : ""}
                     </div>
                     <div
                       className="song-artist item-navigate"
-                      style="display: inline-block;"
+                      style={{ display: "inline-block" }}
                       click="app.getNowPlayingItemDetailed('album') && app.fullscreen(false)">
                       {app.mk.nowPlayingItem["attributes"]["albumName"] ? app.mk.nowPlayingItem["attributes"]["albumName"] : ""}
                     </div>
@@ -193,16 +193,15 @@ export const Component = () => {
                   <div className="song-progress">
                     <div
                       className="song-duration"
-                      style="justify-content: space-between; height: 1px;"
-                      style="[app.chrome.progresshover ? {'display': 'flex'} : {'display' : 'none'} ]">
-                      <p style="width: auto">{app.convertTime(app.getSongProgress())}</p>
-                      <p style="width: auto">{app.convertTime(app.mk.currentPlaybackDuration)}</p>
+                      style={{ justifyContent: "space-between", height: "1px", display: app.chrome.progresshover ? "flex" : "none" }}>
+                      <p style={{ width: "auto" }}>{app.convertTime(app.getSongProgress())}</p>
+                      <p style={{ width: "auto" }}>{app.convertTime(app.mk.currentPlaybackDuration)}</p>
                     </div>
                     <input
                       type="range"
                       step="0.01"
                       min="0"
-                      style="app.progressBarStyle()"
+                      style={app.progressBarStyle()}
                       input="app.playerLCD.desiredDuration = $event.target.value;app.playerLCD.userInteraction = true"
                       mouseup="app.mk.seekToTime($event.target.value);app.playerLCD.desiredDuration = 0;app.playerLCD.userInteraction = false"
                       max="app.mk.currentPlaybackDuration"

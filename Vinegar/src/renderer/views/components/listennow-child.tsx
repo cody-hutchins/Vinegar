@@ -57,11 +57,11 @@ export const Component = () => {
             <div
               className="col"
               v-if="recom?.relationships['primary-content']?.data?.length > 0"
-              style="display: flex; margin-block:1rem;">
+              style={{ display: "flex", marginBlock: "1rem" }}>
               <div
                 click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
                 className="listennow-chip"
-                style="height: 40px;width: 40px;align-self: center;margin-right: 10px;"
+                style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
                 className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type == 'artists'  }">
                 <mediaitem-artwork
                   v-if="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork != null"
@@ -70,19 +70,19 @@ export const Component = () => {
               </div>
               <div
                 click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
-                style="width: fit-content;"
+                style={{ width: "fit-content" }}
                 className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
-                <span style="opacity: 0.5; font-weight: bold;"> {recom.attributes.titleWithoutName.stringForDisplay} </span>
-                <h3 style="margin-block: 0"> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
+                <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
+                <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
               </div>
             </div>
             <div
               className="col"
               v-else
-              style="display: flex; margin-block:1rem;">
+              style={{ display: "flex", marginBlock: "1rem" }}>
               <h3
                 click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
-                style="width: fit-content; margin-block:0;"
+                style={{ width: "fit-content", marginBlock: 0 }}
                 className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
                 {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
               </h3>
@@ -107,7 +107,7 @@ export const Component = () => {
           </template>
         </template>
         <template v-else-if="recom.attributes.display.kind != 'MusicSuperHeroShelf'">
-          <div style="height:330px"></div>
+          <div style={{ height: "330px" }}></div>
         </template>
       </div>
     </div>

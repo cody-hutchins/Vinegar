@@ -600,14 +600,14 @@ export const Component = () => {
             v-if="showLibraryStatus == true">
             <div
               v-if="showInLibrary"
-              style="{display: (showInLibrary ? 'block' : 'none'), 'margin-left':'11px'}">
+              style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
               <button
                 click="addToLibrary()"
                 v-if="!addedToLibrary && (showIndex == false ||(showIndex == true && showIndexPlaylist != false))"
                 aria-label="$root.getLz('action.addToLibrary')">
                 <div
                   className="svg-icon addIcon"
-                  style="{'--color': 'var(--keyColor)', '--url': 'url(./assets/feather/plus.svg)'}"></div>
+                  style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}></div>
               </button>
               <button
                 v-else-if="!(showArtwork == true && (showIndex == false ||(showIndex == true && showIndexPlaylist != false)))"
@@ -615,19 +615,21 @@ export const Component = () => {
                 aria-label="$root.getLz('term.play')">
                 <div
                   className="svg-icon playIcon"
-                  style="{'--color': 'var(--keyColor)', '--url': 'url(./assets/feather/play.svg)'}"></div>
+                  style={{ color: "var(--keyColor)" }}>
+                  {import("./assets/feather/play.svg")}
+                </div>
               </button>
             </div>
             <div
               v-if="!(app.mk.isPlaying && (((app.mk.nowPlayingItem._songId ?? (app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id ))  == itemId) || (app.mk.nowPlayingItem.id  == item.id ))) && showIndex"
-              style="{display: ((showIndex && !showInLibrary) ? 'block' : 'none'), 'margin-left':'11px'}">
+              style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
               <div>
                 <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
               </div>
             </div>
             <div
               v-if="app.mk.isPlaying && (((app.mk.nowPlayingItem._songId ?? (app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id ))  == itemId) || (app.mk.nowPlayingItem.id == item.id))"
-              style="{display: (showInLibrary ? 'none' : 'block')}">
+              style={{ display: showInLibrary ? "none" : "block" }}>
               <div className="loadbar-sound"></div>
             </div>
           </div>
@@ -648,7 +650,7 @@ export const Component = () => {
           </div>
           <div
             className="info-rect"
-            style="{'padding-left': (showArtwork ? '' : '16px')}"
+            style={{ paddingLeft: showArtwork ? "" : "16px" }}
             dblclick="route()">
             <div
               className="title text-overflow-elipsis"
@@ -657,7 +659,7 @@ export const Component = () => {
             </div>
             <div
               className="subtitle text-overflow-elipsis"
-              style="-webkit-box-orient: horizontal;">
+              style={{ "-webkit-box-orient": "horizontal" }}>
               <template v-if="item.attributes.artistName">
                 <div
                   className="artist item-navigate text-overflow-elipsis"
@@ -678,11 +680,11 @@ export const Component = () => {
             </div>
           </div>
           <div className="heart-icon">
-            {/* <div className="heart-unfilled" v-if="isLoved == false" style="{'--url': 'url(./assets/feather/heart.svg)'}" />  */}
+            {/* <div className="heart-unfilled" v-if="isLoved == false" style={{'--url': 'url(./assets/feather/heart.svg)'}} />  */}
             <div
               className="heart-filled"
               v-if="isLoved == true"
-              style="{'--url': 'url(./assets/feather/heart-fill.svg)'}"
+              style={{ url: "url(./assets/feather/heart-fill.svg)" }}
             />
           </div>
           <div

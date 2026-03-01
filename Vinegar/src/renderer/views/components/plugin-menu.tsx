@@ -35,7 +35,7 @@ export const Component = () => {
               <span className="icon">{import("../svg/x.svg")}</span>
               <span
                 className="name"
-                style="top: 0.5px;">
+                style={{ top: "0.5px" }}>
                 {$root.getLz("term.pluginMenu.none")}
               </span>
             </span>
@@ -46,7 +46,7 @@ export const Component = () => {
               <span className="icon">{import("../svg/grid.svg")}</span>
               <span
                 className="name"
-                style="top: 0.5px;">
+                style={{ top: "0.5px" }}>
                 {entry.name}
               </span>
             </button>

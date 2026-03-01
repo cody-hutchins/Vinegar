@@ -91,7 +91,7 @@ export const Component = () => {
         let style = {};
         if (item["disabled"]) {
           style = Object.assign(style, {
-            "pointer-events": "none",
+            pointerEvents: "none",
             opacity: "0.5",
           });
         }
@@ -129,7 +129,7 @@ export const Component = () => {
         <div
           className="menu-panel-body"
           ref="menubody"
-          style="elStyle"
+          style={{ elStyle }}
           className="getBodyClasses()">
           <div
             className="menu-header-text"
@@ -150,15 +150,15 @@ export const Component = () => {
                 v-b-tooltiphover
                 title="item.name"
                 v-if="canDisplay(item)"
-                style="getItemStyle(item)"
+                style={getItemStyle(item)}
                 click="action(item)">
                 <div
                   className="sidebar-icon"
-                  style="margin: 0;"
+                  style={{ margin: 0 }}
                   v-if="item.icon">
                   <div
                     className="svg-icon"
-                    style="{'--url': 'url(' + item.icon + ')'}"></div>
+                    style={{ "--url": "url(" + item.icon + ")" }}></div>
                 </div>
               </button>
             </template>
@@ -168,14 +168,14 @@ export const Component = () => {
               <button
                 className="menu-option"
                 v-if="canDisplay(item)"
-                style="getItemStyle(item)"
+                style={getItemStyle(item)}
                 click="action(item)">
                 <div
                   className="sidebar-icon"
                   v-if="item.icon">
                   <div
                     className="svg-icon"
-                    style="{'--url': 'url(' + item.icon + ')'}"></div>
+                    style={{ "--url": "url(" + item.icon + ")" }}></div>
                 </div>
                 {item.name}
               </button>

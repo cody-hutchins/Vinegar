@@ -440,14 +440,11 @@ export const Component = () => {
           <template v-if="app.playlists.loadingState == 1">
             <div
               className="playlist-display"
-              style="{
-                '--bgColor': (data.attributes.artwork != null && data.attributes.artwork['bgColor'] != null) ? ('#' + data.attributes.artwork.bgColor) : '',
-                '--textColor': (data.attributes.artwork != null && data.attributes.artwork['textColor1'] != null) ? ('#' + data.attributes.artwork.textColor1) : ''
-            }">
+              style={{ bgColor: data.attributes.artwork != null && data.attributes.artwork["bgColor"] != null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork != null && data.attributes.artwork["textColor1"] != null ? "#" + data.attributes.artwork.textColor1 : "" }}>
               <div className="playlistInfo">
                 <div className="row">
                   <div className="col-auto cider-flex-center">
-                    <div style="width: 260px;height:260px;">
+                    <div style={{ width: "260px", height: "260px" }}>
                       <mediaitem-artwork
                         shadow="large"
                         video-priority="true"
@@ -480,7 +477,7 @@ export const Component = () => {
                         </div>
                         <div
                           className="playlist-time genre"
-                          style="margin: 0px;">
+                          style={{ margin: "0px" }}>
                           {getAlbumGenre()}
                         </div>
                         <div
@@ -530,21 +527,21 @@ export const Component = () => {
                       v-observe-visibility="{callback: isHeaderVisible}">
                       <button
                         className="md-btn md-btn-primary md-btn-icon"
-                        style="min-width: 100px;"
+                        style={{ minWidth: "100px" }}
                         click="app.mk.shuffleMode = 0; play()">
                         <img className="md-ico-play" />
                         {app.getLz("term.play")}
                       </button>
                       <button
                         className="md-btn md-btn-primary md-btn-icon"
-                        style="min-width: 100px;"
+                        style={{ minWidth: "100px" }}
                         click="app.mk.shuffleMode = 1;play()">
                         <img className="md-ico-shuffle" />
                         {app.getLz("term.shuffle")}
                       </button>
                       <button
                         className="md-btn md-btn-icon"
-                        style="min-width: 180px;"
+                        style={{ minWidth: "180px" }}
                         v-if="inLibrary!=null && confirm!=true"
                         click="confirmButton()">
                         <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -552,7 +549,7 @@ export const Component = () => {
                       </button>
                       <button
                         className="md-btn md-btn-icon"
-                        style="min-width: 180px;"
+                        style={{ minWidth: "180px" }}
                         v-if="confirm==true"
                         click="(!inLibrary) ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()) ">
                         <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -560,7 +557,7 @@ export const Component = () => {
                       </button>
                       <button
                         className="more-btn-round"
-                        style="float:right;"
+                        style={{ float: "right" }}
                         click="menu"
                         aria-label="app.getLz('term.more')">
                         <div className="svg-icon"></div>
@@ -580,7 +577,7 @@ export const Component = () => {
             </div>
             <div
               className="floating-header"
-              style="{opacity: (headerVisible ? 0 : 1),'pointer-events': (headerVisible ? 'none' : '')}">
+              style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
               <div className="row">
                 <div className="col">
                   <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
@@ -589,21 +586,21 @@ export const Component = () => {
                   <div>
                     <button
                       className="md-btn md-btn-primary  md-btn-icon"
-                      style="min-width: 100px;"
+                      style={{ minWidth: "100px" }}
                       click="app.mk.shuffleMode = 0; play()">
                       <img className="md-ico-play" />
                       {app.getLz("term.play")}
                     </button>
                     <button
                       className="md-btn md-btn-primary  md-btn-icon"
-                      style="min-width: 100px;"
+                      style={{ minWidth: "100px" }}
                       click="app.mk.shuffleMode = 1;play()">
                       <img className="md-ico-shuffle" />
                       {app.getLz("term.shuffle")}
                     </button>
                     <button
                       className="md-btn md-btn-icon"
-                      style="min-width: 180px;"
+                      style={{ minWidth: "180px" }}
                       v-if="inLibrary!=null && confirm!=true"
                       click="confirmButton()">
                       <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -611,7 +608,7 @@ export const Component = () => {
                     </button>
                     <button
                       className="md-btn md-btn-icon"
-                      style="min-width: 180px;"
+                      style={{ minWidth: "180px" }}
                       v-if="confirm==true"
                       click="(!inLibrary) ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()) ">
                       <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -622,7 +619,7 @@ export const Component = () => {
                 <div className="col-auto cider-flex-center">
                   <button
                     className="more-btn-round"
-                    style="float:right;"
+                    style={{ float: "right" }}
                     click="menu"
                     aria-label="term.more">
                     <div className="svg-icon"></div>
@@ -637,7 +634,7 @@ export const Component = () => {
                 content-className="mt-3">
                 <b-tab title="Tracks">
                   <div className="">
-                    <div style="width:100%">
+                    <div style={{ width: "100%" }}>
                       <draggable
                         sort="data.attributes.canEdit && data.type == 'library-playlists'"
                         v-model="data.relationships.tracks.data"
@@ -693,13 +690,13 @@ export const Component = () => {
                   <div
                     className="playlist-time item-navigate"
                     click="app.searchAndNavigate(data,'recordLabel') "
-                    style="width: 50%;">
+                    style={{ width: "50%" }}>
                     {data.attributes.copyright}
                   </div>
                   <template v-if="(data.attributes?.playParams?.kind ?? data.type ?? '').includes('album') &&  data.relationships.catalog != null && data.relationships.catalog != null && data.relationships.catalog.data.length > 0">
                     <div
                       className="playlist-time showExtended item-navigate"
-                      style="color:#fa586a; font-weight: bold"
+                      style={{ color: "#fa586a", fontWeight: "bold" }}
                       click="app.routeView(data.relationships.catalog.data[0])">
                       {$root.getLz("action.showAlbum")}
                     </div>

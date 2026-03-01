@@ -186,7 +186,7 @@ export const Component = () => {
         </div>
         <div
           className="info-rect"
-          style="{'padding-left': (showArtwork ? '' : '16px')}"
+          style={{ paddingLeft: showArtwork ? "" : "16px" }}
           dblclick="app.routeView(item)">
           <div className="title text-overflow-elipsis">{item.attributes.name}</div>
         </div>

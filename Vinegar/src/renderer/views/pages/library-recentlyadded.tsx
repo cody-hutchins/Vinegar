@@ -79,7 +79,7 @@ export const Component = () => {
         </div>
         <button
           v-if="nextUrl && !loading"
-          style="opacity:0;height: 32px;"
+          style={{ opacity: 0, height: "32px" }}
           v-observe-visibility="{callback: visibilityChanged}">
           {$root.getLz("term.showMore")}
         </button>

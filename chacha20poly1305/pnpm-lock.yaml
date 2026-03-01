@@ -1,0 +1,236 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      inherits:
+        specifier: ^2.0.1
+        version: 2.0.4
+      readable-stream:
+        specifier: ^1.0.33
+        version: 1.1.14
+    devDependencies:
+      tap-spec:
+        specifier: ^1.0.1
+        version: 1.0.1
+      tape:
+        specifier: ^3.0.3
+        version: 3.6.1
+
+packages:
+
+  ansi-regex@0.2.1:
+    resolution: {integrity: sha512-sGwIGMjhYdW26/IhwK2gkWWI8DRCVO6uj3hYgHT+zD+QL1pa37tM3ujhyfcJIYSbsxp7Gxhy7zrRW/1AHm4BmA==}
+    engines: {node: '>=0.10.0'}
+
+  ansi-styles@1.1.0:
+    resolution: {integrity: sha512-f2PKUkN5QngiSemowa6Mrk9MPCdtFiOSmibjZ+j1qhLGHHYsqZwmBMRF3IRMVXo8sybDqx2fJl2d/8OphBoWkA==}
+    engines: {node: '>=0.10.0'}
+
+  chalk@0.5.1:
+    resolution: {integrity: sha512-bIKA54hP8iZhyDT81TOsJiQvR1gW+ZYSXFaZUAvoD4wCHdbHY2actmpTE4x344ZlFqHbvoxKOaESULTZN2gstg==}
+    engines: {node: '>=0.10.0'}
+
+  core-util-is@1.0.3:
+    resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
+
+  deep-equal@0.2.2:
+    resolution: {integrity: sha512-FXgye2Jr6oEk01S7gmSrHrPEQ1ontR7wwl+nYiZ8h4SXlHVm0DYda74BIPcHz2s2qPz4+375IcAz1vsWLwddgQ==}
+
+  defined@0.0.0:
+    resolution: {integrity: sha512-zpqiCT8bODLu3QSmLLic8xJnYWBFjOSu/fBCm189oAiTtPq/PSanNACKZDS7kgSyCJY7P+IcODzlIogBK/9RBg==}
+
+  duplexer@0.1.2:
+    resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
+
+  escape-string-regexp@1.0.5:
+    resolution: {integrity: sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==}
+    engines: {node: '>=0.8.0'}
+
+  glob@3.2.11:
+    resolution: {integrity: sha512-hVb0zwEZwC1FXSKRPFTeOtN7AArJcJlI6ULGLtrstaswKNlrTJqAA+1lYlSUop4vjA423xlBzqfVS3iWGlqJ+g==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+  has-ansi@0.1.0:
+    resolution: {integrity: sha512-1YsTg1fk2/6JToQhtZkArMkurq8UoWU1Qe0aR3VUHjgij4nOylSWLWAtBXoZ4/dXOmugfLGm1c+QhuD0JyedFA==}
+    engines: {node: '>=0.10.0'}
+    hasBin: true
+
+  inherits@2.0.4:
+    resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+
+  isarray@0.0.1:
+    resolution: {integrity: sha512-D2S+3GLxWH+uhrNEcoh/fnmYeP8E8/zHl644d/jdA0g2uyXvy3sb0qxotE+ne0LtccHknQzWwZEzhak7oJ0COQ==}
+
+  lru-cache@2.7.3:
+    resolution: {integrity: sha512-WpibWJ60c3AgAz8a2iYErDrcT2C7OmKnsWhIcHOjkUHFjkXncJhtLxNSqUmxRxRunpb5I8Vprd7aNSd2NtksJQ==}
+
+  minimatch@0.3.0:
+    resolution: {integrity: sha512-WFX1jI1AaxNTZVOHLBVazwTWKaQjoykSzCBNXB72vDTCzopQGtyP91tKdFK5cv1+qMwPyiTu1HqUriqplI8pcA==}
+    deprecated: Please update to minimatch 3.0.2 or higher to avoid a RegExp DoS issue
+
+  minimist@0.2.4:
+    resolution: {integrity: sha512-Pkrrm8NjyQ8yVt8Am9M+yUt74zE3iokhzbG1bFVNjLB92vwM71hf40RkEsryg98BujhVOncKm/C1xROxZ030LQ==}
+
+  object-inspect@0.4.0:
+    resolution: {integrity: sha512-8WvkvUZiKAjjsy/63rJjA7jw9uyF0CLVLjBKEfnPHE3Jxvs1LgwqL2OmJN+LliIX1vrzKW+AAu02Cc+xv27ncQ==}
+
+  readable-stream@1.0.34:
+    resolution: {integrity: sha512-ok1qVCJuRkNmvebYikljxJA/UEsKwLl2nI1OmaqAu4/UE+h0wKCHok4XkL/gvi39OacXvw59RJUOFUkDib2rHg==}
+
+  readable-stream@1.1.14:
+    resolution: {integrity: sha512-+MeVjFf4L44XUkhM1eYbD8fyEsxcV81pqMSR5gblfcLCHfZvbrqy4/qYHE+/R5HoBUT11WV5O08Cr1n3YXkWVQ==}
+
+  resumer@0.0.0:
+    resolution: {integrity: sha512-Fn9X8rX8yYF4m81rZCK/5VmrmsSbqS/i3rDLl6ZZHAXgC2nTAx3dhwG8q8odP/RmdLa2YrybDJaAMg+X1ajY3w==}
+
+  sigmund@1.0.1:
+    resolution: {integrity: sha512-fCvEXfh6NWpm+YSuY2bpXb/VIihqWA6hLsgboC+0nl71Q7N7o2eaCW8mJa/NLvQhs6jpd3VZV4UiUQlV6+lc8g==}
+
+  string_decoder@0.10.31:
+    resolution: {integrity: sha512-ev2QzSzWPYmy9GuqfIVildA4OdcGLeFZQrq5ys6RtiuF+RQQiZWr8TZNyAcuVXyQRYfEO+MsoB/1BuQVhOJuoQ==}
+
+  strip-ansi@0.3.0:
+    resolution: {integrity: sha512-DerhZL7j6i6/nEnVG0qViKXI0OKouvvpsAiaj7c+LfqZZZxdwZtv8+UiA/w4VUJpT8UzX0pR1dcHOii1GbmruQ==}
+    engines: {node: '>=0.10.0'}
+    hasBin: true
+
+  supports-color@0.2.0:
+    resolution: {integrity: sha512-tdCZ28MnM7k7cJDJc7Eq80A9CsRFAAOZUy41npOZCs++qSjfIy7o5Rh46CBk+Dk5FbKJ33X3Tqg4YrV07N5RaA==}
+    engines: {node: '>=0.10.0'}
+    hasBin: true
+
+  tap-parser@0.7.0:
+    resolution: {integrity: sha512-eg6Vt2kTjxJyjrt1luqrMD6jbOM2W5MCZ53ci6+9K97f/aQFI0R/01l70hTES66fTuqhMkNQQGjZESz+/7wsGA==}
+    hasBin: true
+
+  tap-spec@1.0.1:
+    resolution: {integrity: sha512-Z5PXSd4T+IrsG4QzvrpA2I8DXFOFC12AZhBjVUHrhw6T1HD0iVhNNXV//5+w/5OFzYKbmQhqs1CBQ8wvOTRFQw==}
+    hasBin: true
+
+  tape@3.6.1:
+    resolution: {integrity: sha512-Qy+shSMwr+bg5NwJhrdCKNOS7BEoo/SEjE+dF4a2OYR73f6ocH5ioLIHE6TuttjONmR3HYlOXwSqFTxUDFJtGg==}
+    hasBin: true
+
+  through2@0.6.5:
+    resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
+
+  through@2.3.8:
+    resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
+
+  xtend@4.0.2:
+    resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
+    engines: {node: '>=0.4'}
+
+snapshots:
+
+  ansi-regex@0.2.1: {}
+
+  ansi-styles@1.1.0: {}
+
+  chalk@0.5.1:
+    dependencies:
+      ansi-styles: 1.1.0
+      escape-string-regexp: 1.0.5
+      has-ansi: 0.1.0
+      strip-ansi: 0.3.0
+      supports-color: 0.2.0
+
+  core-util-is@1.0.3: {}
+
+  deep-equal@0.2.2: {}
+
+  defined@0.0.0: {}
+
+  duplexer@0.1.2: {}
+
+  escape-string-regexp@1.0.5: {}
+
+  glob@3.2.11:
+    dependencies:
+      inherits: 2.0.4
+      minimatch: 0.3.0
+
+  has-ansi@0.1.0:
+    dependencies:
+      ansi-regex: 0.2.1
+
+  inherits@2.0.4: {}
+
+  isarray@0.0.1: {}
+
+  lru-cache@2.7.3: {}
+
+  minimatch@0.3.0:
+    dependencies:
+      lru-cache: 2.7.3
+      sigmund: 1.0.1
+
+  minimist@0.2.4: {}
+
+  object-inspect@0.4.0: {}
+
+  readable-stream@1.0.34:
+    dependencies:
+      core-util-is: 1.0.3
+      inherits: 2.0.4
+      isarray: 0.0.1
+      string_decoder: 0.10.31
+
+  readable-stream@1.1.14:
+    dependencies:
+      core-util-is: 1.0.3
+      inherits: 2.0.4
+      isarray: 0.0.1
+      string_decoder: 0.10.31
+
+  resumer@0.0.0:
+    dependencies:
+      through: 2.3.8
+
+  sigmund@1.0.1: {}
+
+  string_decoder@0.10.31: {}
+
+  strip-ansi@0.3.0:
+    dependencies:
+      ansi-regex: 0.2.1
+
+  supports-color@0.2.0: {}
+
+  tap-parser@0.7.0:
+    dependencies:
+      inherits: 2.0.4
+      minimist: 0.2.4
+      readable-stream: 1.1.14
+
+  tap-spec@1.0.1:
+    dependencies:
+      chalk: 0.5.1
+      duplexer: 0.1.2
+      tap-parser: 0.7.0
+      through2: 0.6.5
+
+  tape@3.6.1:
+    dependencies:
+      deep-equal: 0.2.2
+      defined: 0.0.0
+      glob: 3.2.11
+      inherits: 2.0.4
+      object-inspect: 0.4.0
+      resumer: 0.0.0
+      through: 2.3.8
+
+  through2@0.6.5:
+    dependencies:
+      readable-stream: 1.0.34
+      xtend: 4.0.2
+
+  through@2.3.8: {}
+
+  xtend@4.0.2: {}

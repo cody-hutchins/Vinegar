@@ -341,7 +341,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <select
                 className="md-select"
-                style="width:220px;text-align:center;margin-right:245px"
+                style={{ width: "220px", textAlign: "center", marginRight: "245px" }}
                 v-model="$root.cfg.audio.equalizer.preset"
                 v-on:change="changePreset($root.cfg.audio.equalizer.preset)">
                 <optgroup label="$root.getLz('term.userPresets')">
@@ -854,7 +854,7 @@ export const Component = () => {
               <div className="col">
                 <button
                   className="md-btn"
-                  style="width:100%"
+                  style={{ width: "100%" }}
                   click="resetGain()">
                   {$root.getLz("term.reset")}
                 </button>
@@ -862,7 +862,7 @@ export const Component = () => {
               <div className="col">
                 <button
                   className="md-btn"
-                  style="width:100%"
+                  style={{ width: "100%" }}
                   click="presetOptions($event)">
                   {$root.getLz("term.menu")}
                 </button>

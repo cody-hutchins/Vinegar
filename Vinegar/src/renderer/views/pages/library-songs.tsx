@@ -56,14 +56,14 @@ export const Component = () => {
           <div className="row">
             <div
               className="col"
-              style="padding:0;">
+              style={{ padding: 0 }}>
               <div
                 className="search-input-container"
-                style="width:100%;margin: 16px 0;">
+                style={{ width: "100%", margin: "16px 0" }}>
                 <div className="search-input--icon"></div>
                 <input
                   type="search"
-                  style="width:100%;"
+                  style={{ width: "100%" }}
                   spellcheck="false"
                   placeholder="app.getLz('term.search') + '...'"
                   input="$root.searchLibrarySongs"
@@ -76,14 +76,14 @@ export const Component = () => {
               <div className="row">
                 <button
                   className="col md-btn md-btn-primary  md-btn-icon"
-                  style="min-width: 100px;margin-right: 3px;"
+                  style={{ minWidth: "100px", marginRight: "3px" }}
                   click="app.mk.shuffleMode = 0; play()">
                   <img className="md-ico-play" />
                   {app.getLz("term.play")}
                 </button>
                 <button
                   className="col md-btn md-btn-primary  md-btn-icon"
-                  style="min-width: 100px;margin-right: 3px;"
+                  style={{ minWidth: "100px", marginRight: "3px" }}
                   click="app.mk.shuffleMode = 1;play()">
                   <img className="md-ico-shuffle" />
                   {app.getLz("term.shuffle")}
@@ -147,7 +147,7 @@ export const Component = () => {
               <button
                 v-else
                 className="reload-btn"
-                style="opacity: 0.8;pointer-events: none"
+                style={{ opacity: 0.8, pointerEvents: none }}
                 aria-label="app.getLz('menubar.options.reload')">
                 <div className="spinner"></div>
               </button>

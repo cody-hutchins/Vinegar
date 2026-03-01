@@ -560,7 +560,7 @@ export const Component = () => {
           {item?.meta?.reason?.stringForDisplay ?? ""}
         </div>
         <div
-          style="{'--spcolor': getBgColor()}"
+          style={{ "--spcolor": getBgColor() }}
           className="cd-mediaitem-square"
           className="getClasses()"
           contextmenu="getContextMenu">
@@ -616,7 +616,7 @@ export const Component = () => {
             className="info-rect"
             className="{'info-rect-card': kind == 'card'}"
             v-show="isVisible"
-            style="{'--bgartwork': getArtworkUrl(size, true)}">
+            style={{ "--bgartwork": getArtworkUrl(size, true) }}>
             <div
               className="title"
               title="item.attributes?.name ?? (item.relationships?.contents?.data[0]?.attributes?.name ?? (item.attributes?.editorialNotes?.name ?? ''))"
@@ -626,7 +626,7 @@ export const Component = () => {
               <div
                 className="explicit-icon"
                 v-if="item.attributes && item.attributes.contentRating == 'explicit'"
-                style="background-image: url(./assets/explicit.svg);height: 12px;width: 12px;filter: contrast(0);background-repeat: no-repeat;margin-top: 2.63px;margin-left: 4px;"></div>
+                style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}></div>
             </div>
             <div
               title="getSubtitle()"

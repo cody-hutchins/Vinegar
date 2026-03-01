@@ -17,21 +17,21 @@ export const Component = () => {
     <div id="mediaitem-mvview-sp">
       <div
         v-if="(item.attributes?.editorialArtwork?.subscriptionHero?.url ?? item.attributes?.artwork?.url ?? '') !='' "
-        style="position: relative; display: inline-flex;">
+        style={{ position: "relative", display: "inline-flex" }}>
         <div
           clickself="log(item);app.routeView(item)"
           className="cd-mediaitem-mvview">
-          <div style="height: 70px; min-height: 70px; max-height: 70px; width: 100%; margin-left: 5px;">
+          <div style={{ height: "70px", minHeight: "70px", maxHeight: "70px", width: "100%", marginLeft: "5px" }}>
             <div
               className="title-browse-sp bold "
               click="log(item);app.routeView(item)"
-              style="color: darkgrey;">
+              style={{ color: "darkgrey" }}>
               {badge ? badge?.designBadge : ""}
             </div>
             <div className="title-browse-sp ">{badge != null && badge?.designTag != null ? badge?.designTag : (item.attributes?.name ?? "")}</div>
             <div
               className="title-browse-sp semibold"
-              style="color: darkgrey;">
+              style={{ color: "darkgrey" }}>
               {item?.attributes?.artistName ?? item?.attributes?.curatorName ?? ""}
             </div>
           </div>
@@ -47,18 +47,7 @@ export const Component = () => {
             clickself="log(item);app.routeView(item)">
             <div
               className="button"
-              style="
-                    border-radius: 50%;
-                    background: rgba(50,50,50,0.7);"
-              style="[(!(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? (item.type ?? '')): (item.type ?? '')).includes('radioStation') && !(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? (item.type ?? '')): (item.type ?? '')).includes('song')) ?
-                     {'margin': '205px',
-                        'margin-left': '260px', 'margin-bottom': '140px',
-                        width: '30px',
-                        height: '30px',} :
-                        {'margin': '205px',
-                        'margin-left': '260px', 'margin-bottom': '140px',
-                        width: '30px',
-                        height: '30px',}]"
+              style={{ ...(!(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" } : { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
               click="app.playMediaItem(item)">
               {import("../svg/play.svg")}
             </div>
@@ -70,18 +59,7 @@ export const Component = () => {
           tabindex="0">
           <div
             className="button"
-            style="
-                border-radius: 50%;
-                background: rgba(50,50,50,0.7);"
-            style="[(!(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? (item.type ?? '')): (item.type ?? '')).includes('radioStation') && !(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? (item.type ?? '')): (item.type ?? '')).includes('song')) ?
-                  {'margin': '205px',
-                    'margin-left': '260px', 'margin-bottom': '140px',
-                    width: '30px',
-                    height: '30px',} :
-                    {'margin': '205px',
-                    'margin-left': '260px', 'margin-bottom': '140px',
-                    width: '30px',
-                    height: '30px',}]"
+            style={{ ...(!(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" } : { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
             click="app.playMediaItem(item)">
             {import("../svg/play.svg")}
           </div>

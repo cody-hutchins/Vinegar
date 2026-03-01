@@ -714,7 +714,7 @@ export const Component = () => {
         className="classes"
         is-album="isAlbum()"
         v-if="data != [] && data.attributes != null"
-        style="{'--bgColor': (data.attributes.artwork != null && data.attributes.artwork['bgColor'] != null) ? ('#' + data.attributes.artwork.bgColor) : ''}">
+        style={{ bgColor: data.attributes.artwork != null && data.attributes.artwork["bgColor"] != null ? "#" + data.attributes.artwork.bgColor : "" }}>
         <template v-if="app.playlists.loadingState == 0">
           <div className="content-inner centered">
             <div className="spinner"></div>
@@ -723,7 +723,7 @@ export const Component = () => {
         <template v-if="app.playlists.loadingState == 1">
           <div
             className="playlist-display"
-            style="{ 'background-color': '#' +hasHeroObject()?.bgColor ?? '' }"
+            style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
             mouseoverself="minClass(false)">
             <div className="playlistInfo">
               <div
@@ -736,7 +736,7 @@ export const Component = () => {
                 />
                 <div
                   className="hero-tint"
-                  style="{'background-color': '#' + hasHeroObject()?.bgColor ?? ''}"></div>
+                  style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}></div>
               </div>
               <div className="row">
                 <div
@@ -759,7 +759,7 @@ export const Component = () => {
                         mouseover="minClass(false)"
                         click="editPlaylistName()"
                         v-show="!nameEditing"
-                        style="{ 'color': '#' +hasHeroObject()?.textColor1 ?? '', 'filter' : 'drop-shadow(1px 3px 8px #' + hasHeroObject()?.textColor4 ?? '' +')' }">
+                        style={{ color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
                         {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                       </div>
                       <div
@@ -778,8 +778,8 @@ export const Component = () => {
                       </div>
                       <div
                         className="playlist-time genre"
-                        style="margin: 0px;"
-                        style="{ 'color': '#' + hasHeroObject()?.textColor2 ?? '' }">
+                        style={{ margin: "0px" }}
+                        style={{ color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
                         {getAlbumGenre()}
                       </div>
                       <div
@@ -791,12 +791,12 @@ export const Component = () => {
                       <template v-if="useArtistChip">
                         <artist-chip
                           v-for="artist in data.relationships.artists?.data"
-                          style="{ 'color': '#' +hasHeroObject()?.textColor3 ?? '' }"
+                          style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
                           item="artist"></artist-chip>
                       </template>
                       <div
                         className="playlist-desc"
-                        style="{ 'color': '#' +hasHeroObject()?.textColor3 ?? '' }"
+                        style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
                         v-if="(data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))">
                         <div
                           v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) != null"
@@ -843,26 +843,24 @@ export const Component = () => {
                   <div
                     className="playlist-controls"
                     v-observe-visibility="{callback: isHeaderVisible}"
-                    style="z-index: 20;">
+                    style={{ zIndex: 20 }}>
                     <button
                       className="md-btn md-btn-primary md-btn-icon"
-                      style="min-width: 100px;"
-                      style="{'background': '#' +hasHeroObject()?.textColor4 ?? '','border-top': '#' +hasHeroObject()?.textColor3 ?? '','border': '#' +hasHeroObject()?.textColor2 ?? ''}"
+                      style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
                       click="app.mk.shuffleMode = 0; play()">
                       <img className="md-ico-play" />
                       {app.getLz("term.play")}
                     </button>
                     <button
                       className="md-btn md-btn-primary md-btn-icon"
-                      style="min-width: 100px;"
-                      style="{'background': '#' +hasHeroObject()?.textColor4 ?? '','border-top': '#' +hasHeroObject()?.textColor3 ?? '','border': '#' +hasHeroObject()?.textColor2 ?? ''}"
+                      style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
                       click="app.mk.shuffleMode = 1;play()">
                       <img className="md-ico-shuffle" />
                       {app.getLz("term.shuffle")}
                     </button>
                     <button
                       className="md-btn md-btn-icon"
-                      style="min-width: 180px;"
+                      style={{ minWidth: "180px" }}
                       v-if="inLibrary!=null && confirm!=true"
                       click="confirmButton()">
                       <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -870,7 +868,7 @@ export const Component = () => {
                     </button>
                     <button
                       className="md-btn md-btn-icon"
-                      style="min-width: 180px;"
+                      style={{ minWidth: "180px" }}
                       v-if="confirm==true"
                       click="(!inLibrary) ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()) ">
                       <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -885,23 +883,23 @@ export const Component = () => {
                         <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                       </optgroup>
                     </select>
-                    <div style="display: flex; float: right;">
+                    <div style={{ display: "flex", float: "right" }}>
                       <button
-                        style="{ 'background': '#' + hasHeroObject()?.textColor4 ?? '' }"
+                        style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
                         className="['search-btn', showSearch ? 'active' : '']"
                         click="toggleSearch()"
                         aria-label="showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')">
                         <svg-icon
-                          style="{ 'width': '15px', 'background-color': '#' + hasHeroObject()?.bgColor ?? '' }"
+                          style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
                           url="showSearch ? './assets/search-alt.svg' : './assets/search.svg'"></svg-icon>
                       </button>
                       <button
-                        style="{ 'background': '#' + hasHeroObject()?.textColor4 ?? '' }"
+                        style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
                         className="more-btn-round"
                         click="menu"
                         aria-label="app.getLz('term.more')">
                         <div
-                          style="{ 'background-color': '#' + hasHeroObject()?.bgColor ?? '' }"
+                          style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
                           className="svg-icon"></div>
                       </button>
                     </div>
@@ -931,7 +929,7 @@ export const Component = () => {
           </div>
           <div
             className="floating-header"
-            style="{opacity: (headerVisible ? 0 : 1),'pointer-events': (headerVisible ? 'none' : '')}">
+            style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
             <div className="row">
               <div className="col">
                 <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
@@ -940,21 +938,21 @@ export const Component = () => {
                 <div>
                   <button
                     className="md-btn md-btn-primary  md-btn-icon"
-                    style="min-width: 100px;"
+                    style={{ minWidth: "100px" }}
                     click="app.mk.shuffleMode = 0; play()">
                     <img className="md-ico-play" />
                     {app.getLz("term.play")}
                   </button>
                   <button
                     className="md-btn md-btn-primary  md-btn-icon"
-                    style="min-width: 100px;"
+                    style={{ minWidth: "100px" }}
                     click="app.mk.shuffleMode = 1;play()">
                     <img className="md-ico-shuffle" />
                     {app.getLz("term.shuffle")}
                   </button>
                   <button
                     className="md-btn md-btn-icon"
-                    style="min-width: 180px;"
+                    style={{ minWidth: "180px" }}
                     v-if="inLibrary!=null && confirm!=true"
                     click="confirmButton()">
                     <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -962,7 +960,7 @@ export const Component = () => {
                   </button>
                   <button
                     className="md-btn md-btn-icon"
-                    style="min-width: 180px;"
+                    style={{ minWidth: "180px" }}
                     v-if="confirm==true"
                     click="(!inLibrary) ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()) ">
                     <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
@@ -982,7 +980,7 @@ export const Component = () => {
               <div className="col-auto cider-flex-center">
                 <button
                   className="more-btn-round"
-                  style="float:right;"
+                  style={{ float: right }}
                   click="menu"
                   aria-label="app.getLz('term.more')">
                   <div className="svg-icon"></div>
@@ -1006,7 +1004,7 @@ export const Component = () => {
                   scroll="minClass(true)">
                   <div className="">
                     <div
-                      style="width:100%"
+                      style={{ width: "100%" }}
                       click="minClass(true)">
                       <div
                         v-if="showSearch"
@@ -1024,7 +1022,7 @@ export const Component = () => {
                       </div>
                       <pagination
                         v-if="shouldPaginate"
-                        style="margin-top: 10px"
+                        style={{ marginTop: "10px" }}
                         length="hasNestedPlaylist ? nestedDisplayLength: displayListing.length"
                         pageSize="pageSize"
                         scroll="prefs.scroll"
@@ -1085,13 +1083,13 @@ export const Component = () => {
                   <div
                     className="playlist-time item-navigate"
                     click="app.searchAndNavigate(data,'recordLabel') "
-                    style="width: 50%;">
+                    style={{ width: "50%" }}>
                     {data.attributes.copyright}
                   </div>
                   <template v-if="(data.attributes?.playParams?.kind ?? data.type ?? '').includes('album') &&  data.relationships.catalog != null && data.relationships.catalog != null && data.relationships.catalog.data.length > 0">
                     <div
                       className="playlist-time showExtended item-navigate"
-                      style="color:#fa586a; font-weight: bold"
+                      style={{ color: "#fa586a", fontWeight: "bold" }}
                       click="app.routeView(data.relationships.catalog.data[0])">
                       {$root.getLz("action.showAlbum")}
                     </div>

@@ -140,7 +140,7 @@ export const Component = () => {
     <div id="mediaitem-artwork">
       <div
         className="mediaitem-artwork"
-        style="awStyle"
+        style={{ awStyle }}
         contextmenu="contextMenu"
         className="[{'rounded': (type == 'artists')}, classes]"
         key="url">
@@ -149,7 +149,7 @@ export const Component = () => {
           ref="image"
           decoding="async"
           loading="lazy"
-          style="imgStyle"
+          style={{ imgStyle }}
           load="imgLoaded()"
           className="mediaitem-artwork--img"
         />
