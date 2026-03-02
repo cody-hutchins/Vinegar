@@ -12,12 +12,12 @@ const AppContent = () => {
           v-if="$root.getThemeDirective('appNavigation') == 'seperate'">
           <button
             className="nav-item"
-            click="$root.navigateBack()">
+            onClick={() => $root.navigateBack()}>
             {import("../svg/chevron-left.svg")}
           </button>
           <button
             className="nav-item"
-            click="$root.navigateForward()">
+            onClick={() => $root.navigateForward()}>
             {import("../svg/chevron-right.svg")}
           </button>
         </div>

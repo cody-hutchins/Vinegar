@@ -32,7 +32,7 @@ export const Component = () => {
   }
   function showRepo(repo) {
     const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-    var requestOptions = {
+    let requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -46,7 +46,7 @@ export const Component = () => {
       })
       .catch((error) => {
         openRepo = repo;
-        openRepo.readme = `This repository doesn't have a README.md file.`;
+        openRepo.readme = `repository doesn't have a README.md file.`;
         console.log("error", error);
       });
   }
@@ -88,7 +88,7 @@ export const Component = () => {
     });
   }
   function getRepos() {
-    var requestOptions = {
+    let requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -114,21 +114,21 @@ export const Component = () => {
             <div className="col-auto nopadding cider-flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.openSettingsPage('styles')">
+                onClick={() => $root.openSettingsPage("styles")}>
                 {$root.getLz("settings.option.visual.theme.manageStyles")}
               </button>
             </div>
             <div className="col-auto cider-flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.checkForThemeUpdates()">
+                onClick={() => $root.checkForThemeUpdates()}>
                 {$root.getLz("settings.option.visual.theme.checkForUpdates")}
               </button>
             </div>
             <div className="col-auto nopadding cider-flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="installThemeURL()">
+                onClick={() => installThemeURL()}>
                 {$root.getLz("settings.option.visual.theme.github.download")}
               </button>
             </div>
@@ -138,7 +138,7 @@ export const Component = () => {
           <div className="repos-list">
             <ul className="list-group list-group-flush">
               <li
-                click="showRepo(repo)"
+                onClick={() => showRepo(repo)}
                 className="list-group-item list-group-item-dark"
                 style={{ background: repo.id == openRepo.id ? "var(--keyColor)" : "" }}
                 v-for="repo in repos">
@@ -184,7 +184,7 @@ export const Component = () => {
                 <div className="col-auto nopadding cider-flex-center">
                   <button
                     className="md-btn md-btn-primary"
-                    click="installThemeRepo(openRepo)">
+                    onClick={() => installThemeRepo(openRepo)}>
                     <span v-if="!themesInstalled.includes(openRepo.full_name.toLowerCase())">{$root.getLz("action.install")}</span>
                     <span v-else>{$root.getLz("action.update")}</span>
                   </button>

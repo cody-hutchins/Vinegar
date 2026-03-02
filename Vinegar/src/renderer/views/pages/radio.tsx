@@ -11,7 +11,7 @@ export const Component = () => {
     mounted() {
       this.$root.getRadioPage();
       //   debugger
-      this.getRecentlyPlayed();
+      getRecentlyPlayed();
       //   debugger
     },
     methods: {
@@ -23,10 +23,10 @@ export const Component = () => {
         });
 
         console.debug(recent.data.data);
-        this.recent = this.recent.concat(recent.data.data);
+        recent = recent.concat(recent.data.data);
 
         if (recent.data.next) {
-          this.getRecentlyPlayed(recent.data.next);
+          getRecentlyPlayed(recent.data.next);
         }
       },
     },
@@ -47,20 +47,20 @@ export const Component = () => {
                 <button
                   className="cd-btn-seeall"
                   v-if="recom.attributes.name == 'Recently Played' && recent.length > 10"
-                  click="app.showCollection({ data: recent }, recom.attributes.name ?? '', 'listen_now')">
+                  onClick={() => app.showCollection({ data: recent }, recom.attributes.name ?? "", "listen_now")}>
                   {app.getLz("term.seeAll")}
                 </button>
                 <template v-if="index != 0 && recom.relationships && ((recom.relationships.children &&  recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10))">
                   <button
                     className="cd-btn-seeall"
                     v-if="recom.relationships.room"
-                    click="app.showRoom(recom.relationships.room?.data[0].href)">
+                    onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
                     {app.getLz("term.seeAll")}
                   </button>
                   <button
                     className="cd-btn-seeall"
                     v-else
-                    click="app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? '', 'listen_now')">
+                    onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </template>
@@ -104,7 +104,7 @@ export const Component = () => {
                 <div className="grouping-container">
                   <button
                     className="grouping-btn"
-                    click="$root.goToGrouping(link.url)"
+                    onClick={() => $root.goToGrouping(link.url)}
                     v-for="link in recom.attributes.links">
                     {link.label}
                   </button>

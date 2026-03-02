@@ -23,22 +23,21 @@ export const Component = () => {
       };
     },
     async mounted() {
-      let self = this;
-      this.getListenNowData();
-      await this.getArtistFeed();
-      await this.getFavorites();
-      await this.getRecentlyPlayed();
+      getListenNowData();
+      await getArtistFeed();
+      await getFavorites();
+      await getRecentlyPlayed();
       if (new Date().getMonth() == 11) {
-        this.seenReplay = false;
+        seenReplay = false;
         localStorage.setItem("seenReplay", false);
       }
     },
     methods: {
       async syncFavorites() {
-        this.syncingFavs = true;
+        syncingFavs = true;
         await app.syncFavorites();
-        await this.getArtistFeed();
-        this.syncingFavs = false;
+        await getArtistFeed();
+        syncingFavs = false;
       },
       async seeAllRecentlyPlayed() {
         let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
@@ -56,10 +55,9 @@ export const Component = () => {
         app.showCollection(hist.data, app.getLz("term.history"));
       },
       isSectionReady(section) {
-        return this.sectionsReady.includes(section);
+        return sectionsReady.includes(section);
       },
       removeFavoriteContext() {
-        let self = this;
         return {
           name: "Remove from Favorites",
           action: function (item) {
@@ -72,10 +70,9 @@ export const Component = () => {
         };
       },
       async getFavorites() {
-        let self = this;
         let libraryPlaylists = [];
         let playlists = [];
-        for (let item of this.favoriteItems) {
+        for (let item of favoriteItems) {
           if (item.type == "library-playlists") {
             libraryPlaylists.push(item.id);
           } else if (item.type == "playlists") {
@@ -83,7 +80,7 @@ export const Component = () => {
           }
         }
         if (playlists.length != 0) {
-          this.app.mk.api.v3
+          app.mk.api.v3
             .music(`/v1/catalog/${app.mk.storefrontId}/playlists/${playlists.toString()}`, {
               l: this.$root.mklang,
             })
@@ -92,7 +89,7 @@ export const Component = () => {
             });
         }
         if (libraryPlaylists.length != 0) {
-          this.app.mk.api.v3
+          app.mk.api.v3
             .music(`v1/me/library/playlists/${playlists.toString()}`, {
               l: this.$root.mklang,
             })
@@ -102,15 +99,14 @@ export const Component = () => {
         }
       },
       async getArtistFeed() {
-        let artists = this.followedArtists;
-        let self = this;
-        this.artistFeed = [];
+        let artists = followedArtists;
+        artistFeed = [];
         let chunks = [];
         for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
           chunks.push(artists.slice(artistIdx, artistIdx + 50));
         }
         try {
-          const chunkArtistData = await Promise.all(chunks.map((chunk) => this.app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
+          const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
           chunkArtistData.forEach((chunkResult) =>
             chunkResult.data.data.forEach((item) => {
               if (item.views["latest-release"].data.length != 0) {
@@ -119,7 +115,7 @@ export const Component = () => {
             }),
           );
           // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
-          this.artistFeed.sort((a, b) => {
+          artistFeed.sort((a, b) => {
             let dateA = new Date(a.attributes.releaseDate);
             let dateB = new Date(b.attributes.releaseDate);
             return dateB - dateA;
@@ -133,11 +129,10 @@ export const Component = () => {
           "include[albums]": "catalog,tracks,artists",
           "include[songs]": "catalog,artists",
         });
-        this.recentlyPlayed = hist.data.data;
+        recentlyPlayed = hist.data.data;
       },
       async getListenNowData() {
-        let self = this;
-        this.app.mk.api.v3
+        app.mk.api.v3
           .music(
             `/v1/me/recommendations?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=listen-now&with=friendsMix,library,social&art[social-profiles:url]=c&art[url]=c,f&omit[resource]=autos&relate[editorial-items]=contents&extend=editorialCard,editorialVideo&extend[albums]=artistUrl&extend[library-albums]=artistUrl,editorialVideo&extend[playlists]=artistNames,editorialArtwork,editorialVideo&extend[library-playlists]=artistNames,editorialArtwork,editorialVideo&extend[social-profiles]=topGenreNames&include[albums]=artists&include[songs]=artists&include[music-videos]=artists&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url&fields[artists]=name,url&extend[stations]=airDate,supportsAirTimeUpdates&meta[stations]=inflectionPoints&types=artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells&platform=web&l=${this.$root.mklang}`,
           )
@@ -182,12 +177,12 @@ export const Component = () => {
                 <div className="col-auto nopadding cider-flex-center">
                   <button
                     className="cd-btn-seeall"
-                    click="seeAllHistory()">
+                    onClick={() => seeAllHistory()}>
                     {app.getLz("term.history")}
                   </button>
                   <button
                     className="cd-btn-seeall"
-                    click="seeAllRecentlyPlayed()">
+                    onClick={() => seeAllRecentlyPlayed()}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>
@@ -212,7 +207,7 @@ export const Component = () => {
                 <div className="col-auto nopadding cider-flex-center">
                   <button
                     className="cd-btn-seeall"
-                    click="syncFavorites()"
+                    onClick={() => syncFavorites()}
                     v-if="!syncingFavs">
                     {app.getLz("home.syncFavorites")}
                   </button>
@@ -222,7 +217,7 @@ export const Component = () => {
                     v-else></div>
                   <button
                     className="cd-btn-seeall"
-                    click="app.appRoute('artist-feed')">
+                    onClick={() => app.appRoute("artist-feed")}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>
@@ -266,7 +261,7 @@ export const Component = () => {
             <div className="col">
               <button
                 className="md-btn md-btn-block md-btn-replay--hero"
-                click="$root.appRoute('replay')">
+                onClick={() => $root.appRoute("replay")}>
                 {$root.getLz("term.replay")} {year}
               </button>
             </div>
@@ -281,7 +276,7 @@ export const Component = () => {
                   <button
                     className="md-btn md-btn-replay"
                     v-if="seenReplay"
-                    click="$root.appRoute('replay')">
+                    onClick={() => $root.appRoute("replay")}>
                     {$root.getLz("term.replay")} {year}
                   </button>
                 </div>
@@ -307,7 +302,7 @@ export const Component = () => {
                 <div className="col-auto nopadding cider-flex-center">
                   <button
                     className="cd-btn-seeall"
-                    click="app.showSocialListeningTo()">
+                    onClick={() => app.showSocialListeningTo()}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>

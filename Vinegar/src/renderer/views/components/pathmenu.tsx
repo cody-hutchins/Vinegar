@@ -32,7 +32,7 @@ export const Component = () => {
             <div className="modal-title">{"Edit Paths"}</div>
             <button
               className="close-btn"
-              click="close()"
+              onClick={() => close()}
               aria-label="$root.getLz('action.close')"></button>
           </div>
           <div className="modal-content">
@@ -42,7 +42,7 @@ export const Component = () => {
                 <div className="md-option-segment md-option-segment_auto">
                   <button
                     className="md-btn"
-                    click="remove(folder)">
+                    onClick={() => remove(folder)}>
                     {"Remove"}
                   </button>
                 </div>
@@ -52,7 +52,7 @@ export const Component = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <button
                   className="md-btn"
-                  click="add()">
+                  onClick={() => add()}>
                   {"Add Path"}
                 </button>
               </div>

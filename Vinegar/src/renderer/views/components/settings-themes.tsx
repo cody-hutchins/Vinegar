@@ -80,7 +80,7 @@ export const StylestackEditor = ({ themes }: { themes: object[] }) => {
             <b-col sm="auto">
               <button
                 className="removeItem codicon codicon-close"
-                click="remove(theme)"></button>
+                onClick={() => remove(theme)}></button>
             </b-col>
           </b-row>
         </b-list-group-item>
@@ -108,7 +108,6 @@ export const InstalledThemes = () => {
     getThemesList();
   }
   function getThemesList() {
-    let self = this;
     let themes = ipcRenderer.sendSync("get-themes");
     themes.unshift({
       name: "Acrylic Grain",
@@ -185,7 +184,7 @@ export const InstalledThemes = () => {
   }
   function showRepo(repo) {
     const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-    var requestOptions = {
+    let requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -199,7 +198,7 @@ export const InstalledThemes = () => {
       })
       .catch((error) => {
         openRepo = repo;
-        openRepo.readme = `This repository doesn't have a README.md file.`;
+        openRepo.readme = `repository doesn't have a README.md file.`;
         console.log("error", error);
       });
   }
@@ -241,7 +240,7 @@ export const InstalledThemes = () => {
     });
   }
   function getRepos() {
-    var requestOptions = {
+    let requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -265,21 +264,21 @@ export const InstalledThemes = () => {
             <div className="col-auto nopadding cider-flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.openSettingsPage('github-themes')">
+                onClick={() => $root.openSettingsPage("github-themes")}>
                 {$root.getLz("settings.option.visual.theme.github.explore")}
               </button>
             </div>
             <div className="col-auto  cider-flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.checkForThemeUpdates()">
+                onClick={() => $root.checkForThemeUpdates()}>
                 {$root.getLz("settings.option.visual.theme.checkForUpdates")}
               </button>
             </div>
             <div className="col-auto nopadding cider-flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="openThemesFolder()">
+                onClick={() => openThemesFolder()}>
                 {$root.getLz("settings.option.visual.theme.github.openfolder")}
               </button>
             </div>
@@ -293,7 +292,7 @@ export const InstalledThemes = () => {
             <ul className="list-group list-group-flush">
               <template v-for="theme in themes">
                 <li
-                  click="addStyle(theme.file)"
+                  onClick={() => addStyle(theme.file)}
                   contextmenu="contextMenu($event, theme)"
                   className="list-group-item list-group-item-dark"
                   className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
@@ -324,7 +323,7 @@ export const InstalledThemes = () => {
                   </b-row>
                 </li>
                 <li
-                  click="addStyle(packEntry.file)"
+                  onClick={() => addStyle(packEntry.file)}
                   contextmenu="contextMenu($event, theme)"
                   className="list-group-item list-group-item-dark addon"
                   v-for="packEntry in theme.pack"

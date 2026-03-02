@@ -1,4 +1,4 @@
-export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time; lyrics; richlyrics; translation; onindex; yoffset }) => {
+export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation: string[]; onindex: () => void; yoffset: number }) => {
   const app = this.$root;
   const watch = {
     time: function () {
@@ -62,7 +62,7 @@ export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoff
   const getActiveLyric = () => {
     const delayfix = app.activeCasts[0]?.hasOwnProperty("airplay2") ? -2.5 : 0.1;
     const prevLine = app.currentLyricsLine;
-    for (var i = 0; i < lyrics.length; i++) {
+    for (let i = 0; i < lyrics.length; i++) {
       if (time + delayfix >= lyrics[i].startTime && time + delayfix <= app.lyrics[i].endTime) {
         if (app.currentLyricsLine != i) {
           app.currentLyricsLine = i;
@@ -156,7 +156,7 @@ export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoff
             v-if="lyric && lyric.line && lyric.line != 'lrcInstrumental'">
             <h3
               className="lyric-line"
-              click="seekTo(lyric.startTime)"
+              onClick={() => seekTo(lyric.startTime)}
               className="{unsynced : lyric.startTime == 9999999}"
               v-bind:line-index="index.toString()">
               <template v-if="richlyrics && richlyrics != [] && richlyrics.length > 0">
@@ -184,7 +184,7 @@ export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoff
           <template v-else>
             <h3
               className="lyric-line"
-              click="seekTo(lyric.startTime)"
+              onClick={() => seekTo(lyric.startTime)}
               start="lyric.startTime"
               end="lyric.endTime"
               v-bind:line-index="index.toString()">

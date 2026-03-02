@@ -30,7 +30,7 @@ export const Component = () => {
                         <div className="col-auto cider-flex-center"
                              v-if="data?.relationships?.contents?.data.length > 10">
                             <button className="cd-btn-seeall"
-                                    click="app.showCollection(recom, data.attributes.name ?? '', 'listen_now')">
+                                    onClick={() =>app.showCollection(recom, data.attributes.name ?? '', 'listen_now')}>
                                 {app.getLz('term.seeAll')}
                             </button>
                         </div>
@@ -57,7 +57,7 @@ export const Component = () => {
                     v-if="index != 0 && recom.relationships && ((recom.relationships.children &&  recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10))">
                     <button
                       className="cd-btn-seeall"
-                      click="app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? '', 'listen_now')">
+                      onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
                       {app.getLz("term.seeAll")}
                     </button>
                   </div>

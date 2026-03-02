@@ -2,7 +2,7 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
   const isVisible = true;
   const app = this.$root;
   const visibilityChanged = (isVisible, entry) => {
-    // this.isVisible = isVisible
+    // isVisible = isVisible
   };
   const showCollection = (recom) => {
     console.debug(recom);
@@ -49,7 +49,7 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
               v-if="recom?.relationships['primary-content']?.data?.length > 0"
               style={{ display: "flex", marginBlock: "1rem" }}>
               <div
-                click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
+                onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
                 className="listennow-chip"
                 style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
                 className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type == 'artists'  }">
@@ -59,7 +59,7 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
                   size="100"></mediaitem-artwork>
               </div>
               <div
-                click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
+                onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
                 style={{ width: "fit-content" }}
                 className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
                 <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
@@ -71,7 +71,7 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
               v-else
               style={{ display: "flex", marginBlock: "1rem" }}>
               <h3
-                click="navigateContent(recom?.relationships['primary-content']?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? '')"
+                onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
                 style={{ width: "fit-content", marginBlock: 0 }}
                 className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
                 {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
@@ -82,7 +82,7 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
               v-if="recom.relationships.contents.data.length >= 10">
               <button
                 className="cd-btn-seeall"
-                click="showCollection(recom)">
+                onClick={() => showCollection(recom)}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>

@@ -42,8 +42,6 @@ export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { ite
     }
   }
   async function getChildren() {
-    let self = this;
-    children = [];
     children = this.$root.playlists.listing.filter((child) => {
       if (child.parent == item.id) {
         return child;
@@ -51,8 +49,6 @@ export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { ite
     });
   }
   async function move(item, sendTo) {
-    let self = this;
-    console.log(sendTo);
     let type = item.type.replace("library-", "");
     let typeTo = sendTo.type;
     this.$root.mk.api.v3.music(
@@ -94,7 +90,6 @@ export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { ite
         moveToParent: {
           name: this.$root.getLz("action.moveToTop"),
           action: () => {
-            let self = this;
             move(item, {
               id: playlistRoot,
               type: "library-playlist-folders",
@@ -252,7 +247,7 @@ export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { ite
           dragover="dragOver"
           drop="onDrop"
           href="item.href"
-          click="clickEvent()">
+          onClick={() => clickEvent()}>
           <template v-if="!renaming">
             <svg-icon
               url="icon"

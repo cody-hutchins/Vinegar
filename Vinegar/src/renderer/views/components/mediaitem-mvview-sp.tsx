@@ -14,7 +14,10 @@ export const Component = ({ item, imagesize, badge }: { item: object; imagesize:
           <div style={{ height: "70px", minHeight: "70px", maxHeight: "70px", width: "100%", marginLeft: "5px" }}>
             <div
               className="title-browse-sp bold "
-              click="log(item);app.routeView(item)"
+              onClick={() => {
+                log(item);
+                app.routeView(item);
+              }}
               style={{ color: "darkgrey" }}>
               {badge ? badge?.designBadge : ""}
             </div>
@@ -38,7 +41,7 @@ export const Component = ({ item, imagesize, badge }: { item: object; imagesize:
             <div
               className="button"
               style={{ ...(!(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" } : { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
-              click="app.playMediaItem(item)">
+              onClick={() => app.playMediaItem(item)}>
               {import("../svg/play.svg")}
             </div>
           </div>
@@ -50,7 +53,7 @@ export const Component = ({ item, imagesize, badge }: { item: object; imagesize:
           <div
             className="button"
             style={{ ...(!(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" } : { margin: "205px", marginLeft: "260px", marginBottom: "140px", width: "30px", height: "30px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
-            click="app.playMediaItem(item)">
+            onClick={() => app.playMediaItem(item)}>
             {import("../svg/play.svg")}
           </div>
         </div>

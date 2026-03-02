@@ -29,17 +29,17 @@ export const Component = () => {
     },
     methods: {
       getClasses() {
-        if ((this.data?.data?.length ?? 0) > 0) {
-          let item = this.data.data[0];
+        if ((data?.data?.length ?? 0) > 0) {
+          let item = data.data[0];
           if (typeof item.kind != "undefined") {
-            this.commonKind = item.kind;
+            commonKind = item.kind;
             return item.kind;
           }
           if (typeof item.attributes.playParams != "undefined") {
-            this.commonKind = item.attributes.playParams.kind;
+            commonKind = item.attributes.playParams.kind;
             return item.attributes.playParams.kind;
           }
-          if (this.commonKind != "song") {
+          if (commonKind != "song") {
             return "collection-list-square";
           } else {
             return "";
@@ -50,14 +50,14 @@ export const Component = () => {
       },
       getKind(item) {
         if (typeof item.kind != "undefined") {
-          //  this.commonKind = item.kind;
+          //  commonKind = item.kind;
           return item.kind;
         }
         if (typeof item.attributes.playParams != "undefined") {
-          //  this.commonKind = item.attributes.playParams.kind
+          //  commonKind = item.attributes.playParams.kind
           return item.attributes.playParams.kind;
         }
-        return this.commonKind;
+        return commonKind;
       },
       scrollToTop() {
         let target = document.querySelector(".header-text");
@@ -68,49 +68,47 @@ export const Component = () => {
         });
       },
       getNext() {
-        let self = this;
-        this.triggerEnabled = false;
-        if (typeof this.data.next == "undefined") {
+        if (typeof data.next == "undefined") {
           return;
         }
-        this.loading = true;
+        loading = true;
 
-        this.api.v3.music(this.data.next, app.collectionList.requestBody).then((response) => {
+        api.v3.music(data.next, app.collectionList.requestBody).then((response) => {
           console.log(response);
           if (!app.collectionList.response.groups) {
-            this.data.data = this.data.data.concat(response.data.data);
+            data.data = data.data.concat(response.data.data);
             if (response.data.next) {
-              this.data.next = response.data.next;
-              this.triggerEnabled = true;
+              data.next = response.data.next;
+              triggerEnabled = true;
             }
-            this.loading = false;
+            loading = false;
           } else {
             if (!response.data.results[app.collectionList.response.groups]) {
-              this.loading = false;
+              loading = false;
               return;
             }
-            this.data.data = this.data.data.concat(response.data.results[app.collectionList.response.groups].data);
+            data.data = data.data.concat(response.data.results[app.collectionList.response.groups].data);
             if (response.data.results[app.collectionList.response.groups].next) {
-              this.data.next = response.data.results[app.collectionList.response.groups].next;
-              this.triggerEnabled = true;
-              this.loading = false;
+              data.next = response.data.results[app.collectionList.response.groups].next;
+              triggerEnabled = true;
+              loading = false;
             }
           }
         });
       },
       headerVisibility: function (isVisible, entry) {
         if (isVisible) {
-          this.showFab = false;
+          showFab = false;
         } else {
-          this.showFab = true;
+          showFab = true;
         }
       },
       visibilityChanged: function (isVisible, entry) {
         if (isVisible) {
-          this.canSeeTrigger = true;
-          this.getNext();
+          canSeeTrigger = true;
+          getNext();
         } else {
-          this.canSeeTrigger = false;
+          canSeeTrigger = false;
         }
       },
     },
@@ -146,14 +144,14 @@ export const Component = () => {
             v-if="triggerEnabled"
             style={{ opacity: 0, height: "32px" }}
             v-observe-visibility="{callback: visibilityChanged}">
-            {this.app.getLz("term.showMore")}
+            {app.getLz("term.showMore")}
           </button>
         </div>
         <transition name="fabfade">
           <button
             className="top-fab"
             v-show="showFab"
-            click="scrollToTop()"
+            onClick={() => scrollToTop()}
             aria-label="app.getLz('action.scrollToTop')">
             {import("../svg/arrow-up.svg")}
           </button>

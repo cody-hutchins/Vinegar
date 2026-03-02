@@ -23,8 +23,8 @@ export const Component = () => {
         }
       },
       getTopResult() {
-        if (this.search.results["meta"]) {
-          return this.search.results[this.search.results.meta.results.order[0]]["data"][0];
+        if (search.results["meta"]) {
+          return search.results[search.results.meta.results.order[0]]["data"][0];
         } else {
           return false;
         }
@@ -65,7 +65,7 @@ export const Component = () => {
                 v-if="data.relationships['shared-playlists'].data.length >= 10">
                 <button
                   className="cd-btn-seeall"
-                  click="app.showCollection(data.relationships['shared-playlists'],'Shared Playlists' ?? '', 'default')">
+                  onClick={() => app.showCollection(data.relationships["shared-playlists"], "Shared Playlists" ?? "", "default")}>
                   {app.getLz("term.seeAll")}
                 </button>
               </div>

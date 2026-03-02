@@ -1,26 +1,23 @@
+import { useState } from "react";
+
 export const Component = () => {
   const app = this.$root;
-  const playbackRate = this.$root.cfg.audio.playbackRate;
+  const [playbackRate, setPlaybackRate] = useState(this.$root.cfg.audio.playbackRate);
   const playbackRateWheel = (event) => {
     if (app.checkScrollDirectionIsUp(event)) {
-      saveValue(this.$root.cfg.audio.playbackRate + 0.05);
+      playbackRateClick(this.$root.cfg.audio.playbackRate + 0.05);
     } else {
-      saveValue(this.$root.cfg.audio.playbackRate - 0.05);
+      playbackRateClick(this.$root.cfg.audio.playbackRate - 0.05);
     }
   };
-  const saveValue = (newValue) => {
+  const playbackRateClick = (newValue) => {
     newValue = Number(newValue);
     if (newValue >= 0.25 && newValue <= 2) {
       newValue = String(newValue).length > 4 ? newValue.toFixed(2) : newValue;
       this.$root.mk.playbackRate = newValue;
       this.$root.cfg.audio.playbackRate = newValue;
-      this.playbackRate = newValue;
+      setPlaybackRate(newValue);
     }
-  };
-  const watch = {
-    playbackRate: function (newValue, _oldValue) {
-      saveValue(newValue);
-    },
   };
   return (
     <div id="audio-playbackrate">
@@ -33,7 +30,7 @@ export const Component = () => {
             <div className="modal-title">{app.getLz("settings.option.audio.changePlaybackRate")}</div>
             <button
               className="close-btn"
-              click="app.modals.audioPlaybackRate = false"
+              onClick={() => (app.modals.audioPlaybackRate = false)}
               aria-label="app.getLz('action.close')"></button>
           </div>
           <div className="modal-content">
@@ -41,7 +38,7 @@ export const Component = () => {
               <div className="md-option-segment">{app.getLz("settings.option.audio.playbackRate")}</div>
               <div
                 className="md-option-segment playbackrate-text"
-                v-if="this.playbackRate">
+                v-if="playbackRate">
                 {playbackRate} ×
               </div>
               <div className="md-option-segment md-option-segment_auto">
@@ -50,7 +47,8 @@ export const Component = () => {
                   step="0.05"
                   min="0.25"
                   max="2"
-                  wheel="playbackRateWheel"
+                  onWheel={playbackRateWheel}
+                  onChange={(e) => playbackRateClick(e.target.value)}
                   v-model="playbackRate"
                 />
               </div>

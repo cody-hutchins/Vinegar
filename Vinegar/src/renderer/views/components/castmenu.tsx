@@ -11,7 +11,7 @@ export const Component = () => {
 
   const watch = {
     activeCasts: function (newVal, oldVal) {
-      this.$root.activeCasts = this.activeCasts;
+      this.$root.activeCasts = activeCasts;
     },
   };
 
@@ -20,14 +20,12 @@ export const Component = () => {
   };
 
   const scan = () => {
-    let self = this;
-    scanning = true;
     ipcRenderer.send("getChromeCastDevices", "");
     ipcRenderer.send("getAirplayDevice", "");
     setTimeout(() => {
-      self.devices.cast = ipcRenderer.sendSync("getKnownCastDevices");
-      self.devices.airplay = ipcRenderer.sendSync("getKnownAirplayDevices");
-      self.scanning = false;
+      devices.cast = ipcRenderer.sendSync("getKnownCastDevices");
+      devices.airplay = ipcRenderer.sendSync("getKnownAirplayDevices");
+      scanning = false;
     }, 2000);
     console.log(devices);
     // vm.$forceUpdate();
@@ -51,7 +49,7 @@ export const Component = () => {
   };
 
   const disconnectAirPlayCast = (device) => {
-    app.confirm("Do you want to disconnect this device?", (res) => {
+    app.confirm("Do you want to disconnect device?", (res) => {
       if (res) {
         ipcRenderer.send("disconnectAirplay", device.host + ":" + device.port + "ap");
         console.log("disconnectAirplay", device.host + ":" + device.port + "ap");
@@ -92,7 +90,7 @@ export const Component = () => {
             <div className="modal-title">{$root.getLz("action.cast.todevices")}</div>
             <button
               className="close-btn"
-              click="close()"
+              onClick={() => close()}
               aria-label="$root.getLz('action.close')"></button>
           </div>
           <div
@@ -107,7 +105,7 @@ export const Component = () => {
                   <div
                     className="md-option-line"
                     style={{ cursor: "pointer" }}
-                    click="setCast(device)">
+                    onClick={() => setCast(device)}>
                     <div className="md-option-segment">
                       {device.name}
                       <br />
@@ -162,7 +160,7 @@ export const Component = () => {
                     <div
                       className="md-option-line"
                       style={{ cursor: pointer }}
-                      click="setAirPlayCast(device)">
+                      onClick={() => setAirPlayCast(device)}>
                       <div className="md-option-segment">
                         {device.name}
                         <br />
@@ -171,7 +169,7 @@ export const Component = () => {
                       <div
                         className="md-option-segment_auto"
                         style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                        click="disconnectAirPlayCast(device)"
+                        onClick={() => disconnectAirPlayCast(device)}
                         v-if="activeCasts.some(item => { return item.host == device.host && item.name == device.name && item.port == device.port})">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +217,7 @@ export const Component = () => {
                 v-if="activeCasts.length != 0">
                 <button
                   style={{ width: "100%" }}
-                  click="stopCasting()"
+                  onClick={() => stopCasting()}
                   className="md-btn md-btn-block md-btn-primary">
                   {$root.getLz("action.cast.stop")}
                 </button>
@@ -228,7 +226,7 @@ export const Component = () => {
                 <button
                   style={{ width: "100%" }}
                   className="md-btn md-btn-block"
-                  click="scan()">
+                  onClick={() => scan()}>
                   {$root.getLz("action.cast.scan")}
                 </button>
               </div>

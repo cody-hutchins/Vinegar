@@ -47,13 +47,13 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
               <div className="modal-title">{app.getLz("action.addToPlaylist")}</div>
               <button
                 className="close-btn"
-                click="app.resetState()"
+                onClick={() => app.resetState()}
                 aria-label="app.getLz('action.close')"></button>
             </div>
             <div className="modal-content">
               <button
                 className="playlist-item"
-                click="app.addSelectedToNewPlaylist()"
+                onClick={() => app.addSelectedToNewPlaylist()}
                 style={{ width: "100%" }}>
                 <div className="icon">{import("../svg/plus.svg")}</div>
                 <div className="name">{app.getLz("action.createPlaylist")}</div>

@@ -1,19 +1,16 @@
+import { useEffect } from "react";
+
 export const Component = ({ data }: { data: object }) => {
   const app = this.$root;
   const timedelay = false;
-  function mounted() {
-    let self = this;
-    this.$nextTick(() => {
-      setTimeout(function () {
-        self.timedelay = true;
-      }, 1000);
-    });
-  }
-
   function close() {
     app.modals.moreInfo = false;
   }
-
+  useEffect(() => {
+    setTimeout(() => {
+      timedelay = true;
+    }, 1000);
+  }, []);
   return (
     <div id="moreinfo-modal">
       <div
@@ -25,7 +22,7 @@ export const Component = ({ data }: { data: object }) => {
             <div className="modal-subtitle modal-title">{data.subtitle ?? ""}</div>
             <button
               className="close-btn"
-              click="close()"
+              onClick={() => close()}
               aria-label="app.getLz('action.close')"></button>
           </div>
           <div className="modal-content">

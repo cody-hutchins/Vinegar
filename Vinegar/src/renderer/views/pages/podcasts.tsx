@@ -4,8 +4,8 @@ export const Component = () => {
     props: ["item", "isselected"],
     methods: {
       msToMinSec(ms) {
-        var minutes = Math.floor(ms / 60000);
-        var seconds = ((ms % 60000) / 1000).toFixed(0);
+        let minutes = Math.floor(ms / 60000);
+        let seconds = ((ms % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
       },
     },
@@ -39,31 +39,30 @@ export const Component = () => {
     },
     async mounted() {
       let podcastShow = await app.mk.api.v3.podcasts(`/v1/me/library/podcasts?include=episodes`);
-      this.podcasts = podcastShow.data.data;
+      podcasts = podcastShow.data.data;
       if (podcastShow.data.next) {
-        await this.getNext(podcastShow.data.next);
+        await getNext(podcastShow.data.next);
       }
-      // this.episodes = podcastShow.data.data[0].relationships.episodes.data
+      // episodes = podcastShow.data.data[0].relationships.episodes.data
     },
     methods: {
       searchTriggerVis(visible) {},
       librarySearch() {
-        this.search.resultsLibrary = [];
-        if (this.search.term.length > 2) {
-          this.search.resultsLibrary = this.podcasts.filter((podcast) => podcast.attributes.name.toLowerCase().includes(this.search.term.toLowerCase()));
+        search.resultsLibrary = [];
+        if (search.term.length > 2) {
+          search.resultsLibrary = podcasts.filter((podcast) => podcast.attributes.name.toLowerCase().includes(search.term.toLowerCase()));
         }
       },
       isSubscribed(id) {
-        return this.podcasts.filter((podcast) => podcast.id == id).length > 0;
+        return podcasts.filter((podcast) => podcast.id == id).length > 0;
       },
       searchPodcasts() {
-        let self = this;
-        if (this.search.term == "") {
+        if (search.term == "") {
           return;
         }
         app.mk.api.v3
           .podcasts(`/v1/catalog/${app.mk.storefrontId}/search`, {
-            term: this.search.term,
+            term: search.term,
             types: ["podcasts"],
             limit: 25,
           })
@@ -76,8 +75,8 @@ export const Component = () => {
         window.open(url);
       },
       msToMinSec(ms) {
-        var minutes = Math.floor(ms / 60000);
-        var seconds = ((ms % 60000) / 1000).toFixed(0);
+        let minutes = Math.floor(ms / 60000);
+        let seconds = ((ms % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
       },
       playEpisode(episode) {
@@ -86,40 +85,40 @@ export const Component = () => {
         });
       },
       selectPodcast(podcast) {
-        this.podcastSelected = podcast;
-        this.getEpisodes(podcast);
+        podcastSelected = podcast;
+        getEpisodes(podcast);
       },
       selectEpisode(episode) {
-        this.selected = Clone(episode);
+        selected = Clone(episode);
       },
       async getEpisodes(podcast) {
-        this.episodes = [];
+        episodes = [];
         let eps = await app.mk.api.v3.podcasts(`/v1/catalog/${app.mk.storefrontId}/podcasts/${podcast.id}?include=episodes`);
 
         eps.data.data[0].relationships.episodes.data.forEach((ep) => {
-          this.episodes.push(ep);
+          episodes.push(ep);
         });
         if (eps.data.data[0].relationships.episodes.next) {
-          await this.getNextEpisodes(eps.data.data[0].relationships.episodes.next, podcast.id);
+          await getNextEpisodes(eps.data.data[0].relationships.episodes.next, podcast.id);
         }
       },
       async getNextEpisodes(next, podcastId) {
         let podcastShow = await app.mk.api.v3.podcasts(next);
-        if (podcastId != this.podcastSelected.id) {
+        if (podcastId != podcastSelected.id) {
           return;
         }
         podcastShow.data.data.forEach((ep) => {
-          this.episodes.push(ep);
+          episodes.push(ep);
         });
         if (podcastShow.data.next) {
-          await this.getNextEpisodes(podcastShow.data.next, podcastId);
+          await getNextEpisodes(podcastShow.data.next, podcastId);
         }
       },
       async getNext(next) {
         let podcastShow = await app.mk.api.v3.podcasts(next);
-        this.podcasts = this.podcasts.concat(podcastShow.data.data);
+        podcasts = podcasts.concat(podcastShow.data.data);
         if (podcastShow.data.next) {
-          await this.getNext(podcastShow.data.next);
+          await getNext(podcastShow.data.next);
         }
       },
     },
@@ -219,7 +218,7 @@ export const Component = () => {
               <h3>{$root.getLz("podcast.episodes")}</h3>
             </div>
             <div
-              v-if="this.search.results.length == 0 && podcastSelected.id == -1"
+              v-if="search.results.length == 0 && podcastSelected.id == -1"
               className="podcast-no-search-results">
               <h3>{$root.getLz("error.noResults")}</h3>
               <p>{$root.getLz("error.noResults.description")}</p>
@@ -238,7 +237,7 @@ export const Component = () => {
               <div className="podcasts-details-header">
                 <button
                   className="close-btn"
-                  click="selected.id = -1"
+                  onClick={() => (selected.id = -1)}
                   aria-label="$root.getLz('action.close')"></button>
               </div>
               <div className="podcast-artwork">
@@ -249,7 +248,7 @@ export const Component = () => {
               </div>
               <h3 className="podcast-header">{selected.attributes.name}</h3>
               <button
-                click="playEpisode(selected)"
+                onClick={() => playEpisode(selected)}
                 className="md-btn podcast-play-btn">
                 {$root.getLz("podcast.playEpisode")}
               </button>
@@ -266,14 +265,14 @@ export const Component = () => {
                 <div className="col">
                   <button
                     className="md-btn md-btn-block meta-btn"
-                    click="openUrl(selected.attributes.websiteUrl)">
+                    onClick={() => openUrl(selected.attributes.websiteUrl)}>
                     {$root.getLz("podcast.website")}
                   </button>
                 </div>
                 <div className="col">
                   <button
                     className="md-btn md-btn-block meta-btn"
-                    click="$root.share(selected.attributes.websiteUrl)">
+                    onClick={() => $root.share(selected.attributes.websiteUrl)}>
                     {$root.getLz("action.share")}
                   </button>
                 </div>

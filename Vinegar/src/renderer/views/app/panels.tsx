@@ -70,7 +70,10 @@ export const Component = () => {
           <div
             id="player-exit"
             title="Close"
-            click="exitMV();fullscreen(false);">
+            onClick={() => {
+              exitMV();
+              fullscreen(false);
+            }}>
             <svg
               fill="white"
               xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +82,10 @@ export const Component = () => {
               viewBox="0 0 21 21"
               aria-role="presentation"
               focusable="false"
-              click="exitMV();fullscreen(false);">
+              onClick={() => {
+                exitMV();
+                fullscreen(false);
+              }}>
               <path
                 d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
                 fill-rule="nonzero"
@@ -136,8 +142,8 @@ export const Component = () => {
                 v-if="mvViewMode == 'full'">
                 <button
                   className="volume-button--small volume"
-                  click="muteButtonPressed()"
-                  className="{'active': this.cfg.audio.volume == 0}"
+                  onClick={() => muteButtonPressed()}
+                  className="{'active': cfg.audio.volume == 0}"
                   title="cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
                   v-b-tooltiphover></button>
                 <input
@@ -156,13 +162,13 @@ export const Component = () => {
               <template v-if="mvViewMode == 'full'">
                 <button
                   className="playback-button pause"
-                  click="mk.pause()"
+                  onClick={() => mk.pause()}
                   v-if="mk.isPlaying"
                   title="$root.getLz('term.pause')"
                   v-b-tooltiphover></button>
                 <button
                   className="playback-button play"
-                  click="mk.play()"
+                  onClick={() => mk.play()}
                   v-else
                   title="$root.getLz('term.play')"
                   v-b-tooltiphover></button>
@@ -176,7 +182,7 @@ export const Component = () => {
                     title="$root.getLz('term.lyrics')"
                     v-b-tooltiphover
                     className="{'active': drawer.panel == 'lyrics'}"
-                    click="invokeDrawer('lyrics')"></button>
+                    onClick={() => invokeDrawer("lyrics")}></button>
                 </template>
                 <template v-else>
                   <button
@@ -187,7 +193,7 @@ export const Component = () => {
               <div
                 id="player-pip"
                 className="{'mini': mvViewMode == 'mini'}"
-                click="pip()"
+                onClick={() => pip()}
                 title="Picture-in-Picture"
                 v-b-tooltiphover>
                 {import("../svg/pip.svg")}
@@ -195,7 +201,7 @@ export const Component = () => {
               <div
                 id="player-fullscreen"
                 v-if="mvViewMode == 'full'"
-                click="fullscreen(!fullscreenState, true)"
+                onClick={() => fullscreen(!fullscreenState, true)}
                 title="Fullscreen"
                 v-b-tooltiphover>
                 {import("../svg/fullscreen.svg")}

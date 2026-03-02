@@ -23,8 +23,8 @@ export const Component = () => {
         }
       },
       getTopResult() {
-        if (this.search.results["meta"]) {
-          return this.search.results[this.search.results.meta.results.order[0]]["data"][0];
+        if (search.results["meta"]) {
+          return search.results[search.results.meta.results.order[0]]["data"][0];
         } else {
           return false;
         }
@@ -73,7 +73,7 @@ export const Component = () => {
                 v-if="data.views['latest-releases'].data.length >= 10">
                 <button
                   className="cd-btn-seeall"
-                  click="$root.showRecordLabelView(data.id, data.attributes.name + ' -  Latest Releases', 'latest-releases')">
+                  onClick={() => $root.showRecordLabelView(data.id, data.attributes.name + " -  Latest Releases", "latest-releases")}>
                   {$root.getLz("term.seeAll")}
                 </button>
               </div>
@@ -92,7 +92,7 @@ export const Component = () => {
                 v-if="data.views['top-releases'].data.length >= 10">
                 <button
                   className="cd-btn-seeall"
-                  click="$root.showRecordLabelView(data.id, data.attributes.name + ' -  Top Releases', 'top-releases')">
+                  onClick={() => $root.showRecordLabelView(data.id, data.attributes.name + " -  Top Releases", "top-releases")}>
                   {$root.getLz("term.seeAll")}
                 </button>
               </div>
@@ -111,7 +111,7 @@ export const Component = () => {
                 v-if="data.relationships.playlists.data.length >= 5">
                 <button
                   className="cd-btn-seeall"
-                  click="$root.showCollection(data.relationships.playlists, data.attributes.name + ' -  Playlists', 'curator')">
+                  onClick={() => $root.showCollection(data.relationships.playlists, data.attributes.name + " -  Playlists", "curator")}>
                   {$root.getLz("term.seeAll")}
                 </button>
               </div>

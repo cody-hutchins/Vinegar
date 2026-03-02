@@ -19,20 +19,22 @@ export const Component = ({ item, imagesize }: { item: object; imagesize: number
               <div
                 className="button"
                 style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
-                click="app.playMediaItem(item)">
+                onClick={() => app.playMediaItem(item)}>
                 {import("../svg/play.svg")}
               </div>
             </div>
             <div
               className="title text-overflow-elipsis"
-              click="app.routeView(item)">
+              onClick={() => app.routeView(item)}>
               {item.attributes.name ?? ""}
             </div>
             <div
               className="subtitle text-overflow-elipsis item-navigate"
               v-if="item.attributes.artistName"
               style={{ zIndex: item.attributes.editorialNotes == null && item.attributes.artistName ? "4" : "" }}
-              click="if (item.attributes.artistName)app.searchAndNavigate(item,'artist')">
+              onClick={() => {
+                if (item.attributes.artistName) app.searchAndNavigate(item, "artist");
+              }}>
               {item.attributes.artistName ?? ""}
             </div>
           </div>
@@ -43,7 +45,7 @@ export const Component = ({ item, imagesize }: { item: object; imagesize: number
             <div
               className="button"
               style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
-              click="app.playMediaItem(item)">
+              onClick={() => app.playMediaItem(item)}>
               {import("../svg/play.svg")}
             </div>
           </div>

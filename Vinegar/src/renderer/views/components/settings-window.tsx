@@ -100,7 +100,7 @@ export const Component = () => {
     let updateFields = document.getElementsByClassName("update-check");
     for (let i = 0; i < updateFields.length; i++) {
       updateFields[i].style = "opacity: 0.5; pointerEvents: none;";
-      updateFields[i].title = "Not available on this type of build";
+      updateFields[i].title = "Not available on type of build";
     }
   }
   function promptForRelaunch() {
@@ -167,11 +167,13 @@ export const Component = () => {
           className="{'maxed': $store.state.pageState['settings'].fullscreen, 'no-sidebar': sidebarVis()}">
           <button
             className="close-btn minmax-btn"
-            click="$store.state.pageState['settings'].fullscreen = !$store.state.pageState['settings'].fullscreen"
+            onClick={() => {
+              $store.state.pageState["settings"].fullscreen = !$store.state.pageState["settings"].fullscreen;
+            }}
             className="{'min': $store.state.pageState['settings'].fullscreen}"></button>
           <button
             className="close-btn"
-            click="close()"></button>
+            onClick={() => close()}></button>
           <b-tabs
             className="no-style"
             pills
@@ -222,7 +224,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          click="app.appRoute('apple-account-settings')">
+                          onClick={() => app.appRoute("apple-account-settings")}>
                           {$root.getLz("term.accountSettings")}
                         </button>
                       </div>
@@ -422,7 +424,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          click="$root.openSettingsPage('keybindings')">
+                          onClick={() => $root.openSettingsPage("keybindings")}>
                           {$root.getLz("action.open")}
                         </button>
                       </div>
@@ -456,7 +458,7 @@ export const Component = () => {
                                         {'Local files path'}
                                     </div>
                                     <div className="md-option-segment md-option-segment_auto">
-                                        <button className="md-btn" click="openLocalSongsPathMenu">
+                                        <button className="md-btn" onClick={() =>openLocalSongsPathMenu}>
                                             {'Edit Paths'}
                                         </button>
                                     </div>
@@ -509,7 +511,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          onclick="app.modals.audioControls = true">
+                          onClick={() => (app.modals.audioControls = true)}>
                           {$root.getLz("term.audioControls")}
                         </button>
                       </div>
@@ -519,7 +521,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          onclick="app.modals.audioPlaybackRate = true">
+                          onClick={() => (app.modals.audioPlaybackRate = true)}>
                           {$root.getLz("settings.option.audio.playbackRate.change")}
                         </button>
                       </div>
@@ -542,7 +544,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          onclick="app.modals.equalizer = true">
+                          onClick={() => (app.modals.equalizer = true)}>
                           {$root.getLz("term.equalizer")}
                         </button>
                       </div>
@@ -658,7 +660,7 @@ export const Component = () => {
                                             {$root.getLz('settings.header.visual.theme')}
                                         </div>
                                         <div className="md-option-segment md-option-segment_auto">
-                                            <button className="md-btn md-btn-block" click="$root.appRoute('installed-themes')">
+                                            <button className="md-btn md-btn-block" onClick={() =>$root.appRoute('installed-themes')}>
                                                 {$root.getLz('settings.option.visual.theme.manageStyles')}
                                             </button>
                                         </div>
@@ -1341,7 +1343,7 @@ export const Component = () => {
                         <div className="md-option-segment md-option-segment_auto">
                           <button
                             className="md-btn"
-                            click="reloadDiscordRPC()">
+                            onClick={() => reloadDiscordRPC()}>
                             {$root.getLz("menubar.options.reload")}
                           </button>
                         </div>
@@ -1486,7 +1488,7 @@ export const Component = () => {
                         <button
                           className="md-btn"
                           id="lfmConnect"
-                          click="app.cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize()">
+                          onClick={() => (app.cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize())}>
                           {$root.getLz(`term.${$root.cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
                           <br />
                           <small>
@@ -1624,7 +1626,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          click="copyLogs">
+                          onClick={() => copyLogs}>
                           {$root.getLz("action.copy")}
                         </button>
                       </div>
@@ -1634,7 +1636,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          click="openAppData">
+                          onClick={() => openAppData}>
                           {$root.getLz("action.open")}
                         </button>
                       </div>
@@ -1666,7 +1668,7 @@ export const Component = () => {
                                         {$root.getLz('settings.option.visual.plugin.github.explore')}
                                     </div>
                                     <div className="md-option-segment md-option-segment_auto">
-                                        <button className="md-btn" click="$root.openSettingsPage('github-plugins')">{
+                                        <button className="md-btn" onClick={() =>$root.openSettingsPage('github-plugins')}>{
                                             $root.getLz("settings.option.visual.plugin.github.explore") }
                                         </button>
                                     </div>
@@ -1677,7 +1679,7 @@ export const Component = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <button
                           className="md-btn"
-                          click="reinstallWidevineCDM">
+                          onClick={() => reinstallWidevineCDM}>
                           {$root.getLz("settings.option.experimental.reinstallwidevine")}
                         </button>
                       </div>
@@ -1690,7 +1692,7 @@ export const Component = () => {
                           <input
                             type="checkbox"
                             v-model="app.cfg.advanced.experiments.includes('immersive-preview')"
-                            click="app.cfg.advanced.experiments.includes('immersive-preview') ? removeExperiment('immersive-preview') : addExperiment('immersive-preview')"
+                            onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}
                             switch
                           />
                         </label>
@@ -1708,7 +1710,7 @@ export const Component = () => {
                           <input
                             type="checkbox"
                             v-model="app.cfg.advanced.experiments.includes('unknown-sources')"
-                            click="app.cfg.advanced.experiments.includes('unknown-sources') ? removeExperiment('unknown-sources') : addExperiment('unknown-sources')"
+                            onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}
                             switch
                           />
                         </label>
@@ -1725,7 +1727,7 @@ export const Component = () => {
                           <input
                             type="checkbox"
                             v-model="app.cfg.advanced.experiments.includes('cider_mirror')"
-                            click="app.cfg.advanced.experiments.includes('cider_mirror') ? removeExperiment('cider_mirror') : addExperiment('cider_mirror')"
+                            onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}
                             switch
                           />
                         </label>
@@ -1758,7 +1760,7 @@ export const Component = () => {
                           <input
                             type="checkbox"
                             v-model="app.cfg.advanced.experiments.includes('compactui')"
-                            click="app.cfg.advanced.experiments.includes('compactui') ? removeExperiment('compactui') : addExperiment('compactui')"
+                            onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
                             switch
                             disabled="!!app.getThemeDirective('forceUI')"
                           />
@@ -1774,7 +1776,7 @@ export const Component = () => {
                             type="checkbox"
                             disabled
                             v-model="app.cfg.advanced.experiments.includes('inline-playlists')"
-                            click="app.cfg.advanced.experiments.includes('inline-playlists') ? removeExperiment('inline-playlists') : addExperiment('inline-playlists')"
+                            onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}
                             switch
                           />
                         </label>
@@ -1861,7 +1863,7 @@ export const Component = () => {
                                 <small>Debug Status: { app.cfg.connectUser }</small>
                             </div>
                             <div className="md-option-segment md-option-segment_auto">
-                                <button className="md-btn" id='settings.option.general.updateCider.check' click="authCC()">
+                                <button className="md-btn" id='settings.option.general.updateCider.check' onClick={() =>authCC()}>
                                     {$root.getLz('term.connect')}
                                 </button>
                             </div>
@@ -1875,7 +1877,7 @@ export const Component = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <button className="md-btn" id='settings.option.general.updateCider.check'
-                                            click="logoutCC()" style={{display: flex,alignItems: center,gap: 0.4em}}>
+                                            onClick={() =>logoutCC()} style={{display: flex,alignItems: center,gap: 0.4em}}>
                                         {import("../svg/check.svg") }
                                         <div v>Connected</div>
                                     </button>
@@ -1894,7 +1896,7 @@ export const Component = () => {
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
                                         <input type="checkbox" a-v-model="app.cfg.connectUser.sync.settings"
-                                               click="app.cfg.connectUser.sync.settings = !app.cfg.connectUser.sync.settings"
+                                               onClick={() =>app.cfg.connectUser.sync.settings = !app.cfg.connectUser.sync.settings}
                                                switch/>
                                     </label>
                                 </div>
@@ -1907,7 +1909,7 @@ export const Component = () => {
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
                                         <input type="checkbox" disabled a-v-model="app.cfg.connectUser.sync.themes"
-                                               click="app.cfg.connectUser.sync.themes = !app.cfg.connectUser.sync.themes"
+                                               onClick={() =>app.cfg.connectUser.sync.themes = !app.cfg.connectUser.sync.themes}
                                                switch/>
                                     </label>
                                 </div>
@@ -1920,7 +1922,7 @@ export const Component = () => {
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
                                         <input type="checkbox" disabled a-v-model="app.cfg.connectUser.sync.plugins"
-                                               click="app.cfg.connectUser.sync.plugins = !app.cfg.connectUser.sync.plugins"
+                                               onClick={() =>app.cfg.connectUser.sync.plugins = !app.cfg.connectUser.sync.plugins}
                                                switch/>
                                     </label>
                                 </div>

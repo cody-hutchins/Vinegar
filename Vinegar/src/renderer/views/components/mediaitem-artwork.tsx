@@ -48,7 +48,6 @@ export const Component = ({ size = "120", width, bgcolor = "", url = "", type = 
   };
 
   const contextMenu = (event) => {
-    let self = this;
     app.showMenuPanel(
       {
         items: {

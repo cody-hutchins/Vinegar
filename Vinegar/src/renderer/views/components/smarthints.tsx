@@ -57,7 +57,6 @@ export const Component = ({ item, position }: { item: object; position: number }
     }
   }
   async function contextMenu(event) {
-    let self = this;
     let useMenu = "normal";
     if (app.selectedMediaItems.length <= 1) {
       app.selectedMediaItems = [];
@@ -285,7 +284,6 @@ export const Component = ({ item, position }: { item: object; position: number }
     }
   }
   async function artistMenu(event) {
-    let self = this;
     let followAction = "follow";
     let followActions = {
       follow: {
@@ -371,9 +369,9 @@ export const Component = ({ item, position }: { item: object; position: number }
         app.queueParentandplayChild(parent, childIndex, item);
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
         function shuffleArray(array) {
-          for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
+          for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let temp = array[i];
             array[i] = array[j];
             array[j] = temp;
           }
@@ -386,7 +384,7 @@ export const Component = ({ item, position }: { item: object; position: number }
           })
           .then(function () {
             app.mk.play().then(function () {
-              var playlistId = id;
+              let playlistId = id;
 
               function getPlaylist(id, isLibrary) {
                 if (isLibrary) {
@@ -439,7 +437,12 @@ export const Component = ({ item, position }: { item: object; position: number }
     <div id="mediaitem-smarthints">
       <div
         className="cd-queue-item"
-        click="$root.search.showHints = false;$root.routeView(item);$root.search.cursor = -1;$root.search.term == ''"
+        onClick={() => {
+          $root.search.showHints = false;
+          $root.routeView(item);
+          $root.search.cursor = -1;
+          $root.search.term == "";
+        }}
         contextmenu="$root.hintscontext = true;getContextMenu()"
         className="{'hintactive': ($root.search.cursor == position + $root.search.hints.filter((a) => {return a.content == null}).length)}">
         <div

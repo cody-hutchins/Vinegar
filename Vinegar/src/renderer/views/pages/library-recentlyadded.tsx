@@ -21,7 +21,7 @@ export const Component = () => {
     async mounted() {
       if (this.$store.state.pageState["recentlyAdded"].items.length !== 0) return;
 
-      const firstResult = await app.mk.api.v3.music(this.firstRoute);
+      const firstResult = await app.mk.api.v3.music(firstRoute);
       this.$store.state.pageState["recentlyAdded"].items = firstResult.data.data;
       this.$store.state.pageState["recentlyAdded"].nextUrl = firstResult.data.next;
     },
@@ -30,13 +30,13 @@ export const Component = () => {
     },
     methods: {
       visibilityChanged: function (isVisible, entry) {
-        if (isVisible && !this.loading) {
-          this.getNextData();
+        if (isVisible && !loading) {
+          getNextData();
         }
       },
       async getNextData() {
         if (this.$store.state.pageState["recentlyAdded"].nextUrl) {
-          this.loading = true;
+          loading = true;
           const nextResult = await app.mk.api.v3.music(this.$store.state.pageState["recentlyAdded"].nextUrl);
           this.$store.state.pageState["recentlyAdded"].items = this.$store.state.pageState["recentlyAdded"].items.concat(nextResult.data.data);
           if (nextResult.data.next) {
@@ -44,7 +44,7 @@ export const Component = () => {
           } else {
             this.$store.state.pageState["recentlyAdded"].nextUrl = null;
           }
-          this.loading = false;
+          loading = false;
         }
         return;
       },

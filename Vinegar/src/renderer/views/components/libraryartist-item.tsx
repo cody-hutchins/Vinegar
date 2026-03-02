@@ -7,8 +7,8 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
   };
   const msToMinSec = (ms) => {
-    var minutes = Math.floor(ms / 60000);
-    var seconds = ((ms % 60000) / 1000).toFixed(0);
+    let minutes = Math.floor(ms / 60000);
+    let seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   };
   const getDataType = () => {
@@ -34,7 +34,6 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     return u;
   };
   const contextMenu = (event) => {
-    let self = this;
     let data_type = getDataType();
 
     let item = item;
@@ -152,7 +151,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     <div id="libraryartist-item">
       <div
         v-observe-visibility="{callback: visibilityChanged}"
-        click="select"
+        onClick={() => select}
         className="cd-mediaitem-list-item"
         className="{'mediaitem-selected': app.select_hasMediaItem(guid)}"
         contextmenu="contextMenu">

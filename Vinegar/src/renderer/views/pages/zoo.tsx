@@ -9,8 +9,8 @@ export const Component = () => {
     },
     async mounted() {
       app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/669831761`).then((response) => {
-        this.artist = response.data.data[0];
-        this.artistLoaded = true;
+        artist = response.data.data[0];
+        artistLoaded = true;
       });
     },
     methods: {},
@@ -20,7 +20,7 @@ export const Component = () => {
       <div className="content-inner">
         <svg-icon />
         <h3>Welcome to element park. *BERR NERR NERR NERR NERRRRR BERR NER NER NER NERRR BERRR NR NR NRRRR*</h3>
-        <button click="app.playMediaItemById('1592151778', 'album')">Play Test Album</button>
+        <button onClick={() => app.playMediaItemById("1592151778", "album")}>Play Test Album</button>
         {$store.state.test}
         <div className="spinner"></div>
         <button className="md-btn">Cider Button</button>

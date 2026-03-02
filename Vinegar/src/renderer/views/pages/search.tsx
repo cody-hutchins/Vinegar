@@ -14,7 +14,7 @@ export const Component = () => {
     methods: {
       getTopResult() {
         try {
-          return this.search.results[this.search.results.meta.results.order[0]]["data"][0];
+          return search.results[search.results.meta.results.order[0]]["data"][0];
         } catch (error) {
           return false;
         }
@@ -23,27 +23,27 @@ export const Component = () => {
         let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
           l: this.$root.mklang,
         });
-        this.recentlyPlayed = hist.data.data;
+        recentlyPlayed = hist.data.data;
       },
       async getCategories() {
-        if (this.categoriesView != [] && this.categoriesView.length > 0) {
-          this.categoriesReady = true;
+        if (categoriesView != [] && categoriesView.length > 0) {
+          categoriesReady = true;
           return await true;
         } else {
-          await this.seeAllHistory();
-          let response = await this.app.mk.api.v3.music(`/v1/recommendations/${this.app.mk.storefrontId}?timezone=${encodeURIComponent(this.app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
-          this.categoriesView = response.data.data;
-          console.log(this.categoriesView);
-          this.categoriesReady = true;
+          await seeAllHistory();
+          let response = await app.mk.api.v3.music(`/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
+          categoriesView = response.data.data;
+          console.log(categoriesView);
+          categoriesReady = true;
           return await true;
         }
       },
       getFlattenedCategories() {
         let flattened = [];
-        for (let i = 0; i < this.categoriesView.length; i++) {
-          if (this.categoriesView[i].relationships && this.categoriesView[i].relationships.contents && this.categoriesView[i].relationships.contents.data) {
-            for (let j = 0; j < this.categoriesView[i].relationships.contents.data.length; j++) {
-              if (this.categoriesView[i].relationships.contents.data[j].type != "editorial-items") flattened.push(this.categoriesView[i].relationships.contents.data[j]);
+        for (let i = 0; i < categoriesView.length; i++) {
+          if (categoriesView[i].relationships && categoriesView[i].relationships.contents && categoriesView[i].relationships.contents.data) {
+            for (let j = 0; j < categoriesView[i].relationships.contents.data.length; j++) {
+              if (categoriesView[i].relationships.contents.data[j].type != "editorial-items") flattened.push(categoriesView[i].relationships.contents.data[j]);
             }
           }
         }
@@ -78,7 +78,11 @@ export const Component = () => {
                 className="search-hint text-overflow-elipsis"
                 v-for="(hint, index) in $root.search.hints.filter((a) => {return a.content == null})"
                 className="{active: ($root.search.cursor == index)}"
-                click="$root.search.term = hint.searchTerm;$root.search.showHints = false;$root.searchQuery(hint.searchTerm)">
+                onClick={() => {
+                  $root.search.term = hint.searchTerm;
+                  $root.search.showHints = false;
+                  $root.searchQuery(hint.searchTerm);
+                }}>
                 {hint.displayTerm}
               </button>
               <template v-for="(item, position) in $root.search.hints.filter((a) => {return a.content != null})">
@@ -93,13 +97,17 @@ export const Component = () => {
         </div>
         <div className="btn-group searchToggle">
           <button
-            click="searchType = 'catalog'"
+            onClick={() => {
+              searchType = "catalog";
+            }}
             className="md-btn md-btn-small"
             className="{'md-btn-primary': searchType == 'catalog'}">
             {$root.getLz("term.appleMusic")}
           </button>
           <button
-            click="searchType = 'library';"
+            onClick={() => {
+              searchType = "library";
+            }}
             className="md-btn md-btn-small"
             className="{'md-btn-primary': searchType == 'library'}">
             {$root.getLz("term.library")}
@@ -119,7 +127,7 @@ export const Component = () => {
                   </div>
                   <div
                     className="col-auto cider-flex-center"
-                    click="app.showSearchView(app.search.term, 'song', app.friendlyTypes('song'))"
+                    onClick={() => app.showSearchView(app.search.term, "song", app.friendlyTypes("song"))}
                     v-if="search.results.song.data.length >= 12">
                     <button className="cd-btn-seeall">{app.getLz("term.seeAll")}</button>
                   </div>
@@ -149,7 +157,7 @@ export const Component = () => {
                     v-if="search.results[section].data.length >= 10">
                     <button
                       className="cd-btn-seeall"
-                      click="app.showSearchView(app.search.term, section, app.friendlyTypes(section))">
+                      onClick={() => app.showSearchView(app.search.term, section, app.friendlyTypes(section))}>
                       {app.getLz("term.seeAll")}
                     </button>
                   </div>
@@ -172,7 +180,7 @@ export const Component = () => {
                   v-if="search.resultsSocial.playlist.data.length >= 10">
                   <button
                     className="cd-btn-seeall"
-                    click="app.showCollection(search.resultsSocial.playlist, 'Shared Playlists', 'default')">
+                    onClick={() => app.showCollection(search.resultsSocial.playlist, "Shared Playlists", "default")}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>
@@ -189,7 +197,7 @@ export const Component = () => {
                   v-if="search.resultsSocial.profile.data.length >= 10">
                   <button
                     className="cd-btn-seeall"
-                    click="app.showCollection(search.resultsSocial.profile, 'People', 'default')">
+                    onClick={() => app.showCollection(search.resultsSocial.profile, "People", "default")}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>

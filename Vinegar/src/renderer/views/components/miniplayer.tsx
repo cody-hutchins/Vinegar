@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
   const app = this.$root;
   const tabMode = "";
@@ -17,6 +19,11 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
       console.log("js");
     }
   }
+  useEffect(() => {
+    beforeMount();
+    mounted();
+    return beforeDestroy;
+  }, []);
   return (
     <div id="mini-view">
       <div
@@ -27,7 +34,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
           className="player-pin"
           title="Pin to Top"
           v-if="app.cfg.visual.miniplayer_top_toggle === false"
-          click="app.pinMiniPlayer()">
+          onClick={() => app.pinMiniPlayer()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 28 28"
@@ -43,7 +50,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
           className="player-pin"
           title="Unpin to Top"
           v-if="app.cfg.visual.miniplayer_top_toggle === true"
-          click="app.pinMiniPlayer(false)">
+          onClick={() => app.pinMiniPlayer(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 28 28"
@@ -58,7 +65,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
         <div
           className="player-exit"
           title="Close"
-          click="app.miniPlayer(false)">
+          onClick={() => app.miniPlayer(false)}>
           <svg
             fill="#323232e3"
             width="21"
@@ -94,7 +101,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
         <div className="col artwork-col">
           <div
             className="artwork"
-            click="app.miniPlayer(false)">
+            onClick={() => app.miniPlayer(false)}>
             <mediaitem-artwork
               size="600"
               url="image ?? ''"></mediaitem-artwork>
@@ -112,13 +119,13 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                     <div
                       className="item-navigate song-artist"
                       style={{ display: "inline-block" }}
-                      click="app.getNowPlayingItemDetailed(`artist`)">
+                      onClick={() => app.getNowPlayingItemDetailed(`artist`)}>
                       {app.mk.nowPlayingItem["attributes"]["artistName"]}
                     </div>
                     <div
                       className="song-artist item-navigate"
                       style={{ display: "inline-block" }}
-                      click="app.getNowPlayingItemDetailed('album')">
+                      onClick={() => app.getNowPlayingItemDetailed("album")}>
                       {app.mk.nowPlayingItem["attributes"]["albumName"] ? " — " + app.mk.nowPlayingItem["attributes"]["albumName"] : ""}
                     </div>
                   </div>
@@ -149,21 +156,21 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="playback-button--small shuffle"
                       v-if="$root.mk.shuffleMode == 0"
                       className="$root.isDisabled() && 'disabled'"
-                      click="$root.mk.shuffleMode = 1"
+                      onClick={() => ($root.mk.shuffleMode = 1)}
                       title="$root.getLz('term.enableShuffle')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button--small shuffle active"
                       v-else
                       className="$root.isDisabled() && 'disabled'"
-                      click="$root.mk.shuffleMode = 0"
+                      onClick={() => ($root.mk.shuffleMode = 0)}
                       title="$root.getLz('term.disableShuffle')"
                       v-b-tooltiphover></button>
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button previous"
-                      click="$root.prevButton()"
+                      onClick={() => $root.prevButton()}
                       className="$root.isPrevDisabled() && 'disabled'"
                       title="$root.getLz('term.previous')"
                       v-b-tooltiphover></button>
@@ -171,19 +178,19 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button stop"
-                      click="$root.mk.stop()"
+                      onClick={() => $root.mk.stop()}
                       v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
                       title="$root.getLz('term.stop')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button pause"
-                      click="$root.mk.pause()"
+                      onClick={() => $root.mk.pause()}
                       v-else-if="$root.mk.isPlaying"
                       title="$root.getLz('term.pause')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button play"
-                      click="$root.mk.play()"
+                      onClick={() => $root.mk.play()}
                       v-else
                       title="$root.getLz('term.play')"
                       v-b-tooltiphover></button>
@@ -191,7 +198,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button next"
-                      click="$root.skipToNextItem()"
+                      onClick={() => $root.skipToNextItem()}
                       className="$root.isNextDisabled() && 'disabled'"
                       title="$root.getLz('term.next')"
                       v-b-tooltiphover></button>
@@ -201,19 +208,19 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="playback-button--small repeat"
                       v-if="$root.mk.repeatMode == 0"
                       className="$root.isDisabled() && 'disabled'"
-                      click="$root.mk.repeatMode = 1"
+                      onClick={() => ($root.mk.repeatMode = 1)}
                       title="$root.getLz('term.enableRepeatOne')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button--small repeat repeatOne"
-                      click="$root.mk.repeatMode = 2"
+                      onClick={() => ($root.mk.repeatMode = 2)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 1"
                       title="$root.getLz('term.disableRepeatOne')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button--small repeat active"
-                      click="$root.mk.repeatMode = 0"
+                      onClick={() => ($root.mk.repeatMode = 0)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 2"
                       title="$root.getLz('term.disableRepeat')"
@@ -224,7 +231,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                   <div className="input-container">
                     <button
                       className="volume-button--small volume"
-                      click="app.muteButtonPressed()"
+                      onClick={() => app.muteButtonPressed()}
                       className="{'active': app.cfg.audio.volume == 0}"></button>
                     <input
                       type="range"
@@ -262,8 +269,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
         </div>
     </div>  */}
       {/* <div className="tab-toggles">
-        <div className="lyrics" className="{active: tabMode == 'lyrics'}" click="tabMode = (tabMode == 'lyrics') ? '' : 'lyrics'"></div>
-        <div className="queue"  className="{active: tabMode == 'queue'}" click="tabMode =  (tabMode == 'queue') ? '' :'queue'"></div>
+        <div className="lyrics" className="{active: tabMode == 'lyrics'}" onClick={() =>tabMode = (tabMode == 'lyrics') ? '' : 'lyrics'}></div>
+        <div className="queue"  className="{active: tabMode == 'queue'}" onClick={() =>tabMode =  (tabMode == 'queue') ? '' :'queue'}></div>
     </div>   */}
     </div>
   );

@@ -70,8 +70,8 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
   }
   function msToMinSec(ms) {
-    var minutes = Math.floor(ms / 60000);
-    var seconds = ((ms % 60000) / 1000).toFixed(0);
+    let minutes = Math.floor(ms / 60000);
+    let seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
   function getDataType() {
@@ -474,9 +474,9 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
         app.queueParentandplayChild(parent, childIndex, item);
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
         function shuffleArray(array) {
-          for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
+          for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let temp = array[i];
             array[i] = array[j];
             array[j] = temp;
           }
@@ -489,7 +489,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
           })
           .then(function () {
             app.mk.play().then(function () {
-              var playlistId = id;
+              let playlistId = id;
 
               function getPlaylist(id, isLibrary) {
                 if (isLibrary) {
@@ -551,7 +551,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
       <div
         v-observe-visibility="{callback: visibilityChanged, throttle: 100}"
         contextmenu="contextMenu"
-        click="select"
+        onClick={() => select}
         data-id="itemId"
         data-type="getDataType()"
         data-index="index"
@@ -579,7 +579,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
               v-if="showInLibrary"
               style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
               <button
-                click="addToLibrary()"
+                onClick={() => addToLibrary()}
                 v-if="!addedToLibrary && (showIndex == false ||(showIndex == true && showIndexPlaylist != false))"
                 aria-label="$root.getLz('action.addToLibrary')">
                 <div
@@ -588,7 +588,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
               </button>
               <button
                 v-else-if="!(showArtwork == true && (showIndex == false ||(showIndex == true && showIndexPlaylist != false)))"
-                click="playTrack()"
+                onClick={() => playTrack()}
                 aria-label="$root.getLz('term.play')">
                 <div
                   className="svg-icon playIcon"
@@ -620,7 +620,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
               type="item.type"></mediaitem-artwork>
             <button
               className="overlay-play"
-              click="playTrack()"
+              onClick={() => playTrack()}
               aria-label="$root.getLz('term.play')">
               {import("../svg/play.svg")}
             </button>
@@ -641,7 +641,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
                 <div
                   className="artist item-navigate text-overflow-elipsis"
                   title="item.attributes.artistName"
-                  click="app.searchAndNavigate(item,'artist')">
+                  onClick={() => app.searchAndNavigate(item, "artist")}>
                   {item.attributes.artistName}
                 </div>
                 <template v-if="item.attributes.albumName">&nbsp;—&nbsp;</template>
@@ -649,7 +649,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
                   <div
                     className="artist item-navigate text-overflow-elipsis"
                     title="item.attributes.albumName"
-                    click="app.searchAndNavigate(item,'album')">
+                    onClick={() => app.searchAndNavigate(item, "album")}>
                     {item.attributes.albumName}
                   </div>
                 </template>

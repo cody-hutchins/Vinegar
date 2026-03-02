@@ -23,15 +23,15 @@ export const Component = () => {
       const hash = window.location.hash;
       // get everything after the first / character but keep everything afterwards
       const query = hash.substring(hash.indexOf("/") + 1, hash.indexOf("&") > 0 ? hash.indexOf("&") : hash.length);
-      this.query = query;
-      // if(!this.query.includes("?")) {
-      //   this.query += queryDefaults;
+      query = query;
+      // if(!query.includes("?")) {
+      //   query += queryDefaults;
       // }
       console.debug(query);
-      const result = await this.$root.mk.api.v3.music(`/v1/editorial/${this.$root.mk.storefrontId}/groupings/${this.query}`, !this.query.includes("&") ? queryDefaults : { platform: "web" });
-      this.data = result.data.data[0];
+      const result = await this.$root.mk.api.v3.music(`/v1/editorial/${this.$root.mk.storefrontId}/groupings/${query}`, !query.includes("&") ? queryDefaults : { platform: "web" });
+      data = result.data.data[0];
 
-      console.log(this.data);
+      console.log(data);
 
       //this.$root.getBrowsePage();
     },
@@ -56,13 +56,13 @@ export const Component = () => {
                   <button
                     className="cd-btn-seeall"
                     v-if="recom.relationships.room"
-                    click="app.showRoom(recom.relationships.room?.data[0].href)">
+                    onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
                     {app.getLz("term.seeAll")}
                   </button>
                   <button
                     className="cd-btn-seeall"
                     v-else
-                    click="app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? '', 'listen_now')">
+                    onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>
@@ -96,7 +96,7 @@ export const Component = () => {
                   <div className="grouping-container">
                     <button
                       className="grouping-btn"
-                      click="$root.goToGrouping(link.url)"
+                      onClick={() => $root.goToGrouping(link.url)}
                       v-for="link in recom.attributes.links">
                       {link.label}
                     </button>

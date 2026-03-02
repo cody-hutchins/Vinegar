@@ -27,8 +27,6 @@ export const Component = ({ data, title, type, parentSelector = null }: { data: 
     });
   };
   const getNext = () => {
-    let self = this;
-    triggerEnabled = false;
     if (typeof data.next == "undefined") {
       return;
     }
@@ -109,7 +107,7 @@ export const Component = ({ data, title, type, parentSelector = null }: { data: 
           <button
             className="top-fab"
             v-show="showFab"
-            click="scrollToTop()"
+            onClick={() => scrollToTop()}
             aria-label="app.getLz('action.scrollToTop')">
             {import("../svg/arrow-up.svg")}
           </button>

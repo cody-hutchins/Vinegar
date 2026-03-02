@@ -18,7 +18,7 @@ export const Component = () => {
   }
 
   const currentSlice = useMemo(() => {
-    return this.library.albums.displayListing.slice(start, end);
+    return library.albums.displayListing.slice(start, end);
   }, [start, end]);
 
   const onRangeChange = (newRange: [number, number]) => {
@@ -38,7 +38,7 @@ export const Component = () => {
           <div className="col-auto">
             <button
               v-if="library.albums.downloadState == 2"
-              click="$root.getLibraryAlbumsFull(true, 1)"
+              onClick={() => $root.getLibraryAlbumsFull(true, 1)}
               className="reload-btn"
               aria-label="app.getLz('menubar.options.reload')">
               {import("../svg/redo.svg")}

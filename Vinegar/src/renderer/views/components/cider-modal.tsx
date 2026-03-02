@@ -43,14 +43,14 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
               <div className="modal-title">{app.getLz("action.addToLibrary")}</div>
               <button
                 className="close-btn"
-                click="app.resetState()"
+                onClick={() => app.resetState()}
                 aria-label="app.getLz('action.close')"></button>
             </div>
             <div className="modal-content">
               <button
                 className="playlist-item"
                 className="{ focused: playlist.id == focused }"
-                click="addToPlaylist(playlist.id)"
+                onClick={() => addToPlaylist(playlist.id)}
                 style={{ width: "100%" }}
                 v-for="playlist in playlistSorted"
                 v-if="playlist.attributes.canEdit && playlist.type != 'library-playlist-folders'">

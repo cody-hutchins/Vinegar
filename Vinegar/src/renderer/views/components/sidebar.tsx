@@ -22,7 +22,10 @@ export const Component = () => {
               <input
                 type="search"
                 spellcheck="false"
-                click="$root.appRoute('search');$root.search.showHints = true"
+                onClick={() => {
+                  $root.appRoute("search");
+                  $root.search.showHints = true;
+                }}
                 focus="$root.search.showHints = true"
                 blur="$root.setTimeout(()=>{if($root.hintscontext != true){$root.search.showHints = false} }, 300)"
                 v-on:keyupenter="$root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false;$root.search.showSearchView = true;$root.search.cursor = -1"
@@ -43,7 +46,12 @@ export const Component = () => {
                     className="search-hint text-overflow-elipsis"
                     v-for="(hint, index) in $root.search.hints.filter((a) => {return a.content == null})"
                     className="{active: ($root.search.cursor == index)}"
-                    click="$root.search.term = hint.searchTerm;$root.search.showHints = false;$root.searchQuery(hint.searchTerm);$root.search.cursor = -1">
+                    onClick={() => {
+                      $root.search.term = hint.searchTerm;
+                      $root.search.showHints = false;
+                      $root.searchQuery(hint.searchTerm);
+                      $root.search.cursor = -1;
+                    }}>
                     {hint.displayTerm}
                   </button>
                   <template v-for="(item, position) in $root.search.hints.filter((a) => {return a.content != null})">
@@ -67,7 +75,9 @@ export const Component = () => {
             className="sidebarCatalogSection">
             <div
               className="app-sidebar-header-text"
-              click="$root.cfg.general.sidebarCollapsed.cider = !$root.cfg.general.sidebarCollapsed.cider"
+              onClick={() => {
+                $root.cfg.general.sidebarCollapsed.cider = !$root.cfg.general.sidebarCollapsed.cider;
+              }}
               className="{collapsed: $root.cfg.general.sidebarCollapsed.cider}">
               {$root.getLz("app.name")}
             </div>
@@ -81,7 +91,9 @@ export const Component = () => {
 
             <div
               className="app-sidebar-header-text"
-              click="$root.cfg.general.sidebarCollapsed.applemusic = !$root.cfg.general.sidebarCollapsed.applemusic"
+              onClick={() => {
+                $root.cfg.general.sidebarCollapsed.applemusic = !$root.cfg.general.sidebarCollapsed.applemusic;
+              }}
               className="{collapsed: $root.cfg.general.sidebarCollapsed.applemusic}">
               {$root.getLz("term.appleMusic")}
             </div>
@@ -106,7 +118,9 @@ export const Component = () => {
 
           <div
             className="app-sidebar-header-text"
-            click="$root.cfg.general.sidebarCollapsed.library = !$root.cfg.general.sidebarCollapsed.library"
+            onClick={() => {
+              $root.cfg.general.sidebarCollapsed.library = !$root.cfg.general.sidebarCollapsed.library;
+            }}
             className="{collapsed: $root.cfg.general.sidebarCollapsed.library}">
             {$root.getLz("term.library")}
           </div>
@@ -150,7 +164,7 @@ export const Component = () => {
           </template>
           {/* <template v-if="$root.cfg.libraryPrefs.localPaths.length != 0">
                 <div className="app-sidebar-header-text"
-                     click="$root.cfg.general.sidebarCollapsed.localLibrary = !$root.cfg.general.sidebarCollapsed.localLibrary"
+                     onClick={() =>{$root.cfg.general.sidebarCollapsed.localLibrary = !$root.cfg.general.sidebarCollapsed.localLibrary}}
                      className="{collapsed: $root.cfg.general.sidebarCollapsed.localLibrary}">
                     Local Library
                 </div>
@@ -161,7 +175,9 @@ export const Component = () => {
           <template v-if="$root.getPlaylistFolderChildren('p.applemusic').length != 0">
             <div
               className="app-sidebar-header-text"
-              click="$root.cfg.general.sidebarCollapsed.amplaylists = !$root.cfg.general.sidebarCollapsed.amplaylists"
+              onClick={() => {
+                $root.cfg.general.sidebarCollapsed.amplaylists = !$root.cfg.general.sidebarCollapsed.amplaylists;
+              }}
               contextmenu="$root.playlistHeaderContextMenu"
               className="{collapsed: $root.cfg.general.sidebarCollapsed.amplaylists}">
               {$root.getLz("term.appleMusic")}
@@ -176,7 +192,9 @@ export const Component = () => {
           </template>
           <div
             className="app-sidebar-header-text"
-            click="$root.cfg.general.sidebarCollapsed.playlists = !$root.cfg.general.sidebarCollapsed.playlists"
+            onClick={() => {
+              $root.cfg.general.sidebarCollapsed.playlists = !$root.cfg.general.sidebarCollapsed.playlists;
+            }}
             contextmenu="$root.playlistHeaderContextMenu"
             className="{collapsed: $root.cfg.general.sidebarCollapsed.playlists}">
             {$root.getLz("term.playlists")}
@@ -184,7 +202,7 @@ export const Component = () => {
           <template v-if="!$root.cfg.general.sidebarCollapsed.playlists">
             <button
               className="app-sidebar-item"
-              click="$root.playlistHeaderContextMenu">
+              onClick={() => $root.playlistHeaderContextMenu}>
               <svg-icon url="./assets/feather/plus.svg"></svg-icon>
               <div className="sidebar-item-text">{$root.getLz("action.createNew")}</div>
             </button>
@@ -212,14 +230,18 @@ export const Component = () => {
                 <button
                   className="playback-button--small shuffle"
                   v-if="$root.mk.shuffleMode == 0"
-                  click="$root.mk.shuffleMode = 1"
+                  onClick={() => {
+                    $root.mk.shuffleMode = 1;
+                  }}
                   title="$root.getLz('term.enableShuffle')"
                   className="$root.isDisabled() && 'disabled'"
                   v-b-tooltiphoverrighttop></button>
                 <button
                   className="playback-button--small shuffle active"
                   v-else
-                  click="$root.mk.shuffleMode = 0"
+                  onClick={() => {
+                    $root.mk.shuffleMode = 0;
+                  }}
                   title="$root.getLz('term.disableShuffle')"
                   className="$root.isDisabled() && 'disabled'"
                   v-b-tooltiphoverrighttop></button>
@@ -227,7 +249,7 @@ export const Component = () => {
               <div className="app-chrome-item">
                 <button
                   className="playback-button previous"
-                  click="$root.prevButton()"
+                  onClick={() => $root.prevButton()}
                   className="$root.isPrevDisabled() && 'disabled'"
                   title="$root.getLz('term.previous')"
                   v-b-tooltiphover></button>
@@ -235,19 +257,19 @@ export const Component = () => {
               <div className="app-chrome-item">
                 <button
                   className="playback-button stop"
-                  click="$root.mk.stop()"
+                  onClick={() => $root.mk.stop()}
                   v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
                   title="$root.getLz('term.stop')"
                   v-b-tooltiphover></button>
                 <button
                   className="playback-button pause"
-                  click="$root.mk.pause()"
+                  onClick={() => $root.mk.pause()}
                   v-else-if="$root.mk.isPlaying"
                   title="$root.getLz('term.pause')"
                   v-b-tooltiphover></button>
                 <button
                   className="playback-button play"
-                  click="$root.mk.play()"
+                  onClick={() => $root.mk.play()}
                   v-else
                   title="$root.getLz('term.play')"
                   v-b-tooltiphover></button>
@@ -255,7 +277,7 @@ export const Component = () => {
               <div className="app-chrome-item">
                 <button
                   className="playback-button next"
-                  click="$root.skipToNextItem()"
+                  onClick={() => $root.skipToNextItem()}
                   title="$root.getLz('term.next')"
                   className="$root.isNextDisabled() && 'disabled'"
                   v-b-tooltiphover></button>
@@ -264,20 +286,26 @@ export const Component = () => {
                 <button
                   className="playback-button--small repeat"
                   v-if="$root.mk.repeatMode == 0"
-                  click="$root.mk.repeatMode = 1"
+                  onClick={() => {
+                    $root.mk.repeatMode = 1;
+                  }}
                   className="$root.isDisabled() && 'disabled'"
                   title="$root.getLz('term.enableRepeatOne')"
                   v-b-tooltiphover></button>
                 <button
                   className="playback-button--small repeat repeatOne"
-                  click="$root.mk.repeatMode = 2"
+                  onClick={() => {
+                    $root.mk.repeatMode = 2;
+                  }}
                   v-else-if="$root.mk.repeatMode == 1"
                   title="$root.getLz('term.disableRepeatOne')"
                   className="$root.isDisabled() && 'disabled'"
                   v-b-tooltiphover></button>
                 <button
                   className="playback-button--small repeat active"
-                  click="$root.mk.repeatMode = 0"
+                  onClick={() => {
+                    $root.mk.repeatMode = 0;
+                  }}
                   v-else-if="$root.mk.repeatMode == 2"
                   title="$root.getLz('term.disableRepeat')"
                   className="$root.isDisabled() && 'disabled'"
@@ -288,7 +316,7 @@ export const Component = () => {
               <div className="input-container">
                 <button
                   className="volume-button--small volume"
-                  click="$root.muteButtonPressed()"
+                  onClick={() => $root.muteButtonPressed()}
                   className="{'active': $root.cfg.audio.volume == 0}"
                   title="$root.cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
                   v-b-tooltiphover></button>

@@ -14,7 +14,7 @@ export const Component = () => {
             <div className="modal-title">{$root.getLz("term.pluginMenu")}</div>
             <button
               className="close-btn"
-              click="app.resetState()"
+              onClick={() => app.resetState()}
               aria-label="app.getLz('action.close')"></button>
           </div>
           <div className="modal-content">
@@ -30,7 +30,10 @@ export const Component = () => {
             </span>
             <button
               className="playlist-item"
-              click="entry.onClick(); closeMenu();"
+              onClick={() => {
+                entry.onClick();
+                closeMenu();
+              }}
               v-for="entry in app.pluginMenuEntries">
               <span className="icon">{import("../svg/grid.svg")}</span>
               <span

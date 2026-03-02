@@ -19,7 +19,7 @@ export const Component = () => {
   function mounted() {
     updateQueue();
   }
-  async function getHistory() {
+  async function geory() {
     let history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: this.$root.mklang });
     history = history.data.data;
   }
@@ -35,7 +35,6 @@ export const Component = () => {
     }
   }
   function queueContext(event, item) {
-    const self = this;
     const useMenu = selectedItems.length > 1 ? "multiple" : "single";
     const menus = {
       single: {
@@ -142,7 +141,9 @@ export const Component = () => {
             <button
               className="autoplay"
               style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
-              click="app.mk.autoplayEnabled = !app.mk.autoplayEnabled"
+              onClick={() => {
+                app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
+              }}
               title="app.getLz('term.autoplay')"
               v-b-tooltiphover>
               <img className="infinity" />
@@ -173,7 +174,7 @@ export const Component = () => {
                 className="cd-queue-item"
                 v-else
                 className="{selected: selectedItems.includes(queueItem.item.id)}"
-                click="select($event, queueItem.item.id)"
+                onClick={() => select($event, queueItem.item.id)}
                 dblclick="playQueueItem(queueItem.item.id)"
                 key="queueItem.item.id"
                 contextmenu="queueContext($event, queueItem.item)">
@@ -211,13 +212,18 @@ export const Component = () => {
             <button
               className="md-btn md-btn-small"
               className="{'md-btn-primary': (page == 'queue')}"
-              click="page = 'queue'">
+              onClick={() => {
+                page = "queue";
+              }}>
               {app.getLz("term.queue")}
             </button>
             <button
               className="md-btn md-btn-small"
               className="{'md-btn-primary': (page == 'history')}"
-              click="getHistory();page = 'history'">
+              onClick={() => {
+                geory();
+                page = "history";
+              }}>
               {app.getLz("term.history")}
             </button>
           </div>
@@ -225,7 +231,10 @@ export const Component = () => {
             className="md-btn md-btn-small"
             style={{ width: "100%", marginTop: "6px" }}
             v-if="queueItems.length > 1"
-            click="app.mk.clearQueue();updateQueue()">
+            onClick={() => {
+              app.mk.clearQueue();
+              updateQueue();
+            }}>
             {app.getLz("term.clearAll")}
           </button>
         </div>

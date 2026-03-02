@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export const Component = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt: { type: Object; required: false } }) => {
   const isVisible = false;
   const addedToLibrary = false;
@@ -73,7 +75,6 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
     }
   }
   async function getBadges() {
-    const self = this;
     const id = ((item.attributes?.playParams ?? false) ? item.attributes?.playParams.id : null) || item.id;
     if (id && badges[id]) {
       let friends = badges[id];
@@ -211,7 +212,6 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
     } else {
       console.log(event);
     }
-    let self = this;
     let useMenu = "normal";
     if (app.selectedMediaItems.length <= 1) {
       app.selectedMediaItems = [];
@@ -439,7 +439,6 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
   }
   const artistMenu = async (event) => {
     console.debug(item);
-    let self = this;
     let followAction = "follow";
     let followActions = {
       follow: {
@@ -497,6 +496,10 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
     // kind = null;
     // size = null;
   };
+  useEffect(() => {
+    mounted().then();
+    return beforeDestroy;
+  }, []);
   return (
     <div id="mediaitem-square">
       <div
@@ -526,7 +529,7 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
             </div>
             <div
               className="artwork"
-              click="app.routeView(item)">
+              onClick={() => app.routeView(item)}>
               <mediaitem-artwork
                 url="getArtworkUrl()"
                 video="(item.attributes != null && item.attributes.editorialVideo != null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
@@ -540,14 +543,14 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
             <button
               className="menu-btn"
               v-if="!nomenu.includes(item.type)"
-              click="getContextMenu"
+              onClick={() => getContextMenu}
               aria-label="$root.getLz('term.more')">
               {import("../svg/more.svg")}
             </button>
             <button
               className="play-btn"
               v-if="!noplay.includes(item.type)"
-              click="app.playMediaItem(item)"
+              onClick={() => app.playMediaItem(item)}
               aria-label="$root.getLz('term.play')">
               {import("../svg/play.svg")}
             </button>
@@ -573,7 +576,7 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
               className="title"
               title="item.attributes?.name ?? (item.relationships?.contents?.data[0]?.attributes?.name ?? (item.attributes?.editorialNotes?.name ?? ''))"
               v-if="item.attributes.artistNames == null || kind != 'card'"
-              click="app.routeView(item)">
+              onClick={() => app.routeView(item)}>
               <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind == "394" && item.relationships?.contents?.data[0]?.attributes?.shortName != null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
               <div
                 className="explicit-icon"
@@ -583,7 +586,7 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
             <div
               title="getSubtitle()"
               className="subtitle item-navigate text-overflow-elipsis"
-              click="getSubtitleNavigation()"
+              onClick={() => getSubtitleNavigation()}
               v-if="getSubtitle() != ''">
               {getSubtitle()}
             </div>

@@ -11,7 +11,7 @@ export const Component = ({ length, pageSize, scroll, scrollSelector }: { length
     length: function () {
       if (isInfinite) {
         // If a search reduces the number of things to show, we want to limit
-        // the number of songs shown as well. This is to prevent you scrolling
+        // the number of songs shown as well. is to prevent you scrolling
         // to load your entire library, searching for one song, and then having
         // th re-render the entire library
         if (currentPage > numPages) {
@@ -23,7 +23,7 @@ export const Component = ({ length, pageSize, scroll, scrollSelector }: { length
       }
     },
     scroll: function () {
-      // When changing modes, set the page to 1. This is primarily to
+      // When changing modes, set the page to 1. is primarily to
       // prevent going to a high page (e.g., 50) and then switching to infinite
       // and showing 12.5k songs
       currentPage = 1;
@@ -123,31 +123,31 @@ export const Component = ({ length, pageSize, scroll, scrollSelector }: { length
         <button
           className="md-btn page-btn"
           disabled="effectivePage === 1"
-          click="goToPage(1)">
+          onClick={() => goToPage(1)}>
           <img className="md-ico-first" />
         </button>
         <button
           className="md-btn page-btn prev"
           disabled="effectivePage === 1"
-          click="goToPrevious()">
+          onClick={() => goToPrevious()}>
           <img className="md-ico-prev" />
         </button>
         <button
           className="`md-btn page-btn${ isCurrentPage(page) ? ' md-btn-primary': ''}`"
-          click="goToPage(page)"
+          onClick={() => goToPage(page)}
           v-for="page in pagesToShow">
           {page}
         </button>
         <button
           className="md-btn page-btn next"
           disabled="effectivePage === numPages"
-          click="goToNext()">
+          onClick={() => goToNext()}>
           <img className="md-ico-next" />
         </button>
         <button
           className="md-btn page-btn last"
           disabled="effectivePage === numPages"
-          click="goToEnd()">
+          onClick={() => goToEnd()}>
           <img className="md-ico-last" />
         </button>
         <div className="page-btn md-input-number">

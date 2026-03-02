@@ -187,7 +187,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
   const changeVibrantBass = () => {
     if (app.cfg.audio.equalizer.vibrantBass !== "0") {
       try {
-        for (var i = 0; i < 21; i++) {
+        for (let i = 0; i < 21; i++) {
           CiderAudio.audioNodes.vibrantbassNode[i].gain.value = app.cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (app.cfg.audio.equalizer.vibrantBass / 10);
         }
         CiderAudio.intelliGainComp_n0_0();
@@ -201,7 +201,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
   const changeMix = () => {
     if (Math.max(...app.cfg.audio.equalizer.gain) != 0) {
       try {
-        for (var i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
           CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
         }
         CiderAudio.intelliGainComp_n0_0();
@@ -245,7 +245,6 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
   };
 
   const addPreset = () => {
-    let self = this;
     app.prompt(app.getLz("term.newpreset.name"), (res) => {
       if (res) {
         let eqSettings = Clone(app.cfg.audio.equalizer);
@@ -264,8 +263,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
   };
 
   const saveSelectedPreset = () => {
-    // Save the current settings to the selected preset
-    let self = this;
+    // TODO ERROR Save the current settings to the selected preset
     //let preset = app.cfg.audio.equalizer.presets[app.cfg.audio.equalizer.preset]
     // find the preset by its id (preset)
     let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset == app.cfg.audio.equalizer.preset);
@@ -281,7 +279,6 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
     this.$root.copyToClipboard(btoa(JSON.stringify(preset)));
   };
   const importPreset = () => {
-    let self = this;
     app.prompt("Enter preset share code", (res) => {
       if (res) {
         let preset = JSON.parse(atob(res));
@@ -298,7 +295,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
   const applyPreset = (preset) => {
     Object.assign(this.$root.cfg.audio.equalizer, preset);
     changeVibrantBass();
-    for (var i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
       try {
         CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
       } catch (e) {
@@ -336,7 +333,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
             <div className="modal-title">{$root.getLz("term.equalizer")}</div>
             <button
               className="close-btn"
-              click="close()"
+              onClick={() => close()}
               aria-label="$root.getLz('action.close')"></button>
             <div className="md-option-segment md-option-segment_auto">
               <select
@@ -855,7 +852,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
                 <button
                   className="md-btn"
                   style={{ width: "100%" }}
-                  click="resetGain()">
+                  onClick={() => resetGain()}>
                   {$root.getLz("term.reset")}
                 </button>
               </div>
@@ -863,7 +860,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
                 <button
                   className="md-btn"
                   style={{ width: "100%" }}
-                  click="presetOptions($event)">
+                  onClick={() => presetOptions($event)}>
                   {$root.getLz("term.menu")}
                 </button>
               </div>

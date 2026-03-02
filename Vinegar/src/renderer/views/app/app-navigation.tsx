@@ -9,7 +9,7 @@
         <button
           className="app-sidebar-button"
           style={{ width: "100%" }}
-          click="appRoute('apple-account-settings')">
+          onClick={() => appRoute("apple-account-settings")}>
           <img
             className="sidebar-user-icon"
             loading="lazy"
@@ -24,7 +24,7 @@
               <div className="handle-text text-overflow-elipsis">{chrome.userinfo != null && chrome.userinfo.attributes != null ? (chrome.userinfo.attributes.handle ?? "") : ""}</div>
             </template>
             <template v-else>
-              <div click="mk.authorize()">{$root.getLz("term.login")}</div>
+              <div onClick={() => mk.authorize()}>{$root.getLz("term.login")}</div>
             </template>
           </div>
           <div
@@ -37,51 +37,51 @@
         <button
           className="usermenu-item"
           v-if="cfg.general.privateEnabled"
-          click="cfg.general.privateEnabled = false">
+          onClick={() => (cfg.general.privateEnabled = false)}>
           <span className="usermenu-item-icon"> {import("../svg/x.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.disablePrivateSession")}</span>
         </button>
         <button
           className="usermenu-item"
-          click="appRoute('remote-pair')">
+          onClick={() => appRoute("remote-pair")}>
           <span className="usermenu-item-icon"> {import("../svg/smartphone.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("action.showWebRemoteQR")}</span>
         </button>
         <button
           className="usermenu-item"
-          click="modals.castMenu = true">
+          onClick={() => (modals.castMenu = true)}>
           <span className="usermenu-item-icon"> {import("../svg/cast.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.cast")}</span>
         </button>
         <button
           className="usermenu-item"
-          click="modals.audioSettings = true">
+          onClick={() => (modals.audioSettings = true)}>
           <span className="usermenu-item-icon"> {import("../svg/headphones.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.audioSettings")}</span>
         </button>
         <button
           className="usermenu-item"
           v-if="pluginInstalled"
-          click="modals.pluginMenu = true">
+          onClick={() => (modals.pluginMenu = true)}>
           <span className="usermenu-item-icon"> {import("../svg/grid.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.plugin")}</span>
         </button>
         <button
           className="usermenu-item"
-          click="appRoute('about')">
+          onClick={() => appRoute("about")}>
           <span className="usermenu-item-icon"> {import("../svg/info.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.about")}</span>
         </button>
         <button
           className="usermenu-item"
-          click="modals.settings = true">
+          onClick={() => (modals.settings = true)}>
           <span className="usermenu-item-icon"> {import("../svg/settings.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.settings")}</span>
         </button>
         <button
           className="usermenu-item"
           v-for="entry in $root.pluginMenuTopEntries"
-          click="entry.onClick()">
+          onClick={() => entry.onClick()}>
           <span
             className="usermenu-item-icon"
             style={{ right: "2.5px" }}>
@@ -91,7 +91,7 @@
         </button>
         <button
           className="usermenu-item"
-          click="unauthorize()">
+          onClick={() => unauthorize()}>
           <span
             className="usermenu-item-icon"
             style={{ right: "2.5px" }}>
@@ -101,7 +101,7 @@
         </button>
         <button
           className="usermenu-item"
-          click="quit()">
+          onClick={() => quit()}>
           <span
             className="usermenu-item-icon"
             style={{ right: "2.5px" }}>
@@ -112,7 +112,7 @@
         <button
           v-if="!chrome.noC2Upgrade"
           className="usermenu-item"
-          click="c2offer()">
+          onClick={() => c2offer()}>
           <span
             className="usermenu-item-icon"
             style={{ right: "1.5px" }}>
@@ -165,7 +165,7 @@
         className="lyric-footer">
         <button
           className="md-btn"
-          click="modularUITest(!fullscreenLyrics)">
+          onClick={() => modularUITest(!fullscreenLyrics)}>
           {fullscreenLyrics ? $root.getLz("term.defaultView") : $root.getLz("term.fullscreenView")}
         </button>
       </div>

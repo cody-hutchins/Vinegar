@@ -11,25 +11,24 @@ export const Component = () => {
       };
     },
     async mounted() {
-      let self = this;
-      await this.getArtistFeed();
+      await getArtistFeed();
     },
     methods: {
       async syncFavorites() {
-        this.syncingFavs = true;
+        syncingFavs = true;
         await app.syncFavorites();
-        await this.getArtistFeed();
-        this.syncingFavs = false;
+        await getArtistFeed();
+        syncingFavs = false;
       },
       async unfollow(id) {
-        let index = this.followedArtists.indexOf(id);
+        let index = followedArtists.indexOf(id);
         if (index > -1) {
-          this.followedArtists.splice(index, 1);
+          followedArtists.splice(index, 1);
         }
-        let artist = this.artists.find((a) => a.id == id);
-        let index2 = this.artists.indexOf(artist);
+        let artist = artists.find((a) => a.id == id);
+        let index2 = artists.indexOf(artist);
         if (index2 > -1) {
-          this.artists.splice(index2, 1);
+          artists.splice(index2, 1);
         }
         await app.mk.api.v3.music(
           `/v1/me/favorites`,
@@ -45,13 +44,11 @@ export const Component = () => {
             },
           },
         );
-        this.getArtistFeed();
+        getArtistFeed();
       },
       async getArtistFeed() {
-        let artists = this.followedArtists;
-        let self = this;
-        this.artists = [];
-        this.artistFeed = [];
+        let artists = followedArtists;
+        artistFeed = [];
 
         // Apple limits the number of IDs we can provide in a single API call to 50.
         // Divide it into groups of 50 and send parallel requests
@@ -60,7 +57,7 @@ export const Component = () => {
           chunks.push(artists.slice(artistIdx, artistIdx + 50));
         }
         try {
-          const chunkArtistData = await Promise.all(chunks.map((chunk) => this.app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
+          const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
           chunkArtistData.forEach((chunkResult) =>
             chunkResult.data.data.forEach((item) => {
               self.artists.push(item);
@@ -70,7 +67,7 @@ export const Component = () => {
             }),
           );
           // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
-          this.artistFeed.sort((a, b) => {
+          artistFeed.sort((a, b) => {
             let dateA = new Date(a.attributes.releaseDate);
             let dateB = new Date(b.attributes.releaseDate);
             return dateB - dateA;
@@ -92,7 +89,7 @@ export const Component = () => {
                 <div className="col-auto nopadding cider-flex-center">
                   <button
                     className="cd-btn-seeall"
-                    click="syncFavorites()"
+                    onClick={() => syncFavorites()}
                     v-if="!syncingFavs">
                     {app.getLz("home.syncFavorites")}
                   </button>
@@ -110,7 +107,7 @@ export const Component = () => {
                     item="artist"
                     kind="small"></mediaitem-square>
                   <button
-                    click="unfollow(artist.id)"
+                    onClick={() => unfollow(artist.id)}
                     className="md-btn md-btn-glyph"
                     style={{ display: flex }}>
                     <div className="sidebar-icon">

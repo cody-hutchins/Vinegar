@@ -30,13 +30,13 @@ export const Component = () => {
                 <button
                   className="cd-btn-seeall"
                   v-if="recom.relationships.room"
-                  click="app.showRoom(recom.relationships.room?.data[0].href)">
+                  onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
                   {app.getLz("term.seeAll")}
                 </button>
                 <button
                   className="cd-btn-seeall"
                   v-else
-                  click="app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? '', 'listen_now')">
+                  onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
                   {app.getLz("term.seeAll")}
                 </button>
               </div>
@@ -70,7 +70,7 @@ export const Component = () => {
                 <div className="grouping-container">
                   <button
                     className="grouping-btn"
-                    click="$root.goToGrouping(link.url)"
+                    onClick={() => $root.goToGrouping(link.url)}
                     v-for="link in recom.attributes.links">
                     {link.label}
                   </button>

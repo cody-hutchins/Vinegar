@@ -19,25 +19,25 @@ export const Component = () => {
     },
     computed: {
       currentSlice: function () {
-        return this.library.songs.displayListing.slice(this.start, this.end);
+        return library.songs.displayListing.slice(start, end);
       },
     },
     methods: {
       onRangeChange: function (newRange) {
-        this.start = newRange[0];
-        this.end = newRange[1];
+        start = newRange[0];
+        end = newRange[1];
       },
       play: function () {
         function shuffleArray(array) {
-          for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
+          for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let temp = array[i];
             array[i] = array[j];
             array[j] = temp;
           }
         }
 
-        let query = this.app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
+        let query = app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
         if (!app.mk.queue.isEmpty) app.mk.queue.splice(0, app.mk.queue._itemIDs.length);
         app.mk.stop().then(() => {
           if (app.mk.shuffleMode == 1) {
@@ -77,14 +77,20 @@ export const Component = () => {
                 <button
                   className="col md-btn md-btn-primary  md-btn-icon"
                   style={{ minWidth: "100px", marginRight: "3px" }}
-                  click="app.mk.shuffleMode = 0; play()">
+                  onClick={() => {
+                    app.mk.shuffleMode = 0;
+                    play();
+                  }}>
                   <img className="md-ico-play" />
                   {app.getLz("term.play")}
                 </button>
                 <button
                   className="col md-btn md-btn-primary  md-btn-icon"
                   style={{ minWidth: "100px", marginRight: "3px" }}
-                  click="app.mk.shuffleMode = 1;play()">
+                  onClick={() => {
+                    app.mk.shuffleMode = 1;
+                    play();
+                  }}>
                   <img className="md-ico-shuffle" />
                   {app.getLz("term.shuffle")}
                 </button>
@@ -139,7 +145,7 @@ export const Component = () => {
             <div className="col-auto cider-flex-center">
               <button
                 v-if="library.songs.downloadState == 2"
-                click="$root.getLibrarySongsFull(true)"
+                onClick={() => $root.getLibrarySongsFull(true)}
                 className="reload-btn"
                 aria-label="app.getLz('menubar.options.reload')">
                 {import("../svg/redo.svg")}

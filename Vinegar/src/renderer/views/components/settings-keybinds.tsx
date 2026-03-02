@@ -112,7 +112,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('search')">
+                onClick={() => keyBindUpdate("search")}>
                 {app.cfg.general.keybindings.search.join(" + ")}
               </button>
             </div>
@@ -122,7 +122,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('listnow')">
+                onClick={() => keyBindUpdate("listnow")}>
                 {app.cfg.general.keybindings.listnow.join(" + ")}
               </button>
             </div>
@@ -132,7 +132,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('browse')">
+                onClick={() => keyBindUpdate("browse")}>
                 {app.cfg.general.keybindings.browse.join(" + ")}
               </button>
             </div>
@@ -142,7 +142,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('recentAdd')">
+                onClick={() => keyBindUpdate("recentAdd")}>
                 {app.cfg.general.keybindings.recentAdd.join(" + ")}
               </button>
             </div>
@@ -152,7 +152,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('songs')">
+                onClick={() => keyBindUpdate("songs")}>
                 {app.cfg.general.keybindings.songs.join(" + ")}
               </button>
             </div>
@@ -162,7 +162,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('albums')">
+                onClick={() => keyBindUpdate("albums")}>
                 {app.cfg.general.keybindings.albums.join(" + ")}
               </button>
             </div>
@@ -172,7 +172,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('artists')">
+                onClick={() => keyBindUpdate("artists")}>
                 {app.cfg.general.keybindings.artists.join(" + ")}
               </button>
             </div>
@@ -185,7 +185,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('togglePrivateSession')">
+                onClick={() => keyBindUpdate("togglePrivateSession")}>
                 {app.cfg.general.keybindings.togglePrivateSession.join(" + ")}
               </button>
             </div>
@@ -198,7 +198,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('webRemote')">
+                onClick={() => keyBindUpdate("webRemote")}>
                 {app.cfg.general.keybindings.webRemote.join(" + ")}
               </button>
             </div>
@@ -208,7 +208,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('audioSettings')">
+                onClick={() => keyBindUpdate("audioSettings")}>
                 {app.cfg.general.keybindings.audioSettings.join(" + ")}
               </button>
             </div>
@@ -218,7 +218,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('pluginMenu')">
+                onClick={() => keyBindUpdate("pluginMenu")}>
                 {app.cfg.general.keybindings.pluginMenu.join(" + ")}
               </button>
             </div>
@@ -228,7 +228,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('castToDevices')">
+                onClick={() => keyBindUpdate("castToDevices")}>
                 {app.cfg.general.keybindings.castToDevices.join(" + ")}
               </button>
             </div>
@@ -238,7 +238,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('settings')">
+                onClick={() => keyBindUpdate("settings")}>
                 {app.cfg.general.keybindings.settings.join(" + ")}
               </button>
             </div>
@@ -255,7 +255,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('zoomn')">
+                onClick={() => keyBindUpdate("zoomn")}>
                 {app.cfg.general.keybindings.zoomn.join(" + ")}
               </button>
             </div>
@@ -267,7 +267,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('zoomt')">
+                onClick={() => keyBindUpdate("zoomt")}>
                 {app.cfg.general.keybindings.zoomt.join(" + ")}
               </button>
             </div>
@@ -279,7 +279,7 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('zoomrst')">
+                onClick={() => keyBindUpdate("zoomrst")}>
                 {app.cfg.general.keybindings.zoomrst.join(" + ")}
               </button>
             </div>
@@ -292,14 +292,14 @@ export const Component = () => {
             <div className="md-option-segment md-option-segment_auto">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="keyBindUpdate('openDeveloperTools')">
+                onClick={() => keyBindUpdate("openDeveloperTools")}>
                 {app.cfg.general.keybindings.openDeveloperTools.join(" + ")}
               </button>
             </div>
           </div>
           <button
             className="md-btn md-btn-large md-btn-block"
-            click="keyBindReset()">
+            onClick={() => keyBindReset()}>
             {$root.getLz("term.reset")}
           </button>
         </div>

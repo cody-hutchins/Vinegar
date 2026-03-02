@@ -141,7 +141,7 @@ export const Component = () => {
                 title="item.name"
                 v-if="canDisplay(item)"
                 style={getItemStyle(item)}
-                click="action(item)">
+                onClick={() => action(item)}>
                 <div
                   className="sidebar-icon"
                   style={{ margin: 0 }}
@@ -159,7 +159,7 @@ export const Component = () => {
                 className="menu-option"
                 v-if="canDisplay(item)"
                 style={getItemStyle(item)}
-                click="action(item)">
+                onClick={() => action(item)}>
                 <div
                   className="sidebar-icon"
                   v-if="item.icon">

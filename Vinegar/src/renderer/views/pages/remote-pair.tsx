@@ -4,7 +4,7 @@ export const Component = () => {
     async mounted() {
       ipcRenderer.send("get-remote-pair-url");
       ipcRenderer.on("send-remote-pair-url", (event, url) => {
-        this.url = url;
+        url = url;
         app.webview.src = url;
         document.getElementById("foo").src = url;
       });

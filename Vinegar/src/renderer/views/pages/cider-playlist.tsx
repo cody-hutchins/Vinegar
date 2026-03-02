@@ -33,174 +33,173 @@ export const Component = () => {
       };
     },
     mounted: function () {
-      this.$nextTick(function () {
-        if (this.data.id != "ciderlocal") {
-          this.isInLibrary();
+      setTimeout(function () {
+        if (data.id != "ciderlocal") {
+          isInLibrary();
         } else {
-          if (this.data.relationships != null && this.data.id == "ciderlocal") {
-            this.displayListing = this.data.relationships.tracks.data;
+          if (data.relationships != null && data.id == "ciderlocal") {
+            displayListing = data.relationships.tracks.data;
           }
 
-          this.inPlaylist = this.data.type == "library-playlists";
+          inPlaylist = data.type == "library-playlists";
         }
       });
     },
     beforeMount() {
       if (window.location.hash.includes("playlist")) {
-        window.addEventListener("keydown", this.getCopiedPlayListSongs);
-        window.addEventListener("keydown", this.pasteSongs);
+        window.addEventListener("keydown", getCopiedPlayListSongs);
+        window.addEventListener("keydown", pasteSongs);
       }
     },
     beforeDestroy() {
       if (window.location.hash.includes("playlist")) {
-        window.removeEventListener("keydown", this.getCopiedPlayListSongs);
-        window.removeEventListener("keydown", this.pasteSongs);
+        window.removeEventListener("keydown", getCopiedPlayListSongs);
+        window.removeEventListener("keydown", pasteSongs);
       }
     },
     watch: {
       data: {
         handler: function () {
-          this.isInLibrary();
-          this.getBadges();
+          isInLibrary();
+          getBadges();
 
-          if (this.data.relationships != null) {
-            if (this.data.id == "ciderlocal") {
-              this.displayListing = this.data.relationships.tracks.data;
+          if (data.relationships != null) {
+            if (data.id == "ciderlocal") {
+              displayListing = data.relationships.tracks.data;
             } else {
-              this.generateNestedPlaylist(this.data.relationships.tracks.data);
-              if (!this.hasNestedPlaylist) {
-                this.displayListing = this.data.relationships.tracks.data;
+              generateNestedPlaylist(data.relationships.tracks.data);
+              if (!hasNestedPlaylist) {
+                displayListing = data.relationships.tracks.data;
               }
             }
           }
 
-          this.inPlaylist = this.data.type == "library-playlists";
+          inPlaylist = data.type == "library-playlists";
         },
         deep: true,
       },
     },
     computed: {
       currentSlice() {
-        return this.displayListing.slice(this.start, this.end);
+        return displayListing.slice(start, end);
       },
       nestedSlices() {
-        if (this.shouldPaginate) {
+        if (shouldPaginate) {
           let songsSeen = 0;
           const discs = [];
 
-          for (const disc of this.nestedPlaylist) {
+          for (const disc of nestedPlaylist) {
             songsSeen += disc.tracks.length;
 
-            if (songsSeen >= this.end) {
+            if (songsSeen >= end) {
               discs.push({
                 disc: disc.disc,
-                tracks: disc.tracks.slice(0, this.end + disc.tracks.length - songsSeen),
+                tracks: disc.tracks.slice(0, end + disc.tracks.length - songsSeen),
               });
               break;
-            } else if (songsSeen > this.start) {
+            } else if (songsSeen > start) {
               discs.push({
                 disc: disc.disc,
-                tracks: disc.tracks.slice(this.start - songsSeen),
+                tracks: disc.tracks.slice(start - songsSeen),
               });
             }
           }
 
           return discs;
         } else {
-          return this.nestedPlaylist;
+          return nestedPlaylist;
         }
       },
       shouldPaginate() {
-        const result = this.data.relationships.tracks.data.length > this.pageSize;
+        const result = data.relationships.tracks.data.length > pageSize;
         console.log(result);
         return result;
       },
     },
     methods: {
       onRangeChange(newRange) {
-        this.start = newRange[0];
-        this.end = newRange[1];
+        start = newRange[0];
+        end = newRange[1];
       },
       isAlbum() {
-        return (this.data.attributes?.playParams?.kind ?? this.data.type ?? "").includes("album");
+        return (data.attributes?.playParams?.kind ?? data.type ?? "").includes("album");
       },
       minClass(val) {
         if (app.appMode == "fullscreen") {
           return;
         }
         if (val) {
-          this.classes = ["plmin"];
+          classes = ["plmin"];
         } else {
-          this.classes = [];
+          classes = [];
         }
       },
       openInfoModal() {
         app.moreinfodata = [];
         app.moreinfodata = {
-          title: this.data?.attributes ? (this.data?.attributes?.name ?? this.data?.attributes?.title ?? "" ?? "") : "",
-          subtitle: this.data?.attributes?.artistName ?? "",
-          content: this.data?.attributes?.editorialNotes != null ? (this.data?.attributes?.editorialNotes?.standard ?? this.data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (this.data.attributes?.description?.standard ?? this.data?.attributes?.description?.short ?? "") : "",
+          title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title ?? "" ?? "") : "",
+          subtitle: data?.attributes?.artistName ?? "",
+          content: data?.attributes?.editorialNotes != null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
         };
         app.modals.moreInfo = true;
       },
       generateNestedPlaylist(songlists) {
-        this.nestedPlaylist = [];
-        this.nestedDisplayLength = songlists.length;
+        nestedPlaylist = [];
+        nestedDisplayLength = songlists.length;
 
-        if (this.data?.type?.includes("album")) {
+        if (data?.type?.includes("album")) {
           let discs = songlists
             .map((x) => {
               return x.attributes.discNumber;
             })
             .filter((item, i, ar) => ar.indexOf(item) === i);
 
-          if ((discs && discs.length > 1) || (discs && this.hasNestedPlaylist)) {
+          if ((discs && discs.length > 1) || (discs && hasNestedPlaylist)) {
             for (disc of discs) {
               let songs = songlists.filter((x) => x.attributes.discNumber == disc);
-              this.nestedPlaylist.push({ disc: disc, tracks: songs });
+              nestedPlaylist.push({ disc: disc, tracks: songs });
             }
           }
-          console.log(this.nestedPlaylist);
+          console.log(nestedPlaylist);
         }
 
-        if (!this.hasNestedPlaylist) this.hasNestedPlaylist = this.nestedPlaylist != [] && this.nestedPlaylist.length > 1;
+        if (!hasNestedPlaylist) hasNestedPlaylist = nestedPlaylist != [] && nestedPlaylist.length > 1;
       },
       isHeaderVisible(visible) {
-        this.headerVisible = visible;
+        headerVisible = visible;
       },
       hasHero() {
-        if (this.data.attributes?.editorialArtwork?.bannerUber) {
-          return this.data.attributes?.editorialArtwork?.bannerUber.url;
-        } else if (this.data.attributes?.editorialArtwork?.subscriptionHero) {
-          return this.data.attributes?.editorialArtwork?.subscriptionHero.url;
-        } else if (this.data.attributes?.editorialArtwork?.storeFlowcase) {
-          return this.data.attributes?.editorialArtwork?.storeFlowcase.url;
+        if (data.attributes?.editorialArtwork?.bannerUber) {
+          return data.attributes?.editorialArtwork?.bannerUber.url;
+        } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
+          return data.attributes?.editorialArtwork?.subscriptionHero.url;
+        } else if (data.attributes?.editorialArtwork?.storeFlowcase) {
+          return data.attributes?.editorialArtwork?.storeFlowcase.url;
         }
         return false;
       },
       hasHeroObject() {
-        if (this.data.attributes?.editorialArtwork?.bannerUber) {
-          return this.data.attributes?.editorialArtwork?.bannerUber;
-        } else if (this.data.attributes?.editorialArtwork?.subscriptionHero) {
-          return this.data.attributes?.editorialArtwork?.subscriptionHero;
-        } else if (this.data.attributes?.editorialArtwork?.storeFlowcase) {
-          return this.data.attributes?.editorialArtwork?.storeFlowcase;
+        if (data.attributes?.editorialArtwork?.bannerUber) {
+          return data.attributes?.editorialArtwork?.bannerUber;
+        } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
+          return data.attributes?.editorialArtwork?.subscriptionHero;
+        } else if (data.attributes?.editorialArtwork?.storeFlowcase) {
+          return data.attributes?.editorialArtwork?.storeFlowcase;
         }
         return [];
       },
       getBadges() {
         return;
-        if (this.badgesRequested) {
+        if (badgesRequested) {
           return;
         }
-        this.badgesRequested = true;
-        this.itemBadges = [];
-        let self = this;
-        var id = 0;
+        badgesRequested = true;
+        itemBadges = [];
+        let id = 0;
         try {
-          id = this.data.attributes.playParams.id;
+          id = data.attributes.playParams.id;
         } catch (e) {
-          id = this.data.id;
+          id = data.id;
         }
         this.$root.getSocialBadges((badges) => {
           let friends = badges[id];
@@ -216,15 +215,15 @@ export const Component = () => {
       confirmButton() {
         // Return button to normal state after 3 seconds
 
-        this.confirm = true;
-        setTimeout(() => (this.confirm = false), 3000);
+        confirm = true;
+        setTimeout(() => (confirm = false), 3000);
       },
       getArtistName(data) {
         if (data.attributes.artistName) {
-          this.useArtistChip = true;
+          useArtistChip = true;
           return data.attributes.artistName;
         } else if (data.attributes.artist) {
-          this.useArtistChip = true;
+          useArtistChip = true;
           return data.attributes.artist.attributes.name;
         } else if (data.attributes.curatorName) {
           return data.attributes.curatorName;
@@ -233,61 +232,61 @@ export const Component = () => {
         }
       },
       getAlbumGenre: function () {
-        if (this.data.type.includes("albums")) {
-          let date = this.data.attributes.releaseDate;
+        if (data.type.includes("albums")) {
+          let date = data.attributes.releaseDate;
           if (date == null || date === "") return "";
-          return `${this.data.attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
+          return `${data.attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
         }
       },
       async isInLibrary() {
-        if (this.data.type && !this.data.type.includes("library")) {
+        if (data.type && !data.type.includes("library")) {
           // please keep using vars here
           const params = {
             "fields[playlists]": "inLibrary",
             "fields[albums]": "inLibrary",
             relate: "library",
           };
-          const res = await app.mkapi(this.data.attributes.playParams.kind ?? this.data.type, this.data.attributes.playParams.isLibrary ?? false, this.data.attributes.playParams.id ?? this.data.id, params);
-          this.inLibrary = res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary ? res.data.data[0].attributes.inLibrary : false;
+          const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
+          inLibrary = res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary ? res.data.data[0].attributes.inLibrary : false;
           console.log(res);
         } else {
-          this.inLibrary = true;
+          inLibrary = true;
         }
       },
       editPlaylist() {
-        this.app.editPlaylist(this.data.id, this.data.attributes.name);
-        this.app.editPlaylistDescription(this.data.id, this.data.attributes.description.standard);
-        this.app.playlists.listing.forEach((playlist) => {
-          if (playlist.id === this.data.id) {
-            playlist.attributes.name = this.data.attributes.name;
-            playlist.attributes.description = this.data.attributes.description.standard;
+        app.editPlaylist(data.id, data.attributes.name);
+        app.editPlaylistDescription(data.id, data.attributes.description.standard);
+        app.playlists.listing.forEach((playlist) => {
+          if (playlist.id === data.id) {
+            playlist.attributes.name = data.attributes.name;
+            playlist.attributes.description = data.attributes.description.standard;
           }
         });
-        this.nameEditing = false;
-        this.descriptionEditing = false;
+        nameEditing = false;
+        descriptionEditing = false;
       },
       editPlaylistDescription() {
-        this.app.editPlaylistDescription(this.data.id, this.data.attributes.description.standard);
-        this.app.playlists.listing.forEach((playlist) => {
-          if (playlist.id === this.data.id) {
-            playlist.attributes.description = this.data.attributes.description.standard;
+        app.editPlaylistDescription(data.id, data.attributes.description.standard);
+        app.playlists.listing.forEach((playlist) => {
+          if (playlist.id === data.id) {
+            playlist.attributes.description = data.attributes.description.standard;
           }
         });
-        this.descriptionEditing = false;
+        descriptionEditing = false;
       },
       addToLibrary(id) {
         app.mk.addToLibrary(id);
-        this.inLibrary = true;
-        this.confirm = false;
+        inLibrary = true;
+        confirm = false;
       },
       async removeFromLibrary(id) {
         const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
-        var id = this.data.id ?? this.data.attributes.playParams.id;
-        const res = await app.mkapi(this.data.attributes.playParams.kind ?? this.data.type, this.data.attributes.playParams.isLibrary ?? false, this.data.attributes.playParams.id ?? this.data.id, params);
+        let id = data.id ?? data.attributes.playParams.id;
+        const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
         if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
           id = res.data.data[0].relationships.library.data[0].id;
         }
-        let kind = this.data.attributes.playParams.kind ?? this.data.type ?? "";
+        let kind = data.attributes.playParams.kind ?? data.type ?? "";
         const truekind = !kind.endsWith("s") ? kind + "s" : kind;
         app.mk.api.v3.music(
           `v1/me/library/${truekind}/${id.toString()}`,
@@ -298,28 +297,27 @@ export const Component = () => {
             },
           },
         );
-        this.inLibrary = false;
-        this.confirm = false;
+        inLibrary = false;
+        confirm = false;
       },
       editPlaylistName() {
-        if (this.data.attributes.canEdit && this.data.type === "library-playlists") {
-          this.nameEditing = true;
+        if (data.attributes.canEdit && data.type === "library-playlists") {
+          nameEditing = true;
           setTimeout(() => {
             document.querySelector(".nameEdit").focus();
           }, 100);
         }
       },
       editPlaylistDescription() {
-        if (this.data.attributes.canEdit && this.data.type === "library-playlists") {
-          this.descriptionEditing = true;
+        if (data.attributes.canEdit && data.type === "library-playlists") {
+          descriptionEditing = true;
           setTimeout(() => {
             document.querySelector(".descriptionEdit").focus();
           }, 100);
         }
       },
       buildContextMenu(index) {
-        let self = this;
-        if (!this.data.attributes.canEdit) {
+        if (!data.attributes.canEdit) {
           return;
         }
         return {
@@ -344,63 +342,62 @@ export const Component = () => {
         };
       },
       async put() {
-        if (!this.data.attributes.canEdit) {
+        if (!data.attributes.canEdit) {
           return;
         }
-        console.log("sds", this.convert());
+        console.log("sds", convert());
         await app.mk.api.v3.music(
-          `/v1/me/library/playlists/${this.data.attributes.playParams.id}/tracks`,
+          `/v1/me/library/playlists/${data.attributes.playParams.id}/tracks`,
           {},
           {
             fetchOptions: {
               method: "PUT",
               body: JSON.stringify({
-                data: this.convert(),
+                data: convert(),
               }),
             },
           },
         );
       },
       async remove() {
-        if (!this.data.attributes.canEdit) {
+        if (!data.attributes.canEdit) {
           return;
         }
         // for each app.selectedMediaItems splice the items from the playlist
         for (let i = 0; i < app.selectedMediaItems.length; i++) {
           let item = app.selectedMediaItems[i];
-          let index = this.data.relationships.tracks.data.findIndex((x) => x.id == item.id);
+          let index = data.relationships.tracks.data.findIndex((x) => x.id == item.id);
           if (index > -1) {
-            this.data.relationships.tracks.data.splice(index, 1);
+            data.relationships.tracks.data.splice(index, 1);
           }
         }
-        await this.put();
+        await put();
       },
       convert() {
         let pl_tracks = [];
-        for (let i = 0; i < this.data.relationships.tracks.data.length; i++) {
+        for (let i = 0; i < data.relationships.tracks.data.length; i++) {
           pl_tracks.push({
-            id: this.data.relationships.tracks.data[i].id,
-            type: this.data.relationships.tracks.data[i].type,
+            id: data.relationships.tracks.data[i].id,
+            type: data.relationships.tracks.data[i].type,
           });
         }
         return pl_tracks;
       },
       getRecursive(url) {
         app.apiCall(app.musicBaseUrl + "/v1/me/library/playlists/p.V7VYlrDso6kkYY/tracks?offset=100", (res) => {
-          this.data.relationships.tracks.data = this.data.relationships.tracks.data.concat(res.data.data);
+          data.relationships.tracks.data = data.relationships.tracks.data.concat(res.data.data);
           if (res.data.next) {
-            this.getRecursive(res.data.next);
+            getRecursive(res.data.next);
           }
         });
       },
       async menu(event) {
-        let self = this;
         let artistId = null;
 
-        if (typeof this.data.relationships.artists != "undefined") {
-          artistId = this.data.relationships.artists.data[0].id;
-          if (this.data.relationships.artists.data[0].type == "library-artists") {
-            artistId = this.data.relationships.artists.data[0].relationships.catalog.data[0].id;
+        if (typeof data.relationships.artists != "undefined") {
+          artistId = data.relationships.artists.data[0].id;
+          if (data.relationships.artists.data[0].type == "library-artists") {
+            artistId = data.relationships.artists.data[0].relationships.catalog.data[0].id;
           }
         }
 
@@ -453,7 +450,7 @@ export const Component = () => {
               icon: "./assets/feather/list.svg",
               action: () => {
                 app.selectedMediaItems = [];
-                app.select_selectMediaItem(this.data.attributes.playParams.id ?? this.data.id, this.data.attributes.playParams.kind ?? this.data.type, 0, 0, this.data.attributes.playParams.isLibrary ?? false);
+                app.select_selectMediaItem(data.attributes.playParams.id ?? data.id, data.attributes.playParams.kind ?? data.type, 0, 0, data.attributes.playParams.isLibrary ?? false);
                 app.promptAddToPlaylist();
               },
             },
@@ -462,18 +459,18 @@ export const Component = () => {
               icon: "./assets/feather/share.svg",
               action: () => {
                 let route = "";
-                switch (this.data.type) {
+                switch (data.type) {
                   case "albums":
-                    route = `/v1/catalog/${app.mk.storefrontId}/albums/${this.data.id}`;
+                    route = `/v1/catalog/${app.mk.storefrontId}/albums/${data.id}`;
                     break;
                   case "playlists":
-                    route = `/v1/catalog/${app.mk.storefrontId}/playlists/${this.data.id}`;
+                    route = `/v1/catalog/${app.mk.storefrontId}/playlists/${data.id}`;
                     break;
                   case "library-playlists":
-                    route = `/v1/me/library/playlists/${this.data.id}/catalog`;
+                    route = `/v1/me/library/playlists/${data.id}/catalog`;
                     break;
                   case "library-albums":
-                    route = `/v1/me/library/albums/${this.data.id}/catalog`;
+                    route = `/v1/me/library/albums/${data.id}/catalog`;
                     break;
                 }
                 if (route === "") {
@@ -509,37 +506,37 @@ export const Component = () => {
         return `${kind}:${id}`;
       },
       getFormattedDate: function () {
-        let date = this.data.attributes.releaseDate ?? this.data.attributes.lastModifiedDate ?? this.data.attributes.dateAdded ?? "";
+        let date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
         let prefix = "";
         if (date == null || date === "") return "";
         switch (date) {
-          case this.data.attributes.releaseDate:
-            prefix = this.app.getLz("term.time.released") + " ";
+          case data.attributes.releaseDate:
+            prefix = app.getLz("term.time.released") + " ";
             break;
-          case this.data.attributes.lastModifiedDate:
-            prefix = this.app.getLz("term.time.updated") + " ";
+          case data.attributes.lastModifiedDate:
+            prefix = app.getLz("term.time.updated") + " ";
             break;
-          case this.data.attributes.dateAdded:
-            prefix = this.app.getLz("term.time.added") + " ";
+          case data.attributes.dateAdded:
+            prefix = app.getLz("term.time.added") + " ";
             break;
         }
         let month, year;
         try {
           const releaseDate = new Date(date);
-          // month = new Intl.DateTimeFormat(this.app.cfg.general.language.replace('_','-'), {month: 'long'}).format(releaseDate);
+          // month = new Intl.DateTimeFormat(app.cfg.general.language.replace('_','-'), {month: 'long'}).format(releaseDate);
           // date = releaseDate.getDate();
           // year = releaseDate.getFullYear();
           let formatted = "";
           try {
-            formatted = new Intl.DateTimeFormat(this.app.cfg.general.language?.replace("_", "-") ?? "en-US", {
+            formatted = new Intl.DateTimeFormat(app.cfg.general.language?.replace("_", "-") ?? "en-US", {
               day: "numeric",
               month: "long",
               year: "numeric",
             }).format(releaseDate);
           } catch (e) {
             // use the format in json instead
-            if (this.app.getLz("date.format") != null) {
-              formatted = new this.app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
+            if (app.getLz("date.format") != null) {
+              formatted = new app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
             } else {
               formatted = new Intl.DateTimeFormat("en-US", {
                 day: "numeric",
@@ -555,24 +552,24 @@ export const Component = () => {
       },
       play() {
         function shuffleArray(array) {
-          for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
+          for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let temp = array[i];
             array[i] = array[j];
             array[j] = temp;
           }
         }
 
-        const id = this.data.attributes.playParams?.id ?? this.data.id;
+        const id = data.attributes.playParams?.id ?? data.id;
         //console.log("1")
-        const kind = this.data.attributes.playParams?.kind ?? this.data.type ?? "";
+        const kind = data.attributes.playParams?.kind ?? data.type ?? "";
         //console.log("1")
         if (kind == "podcast-episodes") {
           kind = "episode";
         }
         const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
-        let query = (this.data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+        let query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
 
         app.mk.stop().then(() => {
           if (id != "ciderlocal") {
@@ -605,8 +602,8 @@ export const Component = () => {
         if (event.ctrlKey && event.keyCode === 67) {
           let urls = [];
           app.selectedMediaItems.forEach((item) => {
-            this.app.mk.api.v3.music(`/v1/me/library/songs/${item.id}`).then((response) => {
-              this.app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${response.data.data[0].attributes.playParams.catalogId}`).then((response1) => {
+            app.mk.api.v3.music(`/v1/me/library/songs/${item.id}`).then((response) => {
+              app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${response.data.data[0].attributes.playParams.catalogId}`).then((response1) => {
                 urls.push(response1.data.data[0].attributes.url);
                 navigator.clipboard.writeText(urls);
               });
@@ -616,7 +613,7 @@ export const Component = () => {
         }
       },
       async pasteSongs(event) {
-        if (event.ctrlKey && event.keyCode === 86 && this.data.attributes.canEdit) {
+        if (event.ctrlKey && event.keyCode === 86 && data.attributes.canEdit) {
           let clipboard = await navigator.clipboard.readText();
           let songs = [];
 
@@ -628,9 +625,9 @@ export const Component = () => {
             });
           });
 
-          this.app.mk.api.v3
+          app.mk.api.v3
             .music(
-              `/v1/me/library/playlists/${this.data.id}/tracks`,
+              `/v1/me/library/playlists/${data.id}/tracks`,
               {},
               {
                 fetchOptions: {
@@ -643,23 +640,23 @@ export const Component = () => {
             )
             .then((response) => {
               songs.forEach((item) => {
-                this.app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${item.id}`).then((response1) => {
-                  this.displayListing.push(response1.data.data[0]);
+                app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${item.id}`).then((response1) => {
+                  displayListing.push(response1.data.data[0]);
                 });
               });
             });
         }
       },
       toggleSearch() {
-        this.showSearch = !this.showSearch;
+        showSearch = !showSearch;
 
-        if (!this.showSearch && this.searchQuery != "") {
+        if (!showSearch && searchQuery != "") {
           // Clear search query if the search bar becomes hidden
-          this.searchQuery = "";
-          this.search();
-        } else if (this.showSearch) {
+          searchQuery = "";
+          search();
+        } else if (showSearch) {
           // Focus search bar
-          this.$nextTick(() => {
+          setTimeout(() => {
             this.$refs["search-bar"].focus();
           });
         }
@@ -667,12 +664,12 @@ export const Component = () => {
       search() {
         let filtered = [];
 
-        if (this.searchQuery == "") {
-          filtered = this.data.relationships.tracks.data;
+        if (searchQuery == "") {
+          filtered = data.relationships.tracks.data;
         } else {
-          filtered = this.data.relationships.tracks.data.filter((item) => {
+          filtered = data.relationships.tracks.data.filter((item) => {
             let itemName = item.attributes.name.toLowerCase();
-            let searchTerm = this.searchQuery.toLowerCase();
+            let searchTerm = searchQuery.toLowerCase();
             let artistName = "";
             let albumName = "";
             if (item.attributes.artistName != null) {
@@ -690,19 +687,19 @@ export const Component = () => {
 
             let match = itemName.includes(searchTerm) || artistName.includes(searchTerm);
             // only include album name in playlists
-            // this allows to search for the title track (itemName == albumName)
-            if (this.inPlaylist) match = match || albumName.includes(searchTerm);
+            // allows to search for the title track (itemName == albumName)
+            if (inPlaylist) match = match || albumName.includes(searchTerm);
 
             if (match) return item;
           });
         }
 
-        if (!this.hasNestedPlaylist) {
+        if (!hasNestedPlaylist) {
           // Regular album/playlist
-          this.displayListing = filtered;
+          displayListing = filtered;
         } else {
           // Album with multiple discs
-          this.generateNestedPlaylist(filtered);
+          generateNestedPlaylist(filtered);
         }
       },
     },
@@ -757,7 +754,7 @@ export const Component = () => {
                       <div
                         className="playlist-name"
                         mouseover="minClass(false)"
-                        click="editPlaylistName()"
+                        onClick={() => editPlaylistName()}
                         v-show="!nameEditing"
                         style={{ color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
                         {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
@@ -785,7 +782,7 @@ export const Component = () => {
                       <div
                         className="playlist-artist item-navigate"
                         v-if="getArtistName(data) != '' && !useArtistChip"
-                        click="data.attributes && data.attributes.artistName ? app.searchAndNavigate(data,'artist') : ''">
+                        onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
                         {getArtistName(data)}
                       </div>
                       <template v-if="useArtistChip">
@@ -802,11 +799,11 @@ export const Component = () => {
                           v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) != null"
                           className="content"
                           v-html="data.attributes.description?.short ?? data.attributes.editorialNotes?.short"
-                          click="openInfoModal()"></div>
+                          onClick={() => openInfoModal()}></div>
                         <div
                           v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null) && (descriptionEditing == false)"
                           mouseover="minClass(false)"
-                          click="editPlaylistDescription()"
+                          onClick={() => editPlaylistDescription()}
                           v-html="(data.attributes.description?.standard ?? (data.attributes.editorialNotes?.standard ?? '')).substring(0, 255) +'...'"></div>
                         <div
                           v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null) && (descriptionEditing)"
@@ -822,7 +819,7 @@ export const Component = () => {
                           />
                         </div>
                         {/* <button v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) != null" className="more-btn"
-                                                click="editorialNotesExpanded = !editorialNotesExpanded">
+                                                onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
                                             {app.getLz('term.showMore')}
                                         </button>  */}
                       </div>
@@ -835,7 +832,7 @@ export const Component = () => {
                         v-html="((data.attributes.editorialNotes) ? (data.attributes.editorialNotes.standard ?? (data.attributes.editorialNotes.short ?? '') ) : (data.attributes.description ? (data.attributes.description.standard ?? (data.attributes.description.short ?? '')) : ''))"></div>
                       <button
                         className="more-btn"
-                        click="editorialNotesExpanded = !editorialNotesExpanded">
+                        onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
                         {app.getLz("term.showLess")}
                       </button>
                     </div>
@@ -847,14 +844,20 @@ export const Component = () => {
                     <button
                       className="md-btn md-btn-primary md-btn-icon"
                       style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
-                      click="app.mk.shuffleMode = 0; play()">
+                      onClick={() => {
+                        app.mk.shuffleMode = 0;
+                        play();
+                      }}>
                       <img className="md-ico-play" />
                       {app.getLz("term.play")}
                     </button>
                     <button
                       className="md-btn md-btn-primary md-btn-icon"
                       style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
-                      click="app.mk.shuffleMode = 1;play()">
+                      onClick={() => {
+                        app.mk.shuffleMode = 1;
+                        play();
+                      }}>
                       <img className="md-ico-shuffle" />
                       {app.getLz("term.shuffle")}
                     </button>
@@ -862,7 +865,7 @@ export const Component = () => {
                       className="md-btn md-btn-icon"
                       style={{ minWidth: "180px" }}
                       v-if="inLibrary!=null && confirm!=true"
-                      click="confirmButton()">
+                      onClick={() => confirmButton()}>
                       <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
                       {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                     </button>
@@ -870,7 +873,7 @@ export const Component = () => {
                       className="md-btn md-btn-icon"
                       style={{ minWidth: "180px" }}
                       v-if="confirm==true"
-                      click="(!inLibrary) ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()) ">
+                      onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
                       <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
                       {app.getLz("term.confirm")}
                     </button>
@@ -887,7 +890,7 @@ export const Component = () => {
                       <button
                         style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
                         className="['search-btn', showSearch ? 'active' : '']"
-                        click="toggleSearch()"
+                        onClick={() => toggleSearch()}
                         aria-label="showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')">
                         <svg-icon
                           style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
@@ -896,7 +899,7 @@ export const Component = () => {
                       <button
                         style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
                         className="more-btn-round"
-                        click="menu"
+                        onClick={() => menu}
                         aria-label="app.getLz('term.more')">
                         <div
                           style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
@@ -918,7 +921,9 @@ export const Component = () => {
             <button
               className="md-btn md-btn-small editTracksBtn"
               v-if="(data.attributes.canEdit && data.type == 'library-playlists')"
-              click="editing = !editing">
+              onClick={() => {
+                editing = !editing;
+              }}>
               <span v-if="!editing">
                 <div class="codicon codicon-edit"></div> {$root.getLz("action.editTracklist")}
               </span>
@@ -939,14 +944,20 @@ export const Component = () => {
                   <button
                     className="md-btn md-btn-primary  md-btn-icon"
                     style={{ minWidth: "100px" }}
-                    click="app.mk.shuffleMode = 0; play()">
+                    onClick={() => {
+                      app.mk.shuffleMode = 0;
+                      play();
+                    }}>
                     <img className="md-ico-play" />
                     {app.getLz("term.play")}
                   </button>
                   <button
                     className="md-btn md-btn-primary  md-btn-icon"
                     style={{ minWidth: "100px" }}
-                    click="app.mk.shuffleMode = 1;play()">
+                    onClick={() => {
+                      app.mk.shuffleMode = 1;
+                      play();
+                    }}>
                     <img className="md-ico-shuffle" />
                     {app.getLz("term.shuffle")}
                   </button>
@@ -954,7 +965,7 @@ export const Component = () => {
                     className="md-btn md-btn-icon"
                     style={{ minWidth: "180px" }}
                     v-if="inLibrary!=null && confirm!=true"
-                    click="confirmButton()">
+                    onClick={() => confirmButton()}>
                     <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
                     {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                   </button>
@@ -962,7 +973,7 @@ export const Component = () => {
                     className="md-btn md-btn-icon"
                     style={{ minWidth: "180px" }}
                     v-if="confirm==true"
-                    click="(!inLibrary) ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()) ">
+                    onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
                     <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
                     {app.getLz("term.confirm")}
                   </button>
@@ -981,7 +992,7 @@ export const Component = () => {
                 <button
                   className="more-btn-round"
                   style={{ float: right }}
-                  click="menu"
+                  onClick={() => menu}
                   aria-label="app.getLz('term.more')">
                   <div className="svg-icon"></div>
                 </button>
@@ -1005,7 +1016,7 @@ export const Component = () => {
                   <div className="">
                     <div
                       style={{ width: "100%" }}
-                      click="minClass(true)">
+                      onClick={() => minClass(true)}>
                       <div
                         v-if="showSearch"
                         className="search-input-container">
@@ -1082,7 +1093,7 @@ export const Component = () => {
                   <div className="playlist-time total">{app.getTotalTime()}</div>
                   <div
                     className="playlist-time item-navigate"
-                    click="app.searchAndNavigate(data,'recordLabel') "
+                    onClick={() => app.searchAndNavigate(data, "recordLabel")}
                     style={{ width: "50%" }}>
                     {data.attributes.copyright}
                   </div>
@@ -1090,7 +1101,7 @@ export const Component = () => {
                     <div
                       className="playlist-time showExtended item-navigate"
                       style={{ color: "#fa586a", fontWeight: "bold" }}
-                      click="app.routeView(data.relationships.catalog.data[0])">
+                      onClick={() => app.routeView(data.relationships.catalog.data[0])}>
                       {$root.getLz("action.showAlbum")}
                     </div>
                   </template>

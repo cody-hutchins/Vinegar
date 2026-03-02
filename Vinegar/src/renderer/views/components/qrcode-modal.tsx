@@ -11,7 +11,7 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
             <div className="modal-title">{`Web Remote QR : ` + url}</div>
             <button
               className="close-btn"
-              click="close()"
+              onClick={() => close()}
               aria-label="app.getLz('action.close')"></button>
           </div>
           <div className="modal-content">

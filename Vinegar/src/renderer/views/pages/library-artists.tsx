@@ -34,7 +34,6 @@ export const Component = () => {
       };
     },
     mounted() {
-      let self = this;
       this.$root.getLibraryArtistsFull(null, 0);
       this.$root.$on("ap-inlinecollection", function (e) {
         console.log("hey", e);
@@ -112,7 +111,7 @@ export const Component2 = () => {
       return {
         isVisible: false,
         addedToLibrary: false,
-        guid: this.uuidv4(),
+        guid: uuidv4(),
         app: this.$root,
       };
     },
@@ -131,15 +130,15 @@ export const Component2 = () => {
         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
       },
       msToMinSec(ms) {
-        var minutes = Math.floor(ms / 60000);
-        var seconds = ((ms % 60000) / 1000).toFixed(0);
+        let minutes = Math.floor(ms / 60000);
+        let seconds = ((ms % 60000) / 1000).toFixed(0);
         return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
       },
       getDataType() {
-        return this.item.type;
+        return item.type;
       },
       async select(e) {
-        let u = this.item;
+        let u = item;
         let u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
           platform: "web",
           "include[library-albums]": "artists,tracks",
@@ -147,8 +146,8 @@ export const Component2 = () => {
           "fields[artists]": "url",
           includeOnly: "catalog,artists",
         });
-        this.showCollection({ data: Object.assign({}, u1.data.data) }, u.attributes.name ?? "", "");
-        //app.select_selectMediaItem(u.id, this.getDataType(), this.index, this.guid, true)
+        showCollection({ data: Object.assign({}, u1.data.data) }, u.attributes.name ?? "", "");
+        //app.select_selectMediaItem(u.id, getDataType(), index, guid, true)
       },
       showCollection(response, title, type, requestBody = {}) {
         this.$root.$emit("ap-inlinecollection", {
@@ -161,13 +160,12 @@ export const Component2 = () => {
       getArtwork() {
         let u = "";
         try {
-          u = this.item.relationships.catalog.data[0].attributes.artwork.url;
+          u = item.relationships.catalog.data[0].attributes.artwork.url;
         } catch (e) {}
         return u;
       },
       contextMenu(event) {
-        let self = this;
-        let data_type = this.getDataType();
+        let data_type = getDataType();
 
         let item = self.item;
         item.attributes.artistName = item.attributes.name;
@@ -175,7 +173,7 @@ export const Component2 = () => {
         let useMenu = "normal";
         if (app.selectedMediaItems.length <= 1) {
           app.selectedMediaItems = [];
-          app.select_selectMediaItem(this.item.id, data_type, this.index, this.guid, true);
+          app.select_selectMediaItem(item.id, data_type, index, guid, true);
         } else {
           useMenu = "multiple";
         }
@@ -220,57 +218,57 @@ export const Component2 = () => {
             ],
           },
         };
-        if (this.contextExt) {
-          // if this.context-ext.normal is true append all options to the 'normal' menu which is a kvp of arrays
-          if (this.contextExt.normal) {
-            menus.normal.items = menus.normal.items.concat(this.contextExt.normal);
+        if (contextExt) {
+          // if context-ext.normal is true append all options to the 'normal' menu which is a kvp of arrays
+          if (contextExt.normal) {
+            menus.normal.items = menus.normal.items.concat(contextExt.normal);
           }
-          if (this.contextExt.multiple) {
-            menus.multiple.items = menus.multiple.items.concat(this.contextExt.multiple);
+          if (contextExt.multiple) {
+            menus.multiple.items = menus.multiple.items.concat(contextExt.multiple);
           }
         }
         //CiderContextMenu.Create(event, menus[useMenu]); // Depreciated Context Menu
         app.showMenuPanel(menus[useMenu], event);
       },
       visibilityChanged: function (isVisible, entry) {
-        this.isVisible = isVisible;
+        isVisible = isVisible;
       },
       addToLibrary() {
-        let item = this.item;
+        let item = item;
         if (item.attributes.playParams.id) {
           console.log("adding to library", item.attributes.playParams.id);
           app.addToLibrary(item.attributes.playParams.id.toString());
-          this.addedToLibrary = true;
+          addedToLibrary = true;
         } else if (item.id) {
           console.log("adding to library", item.id);
           app.addToLibrary(item.id.toString());
-          this.addedToLibrary = true;
+          addedToLibrary = true;
         }
       },
       async removeFromLibrary() {
-        let item = this.item;
+        let item = item;
         let params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
         let id = item.id ?? item.attributes.playParams.id;
         let res = await app.mkapi(item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.playParams.id ?? item.id, params);
         if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
           id = res.relationships.library.data[0].id;
         }
-        let kind = this.item.attributes.playParams.kind ?? this.data.item ?? "";
+        let kind = item.attributes.playParams.kind ?? data.item ?? "";
         let truekind = !kind.endsWith("s") ? kind + "s" : kind;
         if (item.attributes.playParams.id) {
           console.log("remove from library", id);
           app.removeFromLibrary(truekind, id);
-          this.addedToLibrary = false;
+          addedToLibrary = false;
         } else if (item.id) {
           console.log("remove from library", id);
           app.removeFromLibrary(truekind, id);
-          this.addedToLibrary = false;
+          addedToLibrary = false;
         }
       },
       playTrack() {
-        let item = this.item;
-        let parent = this.parent;
-        let childIndex = this.index;
+        let item = item;
+        let parent = parent;
+        let childIndex = index;
         console.log(item, parent, childIndex);
         if (parent != null && childIndex != null) {
           app.queueParentandplayChild(parent, childIndex, item);
@@ -284,7 +282,7 @@ export const Component2 = () => {
     <div id="libraryartist-item">
       <div
         v-observe-visibility="{callback: visibilityChanged}"
-        click="select"
+        onClick={() => select}
         className="cd-mediaitem-list-item"
         className="{'mediaitem-selected': app.select_hasMediaItem(guid)}"
         contextmenu="contextMenu">

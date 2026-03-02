@@ -11,36 +11,35 @@ export const Component = () => {
     },
     methods: {
       hasAnimated() {
-        if (this.data.attributes?.editorialVideo && (this.data.attributes?.editorialVideo?.motionArtistWide16x9 || this.data.attributes?.editorialVideo?.motionArtistFullscreen16x9)) {
+        if (data.attributes?.editorialVideo && (data.attributes?.editorialVideo?.motionArtistWide16x9 || data.attributes?.editorialVideo?.motionArtistFullscreen16x9)) {
           return true;
         }
         return false;
       },
       hasHero() {
-        if (this.data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
-          return this.data.attributes?.editorialArtwork?.centeredFullscreenBackground.url;
-        } else if (this.data.attributes?.editorialArtwork?.bannerUber) {
-          return this.data.attributes?.editorialArtwork?.bannerUber.url;
-        } else if (this.data.attributes?.editorialArtwork?.subscriptionHero) {
-          return this.data.attributes?.editorialArtwork?.subscriptionHero.url;
+        if (data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
+          return data.attributes?.editorialArtwork?.centeredFullscreenBackground.url;
+        } else if (data.attributes?.editorialArtwork?.bannerUber) {
+          return data.attributes?.editorialArtwork?.bannerUber.url;
+        } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
+          return data.attributes?.editorialArtwork?.subscriptionHero.url;
         }
         return false;
       },
       hasHeroObject() {
-        if (this.data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
-          return this.data.attributes?.editorialArtwork?.centeredFullscreenBackground;
-        } else if (this.data.attributes?.editorialArtwork?.bannerUber) {
-          return this.data.attributes?.editorialArtwork?.bannerUber;
-        } else if (this.data.attributes?.editorialArtwork?.subscriptionHero) {
-          return this.data.attributes?.editorialArtwork?.subscriptionHero;
+        if (data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
+          return data.attributes?.editorialArtwork?.centeredFullscreenBackground;
+        } else if (data.attributes?.editorialArtwork?.bannerUber) {
+          return data.attributes?.editorialArtwork?.bannerUber;
+        } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
+          return data.attributes?.editorialArtwork?.subscriptionHero;
         }
         return [];
       },
       isHeaderVisible(visible) {
-        this.headerVisible = visible;
+        headerVisible = visible;
       },
       async artistMenu(event) {
-        let self = this;
         let followAction = "follow";
         let followActions = {
           follow: {
@@ -77,7 +76,7 @@ export const Component = () => {
             },
           },
         };
-        if (this.app.cfg.home.followedArtists.includes(self.data.id)) {
+        if (app.cfg.home.followedArtists.includes(self.data.id)) {
           followAction = "unfollow";
         }
         const inFavorites = (
@@ -125,8 +124,8 @@ export const Component = () => {
         }
       },
       getTopResult() {
-        if (this.search.results["meta"]) {
-          return this.search.results[this.search.results.meta.results.order[0]]["data"][0];
+        if (search.results["meta"]) {
+          return search.results[search.results.meta.results.order[0]]["data"][0];
         } else {
           return false;
         }
@@ -163,9 +162,11 @@ export const Component = () => {
                     type="artists"></mediaitem-artwork>
                   <button
                     className="overlay-play"
-                    click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
-                            app.mk.play()
-                        })"
+                    onClick={() =>
+                      app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
+                        app.mk.play();
+                      })
+                    }
                     aria-label="app.getLz('term.play')">
                     {import("../svg/play.svg")}
                   </button>
@@ -177,9 +178,11 @@ export const Component = () => {
                 style={{ color: "#" + hasHeroObject()?.textColor1 ?? "" }}>
                 <button
                   className="artist-play"
-                  click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
-                        app.mk.play()
-                    })"
+                  onClick={() =>
+                    app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
+                      app.mk.play();
+                    })
+                  }
                   aria-label="app.getLz('term.play')">
                   {import("../svg/play.svg")}
                 </button>
@@ -188,14 +191,14 @@ export const Component = () => {
             </div>
             <button
               className="more-btn-round favorite"
-              click="artistMenu"
+              onClick={() => artistMenu}
               style={{ pointerEvents: all }}
               aria-label="app.getLz('term.more')">
               <div className="svg-icon"></div>
             </button>
             <button
               className="more-btn-round menu"
-              click="artistMenu"
+              onClick={() => artistMenu}
               style={{ pointerEvents: all }}
               aria-label="app.getLz('term.more')">
               <div className="svg-icon"></div>
@@ -227,9 +230,11 @@ export const Component = () => {
               <button
                 className="artist-play"
                 style={{ display: "block" }}
-                click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
-                        app.mk.play()
-                    })"
+                onClick={() =>
+                  app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
+                    app.mk.play();
+                  })
+                }
                 aria-label="app.getLz('term.play')">
                 {import("../svg/play.svg")}
               </button>
@@ -240,7 +245,7 @@ export const Component = () => {
             <div className="col-auto cider-flex-center">
               <button
                 className="more-btn-round menu"
-                click="artistMenu"
+                onClick={() => artistMenu}
                 aria-label="app.getLz('term.more')">
                 <div className="svg-icon"></div>
               </button>
@@ -278,7 +283,7 @@ export const Component = () => {
                   style={{ padding: 0 }}>
                   <button
                     className="cd-btn-seeall"
-                    click="app.showArtistView(data.id, data.attributes.name + ' - Top Songs', 'top-songs')">
+                    onClick={() => app.showArtistView(data.id, data.attributes.name + " - Top Songs", "top-songs")}>
                     {app.getLz("term.seeAll")}
                   </button>
                 </div>
@@ -308,7 +313,7 @@ export const Component = () => {
                     v-if="data.views[view].data.length >= 10">
                     <button
                       className="cd-btn-seeall"
-                      click="app.showArtistView(data.id, data.attributes.name + ' - ' + data.views[view].attributes.title, view)">
+                      onClick={() => app.showArtistView(data.id, data.attributes.name + " - " + data.views[view].attributes.title, view)}>
                       {app.getLz("term.seeAll")}
                     </button>
                   </div>

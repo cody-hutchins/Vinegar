@@ -1,7 +1,9 @@
+import { useEffect } from "react";
+
 export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
   const app = this.$root;
   const tabMode = "lyrics";
-  const video = null;
+  let video = null;
   const immersiveEnabled = app.cfg.advanced.experiments.includes("immersive-preview");
   async function mounted() {
     if (app.mk.nowPlayingItem._container.type == "albums") {
@@ -46,6 +48,12 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
       console.log("js");
     }
   };
+
+  useEffect(() => {
+    beforeMount();
+    mounted();
+    return beforeDestroy;
+  }, []);
   return (
     <div id="fullscreen-view">
       <div
@@ -127,7 +135,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
             <div
               className="artwork"
               className="$root.mk.isPlaying && 'playing'"
-              click="app.fullscreen(false)">
+              onClick={() => app.fullscreen(false)}>
               <mediaitem-artwork
                 size="600"
                 video="video"
@@ -148,7 +156,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                     <div
                       className="item-navigate song-artist"
                       style={{ display: "inline-block" }}
-                      click="app.getNowPlasssyingItemDetailed(`artist`) && app.fullscreen(false)">
+                      onClick={() => app.getNowPlasssyingItemDetailed(`artist`) && app.fullscreen(false)}>
                       {app.mk.nowPlayingItem["attributes"]["artistName"]}
                     </div>
                     <div
@@ -159,7 +167,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                     <div
                       className="song-artist item-navigate"
                       style={{ display: "inline-block" }}
-                      click="app.getNowPlayingItemDetailed('album') && app.fullscreen(false)">
+                      onClick={() => app.getNowPlayingItemDetailed("album") && app.fullscreen(false)}>
                       {app.mk.nowPlayingItem["attributes"]["albumName"] ? app.mk.nowPlayingItem["attributes"]["albumName"] : ""}
                     </div>
                   </div>
@@ -188,21 +196,21 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="playback-button--small shuffle"
                       v-if="$root.mk.shuffleMode == 0"
                       className="$root.isDisabled() && 'disabled'"
-                      click="$root.mk.shuffleMode = 1"
+                      onClick={() => ($root.mk.shuffleMode = 1)}
                       title="$root.getLz('term.enableShuffle')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button--small shuffle active"
                       v-else
                       className="$root.isDisabled() && 'disabled'"
-                      click="$root.mk.shuffleMode = 0"
+                      onClick={() => ($root.mk.shuffleMode = 0)}
                       title="$root.getLz('term.disableShuffle')"
                       v-b-tooltiphover></button>
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button previous"
-                      click="$root.prevButton()"
+                      onClick={() => $root.prevButton()}
                       className="$root.isPrevDisabled() && 'disabled'"
                       title="$root.getLz('term.previous')"
                       v-b-tooltiphover></button>
@@ -210,19 +218,19 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button stop"
-                      click="$root.mk.stop()"
+                      onClick={() => $root.mk.stop()}
                       v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
                       title="$root.getLz('term.stop')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button pause"
-                      click="$root.mk.pause()"
+                      onClick={() => $root.mk.pause()}
                       v-else-if="$root.mk.isPlaying"
                       title="$root.getLz('term.pause')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button play"
-                      click="$root.mk.play()"
+                      onClick={() => $root.mk.play()}
                       v-else
                       title="$root.getLz('term.play')"
                       v-b-tooltiphover></button>
@@ -230,7 +238,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button next"
-                      click="$root.skipToNextItem()"
+                      onClick={() => $root.skipToNextItem()}
                       className="$root.isNextDisabled() && 'disabled'"
                       title="$root.getLz('term.next')"
                       v-b-tooltiphover></button>
@@ -240,19 +248,19 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="playback-button--small repeat"
                       v-if="$root.mk.repeatMode == 0"
                       className="$root.isDisabled() && 'disabled'"
-                      click="$root.mk.repeatMode = 1"
+                      onClick={() => ($root.mk.repeatMode = 1)}
                       title="$root.getLz('term.enableRepeatOne')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button--small repeat repeatOne"
-                      click="mk.repeatMode = 2"
+                      onClick={() => (mk.repeatMode = 2)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 1"
                       title="$root.getLz('term.disableRepeatOne')"
                       v-b-tooltiphover></button>
                     <button
                       className="playback-button--small repeat active"
-                      click="$root.mk.repeatMode = 0"
+                      onClick={() => ($root.mk.repeatMode = 0)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 2"
                       title="$root.getLz('term.disableRepeat')"
@@ -264,7 +272,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                 <div className="input-container">
                   <button
                     className="volume-button--small volume"
-                    click="app.muteButtonPressed()"
+                    onClick={() => app.muteButtonPressed()}
                     className="{'active': app.cfg.audio.volume == 0}"
                     title="app.cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
                     v-b-tooltiphover></button>
@@ -313,16 +321,16 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
           <div
             className="lyrics"
             className="{active: tabMode == 'lyrics'}"
-            click="tabMode = (tabMode == 'lyrics') ? '' : 'lyrics'"></div>
+            onClick={() => (tabMode = tabMode == "lyrics" ? "" : "lyrics")}></div>
           <div
             className="queue"
             className="{active: tabMode == 'queue'}"
-            click="tabMode =  (tabMode == 'queue') ? '' :'queue'"></div>
+            onClick={() => (tabMode = tabMode == "queue" ? "" : "queue")}></div>
           <div
             className="queue"
             className="{active: tabMode == 'catalog'}"
             v-if="false"
-            click="tabMode =  (tabMode == 'catalog') ? '' :'catalog'"></div>
+            onClick={() => (tabMode = tabMode == "catalog" ? "" : "catalog")}></div>
         </div>
       </div>
     </div>

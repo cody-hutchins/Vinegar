@@ -46,7 +46,7 @@ export const Component = () => {
             <div className="modal-title">{app.getLz("term.audioControls")}</div>
             <button
               className="close-btn"
-              click="app.modals.audioControls = false"
+              onClick={() => (app.modals.audioControls = false)}
               aria-label="app.getLz('action.close')"></button>
           </div>
           <div className="modal-content">

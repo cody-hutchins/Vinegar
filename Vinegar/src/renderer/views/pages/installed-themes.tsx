@@ -14,7 +14,7 @@ export const Component = () => {
                             </b-col>
                             <b-col className="themeLabel">{getThemeName(theme)}</b-col>
                             <b-col sm="auto">
-                                <button className="removeItem codicon codicon-close" click="remove(theme)"></button>
+                                <button className="removeItem codicon codicon-close" onClick={() =>remove(theme)}></button>
                             </b-col>
                         </b-row>
                         </b-list-group-item>
@@ -36,14 +36,14 @@ export const Component = () => {
       };
     },
     mounted() {
-      console.log(this.themes);
-      this.themeList = [...this.themes];
+      console.log(themes);
+      themeList = [...themes];
 
-      this.themeList.forEach((theme) => {
+      themeList.forEach((theme) => {
         if (theme.pack) {
           theme.pack.forEach((packEntry) => {
             packEntry.file = theme.file.replace("index.less", "") + packEntry.file;
-            this.themeList.push(packEntry);
+            themeList.push(packEntry);
           });
         }
       });
@@ -54,26 +54,26 @@ export const Component = () => {
       },
       getThemeName(filename) {
         try {
-          return this.themeList.find((theme) => theme.file === filename).name;
+          return themeList.find((theme) => theme.file === filename).name;
         } catch (e) {
           return filename;
         }
       },
       moveUp() {
         const styles = this.$root.cfg.visual.styles;
-        const index = styles.indexOf(this.selected);
+        const index = styles.indexOf(selected);
         if (index > 0) {
           styles.splice(index, 1);
-          styles.splice(index - 1, 0, this.selected);
+          styles.splice(index - 1, 0, selected);
         }
         this.$root.reloadStyles();
       },
       moveDown() {
         const styles = this.$root.cfg.visual.styles;
-        const index = styles.indexOf(this.selected);
+        const index = styles.indexOf(selected);
         if (index < styles.length - 1) {
           styles.splice(index, 1);
-          styles.splice(index + 1, 0, this.selected);
+          styles.splice(index + 1, 0, selected);
         }
         this.$root.reloadStyles();
       },
@@ -112,11 +112,10 @@ export const Component = () => {
       };
     },
     mounted() {
-      this.getThemesList();
+      getThemesList();
     },
     methods: {
       getThemesList() {
-        let self = this;
         let themes = ipcRenderer.sendSync("get-themes");
         themes.unshift({
           name: "Acrylic Grain",
@@ -138,10 +137,9 @@ export const Component = () => {
           name: "Dark",
           file: "dark.less",
         });
-        this.themes = themes;
+        themes = themes;
       },
       contextMenu(event, theme) {
-        let self = this;
         let menu = {
           items: {
             uninstall: {
@@ -181,7 +179,6 @@ export const Component = () => {
         ipcRenderer.invoke("open-path", "themes");
       },
       getInstalledThemes() {
-        let self = this;
         const themes = ipcRenderer.sendSync("get-themes");
         // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
         themes.forEach((theme) => {
@@ -194,9 +191,8 @@ export const Component = () => {
         this.$refs.stackEditor.addStyle(filename);
       },
       showRepo(repo) {
-        const self = this;
         const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-        var requestOptions = {
+        let requestOptions = {
           method: "GET",
           redirect: "follow",
         };
@@ -209,7 +205,7 @@ export const Component = () => {
           })
           .catch((error) => {
             self.openRepo = repo;
-            self.openRepo.readme = `This repository doesn't have a README.md file.`;
+            self.openRepo.readme = `repository doesn't have a README.md file.`;
             console.log("error", error);
           });
       },
@@ -217,7 +213,6 @@ export const Component = () => {
         return marked.parse(text);
       },
       installThemeRepo(repo) {
-        let self = this;
         let msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
           repo: repo.full_name,
         });
@@ -237,7 +232,6 @@ export const Component = () => {
         });
       },
       installThemeURL() {
-        let self = this;
         app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
           if (result) {
             ipcRenderer.once("theme-installed", (event, arg) => {
@@ -253,8 +247,7 @@ export const Component = () => {
         });
       },
       getRepos() {
-        let self = this;
-        var requestOptions = {
+        let requestOptions = {
           method: "GET",
           redirect: "follow",
         };
@@ -281,21 +274,21 @@ export const Component = () => {
             <div className="col-auto nopadding flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.appRoute('themes-github')">
+                onClick={() => $root.appRoute("themes-github")}>
                 {$root.getLz("settings.option.visual.theme.github.explore")}
               </button>
             </div>
             <div className="col-auto  flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.checkForThemeUpdates()">
+                onClick={() => $root.checkForThemeUpdates()}>
                 {$root.getLz("settings.option.visual.theme.checkForUpdates")}
               </button>
             </div>
             <div className="col-auto nopadding flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="openThemesFolder()">
+                onClick={() => openThemesFolder()}>
                 {$root.getLz("settings.option.visual.theme.github.openfolder")}
               </button>
             </div>
@@ -309,7 +302,7 @@ export const Component = () => {
             <ul className="list-group list-group-flush">
               <template v-for="theme in themes">
                 <li
-                  click="addStyle(theme.file)"
+                  onClick={() => addStyle(theme.file)}
                   contextmenu="contextMenu($event, theme)"
                   className="list-group-item list-group-item-dark"
                   className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
@@ -340,7 +333,7 @@ export const Component = () => {
                   </b-row>
                 </li>
                 <li
-                  click="addStyle(packEntry.file)"
+                  onClick={() => addStyle(packEntry.file)}
                   contextmenu="contextMenu($event, theme)"
                   className="list-group-item list-group-item-dark addon"
                   v-for="packEntry in theme.pack"

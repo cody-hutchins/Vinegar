@@ -1,6 +1,8 @@
+import { useEffect } from "react";
+
 const AnimatedArtworkView = ({ video, priority = false }: { video: string; priority: boolean }) => {
   const app = this.$root;
-  const hls = null;
+  let hls = null;
   const mounted = () => {
     if (!priority && app.cfg.visual.animated_artwork == "limited") {
       return;
@@ -8,8 +10,8 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
       return;
     }
     if (video) {
-      this.$nextTick(function () {
-        var config = {
+      setTimeout(() => {
+        let config = {
           backBufferLength: 0,
           enableWebVTT: false,
           enableCEA708Captions: false,
@@ -17,10 +19,10 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
           abrEwmaDefaultEstimate: 10000,
           testBandwidth: false,
         };
-        if (this.hls) {
-          this.hls.detachMedia();
+        if (hls) {
+          hls.detachMedia();
         } else {
-          this.hls = new CiderHls(config);
+          hls = new CiderHls(config);
         }
         // bind them together
         if (this.$refs.video) {
@@ -35,10 +37,10 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
             appData: { serviceName: "Apple Music" },
           };
 
-          this.hls.attachMedia(this.$refs.video);
-          this.hls.loadSource(this.video, p);
-          let u = this.hls;
-          var quality = app.cfg.visual.animated_artwork_qualityLevel;
+          hls.attachMedia(this.$refs.video);
+          hls.loadSource(video, p);
+          let u = hls;
+          let quality = app.cfg.visual.animated_artwork_qualityLevel;
           setTimeout(() => {
             let levelsnum = u.levels.map((level) => {
               return level.width;
@@ -61,19 +63,26 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
               }
             }
             try {
-              this.hls.loadLevel = parseInt(quality || 1);
+              hls.loadLevel = parseInt(quality || 1);
             } catch (e) {}
           }, 200);
         }
       });
     }
   };
+
   const beforeDestroy = () => {
-    if (this.hls) {
-      await this.hls.destroy();
-      this.hls = null;
+    if (hls) {
+      hls.destroy().then();
+      hls = null;
     }
   };
+
+  useEffect(() => {
+    mounted();
+    return beforeDestroy;
+  }, []);
+
   return (
     <div id="animatedartwork-view">
       <div

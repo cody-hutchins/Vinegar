@@ -14,34 +14,31 @@ export const Component = () => {
       };
     },
     mounted() {
-      this.getData();
+      getData();
     },
     methods: {
-      getData() {
-        let self = this;
-        app.mk.api.v3
-          .music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
-            types: "albums,songs,music-videos,playlists",
-            l: "en-gb",
-            platform: "auto",
-            limit: "50",
-            genre: "34",
-            include: "tracks",
-            with: "cityCharts,dailyGlobalTopCharts",
-            extend: "artistUrl",
-            "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
-            "fields[playlists]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url,curatorName",
-          })
-          .then((res) => {
-            let page = res.data?.results ?? [];
-            self.songs = page.songs[0] ?? [];
-            self.albums = page.albums[0] ?? [];
-            self.playlists = page.playlists[0] ?? [];
-            self.musicvideos = page["music-videos"][0] ?? [];
-            self.citycharts = page.cityCharts[0] ?? [];
-            self.globalcharts = page.dailyGlobalTopCharts[0] ?? [];
-          });
-        // let self = this;
+      async getData() {
+        let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
+          types: "albums,songs,music-videos,playlists",
+          l: "en-gb",
+          platform: "auto",
+          limit: "50",
+          genre: "34",
+          include: "tracks",
+          with: "cityCharts,dailyGlobalTopCharts",
+          extend: "artistUrl",
+          "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
+          "fields[playlists]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url,curatorName",
+        });
+        let self: Record<string, any> = {};
+        let page = res.data?.results ?? [];
+        self.songs = page.songs[0] ?? [];
+        self.albums = page.albums[0] ?? [];
+        self.playlists = page.playlists[0] ?? [];
+        self.musicvideos = page["music-videos"][0] ?? [];
+        self.citycharts = page.cityCharts[0] ?? [];
+        self.globalcharts = page.dailyGlobalTopCharts[0] ?? [];
+        return self;
         // app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
         //     let page = res.data?.results ?? [];
         //     self.songs = page.songs[0] ?? [];
@@ -65,7 +62,7 @@ export const Component = () => {
               v-if="songs.data.length > 12">
               <button
                 className="cd-btn-seeall"
-                click="app.showCollection((songs ?? []), songs.name ?? '', 'default')">
+                onClick={() => app.showCollection(songs ?? [], songs.name ?? "", "default")}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>
@@ -84,7 +81,7 @@ export const Component = () => {
               v-if="songs.data.length > 12">
               <button
                 className="cd-btn-seeall"
-                click="app.showCollection((albums ?? []), albums.name ?? '', 'default')">
+                onClick={() => app.showCollection(albums ?? [], albums.name ?? "", "default")}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>
@@ -101,7 +98,7 @@ export const Component = () => {
               v-if="playlists.data.length > 12">
               <button
                 className="cd-btn-seeall"
-                click="app.showCollection((playlists ?? []), playlists.name ?? '', 'default')">
+                onClick={() => app.showCollection(playlists ?? [], playlists.name ?? "", "default")}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>
@@ -118,7 +115,7 @@ export const Component = () => {
               v-if="musicvideos.data.length > 12">
               <button
                 className="cd-btn-seeall"
-                click="app.showCollection((musicvideos ?? []), musicvideos.name ?? '', 'default')">
+                onClick={() => app.showCollection(musicvideos ?? [], musicvideos.name ?? "", "default")}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>
@@ -135,7 +132,7 @@ export const Component = () => {
               v-if="globalcharts.data.length > 12">
               <button
                 className="cd-btn-seeall"
-                click="app.showCollection((globalcharts ?? []), globalcharts.name ?? '', 'default')">
+                onClick={() => app.showCollection(globalcharts ?? [], globalcharts.name ?? "", "default")}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>
@@ -152,7 +149,7 @@ export const Component = () => {
               v-if="citycharts.data.length > 12">
               <button
                 className="cd-btn-seeall"
-                click="app.showCollection((citycharts ?? []), citycharts.name ?? '', 'default')">
+                onClick={() => app.showCollection(citycharts ?? [], citycharts.name ?? "", "default")}>
                 {app.getLz("term.seeAll")}
               </button>
             </div>

@@ -14,16 +14,15 @@ export const Component = () => {
     async mounted() {
       // Get available years
       let year = await app.mk.api.v3.music("/v1/me/music-summaries/search?extend=inLibrary&period=year&fields[music-summaries]=period%2Cyear&include[music-summaries]=playlist");
-      this.years = year.data.data;
-      this.years.reverse();
+      years = year.data.data;
+      years.reverse();
       localStorage.setItem("seenReplay", true);
-      this.getReplayYear();
+      getReplayYear();
       const musicGenre = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/genres/34`);
-      this.musicTypeGenre = musicGenre.data.data[0].attributes.name;
+      musicTypeGenre = musicGenre.data.data[0].attributes.name;
     },
     methods: {
       songsToArray(songsData) {
-        let self = this;
         let songs = [];
         let topGenres = {};
         let genrePlayCount = 0;
@@ -55,18 +54,18 @@ export const Component = () => {
         topGenresArray.forEach(function (genre) {
           genre.count = Math.round((genre.count / genrePlayCount) * 100);
         });
-        this.loaded.topGenres = topGenresArray;
+        loaded.topGenres = topGenresArray;
 
         return songs;
       },
       async getReplayYear(year = new Date().getFullYear()) {
-        this.loaded.id = -1;
+        loaded.id = -1;
         let response = await app.mk.api.v3.music(`/v1/me/music-summaries/year-${year}?extend=inLibrary&views=top-artists%2Ctop-albums%2Ctop-songs&include[music-summaries]=playlist&include[playlists]=tracks&includeOnly=playlist%2Ctracks%2Csong%2Cartist%2Calbum`);
         let replayData = response.data.data[0];
         // extended playlist
         let playlist = await app.mk.api.v3.music(replayData.relationships.playlist.data[0].href, { extend: "editorialArtwork,editorialVideo" });
         replayData.playlist = playlist.data.data[0];
-        this.loaded = replayData;
+        loaded = replayData;
       },
       convertToHours(minutes) {
         return Math.floor(minutes / 60);
@@ -80,7 +79,7 @@ export const Component = () => {
           <div
             className="replay-period"
             v-for="year in years"
-            click="getReplayYear(year.attributes.year)">
+            onClick={() => getReplayYear(year.attributes.year)}>
             <div className="artwork-container">
               <mediaitem-artwork
                 size="200"
@@ -109,7 +108,7 @@ export const Component = () => {
             <hr />
             <div className="row">
               <div className="col">
-                <h4 click="hourshow = !hourshow">
+                <h4 onClick={() => (hourshow = !hourshow)}>
                   {convertToHours(loaded.attributes.listenTimeInMinutes)}
                   {$root.getLz("term.time.hours")}
                   {hourshow ? "" : loaded.attributes.listenTimeInMinutes % 60}

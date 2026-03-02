@@ -32,12 +32,12 @@ export const ChromeBottom = () => (
                   <div className="song-name">{mk.nowPlayingItem["attributes"]["name"]}</div>
                   <div
                     className="song-artist"
-                    click="getNowPlayingItemDetailed(`artist`)">
+                    onClick={() => getNowPlayingItemDetailed(`artist`)}>
                     {mk.nowPlayingItem["attributes"]["artistName"]}
                   </div>
                   <div
                     className="song-album"
-                    click="getNowPlayingItemDetailed(`album`)">
+                    onClick={() => getNowPlayingItemDetailed(`album`)}>
                     {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
                   </div>
                   <hr />
@@ -47,13 +47,19 @@ export const ChromeBottom = () => (
                     <button
                       className="md-btn md-btn-small"
                       style={{ width: "100%" }}
-                      click="drawer.open = false; miniPlayer(true)">
+                      onClick={() => {
+                        drawer.open = false;
+                        miniPlayer(true);
+                      }}>
                       {$root.getLz("term.miniplayer")}
                     </button>
                     <button
                       className="md-btn md-btn-small"
                       style={{ width: "100%" }}
-                      click="drawer.open = false; fullscreen(true)">
+                      onClick={() => {
+                        drawer.open = false;
+                        fullscreen(true);
+                      }}>
                       {$root.getLz("term.fullscreenView")}
                     </button>
                   </div>
@@ -72,12 +78,12 @@ export const ChromeBottom = () => (
               </div>
               <div
                 className="song-artist"
-                click="getNowPlayingItemDetailed(`artist`)">
+                onClick={() => getNowPlayingItemDetailed(`artist`)}>
                 {mk.nowPlayingItem["attributes"]["artistName"]}
               </div>
               <div
                 className="song-album"
-                click="getNowPlayingItemDetailed('album')"
+                onClick={() => getNowPlayingItemDetailed("album")}
                 v-if='mk.nowPlayingItem["attributes"]["albumName"]'>
                 {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
               </div>
@@ -129,7 +135,7 @@ export const ChromeBottom = () => (
               <div className="actions">
                 <button
                   className="lcdMenu"
-                  click="nowPlayingContextMenu"
+                  onClick={nowPlayingContextMenu}
                   title="$root.getLz('term.more')"
                   v-b-tooltiphover>
                   <div className="svg-icon"></div>
@@ -190,21 +196,23 @@ export const ChromeBottom = () => (
             className="playback-button--small shuffle"
             v-if="mk.shuffleMode == 0"
             className="isDisabled() && 'disabled'"
-            click="mk.shuffleMode = 1"
+            onClick={() => {
+              mk.shuffleMode = 1;
+            }}
             title="$root.getLz('term.enableShuffle')"
             v-b-tooltiphover></button>
           <button
             className="playback-button--small shuffle active"
             v-else
             className="isDisabled() && 'disabled'"
-            click="mk.shuffleMode = 0"
+            onClick={() => (mk.shuffleMode = 0)}
             title="$root.getLz('term.disableShuffle')"
             v-b-tooltiphover></button>
         </div>
         <div className="app-chrome-item">
           <button
             className="playback-button previous"
-            click="prevButton()"
+            onClick={prevButton}
             className="isPrevDisabled() && 'disabled'"
             title="$root.getLz('term.previous')"
             v-b-tooltiphover></button>
@@ -212,19 +220,19 @@ export const ChromeBottom = () => (
         <div className="app-chrome-item">
           <button
             className="playback-button stop"
-            click="mk.stop()"
+            onClick={mk.stop}
             v-if="mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
             title="$root.getLz('term.stop')"
             v-b-tooltiphover></button>
           <button
             className="playback-button pause"
-            click="mk.pause()"
+            onClick={mk.pause}
             v-else-if="mk.isPlaying"
             title="$root.getLz('term.pause')"
             v-b-tooltiphover></button>
           <button
             className="playback-button play"
-            click="mk.play()"
+            onClick={mk.play}
             v-else
             title="$root.getLz('term.play')"
             v-b-tooltiphover></button>
@@ -232,7 +240,7 @@ export const ChromeBottom = () => (
         <div className="app-chrome-item">
           <button
             className="playback-button next"
-            click="skipToNextItem()"
+            onClick={skipToNextItem}
             className="isNextDisabled() && 'disabled'"
             title="$root.getLz('term.next')"
             v-b-tooltiphover></button>
@@ -242,7 +250,7 @@ export const ChromeBottom = () => (
             className="playback-button--small repeat"
             className="mk.repeatMode == 1 ? 'repeatOne' : mk.repeatMode == 2 ? 'active' : ''"
             className="isDisabled() && 'disabled'"
-            click="repeatIncrement()"
+            onClick={repeatIncrement}
             title="$root.lz.repeat[mk.repeatMode]"
             v-b-tooltiphover></button>
         </div>
@@ -252,8 +260,8 @@ export const ChromeBottom = () => (
       <div className="app-chrome-item volume">
         <button
           className="volume-button--small volume"
-          click="muteButtonPressed()"
-          className="{'active': this.cfg.audio.volume == 0}"
+          onClick={muteButtonPressed}
+          className="{'active': cfg.audio.volume == 0}"
           title="cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
           v-b-tooltiphover></button>
         <input
@@ -274,7 +282,9 @@ export const ChromeBottom = () => (
           className="playback-button--small cast"
           title="$root.getLz('term.cast')"
           v-b-tooltiphover
-          click="modals.castMenu = true"></button>
+          onClick={() => {
+            modals.castMenu = true;
+          }}></button>
       </div>
       <div className="app-chrome-item generic">
         <button
@@ -282,7 +292,7 @@ export const ChromeBottom = () => (
           className="{'active': drawer.panel == 'queue'}"
           title="$root.getLz('term.queue')"
           v-b-tooltiphover
-          click="invokeDrawer('queue')"></button>
+          onClick={() => invokeDrawer("queue")}></button>
       </div>
       <div className="app-chrome-item generic">
         <template v-if="lyrics && lyrics != [] && lyrics.length > 0">
@@ -291,7 +301,7 @@ export const ChromeBottom = () => (
             title="$root.getLz('term.lyrics')"
             v-b-tooltiphover
             className="{'active': drawer.panel == 'lyrics'}"
-            click="invokeDrawer('lyrics')"></button>
+            onClick={() => invokeDrawer("lyrics")}></button>
         </template>
         <template v-else>
           <button

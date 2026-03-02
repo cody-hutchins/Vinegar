@@ -13,7 +13,7 @@ export const Component = () => {
           localStorage.setItem("seenOOBE", 1);
           window.location.reload();
         }
-        this.screen = "signin";
+        screen = "signin";
         capiInit();
       },
       getLz() {
@@ -77,7 +77,7 @@ export const Component = () => {
             <div className="btn-group">
               <div
                 className="md-btn md-btn-primary"
-                click="screen = 'welcome'">
+                onClick={() => (screen = "welcome")}>
                 {getLz("oobe.next")}
               </div>
             </div>
@@ -96,12 +96,12 @@ export const Component = () => {
             <div className="btn-group">
               <div
                 className="md-btn"
-                click="screen = 'before_we_start'">
+                onClick={() => (screen = "before_we_start")}>
                 {getLz("oobe.previous")}
               </div>
               <div
                 className="md-btn md-btn-primary"
-                click="screen = 'visual'">
+                onClick={() => (screen = "visual")}>
                 {getLz("oobe.next")}
               </div>
             </div>
@@ -120,12 +120,12 @@ export const Component = () => {
             <div className="btn-group">
               <div
                 className="md-btn"
-                click="screen = 'welcome'">
+                onClick={() => (screen = "welcome")}>
                 {getLz("oobe.previous")}
               </div>
               <div
                 className="md-btn md-btn-primary"
-                click="screen = 'visual'">
+                onClick={() => (screen = "visual")}>
                 {getLz("oobe.next")}
               </div>
             </div>
@@ -144,7 +144,7 @@ export const Component = () => {
               <b-col>
                 <div
                   className="card bg-dark text-white stylePicker"
-                  click="$root.cfg.visual.directives.windowLayout = 'twopanel'"
+                  onClick={() => ($root.cfg.visual.directives.windowLayout = "twopanel")}
                   className="{'style-active': ($root.cfg.visual.directives.windowLayout == 'twopanel')}">
                   <div className="card-body">
                     <img
@@ -159,7 +159,7 @@ export const Component = () => {
               <b-col>
                 <div
                   className="card bg-dark text-white stylePicker"
-                  click="$root.cfg.visual.directives.windowLayout = 'default'"
+                  onClick={() => ($root.cfg.visual.directives.windowLayout = "default")}
                   className="{'style-active': ($root.cfg.visual.directives.windowLayout == 'default')}">
                   <div className="card-body">
                     <img
@@ -178,12 +178,12 @@ export const Component = () => {
             <div className="btn-group">
               <div
                 className="md-btn"
-                click="screen = 'welcome'">
+                onClick={() => (screen = "welcome")}>
                 {getLz("oobe.previous")}
               </div>
               <div
                 className="md-btn md-btn-primary"
-                click="screen = 'audio'">
+                onClick={() => (screen = "audio")}>
                 {getLz("oobe.next")}
               </div>
             </div>
@@ -222,12 +222,12 @@ export const Component = () => {
             <div className="btn-group">
               <div
                 className="md-btn"
-                click="screen = 'visual'">
+                onClick={() => (screen = "visual")}>
                 {getLz("oobe.previous")}
               </div>
               <div
                 className="md-btn md-btn-primary"
-                click="signIn()">
+                onClick={() => signIn()}>
                 {getLz("oobe.next")}
               </div>
             </div>
@@ -245,7 +245,7 @@ export const Component = () => {
             <div className="btn-group">
               <div
                 className="md-btn"
-                click="app.appMode ='player'">
+                onClick={() => (app.appMode = "player")}>
                 {getLz("oobe.done")}
               </div>
             </div>
@@ -257,10 +257,10 @@ export const Component = () => {
             v-if="$root.platform !== 'darwin'">
             <button
               className="min"
-              click="$root.ipcRenderer.send('minimize')"></button>
+              onClick={() => $root.ipcRenderer.send("minimize")}></button>
             <button
               className="close"
-              click="$root.ipcRenderer.send('close')"></button>
+              onClick={() => $root.ipcRenderer.send("close")}></button>
           </div>
         </div>
       </div>

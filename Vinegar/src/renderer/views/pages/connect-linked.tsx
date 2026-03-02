@@ -4,7 +4,7 @@ export const Component = () => {
     async mounted() {
       ipcRenderer.send("get-connected-url");
       ipcRenderer.on("send-connected-url", (event, url) => {
-        this.url = url;
+        url = url;
         app.webview.src = url;
         document.getElementById("foo").src = url;
       });

@@ -21,16 +21,15 @@ export const Component = () => {
       };
     },
     mounted() {
-      this.themes = ipcRenderer.sendSync("get-themes");
-      this.getRepos();
-      this.getInstalledThemes();
+      themes = ipcRenderer.sendSync("get-themes");
+      getRepos();
+      getInstalledThemes();
     },
     methods: {
       openThemesFolder() {
         ipcRenderer.invoke("open-path", "themes");
       },
       getInstalledThemes() {
-        let self = this;
         const themes = ipcRenderer.sendSync("get-themes");
         // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
         themes.forEach((theme) => {
@@ -40,9 +39,8 @@ export const Component = () => {
         });
       },
       showRepo(repo) {
-        const self = this;
         const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-        var requestOptions = {
+        let requestOptions = {
           method: "GET",
           redirect: "follow",
         };
@@ -55,7 +53,7 @@ export const Component = () => {
           })
           .catch((error) => {
             self.openRepo = repo;
-            self.openRepo.readme = `This repository doesn't have a README.md file.`;
+            self.openRepo.readme = `repository doesn't have a README.md file.`;
             console.log("error", error);
           });
       },
@@ -63,7 +61,6 @@ export const Component = () => {
         return marked.parse(text);
       },
       installThemeRepo(repo) {
-        let self = this;
         let msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
           repo: repo.full_name,
         });
@@ -83,7 +80,6 @@ export const Component = () => {
         });
       },
       installThemeURL() {
-        let self = this;
         app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
           if (result) {
             ipcRenderer.once("theme-installed", (event, arg) => {
@@ -99,8 +95,7 @@ export const Component = () => {
         });
       },
       getRepos() {
-        let self = this;
-        var requestOptions = {
+        let requestOptions = {
           method: "GET",
           redirect: "follow",
         };
@@ -128,21 +123,21 @@ export const Component = () => {
             <div className="col-auto nopadding flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.appRoute('installed-themes')">
+                onClick={() => $root.appRoute("installed-themes")}>
                 {$root.getLz("settings.option.visual.theme.manageStyles")}
               </button>
             </div>
             <div className="col-auto flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="$root.checkForThemeUpdates()">
+                onClick={() => $root.checkForThemeUpdates()}>
                 {$root.getLz("settings.option.visual.theme.checkForUpdates")}
               </button>
             </div>
             <div className="col-auto nopadding flex-center">
               <button
                 className="md-btn md-btn-small md-btn-block"
-                click="installThemeURL()">
+                onClick={() => installThemeURL()}>
                 {$root.getLz("settings.option.visual.theme.github.download")}
               </button>
             </div>
@@ -152,7 +147,7 @@ export const Component = () => {
           <div className="repos-list">
             <ul className="list-group list-group-flush">
               <li
-                click="showRepo(repo)"
+                onClick={() => showRepo(repo)}
                 className="list-group-item list-group-item-dark"
                 style={{ background: repo.id == openRepo.id ? "var(--keyColor)" : "" }}
                 v-for="repo in repos">
@@ -198,7 +193,7 @@ export const Component = () => {
                 <div className="col-auto nopadding flex-center">
                   <button
                     className="md-btn md-btn-primary"
-                    click="installThemeRepo(openRepo)">
+                    onClick={() => installThemeRepo(openRepo)}>
                     <span v-if="!themesInstalled.includes(openRepo.full_name.toLowerCase())">{$root.getLz("action.install")}</span>
                     <span v-else>{$root.getLz("action.update")}</span>
                   </button>
