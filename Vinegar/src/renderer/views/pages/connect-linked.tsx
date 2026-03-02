@@ -1,16 +1,14 @@
+import { useEffect } from "react";
+
 export const Component = () => {
-  Vue.component("connected", {
-    template: "#connected",
-    async mounted() {
-      ipcRenderer.send("get-connected-url");
-      ipcRenderer.on("send-connected-url", (event, url) => {
-        url = url;
-        app.webview.src = url;
-        document.getElementById("foo").src = url;
-      });
-    },
-    methods: {},
-  });
+  useEffect(() => {
+    ipcRenderer.send("get-connected-url");
+    ipcRenderer.on("send-connected-url", (event, url) => {
+      url = url;
+      app.webview.src = url;
+      document.getElementById("foo").src = url;
+    });
+  }, []);
   return (
     <div id="connected">
       <div style={{ display: "flex", width: "100%", height: "100%", paddingTop: "var(--navigationBarHeight)", position: "absolute", top: 0, left: 0 }}>

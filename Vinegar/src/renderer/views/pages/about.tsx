@@ -1,120 +1,112 @@
 export const Component = () => {
-  Vue.component("about-page", {
-    template: "#about-page",
-    data: function () {
-      return {
-        window: window,
-        version: app.version,
-        team: [
-          {
-            name: "cryptofyre",
-            link: "https://github.com/cryptofyre",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/33162551?v=4",
-            twitter: "https://twitter.com/cryptofyre",
-          },
-          {
-            name: "Core",
-            link: "https://github.com/coredev-uk",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/64542347?v=4",
-            twitter: "https://twitter.com/core_hdd",
-          },
-          {
-            name: "Quacksire",
-            link: "https://github.com/quacksire",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/19170969?v=4",
-            twitter: "https://twitter.com/duckdoquack",
-          },
-          {
-            name: "booploops",
-            link: "https://github.com/booploops",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/49113086?v=4",
-            twitter: "https://twitter.com/boopl00ps",
-          },
-          {
-            name: "vapormusic",
-            link: "https://github.com/vapormusic",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/27716185?v=4",
-          },
-          {
-            name: "Maikiwi",
-            link: "https://github.com/maikirakiwi",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/74925636?v=4",
-            twitter: "https://twitter.com/notmaikiwi",
-          },
-          {
-            name: "yazninja",
-            link: "https://github.com/yazninja",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/71800112?v=4",
-            twitter: "https://twitter.com/YazNinjaa",
-          },
-          {
-            name: "GamingLiamStudios",
-            link: "https://github.com/GamingLiamStudios",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/58615717?v=4",
-            twitter: "https://twitter.com/GLStudios_",
-          },
-          {
-            name: "Amaru",
-            link: "https://github.com/Amaru8",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/52407090?v=4",
-          },
-          {
-            name: "lockieluke",
-            link: "https://github.com/lockieluke",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/25424409?v=4",
-            twitter: "https://twitter.com/lockie_luke",
-          },
-          {
-            name: "Swiftzerr",
-            link: "https://github.com/Swiftzerr",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/67812203?v=4",
-          },
-          {
-            name: "Ishmeet",
-            link: "https://github.com/StupeFied",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/89881655?v=4",
-          },
-          {
-            name: "Monochromish",
-            link: "https://github.com/Monochromish",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/79590499?v=4",
-          },
-          {
-            name: "d3rpp",
-            link: "https://github.com/d3rpp",
-            role: app.getLz("term.developer"),
-            avatar: "https://avatars.githubusercontent.com/u/45675641?v=4",
-          },
-          {
-            name: "Void",
-            link: "https://twitter.com/MoonyVoid",
-            role: app.getLz("term.socialTeam"),
-            avatar: "https://pbs.twimg.com/profile_images/1226463559472816129/8LScNYED_400x400.jpg",
-          },
-          {
-            name: "NoseySG",
-            link: "https://twitter.com/noah_grose",
-            role: app.getLz("term.socialTeam"),
-            avatar: "https://pbs.twimg.com/profile_images/1496944907260420099/D5gl6H4J_400x400.jpg",
-          },
-        ],
-      };
+  const window = window;
+  const version = app.version;
+  const team = [
+    {
+      name: "cryptofyre",
+      link: "https://github.com/cryptofyre",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/33162551?v=4",
+      twitter: "https://twitter.com/cryptofyre",
     },
-    methods: {},
-  });
+    {
+      name: "Core",
+      link: "https://github.com/coredev-uk",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/64542347?v=4",
+      twitter: "https://twitter.com/core_hdd",
+    },
+    {
+      name: "Quacksire",
+      link: "https://github.com/quacksire",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/19170969?v=4",
+      twitter: "https://twitter.com/duckdoquack",
+    },
+    {
+      name: "booploops",
+      link: "https://github.com/booploops",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/49113086?v=4",
+      twitter: "https://twitter.com/boopl00ps",
+    },
+    {
+      name: "vapormusic",
+      link: "https://github.com/vapormusic",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/27716185?v=4",
+    },
+    {
+      name: "Maikiwi",
+      link: "https://github.com/maikirakiwi",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/74925636?v=4",
+      twitter: "https://twitter.com/notmaikiwi",
+    },
+    {
+      name: "yazninja",
+      link: "https://github.com/yazninja",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/71800112?v=4",
+      twitter: "https://twitter.com/YazNinjaa",
+    },
+    {
+      name: "GamingLiamStudios",
+      link: "https://github.com/GamingLiamStudios",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/58615717?v=4",
+      twitter: "https://twitter.com/GLStudios_",
+    },
+    {
+      name: "Amaru",
+      link: "https://github.com/Amaru8",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/52407090?v=4",
+    },
+    {
+      name: "lockieluke",
+      link: "https://github.com/lockieluke",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/25424409?v=4",
+      twitter: "https://twitter.com/lockie_luke",
+    },
+    {
+      name: "Swiftzerr",
+      link: "https://github.com/Swiftzerr",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/67812203?v=4",
+    },
+    {
+      name: "Ishmeet",
+      link: "https://github.com/StupeFied",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/89881655?v=4",
+    },
+    {
+      name: "Monochromish",
+      link: "https://github.com/Monochromish",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/79590499?v=4",
+    },
+    {
+      name: "d3rpp",
+      link: "https://github.com/d3rpp",
+      role: app.getLz("term.developer"),
+      avatar: "https://avatars.githubusercontent.com/u/45675641?v=4",
+    },
+    {
+      name: "Void",
+      link: "https://twitter.com/MoonyVoid",
+      role: app.getLz("term.socialTeam"),
+      avatar: "https://pbs.twimg.com/profile_images/1226463559472816129/8LScNYED_400x400.jpg",
+    },
+    {
+      name: "NoseySG",
+      link: "https://twitter.com/noah_grose",
+      role: app.getLz("term.socialTeam"),
+      avatar: "https://pbs.twimg.com/profile_images/1496944907260420099/D5gl6H4J_400x400.jpg",
+    },
+  ];
   return (
     <div id="about-page">
       <div className="content-inner about-page">

@@ -1,137 +1,127 @@
-export const Component = () => {
-  Vue.component("cider-artist", {
-    template: "#cider-artist",
-    props: ["data"],
-    data: function () {
-      return {
-        topSongsExpanded: false,
-        app: this.$root,
-        headerVisible: true,
-      };
-    },
-    methods: {
-      hasAnimated() {
-        if (data.attributes?.editorialVideo && (data.attributes?.editorialVideo?.motionArtistWide16x9 || data.attributes?.editorialVideo?.motionArtistFullscreen16x9)) {
-          return true;
-        }
-        return false;
+export const Component = ({ data }: { data: object }) => {
+  let topSongsExpanded = false;
+  const app = this.$root;
+  let headerVisible = true;
+  function hasAnimated() {
+    if (data.attributes?.editorialVideo && (data.attributes?.editorialVideo?.motionArtistWide16x9 || data.attributes?.editorialVideo?.motionArtistFullscreen16x9)) {
+      return true;
+    }
+    return false;
+  }
+  function hasHero() {
+    if (data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
+      return data.attributes?.editorialArtwork?.centeredFullscreenBackground.url;
+    } else if (data.attributes?.editorialArtwork?.bannerUber) {
+      return data.attributes?.editorialArtwork?.bannerUber.url;
+    } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
+      return data.attributes?.editorialArtwork?.subscriptionHero.url;
+    }
+    return false;
+  }
+  function hasHeroObject() {
+    if (data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
+      return data.attributes?.editorialArtwork?.centeredFullscreenBackground;
+    } else if (data.attributes?.editorialArtwork?.bannerUber) {
+      return data.attributes?.editorialArtwork?.bannerUber;
+    } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
+      return data.attributes?.editorialArtwork?.subscriptionHero;
+    }
+    return [];
+  }
+  function isHeaderVisible(visible) {
+    headerVisible = visible;
+  }
+  async function artistMenu(event) {
+    let followAction = "follow";
+    let followActions = {
+      follow: {
+        icon: "./assets/feather/plus-circle.svg",
+        name: app.getLz("action.follow"),
+        action: () => {
+          self.app.cfg.home.followedArtists.push(self.data.id);
+        },
       },
-      hasHero() {
-        if (data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
-          return data.attributes?.editorialArtwork?.centeredFullscreenBackground.url;
-        } else if (data.attributes?.editorialArtwork?.bannerUber) {
-          return data.attributes?.editorialArtwork?.bannerUber.url;
-        } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
-          return data.attributes?.editorialArtwork?.subscriptionHero.url;
-        }
-        return false;
+      unfollow: {
+        icon: "./assets/feather/x-circle.svg",
+        name: app.getLz("action.unfollow"),
+        action: () => {
+          let index = self.app.cfg.home.followedArtists.indexOf(self.data.id);
+          if (index > -1) {
+            self.app.cfg.home.followedArtists.splice(index, 1);
+          }
+        },
       },
-      hasHeroObject() {
-        if (data.attributes?.editorialArtwork?.centeredFullscreenBackground) {
-          return data.attributes?.editorialArtwork?.centeredFullscreenBackground;
-        } else if (data.attributes?.editorialArtwork?.bannerUber) {
-          return data.attributes?.editorialArtwork?.bannerUber;
-        } else if (data.attributes?.editorialArtwork?.subscriptionHero) {
-          return data.attributes?.editorialArtwork?.subscriptionHero;
-        }
-        return [];
+    };
+    let favoriteActions = {
+      favorite: {
+        icon: "./assets/star.svg",
+        name: app.getLz("action.favorite"),
+        action: () => {
+          app.setArtistFavorite(app.artistPage.data.id, true);
+        },
       },
-      isHeaderVisible(visible) {
-        headerVisible = visible;
+      removeFavorite: {
+        icon: "./assets/star.svg",
+        name: app.getLz("action.removeFavorite"),
+        action: () => {
+          app.setArtistFavorite(app.artistPage.data.id, false);
+        },
       },
-      async artistMenu(event) {
-        let followAction = "follow";
-        let followActions = {
-          follow: {
-            icon: "./assets/feather/plus-circle.svg",
-            name: app.getLz("action.follow"),
-            action: () => {
-              self.app.cfg.home.followedArtists.push(self.data.id);
-            },
-          },
-          unfollow: {
-            icon: "./assets/feather/x-circle.svg",
-            name: app.getLz("action.unfollow"),
-            action: () => {
-              let index = self.app.cfg.home.followedArtists.indexOf(self.data.id);
-              if (index > -1) {
-                self.app.cfg.home.followedArtists.splice(index, 1);
-              }
-            },
-          },
-        };
-        let favoriteActions = {
-          favorite: {
-            icon: "./assets/star.svg",
-            name: app.getLz("action.favorite"),
-            action: () => {
-              app.setArtistFavorite(app.artistPage.data.id, true);
-            },
-          },
-          removeFavorite: {
-            icon: "./assets/star.svg",
-            name: app.getLz("action.removeFavorite"),
-            action: () => {
-              app.setArtistFavorite(app.artistPage.data.id, false);
-            },
-          },
-        };
-        if (app.cfg.home.followedArtists.includes(self.data.id)) {
-          followAction = "unfollow";
-        }
-        const inFavorites = (
-          await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${app.artistPage.data.id}`, {
-            "fields[artists]": "inFavorites",
-          })
-        ).data.data[0].attributes?.inFavorites;
-        app.showMenuPanel(
+    };
+    if (app.cfg.home.followedArtists.includes(self.data.id)) {
+      followAction = "unfollow";
+    }
+    const inFavorites = (
+      await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${app.artistPage.data.id}`, {
+        "fields[artists]": "inFavorites",
+      })
+    ).data.data[0].attributes?.inFavorites;
+    app.showMenuPanel(
+      {
+        items: [
           {
-            items: [
-              {
-                icon: "./assets/feather/play.svg",
-                name: app.getLz("action.startRadio"),
-                action: () => {
-                  app.mk.setStationQueue({ artist: self.data.id }).then(() => {
-                    app.mk.play();
-                  });
-                },
-              },
-              favoriteActions[inFavorites ? "removeFavorite" : "favorite"],
-              // followActions[followAction],
-              {
-                icon: "./assets/feather/share.svg",
-                name: app.getLz("term.share"),
-                action: () => {
-                  self.app.copyToClipboard(self.data.attributes.url);
-                },
-              },
-            ],
+            icon: "./assets/feather/play.svg",
+            name: app.getLz("action.startRadio"),
+            action: () => {
+              app.mk.setStationQueue({ artist: self.data.id }).then(() => {
+                app.mk.play();
+              });
+            },
           },
-          event,
-        );
+          favoriteActions[inFavorites ? "removeFavorite" : "favorite"],
+          // followActions[followAction],
+          {
+            icon: "./assets/feather/share.svg",
+            name: app.getLz("term.share"),
+            action: () => {
+              self.app.copyToClipboard(self.data.attributes.url);
+            },
+          },
+        ],
       },
-      getArtistPalette(artist) {
-        if (artist["attributes"]["artwork"]) {
-          return {
-            background: "#" + artist["attributes"]["artwork"]["bgColor"],
-            color: "#" + artist["attributes"]["artwork"]["textColor1"],
-          };
-        } else {
-          return {
-            background: "#000000",
-            color: "#ffffff",
-          };
-        }
-      },
-      getTopResult() {
-        if (search.results["meta"]) {
-          return search.results[search.results.meta.results.order[0]]["data"][0];
-        } else {
-          return false;
-        }
-      },
-    },
-  });
+      event,
+    );
+  }
+  function getArtistPalette(artist) {
+    if (artist["attributes"]["artwork"]) {
+      return {
+        background: "#" + artist["attributes"]["artwork"]["bgColor"],
+        color: "#" + artist["attributes"]["artwork"]["textColor1"],
+      };
+    } else {
+      return {
+        background: "#000000",
+        color: "#ffffff",
+      };
+    }
+  }
+  function getTopResult() {
+    if (search.results["meta"]) {
+      return search.results[search.results.meta.results.order[0]]["data"][0];
+    } else {
+      return false;
+    }
+  }
   return (
     <div id="cider-artist">
       <div

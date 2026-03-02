@@ -1,36 +1,25 @@
-export const Component = () => {
-  Vue.component("cider-recordlabel", {
-    template: "#cider-recordlabel",
-    props: ["data"],
-    data: function () {
+export const Component = ({ data }: { data: string }) => {
+  let topSongsExpanded = false;
+  function getArtistPalette(artist) {
+    if (artist?.attributes?.artwork != null) {
       return {
-        topSongsExpanded: false,
-        $root: this.$root,
+        background: "#" + artist["attributes"]["artwork"]["bgColor"],
+        color: "#" + artist["attributes"]["artwork"]["textColor1"],
       };
-    },
-    methods: {
-      getArtistPalette(artist) {
-        if (artist?.attributes?.artwork != null) {
-          return {
-            background: "#" + artist["attributes"]["artwork"]["bgColor"],
-            color: "#" + artist["attributes"]["artwork"]["textColor1"],
-          };
-        } else {
-          return {
-            background: "#000000",
-            color: "#ffffff",
-          };
-        }
-      },
-      getTopResult() {
-        if (search.results["meta"]) {
-          return search.results[search.results.meta.results.order[0]]["data"][0];
-        } else {
-          return false;
-        }
-      },
-    },
-  });
+    } else {
+      return {
+        background: "#000000",
+        color: "#ffffff",
+      };
+    }
+  }
+  function getTopResult() {
+    if (search.results["meta"]) {
+      return search.results[search.results.meta.results.order[0]]["data"][0];
+    } else {
+      return false;
+    }
+  }
   return (
     <div id="cider-recordlabel">
       <div className="content-inner artist-page">

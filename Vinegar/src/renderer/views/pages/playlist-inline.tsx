@@ -1,406 +1,398 @@
-export const Component = () => {
-  Vue.component("playlist-inline", {
-    template: "#playlist-inline",
-    props: ["data"],
+import { useEffect } from "react";
 
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+  let editorialNotesExpanded = false;
+  let drag = false;
+  let nameEditing = false;
+  let inLibrary = null;
+  let confirm = false;
+  let itemBadges = [];
+  let badgesRequested = false;
+  let headerVisible = true;
+  let useArtistChip = false;
+  let nestedPlaylist = [];
+  useEffect(() => {
+    setTimeout(isInLibrary);
+  }, []);
+  const watch = {
     data: function () {
-      return {
-        editorialNotesExpanded: false,
-        drag: false,
-        nameEditing: false,
-        inLibrary: null,
-        confirm: false,
-        app: this.$root,
-        itemBadges: [],
-        badgesRequested: false,
-        headerVisible: true,
-        useArtistChip: false,
-        nestedPlaylist: [],
+      nestedPlaylist = [];
+      isInLibrary();
+      getBadges();
+      generateNestedPlaylist();
+    },
+  };
+
+  function openInfoModal() {
+    app.moreinfodata = [];
+    app.moreinfodata = {
+      title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title ?? "" ?? "") : "",
+      subtitle: data?.attributes?.artistName ?? "",
+      content: data?.attributes?.editorialNotes != null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
+    };
+    app.modals.moreInfo = true;
+  }
+  function generateNestedPlaylist() {
+    nestedPlaylist = [];
+    if (data?.type?.includes("album")) {
+      console.log(data.relationships.tracks.data);
+      let songlists = data.relationships.tracks.data;
+      let discs = songlists
+        .map((x) => {
+          return x.attributes.discNumber;
+        })
+        .filter((item, i, ar) => ar.indexOf(item) === i);
+      if (discs && discs.length > 1) {
+        for (disc of discs) {
+          let songs = songlists.filter((x) => x.attributes.discNumber == disc);
+          nestedPlaylist.push({ disc: disc, tracks: songs });
+        }
+      }
+      console.log(nestedPlaylist);
+    }
+  }
+  function isHeaderVisible(visible) {
+    headerVisible = visible;
+  }
+  function getBadges() {
+    // TODO find why it was just returning
+    if (badgesRequested) {
+      return;
+    }
+    badgesRequested = true;
+    itemBadges = [];
+    let id = 0;
+    try {
+      id = data.attributes.playParams.id;
+    } catch (e) {
+      id = data.id;
+    }
+    this.$root.getSocialBadges((badges) => {
+      let friends = badges[id];
+      if (friends) {
+        friends.forEach(function (friend) {
+          self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+            self.itemBadges.push(data.data.data[0]);
+          });
+        });
+      }
+    });
+  }
+  function confirmButton() {
+    // Return button to normal state after 3 seconds
+
+    confirm = true;
+    setTimeout(() => (confirm = false), 3000);
+  }
+  function getArtistName(data) {
+    if (data.attributes.artistName) {
+      useArtistChip = true;
+      return data.attributes.artistName;
+    } else if (data.attributes.artist) {
+      useArtistChip = true;
+      return data.attributes.artist.attributes.name;
+    } else if (data.attributes.curatorName) {
+      return data.attributes.curatorName;
+    } else {
+      return "";
+    }
+  }
+  function getAlbumGenre() {
+    if (data.type.includes("albums")) {
+      let date = data.attributes.releaseDate;
+      if (date == null || date === "") return "";
+      return `${data.relationships.tracks.data[0].attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
+    }
+  }
+  async function isInLibrary() {
+    if (data.type && !data.type.includes("library")) {
+      // please keep using vars here
+      const params = {
+        "fields[playlists]": "inLibrary",
+        "fields[albums]": "inLibrary",
+        relate: "library",
       };
-    },
-    mounted: function () {
-      setTimeout(isInLibrary);
-    },
-    watch: {
-      data: function () {
-        nestedPlaylist = [];
-        isInLibrary();
-        getBadges();
-        generateNestedPlaylist();
+      const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
+      inLibrary = res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary ? res.data.data[0].attributes.inLibrary : false;
+      console.log(res);
+    } else {
+      inLibrary = true;
+    }
+  }
+  function editPlaylist() {
+    app.editPlaylist(data.id, data.attributes.name);
+    app.playlists.listing.forEach((playlist) => {
+      if (playlist.id === data.id) {
+        playlist.attributes.name = data.attributes.name;
+      }
+    });
+    nameEditing = false;
+  }
+  function addToLibrary(id) {
+    app.mk.addToLibrary(id);
+    inLibrary = true;
+    confirm = false;
+  }
+  async function removeFromLibrary(id) {
+    const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
+    let id = data.id ?? data.attributes.playParams.id;
+    const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
+    if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
+      id = res.data.data[0].relationships.library.data[0].id;
+    }
+    let kind = data.attributes.playParams.kind ?? data.type ?? "";
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    app.mk.api.v3.music(
+      `v1/me/library/${truekind}/${id.toString()}`,
+      {},
+      {
+        fetchOptions: {
+          method: "DELETE",
+        },
       },
-    },
-    methods: {
-      openInfoModal() {
-        app.moreinfodata = [];
-        app.moreinfodata = {
-          title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title ?? "" ?? "") : "",
-          subtitle: data?.attributes?.artistName ?? "",
-          content: data?.attributes?.editorialNotes != null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
-        };
-        app.modals.moreInfo = true;
+    );
+    inLibrary = false;
+    confirm = false;
+  }
+  function editPlaylistName() {
+    if (data.attributes.canEdit && data.type === "library-playlists") {
+      nameEditing = true;
+      setTimeout(() => {
+        document.querySelector(".nameEdit").focus();
+      }, 100);
+    }
+  }
+  function buildContextMenu(index) {
+    if (!data.attributes.canEdit) {
+      return;
+    }
+    return {
+      normal: [
+        {
+          icon: "./assets/feather/x-circle.svg",
+          name: app.getLz("action.removeFromPlaylist"),
+          action: () => {
+            self.remove();
+          },
+        },
+      ],
+      multiple: [
+        {
+          icon: "./assets/feather/x-circle.svg",
+          name: app.getLz("action.removeFromPlaylist"),
+          action: () => {
+            self.remove();
+          },
+        },
+      ],
+    };
+  }
+  async function put() {
+    if (!data.attributes.canEdit) {
+      return;
+    }
+    console.log("sds", convert());
+    await app.mk.api.v3.music(
+      `/v1/me/library/playlists/${data.attributes.playParams.id}/tracks`,
+      {},
+      {
+        fetchOptions: {
+          method: "PUT",
+          body: JSON.stringify({
+            data: convert(),
+          }),
+        },
       },
-      generateNestedPlaylist() {
-        nestedPlaylist = [];
-        if (data?.type?.includes("album")) {
-          console.log(data.relationships.tracks.data);
-          let songlists = data.relationships.tracks.data;
-          let discs = songlists
-            .map((x) => {
-              return x.attributes.discNumber;
-            })
-            .filter((item, i, ar) => ar.indexOf(item) === i);
-          if (discs && discs.length > 1) {
-            for (disc of discs) {
-              let songs = songlists.filter((x) => x.attributes.discNumber == disc);
-              nestedPlaylist.push({ disc: disc, tracks: songs });
+    );
+  }
+  async function remove() {
+    if (!data.attributes.canEdit) {
+      return;
+    }
+    // for each app.selectedMediaItems splice the items from the playlist
+    for (let i = 0; i < app.selectedMediaItems.length; i++) {
+      let item = app.selectedMediaItems[i];
+      let index = data.relationships.tracks.data.findIndex((x) => x.id == item.id);
+      if (index > -1) {
+        data.relationships.tracks.data.splice(index, 1);
+      }
+    }
+    await put();
+  }
+  function convert() {
+    let pl_tracks = [];
+    for (let i = 0; i < data.relationships.tracks.data.length; i++) {
+      pl_tracks.push({
+        id: data.relationships.tracks.data[i].id,
+        type: data.relationships.tracks.data[i].type,
+      });
+    }
+    return pl_tracks;
+  }
+  function getRecursive(url) {
+    app.apiCall(app.musicBaseUrl + "/v1/me/library/playlists/p.V7VYlrDso6kkYY/tracks?offset=100", (res) => {
+      data.relationships.tracks.data = data.relationships.tracks.data.concat(res.data.data);
+      if (res.data.next) {
+        getRecursive(res.data.next);
+      }
+    });
+  }
+  function menu(event) {
+    let artistId = null;
+
+    if (typeof data.relationships.artists != "undefined") {
+      artistId = data.relationships.artists.data[0].id;
+      if (data.relationships.artists.data[0].type == "library-artists") {
+        artistId = data.relationships.artists.data[0].relationships.catalog.data[0].id;
+      }
+    }
+
+    let menuItems = {
+      items: {
+        share: {
+          name: app.getLz("term.share"),
+          icon: "./assets/feather/share.svg",
+          action: () => {
+            let route = "";
+            switch (data.type) {
+              case "albums":
+                route = `/v1/catalog/${app.mk.storefrontId}/albums/${data.id}`;
+                break;
+              case "playlists":
+                route = `/v1/catalog/${app.mk.storefrontId}/playlists/${data.id}`;
+                break;
+              case "library-playlists":
+                route = `/v1/me/library/playlists/${data.id}/catalog`;
+                break;
+              case "library-albums":
+                route = `/v1/me/library/albums/${data.id}/catalog`;
+                break;
             }
-          }
-          console.log(nestedPlaylist);
-        }
-      },
-      isHeaderVisible(visible) {
-        headerVisible = visible;
-      },
-      getBadges() {
-        return;
-        if (badgesRequested) {
-          return;
-        }
-        badgesRequested = true;
-        itemBadges = [];
-        let id = 0;
-        try {
-          id = data.attributes.playParams.id;
-        } catch (e) {
-          id = data.id;
-        }
-        this.$root.getSocialBadges((badges) => {
-          let friends = badges[id];
-          if (friends) {
-            friends.forEach(function (friend) {
-              self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
-                self.itemBadges.push(data.data.data[0]);
-              });
-            });
-          }
-        });
-      },
-      confirmButton() {
-        // Return button to normal state after 3 seconds
-
-        confirm = true;
-        setTimeout(() => (confirm = false), 3000);
-      },
-      getArtistName(data) {
-        if (data.attributes.artistName) {
-          useArtistChip = true;
-          return data.attributes.artistName;
-        } else if (data.attributes.artist) {
-          useArtistChip = true;
-          return data.attributes.artist.attributes.name;
-        } else if (data.attributes.curatorName) {
-          return data.attributes.curatorName;
-        } else {
-          return "";
-        }
-      },
-      getAlbumGenre: function () {
-        if (data.type.includes("albums")) {
-          let date = data.attributes.releaseDate;
-          if (date == null || date === "") return "";
-          return `${data.relationships.tracks.data[0].attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
-        }
-      },
-      async isInLibrary() {
-        if (data.type && !data.type.includes("library")) {
-          // please keep using vars here
-          const params = {
-            "fields[playlists]": "inLibrary",
-            "fields[albums]": "inLibrary",
-            relate: "library",
-          };
-          const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
-          inLibrary = res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary ? res.data.data[0].attributes.inLibrary : false;
-          console.log(res);
-        } else {
-          inLibrary = true;
-        }
-      },
-      editPlaylist() {
-        app.editPlaylist(data.id, data.attributes.name);
-        app.playlists.listing.forEach((playlist) => {
-          if (playlist.id === data.id) {
-            playlist.attributes.name = data.attributes.name;
-          }
-        });
-        nameEditing = false;
-      },
-      addToLibrary(id) {
-        app.mk.addToLibrary(id);
-        inLibrary = true;
-        confirm = false;
-      },
-      async removeFromLibrary(id) {
-        const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
-        let id = data.id ?? data.attributes.playParams.id;
-        const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
-        if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
-          id = res.data.data[0].relationships.library.data[0].id;
-        }
-        let kind = data.attributes.playParams.kind ?? data.type ?? "";
-        const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-        app.mk.api.v3.music(
-          `v1/me/library/${truekind}/${id.toString()}`,
-          {},
-          {
-            fetchOptions: {
-              method: "DELETE",
-            },
-          },
-        );
-        inLibrary = false;
-        confirm = false;
-      },
-      editPlaylistName() {
-        if (data.attributes.canEdit && data.type === "library-playlists") {
-          nameEditing = true;
-          setTimeout(() => {
-            document.querySelector(".nameEdit").focus();
-          }, 100);
-        }
-      },
-      buildContextMenu(index) {
-        if (!data.attributes.canEdit) {
-          return;
-        }
-        return {
-          normal: [
-            {
-              icon: "./assets/feather/x-circle.svg",
-              name: app.getLz("action.removeFromPlaylist"),
-              action: () => {
-                self.remove();
-              },
-            },
-          ],
-          multiple: [
-            {
-              icon: "./assets/feather/x-circle.svg",
-              name: app.getLz("action.removeFromPlaylist"),
-              action: () => {
-                self.remove();
-              },
-            },
-          ],
-        };
-      },
-      async put() {
-        if (!data.attributes.canEdit) {
-          return;
-        }
-        console.log("sds", convert());
-        await app.mk.api.v3.music(
-          `/v1/me/library/playlists/${data.attributes.playParams.id}/tracks`,
-          {},
-          {
-            fetchOptions: {
-              method: "PUT",
-              body: JSON.stringify({
-                data: convert(),
-              }),
-            },
-          },
-        );
-      },
-      async remove() {
-        if (!data.attributes.canEdit) {
-          return;
-        }
-        // for each app.selectedMediaItems splice the items from the playlist
-        for (let i = 0; i < app.selectedMediaItems.length; i++) {
-          let item = app.selectedMediaItems[i];
-          let index = data.relationships.tracks.data.findIndex((x) => x.id == item.id);
-          if (index > -1) {
-            data.relationships.tracks.data.splice(index, 1);
-          }
-        }
-        await put();
-      },
-      convert() {
-        let pl_tracks = [];
-        for (let i = 0; i < data.relationships.tracks.data.length; i++) {
-          pl_tracks.push({
-            id: data.relationships.tracks.data[i].id,
-            type: data.relationships.tracks.data[i].type,
-          });
-        }
-        return pl_tracks;
-      },
-      getRecursive(url) {
-        app.apiCall(app.musicBaseUrl + "/v1/me/library/playlists/p.V7VYlrDso6kkYY/tracks?offset=100", (res) => {
-          data.relationships.tracks.data = data.relationships.tracks.data.concat(res.data.data);
-          if (res.data.next) {
-            getRecursive(res.data.next);
-          }
-        });
-      },
-      menu(event) {
-        let artistId = null;
-
-        if (typeof data.relationships.artists != "undefined") {
-          artistId = data.relationships.artists.data[0].id;
-          if (data.relationships.artists.data[0].type == "library-artists") {
-            artistId = data.relationships.artists.data[0].relationships.catalog.data[0].id;
-          }
-        }
-
-        let menuItems = {
-          items: {
-            share: {
-              name: app.getLz("term.share"),
-              icon: "./assets/feather/share.svg",
-              action: () => {
-                let route = "";
-                switch (data.type) {
-                  case "albums":
-                    route = `/v1/catalog/${app.mk.storefrontId}/albums/${data.id}`;
-                    break;
-                  case "playlists":
-                    route = `/v1/catalog/${app.mk.storefrontId}/playlists/${data.id}`;
-                    break;
-                  case "library-playlists":
-                    route = `/v1/me/library/playlists/${data.id}/catalog`;
-                    break;
-                  case "library-albums":
-                    route = `/v1/me/library/albums/${data.id}/catalog`;
-                    break;
-                }
-                if (route === "") {
-                  return;
-                }
-                app.mk.api.v3.music(route).then((res) => {
-                  console.log(res.data.data[0].attributes.url);
-                  app.copyToClipboard(res.data.data[0].attributes.url);
-                });
-              },
-            },
-            follow: {
-              name: app.getLz("action.follow"),
-              icon: "./assets/feather/plus-circle.svg",
-              hidden: false,
-              action: () => {
-                app.setArtistFavorite(artistId, true);
-              },
-            },
-            unfollow: {
-              name: app.getLz("action.unfollow"),
-              icon: "./assets/feather/x-circle.svg",
-              hidden: true,
-              action: () => {
-                app.setArtistFavorite(artistId, false);
-              },
-            },
-          },
-        };
-
-        if (artistId != null) {
-          if (app.followingArtist(artistId)) {
-            menuItems.items.follow.hidden = true;
-            menuItems.items.unfollow.hidden = false;
-          } else {
-            menuItems.items.follow.hidden = false;
-            menuItems.items.unfollow.hidden = true;
-          }
-        } else {
-          menuItems.items.follow.hidden = true;
-          menuItems.items.unfollow.hidden = true;
-        }
-
-        app.showMenuPanel(menuItems, event);
-      },
-      getItemParent: function (data) {
-        kind = data.attributes.playParams.kind;
-        id = data.attributes.playParams.id;
-        return `${kind}:${id}`;
-      },
-      getFormattedDate: function () {
-        let date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
-        let prefix = "";
-        if (date == null || date === "") return "";
-        switch (date) {
-          case data.attributes.releaseDate:
-            prefix = app.getLz("term.time.released") + " ";
-            break;
-          case data.attributes.lastModifiedDate:
-            prefix = app.getLz("term.time.updated") + " ";
-            break;
-          case data.attributes.dateAdded:
-            prefix = app.getLz("term.time.added") + " ";
-            break;
-        }
-        let month, year;
-        try {
-          const releaseDate = new Date(date);
-          // month = new Intl.DateTimeFormat(app.cfg.general.language.replace('_','-'), {month: 'long'}).format(releaseDate);
-          // date = releaseDate.getDate();
-          // year = releaseDate.getFullYear();
-          let formatted = "";
-          try {
-            formatted = new Intl.DateTimeFormat(app.cfg.general.language?.replace("_", "-") ?? "en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            }).format(releaseDate);
-          } catch (e) {
-            // use the format in json instead
-            if (app.getLz("date.format") != null) {
-              formatted = new app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
-            } else {
-              formatted = new Intl.DateTimeFormat("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              }).format(releaseDate);
+            if (route === "") {
+              return;
             }
-          }
-          return prefix + formatted;
-        } catch (e) {
-          return "";
-        }
-      },
-      play() {
-        function shuffleArray(array) {
-          for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            let temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-          }
-        }
-
-        const id = data.attributes.playParams.id ?? data.id;
-        //console.log("1")
-        const kind = data.attributes.playParams.kind ?? data.type ?? "";
-        //console.log("1")
-        const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-
-        let query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
-        app.mk.stop().then(function () {
-          app.mk.setQueue({ [truekind]: [id], parameters: { l: app.mklang } }).then(function () {
-            app.mk.play().then(function () {
-              if (query.length > 100) {
-                let u = query.slice(100);
-                if (app.mk.shuffleMode == 1) {
-                  shuffleArray(u);
-                }
-                app.mk.queue.append(u);
-              }
+            app.mk.api.v3.music(route).then((res) => {
+              console.log(res.data.data[0].attributes.url);
+              app.copyToClipboard(res.data.data[0].attributes.url);
             });
-          });
-        });
+          },
+        },
+        follow: {
+          name: app.getLz("action.follow"),
+          icon: "./assets/feather/plus-circle.svg",
+          hidden: false,
+          action: () => {
+            app.setArtistFavorite(artistId, true);
+          },
+        },
+        unfollow: {
+          name: app.getLz("action.unfollow"),
+          icon: "./assets/feather/x-circle.svg",
+          hidden: true,
+          action: () => {
+            app.setArtistFavorite(artistId, false);
+          },
+        },
       },
-    },
-  });
+    };
+
+    if (artistId != null) {
+      if (app.followingArtist(artistId)) {
+        menuItems.items.follow.hidden = true;
+        menuItems.items.unfollow.hidden = false;
+      } else {
+        menuItems.items.follow.hidden = false;
+        menuItems.items.unfollow.hidden = true;
+      }
+    } else {
+      menuItems.items.follow.hidden = true;
+      menuItems.items.unfollow.hidden = true;
+    }
+
+    app.showMenuPanel(menuItems, event);
+  }
+  function getItemParent(data) {
+    kind = data.attributes.playParams.kind;
+    id = data.attributes.playParams.id;
+    return `${kind}:${id}`;
+  }
+  function getFormattedDate() {
+    let date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
+    let prefix = "";
+    if (date == null || date === "") return "";
+    switch (date) {
+      case data.attributes.releaseDate:
+        prefix = app.getLz("term.time.released") + " ";
+        break;
+      case data.attributes.lastModifiedDate:
+        prefix = app.getLz("term.time.updated") + " ";
+        break;
+      case data.attributes.dateAdded:
+        prefix = app.getLz("term.time.added") + " ";
+        break;
+    }
+    let month, year;
+    try {
+      const releaseDate = new Date(date);
+      // month = new Intl.DateTimeFormat(app.cfg.general.language.replace('_','-'), {month: 'long'}).format(releaseDate);
+      // date = releaseDate.getDate();
+      // year = releaseDate.getFullYear();
+      let formatted = "";
+      try {
+        formatted = new Intl.DateTimeFormat(app.cfg.general.language?.replace("_", "-") ?? "en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }).format(releaseDate);
+      } catch (e) {
+        // use the format in json instead
+        if (app.getLz("date.format") != null) {
+          formatted = new app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
+        } else {
+          formatted = new Intl.DateTimeFormat("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }).format(releaseDate);
+        }
+      }
+      return prefix + formatted;
+    } catch (e) {
+      return "";
+    }
+  }
+  function play() {
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    const id = data.attributes.playParams.id ?? data.id;
+    //console.log("1")
+    const kind = data.attributes.playParams.kind ?? data.type ?? "";
+    //console.log("1")
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
+
+    let query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+    app.mk.stop().then(function () {
+      app.mk.setQueue({ [truekind]: [id], parameters: { l: app.mklang } }).then(function () {
+        app.mk.play().then(function () {
+          if (query.length > 100) {
+            let u = query.slice(100);
+            if (app.mk.shuffleMode == 1) {
+              shuffleArray(u);
+            }
+            app.mk.queue.append(u);
+          }
+        });
+      });
+    });
+  }
   return (
     <div id="playlist-inline">
       <div

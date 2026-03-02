@@ -1,118 +1,94 @@
-export const Component = () => {
-  Vue.component("cider-collection-list", {
-    template: "#cider-collection-list",
-    props: {
-      data: {
-        type: Object,
-        required: true,
-      },
-      title: {
-        type: String,
-        required: false,
-      },
-      type: {
-        type: String,
-        required: false,
-        default: "artists",
-      },
-    },
-    data: function () {
-      return {
-        triggerEnabled: true,
-        canSeeTrigger: false,
-        showFab: false,
-        commonKind: "song",
-        api: this.$root.mk.api,
-        loading: false,
-        app: this.$root,
-      };
-    },
-    methods: {
-      getClasses() {
-        if ((data?.data?.length ?? 0) > 0) {
-          let item = data.data[0];
-          if (typeof item.kind != "undefined") {
-            commonKind = item.kind;
-            return item.kind;
-          }
-          if (typeof item.attributes.playParams != "undefined") {
-            commonKind = item.attributes.playParams.kind;
-            return item.attributes.playParams.kind;
-          }
-          if (commonKind != "song") {
-            return "collection-list-square";
-          } else {
-            return "";
-          }
-        } else {
-          return "";
+export const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
+  const app = this.$root;
+  let triggerEnabled = true;
+  let canSeeTrigger = false;
+  let showFab = false;
+  let commonKind = "song";
+  let api = this.$root.mk.api;
+  let loading = false;
+  function getClasses() {
+    if ((data?.data?.length ?? 0) > 0) {
+      let item = data.data[0];
+      if (typeof item.kind != "undefined") {
+        commonKind = item.kind;
+        return item.kind;
+      }
+      if (typeof item.attributes.playParams != "undefined") {
+        commonKind = item.attributes.playParams.kind;
+        return item.attributes.playParams.kind;
+      }
+      if (commonKind != "song") {
+        return "collection-list-square";
+      } else {
+        return "";
+      }
+    } else {
+      return "";
+    }
+  }
+  function getKind(item) {
+    if (typeof item.kind != "undefined") {
+      //  commonKind = item.kind;
+      return item.kind;
+    }
+    if (typeof item.attributes.playParams != "undefined") {
+      //  commonKind = item.attributes.playParams.kind
+      return item.attributes.playParams.kind;
+    }
+    return commonKind;
+  }
+  function scrollToTop() {
+    let target = document.querySelector(".header-text");
+    document.querySelector("#app-content").scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }
+  function getNext() {
+    if (typeof data.next == "undefined") {
+      return;
+    }
+    loading = true;
+
+    api.v3.music(data.next, app.collectionList.requestBody).then((response) => {
+      console.log(response);
+      if (!app.collectionList.response.groups) {
+        data.data = data.data.concat(response.data.data);
+        if (response.data.next) {
+          data.next = response.data.next;
+          triggerEnabled = true;
         }
-      },
-      getKind(item) {
-        if (typeof item.kind != "undefined") {
-          //  commonKind = item.kind;
-          return item.kind;
-        }
-        if (typeof item.attributes.playParams != "undefined") {
-          //  commonKind = item.attributes.playParams.kind
-          return item.attributes.playParams.kind;
-        }
-        return commonKind;
-      },
-      scrollToTop() {
-        let target = document.querySelector(".header-text");
-        document.querySelector("#app-content").scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
-      },
-      getNext() {
-        if (typeof data.next == "undefined") {
+        loading = false;
+      } else {
+        if (!response.data.results[app.collectionList.response.groups]) {
+          loading = false;
           return;
         }
-        loading = true;
-
-        api.v3.music(data.next, app.collectionList.requestBody).then((response) => {
-          console.log(response);
-          if (!app.collectionList.response.groups) {
-            data.data = data.data.concat(response.data.data);
-            if (response.data.next) {
-              data.next = response.data.next;
-              triggerEnabled = true;
-            }
-            loading = false;
-          } else {
-            if (!response.data.results[app.collectionList.response.groups]) {
-              loading = false;
-              return;
-            }
-            data.data = data.data.concat(response.data.results[app.collectionList.response.groups].data);
-            if (response.data.results[app.collectionList.response.groups].next) {
-              data.next = response.data.results[app.collectionList.response.groups].next;
-              triggerEnabled = true;
-              loading = false;
-            }
-          }
-        });
-      },
-      headerVisibility: function (isVisible, entry) {
-        if (isVisible) {
-          showFab = false;
-        } else {
-          showFab = true;
+        data.data = data.data.concat(response.data.results[app.collectionList.response.groups].data);
+        if (response.data.results[app.collectionList.response.groups].next) {
+          data.next = response.data.results[app.collectionList.response.groups].next;
+          triggerEnabled = true;
+          loading = false;
         }
-      },
-      visibilityChanged: function (isVisible, entry) {
-        if (isVisible) {
-          canSeeTrigger = true;
-          getNext();
-        } else {
-          canSeeTrigger = false;
-        }
-      },
-    },
-  });
+      }
+    });
+  }
+  function headerVisibility(isVisible, entry) {
+    if (isVisible) {
+      showFab = false;
+    } else {
+      showFab = true;
+    }
+  }
+  function visibilityChanged(isVisible, entry) {
+    if (isVisible) {
+      canSeeTrigger = true;
+      getNext();
+    } else {
+      canSeeTrigger = false;
+    }
+  }
   return (
     <div id="cider-collection-list">
       <div className="content-inner collection-page">

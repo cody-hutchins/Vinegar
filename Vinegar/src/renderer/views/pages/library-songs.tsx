@@ -1,54 +1,47 @@
-export const Component = () => {
-  Vue.component("cider-library-songs", {
-    template: "#cider-library-songs",
-    data: function () {
-      const pageSize = this.$root.cfg.libraryPrefs.pageSize;
-      return {
-        // currentPage is oneIndexed
-        library: this.$root.library,
-        mediaItemSize: "compact",
-        prefs: this.$root.cfg.libraryPrefs.songs,
-        app: this.$root,
-        pageSize: pageSize,
-        start: 0,
-        end: pageSize,
-      };
-    },
-    mounted() {
-      this.$root.getLibrarySongsFull();
-    },
-    computed: {
-      currentSlice: function () {
-        return library.songs.displayListing.slice(start, end);
-      },
-    },
-    methods: {
-      onRangeChange: function (newRange) {
-        start = newRange[0];
-        end = newRange[1];
-      },
-      play: function () {
-        function shuffleArray(array) {
-          for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            let temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-          }
-        }
+import { useEffect, useMemo } from "react";
 
-        let query = app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
-        if (!app.mk.queue.isEmpty) app.mk.queue.splice(0, app.mk.queue._itemIDs.length);
-        app.mk.stop().then(() => {
-          if (app.mk.shuffleMode == 1) {
-            shuffleArray(query);
-          }
-          app.mk.queue.append(query);
-          app.mk.changeToMediaAtIndex(0);
-        });
-      },
-    },
-  });
+export const Component = () => {
+  const app = this.$root;
+  let library = this.$root.library;
+  let mediaItemSize = "compact";
+  let prefs = this.$root.cfg.libraryPrefs.songs;
+  let start = 0;
+  const pageSize = this.$root.cfg.libraryPrefs.pageSize;
+  let end = pageSize;
+
+  useEffect(() => {
+    this.$root.getLibrarySongsFull();
+  }, []);
+
+  const currentSlice = useMemo(() => {
+    return library.songs.displayListing.slice(start, end);
+  }, [start, end]);
+
+  function onRangeChange(newRange) {
+    start = newRange[0];
+    end = newRange[1];
+  }
+  function play() {
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    let query = app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
+    if (!app.mk.queue.isEmpty) app.mk.queue.splice(0, app.mk.queue._itemIDs.length);
+    app.mk.stop().then(() => {
+      if (app.mk.shuffleMode == 1) {
+        shuffleArray(query);
+      }
+      app.mk.queue.append(query);
+      app.mk.changeToMediaAtIndex(0);
+    });
+  }
+
   return (
     <div id="cider-library-songs">
       <div className="content-inner library-page">

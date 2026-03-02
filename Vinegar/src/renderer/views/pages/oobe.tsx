@@ -1,44 +1,34 @@
 export const Component = () => {
-  Vue.component("cider-oobe", {
-    template: "#cider-oobe",
-    data: function () {
-      return {
-        screen: "before_we_start",
-      };
-    },
-    async mounted() {},
-    methods: {
-      signIn() {
-        if (localStorage.getItem("music.ampwebplay.media-user-token")) {
-          localStorage.setItem("seenOOBE", 1);
-          window.location.reload();
-        }
-        screen = "signin";
-        capiInit();
-      },
-      getLz() {
-        return this.$root.getLz.apply(this.$root, arguments);
-      },
-      getLanguages: function () {
-        let langs = this.$root.lzListing;
-        let categories = {
-          main: [],
-          fun: [],
-          unsorted: [],
-        };
-        // sort by category if category is undefined or empty put it in "unsorted"
-        for (let i = 0; i < langs.length; i++) {
-          if (langs[i].category === undefined || langs[i].category === "") {
-            categories.unsorted.push(langs[i]);
-          } else {
-            categories[langs[i].category].push(langs[i]);
-          }
-        }
-        // return
-        return categories;
-      },
-    },
-  });
+  let screen = "before_we_start";
+  function signIn() {
+    if (localStorage.getItem("music.ampwebplay.media-user-token")) {
+      localStorage.setItem("seenOOBE", 1);
+      window.location.reload();
+    }
+    screen = "signin";
+    capiInit();
+  }
+  function getLz() {
+    return this.$root.getLz.apply(this.$root, arguments);
+  }
+  function getLanguages() {
+    let langs = this.$root.lzListing;
+    let categories = {
+      main: [],
+      fun: [],
+      unsorted: [],
+    };
+    // sort by category if category is undefined or empty put it in "unsorted"
+    for (let i = 0; i < langs.length; i++) {
+      if (langs[i].category === undefined || langs[i].category === "") {
+        categories.unsorted.push(langs[i]);
+      } else {
+        categories[langs[i].category].push(langs[i]);
+      }
+    }
+    // return
+    return categories;
+  }
   return (
     <div id="cider-oobe">
       <div className="content-inner oobe">

@@ -1,4 +1,4 @@
-export const MadeForYou = (
+export const MadeForYou = ({ item }: { item: object }) => (
   <div className="content-inner">
     <div className="row">
       <div

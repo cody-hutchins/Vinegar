@@ -1,13 +1,6 @@
-export const Component = () => {
-  Vue.component("cider-multiroom", {
-    template: "#cider-multiroom",
-    props: ["data"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-  });
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+
   return (
     <div id="cider-multiroom">
       <div className="content-inner cider-multiroom">

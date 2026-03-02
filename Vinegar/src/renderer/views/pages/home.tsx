@@ -1,169 +1,168 @@
+import { useEffect } from "react";
+
 export const Component = () => {
-  Vue.component("cider-home", {
-    template: "#cider-home",
-    data: function () {
-      return {
-        app: this.$root,
-        followedArtists: this.$root.cfg.home.followedArtists,
-        favoriteItems: this.$root.cfg.home.favoriteItems,
-        madeForYou: [],
-        recentlyPlayed: [],
-        friendsListeningTo: [],
-        replayPlaylists: [],
-        favorites: [],
-        profile: {},
-        modify: 0,
-        artistFeed: [],
-        showingArtistFeed: false,
-        page: "main",
-        sectionsReady: [],
-        year: new Date().getFullYear(),
-        seenReplay: localStorage.getItem("seenReplay"),
-        syncingFavs: false,
-      };
-    },
-    async mounted() {
-      getListenNowData();
-      await getArtistFeed();
-      await getFavorites();
-      await getRecentlyPlayed();
-      if (new Date().getMonth() == 11) {
-        seenReplay = false;
-        localStorage.setItem("seenReplay", false);
+  const app = this.$root;
+  let followedArtists = this.$root.cfg.home.followedArtists;
+  let favoriteItems = this.$root.cfg.home.favoriteItems;
+  let madeForYou = [];
+  let recentlyPlayed = [];
+  let friendsListeningTo = [];
+  let replayPlaylists = [];
+  let favorites = [];
+  let profile = {};
+  let modify = 0;
+  let artistFeed = [];
+  let showingArtistFeed = false;
+  let page = "main";
+  let sectionsReady = [];
+  let year = new Date().getFullYear();
+  let seenReplay = localStorage.getItem("seenReplay");
+  let syncingFavs = false;
+
+  async function mounted() {
+    getListenNowData();
+    await getArtistFeed();
+    await getFavorites();
+    await getRecentlyPlayed();
+    if (new Date().getMonth() == 11) {
+      seenReplay = false;
+      localStorage.setItem("seenReplay", false);
+    }
+  }
+  useEffect(() => {
+    mounted().then();
+  }, []);
+
+  async function syncFavorites() {
+    syncingFavs = true;
+    await app.syncFavorites();
+    await getArtistFeed();
+    syncingFavs = false;
+  }
+  async function seeAllRecentlyPlayed() {
+    let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+      l: this.$root.mklang,
+      include: "tracks",
+      "include[albums]": "catalog,tracks,artists",
+      "include[songs]": "catalog,artists",
+    });
+    app.showCollection(hist.data, app.getLz("home.recentlyPlayed"));
+  }
+  async function seeAllHistory() {
+    let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+      l: this.$root.mklang,
+    });
+    app.showCollection(hist.data, app.getLz("term.history"));
+  }
+  function isSectionReady(section) {
+    return sectionsReady.includes(section);
+  }
+  function removeFavoriteContext() {
+    return {
+      name: "Remove from Favorites",
+      action: function (item) {
+        let index = self.favoriteItems.findIndex((x) => x.id == item.id);
+        if (index > -1) {
+          self.favoriteItems.splice(index, 1);
+          self.app.cfg.home.favoriteItems = self.favoriteItems;
+        }
+      },
+    };
+  }
+  async function getFavorites() {
+    let libraryPlaylists = [];
+    let playlists = [];
+    for (let item of favoriteItems) {
+      if (item.type == "library-playlists") {
+        libraryPlaylists.push(item.id);
+      } else if (item.type == "playlists") {
+        playlists.push(item.id);
       }
-    },
-    methods: {
-      async syncFavorites() {
-        syncingFavs = true;
-        await app.syncFavorites();
-        await getArtistFeed();
-        syncingFavs = false;
-      },
-      async seeAllRecentlyPlayed() {
-        let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+    }
+    if (playlists.length != 0) {
+      app.mk.api.v3
+        .music(`/v1/catalog/${app.mk.storefrontId}/playlists/${playlists.toString()}`, {
           l: this.$root.mklang,
-          include: "tracks",
-          "include[albums]": "catalog,tracks,artists",
-          "include[songs]": "catalog,artists",
+        })
+        .then((playlistsData) => {
+          self.favorites.push(...playlistsData.data);
         });
-        app.showCollection(hist.data, app.getLz("home.recentlyPlayed"));
-      },
-      async seeAllHistory() {
-        let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+    }
+    if (libraryPlaylists.length != 0) {
+      app.mk.api.v3
+        .music(`v1/me/library/playlists/${playlists.toString()}`, {
           l: this.$root.mklang,
+        })
+        .then((playlistsData) => {
+          self.favorites.push(...playlistsData.data);
         });
-        app.showCollection(hist.data, app.getLz("term.history"));
-      },
-      isSectionReady(section) {
-        return sectionsReady.includes(section);
-      },
-      removeFavoriteContext() {
-        return {
-          name: "Remove from Favorites",
-          action: function (item) {
-            let index = self.favoriteItems.findIndex((x) => x.id == item.id);
-            if (index > -1) {
-              self.favoriteItems.splice(index, 1);
-              self.app.cfg.home.favoriteItems = self.favoriteItems;
-            }
-          },
-        };
-      },
-      async getFavorites() {
-        let libraryPlaylists = [];
-        let playlists = [];
-        for (let item of favoriteItems) {
-          if (item.type == "library-playlists") {
-            libraryPlaylists.push(item.id);
-          } else if (item.type == "playlists") {
-            playlists.push(item.id);
+    }
+  }
+  async function getArtistFeed() {
+    let artists = followedArtists;
+    artistFeed = [];
+    let chunks = [];
+    for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
+      chunks.push(artists.slice(artistIdx, artistIdx + 50));
+    }
+    try {
+      const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
+      chunkArtistData.forEach((chunkResult) =>
+        chunkResult.data.data.forEach((item) => {
+          if (item.views["latest-release"].data.length != 0) {
+            self.artistFeed.push(item.views["latest-release"].data[0]);
           }
-        }
-        if (playlists.length != 0) {
-          app.mk.api.v3
-            .music(`/v1/catalog/${app.mk.storefrontId}/playlists/${playlists.toString()}`, {
-              l: this.$root.mklang,
-            })
-            .then((playlistsData) => {
-              self.favorites.push(...playlistsData.data);
-            });
-        }
-        if (libraryPlaylists.length != 0) {
-          app.mk.api.v3
-            .music(`v1/me/library/playlists/${playlists.toString()}`, {
-              l: this.$root.mklang,
-            })
-            .then((playlistsData) => {
-              self.favorites.push(...playlistsData.data);
-            });
-        }
-      },
-      async getArtistFeed() {
-        let artists = followedArtists;
-        artistFeed = [];
-        let chunks = [];
-        for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
-          chunks.push(artists.slice(artistIdx, artistIdx + 50));
-        }
+        }),
+      );
+      // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
+      artistFeed.sort((a, b) => {
+        let dateA = new Date(a.attributes.releaseDate);
+        let dateB = new Date(b.attributes.releaseDate);
+        return dateB - dateA;
+      });
+    } catch (error) {}
+  }
+  async function getRecentlyPlayed() {
+    let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+      l: this.$root.mklang,
+      include: "tracks",
+      "include[albums]": "catalog,tracks,artists",
+      "include[songs]": "catalog,artists",
+    });
+    recentlyPlayed = hist.data.data;
+  }
+  async function getListenNowData() {
+    app.mk.api.v3
+      .music(
+        `/v1/me/recommendations?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=listen-now&with=friendsMix,library,social&art[social-profiles:url]=c&art[url]=c,f&omit[resource]=autos&relate[editorial-items]=contents&extend=editorialCard,editorialVideo&extend[albums]=artistUrl&extend[library-albums]=artistUrl,editorialVideo&extend[playlists]=artistNames,editorialArtwork,editorialVideo&extend[library-playlists]=artistNames,editorialArtwork,editorialVideo&extend[social-profiles]=topGenreNames&include[albums]=artists&include[songs]=artists&include[music-videos]=artists&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url&fields[artists]=name,url&extend[stations]=airDate,supportsAirTimeUpdates&meta[stations]=inflectionPoints&types=artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells&platform=web&l=${this.$root.mklang}`,
+      )
+      .then((data) => {
+        console.log(data.data.data[1]);
         try {
-          const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
-          chunkArtistData.forEach((chunkResult) =>
-            chunkResult.data.data.forEach((item) => {
-              if (item.views["latest-release"].data.length != 0) {
-                self.artistFeed.push(item.views["latest-release"].data[0]);
-              }
-            }),
-          );
-          // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
-          artistFeed.sort((a, b) => {
-            let dateA = new Date(a.attributes.releaseDate);
-            let dateB = new Date(b.attributes.releaseDate);
-            return dateB - dateA;
-          });
-        } catch (error) {}
-      },
-      async getRecentlyPlayed() {
-        let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
-          l: this.$root.mklang,
-          include: "tracks",
-          "include[albums]": "catalog,tracks,artists",
-          "include[songs]": "catalog,artists",
-        });
-        recentlyPlayed = hist.data.data;
-      },
-      async getListenNowData() {
-        app.mk.api.v3
-          .music(
-            `/v1/me/recommendations?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=listen-now&with=friendsMix,library,social&art[social-profiles:url]=c&art[url]=c,f&omit[resource]=autos&relate[editorial-items]=contents&extend=editorialCard,editorialVideo&extend[albums]=artistUrl&extend[library-albums]=artistUrl,editorialVideo&extend[playlists]=artistNames,editorialArtwork,editorialVideo&extend[library-playlists]=artistNames,editorialArtwork,editorialVideo&extend[social-profiles]=topGenreNames&include[albums]=artists&include[songs]=artists&include[music-videos]=artists&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url&fields[artists]=name,url&extend[stations]=airDate,supportsAirTimeUpdates&meta[stations]=inflectionPoints&types=artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells&platform=web&l=${this.$root.mklang}`,
-          )
-          .then((data) => {
-            console.log(data.data.data[1]);
-            try {
-              self.madeForYou = data.data.data.filter((section) => {
-                if (section.meta.metrics.moduleType == "6") {
-                  return section;
-                }
-              })[0].relationships.contents.data;
-            } catch (err) {}
-            self.sectionsReady.push("madeForYou");
+          self.madeForYou = data.data.data.filter((section) => {
+            if (section.meta.metrics.moduleType == "6") {
+              return section;
+            }
+          })[0].relationships.contents.data;
+        } catch (err) {}
+        self.sectionsReady.push("madeForYou");
 
-            try {
-              self.friendsListeningTo = data.data.data.filter((section) => {
-                if (section.meta.metrics.moduleType == "11") {
-                  return section;
-                }
-              })[0].relationships.contents.data;
-            } catch (err) {}
-            self.sectionsReady.push("recentlyPlayed");
-            self.sectionsReady.push("friendsListeningTo");
-          });
+        try {
+          self.friendsListeningTo = data.data.data.filter((section) => {
+            if (section.meta.metrics.moduleType == "11") {
+              return section;
+            }
+          })[0].relationships.contents.data;
+        } catch (err) {}
+        self.sectionsReady.push("recentlyPlayed");
+        self.sectionsReady.push("friendsListeningTo");
+      });
 
-        app.mk.api.v3.music("/v1/me/social/profile/").then((response) => {
-          self.profile = response.data.data[0];
-        });
-      },
-    },
-  });
+    app.mk.api.v3.music("/v1/me/social/profile/").then((response) => {
+      self.profile = response.data.data[0];
+    });
+  }
+
   return (
     <div id="cider-home">
       <div className="content-inner home-page">

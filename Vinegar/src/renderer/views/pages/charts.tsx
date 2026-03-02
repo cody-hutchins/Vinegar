@@ -1,53 +1,49 @@
+import { useEffect } from "react";
+
 export const Component = () => {
-  Vue.component("cider-charts", {
-    template: "#cider-charts",
-    data: function () {
-      return {
-        app: this.$root,
-        songs: [],
-        albums: [],
-        playlists: [],
-        musicvideos: [],
-        citycharts: [],
-        globalcharts: [],
-        categories: [],
-      };
-    },
-    mounted() {
-      getData();
-    },
-    methods: {
-      async getData() {
-        let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
-          types: "albums,songs,music-videos,playlists",
-          l: "en-gb",
-          platform: "auto",
-          limit: "50",
-          genre: "34",
-          include: "tracks",
-          with: "cityCharts,dailyGlobalTopCharts",
-          extend: "artistUrl",
-          "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
-          "fields[playlists]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url,curatorName",
-        });
-        let self: Record<string, any> = {};
-        let page = res.data?.results ?? [];
-        self.songs = page.songs[0] ?? [];
-        self.albums = page.albums[0] ?? [];
-        self.playlists = page.playlists[0] ?? [];
-        self.musicvideos = page["music-videos"][0] ?? [];
-        self.citycharts = page.cityCharts[0] ?? [];
-        self.globalcharts = page.dailyGlobalTopCharts[0] ?? [];
-        return self;
-        // app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
-        //     let page = res.data?.results ?? [];
-        //     self.songs = page.songs[0] ?? [];
-        //     self.albums = page.albums[0] ?? [];
-        //     self.playlists = page.playlists[0] ?? [];
-        // })
-      },
-    },
-  });
+  const app = this.$root;
+  let songs = [];
+  let albums = [];
+  let playlists = [];
+  let musicvideos = [];
+  let citycharts = [];
+  let globalcharts = [];
+  let categories = [];
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  async function getData() {
+    let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
+      types: "albums,songs,music-videos,playlists",
+      l: "en-gb",
+      platform: "auto",
+      limit: "50",
+      genre: "34",
+      include: "tracks",
+      with: "cityCharts,dailyGlobalTopCharts",
+      extend: "artistUrl",
+      "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
+      "fields[playlists]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url,curatorName",
+    });
+    let self: Record<string, any> = {};
+    let page = res.data?.results ?? [];
+    self.songs = page.songs[0] ?? [];
+    self.albums = page.albums[0] ?? [];
+    self.playlists = page.playlists[0] ?? [];
+    self.musicvideos = page["music-videos"][0] ?? [];
+    self.citycharts = page.cityCharts[0] ?? [];
+    self.globalcharts = page.dailyGlobalTopCharts[0] ?? [];
+    return self;
+    // app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
+    //     let page = res.data?.results ?? [];
+    //     self.songs = page.songs[0] ?? [];
+    //     self.albums = page.albums[0] ?? [];
+    //     self.playlists = page.playlists[0] ?? [];
+    // })
+  }
+
   return (
     <div id="cider-charts">
       <div className="content-inner">

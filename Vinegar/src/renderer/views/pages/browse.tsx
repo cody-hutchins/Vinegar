@@ -1,17 +1,10 @@
-export const Component = () => {
-  Vue.component("cider-browse", {
-    template: "#cider-browse",
-    props: ["data"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    mounted() {
-      this.$root.getBrowsePage();
-    },
-    methods: {},
-  });
+import { useEffect } from "react";
+
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+  useEffect(() => {
+    this.$root.getBrowsePage();
+  }, []);
   return (
     <div id="cider-browse">
       <div className="content-inner">

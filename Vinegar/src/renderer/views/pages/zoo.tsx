@@ -1,20 +1,15 @@
 export const Component = () => {
-  Vue.component("cider-zoo", {
-    template: "#cider-zoo",
-    data: function () {
-      return {
-        artistLoaded: false,
-        artist: {},
-      };
-    },
-    async mounted() {
-      app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/669831761`).then((response) => {
-        artist = response.data.data[0];
-        artistLoaded = true;
-      });
-    },
-    methods: {},
-  });
+  let artistLoaded = false;
+  let artist = {};
+  async function mounted() {
+    app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/669831761`).then((response) => {
+      artist = response.data.data[0];
+      artistLoaded = true;
+    });
+  }
+  useEffect(() => {
+    mounted().then();
+  }, []);
   return (
     <div id="cider-zoo">
       <div className="content-inner">

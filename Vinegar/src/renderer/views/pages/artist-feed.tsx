@@ -1,81 +1,79 @@
-export const Component = () => {
-  Vue.component("cider-artist-feed", {
-    template: "#cider-artist-feed",
-    data: function () {
-      return {
-        app: this.$root,
-        followedArtists: this.$root.cfg.home.followedArtists,
-        artistFeed: [],
-        artists: [],
-        syncingFavs: false,
-      };
-    },
-    async mounted() {
-      await getArtistFeed();
-    },
-    methods: {
-      async syncFavorites() {
-        syncingFavs = true;
-        await app.syncFavorites();
-        await getArtistFeed();
-        syncingFavs = false;
-      },
-      async unfollow(id) {
-        let index = followedArtists.indexOf(id);
-        if (index > -1) {
-          followedArtists.splice(index, 1);
-        }
-        let artist = artists.find((a) => a.id == id);
-        let index2 = artists.indexOf(artist);
-        if (index2 > -1) {
-          artists.splice(index2, 1);
-        }
-        await app.mk.api.v3.music(
-          `/v1/me/favorites`,
-          {
-            "art[url]": "f",
-            "ids[artists]": id,
-            l: app.mklang,
-            platform: "web",
-          },
-          {
-            fetchOptions: {
-              method: "DELETE",
-            },
-          },
-        );
-        getArtistFeed();
-      },
-      async getArtistFeed() {
-        let artists = followedArtists;
-        artistFeed = [];
+import { useEffect } from "react";
 
-        // Apple limits the number of IDs we can provide in a single API call to 50.
-        // Divide it into groups of 50 and send parallel requests
-        let chunks = [];
-        for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
-          chunks.push(artists.slice(artistIdx, artistIdx + 50));
-        }
-        try {
-          const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
-          chunkArtistData.forEach((chunkResult) =>
-            chunkResult.data.data.forEach((item) => {
-              self.artists.push(item);
-              if (item.views["latest-release"].data.length != 0) {
-                self.artistFeed.push(item.views["latest-release"].data[0]);
-              }
-            }),
-          );
-          // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
-          artistFeed.sort((a, b) => {
-            let dateA = new Date(a.attributes.releaseDate);
-            let dateB = new Date(b.attributes.releaseDate);
-            return dateB - dateA;
-          });
-        } catch (err) {}
+export const Component = () => {
+  const app = this.$root;
+  let followedArtists = this.$root.cfg.home.followedArtists;
+  let artistFeed = [];
+  let artists = [];
+  let syncingFavs = false;
+
+  useEffect(() => {
+    getArtistFeed().then();
+  }, []);
+
+  async function syncFavorites() {
+    syncingFavs = true;
+    await app.syncFavorites();
+    await getArtistFeed();
+    syncingFavs = false;
+  }
+
+  async function unfollow(id) {
+    let index = followedArtists.indexOf(id);
+    if (index > -1) {
+      followedArtists.splice(index, 1);
+    }
+    let artist = artists.find((a) => a.id == id);
+    let index2 = artists.indexOf(artist);
+    if (index2 > -1) {
+      artists.splice(index2, 1);
+    }
+    await app.mk.api.v3.music(
+      `/v1/me/favorites`,
+      {
+        "art[url]": "f",
+        "ids[artists]": id,
+        l: app.mklang,
+        platform: "web",
       },
-    },
-  });
+      {
+        fetchOptions: {
+          method: "DELETE",
+        },
+      },
+    );
+    getArtistFeed();
+  }
+
+  async function getArtistFeed() {
+    let artists = followedArtists;
+    artistFeed = [];
+
+    // Apple limits the number of IDs we can provide in a single API call to 50.
+    // Divide it into groups of 50 and send parallel requests
+    let chunks = [];
+    for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
+      chunks.push(artists.slice(artistIdx, artistIdx + 50));
+    }
+    try {
+      const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
+      chunkArtistData.forEach((chunkResult) =>
+        chunkResult.data.data.forEach((item) => {
+          self.artists.push(item);
+          if (item.views["latest-release"].data.length != 0) {
+            self.artistFeed.push(item.views["latest-release"].data[0]);
+          }
+        }),
+      );
+      // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
+      artistFeed.sort((a, b) => {
+        let dateA = new Date(a.attributes.releaseDate);
+        let dateB = new Date(b.attributes.releaseDate);
+        return dateB - dateA;
+      });
+    } catch (err) {}
+  }
+
   return (
     <div id="cider-artist-feed">
       <div className="content-inner">

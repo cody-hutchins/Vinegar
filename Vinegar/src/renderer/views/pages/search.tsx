@@ -1,56 +1,51 @@
-export const Component = () => {
-  Vue.component("cider-search", {
-    template: "#cider-search",
-    props: ["search"],
-    data: function () {
-      return {
-        app: this.$root,
-        recentlyPlayed: [],
-        categoriesView: [],
-        categoriesReady: false,
-        searchType: "catalog",
-      };
-    },
-    methods: {
-      getTopResult() {
-        try {
-          return search.results[search.results.meta.results.order[0]]["data"][0];
-        } catch (error) {
-          return false;
+export const Component = ({ search }: { search: object }) => {
+  const app = this.$root;
+  let recentlyPlayed = [];
+  let goriesView = [];
+  let categoriesReady = false;
+  let searchType = "catalog";
+
+  function getTopResult() {
+    try {
+      return search.results[search.results.meta.results.order[0]]["data"][0];
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async function seeAllHistory() {
+    let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+      l: this.$root.mklang,
+    });
+    recentlyPlayed = hist.data.data;
+  }
+
+  async function getCategories() {
+    if (categoriesView != [] && categoriesView.length > 0) {
+      categoriesReady = true;
+      return await true;
+    } else {
+      await seeAllHistory();
+      let response = await app.mk.api.v3.music(`/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
+      categoriesView = response.data.data;
+      console.log(categoriesView);
+      categoriesReady = true;
+      return await true;
+    }
+  }
+
+  function getFlattenedCategories() {
+    let flattened = [];
+    for (let i = 0; i < categoriesView.length; i++) {
+      if (categoriesView[i].relationships && categoriesView[i].relationships.contents && categoriesView[i].relationships.contents.data) {
+        for (let j = 0; j < categoriesView[i].relationships.contents.data.length; j++) {
+          if (categoriesView[i].relationships.contents.data[j].type != "editorial-items") flattened.push(categoriesView[i].relationships.contents.data[j]);
         }
-      },
-      async seeAllHistory() {
-        let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
-          l: this.$root.mklang,
-        });
-        recentlyPlayed = hist.data.data;
-      },
-      async getCategories() {
-        if (categoriesView != [] && categoriesView.length > 0) {
-          categoriesReady = true;
-          return await true;
-        } else {
-          await seeAllHistory();
-          let response = await app.mk.api.v3.music(`/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
-          categoriesView = response.data.data;
-          console.log(categoriesView);
-          categoriesReady = true;
-          return await true;
-        }
-      },
-      getFlattenedCategories() {
-        let flattened = [];
-        for (let i = 0; i < categoriesView.length; i++) {
-          if (categoriesView[i].relationships && categoriesView[i].relationships.contents && categoriesView[i].relationships.contents.data) {
-            for (let j = 0; j < categoriesView[i].relationships.contents.data.length; j++) {
-              if (categoriesView[i].relationships.contents.data[j].type != "editorial-items") flattened.push(categoriesView[i].relationships.contents.data[j]);
-            }
-          }
-        }
-        return flattened;
-      },
-    },
-  });
+      }
+    }
+    return flattened;
+  }
+
   return (
     <div id="cider-search">
       <div className="content-inner search-page">

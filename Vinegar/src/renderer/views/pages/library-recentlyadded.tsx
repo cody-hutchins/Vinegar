@@ -1,55 +1,56 @@
-export const Component = () => {
-  Vue.component("cider-recentlyadded", {
-    template: "#cider-recentlyadded",
-    computed: {
-      items() {
-        return this.$store.state.pageState["recentlyAdded"].items;
-      },
-      nextUrl() {
-        return this.$store.state.pageState["recentlyAdded"].nextUrl;
-      },
-      itemSize() {
-        return this.$store.state.pageState["recentlyAdded"].size;
-      },
-    },
-    data: function () {
-      return {
-        loading: false,
-        firstRoute: `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`,
-      };
-    },
-    async mounted() {
-      if (this.$store.state.pageState["recentlyAdded"].items.length !== 0) return;
+import { useEffect, useMemo } from "react";
 
-      const firstResult = await app.mk.api.v3.music(firstRoute);
-      this.$store.state.pageState["recentlyAdded"].items = firstResult.data.data;
-      this.$store.state.pageState["recentlyAdded"].nextUrl = firstResult.data.next;
-    },
-    beforeDestroy() {
-      // this.$store.state.pageState["recently-added"].scrollPosY = $("#app-content").scrollTop()
-    },
-    methods: {
-      visibilityChanged: function (isVisible, entry) {
-        if (isVisible && !loading) {
-          getNextData();
-        }
-      },
-      async getNextData() {
-        if (this.$store.state.pageState["recentlyAdded"].nextUrl) {
-          loading = true;
-          const nextResult = await app.mk.api.v3.music(this.$store.state.pageState["recentlyAdded"].nextUrl);
-          this.$store.state.pageState["recentlyAdded"].items = this.$store.state.pageState["recentlyAdded"].items.concat(nextResult.data.data);
-          if (nextResult.data.next) {
-            this.$store.state.pageState["recentlyAdded"].nextUrl = nextResult.data.next;
-          } else {
-            this.$store.state.pageState["recentlyAdded"].nextUrl = null;
-          }
-          loading = false;
-        }
-        return;
-      },
-    },
-  });
+export const Component = () => {
+  let loading = false;
+  let firstRoute = `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`;
+  const items = useMemo(() => {
+    return this.$store.state.pageState["recentlyAdded"].items;
+  }, [this.$store.state.pageState]);
+  const nextUrl = useMemo(() => {
+    return this.$store.state.pageState["recentlyAdded"].nextUrl;
+  }, [this.$store.state.pageState]);
+  const itemSize = useMemo(() => {
+    return this.$store.state.pageState["recentlyAdded"].size;
+  }, [this.$store.state.pageState]);
+
+  async function mounted() {
+    if (this.$store.state.pageState["recentlyAdded"].items.length !== 0) return;
+
+    const firstResult = await app.mk.api.v3.music(firstRoute);
+    this.$store.state.pageState["recentlyAdded"].items = firstResult.data.data;
+    this.$store.state.pageState["recentlyAdded"].nextUrl = firstResult.data.next;
+  }
+
+  function beforeDestroy() {
+    // this.$store.state.pageState["recently-added"].scrollPosY = $("#app-content").scrollTop()
+  }
+
+  useEffect(() => {
+    mounted();
+    return beforeDestroy;
+  }, []);
+
+  function visibilityChanged(isVisible, entry) {
+    if (isVisible && !loading) {
+      getNextData();
+    }
+  }
+
+  async function getNextData() {
+    if (this.$store.state.pageState["recentlyAdded"].nextUrl) {
+      loading = true;
+      const nextResult = await app.mk.api.v3.music(this.$store.state.pageState["recentlyAdded"].nextUrl);
+      this.$store.state.pageState["recentlyAdded"].items = this.$store.state.pageState["recentlyAdded"].items.concat(nextResult.data.data);
+      if (nextResult.data.next) {
+        this.$store.state.pageState["recentlyAdded"].nextUrl = nextResult.data.next;
+      } else {
+        this.$store.state.pageState["recentlyAdded"].nextUrl = null;
+      }
+      loading = false;
+    }
+    return;
+  }
+
   return (
     <div id="cider-recentlyadded">
       <div className="content-inner">

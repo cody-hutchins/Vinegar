@@ -1,13 +1,11 @@
+import { useEffect } from "react";
+
 export const Component = () => {
-  Vue.component("apple-account-settings", {
-    template: "#apple-account-settings",
-    mounted() {
-      document.querySelector("#foo").addEventListener("dom-ready", () => {
-        // document.querySelector("#foo").executeJavaScript(`document.body.innerHTML += ("<style>.header {display: none!important;} </style>")`)
-      });
-    },
-    methods: {},
-  });
+  useEffect(() => {
+    document.querySelector("#foo").addEventListener("dom-ready", () => {
+      // document.querySelector("#foo").executeJavaScript(`document.body.innerHTML += ("<style>.header {display: none!important;} </style>")`)
+    });
+  }, []);
   return (
     <div id="apple-account-settings">
       <div style={{ display: "flex", width: "100%", height: "100%", paddingTop: "var(--navigationBarHeight)", position: "absolute", top: 0, left: 0 }}>

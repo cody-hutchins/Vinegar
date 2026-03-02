@@ -1,21 +1,7 @@
 export const Component = () => {
-  Vue.component("plugin-renderer", {
-    /*html*/
-    template: `
-            <component is="getPage()"></component>
-        `,
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    props: {},
-    mounted() {},
-    methods: {
-      getPage() {
-        return this.$root.pluginPages.page;
-      },
-    },
-  });
+  const app = this.$root;
+  function getPage() {
+    return this.$root.pluginPages.page;
+  }
   return <component is={getPage}></component>;
 };

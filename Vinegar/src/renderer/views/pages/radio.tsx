@@ -1,36 +1,28 @@
-export const Component = () => {
-  Vue.component("cider-radio", {
-    template: "#cider-radio",
-    props: ["data"],
-    data: function () {
-      return {
-        app: this.$root,
-        recent: [],
-      };
-    },
-    mounted() {
-      this.$root.getRadioPage();
-      //   debugger
-      getRecentlyPlayed();
-      //   debugger
-    },
-    methods: {
-      getRecentlyPlayed: async function (next = null) {
-        const recent = await app.mk.api.v3.music(`${next ?? "/v1/me/recent/radio-stations"}`, {
-          platform: "web",
-          "art[url]": "f",
-          l: app.mklang,
-        });
+import { useEffect } from "react";
 
-        console.debug(recent.data.data);
-        recent = recent.concat(recent.data.data);
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+  let recent = [];
+  useEffect(() => {
+    this.$root.getRadioPage();
+    //   debugger
+    getRecentlyPlayed();
+    //   debugger
+  }, []);
+  const getRecentlyPlayed = async (next = null) => {
+    const recent = await app.mk.api.v3.music(`${next ?? "/v1/me/recent/radio-stations"}`, {
+      platform: "web",
+      "art[url]": "f",
+      l: app.mklang,
+    });
 
-        if (recent.data.next) {
-          getRecentlyPlayed(recent.data.next);
-        }
-      },
-    },
-  });
+    console.debug(recent.data.data);
+    recent = recent.concat(recent.data.data);
+
+    if (recent.data.next) {
+      getRecentlyPlayed(recent.data.next);
+    }
+  };
   return (
     <div id="cider-radio">
       <div className="content-inner">

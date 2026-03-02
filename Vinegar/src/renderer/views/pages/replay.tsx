@@ -1,77 +1,75 @@
-export const Component = () => {
-  Vue.component("replay-page", {
-    template: "#replay-page",
-    data: function () {
-      return {
-        years: [],
-        loaded: {
-          id: -1,
-        },
-        hourshow: true,
-        musicTypeGenre: "",
-      };
-    },
-    async mounted() {
-      // Get available years
-      let year = await app.mk.api.v3.music("/v1/me/music-summaries/search?extend=inLibrary&period=year&fields[music-summaries]=period%2Cyear&include[music-summaries]=playlist");
-      years = year.data.data;
-      years.reverse();
-      localStorage.setItem("seenReplay", true);
-      getReplayYear();
-      const musicGenre = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/genres/34`);
-      musicTypeGenre = musicGenre.data.data[0].attributes.name;
-    },
-    methods: {
-      songsToArray(songsData) {
-        let songs = [];
-        let topGenres = {};
-        let genrePlayCount = 0;
-        songsData.forEach(function (songData) {
-          let song = songData.relationships.song.data[0];
-          song.attributes.playCount = songData.attributes.playCount;
-          songs.push(song);
-          genrePlayCount += song.attributes.playCount;
-          song.attributes.genreNames.forEach(function (genre) {
-            if (genre != self.musicTypeGenre) {
-              if (topGenres[genre] == undefined) {
-                topGenres[genre] = song.attributes.playCount;
-              } else {
-                topGenres[genre] += song.attributes.playCount;
-              }
-            }
-          });
-        });
-        let topGenresArray = [];
-        for (let genre in topGenres) {
-          topGenresArray.push({
-            genre: genre,
-            count: topGenres[genre],
-          });
-        }
-        topGenresArray.sort(function (a, b) {
-          return b.count - a.count;
-        });
-        topGenresArray.forEach(function (genre) {
-          genre.count = Math.round((genre.count / genrePlayCount) * 100);
-        });
-        loaded.topGenres = topGenresArray;
+import { useEffect } from "react";
 
-        return songs;
-      },
-      async getReplayYear(year = new Date().getFullYear()) {
-        loaded.id = -1;
-        let response = await app.mk.api.v3.music(`/v1/me/music-summaries/year-${year}?extend=inLibrary&views=top-artists%2Ctop-albums%2Ctop-songs&include[music-summaries]=playlist&include[playlists]=tracks&includeOnly=playlist%2Ctracks%2Csong%2Cartist%2Calbum`);
-        let replayData = response.data.data[0];
-        // extended playlist
-        let playlist = await app.mk.api.v3.music(replayData.relationships.playlist.data[0].href, { extend: "editorialArtwork,editorialVideo" });
-        replayData.playlist = playlist.data.data[0];
-        loaded = replayData;
-      },
-      convertToHours(minutes) {
-        return Math.floor(minutes / 60);
-      },
-    },
-  });
+export const Component = () => {
+  let years = [];
+  let loaded = {
+    id: -1,
+  };
+  let hourshow = true;
+  let musicTypeGenre = "";
+  async function mounted() {
+    // Get available years
+    let year = await app.mk.api.v3.music("/v1/me/music-summaries/search?extend=inLibrary&period=year&fields[music-summaries]=period%2Cyear&include[music-summaries]=playlist");
+    years = year.data.data;
+    years.reverse();
+    localStorage.setItem("seenReplay", true);
+    getReplayYear();
+    const musicGenre = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/genres/34`);
+    musicTypeGenre = musicGenre.data.data[0].attributes.name;
+  }
+  useEffect(() => {
+    mounted().then();
+  }, []);
+
+  function songsToArray(songsData) {
+    let songs = [];
+    let topGenres = {};
+    let genrePlayCount = 0;
+    songsData.forEach(function (songData) {
+      let song = songData.relationships.song.data[0];
+      song.attributes.playCount = songData.attributes.playCount;
+      songs.push(song);
+      genrePlayCount += song.attributes.playCount;
+      song.attributes.genreNames.forEach(function (genre) {
+        if (genre != self.musicTypeGenre) {
+          if (topGenres[genre] == undefined) {
+            topGenres[genre] = song.attributes.playCount;
+          } else {
+            topGenres[genre] += song.attributes.playCount;
+          }
+        }
+      });
+    });
+    let topGenresArray = [];
+    for (let genre in topGenres) {
+      topGenresArray.push({
+        genre: genre,
+        count: topGenres[genre],
+      });
+    }
+    topGenresArray.sort(function (a, b) {
+      return b.count - a.count;
+    });
+    topGenresArray.forEach(function (genre) {
+      genre.count = Math.round((genre.count / genrePlayCount) * 100);
+    });
+    loaded.topGenres = topGenresArray;
+
+    return songs;
+  }
+  async function getReplayYear(year = new Date().getFullYear()) {
+    loaded.id = -1;
+    let response = await app.mk.api.v3.music(`/v1/me/music-summaries/year-${year}?extend=inLibrary&views=top-artists%2Ctop-albums%2Ctop-songs&include[music-summaries]=playlist&include[playlists]=tracks&includeOnly=playlist%2Ctracks%2Csong%2Cartist%2Calbum`);
+    let replayData = response.data.data[0];
+    // extended playlist
+    let playlist = await app.mk.api.v3.music(replayData.relationships.playlist.data[0].href, { extend: "editorialArtwork,editorialVideo" });
+    replayData.playlist = playlist.data.data[0];
+    loaded = replayData;
+  }
+  function convertToHours(minutes) {
+    return Math.floor(minutes / 60);
+  }
+
   return (
     <div id="replay-page">
       <div className="content-inner replay-page">

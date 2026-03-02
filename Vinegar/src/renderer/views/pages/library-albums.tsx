@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 export const Component = () => {
   const pageSize = this.$root.cfg.libraryPrefs.pageSize;
@@ -25,6 +25,9 @@ export const Component = () => {
     start = newRange[0];
     end = newRange[1];
   };
+  useEffect(() => {
+    mounted();
+  }, []);
 
   return (
     <div id="cider-library-albums">

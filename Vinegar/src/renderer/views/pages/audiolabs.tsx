@@ -1,32 +1,26 @@
+import { useEffect } from "react";
+
 export const Component = () => {
-  Vue.component("audiolabs-page", {
-    template: "#audiolabs-page",
-    props: [],
-    data: function () {
-      return {
-        app: this.$root,
-        arprofiles: CiderAudio.atmosphereRealizerProfiles,
-        spprofiles: CiderAudio.spatialProfiles,
-        ciderPPE: [
-          { name: "MAIKIWI", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
-          { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
-          { name: "NATURAL", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
-          { name: "LEGACY", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
-        ],
-      };
-    },
-    mounted: function () {
-      return {
-        ciderPPE: [
-          { name: "MAIKIWI", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
-          { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
-          { name: "NATURAL", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
-          { name: "LEGACY", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
-        ],
-      };
-    },
-    methods: {},
-  });
+  const app = this.$root;
+  let arprofiles = CiderAudio.atmosphereRealizerProfiles;
+  let spprofiles = CiderAudio.spatialProfiles;
+  let ciderPPE = [
+    { name: "MAIKIWI", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
+    { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+    { name: "NATURAL", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
+    { name: "LEGACY", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+  ];
+  useEffect(() => {
+    return {
+      ciderPPE: [
+        { name: "MAIKIWI", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
+        { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+        { name: "NATURAL", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
+        { name: "LEGACY", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+      ],
+    };
+  }, []);
+
   return (
     <div id="audiolabs-page">
       <div className="audiolabs-page">

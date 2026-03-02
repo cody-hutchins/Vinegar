@@ -1,41 +1,40 @@
+import { useEffect } from "react";
+
 export const Component = () => {
-  Vue.component("cider-groupings", {
-    template: "#cider-groupings",
-    data: function () {
-      return {
-        data: null,
-        app: this.$root,
-        query: "",
-      };
-    },
-    async mounted() {
-      const queryDefaults = {
-        platform: "web",
-        l: this.$root.mklang,
-        extend: "editorialArtwork,artistUrl",
-        "omit[resource:artists]": "relationships",
-        "include[groupings]": "curator",
-        "include[albums]": "artists",
-        "include[songs]": "artists",
-        "include[music-videos]": "artists",
-        "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
-      };
-      const hash = window.location.hash;
-      // get everything after the first / character but keep everything afterwards
-      const query = hash.substring(hash.indexOf("/") + 1, hash.indexOf("&") > 0 ? hash.indexOf("&") : hash.length);
-      query = query;
-      // if(!query.includes("?")) {
-      //   query += queryDefaults;
-      // }
-      console.debug(query);
-      const result = await this.$root.mk.api.v3.music(`/v1/editorial/${this.$root.mk.storefrontId}/groupings/${query}`, !query.includes("&") ? queryDefaults : { platform: "web" });
-      data = result.data.data[0];
+  const app = this.$root;
+  let data = null;
+  let query = "";
 
-      console.log(data);
+  async function mounted() {
+    const queryDefaults = {
+      platform: "web",
+      l: this.$root.mklang,
+      extend: "editorialArtwork,artistUrl",
+      "omit[resource:artists]": "relationships",
+      "include[groupings]": "curator",
+      "include[albums]": "artists",
+      "include[songs]": "artists",
+      "include[music-videos]": "artists",
+      "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
+    };
+    const hash = window.location.hash;
+    // get everything after the first / character but keep everything afterwards
+    const query = hash.substring(hash.indexOf("/") + 1, hash.indexOf("&") > 0 ? hash.indexOf("&") : hash.length);
+    query = query;
+    // if(!query.includes("?")) {
+    //   query += queryDefaults;
+    // }
+    console.debug(query);
+    const result = await this.$root.mk.api.v3.music(`/v1/editorial/${this.$root.mk.storefrontId}/groupings/${query}`, !query.includes("&") ? queryDefaults : { platform: "web" });
+    data = result.data.data[0];
 
-      //this.$root.getBrowsePage();
-    },
-  });
+    console.log(data);
+
+    //this.$root.getBrowsePage();
+  }
+  useEffect(() => {
+    mounted().then();
+  }, []);
   return (
     <div id="cider-groupings">
       <div className="content-inner">

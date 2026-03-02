@@ -1,16 +1,10 @@
-export const Component = () => {
-  Vue.component("cider-applecurator", {
-    template: "#cider-applecurator",
-    props: ["data"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    mounted() {
-      console.log("ping");
-    },
-  });
+import { useEffect } from "react";
+
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+  useEffect(() => {
+    console.log("ping");
+  }, []);
   return (
     <div id="cider-applecurator">
       <div className="content-inner">

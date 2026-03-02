@@ -1,36 +1,26 @@
-export const Component = () => {
-  Vue.component("cider-socialprofile", {
-    template: "#cider-socialprofile",
-    props: ["data"],
-    data: function () {
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+  let topSongsExpanded = false;
+  function getArtistPalette(artist) {
+    if (artist?.attributes?.artwork != null) {
       return {
-        topSongsExpanded: false,
-        app: this.$root,
+        background: "#" + artist["attributes"]["artwork"]["bgColor"],
+        color: "#" + artist["attributes"]["artwork"]["textColor1"],
       };
-    },
-    methods: {
-      getArtistPalette(artist) {
-        if (artist?.attributes?.artwork != null) {
-          return {
-            background: "#" + artist["attributes"]["artwork"]["bgColor"],
-            color: "#" + artist["attributes"]["artwork"]["textColor1"],
-          };
-        } else {
-          return {
-            background: "#000000",
-            color: "#ffffff",
-          };
-        }
-      },
-      getTopResult() {
-        if (search.results["meta"]) {
-          return search.results[search.results.meta.results.order[0]]["data"][0];
-        } else {
-          return false;
-        }
-      },
-    },
-  });
+    } else {
+      return {
+        background: "#000000",
+        color: "#ffffff",
+      };
+    }
+  }
+  function getTopResult() {
+    if (search.results["meta"]) {
+      return search.results[search.results.meta.results.order[0]]["data"][0];
+    } else {
+      return false;
+    }
+  }
   return (
     <div id="cider-socialprofile">
       <div className="content-inner artist-page profile-page">
@@ -40,7 +30,7 @@ export const Component = () => {
           <div className="row">
             <div
               className="col-sm"
-              style={{ width: auto }}>
+              style={{ width: "auto" }}>
               <div className="artist-image">
                 <mediaitem-artwork
                   shadow="large"
