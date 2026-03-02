@@ -1,36 +1,23 @@
-export const ArtistChip = () => {
-  Vue.component("artist-chip", {
-    props: {
-      item: {
-        type: Object,
-        required: true,
-      },
-    },
-    data: function () {
-      return {
-        image: false,
-        artist: {
-          id: null,
-        },
-      };
-    },
-    template: "#artist-chip",
-    async mounted() {
-      let artistId = this.item.id;
-      if (typeof this.item.relationships == "object") {
-        artistId = this.item.relationships.catalog.data[0].id;
-      }
-      app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artistId}`).then((response) => {
-        this.artist = response.data.data[0];
-        this.image = true;
-      });
-    },
-    methods: {
-      route() {
-        app.appRoute(`artist/${this.artist.id}`);
-      },
-    },
-  });
+export const ArtistChip = ({item}: {item: object}) => {
+  let image = false;
+  let artist: {
+    id: null,
+  }
+
+  async function mounted() {
+    let artistId = this.item.id;
+    if (typeof this.item.relationships == "object") {
+      artistId = this.item.relationships.catalog.data[0].id;
+    }
+    app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artistId}`).then((response) => {
+      this.artist = response.data.data[0];
+      this.image = true;
+    });
+  }
+  function route() {
+    app.appRoute(`artist/${this.artist.id}`);
+  }
+
   return (
     <div id="artist-chip">
       <div

@@ -1,14 +1,5 @@
-export const Component = () => {
-  Vue.component("mediaitem-mvview", {
-    template: "#mediaitem-mvview",
-    props: ["item", "imagesize"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    methods: {},
-  });
+export const Component = ({item, imagesize}: {item: object, imagesize: number}) => {
+  const app = this.$root;
   return (
     <div id="mediaitem-mvview">
       <template>
@@ -20,7 +11,7 @@ export const Component = () => {
               <mediaitem-artwork
                 url="item.attributes.artwork ? item.attributes.artwork.url : ''"
                 video="(item.attributes != null && item.attributes.editorialVideo != null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
-                size="imagesize ?? 300"></mediaitem-artwork>
+                size={imagesize ?? 300}></mediaitem-artwork>
             </div>
             <div
               className="cd-mediaitem-mvview-overlay"

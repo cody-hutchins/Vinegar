@@ -1,39 +1,15 @@
-export const Component = () => {
-  Vue.component("artwork-material", {
-    template: "#artwork-material",
-    data: function () {
-      return {
-        src: "",
-      };
-    },
-    mounted() {
-      this.src = app.getMediaItemArtwork(this.url, this.size);
-    },
-    props: {
-      url: {
-        type: String,
-        required: true,
-      },
-      size: {
-        type: [String, Number],
-        required: false,
-        default: "32",
-      },
-      images: {
-        type: [String, Number],
-        required: false,
-        default: "2",
-      },
-    },
-    methods: {},
-  });
+export const Component = ({url, size, images}: {url: string, size: (string | number) = "32", images: (string | number) = "2"}) => {
+  let src = '';
+  mounted() {
+    src = app.getMediaItemArtwork(url, size);
+  };
   return (
     <div id="artwork-material">
       <div className="artworkMaterial">
         <mediaitem-artwork
-          url="src"
+          url={src}
           size="500"
-          v-for="image in images"
+          v-for={image in images}
         />
       </div>
     </div>

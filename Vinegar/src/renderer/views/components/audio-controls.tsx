@@ -1,47 +1,40 @@
 export const Component = () => {
-  Vue.component("audio-controls", {
-    template: "#audio-controls",
-    data: function () {
-      return {
-        app: this.$root,
-        maxVolume: this.$root.cfg.audio.maxVolume * 100,
-        volumeStep: this.$root.cfg.audio.volumeStep * 100,
-        volume: this.$root.cfg.audio.volume * 100,
-      };
+  const app = this.$root;
+  const maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
+  const volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
+  const volume: number = this.$root.cfg.audio.volume * 100;
+  const watch: {
+    maxVolume: (newValue: number, _oldValue: number) => {
+      if (newValue > 100) {
+        newValue = 100;
+      } else {
+        newValue = Math.round(newValue);
+      }
+      this.$root.cfg.audio.maxVolume = newValue / 100;
+      maxVolume = newValue;
+      console.log(newValue, _oldValue);
     },
-    watch: {
-      maxVolume: function (newValue, _oldValue) {
-        if (newValue > 100) {
-          newValue = 100;
-        } else {
-          newValue = Math.round(newValue);
-        }
-        this.$root.cfg.audio.maxVolume = newValue / 100;
-        this.maxVolume = newValue;
-        console.log(newValue, _oldValue);
-      },
-      volume: function (newValue, _oldValue) {
-        if (newValue > this.maxVolume) {
-          newValue = 100;
-        } else {
-          newValue = Math.round(newValue);
-        }
-        this.$root.mk.volume = newValue / 100;
-        this.volume = newValue;
-        console.log(newValue, _oldValue);
-      },
-      volumeStep: function (newValue, _oldValue) {
-        if (newValue > this.maxVolume) {
-          newValue = 100;
-        } else {
-          newValue = Math.round(newValue);
-        }
-        this.$root.cfg.audio.volumeStep = newValue / 100;
-        this.volumeStep = newValue;
-        console.log(newValue, _oldValue);
-      },
+    volume: (newValue: number, _oldValue: number) => {
+      if (newValue > maxVolume) {
+        newValue = 100;
+      } else {
+        newValue = Math.round(newValue);
+      }
+      this.$root.mk.volume = newValue / 100;
+      volume = newValue;
+      console.log(newValue, _oldValue);
     },
-  });
+    volumeStep: (newValue: number, _oldValue: number) => {
+      if (newValue > maxVolume) {
+        newValue = 100;
+      } else {
+        newValue = Math.round(newValue);
+      }
+      this.$root.cfg.audio.volumeStep = newValue / 100;
+      volumeStep = newValue;
+      console.log(newValue, _oldValue);
+    }
+  };
   return (
     <div id="audio-controls">
       <div

@@ -1,13 +1,5 @@
 export const AppContent = () => {
-  Vue.component("app-content-area", {
-    template: "#app-content-area",
-    data: function () {
-      return {
-        scrollPos: 0,
-      };
-    },
-    methods: {},
-  });
+  const scrollPos = 0;
   return (
     <div id="app-content-area">
       <div
@@ -35,7 +27,7 @@ export const AppContent = () => {
           <transition
             v-onenter={appRoute.onEnter}
             name="$root.chrome.desiredPageTransition">
-            <template v-if={appRoute.condition}>env.appRoutes[i].component;</template>
+            <template v-if={appRoute.condition}>{appRoute.component}</template>
           </transition>
         ))}
         {/* <!-- Library - Made For You --> */}
