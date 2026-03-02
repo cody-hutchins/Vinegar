@@ -1,17 +1,4 @@
-export const Component = () => {
-  Vue.component("mediaitem-scroller-horizontal-sp", {
-    template: "#mediaitem-scroller-horizontal-sp",
-    props: {
-      items: { type: Array, required: false },
-      withReason: { type: Boolean, required: false, default: false },
-    },
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    methods: {},
-  });
+export const Component = ({ items, withReason }: { items?: object[]; withReason?: boolean }) => {
   return (
     <div id="mediaitem-scroller-horizontal-sp">
       <div className="cd-hmedia-scroller hmedia-scroller-card">
@@ -21,9 +8,9 @@ export const Component = () => {
               kind="card"
               item="item"
               size="300"
-              reasonShown="withReason"
+              reasonShown={withReason}
               v-bind:key="item.id"
-              v-for="item in items"></mediaitem-square>
+              v-for={item in items}></mediaitem-square>
           </template>
         </vue-horizontal>
       </div>

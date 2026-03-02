@@ -1,4 +1,4 @@
-export const AppContent = () => {
+const AppContent = () => {
   const scrollPos = 0;
   return (
     <div id="app-content-area">
@@ -41,3 +41,5 @@ export const AppContent = () => {
     </div>
   );
 };
+
+export default AppContent;

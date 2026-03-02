@@ -1,146 +1,109 @@
-export const Component = () => {
-  Vue.component("mediaitem-artwork", {
-    template: "#mediaitem-artwork",
-    props: {
-      size: {
-        type: [String, Number],
-        default: "120",
-      },
-      width: {
-        type: [String, Number],
-        required: false,
-      },
-      bgcolor: {
-        type: String,
-        default: "",
-      },
-      url: {
-        type: String,
-        default: "",
-      },
-      type: {
-        type: String,
-        default: "",
-      },
-      video: {
-        type: String,
-        required: false,
-      },
-      videoPriority: {
-        type: Boolean,
-        required: false,
-      },
-      shadow: {
-        type: String,
-        default: "",
-      },
-      upscaling: {
-        type: Boolean,
-        default: false,
-      },
+export const Component = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
+  const app = this.$root;
+  const isVisible = false;
+  const style = {
+    "box-shadow": "",
+  };
+  const awStyle = {
+    background: bgcolor,
+  };
+  const imgStyle = {
+    opacity: 0,
+    transition: "opacity .25s linear",
+  };
+  const classes = [];
+  const imgSrc = "";
+
+  const computed = {
+    windowRelativeScale: function () {
+      return app.$store.state.windowRelativeScale;
     },
-    data: function () {
-      return {
-        app: this.$root,
-        isVisible: false,
-        style: {
-          "box-shadow": "",
-        },
-        awStyle: {
-          background: this.bgcolor,
-        },
-        imgStyle: {
-          opacity: 0,
-          transition: "opacity .25s linear",
-        },
-        classes: [],
-        imgSrc: "",
-      };
+  };
+
+  const watch = {
+    windowRelativeScale: function (newValue, oldValue) {
+      swapImage(newValue);
     },
-    computed: {
-      windowRelativeScale: function () {
-        return app.$store.state.windowRelativeScale;
-      },
+    url: function (newValue, oldValue) {
+      imgSrc = app.getMediaItemArtwork(url, size, width);
     },
-    watch: {
-      windowRelativeScale: function (newValue, oldValue) {
-        this.swapImage(newValue);
-      },
-      url: function (newValue, oldValue) {
-        this.imgSrc = app.getMediaItemArtwork(this.url, this.size, this.width);
-      },
-    },
-    mounted() {
-      this.getClasses();
-      this.imgSrc = app.getMediaItemArtwork(this.url, this.size, this.width);
-    },
-    methods: {
-      swapImage(newValue) {
-        if (!this.upscaling || window.devicePixelRatio !== 1) return;
-        if (newValue > 1.5) {
-          this.imgSrc = app.getMediaItemArtwork(this.url, parseInt(this.size * 2.0), parseInt(this.size * 2.0));
-        }
-      },
-      imgLoaded() {
-        this.imgStyle.opacity = 1;
-        this.swapImage(app.$store.state.windowRelativeScale);
-        // this.awStyle.background = ""
-      },
-      contextMenu(event) {
-        let self = this;
-        app.showMenuPanel(
-          {
-            items: {
-              save: {
-                name: app.getLz("action.openArtworkInBrowser"),
-                action: () => {
-                  window.open(app.getMediaItemArtwork(self.url, 1024, 1024));
-                },
-              },
+  };
+
+  function mounted() {
+    getClasses();
+    imgSrc = app.getMediaItemArtwork(url, size, width);
+  }
+
+  const swapImage = (newValue) => {
+    if (!upscaling || window.devicePixelRatio !== 1) return;
+    if (newValue > 1.5) {
+      imgSrc = app.getMediaItemArtwork(url, parseInt(size * 2.0), parseInt(size * 2.0));
+    }
+  };
+
+  const imgLoaded = () => {
+    imgStyle.opacity = 1;
+    swapImage(app.$store.state.windowRelativeScale);
+    // awStyle.background = ""
+  };
+
+  const contextMenu = (event) => {
+    let self = this;
+    app.showMenuPanel(
+      {
+        items: {
+          save: {
+            name: app.getLz("action.openArtworkInBrowser"),
+            action: () => {
+              window.open(app.getMediaItemArtwork(self.url, 1024, 1024));
             },
           },
-          event,
-        );
+        },
       },
-      getVideoPriority() {
-        if (app.cfg.visual.animated_artwork == "always") {
-          return true;
-        } else if (this.videoPriority && app.cfg.visual.animated_artwork == "limited") {
-          return true;
-        } else if (app.cfg.visual.animated_artwork == "disabled") {
-          return false;
-        }
-        return this.videoPriority;
-      },
-      getClasses() {
-        switch (this.shadow) {
-          case "none":
-            this.classes.push("no-shadow");
-            break;
-          case "large":
-            this.classes.push("shadow");
-            break;
-          case "subtle":
-            this.classes.push("subtle-shadow");
-            break;
-          default:
-            break;
-        }
-        return this.classes;
-      },
-      getArtworkStyle() {
-        return {
-          width: this.size + "px",
-          height: this.size + "px",
-        };
-      },
-    },
-  });
+      event,
+    );
+  };
+
+  const getVideoPriority = () => {
+    if (app.cfg.visual.animated_artwork == "always") {
+      return true;
+    } else if (videoPriority && app.cfg.visual.animated_artwork == "limited") {
+      return true;
+    } else if (app.cfg.visual.animated_artwork == "disabled") {
+      return false;
+    }
+    return videoPriority;
+  };
+
+  const getClasses = () => {
+    switch (shadow) {
+      case "none":
+        classes.push("no-shadow");
+        break;
+      case "large":
+        classes.push("shadow");
+        break;
+      case "subtle":
+        classes.push("subtle-shadow");
+        break;
+      default:
+        break;
+    }
+    return classes;
+  };
+
+  const getArtworkStyle = () => {
+    return {
+      width: size + "px",
+      height: size + "px",
+    };
+  };
+
   return (
     <div id="mediaitem-artwork">
       <div
         className="mediaitem-artwork"
-        style={{ awStyle }}
+        style={awStyle}
         contextmenu="contextMenu"
         className="[{'rounded': (type == 'artists')}, classes]"
         key="url">
@@ -149,7 +112,7 @@ export const Component = () => {
           ref="image"
           decoding="async"
           loading="lazy"
-          style={{ imgStyle }}
+          style={imgStyle}
           load="imgLoaded()"
           className="mediaitem-artwork--img"
         />

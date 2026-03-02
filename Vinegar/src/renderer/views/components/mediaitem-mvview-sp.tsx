@@ -1,18 +1,8 @@
-export const Component = () => {
-  Vue.component("mediaitem-mvview-sp", {
-    template: "#mediaitem-mvview-sp",
-    props: ["item", "imagesize", "badge"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    methods: {
-      log(item) {
-        console.log(item);
-      },
-    },
-  });
+export const Component = ({ item, imagesize, badge }: { item: object; imagesize: number; badge: object }) => {
+  const app = this.$root;
+  function log(item) {
+    console.log(item);
+  }
   return (
     <div id="mediaitem-mvview-sp">
       <div

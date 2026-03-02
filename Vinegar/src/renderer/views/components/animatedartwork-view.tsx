@@ -1,13 +1,13 @@
-export const AnimatedArtworkView = ({video, priority}: {video: string, priority = false}) => {
+const AnimatedArtworkView = ({ video, priority = false }: { video: string; priority: boolean }) => {
   const app = this.$root;
   const hls = null;
   const mounted = () => {
-    if (!this.priority && app.cfg.visual.animated_artwork == "limited") {
+    if (!priority && app.cfg.visual.animated_artwork == "limited") {
       return;
     } else if (app.cfg.visual.animated_artwork == "disabled") {
       return;
     }
-    if (this.video) {
+    if (video) {
       this.$nextTick(function () {
         var config = {
           backBufferLength: 0,
@@ -67,13 +67,13 @@ export const AnimatedArtworkView = ({video, priority}: {video: string, priority 
         }
       });
     }
-  }
+  };
   const beforeDestroy = () => {
     if (this.hls) {
       await this.hls.destroy();
       this.hls = null;
     }
-  }
+  };
   return (
     <div id="animatedartwork-view">
       <div

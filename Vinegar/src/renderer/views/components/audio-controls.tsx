@@ -1,9 +1,9 @@
 export const Component = () => {
   const app = this.$root;
-  const maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
-  const volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
-  const volume: number = this.$root.cfg.audio.volume * 100;
-  const watch: {
+  let maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
+  let volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
+  let volume: number = this.$root.cfg.audio.volume * 100;
+  const watch = {
     maxVolume: (newValue: number, _oldValue: number) => {
       if (newValue > 100) {
         newValue = 100;
@@ -33,7 +33,7 @@ export const Component = () => {
       this.$root.cfg.audio.volumeStep = newValue / 100;
       volumeStep = newValue;
       console.log(newValue, _oldValue);
-    }
+    },
   };
   return (
     <div id="audio-controls">

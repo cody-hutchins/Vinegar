@@ -1,8 +1,8 @@
-export const ArtistChip = ({item}: {item: object}) => {
+export const ArtistChip = ({ item }: { item: object }) => {
   let image = false;
   let artist: {
-    id: null,
-  }
+    id: null;
+  };
 
   async function mounted() {
     let artistId = this.item.id;

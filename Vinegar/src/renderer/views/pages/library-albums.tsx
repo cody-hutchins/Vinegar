@@ -1,37 +1,31 @@
+import { useMemo } from "react";
+
 export const Component = () => {
-  Vue.component("cider-library-albums", {
-    template: "#cider-library-albums",
-    data: function () {
-      const pageSize = this.$root.cfg.libraryPrefs.pageSize;
-      return {
-        library: this.$root.library,
-        mediaItemSize: "compact",
-        prefs: this.$root.cfg.libraryPrefs.albums,
-        app: this.$root,
-        pageSize: pageSize,
-        start: 0,
-        end: pageSize,
-      };
-    },
-    mounted() {
-      this.$root.getLibraryAlbumsFull(null, 1);
-      this.$root.getAlbumSort();
-      this.$root.searchLibraryAlbums(1);
-      this.$root.getLibrarySongsFull();
-      this.$root.searchLibraryAlbums(1);
-    },
-    computed: {
-      currentSlice: function () {
-        return this.library.albums.displayListing.slice(this.start, this.end);
-      },
-    },
-    methods: {
-      onRangeChange: function (newRange) {
-        this.start = newRange[0];
-        this.end = newRange[1];
-      },
-    },
-  });
+  const pageSize = this.$root.cfg.libraryPrefs.pageSize;
+  let library = this.$root.library;
+  let mediaItemSize = "compact";
+  let prefs = this.$root.cfg.libraryPrefs.albums;
+  let app = this.$root;
+  let start = 0;
+  let end = pageSize;
+
+  function mounted() {
+    this.$root.getLibraryAlbumsFull(null, 1);
+    this.$root.getAlbumSort();
+    this.$root.searchLibraryAlbums(1);
+    this.$root.getLibrarySongsFull();
+    this.$root.searchLibraryAlbums(1);
+  }
+
+  const currentSlice = useMemo(() => {
+    return this.library.albums.displayListing.slice(start, end);
+  }, [start, end]);
+
+  const onRangeChange = (newRange: [number, number]) => {
+    start = newRange[0];
+    end = newRange[1];
+  };
+
   return (
     <div id="cider-library-albums">
       <div className="content-inner">
@@ -124,7 +118,7 @@ export const Component = () => {
             pageSize="pageSize"
             scroll="prefs.scroll"
             scrollSelector="#app-content"
-            onRangeChange="onRangeChange"
+            onRangeChange={onRangeChange}
             style={{ marginBottom: 0 }}
           />
         </div>

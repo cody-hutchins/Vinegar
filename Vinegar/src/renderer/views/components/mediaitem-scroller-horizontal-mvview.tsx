@@ -1,34 +1,5 @@
-export const Component = () => {
-  Vue.component("mediaitem-scroller-horizontal-mvview", {
-    template: "#mediaitem-scroller-horizontal-mvview",
-    props: {
-      items: {
-        type: Array,
-        required: true,
-      },
-      imagesize: {
-        type: Number,
-        required: false,
-      },
-      browsesp: {
-        type: Boolean,
-        required: false,
-      },
-      kind: {
-        type: String,
-        required: false,
-        default: "",
-      },
-    },
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    // mounted(){
-    //     console.log('hes',this.items)
-    // }
-  });
+export const Component = ({ items, imagesize, browsesp, kind = "" }: { items: object[]; imagesize?: number; kind?: string }) => {
+  const app = this.$root;
   return (
     <div id="mediaitem-scroller-horizontal-mvview">
       <vue-horizontal>

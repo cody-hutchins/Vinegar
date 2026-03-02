@@ -1,104 +1,77 @@
-export const Component = () => {
-  Vue.component("inline-collection-list", {
-    template: "#inline-collection-list",
-    props: {
-      data: {
-        required: true,
-      },
-      title: {
-        type: String,
-        required: false,
-      },
-      type: {
-        type: String,
-        required: false,
-        default: "artists",
-      },
-      parentSelector: {
-        type: String,
-        required: false,
-        default: null,
-      },
-    },
-    data: function () {
-      return {
-        triggerEnabled: true,
-        canSeeTrigger: false,
-        showFab: false,
-        commonKind: "song",
-        api: this.$root.mk.api,
-        loading: false,
-        app: this.$root,
-      };
-    },
-    methods: {
-      getKind(item) {
-        if (typeof item.kind != "undefined") {
-          this.commonKind = item.kind;
-          return item.kind;
+export const Component = ({ data, title, type, parentSelector = null }: { data: object; title?: string; type?: string; parentSelector?: string | null }) => {
+  let triggerEnabled = true;
+  let canSeeTrigger = false;
+  let showFab = false;
+  let commonKind = "song";
+  let loading = false;
+  const api = this.$root.mk.api;
+  const app = this.$root;
+
+  const getKind = (item) => {
+    if (typeof item.kind != "undefined") {
+      commonKind = item.kind;
+      return item.kind;
+    }
+    if (typeof item.attributes.playParams != "undefined") {
+      commonKind = item.attributes.playParams.kind;
+      return item.attributes.playParams.kind;
+    }
+    return commonKind;
+  };
+  const scrollToTop = () => {
+    let target = document.querySelector(".header-text");
+    document.querySelector(parentSelector ?? ".collection-page").scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+  const getNext = () => {
+    let self = this;
+    triggerEnabled = false;
+    if (typeof data.next == "undefined") {
+      return;
+    }
+    loading = true;
+
+    api.v3.music(data.next, app.collectionList.requestBody).then((response) => {
+      console.log(response);
+      if (!app.collectionList.response.groups) {
+        data.data = data.data.concat(response.data.data);
+        if (response.data.next) {
+          data.next = response.data.next;
+          triggerEnabled = true;
         }
-        if (typeof item.attributes.playParams != "undefined") {
-          this.commonKind = item.attributes.playParams.kind;
-          return item.attributes.playParams.kind;
-        }
-        return this.commonKind;
-      },
-      scrollToTop() {
-        let target = document.querySelector(".header-text");
-        document.querySelector(this.parentSelector ?? ".collection-page").scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
-      },
-      getNext() {
-        let self = this;
-        this.triggerEnabled = false;
-        if (typeof this.data.next == "undefined") {
+        loading = false;
+      } else {
+        if (!response.data.results[app.collectionList.response.groups]) {
+          loading = false;
           return;
         }
-        this.loading = true;
-
-        this.api.v3.music(this.data.next, app.collectionList.requestBody).then((response) => {
-          console.log(response);
-          if (!app.collectionList.response.groups) {
-            this.data.data = this.data.data.concat(response.data.data);
-            if (response.data.next) {
-              this.data.next = response.data.next;
-              this.triggerEnabled = true;
-            }
-            this.loading = false;
-          } else {
-            if (!response.data.results[app.collectionList.response.groups]) {
-              this.loading = false;
-              return;
-            }
-            this.data.data = this.data.data.concat(response.data.results[app.collectionList.response.groups].data);
-            if (response.data.results[app.collectionList.response.groups].next) {
-              this.data.next = response.data.results[app.collectionList.response.groups].next;
-              this.triggerEnabled = true;
-              this.loading = false;
-            }
-          }
-        });
-      },
-      headerVisibility: function (isVisible, entry) {
-        if (isVisible) {
-          this.showFab = false;
-        } else {
-          this.showFab = true;
+        data.data = data.data.concat(response.data.results[app.collectionList.response.groups].data);
+        if (response.data.results[app.collectionList.response.groups].next) {
+          data.next = response.data.results[app.collectionList.response.groups].next;
+          triggerEnabled = true;
+          loading = false;
         }
-      },
-      visibilityChanged: function (isVisible, entry) {
-        if (isVisible) {
-          this.canSeeTrigger = true;
-          this.getNext();
-        } else {
-          this.canSeeTrigger = false;
-        }
-      },
-    },
-  });
+      }
+    });
+  };
+  const headerVisibility = (isVisible, entry) => {
+    if (isVisible) {
+      showFab = false;
+    } else {
+      showFab = true;
+    }
+  };
+  const visibilityChanged = (isVisible, entry) => {
+    if (isVisible) {
+      canSeeTrigger = true;
+      getNext();
+    } else {
+      canSeeTrigger = false;
+    }
+  };
   return (
     <div id="inline-collection-list">
       <div className="collection-page">
@@ -129,7 +102,7 @@ export const Component = () => {
             v-if="triggerEnabled"
             style={{ opacity: 0, height: "32px" }}
             v-observe-visibility="{callback: visibilityChanged}">
-            {this.app.getLz("term.showMore")}
+            {app.getLz("term.showMore")}
           </button>
         </div>
         <transition name="fabfade">

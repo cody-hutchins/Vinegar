@@ -1,88 +1,85 @@
 export const Component = () => {
-  Vue.component("castmenu", {
-    template: "#castmenu",
-    data: function () {
-      return {
-        devices: {
-          cast: [],
-          airplay: [],
-        },
-        scanning: false,
-        activeCasts: this.$root.activeCasts,
-      };
+  let devices: {
+    cast: [];
+    airplay: [];
+  };
+  let scanning = false;
+  let activeCasts = this.$root.activeCasts;
+  function mounted() {
+    scan();
+  }
+
+  const watch = {
+    activeCasts: function (newVal, oldVal) {
+      this.$root.activeCasts = this.activeCasts;
     },
-    mounted() {
-      this.scan();
-    },
-    watch: {
-      activeCasts: function (newVal, oldVal) {
-        this.$root.activeCasts = this.activeCasts;
-      },
-    },
-    methods: {
-      close() {
-        this.$root.modals.castMenu = false;
-      },
-      scan() {
-        let self = this;
-        this.scanning = true;
-        ipcRenderer.send("getChromeCastDevices", "");
-        ipcRenderer.send("getAirplayDevice", "");
-        setTimeout(() => {
-          self.devices.cast = ipcRenderer.sendSync("getKnownCastDevices");
-          self.devices.airplay = ipcRenderer.sendSync("getKnownAirplayDevices");
-          self.scanning = false;
-        }, 2000);
-        console.log(this.devices);
-        // vm.$forceUpdate();
-      },
-      setCast(device) {
-        CiderAudio.sendAudio();
-        this.activeCasts.push(device);
-        ipcRenderer.send("performGCCast", device, "Cider", "Playing ...", "Test build", "");
-      },
-      setAirPlayCast(device) {
-        if (
-          !this.activeCasts.some((item) => {
-            return item.host == device.host && item.name == device.name && item.port == device.port;
-          })
-        ) {
-          this.activeCasts.push(device);
-          ipcRenderer.send("performAirplayPCM", device.host, device.port, null, "", "", "", "", device.txt, device.airplay2, false);
-        }
-      },
-      disconnectAirPlayCast(device) {
-        app.confirm("Do you want to disconnect this device?", (res) => {
-          if (res) {
-            ipcRenderer.send("disconnectAirplay", device.host + ":" + device.port + "ap");
-            console.log("disconnectAirplay", device.host + ":" + device.port + "ap");
-            let idx = this.activeCasts.findIndex((a) => {
-              return a.host == device.host && a.port == device.port;
-            });
-            console.log(idx);
-            if (idx != -1) {
-              delete this.activeCasts[idx];
-              delete this.$root.activeCasts[idx];
-              this.activeCasts = this.activeCasts.filter((a) => {
-                return !(a.host == device.host && a.port == device.port);
-              });
-              console.log(this.activeCasts);
-              if (this.activeCasts.length == 0) {
-                this.stopCasting();
-              }
-            }
-          }
+  };
+
+  const close = () => {
+    this.$root.modals.castMenu = false;
+  };
+
+  const scan = () => {
+    let self = this;
+    scanning = true;
+    ipcRenderer.send("getChromeCastDevices", "");
+    ipcRenderer.send("getAirplayDevice", "");
+    setTimeout(() => {
+      self.devices.cast = ipcRenderer.sendSync("getKnownCastDevices");
+      self.devices.airplay = ipcRenderer.sendSync("getKnownAirplayDevices");
+      self.scanning = false;
+    }, 2000);
+    console.log(devices);
+    // vm.$forceUpdate();
+  };
+
+  const setCast = (device) => {
+    CiderAudio.sendAudio();
+    activeCasts.push(device);
+    ipcRenderer.send("performGCCast", device, "Cider", "Playing ...", "Test build", "");
+  };
+
+  const setAirPlayCast = (device) => {
+    if (
+      !activeCasts.some((item) => {
+        return item.host == device.host && item.name == device.name && item.port == device.port;
+      })
+    ) {
+      activeCasts.push(device);
+      ipcRenderer.send("performAirplayPCM", device.host, device.port, null, "", "", "", "", device.txt, device.airplay2, false);
+    }
+  };
+
+  const disconnectAirPlayCast = (device) => {
+    app.confirm("Do you want to disconnect this device?", (res) => {
+      if (res) {
+        ipcRenderer.send("disconnectAirplay", device.host + ":" + device.port + "ap");
+        console.log("disconnectAirplay", device.host + ":" + device.port + "ap");
+        let idx = activeCasts.findIndex((a) => {
+          return a.host == device.host && a.port == device.port;
         });
-      },
-      stopCasting() {
-        CiderAudio.stopAudio();
-        ipcRenderer.send("disconnectAirplay", "");
-        ipcRenderer.send("stopGCast", "");
-        this.activeCasts = [];
-        // vm.$forceUpdate();
-      },
-    },
-  });
+        console.log(idx);
+        if (idx != -1) {
+          delete activeCasts[idx];
+          delete this.$root.activeCasts[idx];
+          activeCasts = activeCasts.filter((a) => {
+            return !(a.host == device.host && a.port == device.port);
+          });
+          console.log(activeCasts);
+          if (activeCasts.length == 0) {
+            stopCasting();
+          }
+        }
+      }
+    });
+  };
+  const stopCasting = () => {
+    CiderAudio.stopAudio();
+    ipcRenderer.send("disconnectAirplay", "");
+    ipcRenderer.send("stopGCast", "");
+    activeCasts = [];
+    // vm.$forceUpdate();
+  };
 
   return (
     <div id="castmenu">

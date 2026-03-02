@@ -1,8 +1,8 @@
-export const Component = ({url, size, images}: {url: string, size: (string | number) = "32", images: (string | number) = "2"}) => {
-  let src = '';
-  mounted() {
+const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size: string | number; images: string | number }) => {
+  let src = "";
+  function mounted() {
     src = app.getMediaItemArtwork(url, size);
-  };
+  }
   return (
     <div id="artwork-material">
       <div className="artworkMaterial">
@@ -15,3 +15,5 @@ export const Component = ({url, size, images}: {url: string, size: (string | num
     </div>
   );
 };
+
+export default ArtworkMaterial;

@@ -1,14 +1,5 @@
-export const Component = () => {
-  Vue.component("mediaitem-hrect", {
-    template: "#mediaitem-hrect",
-    props: ["item"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    methods: {},
-  });
+export const Component = ({ item }: { item: object }) => {
+  const app = this.$root;
   return (
     <div id="mediaitem-hrect">
       <template>

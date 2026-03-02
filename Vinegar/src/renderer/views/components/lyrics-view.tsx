@@ -1,160 +1,150 @@
-export const Component = () => {
-  Vue.component("lyrics-view", {
-    template: "#lyrics-view",
-    props: ["time", "lyrics", "richlyrics", "translation", "onindex", "yoffset"],
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    watch: {
-      time: function () {
-        if (((app.lyricon && app.drawer.open) || app.appMode == "fullscreen") && this.$refs.lyricsview) {
-          let currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
-          if (currentLine && currentLine.getElementsByClassName("lyricWaiting").length > 0) {
-            let duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
-            let u = (this.time - currentLine.getAttribute("start")) / duration;
-            if (u < 0.25 && !currentLine.classList.contains("mode1")) {
-              try {
-                currentLine.classList.add("mode1");
-                currentLine.classList.remove("mode3");
-                currentLine.classList.remove("mode2");
-              } catch (e) {}
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 0.25;
-              currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
-            } else if (u >= 0.25 && u < 0.5 && !currentLine.classList.contains("mode2")) {
-              try {
-                currentLine.classList.add("mode2");
-                currentLine.classList.remove("mode1");
-                currentLine.classList.remove("mode3");
-              } catch (e) {}
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
-              currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
-            } else if (u >= 0.5 && u < 0.75 && !currentLine.classList.contains("mode3")) {
-              try {
-                currentLine.classList.add("mode3");
-                currentLine.classList.remove("mode1");
-                currentLine.classList.remove("mode2");
-              } catch (e) {}
-              currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
-            } else if (u >= 0.75 && currentLine.classList.contains("mode3")) {
-              try {
-                currentLine.classList.remove("mode1");
-                currentLine.classList.remove("mode2");
-                currentLine.classList.remove("mode3");
-              } catch (e) {}
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
-              currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
-              currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
-            }
-          }
-        }
-        this.getActiveLyric();
-      },
-    },
-    methods: {
-      seekTo(startTime) {
-        if (startTime != 9999999) this.app.seekTo(startTime, false);
-      },
-      getActiveLyric() {
-        const delayfix = app.activeCasts[0]?.hasOwnProperty("airplay2") ? -2.5 : 0.1;
-        const prevLine = app.currentLyricsLine;
-        for (var i = 0; i < this.lyrics.length; i++) {
-          if (this.time + delayfix >= this.lyrics[i].startTime && this.time + delayfix <= app.lyrics[i].endTime) {
-            if (app.currentLyricsLine != i) {
-              app.currentLyricsLine = i;
-              if (((app.lyricon && app.drawer.open) || app.appMode == "fullscreen") && this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`)) {
-                if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`)) {
-                  this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`).classList.remove("active");
-                }
-                this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`).classList.add("active");
-                if (this.checkIfScrollIsStatic) {
-                  let lyricElement = this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`);
-                  // this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`).scrollIntoView({
-                  //     behavior: "smooth",
-                  //     block: "nearest", inline: 'start'
-                  // })
-                  let parent = lyricElement.parentElement;
-                  let parentRect = parent.getBoundingClientRect();
-                  let lyricElementRect = lyricElement.getBoundingClientRect();
-                  let parentScrollTop = parent.scrollTop;
-                  let parentScrollLeft = parent.scrollLeft;
-                  let parentScrollTopDiff = parentScrollTop - parentRect.top;
-                  let parentScrollLeftDiff = parentScrollLeft - parentRect.left;
-                  let lyricElementScrollTop = lyricElementRect.top + parentScrollTopDiff;
-                  let lyricElementScrollLeft = lyricElementRect.left + parentScrollLeftDiff;
-                  let scrollTopDiff = lyricElementScrollTop - parentScrollTop;
-                  let scrollLeftDiff = lyricElementScrollLeft - parentScrollLeft;
-                  let scrollTop = parent.scrollTop + scrollTopDiff;
-                  let scrollLeft = parent.scrollLeft + scrollLeftDiff;
-                  parent.scrollTo({
-                    top: scrollTop - (this.yoffset ?? 128),
-                    left: scrollLeft,
-                    behavior: "smooth",
-                  });
-                }
-              }
-            } else if (app.currentLyricsLine == 0 && app.drawer.open) {
-              if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`) && !this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.contains("active")) this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.add("active");
-            }
-            break;
-          }
-        }
-        try {
-          if (app.drawer.open || app.appMode == "fullscreen") {
+export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time; lyrics; richlyrics; translation; onindex; yoffset }) => {
+  const app = this.$root;
+  const watch = {
+    time: function () {
+      if (((app.lyricon && app.drawer.open) || app.appMode == "fullscreen") && this.$refs.lyricsview) {
+        let currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
+        if (currentLine && currentLine.getElementsByClassName("lyricWaiting").length > 0) {
+          let duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
+          let u = (time - currentLine.getAttribute("start")) / duration;
+          if (u < 0.25 && !currentLine.classList.contains("mode1")) {
             try {
-              this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`).childNodes.classList.remove("verse-active");
+              currentLine.classList.add("mode1");
+              currentLine.classList.remove("mode3");
+              currentLine.classList.remove("mode2");
             } catch (e) {}
-            for (child of this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${app.currentLyricsLine}"]`).querySelectorAll(".verse")) {
-              if (this.time + delayfix >= child.getAttribute("lyricstart") * 1 + child.getAttribute("versestart") * 1) {
-                child.classList.add("verse-active");
-              } else {
-                child.classList.remove("verse-active");
-              }
-            }
-          }
-        } catch (e) {}
-      },
-      getActiveVerse(timeStart, timeEnd, verseTime) {
-        let relativeTime = this.time - timeStart;
-        console.log(this.time, timeEnd, timeStart, relativeTime >= verseTime && relativeTime <= timeEnd - timeStart);
-        return relativeTime >= verseTime && relativeTime <= timeEnd - timeStart;
-      },
-      getVerseLine(index) {
-        if (this.richlyrics[index] != null && this.richlyrics[index].l != null) {
-          return this.richlyrics[index].l;
-        } else return [];
-      },
-      qqInstrumental(lyrics) {
-        for (lyric of lyrics) {
-          if (lyric.line.includes("纯音乐") && lyric.line.includes("欣赏")) {
-            return true;
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 0.25;
+            currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
+          } else if (u >= 0.25 && u < 0.5 && !currentLine.classList.contains("mode2")) {
+            try {
+              currentLine.classList.add("mode2");
+              currentLine.classList.remove("mode1");
+              currentLine.classList.remove("mode3");
+            } catch (e) {}
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
+            currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
+          } else if (u >= 0.5 && u < 0.75 && !currentLine.classList.contains("mode3")) {
+            try {
+              currentLine.classList.add("mode3");
+              currentLine.classList.remove("mode1");
+              currentLine.classList.remove("mode2");
+            } catch (e) {}
+            currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
+          } else if (u >= 0.75 && currentLine.classList.contains("mode3")) {
+            try {
+              currentLine.classList.remove("mode1");
+              currentLine.classList.remove("mode2");
+              currentLine.classList.remove("mode3");
+            } catch (e) {}
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
+            currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
+            currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
           }
         }
-        return false;
-      },
-      checkIfScrollIsStatic: setInterval(() => {
-        try {
-          if (position === this.$refs.lyricsview.scrollTop) {
-            clearInterval(checkIfScrollIsStatic);
-            // do something
-          }
-          position = this.$refs.lyricsview.scrollTop;
-        } catch (e) {}
-      }, 50),
+      }
+      getActiveLyric();
     },
-  });
+  };
+  const seekTo = (startTime) => {
+    if (startTime != 9999999) app.seekTo(startTime, false);
+  };
+  const getActiveLyric = () => {
+    const delayfix = app.activeCasts[0]?.hasOwnProperty("airplay2") ? -2.5 : 0.1;
+    const prevLine = app.currentLyricsLine;
+    for (var i = 0; i < lyrics.length; i++) {
+      if (time + delayfix >= lyrics[i].startTime && time + delayfix <= app.lyrics[i].endTime) {
+        if (app.currentLyricsLine != i) {
+          app.currentLyricsLine = i;
+          if (((app.lyricon && app.drawer.open) || app.appMode == "fullscreen") && this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`)) {
+            if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`)) {
+              this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`).classList.remove("active");
+            }
+            this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`).classList.add("active");
+            if (checkIfScrollIsStatic) {
+              let lyricElement = this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`);
+              // this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`).scrollIntoView({
+              //     behavior: "smooth",
+              //     block: "nearest", inline: 'start'
+              // })
+              let parent = lyricElement.parentElement;
+              let parentRect = parent.getBoundingClientRect();
+              let lyricElementRect = lyricElement.getBoundingClientRect();
+              let parentScrollTop = parent.scrollTop;
+              let parentScrollLeft = parent.scrollLeft;
+              let parentScrollTopDiff = parentScrollTop - parentRect.top;
+              let parentScrollLeftDiff = parentScrollLeft - parentRect.left;
+              let lyricElementScrollTop = lyricElementRect.top + parentScrollTopDiff;
+              let lyricElementScrollLeft = lyricElementRect.left + parentScrollLeftDiff;
+              let scrollTopDiff = lyricElementScrollTop - parentScrollTop;
+              let scrollLeftDiff = lyricElementScrollLeft - parentScrollLeft;
+              let scrollTop = parent.scrollTop + scrollTopDiff;
+              let scrollLeft = parent.scrollLeft + scrollLeftDiff;
+              parent.scrollTo({
+                top: scrollTop - (yoffset ?? 128),
+                left: scrollLeft,
+                behavior: "smooth",
+              });
+            }
+          }
+        } else if (app.currentLyricsLine == 0 && app.drawer.open) {
+          if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`) && !this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.contains("active")) this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.add("active");
+        }
+        break;
+      }
+    }
+    try {
+      if (app.drawer.open || app.appMode == "fullscreen") {
+        try {
+          this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`).childNodes.classList.remove("verse-active");
+        } catch (e) {}
+        for (child of this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${app.currentLyricsLine}"]`).querySelectorAll(".verse")) {
+          if (time + delayfix >= child.getAttribute("lyricstart") * 1 + child.getAttribute("versestart") * 1) {
+            child.classList.add("verse-active");
+          } else {
+            child.classList.remove("verse-active");
+          }
+        }
+      }
+    } catch (e) {}
+  };
+  const getActiveVerse = (timeStart, timeEnd, verseTime) => {
+    let relativeTime = time - timeStart;
+    console.log(time, timeEnd, timeStart, relativeTime >= verseTime && relativeTime <= timeEnd - timeStart);
+    return relativeTime >= verseTime && relativeTime <= timeEnd - timeStart;
+  };
+  const getVerseLine = (index) => {
+    if (richlyrics[index] != null && richlyrics[index].l != null) {
+      return richlyrics[index].l;
+    } else return [];
+  };
+  const qqInstrumental = (lyrics) => {
+    for (lyric of lyrics) {
+      if (lyric.line.includes("纯音乐") && lyric.line.includes("欣赏")) {
+        return true;
+      }
+    }
+    return false;
+  };
+  const checkIfScrollIsStatic = setInterval(() => {
+    try {
+      if (position === this.$refs.lyricsview.scrollTop) {
+        clearInterval(checkIfScrollIsStatic);
+        // do something
+      }
+      position = this.$refs.lyricsview.scrollTop;
+    } catch (e) {}
+  }, 50);
   return (
     <div id="lyrics-view">
       <div

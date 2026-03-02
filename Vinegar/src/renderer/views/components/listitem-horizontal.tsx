@@ -1,63 +1,45 @@
-export const Component = () => {
-  Vue.component("listitem-horizontal", {
-    template: "#listitem-horizontal",
-    name: "listitem-horizontal",
-    props: {
-      items: {
-        type: Array,
-        required: true,
-      },
-      showLibraryStatus: {
-        type: Boolean,
-        default: true,
-      },
-    },
-    data: function () {
-      return {
-        itemPages: [],
-        simplifiedParent: [],
-      };
-    },
-    mounted() {
+export const Component = ({ items, showLibraryStatus = true }: { items: object[]; showLibraryStatus?: boolean }) => {
+  const itemPages = [];
+  const simplifiedParent = [];
+
+  function mounted() {
+    // give every item an id
+    items.forEach(function (item, index) {
+      item.id = index;
+    });
+    // split items into pages
+    itemPages = app.arrayToChunk(items, 4);
+    try {
+      simplifiedParent = JSON.stringify(
+        items.map(function (x) {
+          return x.attributes.playParams;
+        }),
+      );
+      console.debug("simplifiedParent: " + simplifiedParent);
+    } catch (e) {}
+  }
+  const watch = {
+    items: function (items) {
       // give every item an id
-      this.items.forEach(function (item, index) {
+      items.forEach(function (item, index) {
         item.id = index;
       });
       // split items into pages
-      this.itemPages = app.arrayToChunk(this.items, 4);
+      itemPages = app.arrayToChunk(items, 4);
       try {
-        this.simplifiedParent = JSON.stringify(
-          this.items.map(function (x) {
+        simplifiedParent = JSON.stringify(
+          items.map(function (x) {
             return x.attributes.playParams;
           }),
         );
-        console.debug("simplifiedParent: " + this.simplifiedParent);
+        console.log("simplifiedParent: " + simplifiedParent);
       } catch (e) {}
     },
-    watch: {
-      items: function (items) {
-        // give every item an id
-        this.items.forEach(function (item, index) {
-          item.id = index;
-        });
-        // split items into pages
-        this.itemPages = app.arrayToChunk(this.items, 4);
-        try {
-          this.simplifiedParent = JSON.stringify(
-            this.items.map(function (x) {
-              return x.attributes.playParams;
-            }),
-          );
-          console.log("simplifiedParent: " + this.simplifiedParent);
-        } catch (e) {}
-      },
-    },
-    methods: {
-      sayHello: function () {
-        alert("Hello world!");
-      },
-    },
-  });
+  };
+  const sayHello = () => {
+    alert("Hello world!");
+  };
+
   return (
     <div id="listitem-horizontal">
       <div className="listitem-horizontal">
@@ -65,7 +47,7 @@ export const Component = () => {
           <div v-for="items in itemPages">
             <mediaitem-list-item
               v-for="(song, index) in items"
-              show-library-status="showLibraryStatus"
+              show-library-status={showLibraryStatus}
               v-bind:key="song.id"
               parent="'listitem-hr' + simplifiedParent"
               index="song.index"

@@ -1,330 +1,330 @@
-export const Component = () => {
-  Vue.component("eq-view", {
-    template: "#eq-view",
-    data: function () {
-      return {
-        // app: this.$root,
-        eqPreset: function () {
-          this.preset = uuidv4();
-          this.name = "";
-          this.frequencies = [];
-          this.gain = [];
-          this.Q = [];
-          this.mix = 1;
-          this.vibrantBass = 0;
-          this.userGenerated = true;
-        },
-        defaultPresets: [
-          {
-            preset: "default",
-            name: "Default",
-            frequencies: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
-            gain: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            Q: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "boostAiriness",
-            name: "Boost Airiness",
-            frequencies: [1169, 1733, 5962, 8688, 14125, 18628, 18628, 19000, 19500, 20000],
-            gain: [-1.41, 0.25, 3.33, 0.22, -0.53, 0.2, 3.64, 0, 0, 0],
-            Q: [0.405, 2.102, 0.025, 2.5, 7.071, 1.768, 1.146, 1, 1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "acoustic",
-            name: "Acoustic",
-            frequencies: [32, 75, 125, 220, 700, 1000, 2000, 4000, 10000, 16000],
-            gain: [0, -8, 0, -0.1, -3, 0, 0, 0, 4, 0],
-            Q: [1, 0.2, 1, 2.0, 1.4, 1, 1, 1, 0.1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "clearVocal",
-            name: "Clear Vocal",
-            frequencies: [20, 63, 125, 250, 400, 1000, 2000, 4000, 8000, 20000],
-            gain: [-22, 0, 0, 0, -3, 0, 1.8, 0, 0, 3.5],
-            Q: [0.3, 1, 1, 1, 2.0, 1, 0.7, 1, 1, 0.8],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "instrumentClarity",
-            name: "Instrument Clarity",
-            frequencies: [20, 63, 155, 250, 500, 1000, 2000, 5000, 11000, 16000],
-            gain: [-15, 0, -3, 0, 0, 0, 0, 3.1, 0, 0],
-            Q: [0.5, 1, 2, 1, 1, 1, 1, 1.5, 0.1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "reduceHarshness",
-            name: "Reduce Harshness",
-            frequencies: [32, 63, 125, 250, 500, 1128, 2000, 4057, 8000, 16000],
-            gain: [0, 0, 0, 0, 0, 2, 0, -6.4, 0, 0],
-            Q: [1, 1, 1, 1, 1, 2, 1, 1, 1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "smileyFace",
-            name: "Smiley Face",
-            frequencies: [35, 63, 125, 250, 500, 800, 2000, 4000, 8000, 20000],
-            gain: [5, 0, 0, 0, 0, -5, 0, 0, 0, 5],
-            Q: [0.1, 1, 1, 1, 1, 0.6, 1, 1, 1, 0.2],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "bassBoostSurgical",
-            name: "Surgical Bass Boost",
-            frequencies: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
-            gain: [2.7, 2.2, 1.6, 1.4, 0.6, 0, 0, 0, 0, 0],
-            Q: [1.4, 1.4, 1.4, 1.4, 1.4, 1, 1, 1, 1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-          {
-            preset: "bassBoostClassic",
-            name: "Classic Bass Boost",
-            frequencies: [32, 63, 160, 250, 500, 1000, 2000, 3500, 8000, 20000],
-            gain: [2.7, 2.2, 1.6, 1.4, 0.6, 0, 0, 0, 0, 0],
-            Q: [0.7, 0.7, 0.7, 0.7, 0.7, 1, 1, 1, 1, 1],
-            mix: 1,
-            vibrantBass: 0,
-            userGenerated: false,
-          },
-        ],
-      };
+export const Component = ({ src, url }: { src: string; url: string }) => {
+  const app = this.$root;
+  const eqPreset = () => ({
+    preset: uuidv4(),
+    name: "",
+    frequencies: [],
+    gain: [],
+    Q: [],
+    mix: 1,
+    vibrantBass: 0,
+    userGenerated: true,
+  });
+
+  const defaultPresets = [
+    {
+      preset: "default",
+      name: "Default",
+      frequencies: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
+      gain: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      Q: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
     },
-    props: ["src", "url"],
-    mounted() {},
-    methods: {
-      presetOptions(event) {
-        let menu = {
-          items: {
-            new: {
-              icon: "./assets/feather/plus.svg",
-              name: app.getLz("action.newpreset"),
-              action: () => {
-                this.addPreset();
-              },
-            },
-            delete: {
-              icon: "./assets/feather/x-circle.svg",
-              name: app.getLz("action.deletepreset"),
-              action: () => {
-                this.deletePreset();
-              },
-            },
-            import: {
-              icon: "./assets/feather/share.svg",
-              name: app.getLz("action.import"),
-              action: () => {
-                this.importPreset();
-              },
-            },
-            export: {
-              icon: "./assets/feather/share.svg",
-              name: app.getLz("action.export"),
-              action: () => {
-                this.exportPreset();
-              },
-            },
+    {
+      preset: "boostAiriness",
+      name: "Boost Airiness",
+      frequencies: [1169, 1733, 5962, 8688, 14125, 18628, 18628, 19000, 19500, 20000],
+      gain: [-1.41, 0.25, 3.33, 0.22, -0.53, 0.2, 3.64, 0, 0, 0],
+      Q: [0.405, 2.102, 0.025, 2.5, 7.071, 1.768, 1.146, 1, 1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "acoustic",
+      name: "Acoustic",
+      frequencies: [32, 75, 125, 220, 700, 1000, 2000, 4000, 10000, 16000],
+      gain: [0, -8, 0, -0.1, -3, 0, 0, 0, 4, 0],
+      Q: [1, 0.2, 1, 2.0, 1.4, 1, 1, 1, 0.1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "clearVocal",
+      name: "Clear Vocal",
+      frequencies: [20, 63, 125, 250, 400, 1000, 2000, 4000, 8000, 20000],
+      gain: [-22, 0, 0, 0, -3, 0, 1.8, 0, 0, 3.5],
+      Q: [0.3, 1, 1, 1, 2.0, 1, 0.7, 1, 1, 0.8],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "instrumentClarity",
+      name: "Instrument Clarity",
+      frequencies: [20, 63, 155, 250, 500, 1000, 2000, 5000, 11000, 16000],
+      gain: [-15, 0, -3, 0, 0, 0, 0, 3.1, 0, 0],
+      Q: [0.5, 1, 2, 1, 1, 1, 1, 1.5, 0.1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "reduceHarshness",
+      name: "Reduce Harshness",
+      frequencies: [32, 63, 125, 250, 500, 1128, 2000, 4057, 8000, 16000],
+      gain: [0, 0, 0, 0, 0, 2, 0, -6.4, 0, 0],
+      Q: [1, 1, 1, 1, 1, 2, 1, 1, 1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "smileyFace",
+      name: "Smiley Face",
+      frequencies: [35, 63, 125, 250, 500, 800, 2000, 4000, 8000, 20000],
+      gain: [5, 0, 0, 0, 0, -5, 0, 0, 0, 5],
+      Q: [0.1, 1, 1, 1, 1, 0.6, 1, 1, 1, 0.2],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "bassBoostSurgical",
+      name: "Surgical Bass Boost",
+      frequencies: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
+      gain: [2.7, 2.2, 1.6, 1.4, 0.6, 0, 0, 0, 0, 0],
+      Q: [1.4, 1.4, 1.4, 1.4, 1.4, 1, 1, 1, 1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+    {
+      preset: "bassBoostClassic",
+      name: "Classic Bass Boost",
+      frequencies: [32, 63, 160, 250, 500, 1000, 2000, 3500, 8000, 20000],
+      gain: [2.7, 2.2, 1.6, 1.4, 0.6, 0, 0, 0, 0, 0],
+      Q: [0.7, 0.7, 0.7, 0.7, 0.7, 1, 1, 1, 1, 1],
+      mix: 1,
+      vibrantBass: 0,
+      userGenerated: false,
+    },
+  ];
+
+  const presetOptions = (event) => {
+    let menu = {
+      items: {
+        new: {
+          icon: "./assets/feather/plus.svg",
+          name: app.getLz("action.newpreset"),
+          action: () => {
+            addPreset();
           },
-        };
+        },
+        delete: {
+          icon: "./assets/feather/x-circle.svg",
+          name: app.getLz("action.deletepreset"),
+          action: () => {
+            deletePreset();
+          },
+        },
+        import: {
+          icon: "./assets/feather/share.svg",
+          name: app.getLz("action.import"),
+          action: () => {
+            importPreset();
+          },
+        },
+        export: {
+          icon: "./assets/feather/share.svg",
+          name: app.getLz("action.export"),
+          action: () => {
+            exportPreset();
+          },
+        },
+      },
+    };
 
-        if (!this.$root.cfg.audio.equalizer.userGenerated) {
-          delete menu.items.delete;
-        }
+    if (!this.$root.cfg.audio.equalizer.userGenerated) {
+      delete menu.items.delete;
+    }
 
-        app.showMenuPanel(menu, event);
-      },
-      sharePreset(event) {
-        let menu = {
-          items: [
-            {
-              icon: "./assets/feather/share.svg",
-              name: app.getLz("action.import"),
-              action: function () {
-                notyf.error("Not implemented yet");
-              },
-            },
-            {
-              icon: "./assets/feather/share.svg",
-              name: app.getLz("action.export"),
-              action: function () {
-                notyf.error("Not implemented yet");
-              },
-            },
-          ],
-        };
-        app.showMenuPanel(menu, event);
-      },
-      deletePreset() {
-        let presets = this.$root.cfg.audio.equalizer.presets;
-        app.confirm(app.getLz("term.deletepreset.warn"), (result) => {
-          if (result) {
-            this.changePreset("default");
-            // find the preset by id (preset) and remove it
-            let index = presets.findIndex((p) => p.preset == this.preset);
-            presets.splice(index, 1);
-            notyf.success(app.getLz("term.deletedpreset"));
-          }
-        });
-      },
-      close() {
-        app.modals.equalizer = false;
-      },
-      changeVibrantBass() {
-        if (app.cfg.audio.equalizer.vibrantBass !== "0") {
-          try {
-            for (var i = 0; i < 21; i++) {
-              CiderAudio.audioNodes.vibrantbassNode[i].gain.value = app.cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (app.cfg.audio.equalizer.vibrantBass / 10);
-            }
-            CiderAudio.intelliGainComp_n0_0();
-          } catch (e) {
-            CiderAudio.hierarchical_loading();
-          }
-        } else {
-          CiderAudio.hierarchical_loading();
-        }
-      },
-      changeMix() {
-        if (Math.max(...app.cfg.audio.equalizer.gain) != 0) {
-          try {
-            for (var i = 0; i < 10; i++) {
-              CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
-            }
-            CiderAudio.intelliGainComp_n0_0();
-          } catch (e) {
-            CiderAudio.hierarchical_loading();
-          }
-        }
-      },
-      changeGain(i) {
-        if (Math.max(...app.cfg.audio.equalizer.gain) != 0) {
-          try {
-            CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
-            CiderAudio.intelliGainComp_n0_0();
-          } catch (e) {
-            CiderAudio.hierarchical_loading();
-          }
-        } else {
-          CiderAudio.hierarchical_loading();
-        }
-      },
-      changeFreq(i) {
-        CiderAudio.audioNodes.audioBands[i].frequency.value = app.cfg.audio.equalizer.frequencies[i];
-      },
-      changeQ(i) {
-        CiderAudio.audioNodes.audioBands[i].Q.value = app.cfg.audio.equalizer.Q[i];
-      },
-      resetGain() {
-        this.applyPreset({
-          frequencies: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
-          gain: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          Q: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-          mix: 1,
-          vibrantBass: 0,
-        });
-        if (app.cfg.audio.equalizer.userGenerated) {
-          this.saveSelectedPreset();
-        }
-      },
-      addPreset() {
-        let self = this;
-        app.prompt(app.getLz("term.newpreset.name"), (res) => {
-          if (res) {
-            let eqSettings = Clone(app.cfg.audio.equalizer);
-            let newPreset = new self.eqPreset();
-            newPreset.name = res;
-            newPreset.frequencies = eqSettings.frequencies;
-            newPreset.gain = eqSettings.gain;
-            newPreset.Q = eqSettings.Q;
-            newPreset.mix = eqSettings.mix;
-            newPreset.vibrantBass = eqSettings.vibrantBass;
-            app.cfg.audio.equalizer.presets.push(newPreset);
-            notyf.success(app.getLz("term.addedpreset"));
-            self.changePreset(newPreset.preset);
-          }
-        });
-      },
-      saveSelectedPreset() {
-        // Save the current settings to the selected preset
-        let self = this;
-        //let preset = app.cfg.audio.equalizer.presets[app.cfg.audio.equalizer.preset]
-        // find the preset by its id (preset)
-        let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset == app.cfg.audio.equalizer.preset);
-        preset.frequencies = app.cfg.audio.equalizer.frequencies;
-        preset.gain = app.cfg.audio.equalizer.gain;
-        preset.Q = app.cfg.audio.equalizer.Q;
-        preset.mix = app.cfg.audio.equalizer.mix;
-        preset.vibrantBass = app.cfg.audio.equalizer.vibrantBass;
-        notyf.success("Saved Preset");
-      },
-      exportPreset() {
-        let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset == app.cfg.audio.equalizer.preset);
-        this.$root.copyToClipboard(btoa(JSON.stringify(preset)));
-      },
-      importPreset() {
-        let self = this;
-        app.prompt("Enter preset share code", (res) => {
-          if (res) {
-            let preset = JSON.parse(atob(res));
-            if (preset.frequencies && preset.gain && preset.Q && preset.mix && preset.vibrantBass) {
-              // self.applyPreset(preset)
-              app.cfg.audio.equalizer.presets.push(preset);
-              notyf.success(`${preset.name} has been imported.`);
-            } else {
-              notyf.error("Invalid Preset");
-            }
-          }
-        });
-      },
-      applyPreset(preset) {
-        Object.assign(this.$root.cfg.audio.equalizer, preset);
-        this.changeVibrantBass();
-        for (var i = 0; i < 10; i++) {
-          try {
-            CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
-          } catch (e) {
-            CiderAudio.hierarchical_loading();
-            CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
-          }
+    app.showMenuPanel(menu, event);
+  };
 
-          CiderAudio.audioNodes.audioBands[i].frequency.value = app.cfg.audio.equalizer.frequencies[i];
-          CiderAudio.audioNodes.audioBands[i].Q.value = app.cfg.audio.equalizer.Q[i];
+  const sharePreset = (event) => {
+    let menu = {
+      items: [
+        {
+          icon: "./assets/feather/share.svg",
+          name: app.getLz("action.import"),
+          action: function () {
+            notyf.error("Not implemented yet");
+          },
+        },
+        {
+          icon: "./assets/feather/share.svg",
+          name: app.getLz("action.export"),
+          action: function () {
+            notyf.error("Not implemented yet");
+          },
+        },
+      ],
+    };
+    app.showMenuPanel(menu, event);
+  };
+
+  const deletePreset = () => {
+    let presets = this.$root.cfg.audio.equalizer.presets;
+    app.confirm(app.getLz("term.deletepreset.warn"), (result) => {
+      if (result) {
+        changePreset("default");
+        // find the preset by id (preset) and remove it
+        let index = presets.findIndex((p) => p.preset == preset);
+        presets.splice(index, 1);
+        notyf.success(app.getLz("term.deletedpreset"));
+      }
+    });
+  };
+
+  const close = () => {
+    app.modals.equalizer = false;
+  };
+
+  const changeVibrantBass = () => {
+    if (app.cfg.audio.equalizer.vibrantBass !== "0") {
+      try {
+        for (var i = 0; i < 21; i++) {
+          CiderAudio.audioNodes.vibrantbassNode[i].gain.value = app.cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (app.cfg.audio.equalizer.vibrantBass / 10);
         }
         CiderAudio.intelliGainComp_n0_0();
-      },
-      changePreset(id) {
-        let userPresets = app.cfg.audio.equalizer.presets;
-        let defaultPresets = Clone(this.defaultPresets);
-
-        let presets = defaultPresets.concat(userPresets);
-        console.log(presets);
-        let preset = presets.find((p) => p.preset == id);
-
-        console.log(preset);
-
-        if (preset) {
-          this.applyPreset(preset);
+      } catch (e) {
+        CiderAudio.hierarchical_loading();
+      }
+    } else {
+      CiderAudio.hierarchical_loading();
+    }
+  };
+  const changeMix = () => {
+    if (Math.max(...app.cfg.audio.equalizer.gain) != 0) {
+      try {
+        for (var i = 0; i < 10; i++) {
+          CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
         }
-      },
-    },
-  });
+        CiderAudio.intelliGainComp_n0_0();
+      } catch (e) {
+        CiderAudio.hierarchical_loading();
+      }
+    }
+  };
+  const changeGain = (i) => {
+    if (Math.max(...app.cfg.audio.equalizer.gain) != 0) {
+      try {
+        CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+        CiderAudio.intelliGainComp_n0_0();
+      } catch (e) {
+        CiderAudio.hierarchical_loading();
+      }
+    } else {
+      CiderAudio.hierarchical_loading();
+    }
+  };
+
+  const changeFreq = (i) => {
+    CiderAudio.audioNodes.audioBands[i].frequency.value = app.cfg.audio.equalizer.frequencies[i];
+  };
+
+  const changeQ = (i) => {
+    CiderAudio.audioNodes.audioBands[i].Q.value = app.cfg.audio.equalizer.Q[i];
+  };
+
+  const resetGain = () => {
+    applyPreset({
+      frequencies: [32, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000],
+      gain: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      Q: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      mix: 1,
+      vibrantBass: 0,
+    });
+    if (app.cfg.audio.equalizer.userGenerated) {
+      saveSelectedPreset();
+    }
+  };
+
+  const addPreset = () => {
+    let self = this;
+    app.prompt(app.getLz("term.newpreset.name"), (res) => {
+      if (res) {
+        let eqSettings = Clone(app.cfg.audio.equalizer);
+        let newPreset = new eqPreset();
+        newPreset.name = res;
+        newPreset.frequencies = eqSettings.frequencies;
+        newPreset.gain = eqSettings.gain;
+        newPreset.Q = eqSettings.Q;
+        newPreset.mix = eqSettings.mix;
+        newPreset.vibrantBass = eqSettings.vibrantBass;
+        app.cfg.audio.equalizer.presets.push(newPreset);
+        notyf.success(app.getLz("term.addedpreset"));
+        changePreset(newPreset.preset);
+      }
+    });
+  };
+
+  const saveSelectedPreset = () => {
+    // Save the current settings to the selected preset
+    let self = this;
+    //let preset = app.cfg.audio.equalizer.presets[app.cfg.audio.equalizer.preset]
+    // find the preset by its id (preset)
+    let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset == app.cfg.audio.equalizer.preset);
+    preset.frequencies = app.cfg.audio.equalizer.frequencies;
+    preset.gain = app.cfg.audio.equalizer.gain;
+    preset.Q = app.cfg.audio.equalizer.Q;
+    preset.mix = app.cfg.audio.equalizer.mix;
+    preset.vibrantBass = app.cfg.audio.equalizer.vibrantBass;
+    notyf.success("Saved Preset");
+  };
+  const exportPreset = () => {
+    let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset == app.cfg.audio.equalizer.preset);
+    this.$root.copyToClipboard(btoa(JSON.stringify(preset)));
+  };
+  const importPreset = () => {
+    let self = this;
+    app.prompt("Enter preset share code", (res) => {
+      if (res) {
+        let preset = JSON.parse(atob(res));
+        if (preset.frequencies && preset.gain && preset.Q && preset.mix && preset.vibrantBass) {
+          // applyPreset(preset)
+          app.cfg.audio.equalizer.presets.push(preset);
+          notyf.success(`${preset.name} has been imported.`);
+        } else {
+          notyf.error("Invalid Preset");
+        }
+      }
+    });
+  };
+  const applyPreset = (preset) => {
+    Object.assign(this.$root.cfg.audio.equalizer, preset);
+    changeVibrantBass();
+    for (var i = 0; i < 10; i++) {
+      try {
+        CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+      } catch (e) {
+        CiderAudio.hierarchical_loading();
+        CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+      }
+
+      CiderAudio.audioNodes.audioBands[i].frequency.value = app.cfg.audio.equalizer.frequencies[i];
+      CiderAudio.audioNodes.audioBands[i].Q.value = app.cfg.audio.equalizer.Q[i];
+    }
+    CiderAudio.intelliGainComp_n0_0();
+  };
+  const changePreset = (id) => {
+    let userPresets = app.cfg.audio.equalizer.presets;
+    let defaultPresets = Clone(defaultPresets);
+
+    let presets = defaultPresets.concat(userPresets);
+    console.log(presets);
+    let preset = presets.find((p) => p.preset == id);
+
+    console.log(preset);
+
+    if (preset) {
+      applyPreset(preset);
+    }
+  };
   return (
     <div id="eq-view">
       <div

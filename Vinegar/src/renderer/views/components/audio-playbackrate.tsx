@@ -1,36 +1,27 @@
 export const Component = () => {
-  Vue.component("audio-playbackrate", {
-    template: "#audio-playbackrate",
-    data: function () {
-      return {
-        app: this.$root,
-        playbackRate: this.$root.cfg.audio.playbackRate,
-      };
+  const app = this.$root;
+  const playbackRate = this.$root.cfg.audio.playbackRate;
+  const playbackRateWheel = (event) => {
+    if (app.checkScrollDirectionIsUp(event)) {
+      saveValue(this.$root.cfg.audio.playbackRate + 0.05);
+    } else {
+      saveValue(this.$root.cfg.audio.playbackRate - 0.05);
+    }
+  };
+  const saveValue = (newValue) => {
+    newValue = Number(newValue);
+    if (newValue >= 0.25 && newValue <= 2) {
+      newValue = String(newValue).length > 4 ? newValue.toFixed(2) : newValue;
+      this.$root.mk.playbackRate = newValue;
+      this.$root.cfg.audio.playbackRate = newValue;
+      this.playbackRate = newValue;
+    }
+  };
+  const watch = {
+    playbackRate: function (newValue, _oldValue) {
+      saveValue(newValue);
     },
-    watch: {
-      playbackRate: function (newValue, _oldValue) {
-        this.saveValue(newValue);
-      },
-    },
-    methods: {
-      playbackRateWheel(event) {
-        if (app.checkScrollDirectionIsUp(event)) {
-          this.saveValue(this.$root.cfg.audio.playbackRate + 0.05);
-        } else {
-          this.saveValue(this.$root.cfg.audio.playbackRate - 0.05);
-        }
-      },
-      saveValue(newValue) {
-        newValue = Number(newValue);
-        if (newValue >= 0.25 && newValue <= 2) {
-          newValue = String(newValue).length > 4 ? newValue.toFixed(2) : newValue;
-          this.$root.mk.playbackRate = newValue;
-          this.$root.cfg.audio.playbackRate = newValue;
-          this.playbackRate = newValue;
-        }
-      },
-    },
-  });
+  };
   return (
     <div id="audio-playbackrate">
       <div

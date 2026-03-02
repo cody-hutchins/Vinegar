@@ -1,4 +1,4 @@
-export const Component = ({item, imagesize}: {item: object, imagesize: number}) => {
+export const Component = ({ item, imagesize }: { item: object; imagesize: number }) => {
   const app = this.$root;
   return (
     <div id="mediaitem-mvview">

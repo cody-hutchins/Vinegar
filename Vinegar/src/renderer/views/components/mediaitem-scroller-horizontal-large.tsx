@@ -1,8 +1,4 @@
-export const Component = () => {
-  Vue.component("mediaitem-scroller-horizontal-large", {
-    template: "#mediaitem-scroller-horizontal-large",
-    props: ["items"],
-  });
+export const Component = ({ items }: { items: object[] }) => {
   return (
     <div id="mediaitem-scroller-horizontal-large">
       <vue-horizontal>

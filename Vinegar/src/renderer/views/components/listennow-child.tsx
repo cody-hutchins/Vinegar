@@ -1,54 +1,44 @@
-export const Component = () => {
-  Vue.component("listennow-child", {
-    template: "#listennow-child",
-    props: ["recom", "index"],
-    data: function () {
-      return {
-        isVisible: true,
-        app: this.$root,
-      };
-    },
-    methods: {
-      visibilityChanged: function (isVisible, entry) {
-        // this.isVisible = isVisible
-      },
-      showCollection: function (recom) {
-        console.debug(recom);
-        app.showCollection(recom.relationships.contents, recom.attributes.title ? recom.attributes.title.stringForDisplay : "", "listen_now");
-      },
-      navigateContent: async function (id) {
-        if (typeof id != "string") {
-          app.routeView(id);
+export const Component = ({ recom, index }: { recom: object; index: number }) => {
+  const isVisible = true;
+  const app = this.$root;
+  const visibilityChanged = (isVisible, entry) => {
+    // this.isVisible = isVisible
+  };
+  const showCollection = (recom) => {
+    console.debug(recom);
+    app.showCollection(recom.relationships.contents, recom.attributes.title ? recom.attributes.title.stringForDisplay : "", "listen_now");
+  };
+  const navigateContent = async (id) => {
+    if (typeof id != "string") {
+      app.routeView(id);
+    } else {
+      try {
+        let a = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[albums]=${id}`);
+        let q1 = a.data?.data[0];
+        if (q1) {
+          app.routeView(q1);
         } else {
-          try {
-            let a = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[albums]=${id}`);
-            let q1 = a.data?.data[0];
-            if (q1) {
-              app.routeView(q1);
-            } else {
-              let b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
-              let q2 = b.data?.data[0];
-              if (q2) {
-                app.routeView(q2);
-              } else {
-                let c = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[playlists]=${id}`);
-                let q3 = c.data?.data[0];
-                if (q3) {
-                  app.routeView(q3);
-                }
-              }
-            }
-          } catch (e) {
-            let b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
-            let q2 = b.data?.data[0];
-            if (q2) {
-              app.routeView(q2);
+          let b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
+          let q2 = b.data?.data[0];
+          if (q2) {
+            app.routeView(q2);
+          } else {
+            let c = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[playlists]=${id}`);
+            let q3 = c.data?.data[0];
+            if (q3) {
+              app.routeView(q3);
             }
           }
         }
-      },
-    },
-  });
+      } catch (e) {
+        let b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
+        let q2 = b.data?.data[0];
+        if (q2) {
+          app.routeView(q2);
+        }
+      }
+    }
+  };
   return (
     <div id="listennow-child">
       <div v-observe-visibility="{callback: visibilityChanged}">

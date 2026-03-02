@@ -1,78 +1,51 @@
-export const Component = () => {
-  Vue.component("fullscreen-view", {
-    template: "#fullscreen-view",
-    props: {
-      time: {
-        type: Number,
-        required: false,
-      },
-      lyrics: {
-        type: Array,
-        required: false,
-      },
-      richlyrics: {
-        type: Array,
-        required: false,
-      },
-      image: {
-        type: String,
-        required: false,
-      },
-    },
-    data: function () {
-      return {
-        app: this.$root,
-        tabMode: "lyrics",
-        video: null,
-        immersiveEnabled: app.cfg.advanced.experiments.includes("immersive-preview"),
-      };
-    },
-    async mounted() {
-      if (app.mk.nowPlayingItem._container.type == "albums") {
-        try {
-          const result = (
-            await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/${app.mk.nowPlayingItem._container.type}/${app.mk.nowPlayingItem._container.id}`, {
-              fields: "editorialArtwork,editorialVideo",
-            })
-          ).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
-          if (result) {
-            this.video = result;
-          } else {
-            this.video = null;
-          }
-        } catch (e) {
-          this.video = null;
-          e = null;
+export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
+  const app = this.$root;
+  const tabMode = "lyrics";
+  const video = null;
+  const immersiveEnabled = app.cfg.advanced.experiments.includes("immersive-preview");
+  async function mounted() {
+    if (app.mk.nowPlayingItem._container.type == "albums") {
+      try {
+        const result = (
+          await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/${app.mk.nowPlayingItem._container.type}/${app.mk.nowPlayingItem._container.id}`, {
+            fields: "editorialArtwork,editorialVideo",
+          })
+        ).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
+        if (result) {
+          video = result;
+        } else {
+          video = null;
         }
-      } else if (app.mk.nowPlayingItem._container.type == "library-albums") {
-        try {
-          const result = (await app.mk.api.v3.music(`/v1/me/library/albums/${app.mk.nowPlayingItem._container.id}/catalog`, { fields: "editorialArtwork,editorialVideo" })).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
-          if (result) {
-            this.video = result;
-          } else {
-            this.video = null;
-          }
-        } catch (e) {
-          e = null;
-          this.video = null;
-        }
+      } catch (e) {
+        video = null;
+        e = null;
       }
-    },
-    beforeMount() {
-      window.addEventListener("keyup", this.onEscapeKeyUp);
-    },
-    beforeDestroy() {
-      window.removeEventListener("keyup", this.onEscapeKeyUp);
-    },
-    methods: {
-      onEscapeKeyUp(event) {
-        if (event.which === 27) {
-          app.fullscreen(false);
-          console.log("js");
+    } else if (app.mk.nowPlayingItem._container.type == "library-albums") {
+      try {
+        const result = (await app.mk.api.v3.music(`/v1/me/library/albums/${app.mk.nowPlayingItem._container.id}/catalog`, { fields: "editorialArtwork,editorialVideo" })).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
+        if (result) {
+          video = result;
+        } else {
+          video = null;
         }
-      },
-    },
-  });
+      } catch (e) {
+        e = null;
+        video = null;
+      }
+    }
+  }
+  function beforeMount() {
+    window.addEventListener("keyup", onEscapeKeyUp);
+  }
+  function beforeDestroy() {
+    window.removeEventListener("keyup", onEscapeKeyUp);
+  }
+  const onEscapeKeyUp = (event) => {
+    if (event.which === 27) {
+      app.fullscreen(false);
+      console.log("js");
+    }
+  };
   return (
     <div id="fullscreen-view">
       <div
@@ -84,17 +57,17 @@ export const Component = () => {
               <img
                 v-if="(app.cfg.visual.bg_artwork_rotation && app.animateBackground)"
                 className="bg-artwork a"
-                src="(image ?? '').replace('{w}','30').replace('{h}','30')"
+                src={(image ?? "").replace("{w}", "30").replace("{h}", "30")}
               />
               <img
                 v-if="(app.cfg.visual.bg_artwork_rotation && app.animateBackground)"
                 className="bg-artwork b"
-                src="(image ?? '').replace('{w}','30').replace('{h}','30')"
+                src={(image ?? "").replace("{w}", "30").replace("{h}", "30")}
               />
               <img
                 v-if="!(app.cfg.visual.bg_artwork_rotation && app.animateBackground)"
                 className="bg-artwork no-animation"
-                src="(image ?? '').replace('{w}','30').replace('{h}','30')"
+                src={(image ?? "").replace("{w}", "30").replace("{h}", "30")}
               />
             </div>
           </div>
@@ -320,9 +293,9 @@ export const Component = () => {
               v-if="tabMode == 'lyrics'">
               <lyrics-view
                 yoffset="120"
-                time="time"
-                lyrics="lyrics"
-                richlyrics="richlyrics"></lyrics-view>
+                time={time}
+                lyrics={lyrics}
+                richlyrics={richlyrics}></lyrics-view>
             </div>
             <div
               className="queue-col"

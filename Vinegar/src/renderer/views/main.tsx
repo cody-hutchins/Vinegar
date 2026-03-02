@@ -70,7 +70,7 @@ export const Main = () => {
         <link
           rel={process.env.dev ? " stylesheet" : "stylesheet/less"}
           type="text/css"
-          href={`style.{(env.dev ? "css" : "less")}`}
+          href={`style.${process.env.dev ? "css" : "less"}`}
         />
         {/*    <link rel="stylesheet/less" type="text/css" id="userTheme" href="themes/default.less"/> */}
         <script src="./lib/less.js"></script>
@@ -121,7 +121,7 @@ export const Main = () => {
 
       <body
         className="notransparency"
-        oncontextmenu="return false;"
+        onContextMenu={() => false}
         loading="1"
         os-release={parseInt(process.env.osRelease || "0")}
         platform={process.env.platform}>

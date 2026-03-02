@@ -1,50 +1,36 @@
-export const Component = () => {
-  Vue.component("add-to-playlist", {
-    template: "#add-to-playlist",
-    data: function () {
-      return {
-        playlistSorted: [],
-        searchQuery: "",
-        focused: "",
-        app: this.$root,
-      };
-    },
-    props: {
-      playlists: {
-        type: Array,
-        required: true,
-      },
-    },
-    mounted() {
-      this.search();
-      this.$refs.searchInput.focus();
-      this.$refs.searchInput.addEventListener("keydown", (e) => {
-        if (e.keyCode == 13) {
-          if (this.focused != "") {
-            this.addToPlaylist(this.focused);
-          }
+export const Component = ({ playlists }: { playlists: object[] }) => {
+  const playlistSorted = [];
+  const searchQuery = "";
+  const focused = "";
+  const app = this.$root;
+  function mounted() {
+    search();
+    $refs.searchInput.focus();
+    $refs.searchInput.addEventListener("keydown", (e) => {
+      if (e.keyCode == 13) {
+        if (focused != "") {
+          addToPlaylist(focused);
         }
+      }
+    });
+  }
+
+  const addToPlaylist = (id) => {
+    app.addSelectedToPlaylist(id);
+  };
+  const search = () => {
+    focused = "";
+    if (searchQuery == "") {
+      playlistSorted = playlists;
+    } else {
+      playlistSorted = playlists.filter((playlist) => {
+        return playlist.attributes.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
       });
-    },
-    methods: {
-      addToPlaylist(id) {
-        app.addSelectedToPlaylist(id);
-      },
-      search() {
-        this.focused = "";
-        if (this.searchQuery == "") {
-          this.playlistSorted = this.playlists;
-        } else {
-          this.playlistSorted = this.playlists.filter((playlist) => {
-            return playlist.attributes.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-          });
-          if (this.playlistSorted.length == 1) {
-            this.focused = this.playlistSorted[0].id;
-          }
-        }
-      },
-    },
-  });
+      if (playlistSorted.length == 1) {
+        focused = playlistSorted[0].id;
+      }
+    }
+  };
   return (
     <div id="add-to-playlist">
       <template>
