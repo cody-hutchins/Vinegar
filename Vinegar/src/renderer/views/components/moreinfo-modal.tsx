@@ -1,27 +1,19 @@
-export const Component = () => {
-  Vue.component("moreinfo-modal", {
-    template: "#moreinfo-modal",
-    data: function () {
-      return {
-        app: this.$root,
-        timedelay: false,
-      };
-    },
-    props: ["data"],
-    mounted() {
-      let self = this;
-      this.$nextTick(() => {
-        setTimeout(function () {
-          self.timedelay = true;
-        }, 1000);
-      });
-    },
-    methods: {
-      close() {
-        app.modals.moreInfo = false;
-      },
-    },
-  });
+export const Component = ({ data }: { data: object }) => {
+  const app = this.$root;
+  const timedelay = false;
+  function mounted() {
+    let self = this;
+    this.$nextTick(() => {
+      setTimeout(function () {
+        self.timedelay = true;
+      }, 1000);
+    });
+  }
+
+  function close() {
+    app.modals.moreInfo = false;
+  }
+
   return (
     <div id="moreinfo-modal">
       <div

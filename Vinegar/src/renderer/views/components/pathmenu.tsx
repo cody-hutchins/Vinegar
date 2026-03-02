@@ -1,36 +1,26 @@
 export const Component = () => {
-  Vue.component("pathmenu", {
-    template: "#pathmenu",
-    data: function () {
-      return {
-        folders: [],
-      };
-    },
-    mounted() {
-      this.folders = this.$root.cfg.libraryPrefs.localPaths;
-    },
-    watch: {},
-    methods: {
-      close() {
-        this.$root.modals.pathMenu = false;
-      },
-      async add() {
-        const result = await ipcRenderer.invoke("folderSelector");
-        for (i of result) {
-          if (this.folders.findIndex((x) => x.startsWith(i)) == -1) {
-            this.folders.push(i);
-          }
-        }
-        this.$root.cfg.libraryPrefs.localPaths = this.folders;
-        ipcRenderer.invoke("scanLibrary");
-      },
-      remove(dir) {
-        this.folders = this.folders.filter((item) => item !== dir);
-        this.$root.cfg.libraryPrefs.localPaths = this.folders;
-        ipcRenderer.invoke("scanLibrary");
-      },
-    },
-  });
+  let folders = [];
+  function mounted() {
+    folders = this.$root.cfg.libraryPrefs.localPaths;
+  }
+  function close() {
+    this.$root.modals.pathMenu = false;
+  }
+  async function add() {
+    const result = await ipcRenderer.invoke("folderSelector");
+    for (i of result) {
+      if (folders.findIndex((x) => x.startsWith(i)) == -1) {
+        folders.push(i);
+      }
+    }
+    this.$root.cfg.libraryPrefs.localPaths = folders;
+    ipcRenderer.invoke("scanLibrary");
+  }
+  function remove(dir) {
+    folders = folders.filter((item) => item !== dir);
+    this.$root.cfg.libraryPrefs.localPaths = folders;
+    ipcRenderer.invoke("scanLibrary");
+  }
   return (
     <div id="pathmenu">
       <div

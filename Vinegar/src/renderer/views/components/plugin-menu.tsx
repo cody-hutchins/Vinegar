@@ -1,19 +1,8 @@
 export const Component = () => {
-  Vue.component("plugin-menu", {
-    template: "#plugin-menu",
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    props: {},
-    mounted() {},
-    methods: {
-      closeMenu() {
-        app.modals.pluginMenu = false;
-      },
-    },
-  });
+  const app = this.$root;
+  function closeMenu() {
+    app.modals.pluginMenu = false;
+  }
   return (
     <div id="plugin-menu">
       <div

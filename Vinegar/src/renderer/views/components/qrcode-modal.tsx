@@ -1,19 +1,8 @@
-export const Component = () => {
-  Vue.component("qrcode-modal", {
-    template: "#qrcode-modal",
-    data: function () {
-      return {
-        app: this.$root,
-      };
-    },
-    props: ["src", "url"],
-    mounted() {},
-    methods: {
-      close() {
-        app.resetState();
-      },
-    },
-  });
+export const Component = ({ src, url }: { src: string; url: string }) => {
+  const app = this.$root;
+  function close() {
+    app.resetState();
+  }
   return (
     <div id="qrcode-modal">
       <div className="modal-fullscreen spatialproperties-panel">

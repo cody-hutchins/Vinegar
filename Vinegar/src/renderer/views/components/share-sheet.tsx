@@ -1,55 +1,40 @@
-export const Component = () => {
-  Vue.component("add-to-playlist", {
-    template: "#add-to-playlist",
-    data: function () {
-      return {
-        playlistSorted: [],
-        searchQuery: "",
-        focused: "",
-        app: this.$root,
-      };
-    },
-    props: {
-      playlists: {
-        type: Array,
-        required: true,
-      },
-    },
-    mounted() {
-      this.search();
-      this.$refs.searchInput.focus();
-      this.$refs.searchInput.addEventListener("keydown", (e) => {
-        if (e.keyCode == 13) {
-          if (this.focused != "") {
-            this.addToPlaylist(this.focused);
-          }
+export const Component = ({ playlists }: { playlists: object[] }) => {
+  let playlistSorted = [];
+  let searchQuery = "";
+  let focused = "";
+  const app = this.$root;
+  function mounted() {
+    search();
+    this.$refs.searchInput.focus();
+    this.$refs.searchInput.addEventListener("keydown", (e) => {
+      if (e.keyCode == 13) {
+        if (focused != "") {
+          addToPlaylist(focused);
         }
+      }
+    });
+  }
+  function playlistSelect(playlist) {
+    if (playlist.type != "library-playlist-folders") {
+      addToPlaylist(playlist.id);
+    }
+  }
+  function addToPlaylist(id) {
+    app.addSelectedToPlaylist(id);
+  }
+  function search() {
+    focused = "";
+    if (searchQuery == "") {
+      playlistSorted = playlists;
+    } else {
+      playlistSorted = playlists.filter((playlist) => {
+        return playlist.attributes.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
       });
-    },
-    methods: {
-      playlistSelect(playlist) {
-        if (playlist.type != "library-playlist-folders") {
-          this.addToPlaylist(playlist.id);
-        }
-      },
-      addToPlaylist(id) {
-        app.addSelectedToPlaylist(id);
-      },
-      search() {
-        this.focused = "";
-        if (this.searchQuery == "") {
-          this.playlistSorted = this.playlists;
-        } else {
-          this.playlistSorted = this.playlists.filter((playlist) => {
-            return playlist.attributes.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-          });
-          if (this.playlistSorted.length == 1) {
-            this.focused = this.playlistSorted[0].id;
-          }
-        }
-      },
-    },
-  });
+      if (playlistSorted.length == 1) {
+        focused = playlistSorted[0].id;
+      }
+    }
+  }
   return (
     <div id="add-to-playlist">
       <template>

@@ -1,127 +1,120 @@
-export const Component = () => {
-  Vue.component("pagination", {
-    template: "#pagination",
-    props: {
-      length: { type: Number, required: true },
-      pageSize: { type: Number, required: true },
-      scroll: { type: String, required: true },
-      scrollSelector: { type: String, required: true },
-    },
-    data: function () {
-      return { currentPage: 1 };
-    },
-    mounted() {
-      document.querySelector(this.scrollSelector).addEventListener("scroll", this.handleScroll);
-    },
-    destroyed() {
-      document.querySelector(this.scrollSelector).removeEventListener("scroll", this.handleScroll);
-    },
-    watch: {
-      length: function () {
-        if (this.isInfinite) {
-          // If a search reduces the number of things to show, we want to limit
-          // the number of songs shown as well. This is to prevent you scrolling
-          // to load your entire library, searching for one song, and then having
-          // th re-render the entire library
-          if (this.currentPage > this.numPages) {
-            this.currentPage = this.numPages;
-            this.$emit("onRangeChange", this.currentRange);
-          }
-        } else {
-          this.$emit("onRangeChange", this.currentRange);
+import { useMemo } from "react";
+export const Component = ({ length, pageSize, scroll, scrollSelector }: { length: number; pageSize: number; scroll: string; scrollSelector: string }) => {
+  let currentPage = 1;
+  function mounted() {
+    document.querySelector(scrollSelector).addEventListener("scroll", handleScroll);
+  }
+  function destroyed() {
+    document.querySelector(scrollSelector).removeEventListener("scroll", handleScroll);
+  }
+  const watch = {
+    length: function () {
+      if (isInfinite) {
+        // If a search reduces the number of things to show, we want to limit
+        // the number of songs shown as well. This is to prevent you scrolling
+        // to load your entire library, searching for one song, and then having
+        // th re-render the entire library
+        if (currentPage > numPages) {
+          currentPage = numPages;
+          this.$emit("onRangeChange", currentRange);
         }
-      },
-      scroll: function () {
-        // When changing modes, set the page to 1. This is primarily to
-        // prevent going to a high page (e.g., 50) and then switching to infinite
-        // and showing 12.5k songs
-        this.currentPage = 1;
-        this.$emit("onRangeChange", this.currentRange);
-      },
+      } else {
+        this.$emit("onRangeChange", currentRange);
+      }
     },
-    computed: {
-      isInfinite: function () {
-        return this.scroll === "infinite";
-      },
-      currentRange: function () {
-        if (this.isInfinite) {
-          return [0, this.currentPage * this.pageSize];
-        } else {
-          const startingPage = Math.min(this.numPages, this.currentPage);
+    scroll: function () {
+      // When changing modes, set the page to 1. This is primarily to
+      // prevent going to a high page (e.g., 50) and then switching to infinite
+      // and showing 12.5k songs
+      currentPage = 1;
+      this.$emit("onRangeChange", currentRange);
+    },
+  };
 
-          return [(startingPage - 1) * this.pageSize, startingPage * this.pageSize];
-        }
-      },
-      effectivePage: function () {
-        return Math.min(this.currentPage, this.numPages);
-      },
-      numPages: function () {
-        return Math.ceil(this.length / this.pageSize) || 1;
-      },
-      pagesToShow: function () {
-        let start = this.currentPage - 2;
-        let end = this.currentPage + 2;
+  const isInfinite = useMemo(() => {
+    return scroll === "infinite";
+  }, [scroll]);
 
-        if (start < 1) {
-          end += 1 - start;
-          start = 1;
-        }
+  const currentRange = useMemo(() => {
+    if (isInfinite) {
+      return [0, currentPage * pageSize];
+    } else {
+      const startingPage = Math.min(numPages, currentPage);
 
-        const endDifference = end - this.numPages;
-        if (endDifference > 0) {
-          end = this.numPages;
-          start = Math.max(1, start - endDifference);
-        }
+      return [(startingPage - 1) * pageSize, startingPage * pageSize];
+    }
+  }, [isInfinite, currentPage, pageSize]);
 
-        const array = [];
-        for (let idx = start; idx <= end; idx++) {
-          array.push(idx);
-        }
-        return array;
-      },
-    },
-    methods: {
-      // Infinite Scrolling
-      handleScroll: function (event) {
-        if (this.isInfinite && this.currentPage < this.numPages && event.target.scrollTop >= event.target.scrollHeight - event.target.clientHeight) {
-          this.currentPage += 1;
-          this.$emit("onRangeChange", this.currentRange);
-        }
-      },
-      // Pagination
-      isCurrentPage: function (idx) {
-        return idx === this.currentPage || (idx === this.numPages && this.currentPage > this.numPages);
-      },
-      changePage: function (event) {
-        const value = event.target.valueAsNumber;
+  const effectivePage = useMemo(() => {
+    return Math.min(currentPage, numPages);
+  }, [currentPage, numPages]);
 
-        if (!isNaN(value) && value >= 1 && value <= this.numPages) {
-          this.currentPage = value;
-          this.$emit("onRangeChange", this.currentRange);
-        }
-      },
-      goToPage: function (page) {
-        this.currentPage = page;
-        this.$emit("onRangeChange", this.currentRange);
-      },
-      goToPrevious: function () {
-        if (this.currentPage > 1) {
-          this.currentPage -= 1;
-          this.$emit("onRangeChange", this.currentRange);
-        }
-      },
-      goToNext: function () {
-        if (this.currentPage < this.numPages) {
-          this.currentPage += 1;
-          this.$emit("onRangeChange", this.currentRange);
-        }
-      },
-      goToEnd: function () {
-        this.currentPage = this.numPages;
-        this.$emit("onRangeChange", this.currentRange);
-      },
-    },
-  });
+  const numPages = useMemo(() => {
+    return Math.ceil(length / pageSize) || 1;
+  }, [length, pageSize]);
+
+  const pagesToShow = useMemo(() => {
+    let start = currentPage - 2;
+    let end = currentPage + 2;
+
+    if (start < 1) {
+      end += 1 - start;
+      start = 1;
+    }
+
+    const endDifference = end - numPages;
+    if (endDifference > 0) {
+      end = numPages;
+      start = Math.max(1, start - endDifference);
+    }
+
+    const array = [];
+    for (let idx = start; idx <= end; idx++) {
+      array.push(idx);
+    }
+    return array;
+  }, [currentPage, numPages]);
+
+  // Infinite Scrolling
+  const handleScroll = (event) => {
+    if (isInfinite && currentPage < numPages && event.target.scrollTop >= event.target.scrollHeight - event.target.clientHeight) {
+      currentPage += 1;
+      this.$emit("onRangeChange", currentRange);
+    }
+  };
+  // Pagination
+  const isCurrentPage = (idx) => {
+    return idx === currentPage || (idx === numPages && currentPage > numPages);
+  };
+  const changePage = (event) => {
+    const value = event.target.valueAsNumber;
+
+    if (!isNaN(value) && value >= 1 && value <= numPages) {
+      currentPage = value;
+      this.$emit("onRangeChange", currentRange);
+    }
+  };
+  const goToPage = (page) => {
+    currentPage = page;
+    this.$emit("onRangeChange", currentRange);
+  };
+  const goToPrevious = () => {
+    if (currentPage > 1) {
+      currentPage -= 1;
+      this.$emit("onRangeChange", currentRange);
+    }
+  };
+  const goToNext = () => {
+    if (currentPage < numPages) {
+      currentPage += 1;
+      this.$emit("onRangeChange", currentRange);
+    }
+  };
+  const goToEnd = () => {
+    currentPage = numPages;
+    this.$emit("onRangeChange", currentRange);
+  };
+
   return (
     <div id="pagination">
       <div

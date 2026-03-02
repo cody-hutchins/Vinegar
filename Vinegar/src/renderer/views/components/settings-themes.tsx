@@ -1,79 +1,67 @@
-export const Component = () => {
-  // do not translate
-  Vue.component("stylestack-editor", {
-    /*html*/
-    template: `
-            
-        `,
-    props: {
-      themes: {
-        type: Array,
-        default: [],
-        required: true,
-      },
-    },
-    data: function () {
-      return {
-        selected: null,
-        newTheme: null,
-        themeList: [],
-      };
-    },
-    mounted() {
-      console.log(this.themes);
-      this.themeList = [...this.themes];
+export const StylestackEditor = ({ themes }: { themes: object[] }) => {
+  let selected = null;
+  let newTheme = null;
+  let themeList = [];
 
-      this.themeList.forEach((theme) => {
-        if (theme.pack) {
-          theme.pack.forEach((packEntry) => {
-            packEntry.file = theme.file.replace("index.less", "") + packEntry.file;
-            this.themeList.push(packEntry);
-          });
-        }
-      });
-    },
-    methods: {
-      gitHubExplore() {
-        this.$root.openSettingsPage("github-themes");
-      },
-      getThemeName(filename) {
-        try {
-          return this.themeList.find((theme) => theme.file === filename).name;
-        } catch (e) {
-          return filename;
-        }
-      },
-      moveUp() {
-        const styles = this.$root.cfg.visual.styles;
-        const index = styles.indexOf(this.selected);
-        if (index > 0) {
-          styles.splice(index, 1);
-          styles.splice(index - 1, 0, this.selected);
-        }
-        this.$root.reloadStyles();
-      },
-      moveDown() {
-        const styles = this.$root.cfg.visual.styles;
-        const index = styles.indexOf(this.selected);
-        if (index < styles.length - 1) {
-          styles.splice(index, 1);
-          styles.splice(index + 1, 0, this.selected);
-        }
-        this.$root.reloadStyles();
-      },
-      remove(style) {
-        const styles = this.$root.cfg.visual.styles;
-        const index = styles.indexOf(style);
-        styles.splice(index, 1);
-        this.$root.reloadStyles();
-      },
-      addStyle(style) {
-        const styles = this.$root.cfg.visual.styles;
-        styles.push(style);
-        this.$root.reloadStyles();
-      },
-    },
-  });
+  function mounted() {
+    console.log(themes);
+    themeList = [...themes];
+
+    themeList.forEach((theme) => {
+      if (theme.pack) {
+        theme.pack.forEach((packEntry) => {
+          packEntry.file = theme.file.replace("index.less", "") + packEntry.file;
+          themeList.push(packEntry);
+        });
+      }
+    });
+  }
+
+  function gitHubExplore() {
+    this.$root.openSettingsPage("github-themes");
+  }
+
+  function getThemeName(filename) {
+    try {
+      return themeList.find((theme) => theme.file === filename).name;
+    } catch (e) {
+      return filename;
+    }
+  }
+
+  function moveUp() {
+    const styles = this.$root.cfg.visual.styles;
+    const index = styles.indexOf(selected);
+    if (index > 0) {
+      styles.splice(index, 1);
+      styles.splice(index - 1, 0, selected);
+    }
+    this.$root.reloadStyles();
+  }
+
+  function moveDown() {
+    const styles = this.$root.cfg.visual.styles;
+    const index = styles.indexOf(selected);
+    if (index < styles.length - 1) {
+      styles.splice(index, 1);
+      styles.splice(index + 1, 0, selected);
+    }
+    this.$root.reloadStyles();
+  }
+
+  function remove(style) {
+    const styles = this.$root.cfg.visual.styles;
+    const index = styles.indexOf(style);
+    styles.splice(index, 1);
+    this.$root.reloadStyles();
+  }
+
+  function addStyle(style) {
+    const styles = this.$root.cfg.visual.styles;
+    styles.push(style);
+    this.$root.reloadStyles();
+  }
+
   return (
     <div className="stylestack-editor">
       <draggable
@@ -101,187 +89,171 @@ export const Component = () => {
   );
 };
 
-export const Component2 = () => {
-  Vue.component("installed-themes", {
-    template: "#installed-themes",
-    props: [],
-    data: function () {
-      return {
-        repos: [],
-        openRepo: {
-          id: -1,
-          name: "",
-          description: "",
-          html_url: "",
-          stargazers_count: 0,
-          owner: {
-            avatar_url: "",
-          },
-          readme: "",
-        },
-        themesInstalled: [],
-        themes: [],
-      };
+export const InstalledThemes = () => {
+  let repos = [];
+  let openRepo = {
+    id: -1,
+    name: "",
+    description: "",
+    html_url: "",
+    stargazers_count: 0,
+    owner: {
+      avatar_url: "",
     },
-    mounted() {
-      this.getThemesList();
-    },
-    methods: {
-      getThemesList() {
-        let self = this;
-        let themes = ipcRenderer.sendSync("get-themes");
-        themes.unshift({
-          name: "Acrylic Grain",
-          file: "grain.less",
-        });
-        themes.unshift({
-          name: "Sweetener",
-          file: "sweetener.less",
-        });
-        themes.unshift({
-          name: "Reduce Visuals",
-          file: "reduce_visuals.less",
-        });
-        // themes.unshift({
-        //     name: "Inline Drawer",
-        //     file: "inline_drawer.less"
-        // })
-        themes.unshift({
-          name: "Dark",
-          file: "dark.less",
-        });
-        this.themes = themes;
-      },
-      contextMenu(event, theme) {
-        let self = this;
-        let menu = {
-          items: {
-            uninstall: {
-              name: app.getLz("settings.option.visual.theme.uninstall"),
-              disabled: true,
-              action: () => {
-                app.confirm(
-                  app.stringTemplateParser(app.getLz("settings.prompt.visual.theme.uninstallTheme"), {
-                    theme: theme.name ?? theme.file,
-                  }),
-                  (res) => {
-                    if (res) {
-                      console.debug(theme);
-                      ipcRenderer.once("theme-uninstalled", (event, args) => {
-                        console.debug(event, args);
-                        self.getThemesList();
-                      });
-                      ipcRenderer.invoke("uninstall-theme", theme.path);
-                    }
-                  },
-                );
+    readme: "",
+  };
+  let themesInstalled = [];
+  let themes = [];
+  function mounted() {
+    getThemesList();
+  }
+  function getThemesList() {
+    let self = this;
+    let themes = ipcRenderer.sendSync("get-themes");
+    themes.unshift({
+      name: "Acrylic Grain",
+      file: "grain.less",
+    });
+    themes.unshift({
+      name: "Sweetener",
+      file: "sweetener.less",
+    });
+    themes.unshift({
+      name: "Reduce Visuals",
+      file: "reduce_visuals.less",
+    });
+    // themes.unshift({
+    //     name: "Inline Drawer",
+    //     file: "inline_drawer.less"
+    // })
+    themes.unshift({
+      name: "Dark",
+      file: "dark.less",
+    });
+    themes = themes;
+  }
+  const contextMenu = (event, theme) => {
+    let menu = {
+      items: {
+        uninstall: {
+          name: app.getLz("settings.option.visual.theme.uninstall"),
+          disabled: true,
+          action: () => {
+            app.confirm(
+              app.stringTemplateParser(app.getLz("settings.prompt.visual.theme.uninstallTheme"), {
+                theme: theme.name ?? theme.file,
+              }),
+              (res) => {
+                if (res) {
+                  console.debug(theme);
+                  ipcRenderer.once("theme-uninstalled", (event, args) => {
+                    console.debug(event, args);
+                    getThemesList();
+                  });
+                  ipcRenderer.invoke("uninstall-theme", theme.path);
+                }
               },
-            },
-            viewInfo: {
-              name: app.getLz("settings.option.visual.theme.viewInfo"),
-              disabled: true,
-              action: () => {},
-            },
+            );
           },
-        };
-        if (theme.path) {
-          menu.items.uninstall.disabled = false;
-        }
-        this.$root.showMenuPanel(menu, event);
+        },
+        viewInfo: {
+          name: app.getLz("settings.option.visual.theme.viewInfo"),
+          disabled: true,
+          action: () => {},
+        },
       },
-      openThemesFolder() {
-        ipcRenderer.invoke("open-path", "themes");
-      },
-      getInstalledThemes() {
-        let self = this;
-        const themes = ipcRenderer.sendSync("get-themes");
-        // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
-        themes.forEach((theme) => {
-          if (theme.github_repo !== "" && typeof theme.commit != "") {
-            self.themesInstalled.push(theme.github_repo.toLowerCase());
-          }
-        });
-      },
-      addStyle(filename) {
-        this.$refs.stackEditor.addStyle(filename);
-      },
-      showRepo(repo) {
-        const self = this;
-        const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-        var requestOptions = {
-          method: "GET",
-          redirect: "follow",
-        };
+    };
+    if (theme.path) {
+      menu.items.uninstall.disabled = false;
+    }
+    this.$root.showMenuPanel(menu, event);
+  };
+  function openThemesFolder() {
+    ipcRenderer.invoke("open-path", "themes");
+  }
+  function getInstalledThemes() {
+    const themes = ipcRenderer.sendSync("get-themes");
+    // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
+    themes.forEach((theme) => {
+      if (theme.github_repo !== "" && typeof theme.commit != "") {
+        themesInstalled.push(theme.github_repo.toLowerCase());
+      }
+    });
+  }
+  function addStyle(filename) {
+    this.$refs.stackEditor.addStyle(filename);
+  }
+  function showRepo(repo) {
+    const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
 
-        app
-          ._fetch(readmeUrl, requestOptions)
-          .then((response) => response.text())
-          .then((result) => {
-            self.openRepo = repo;
-            self.openRepo.readme = self.convertReadMe(result);
-          })
-          .catch((error) => {
-            self.openRepo = repo;
-            self.openRepo.readme = `This repository doesn't have a README.md file.`;
-            console.log("error", error);
-          });
-      },
-      convertReadMe(text) {
-        return marked.parse(text);
-      },
-      installThemeRepo(repo) {
-        let self = this;
-        let msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
-          repo: repo.full_name,
-        });
-        app.confirm(msg, (res) => {
-          if (res) {
-            ipcRenderer.once("theme-installed", (event, arg) => {
-              if (arg.success) {
-                self.themes = ipcRenderer.sendSync("get-themes");
-                self.getInstalledThemes();
-                notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
-              } else {
-                notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
-              }
-            });
-            ipcRenderer.invoke("get-github-theme", repo.html_url);
+    app
+      ._fetch(readmeUrl, requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        openRepo = repo;
+        openRepo.readme = convertReadMe(result);
+      })
+      .catch((error) => {
+        openRepo = repo;
+        openRepo.readme = `This repository doesn't have a README.md file.`;
+        console.log("error", error);
+      });
+  }
+  function convertReadMe(text) {
+    return marked.parse(text);
+  }
+  function installThemeRepo(repo) {
+    let msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
+      repo: repo.full_name,
+    });
+    app.confirm(msg, (res) => {
+      if (res) {
+        ipcRenderer.once("theme-installed", (event, arg) => {
+          if (arg.success) {
+            themes = ipcRenderer.sendSync("get-themes");
+            getInstalledThemes();
+            notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
+          } else {
+            notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
           }
         });
-      },
-      installThemeURL() {
-        let self = this;
-        app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
-          if (result) {
-            ipcRenderer.once("theme-installed", (event, arg) => {
-              if (arg.success) {
-                self.themes = ipcRenderer.sendSync("get-themes");
-                notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
-              } else {
-                notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
-              }
-            });
-            ipcRenderer.invoke("get-github-theme", result);
+        ipcRenderer.invoke("get-github-theme", repo.html_url);
+      }
+    });
+  }
+  function installThemeURL() {
+    app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
+      if (result) {
+        ipcRenderer.once("theme-installed", (event, arg) => {
+          if (arg.success) {
+            themes = ipcRenderer.sendSync("get-themes");
+            notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
+          } else {
+            notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
           }
         });
-      },
-      getRepos() {
-        let self = this;
-        var requestOptions = {
-          method: "GET",
-          redirect: "follow",
-        };
+        ipcRenderer.invoke("get-github-theme", result);
+      }
+    });
+  }
+  function getRepos() {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
 
-        fetch("https://api.github.com/search/repositories?q=topic:cidermusictheme fork:true", requestOptions)
-          .then((response) => response.text())
-          .then((result) => {
-            let items = JSON.parse(result).items;
-            self.repos = items;
-          })
-          .catch((error) => console.log("error", error));
-      },
-    },
-  });
+    fetch("https://api.github.com/search/repositories?q=topic:cidermusictheme fork:true", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        let items = JSON.parse(result).items;
+        repos = items;
+      })
+      .catch((error) => console.log("error", error));
+  }
   return (
     <div id="installed-themes">
       <div className="installed-themes-page">
@@ -380,10 +352,10 @@ export const Component2 = () => {
             <div className="repo-header">
               <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
             </div>
-            <stylestack-editor
+            <StylestackEditor
               ref="stackEditor"
               v-if="themes.length != 0"
-              themes="themes"
+              themes={themes}
             />
           </div>
         </div>

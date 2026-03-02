@@ -1,171 +1,162 @@
 export const Component = () => {
-  Vue.component("settings-window", {
-    template: "#settings-window",
-    data: function () {
-      return {
-        app: this.$root,
-        themes: ipcRenderer.sendSync("get-themes"),
-        tabIndex: 0,
-        canChangeHash: false,
-        lastfmConnecting: false,
-      };
+  const app = this.$root;
+  let themes = ipcRenderer.sendSync("get-themes");
+  let tabIndex = 0;
+  let canChangeHash = false;
+  let lastfmConnecting = false;
+  const watch = {
+    tabIndex: function (val) {
+      if (canChangeHash) {
+        // window.location.hash = `#settings/${val}`
+      }
     },
-    watch: {
-      tabIndex: function (val) {
-        if (this.canChangeHash) {
-          // window.location.hash = `#settings/${val}`
+  };
+  function sidebarVis() {
+    const tabIndex = app.$store.state.pageState["settings"].currentTabIndex;
+    if (tabIndex == 3 || tabIndex == 5 || tabIndex == 10) {
+      return true;
+    }
+    return false;
+  }
+  function close() {
+    this.$root.modals.settings = false;
+  }
+  function windowBgStyleChange() {
+    this.$root.getNowPlayingArtworkBG(undefined, true);
+    if (this.$root.cfg.visual.window_background_style === "mica") {
+      this.$root.spawnMica();
+    }
+  }
+  function reinstallWidevineCDM() {
+    app.confirm(app.getLz("settings.option.experimental.reinstallwidevine.confirm"), (ok) => {
+      if (ok) {
+        ipcRenderer.invoke("reinstall-widevine-cdm");
+      }
+    });
+  }
+  function gitHubExplore() {
+    app.openSettingsPage("github-themes");
+  }
+  function copyLogs() {
+    ipcRenderer.send("fetch-log");
+    notyf.success(app.getLz("term.share.success"));
+  }
+  function openAppData() {
+    ipcRenderer.send("open-appdata");
+  }
+  function changeDisplayTheme() {
+    ipcRenderer.send("changeDisplayTheme", app.cfg.visual.overrideDisplayTheme);
+  }
+  const getLanguages = () => {
+    let langs = this.$root.lzListing;
+    let categories = {
+      main: [],
+      fun: [],
+      unsorted: [],
+    };
+    // sort by category if category is undefined or empty put it in "unsorted"
+    for (let i = 0; i < langs.length; i++) {
+      if (langs[i].category === undefined || langs[i].category === "") {
+        categories.unsorted.push(langs[i]);
+      } else {
+        try {
+          categories[langs[i].category].push(langs[i]);
+        } catch {
+          categories["unsorted"].push(langs[i]);
         }
-      },
-    },
-    methods: {
-      sidebarVis() {
-        const tabIndex = app.$store.state.pageState["settings"].currentTabIndex;
-        if (tabIndex == 3 || tabIndex == 5 || tabIndex == 10) {
-          return true;
-        }
-        return false;
-      },
-      close() {
-        this.$root.modals.settings = false;
-      },
-      windowBgStyleChange() {
-        this.$root.getNowPlayingArtworkBG(undefined, true);
-        if (this.$root.cfg.visual.window_background_style === "mica") {
-          this.$root.spawnMica();
-        }
-      },
-      reinstallWidevineCDM() {
-        app.confirm(app.getLz("settings.option.experimental.reinstallwidevine.confirm"), (ok) => {
-          if (ok) {
-            ipcRenderer.invoke("reinstall-widevine-cdm");
-          }
-        });
-      },
-      gitHubExplore() {
-        app.openSettingsPage("github-themes");
-      },
-      copyLogs() {
-        ipcRenderer.send("fetch-log");
-        notyf.success(app.getLz("term.share.success"));
-      },
-      openAppData() {
-        ipcRenderer.send("open-appdata");
-      },
-      changeDisplayTheme() {
-        ipcRenderer.send("changeDisplayTheme", app.cfg.visual.overrideDisplayTheme);
-      },
-      getLanguages: function () {
-        let langs = this.$root.lzListing;
-        let categories = {
-          main: [],
-          fun: [],
-          unsorted: [],
-        };
-        // sort by category if category is undefined or empty put it in "unsorted"
-        for (let i = 0; i < langs.length; i++) {
-          if (langs[i].category === undefined || langs[i].category === "") {
-            categories.unsorted.push(langs[i]);
-          } else {
-            try {
-              categories[langs[i].category].push(langs[i]);
-            } catch {
-              categories["unsorted"].push(langs[i]);
-            }
-          }
-        }
-        // return
-        console.log(categories);
-        return categories;
-      },
-      addExperiment(flag) {
-        app.cfg.advanced.experiments.push(flag);
-      },
-      removeExperiment(flag) {
-        app.cfg.advanced.experiments.splice(app.cfg.advanced.experiments.indexOf(flag), 1);
-      },
-      toggleNormalization: function () {
-        if (app.cfg.audio.normalization) {
-          CiderAudio.normalizerOn();
-        } else {
-          CiderAudio.normalizerOff();
-        }
-      },
-      changeAudioQuality: function () {
-        app.mk.bitrate = MusicKit.PlaybackBitrate[app.cfg.audio.quality];
-      },
-      toggleUserInfo: function () {
-        app.chrome.hideUserInfo = !app.cfg.visual.showuserinfo;
-      },
-      sendDataToMTT: function () {
-        ipcRenderer.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
-        //  setStoreValue does not change plugin store values somehow
-        ipcRenderer.invoke("update-store-mtt", app.cfg.general.close_behavior);
-      },
-      checkIfUpdateDisabled() {
-        if (app.cfg.main.UPDATABLE) return;
+      }
+    }
+    // return
+    console.log(categories);
+    return categories;
+  };
+  function addExperiment(flag) {
+    app.cfg.advanced.experiments.push(flag);
+  }
+  function removeExperiment(flag) {
+    app.cfg.advanced.experiments.splice(app.cfg.advanced.experiments.indexOf(flag), 1);
+  }
+  const toggleNormalization = () => {
+    if (app.cfg.audio.normalization) {
+      CiderAudio.normalizerOn();
+    } else {
+      CiderAudio.normalizerOff();
+    }
+  };
+  const changeAudioQuality = () => {
+    app.mk.bitrate = MusicKit.PlaybackBitrate[app.cfg.audio.quality];
+  };
+  const toggleUserInfo = () => {
+    app.chrome.hideUserInfo = !app.cfg.visual.showuserinfo;
+  };
+  const sendDataToMTT = () => {
+    ipcRenderer.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
+    //  setStoreValue does not change plugin store values somehow
+    ipcRenderer.invoke("update-store-mtt", app.cfg.general.close_behavior);
+  };
+  function checkIfUpdateDisabled() {
+    if (app.cfg.main.UPDATABLE) return;
 
-        let updateFields = document.getElementsByClassName("update-check");
-        for (let i = 0; i < updateFields.length; i++) {
-          updateFields[i].style = "opacity: 0.5; pointerEvents: none;";
-          updateFields[i].title = "Not available on this type of build";
-        }
-      },
-      promptForRelaunch() {
-        app.confirm(app.getLz("action.relaunch.confirm"), function (result) {
-          if (result) {
-            ipcRenderer.send("relaunchApp", "");
-          }
-        });
-      },
-      authCC() {
-        ipcRenderer.send("cc-auth");
-      },
-      logoutCC() {
-        ipcRenderer.send("cc-logout");
-      },
-      reloadDiscordRPC() {
-        ipcRenderer.send("discordrpc:reload");
-      },
-      lfmDisconnect() {
-        this.$root.cfg.connectivity.lastfm.enabled = false;
-        this.$root.cfg.connectivity.lastfm.secrets.username = "";
-        this.$root.cfg.connectivity.lastfm.secrets.key = "";
-        ipcRenderer.send("lastfm:disconnect");
-      },
-      async lfmAuthorize() {
-        this.lastfmConnecting = true;
-        window.open(await ipcRenderer.invoke("lastfm:url"));
-        app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connecting"));
+    let updateFields = document.getElementsByClassName("update-check");
+    for (let i = 0; i < updateFields.length; i++) {
+      updateFields[i].style = "opacity: 0.5; pointerEvents: none;";
+      updateFields[i].title = "Not available on this type of build";
+    }
+  }
+  function promptForRelaunch() {
+    app.confirm(app.getLz("action.relaunch.confirm"), (result) => {
+      if (result) {
+        ipcRenderer.send("relaunchApp", "");
+      }
+    });
+  }
+  function authCC() {
+    ipcRenderer.send("cc-auth");
+  }
+  function logoutCC() {
+    ipcRenderer.send("cc-logout");
+  }
+  function reloadDiscordRPC() {
+    ipcRenderer.send("discordrpc:reload");
+  }
+  function lfmDisconnect() {
+    this.$root.cfg.connectivity.lastfm.enabled = false;
+    this.$root.cfg.connectivity.lastfm.secrets.username = "";
+    this.$root.cfg.connectivity.lastfm.secrets.key = "";
+    ipcRenderer.send("lastfm:disconnect");
+  }
+  async function lfmAuthorize() {
+    lastfmConnecting = true;
+    window.open(await ipcRenderer.invoke("lastfm:url"));
+    app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connecting"));
 
-        /* Just a timeout for the button */
-        setTimeout(() => {
-          if (!this.$root.cfg.connectivity.lastfm.enabled) {
-            app.notyf.error(app.getLz("settings.notyf.connectivity.lastfmScrobble.connectError"));
-            console.warn("[lastfm:authorize] Last.fm authorization timed out.");
-            this.lastfmConnecting = false;
-          }
-        }, 40000);
+    /* Just a timeout for the button */
+    setTimeout(() => {
+      if (!this.$root.cfg.connectivity.lastfm.enabled) {
+        app.notyf.error(app.getLz("settings.notyf.connectivity.lastfmScrobble.connectError"));
+        console.warn("[lastfm:authorize] Last.fm authorization timed out.");
+        lastfmConnecting = false;
+      }
+    }, 40000);
 
-        ipcRenderer.once("lastfm:authenticated", (_e, session) => {
-          this.$root.cfg.connectivity.lastfm.secrets.username = session.username;
-          this.$root.cfg.connectivity.lastfm.secrets.key = session.key;
-          this.$root.cfg.connectivity.lastfm.enabled = true;
-          this.lastfmConnecting = false;
-          app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connectSuccess"));
-        });
-      },
-      filterChange(e) {
-        this.$root.cfg.connectivity.lastfm.filter_types[e.target.value] = e.target.checked;
-      },
-      submitToken() {
-        const token = document.getElementById("lfmToken").value;
-        ipcRenderer.send("lastfm:auth", token);
-      },
-      openLocalSongsPathMenu() {
-        app.modals.pathMenu = true;
-      },
-    },
-  });
+    ipcRenderer.once("lastfm:authenticated", (_e, session) => {
+      this.$root.cfg.connectivity.lastfm.secrets.username = session.username;
+      this.$root.cfg.connectivity.lastfm.secrets.key = session.key;
+      this.$root.cfg.connectivity.lastfm.enabled = true;
+      lastfmConnecting = false;
+      app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connectSuccess"));
+    });
+  }
+  function filterChange(e) {
+    this.$root.cfg.connectivity.lastfm.filter_types[e.target.value] = e.target.checked;
+  }
+  function submitToken() {
+    const token = document.getElementById("lfmToken").value;
+    ipcRenderer.send("lastfm:auth", token);
+  }
+  function openLocalSongsPathMenu() {
+    app.modals.pathMenu = true;
+  }
   return (
     <div id="settings-window">
       <div

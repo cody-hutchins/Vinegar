@@ -1,22 +1,17 @@
 export const Component = () => {
-  Vue.component("cider-app-sidebar", {
-    template: "#cider-app-sidebar",
-    methods: {
-      switchArtworkDisplayLayout: function () {
-        switch (app.cfg.visual.artworkDisplayLayout) {
-          case "default":
-            app.cfg.visual.artworkDisplayLayout = "sidebar";
-            break;
-          case "sidebar":
-            app.cfg.visual.artworkDisplayLayout = "default";
-            break;
-          default:
-            app.cfg.visual.artworkDisplayLayout = "default";
-            break;
-        }
-      },
-    },
-  });
+  const switchArtworkDisplayLayout = () => {
+    switch (app.cfg.visual.artworkDisplayLayout) {
+      case "default":
+        app.cfg.visual.artworkDisplayLayout = "sidebar";
+        break;
+      case "sidebar":
+        app.cfg.visual.artworkDisplayLayout = "default";
+        break;
+      default:
+        app.cfg.visual.artworkDisplayLayout = "default";
+        break;
+    }
+  };
   return (
     <div id="cider-app-sidebar">
       <div id="app-sidebar">
@@ -201,7 +196,7 @@ export const Component = () => {
           </template>
           <div
             v-if="$root.cfg.visual.artworkDisplayLayout == 'sidebar'"
-            clickstop="switchArtworkDisplayLayout()"
+            clickstop={switchArtworkDisplayLayout()}
             className="artwork"
             id="artworkLCD"
             style={{ position: "sticky", bottom: "0px" }}>

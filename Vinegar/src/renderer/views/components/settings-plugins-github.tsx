@@ -1,129 +1,115 @@
 export const Component = () => {
-  Vue.component("plugins-github", {
-    template: "#plugins-github",
-    props: [],
-    data: function () {
-      return {
-        repos: [],
-        openRepo: {
-          id: -1,
-          name: "",
-          description: "",
-          html_url: "",
-          stargazers_count: 0,
-          owner: {
-            avatar_url: "",
-          },
-          readme: "",
-        },
-        themesInstalled: [],
-      };
+  let repos = [];
+  let openRepo = {
+    id: -1,
+    name: "",
+    description: "",
+    html_url: "",
+    stargazers_count: 0,
+    owner: {
+      avatar_url: "",
     },
-    mounted() {
-      this.getRepos();
-      // this.getInstalledThemes();
-    },
-    methods: {
-      getInstalledThemes() {
-        let self = this;
-        const themes = ipcRenderer.sendSync("get-themes");
-        // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
-        themes.forEach((theme) => {
-          if (theme.github_repo !== "") {
-            self.themesInstalled.push(theme.github_repo);
-          }
-        });
-      },
-      showRepo(repo) {
-        const self = this;
-        const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-        var requestOptions = {
-          method: "GET",
-          redirect: "follow",
-        };
+    readme: "",
+  };
+  const themesInstalled = [];
+  function mounted() {
+    getRepos();
+    // getInstalledThemes();
+  }
+  function getInstalledThemes() {
+    const themes = ipcRenderer.sendSync("get-themes");
+    // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
+    themes.forEach((theme) => {
+      if (theme.github_repo !== "") {
+        themesInstalled.push(theme.github_repo);
+      }
+    });
+  }
+  function showRepo(repo) {
+    const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
 
-        app
-          ._fetch(readmeUrl, requestOptions)
-          .then((response) => response.text())
-          .then((result) => {
-            self.openRepo = repo;
-            self.openRepo.readme = self.convertReadMe(result);
-          })
-          .catch((error) => {
-            self.openRepo = repo;
-            self.openRepo.readme = `This repository doesn't have a README.md file.`;
-            console.log("error", error);
-          });
-      },
-      convertReadMe(text) {
-        return marked.parse(text);
-      },
-      installThemeRepo(repo) {
-        let self = this;
-        let msg = app.stringTemplateParser(app.getLz("settings.option.visual.plugin.github.install.confirm"), {
-          repo: repo.full_name,
-        });
-        app.confirm(msg, (res) => {
-          if (res) {
-            ipcRenderer.once("plugin-installed", (event, arg) => {
-              if (arg.success) {
-                self.themes = [];
-                notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
-                app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
-                  if (ok) {
-                    ipcRenderer.invoke("relaunchApp");
-                  } else {
-                    return;
-                  }
-                });
+    app
+      ._fetch(readmeUrl, requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        openRepo = repo;
+        openRepo.readme = convertReadMe(result);
+      })
+      .catch((error) => {
+        openRepo = repo;
+        openRepo.readme = `This repository doesn't have a README.md file.`;
+        console.log("error", error);
+      });
+  }
+  function convertReadMe(text) {
+    return marked.parse(text);
+  }
+  function installThemeRepo(repo) {
+    let msg = app.stringTemplateParser(app.getLz("settings.option.visual.plugin.github.install.confirm"), {
+      repo: repo.full_name,
+    });
+    app.confirm(msg, (res) => {
+      if (res) {
+        ipcRenderer.once("plugin-installed", (event, arg) => {
+          if (arg.success) {
+            themes = [];
+            notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
+            app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
+              if (ok) {
+                ipcRenderer.invoke("relaunchApp");
               } else {
-                notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
+                return;
               }
             });
-            ipcRenderer.invoke("get-github-plugin", repo.html_url);
+          } else {
+            notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
           }
         });
-      },
-      installThemeURL() {
-        let self = this;
-        app.prompt(app.getLz("settings.prompt.visual.plugin.github.URL"), (result) => {
-          if (result) {
-            ipcRenderer.once("plugin-installed", (event, arg) => {
-              if (arg.success) {
-                self.themes = ipcRenderer.sendSync("get-themes");
-                app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
-                  if (ok) {
-                    ipcRenderer.invoke("relaunchApp");
-                  } else {
-                    return;
-                  }
-                });
-                notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
+        ipcRenderer.invoke("get-github-plugin", repo.html_url);
+      }
+    });
+  }
+  function installThemeURL() {
+    let self = this;
+    app.prompt(app.getLz("settings.prompt.visual.plugin.github.URL"), (result) => {
+      if (result) {
+        ipcRenderer.once("plugin-installed", (event, arg) => {
+          if (arg.success) {
+            themes = ipcRenderer.sendSync("get-themes");
+            app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
+              if (ok) {
+                ipcRenderer.invoke("relaunchApp");
               } else {
-                notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
+                return;
               }
             });
-            ipcRenderer.invoke("get-github-plugin", result);
+            notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
+          } else {
+            notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
           }
         });
-      },
-      getRepos() {
-        let self = this;
-        var requestOptions = {
-          method: "GET",
-          redirect: "follow",
-        };
+        ipcRenderer.invoke("get-github-plugin", result);
+      }
+    });
+  }
+  function getRepos() {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
 
-        app
-          ._fetch("https://api.github.com/search/repositories?q=topic:cidermusicplugin fork:true&per_page=100", requestOptions)
-          .then((response) => response.text())
-          .then((result) => {
-            self.repos = JSON.parse(result).items;
-          })
-          .catch((error) => console.log("error", error));
-      },
-    },
-  });
+    app
+      ._fetch("https://api.github.com/search/repositories?q=topic:cidermusicplugin fork:true&per_page=100", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        repos = JSON.parse(result).items;
+      })
+      .catch((error) => console.log("error", error));
+  }
   return (
     <div id="plugins-github">
       <div className="github-themes-page">

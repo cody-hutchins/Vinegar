@@ -1,48 +1,22 @@
-export const Component = () => {
-  Vue.component("mini-view", {
-    template: "#mini-view",
-    props: {
-      time: {
-        type: Number,
-        required: false,
-      },
-      lyrics: {
-        type: Array,
-        required: false,
-      },
-      richlyrics: {
-        type: Array,
-        required: false,
-      },
-      image: {
-        type: String,
-        required: false,
-      },
-    },
-    data: function () {
-      return {
-        app: this.$root,
-        tabMode: "",
-      };
-    },
-    beforeMount() {
-      window.addEventListener("keyup", this.onEscapeKeyUp);
-    },
-    beforeDestroy() {
-      window.removeEventListener("keyup", this.onEscapeKeyUp);
-    },
-    mounted() {
-      app.pinMiniPlayer(true);
-    },
-    methods: {
-      onEscapeKeyUp(event) {
-        if (event.which === 27) {
-          app.miniPlayer(false);
-          console.log("js");
-        }
-      },
-    },
-  });
+export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
+  const app = this.$root;
+  const tabMode = "";
+
+  function beforeMount() {
+    window.addEventListener("keyup", onEscapeKeyUp);
+  }
+  function beforeDestroy() {
+    window.removeEventListener("keyup", onEscapeKeyUp);
+  }
+  function mounted() {
+    app.pinMiniPlayer(true);
+  }
+  function onEscapeKeyUp(event) {
+    if (event.which === 27) {
+      app.miniPlayer(false);
+      console.log("js");
+    }
+  }
   return (
     <div id="mini-view">
       <div
