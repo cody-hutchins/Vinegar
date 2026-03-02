@@ -1,24 +1,39 @@
 import { useEffect } from "react";
 
-export const PodcastEpisode = () => {
-  Vue.component("podcast-episode", {
-    template: "#podcast-episode",
-    props: ["item", "isselected"],
-    methods: {
-      msToMinSec(ms) {
-        let minutes = Math.floor(ms / 60000);
-        let seconds = ((ms % 60000) / 1000).toFixed(0);
-        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-      },
-    },
-  });
+export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
+  function msToMinSec(ms: number) {
+    let minutes = Math.floor(ms / 60000);
+    let seconds = ((ms % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  }
+  return (
+    <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
+      <div
+        className="info-rect"
+        style={{ paddingLeft: "16px" }}>
+        <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+        <div className="subtitle text-overflow-elipsis">{item.attributes.description.standard}</div>
+        <div className="subtitle text-overflow-elipsis">
+          {msToMinSec(item.attributes.durationInMilliseconds)} • {new Date(item.attributes.releaseDateTime).toLocaleString()}
+        </div>
+      </div>
+    </div>
+  );
 };
-export const PodcastTab = () => {
-  Vue.component("podcast-tab", {
-    template: "#podcast-tab",
-    props: ["item", "isselected"],
-    methods: {},
-  });
+export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
+  return (
+    <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
+      <div className="artwork">
+        <mediaitem-artwork
+          url="item.attributes.artwork.url"
+          size="50"
+          type="podcast"></mediaitem-artwork>
+      </div>
+      <div className="info-rect">
+        <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+      </div>
+    </div>
+  );
 };
 
 export const Podcasts = () => {
@@ -169,11 +184,12 @@ export const Podcasts = () => {
                 v-if="podcasts.length != 0">
                 {$root.getLz("podcast.subscribedOnItunes")}
               </div>
-              <podcast-tab
-                isselected="podcastSelected.id == podcast.id"
+              <PodcastTab
+                isSelected="podcastSelected.id == podcast.id"
                 clicknative="selectPodcast(podcast)"
                 v-for="podcast in podcasts"
-                item="podcast"></podcast-tab>
+                item="podcast"
+              />
             </div>
             <div v-else>
               <div
@@ -181,21 +197,22 @@ export const Podcasts = () => {
                 v-if="podcasts.length != 0">
                 {$root.getLz("term.library")}
               </div>
-              <podcast-tab
-                isselected="podcastSelected.id == podcast.id"
+              <PodcastTab
+                isSelected="podcastSelected.id == podcast.id"
                 clicknative="selectPodcast(podcast)"
                 v-for="podcast in search.resultsLibrary"
-                item="podcast"></podcast-tab>
+                item="podcast"
+              />
               <div
                 className="podcast-list-header"
                 v-if="podcasts.length != 0">
                 {$root.getLz("podcast.itunesStore")}
               </div>
-              <podcast-tab
-                isselected="podcastSelected.id == podcast.id"
+              <PodcastTab
+                isSelected="podcastSelected.id == podcast.id"
                 clicknative="selectPodcast(podcast)"
                 v-for="podcast in search.results"
-                item="podcast"></podcast-tab>
+                item="podcast"></PodcastTab>
             </div>
           </div>
           <div className="episodes-list">
@@ -237,12 +254,13 @@ export const Podcasts = () => {
               <h3>{$root.getLz("error.noResults")}</h3>
               <p>{$root.getLz("error.noResults.description")}</p>
             </div>
-            <podcast-episode
-              isselected="selected.id == episode.id"
+            <PodcastEpisode
+              isSelected="selected.id == episode.id"
               dblclicknative="playEpisode(episode)"
               clicknative="selectEpisode(episode)"
               item="episode"
-              v-for="episode in episodes"></podcast-episode>
+              v-for="episode in episodes"
+            />
           </div>
           <transition name="wpfade">
             <div
@@ -296,9 +314,7 @@ export const Podcasts = () => {
         </div>
       </div>
       <div id="podcast-tab">
-        <div
-          className="cd-mediaitem-list-item list-flat"
-          className="{'mediaitem-selected': isselected}">
+        <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
           <div className="artwork">
             <mediaitem-artwork
               url="item.attributes.artwork.url"
@@ -311,9 +327,7 @@ export const Podcasts = () => {
         </div>
       </div>
       <div id="podcast-episode">
-        <div
-          className="cd-mediaitem-list-item list-flat"
-          className="{'mediaitem-selected': isselected}">
+        <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
           <div
             className="info-rect"
             style={{ paddingLeft: "16px" }}>
