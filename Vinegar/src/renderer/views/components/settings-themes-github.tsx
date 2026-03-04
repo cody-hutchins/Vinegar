@@ -1,4 +1,4 @@
-export const Component = () => {
+const ThemesGithub = () => {
   let repos = [];
   let openRepo = {
     id: -1,
@@ -152,7 +152,8 @@ export const Component = () => {
                   <div className="col-auto">
                     <span
                       v-if="themesInstalled.includes(repo.full_name.toLowerCase())"
-                      className="codicon codicon-cloud-download"></span>
+                      className="codicon codicon-cloud-download"
+                    />
                   </div>
                 </div>
               </li>
@@ -170,7 +171,8 @@ export const Component = () => {
                     <div>
                       <div
                         className="svg-icon inline"
-                        style={{ "--url": "url('./assets/github.svg')" }}></div>
+                        style={{ "--url": "url('./assets/github.svg')" }}
+                      />
                       <a
                         className="repo-url"
                         target="_blank"
@@ -194,13 +196,17 @@ export const Component = () => {
             <hr />
             <div
               v-html="openRepo.readme"
-              className="github-content"></div>
+              className="github-content"
+            />
           </div>
           <div
             className="github-preview"
-            v-else></div>
+            v-else
+          />
         </div>
       </div>
     </div>
   );
 };
+
+export default ThemesGithub;

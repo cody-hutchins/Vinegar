@@ -1,4 +1,4 @@
-export const Component = ({ item, position }: { item: object; position: number }) => {
+const MediaItemSmarthints = ({ item, position }: { item: object; position: number }) => {
   const app = this.$root;
   const guid = uuidv4();
   let addedToLibrary = false;
@@ -454,16 +454,18 @@ export const Component = ({ item, position }: { item: object; position: number }
             <div
               className="artwork"
               className="{'circle': item.type == 'artists'}">
-              <mediaitem-artwork
+              <MediaItemArtwork
                 url="item.attributes.artwork ? item.attributes.artwork.url : ''"
                 size="32"
-                style={{ position: "relative", zIndex: "-1" }}></mediaitem-artwork>
+                style={{ position: "relative", zIndex: "-1" }}
+              />
               <button
                 className="circular-play-button"
                 clickstop="playTrack(item)">
                 <div
                   className="_svg-icon"
-                  style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}></div>
+                  style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}
+                />
               </button>
             </div>
           </div>
@@ -476,7 +478,7 @@ export const Component = ({ item, position }: { item: object; position: number }
           <div
             className="queue-explicit-icon cider-flex-center"
             v-if="item.attributes.contentRating == 'explicit'">
-            <div className="explicit-icon"></div>
+            <div className="explicit-icon" />
           </div>
           {/* <div className="col queue-duration-info">
             <div className="queue-duration cider-flex-center">
@@ -488,3 +490,5 @@ export const Component = ({ item, position }: { item: object; position: number }
     </div>
   );
 };
+
+export default MediaItemSmarthints;

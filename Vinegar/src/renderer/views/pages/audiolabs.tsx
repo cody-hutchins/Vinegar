@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = () => {
+const Audiolabs = () => {
   const app = this.$root;
   let arprofiles = CiderAudio.atmosphereRealizerProfiles;
   let spprofiles = CiderAudio.spatialProfiles;
@@ -29,7 +29,8 @@ export const Component = () => {
             <div className="md-option-line">
               <b-jumbotron
                 header="$root.getLz('settings.option.audio.audioLab')"
-                lead="Designed by Cider Acoustic Technologies in California"></b-jumbotron>
+                lead="Designed by Cider Acoustic Technologies in California"
+              />
             </div>
             <div className="md-option-line">
               <div className="md-option-segment">
@@ -203,3 +204,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default Audiolabs;

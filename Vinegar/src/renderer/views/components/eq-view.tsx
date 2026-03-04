@@ -1,4 +1,4 @@
-export const Component = ({ src, url }: { src: string; url: string }) => {
+const EQView = ({ src, url }: { src: string; url: string }) => {
   const app = this.$root;
   const eqPreset = () => ({
     preset: uuidv4(),
@@ -334,7 +334,8 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="$root.getLz('action.close')"></button>
+              aria-label="$root.getLz('action.close')"
+            />
             <div className="md-option-segment md-option-segment_auto">
               <select
                 className="md-select"
@@ -871,3 +872,5 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
     </div>
   );
 };
+
+export default EQView;

@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 
-export const Component = () => {
+const Component = () => {
   const app = this.$root;
   let library = this.$root.library;
   let mediaItemSize = "compact";
@@ -53,7 +53,7 @@ export const Component = () => {
               <div
                 className="search-input-container"
                 style={{ width: "100%", margin: "16px 0" }}>
-                <div className="search-input--icon"></div>
+                <div className="search-input--icon" />
                 <input
                   type="search"
                   style={{ width: "100%" }}
@@ -148,7 +148,7 @@ export const Component = () => {
                 className="reload-btn"
                 style={{ opacity: 0.8, pointerEvents: none }}
                 aria-label="app.getLz('menubar.options.reload')">
-                <div className="spinner"></div>
+                <div className="spinner" />
               </button>
             </div>
           </div>
@@ -166,7 +166,7 @@ export const Component = () => {
           className="well"
           key="1"
           v-if="prefs.size == 'compact'">
-          <mediaitem-list-item
+          <MediaItemListItem
             class-list="compact"
             item="item"
             parent="'librarysongs'"
@@ -174,20 +174,22 @@ export const Component = () => {
             show-meta-data="true"
             show-library-status="false"
             v-bind:key="item.id"
-            v-for="(item, index) in currentSlice"></mediaitem-list-item>
+            v-for="(item, index) in currentSlice"
+          />
         </div>
         <div
           className="well"
           key="2"
           v-else>
-          <mediaitem-list-item
+          <MediaItemListItem
             item="item"
             parent="'librarysongs'"
             index="index"
             show-meta-data="true"
             show-library-status="false"
             v-bind:key="item.id"
-            v-for="(item, index) in currentSlice"></mediaitem-list-item>
+            v-for="(item, index) in currentSlice"
+          />
         </div>
       </div>
     </div>

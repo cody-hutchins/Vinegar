@@ -1,4 +1,6 @@
-export const Component = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
+import AnimatedartworkView from "./animatedartwork-view.jsx";
+
+const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
   const app = this.$root;
   const isVisible = false;
   const style = {
@@ -119,10 +121,13 @@ export const Component = ({ size = "120", width, bgcolor = "", url = "", type = 
           v-if="video && getVideoPriority()"
           className="animatedartwork-view-box"
         />
-        <animatedartwork-view
+        <AnimatedartworkView
           priority="getVideoPriority()"
-          video="video"></animatedartwork-view>
+          video="video"
+        />
       </div>
     </div>
   );
 };
+
+export default MediaItemArtwork;

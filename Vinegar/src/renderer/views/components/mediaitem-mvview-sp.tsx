@@ -1,4 +1,6 @@
-export const Component = ({ item, imagesize, badge }: { item: object; imagesize: number; badge: object }) => {
+import MediaItemArtwork from "./MediaItemArtwork.jsx";
+
+const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: object; imagesize: number; badge: object }) => {
   const app = this.$root;
   function log(item) {
     console.log(item);
@@ -29,11 +31,12 @@ export const Component = ({ item, imagesize, badge }: { item: object; imagesize:
             </div>
           </div>
           <div className="artwork">
-            <mediaitem-artwork
-              url="item.attributes?.editorialArtwork?.subscriptionHero?.url ?? item.attributes?.artwork?.url"
-              video="(item.attributes != null && item.attributes?.editorialVideo != null) ? (item.attributes?.editorialVideo?.motionDetailSquare ? item.attributes?.editorialVideo?.motionDetailSquare?.video : (item.attributes?.editorialVideo?.motionSquareVideo1x1 ? item?.attributes?.editorialVideo?.motionSquareVideo1x1?.video : '')) : '' "
+            <MediaItemArtwork
+              url={item.attributes?.editorialArtwork?.subscriptionHero?.url ?? item.attributes?.artwork?.url}
+              video={item.attributes != null && item.attributes?.editorialVideo != null ? (item.attributes?.editorialVideo?.motionDetailSquare ? item.attributes?.editorialVideo?.motionDetailSquare?.video : item.attributes?.editorialVideo?.motionSquareVideo1x1 ? item?.attributes?.editorialVideo?.motionSquareVideo1x1?.video : "") : ""}
               size="516"
-              width="900"></mediaitem-artwork>
+              width="900"
+            />
           </div>
           <div
             className="cd-mediaitem-mvview-overlay"
@@ -61,3 +64,5 @@ export const Component = ({ item, imagesize, badge }: { item: object; imagesize:
     </div>
   );
 };
+
+export default MediaItemMVViewSP;

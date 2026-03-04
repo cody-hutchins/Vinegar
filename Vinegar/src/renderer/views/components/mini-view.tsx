@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
+const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
   const app = this.$root;
   const tabMode = "";
 
@@ -29,7 +29,7 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
       <div
         className="mini-view"
         tabindex="0">
-        <div className="background"></div>
+        <div className="background" />
         <div
           className="player-pin"
           title="Pin to Top"
@@ -102,9 +102,10 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
           <div
             className="artwork"
             onClick={() => app.miniPlayer(false)}>
-            <mediaitem-artwork
+            <MediaItemArtwork
               size="600"
-              url="image ?? ''"></mediaitem-artwork>
+              url="image ?? ''"
+            />
           </div>
           <div className="controls-parents">
             <template v-if="app.mkReady()">
@@ -158,14 +159,16 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="$root.isDisabled() && 'disabled'"
                       onClick={() => ($root.mk.shuffleMode = 1)}
                       title="$root.getLz('term.enableShuffle')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button--small shuffle active"
                       v-else
                       className="$root.isDisabled() && 'disabled'"
                       onClick={() => ($root.mk.shuffleMode = 0)}
                       title="$root.getLz('term.disableShuffle')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -173,7 +176,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       onClick={() => $root.prevButton()}
                       className="$root.isPrevDisabled() && 'disabled'"
                       title="$root.getLz('term.previous')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -181,19 +185,22 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       onClick={() => $root.mk.stop()}
                       v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
                       title="$root.getLz('term.stop')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button pause"
                       onClick={() => $root.mk.pause()}
                       v-else-if="$root.mk.isPlaying"
                       title="$root.getLz('term.pause')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button play"
                       onClick={() => $root.mk.play()}
                       v-else
                       title="$root.getLz('term.play')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -201,7 +208,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       onClick={() => $root.skipToNextItem()}
                       className="$root.isNextDisabled() && 'disabled'"
                       title="$root.getLz('term.next')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -210,21 +218,24 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="$root.isDisabled() && 'disabled'"
                       onClick={() => ($root.mk.repeatMode = 1)}
                       title="$root.getLz('term.enableRepeatOne')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button--small repeat repeatOne"
                       onClick={() => ($root.mk.repeatMode = 2)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 1"
                       title="$root.getLz('term.disableRepeatOne')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button--small repeat active"
                       onClick={() => ($root.mk.repeatMode = 0)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 2"
                       title="$root.getLz('term.disableRepeat')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                 </div>
                 <div className="app-chrome-item volume display--large">
@@ -232,7 +243,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                     <button
                       className="volume-button--small volume"
                       onClick={() => app.muteButtonPressed()}
-                      className="{'active': app.cfg.audio.volume == 0}"></button>
+                      className="{'active': app.cfg.audio.volume == 0}"
+                    />
                     <input
                       type="range"
                       className="slider"
@@ -260,18 +272,20 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                 <div>Name</div>
             </div>
             <div className="lyrics-col" v-if="tabMode == 'lyrics'">
-                <lyrics-view yoffset="120" time="time" lyrics="lyrics"
-                richlyrics="richlyrics"></lyrics-view>
+                <LyricsView yoffset="120" time="time" lyrics="lyrics"
+                richlyrics="richlyrics" />
             </div>
             <div className="queue-col" v-if="tabMode == 'queue'">
-                <cider-queue v-if="tabMode == 'queue'" ref="queue" ></cider-queue>
+                <Queue v-if="tabMode == 'queue'" ref="queue"  />
             </div>
         </div>
     </div>  */}
       {/* <div className="tab-toggles">
-        <div className="lyrics" className="{active: tabMode == 'lyrics'}" onClick={() =>tabMode = (tabMode == 'lyrics') ? '' : 'lyrics'}></div>
-        <div className="queue"  className="{active: tabMode == 'queue'}" onClick={() =>tabMode =  (tabMode == 'queue') ? '' :'queue'}></div>
+        <div className="lyrics" className="{active: tabMode == 'lyrics'}" onClick={() =>tabMode = (tabMode == 'lyrics') ? '' : 'lyrics'} />
+        <div className="queue"  className="{active: tabMode == 'queue'}" onClick={() =>tabMode =  (tabMode == 'queue') ? '' :'queue'} />
     </div>   */}
     </div>
   );
 };
+
+export default MiniView;

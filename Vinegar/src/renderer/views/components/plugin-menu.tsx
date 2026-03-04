@@ -1,4 +1,4 @@
-export const Component = () => {
+const PluginMenu = () => {
   const app = this.$root;
   function closeMenu() {
     app.modals.pluginMenu = false;
@@ -15,7 +15,8 @@ export const Component = () => {
             <button
               className="close-btn"
               onClick={() => app.resetState()}
-              aria-label="app.getLz('action.close')"></button>
+              aria-label="app.getLz('action.close')"
+            />
           </div>
           <div className="modal-content">
             <span
@@ -48,3 +49,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default PluginMenu;

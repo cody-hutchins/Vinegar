@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import Queue from "./queue.jsx";
+import LyricsView from "./lyrics-view.jsx";
 
-export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
+const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
   const app = this.$root;
   const tabMode = "lyrics";
   let video = null;
@@ -84,48 +86,55 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
           className="fs-header"
           v-if="immersiveEnabled">
           <div className="top-nav-group">
-            <sidebar-library-item
+            <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
               name="$root.getLz('home.title')"
               svg-icon="./assets/feather/home.svg"
               svg-icon-name="home"
-              page="home"></sidebar-library-item>
-            <sidebar-library-item
+              page="home"
+            />
+            <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
               name="$root.getLz('term.listenNow')"
               svg-icon="./assets/feather/play-circle.svg"
               svg-icon-name="listenNow"
-              page="listen_now"></sidebar-library-item>
-            <sidebar-library-item
+              page="listen_now"
+            />
+            <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
               name="$root.getLz('term.browse')"
               svg-icon="./assets/feather/globe.svg"
               svg-icon-name="browse"
-              page="browse"></sidebar-library-item>
-            <sidebar-library-item
+              page="browse"
+            />
+            <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
               name="$root.getLz('term.radio')"
               svg-icon="./assets/feather/radio.svg"
               svg-icon-name="radio"
-              page="radio"></sidebar-library-item>
-            <sidebar-library-item
+              page="radio"
+            />
+            <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
               name="$root.getLz('term.library')"
               svg-icon="./assets/feather/radio.svg"
               svg-icon-name="library"
-              page="library"></sidebar-library-item>
-            <sidebar-library-item
+              page="library"
+            />
+            <SidebarLibraryItem
               clicknative="tabMode = ''"
               name="$root.getLz('term.nowPlaying')"
               svg-icon="./assets/play.svg"
               svg-icon-name="nowPlaying"
-              page="nowPlaying"></sidebar-library-item>
-            <sidebar-library-item
+              page="nowPlaying"
+            />
+            <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
               name=""
               svg-icon="./assets/search.svg"
               svg-icon-name="search"
-              page="search"></sidebar-library-item>
+              page="search"
+            />
           </div>
         </div>
         <div
@@ -136,11 +145,12 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
               className="artwork"
               className="$root.mk.isPlaying && 'playing'"
               onClick={() => app.fullscreen(false)}>
-              <mediaitem-artwork
+              <MediaItemArtwork
                 size="600"
                 video="video"
                 videoPriority="true"
-                url="(image ?? '').replace('{w}','600').replace('{h}','600')"></mediaitem-artwork>
+                url="(image ?? '').replace('{w}','600').replace('{h}','600')"
+              />
             </div>
             <div
               className="controls-parents"
@@ -198,14 +208,16 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="$root.isDisabled() && 'disabled'"
                       onClick={() => ($root.mk.shuffleMode = 1)}
                       title="$root.getLz('term.enableShuffle')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button--small shuffle active"
                       v-else
                       className="$root.isDisabled() && 'disabled'"
                       onClick={() => ($root.mk.shuffleMode = 0)}
                       title="$root.getLz('term.disableShuffle')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -213,7 +225,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       onClick={() => $root.prevButton()}
                       className="$root.isPrevDisabled() && 'disabled'"
                       title="$root.getLz('term.previous')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -221,19 +234,22 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       onClick={() => $root.mk.stop()}
                       v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
                       title="$root.getLz('term.stop')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button pause"
                       onClick={() => $root.mk.pause()}
                       v-else-if="$root.mk.isPlaying"
                       title="$root.getLz('term.pause')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button play"
                       onClick={() => $root.mk.play()}
                       v-else
                       title="$root.getLz('term.play')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -241,7 +257,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       onClick={() => $root.skipToNextItem()}
                       className="$root.isNextDisabled() && 'disabled'"
                       title="$root.getLz('term.next')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
@@ -250,21 +267,24 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                       className="$root.isDisabled() && 'disabled'"
                       onClick={() => ($root.mk.repeatMode = 1)}
                       title="$root.getLz('term.enableRepeatOne')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button--small repeat repeatOne"
                       onClick={() => (mk.repeatMode = 2)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 1"
                       title="$root.getLz('term.disableRepeatOne')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                     <button
                       className="playback-button--small repeat active"
                       onClick={() => ($root.mk.repeatMode = 0)}
                       className="$root.isDisabled() && 'disabled'"
                       v-else-if="$root.mk.repeatMode == 2"
                       title="$root.getLz('term.disableRepeat')"
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   </div>
                 </div>
               </div>
@@ -275,7 +295,8 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
                     onClick={() => app.muteButtonPressed()}
                     className="{'active': app.cfg.audio.volume == 0}"
                     title="app.cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
-                    v-b-tooltiphover></button>
+                    v-b-tooltiphover
+                  />
                   <input
                     type="range"
                     className="slider"
@@ -299,40 +320,46 @@ export const Component = ({ time, lyrics, richlyrics, image }: { time?: number; 
             <div
               className="lyrics-col"
               v-if="tabMode == 'lyrics'">
-              <lyrics-view
+              <LyricsView
                 yoffset="120"
                 time={time}
                 lyrics={lyrics}
-                richlyrics={richlyrics}></lyrics-view>
+                richlyrics={richlyrics}
+              />
             </div>
             <div
               className="queue-col"
               v-else>
-              <cider-queue ref="queue"></cider-queue>
+              <Queue ref="queue" />
             </div>
           </div>
         </div>
         <div
           className="app-content-container"
           v-else>
-          <app-content-area></app-content-area>
+          <app-content-area />
         </div>
         <div className="tab-toggles">
           <div
             className="lyrics"
             className="{active: tabMode == 'lyrics'}"
-            onClick={() => (tabMode = tabMode == "lyrics" ? "" : "lyrics")}></div>
+            onClick={() => (tabMode = tabMode == "lyrics" ? "" : "lyrics")}
+          />
           <div
             className="queue"
             className="{active: tabMode == 'queue'}"
-            onClick={() => (tabMode = tabMode == "queue" ? "" : "queue")}></div>
+            onClick={() => (tabMode = tabMode == "queue" ? "" : "queue")}
+          />
           <div
             className="queue"
             className="{active: tabMode == 'catalog'}"
             v-if="false"
-            onClick={() => (tabMode = tabMode == "catalog" ? "" : "catalog")}></div>
+            onClick={() => (tabMode = tabMode == "catalog" ? "" : "catalog")}
+          />
         </div>
       </div>
     </div>
   );
 };
+
+export default FullscreenView;

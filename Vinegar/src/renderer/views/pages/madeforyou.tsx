@@ -8,10 +8,11 @@ export const MadeForYou = ({ item }: { item: object }) => (
       </div>
     </div>
     <div className="madeforyou-body">
-      <mediaitem-square
+      <MediaItemSquare
         item="item"
         v-for="item in madeforyou.data"
-        v-bind:key="item.id"></mediaitem-square>
+        v-bind:key="item.id"
+      />
     </div>
   </div>
 );

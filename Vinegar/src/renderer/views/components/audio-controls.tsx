@@ -1,4 +1,4 @@
-export const Component = () => {
+const Component = () => {
   const app = this.$root;
   let maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
   let volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
@@ -47,7 +47,8 @@ export const Component = () => {
             <button
               className="close-btn"
               onClick={() => (app.modals.audioControls = false)}
-              aria-label="app.getLz('action.close')"></button>
+              aria-label="app.getLz('action.close')"
+            />
           </div>
           <div className="modal-content">
             <div className="md-option-line">

@@ -1,3 +1,6 @@
+import FullscreenView from "./components/fullscreen-view.jsx";
+import MiniView from "./components/mini-view.jsx";
+
 export const Main = () => {
   window.quasarConfig = {
     brand: {
@@ -132,7 +135,7 @@ export const Main = () => {
         <script src="./lib/vue-observe-visibility.min.js"></script>
         <script src="./lib/vuedraggable.umd.min.js"></script>
 
-        {/* <script src="./lib/quasar/quasar.umd.min.js"></div>  */}
+        {/* <script src="./lib/quasar/quasar.umd.min.js" />  */}
         <script
           type="module"
           src="./main/app.js"></script>
@@ -159,36 +162,39 @@ export const Main = () => {
             <div
               className="fullscreen-view-container"
               v-if="appMode == 'fullscreen'">
-              <fullscreen-view
+              <FullscreenView
                 ref="fsView"
                 image="currentArtUrlRaw"
                 time="mk.currentPlaybackTime - lyricOffset"
                 lyrics="lyrics"
-                richlyrics="richlyrics"></fullscreen-view>
+                richlyrics="richlyrics"
+              />
             </div>
           </transition>
           <transition name="fsModeSwitch">
             <div
               className="fullscreen-view-container"
               v-if="appMode == 'mini'">
-              <mini-view
+              <MiniView
                 image="currentArtUrlRaw"
                 time="mk.currentPlaybackTime - lyricOffset"
                 lyrics="lyrics"
-                richlyrics="richlyrics"></mini-view>
+                richlyrics="richlyrics"
+              />
             </div>
           </transition>
           <transition name="fsModeSwitch">
             <div
               className="fullscreen-view-container oobe"
               v-if="appMode == 'oobe'">
-              <cider-oobe></cider-oobe>
+              <cider-oobe />
             </div>
           </transition>
           {import("app/panels")}
           <div
             className="cursor"
-            v-if="chrome.showCursor"></div>
+            v-if="chrome.showCursor"
+          />
         </div>
 
         {Object.keys(process.env.components).map((comp) => import(comp))}

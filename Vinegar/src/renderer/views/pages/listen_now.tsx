@@ -1,6 +1,7 @@
 import { useEffect } from "react";
+import ListenNowChild from "../components/listennow-child.jsx";
 
-export const Component = ({ data }: { data: object }) => {
+const ListenNow = ({ data }: { data: object }) => {
   const app = this.$root;
   useEffect(() => {
     this.$root.getListenNow();
@@ -10,11 +11,13 @@ export const Component = ({ data }: { data: object }) => {
       <div className="content-inner">
         <h1 className="header-text">{app.getLz("term.listenNow")}</h1>
         <template v-for="(recom,index) in data.data">
-          <listennow-child
+          <ListenNowChild
             recom="recom"
-            index="index"></listennow-child>
+            index="index"
+          />
         </template>
       </div>
     </div>
   );
 };
+export default ListenNow;

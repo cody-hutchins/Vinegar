@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export const Component = () => {
+const Queue = () => {
   let drag = false;
   let queuePosition = 0;
   let queueItems = [];
@@ -153,11 +153,12 @@ export const Component = () => {
         <div
           className="queue-body"
           v-if="page == 'history'">
-          <mediaitem-list-item
+          <MediaItemListItem
             show-library-status="false"
             v-for="item in history"
             v-bind:key="item.id"
-            item="item"></mediaitem-list-item>
+            item="item"
+          />
         </div>
         <div
           className="queue-body"
@@ -169,7 +170,8 @@ export const Component = () => {
             <template v-for="(queueItem, position) in displayQueueItems">
               <div
                 v-if="position === 0"
-                key="queueItem.item.id"></div>
+                key="queueItem.item.id"
+              />
               <div
                 className="cd-queue-item"
                 v-else
@@ -181,9 +183,10 @@ export const Component = () => {
                 <div className="row">
                   <div className="col-auto cider-flex-center">
                     <div className="artwork">
-                      <mediaitem-artwork
+                      <MediaItemArtwork
                         url="queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ''"
-                        size="32"></mediaitem-artwork>
+                        size="32"
+                      />
                     </div>
                   </div>
                   <div className="col queue-info">
@@ -195,7 +198,7 @@ export const Component = () => {
                   <div
                     className="queue-explicit-icon cider-flex-center"
                     v-if="queueItem.item.attributes.contentRating == 'explicit'">
-                    <div className="explicit-icon"></div>
+                    <div className="explicit-icon" />
                   </div>
                   <div className="col queue-duration-info">
                     <div className="queue-duration cider-flex-center">{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
@@ -242,3 +245,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default Queue;

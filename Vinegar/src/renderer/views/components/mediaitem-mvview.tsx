@@ -1,4 +1,6 @@
-export const Component = ({ item, imagesize }: { item: object; imagesize: number }) => {
+import MediaItemArtwork from "./MediaItemArtwork.jsx";
+
+const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number }) => {
   const app = this.$root;
   return (
     <div id="mediaitem-mvview">
@@ -8,10 +10,11 @@ export const Component = ({ item, imagesize }: { item: object; imagesize: number
             clickself="app.routeView(item)"
             className="cd-mediaitem-mvview">
             <div className="artwork">
-              <mediaitem-artwork
+              <MediaItemArtwork
                 url="item.attributes.artwork ? item.attributes.artwork.url : ''"
                 video="(item.attributes != null && item.attributes.editorialVideo != null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
-                size={imagesize ?? 300}></mediaitem-artwork>
+                size={imagesize ?? 300}
+              />
             </div>
             <div
               className="cd-mediaitem-mvview-overlay"
@@ -54,3 +57,5 @@ export const Component = ({ item, imagesize }: { item: object; imagesize: number
     </div>
   );
 };
+
+export default MediaItemMVView;

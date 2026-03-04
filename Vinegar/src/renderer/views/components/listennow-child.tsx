@@ -1,4 +1,7 @@
-export const Component = ({ recom, index }: { recom: object; index: number }) => {
+import MediaItemScrollerHorizontalLarge from "./mediaitem-scroller-horizontal-large.jsx";
+import MediaItemScrollerHorizontalSP from "./mediaitem-scroller-horizontal-sp.jsx";
+
+const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   const isVisible = true;
   const app = this.$root;
   const visibilityChanged = (isVisible, entry) => {
@@ -53,10 +56,11 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
                 className="listennow-chip"
                 style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
                 className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type == 'artists'  }">
-                <mediaitem-artwork
+                <MediaItemArtwork
                   v-if="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork != null"
                   url="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork?.url"
-                  size="100"></mediaitem-artwork>
+                  size="100"
+                />
               </div>
               <div
                 onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
@@ -88,18 +92,21 @@ export const Component = ({ recom, index }: { recom: object; index: number }) =>
             </div>
           </div>
           <template v-if="recom.attributes.display.kind == 'MusicCoverShelf' || recom.attributes.display.kind == 'MusicCircleCoverShelf'">
-            <mediaitem-scroller-horizontal-large items="recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-large>
+            <MediaItemScrollerHorizontalLarge items="recom.relationships.contents.data.limit(10)" />
           </template>
           <template v-else>
-            <mediaitem-scroller-horizontal-sp
+            <MediaItemScrollerHorizontalSP
               withReason="index==0"
-              items="recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-sp>
+              items="recom.relationships.contents.data.limit(10)"
+            />
           </template>
         </template>
         <template v-else-if="recom.attributes.display.kind != 'MusicSuperHeroShelf'">
-          <div style={{ height: "330px" }}></div>
+          <div style={{ height: "330px" }} />
         </template>
       </div>
     </div>
   );
 };
+
+export default ListenNowChild;

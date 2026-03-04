@@ -4,6 +4,8 @@ import chromeTop from "./app/chrome-top";
 import appNavigation from "./app/app-navigation";
 import chromeBottom from "./app/chrome-bottom";
 import { ReactElement } from "react";
+import MiniView from "./components/mini-view.jsx";
+import FullscreenView from "./components/fullscreen-view.jsx";
 
 export default function App(): ReactElement {
   window.quasarConfig = {
@@ -165,7 +167,7 @@ export default function App(): ReactElement {
           <ViewTransition name="fsModeSwitch">
             {appMode === "fullscreen" && (
               <div className="fullscreen-view-container">
-                <fullscreen-view
+                <FullscreenView
                   ref="fsView"
                   image="currentArtUrlRaw"
                   time={mk.currentPlaybackTime - lyricOffset}
@@ -178,11 +180,12 @@ export default function App(): ReactElement {
           <ViewTransition name="fsModeSwitch">
             {appMode === "mini" && (
               <div className="fullscreen-view-container">
-                <mini-view
+                <MiniView
                   image="currentArtUrlRaw"
                   time={mk.currentPlaybackTime - lyricOffset}
                   lyrics="lyrics"
-                  richlyrics="richlyrics"></mini-view>
+                  richlyrics="richlyrics"
+                />
               </div>
             )}
           </ViewTransition>

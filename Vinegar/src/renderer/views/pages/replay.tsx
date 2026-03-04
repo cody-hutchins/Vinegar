@@ -1,6 +1,10 @@
 import { useEffect } from "react";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
+import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 
-export const Component = () => {
+const Replay = () => {
   let years = [];
   let loaded = {
     id: -1,
@@ -79,9 +83,10 @@ export const Component = () => {
             v-for="year in years"
             onClick={() => getReplayYear(year.attributes.year)}>
             <div className="artwork-container">
-              <mediaitem-artwork
+              <MediaItemArtwork
                 size="200"
-                url="year.relationships.playlist.data[0].attributes.artwork.url"></mediaitem-artwork>
+                url="year.relationships.playlist.data[0].attributes.artwork.url"
+              />
             </div>
             {year.attributes.year}
           </div>
@@ -95,10 +100,11 @@ export const Component = () => {
             <div
               className="replay-video"
               v-if="false">
-              <mediaitem-artwork
+              <MediaItemArtwork
                 url="loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.previewFrame.url"
                 video="loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.video"
-                video-priority="true"></mediaitem-artwork>
+                video-priority="true"
+              />
             </div>
             <h1 className="replay-header">
               {loaded.attributes.year} {$root.getLz("term.replay")}
@@ -123,22 +129,23 @@ export const Component = () => {
                 </h4>
               </div>
               <div className="col-auto replay-playlist-container">
-                <mediaitem-square
+                <MediaItemSquare
                   kind="card"
                   no-scale="true"
                   force-video="true"
-                  item="loaded.playlist"></mediaitem-square>
+                  item="loaded.playlist"
+                />
               </div>
             </div>
             {/*            Top Artists */}
             <h3>{$root.getLz("term.topArtists")}</h3>
             <div className="well">
-              <mediaitem-scroller-horizontal>
+              <MediaItemScrollerHorizontal>
                 <div
                   className="card replay-card"
                   v-for="artistData in loaded.views['top-artists'].data">
                   <div className="card-body">
-                    <mediaitem-square item="artistData.relationships.artist.data[0]"></mediaitem-square>
+                    <MediaItemSquare item="artistData.relationships.artist.data[0]" />
                   </div>
                   <div className="card-footer">
                     {convertToHours(artistData.attributes.listenTimeInMinutes)}
@@ -148,17 +155,17 @@ export const Component = () => {
                     {$root.getLz("term.times")}
                   </div>
                 </div>
-              </mediaitem-scroller-horizontal>
+              </MediaItemScrollerHorizontal>
             </div>
             {/*            Top Albums */}
             <h3>{$root.getLz("term.topAlbums")}</h3>
             <div className="well">
-              <mediaitem-scroller-horizontal>
+              <MediaItemScrollerHorizontal>
                 <div
                   className="card replay-card"
                   v-for="albumData in loaded.views['top-albums'].data">
                   <div className="card-body">
-                    <mediaitem-square item="albumData.relationships.album.data[0]"></mediaitem-square>
+                    <MediaItemSquare item="albumData.relationships.album.data[0]" />
                   </div>
                   <div className="card-footer">
                     {convertToHours(albumData.attributes.listenTimeInMinutes)}
@@ -167,14 +174,15 @@ export const Component = () => {
                     {albumData.attributes.playCount} {$root.getLz("term.plays")}
                   </div>
                 </div>
-              </mediaitem-scroller-horizontal>
+              </MediaItemScrollerHorizontal>
             </div>
             {/*            Top Songs */}
             <h3>{$root.getLz("term.topSongs")}</h3>
             <div className="well">
-              <listitem-horizontal
+              <ListitemHorizontal
                 show-library-status="false"
-                items="songsToArray(loaded.views['top-songs'].data)"></listitem-horizontal>
+                items="songsToArray(loaded.views['top-songs'].data)"
+              />
             </div>
             <h3>{$root.getLz("term.topGenres")}</h3>
             <div className="top-genres-container">
@@ -197,3 +205,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default Replay;

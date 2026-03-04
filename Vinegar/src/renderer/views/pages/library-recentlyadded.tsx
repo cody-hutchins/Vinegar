@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 
-export const Component = () => {
+const Component = () => {
   let loading = false;
   let firstRoute = `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`;
   const items = useMemo(() => {
@@ -58,25 +58,27 @@ export const Component = () => {
         <div
           className="well itemContainer collection-list-square"
           v-if="itemSize == 'normal'">
-          <mediaitem-square
+          <MediaItemSquare
             v-for="item in items"
             item="item"
-            v-bind:key="item.id"></mediaitem-square>
+            v-bind:key="item.id"
+          />
         </div>
         <div
           className="well itemContainer collection-list-square"
           v-else="itemSize == 'compact'">
-          <mediaitem-list-item
+          <MediaItemListItem
             show-meta-data="true"
             show-library-status="false"
             v-for="item in items"
             item="item"
-            v-bind:key="item.id"></mediaitem-list-item>
+            v-bind:key="item.id"
+          />
         </div>
         <div
           className="well itemContainer collection-list-square"
           v-show="loading">
-          <div className="spinner"></div>
+          <div className="spinner" />
         </div>
         <button
           v-if="nextUrl && !loading"

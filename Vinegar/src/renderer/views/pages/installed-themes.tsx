@@ -74,13 +74,14 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
           key="theme">
           <b-row>
             <b-col sm="auto">
-              <div className="handle codicon codicon-grabber"></div>
+              <div className="handle codicon codicon-grabber" />
             </b-col>
             <b-col className="themeLabel">{getThemeName(theme)}</b-col>
             <b-col sm="auto">
               <button
                 className="removeItem codicon codicon-close"
-                onClick={() => remove(theme)}></button>
+                onClick={() => remove(theme)}
+              />
             </b-col>
           </b-row>
         </b-list-group-item>
@@ -303,22 +304,23 @@ export const InstalledThemes = () => {
                       <b-col
                         sm="auto"
                         v-if="theme.pack">
-                        <button className="themeContextMenu codicon codicon-package"></button>
+                        <button className="themeContextMenu codicon codicon-package" />
                       </b-col>
                       <b-col sm="auto">
-                        <button className="themeContextMenu codicon codicon-check"></button>
+                        <button className="themeContextMenu codicon codicon-check" />
                       </b-col>
                     </template>
                     <template v-else>
                       <b-col
                         sm="auto"
                         v-if="theme.pack">
-                        <button className="themeContextMenu codicon codicon-package"></button>
+                        <button className="themeContextMenu codicon codicon-package" />
                       </b-col>
                       <b-col sm="auto">
                         <button
                           clickstop="contextMenu($event, theme)"
-                          className="themeContextMenu codicon codicon-list-unordered"></button>
+                          className="themeContextMenu codicon codicon-list-unordered"
+                        />
                       </b-col>
                     </template>
                   </b-row>
@@ -334,12 +336,12 @@ export const InstalledThemes = () => {
                     <b-col className="themeLabel">{packEntry.name}</b-col>
                     <template v-if="$root.cfg.visual.styles.includes(packEntry.file)">
                       <b-col sm="auto">
-                        <button className="themeContextMenu codicon codicon-check"></button>
+                        <button className="themeContextMenu codicon codicon-check" />
                       </b-col>
                     </template>
                     <template v-else>
                       <b-col sm="auto">
-                        <button className="themeContextMenu codicon codicon-diff-added"></button>
+                        <button className="themeContextMenu codicon codicon-diff-added" />
                       </b-col>
                     </template>
                   </b-row>

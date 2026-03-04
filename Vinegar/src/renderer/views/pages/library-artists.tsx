@@ -1,6 +1,9 @@
 import { useEffect } from "react";
+import MediaItemArtwork from "../components/MediaItemArtwork.jsx";
+import LibraryArtistItem from "../components/libraryartist-item.jsx";
+import InlineCollectionList from "../components/inline-collection-list.jsx";
 
-export const Component = () => {
+const Component = () => {
   const app = this.$root;
   let library = this.$root.library;
   let ciderPodcasts = [];
@@ -63,7 +66,7 @@ export const Component = () => {
               <div
                 className="search-input-container"
                 style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
-                <div className="search-input--icon"></div>
+                <div className="search-input--icon" />
                 <input
                   type="search"
                   style={{ width: "100%" }}
@@ -76,23 +79,25 @@ export const Component = () => {
               </div>
             </div>
             <div className="podcasts-list">
-              <libraryartist-item
+              <LibraryArtistItem
                 show-duration="false"
                 show-meta-data="true"
                 show-library-status="false"
                 item="item"
-                v-for="item in library.artists.displayListing"></libraryartist-item>
+                v-for="item in library.artists.displayListing"
+              />
             </div>
           </div>
           <div className="episodes-list">
             <div
               className="episodes-inline-info"
               v-if="clready">
-              <inline-collection-list
+              <InlineCollectionList
                 parentSelector="'.episodes-list'"
                 data="clresponse"
                 type="cltype"
-                title="cltitle"></inline-collection-list>
+                title="cltitle"
+              />
             </div>
           </div>
         </div>
@@ -261,22 +266,22 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
       <div
         v-observe-visibility="{callback: visibilityChanged}"
         onClick={() => select}
-        className="cd-mediaitem-list-item"
-        className="{'mediaitem-selected': app.select_hasMediaItem(guid)}"
-        contextmenu="contextMenu">
+        className={`cd-mediaitem-list-item ${app.select_hasMediaItem(guid) ? "mediaitem-selected" : ""}`}
+        onContextMenu={contextMenu}>
         <template v-if="isVisible">
           <div
             className="artwork"
             v-if="showArtwork == true">
-            <mediaitem-artwork
-              url="getArtwork()"
+            <MediaItemArtwork
+              url={getArtwork()}
               size="50"
-              type="item.type"></mediaitem-artwork>
+              type={item.type}
+            />
           </div>
           <div
             className="info-rect"
             style={{ paddingLeft: showArtwork ? "" : "16px" }}
-            dblclick="select">
+            onDoubleClick={select}>
             <div className="title text-overflow-elipsis">{item.attributes.name}</div>
           </div>
         </template>

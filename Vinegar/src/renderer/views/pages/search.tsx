@@ -1,4 +1,10 @@
-export const Component = ({ search }: { search: object }) => {
+import ListitemHorizontal from "../components/listitem-horizontal.jsx";
+import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
+import MediaitemSmarthints from "../components/mediaitem-smarthints.jsx";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+
+const Component = ({ search }: { search: object }) => {
   const app = this.$root;
   let recentlyPlayed = [];
   let goriesView = [];
@@ -52,7 +58,7 @@ export const Component = ({ search }: { search: object }) => {
         <div
           className="search-input-container fs-search"
           v-if="$root.appMode == 'fullscreen'">
-          <div className="search-input--icon"></div>
+          <div className="search-input--icon" />
           <input
             type="search"
             spellcheck="false"
@@ -81,11 +87,11 @@ export const Component = ({ search }: { search: object }) => {
                 {hint.displayTerm}
               </button>
               <template v-for="(item, position) in $root.search.hints.filter((a) => {return a.content != null})">
-                <mediaitem-smarthints
+                <MediaitemSmarthints
                   item="item.content"
                   position="position">
                   {" "}
-                </mediaitem-smarthints>
+                </MediaitemSmarthints>
               </template>
             </div>
           </div>
@@ -111,7 +117,7 @@ export const Component = ({ search }: { search: object }) => {
         <div v-if="search != null && search != [] && search.term != '' && $root.search.showSearchView">
           <template v-if="searchType == 'catalog'">
             <h3>{app.getLz("term.topResult")}</h3>
-            <mediaitem-scroller-horizontal items="search?.results[search?.results?.meta?.results?.order[0]]?.data"></mediaitem-scroller-horizontal>
+            <MediaitemScrollerHorizontal items="search?.results[search?.results?.meta?.results?.order[0]]?.data" />
             <div className="row">
               <div
                 className="col"
@@ -128,12 +134,12 @@ export const Component = ({ search }: { search: object }) => {
                   </div>
                 </div>
                 <div className="mediaitem-list-item__grid">
-                  <listitem-horizontal items="search.results.song.data.limit(12)"></listitem-horizontal>
+                  <ListitemHorizontal items="search.results.song.data.limit(12)" />
                 </div>
               </div>
               <div
                 v-else
-                style={{ textAlign: center }}>
+                style={{ textAlign: "center" }}>
                 <h3>{app.getLz("error.noResults")}</h3>
                 <p>{app.getLz("error.noResults.description")}</p>
               </div>
@@ -158,10 +164,10 @@ export const Component = ({ search }: { search: object }) => {
                   </div>
                 </div>
                 <template v-if="!app.friendlyTypes(section).includes('Video')">
-                  <mediaitem-scroller-horizontal-large items="search.results[section].data.limit(10)"></mediaitem-scroller-horizontal-large>
+                  <MediaItemScrollerHorizontalLarge items="search.results[section].data.limit(10)" />
                 </template>
                 <template v-else>
-                  <mediaitem-scroller-horizontal-mvview items="search.results[section].data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                  <MediaItemScrollerHorizontalMVView items="search.results[section].data.limit(10)" />
                 </template>
               </template>
             </template>
@@ -180,7 +186,7 @@ export const Component = ({ search }: { search: object }) => {
                   </button>
                 </div>
               </div>
-              <mediaitem-scroller-horizontal-large items="search.resultsSocial.playlist.data.limit(10)"></mediaitem-scroller-horizontal-large>
+              <MediaItemScrollerHorizontalLarge items="search.resultsSocial.playlist.data.limit(10)" />
             </template>
             <template v-if="search.resultsSocial.profile">
               <div className="row">
@@ -197,7 +203,7 @@ export const Component = ({ search }: { search: object }) => {
                   </button>
                 </div>
               </div>
-              <mediaitem-scroller-horizontal-large items="search.resultsSocial.profile.data.limit(10)"></mediaitem-scroller-horizontal-large>
+              <MediaItemScrollerHorizontalLarge items="search.resultsSocial.profile.data.limit(10)" />
             </template>
           </template>
           <template v-else>
@@ -207,12 +213,12 @@ export const Component = ({ search }: { search: object }) => {
               <div
                 className="mediaitem-list-item__grid"
                 v-if="key.includes('songs')">
-                <listitem-horizontal items="section.data"></listitem-horizontal>
+                <ListitemHorizontal items="section.data" />
               </div>
               <div
                 className="well"
                 v-else>
-                <mediaitem-scroller-horizontal-large items="section.data"></mediaitem-scroller-horizontal-large>
+                <MediaItemScrollerHorizontalLarge items="section.data" />
               </div>
             </div>
           </template>
@@ -225,14 +231,14 @@ export const Component = ({ search }: { search: object }) => {
                 v-if="categoriesView != null && categoriesView != [] && categoriesView[0]?.attributes != null && categoriesView[0]?.attributes.title != null">
                 <h3>{$root.getLz("home.recentlyPlayed")}</h3>
                 <div className="mediaitem-list-item__grid">
-                  <listitem-horizontal items="recentlyPlayed.limit(10)"></listitem-horizontal>
+                  <ListitemHorizontal items="recentlyPlayed.limit(10)" />
                 </div>
-                {/* <mediaitem-square kind="'385'" size="600" v-for="item in recentlyPlayed.limit(10)" item="item" imagesize="800"></mediaitem-square> */}
+                {/* <MediaItemSquare kind="'385'" size="600" v-for="item in recentlyPlayed.limit(10)" item="item" imagesize="800" /> */}
                 <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
               </div>
             </div>
             <div className="categories">
-              <mediaitem-square
+              <MediaItemSquare
                 kind="'385'"
                 imageformat="'bb'"
                 size="600"

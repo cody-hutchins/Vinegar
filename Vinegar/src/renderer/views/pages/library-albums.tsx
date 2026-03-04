@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 
-export const Component = () => {
+const Component = () => {
   const pageSize = this.$root.cfg.libraryPrefs.pageSize;
   let library = this.$root.library;
   let mediaItemSize = "compact";
@@ -55,7 +55,7 @@ export const Component = () => {
             <div
               className="search-input-container"
               style={{ width: "100%", margin: "16px 0" }}>
-              <div className="search-input--icon"></div>
+              <div className="search-input--icon" />
               <input
                 type="search"
                 style={{ width: "100%" }}
@@ -128,21 +128,23 @@ export const Component = () => {
         <div className="well">
           <div className="albums-square-container">
             <div>
-              <mediaitem-square
+              <MediaItemSquare
                 v-if="prefs.viewAs == 'covers'"
                 size="'300'"
                 item="item"
-                v-for="item in currentSlice"></mediaitem-square>
+                v-for="item in currentSlice"
+              />
             </div>
           </div>
-          <mediaitem-list-item
+          <MediaItemListItem
             v-if="prefs.viewAs == 'list'"
             show-duration="false"
             show-meta-data="true"
             show-library-status="false"
             v-bind:key="item.id"
             item="item"
-            v-for="item in currentSlice"></mediaitem-list-item>
+            v-for="item in currentSlice"
+          />
         </div>
       </div>
     </div>

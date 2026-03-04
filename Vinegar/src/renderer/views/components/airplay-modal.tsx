@@ -22,7 +22,8 @@ export const AirplayModal = () => {
           <button
             className="close-btn"
             onClick={close}
-            aria-label={this.$root.getLz("action.close")}></button>
+            aria-label={this.$root.getLz("action.close")}
+          />
         </div>
         <div
           className="modal-content"

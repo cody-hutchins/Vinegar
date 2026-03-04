@@ -1,6 +1,11 @@
 import { useEffect } from "react";
+import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
+import ArtistChip from "../components/artist-chip.jsx";
+import ArtworkMaterial from "../components/artwork-material.jsx";
+import MediaItemListItem from "../components/mediaitem-list-item.jsx";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 
-export const Component = ({ data }: { data: object }) => {
+const Component = ({ data }: { data: object }) => {
   const app = this.$root;
   let editorialNotesExpanded = false;
   let drag = false;
@@ -12,9 +17,11 @@ export const Component = ({ data }: { data: object }) => {
   let headerVisible = true;
   let useArtistChip = false;
   let nestedPlaylist = [];
+
   useEffect(() => {
     setTimeout(isInLibrary);
   }, []);
+
   const watch = {
     data: function () {
       nestedPlaylist = [];
@@ -421,7 +428,7 @@ export const Component = ({ data }: { data: object }) => {
           </div>
           <template v-if="app.playlists.loadingState == 0">
             <div className="content-inner centered">
-              <div className="spinner"></div>
+              <div className="spinner" />
             </div>
           </template>
           <template v-if="app.playlists.loadingState == 1">
@@ -432,12 +439,13 @@ export const Component = ({ data }: { data: object }) => {
                 <div className="row">
                   <div className="col-auto cider-flex-center">
                     <div style={{ width: "260px", height: "260px" }}>
-                      <mediaitem-artwork
+                      <MediaItemArtwork
                         shadow="large"
                         video-priority="true"
                         url="(data.attributes != null && data.attributes.artwork != null) ? data.attributes.artwork.url : ((data.relationships != null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes != null) ? ((data.relationships.tracks.data[0].attributes.artwork != null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')"
                         video="(data.attributes != null && data.attributes.editorialVideo != null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
-                        size="260"></mediaitem-artwork>
+                        size="260"
+                      />
                     </div>
                   </div>
                   <div className="col playlist-info">
@@ -474,9 +482,10 @@ export const Component = ({ data }: { data: object }) => {
                           {getArtistName(data)}
                         </div>
                         <template v-if="useArtistChip">
-                          <artist-chip
+                          <ArtistChip
                             v-for="artist in data.relationships.artists?.data"
-                            item="artist"></artist-chip>
+                            item="artist"
+                          />
                         </template>
                         <div
                           className="playlist-desc"
@@ -485,11 +494,13 @@ export const Component = ({ data }: { data: object }) => {
                             v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) != null"
                             className="content"
                             v-html="data.attributes.description?.short ?? data.attributes.editorialNotes?.short"
-                            onClick={() => openInfoModal()}></div>
+                            onClick={() => openInfoModal()}
+                          />
                           <div
                             v-else-if="(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null"
                             className="content"
-                            v-html="data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard"></div>
+                            v-html="data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard"
+                          />
                           {/* <button v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) != null" className="more-btn"
                                                     onClick={() =>openInfoModal()}>
                                                 {app.getLz('term.showMore')}
@@ -501,7 +512,8 @@ export const Component = ({ data }: { data: object }) => {
                       <div className="playlist-desc-expanded">
                         <div
                           className="content"
-                          v-html="((data.attributes.editorialNotes) ? (data.attributes.editorialNotes.standard ?? (data.attributes.editorialNotes.short ?? '') ) : (data.attributes.description ? (data.attributes.description.standard ?? (data.attributes.description.short ?? '')) : ''))"></div>
+                          v-html="((data.attributes.editorialNotes) ? (data.attributes.editorialNotes.standard ?? (data.attributes.editorialNotes.short ?? '') ) : (data.attributes.description ? (data.attributes.description.standard ?? (data.attributes.description.short ?? '')) : ''))"
+                        />
                         <button
                           className="more-btn"
                           onClick={() => {
@@ -555,7 +567,7 @@ export const Component = ({ data }: { data: object }) => {
                         style={{ float: "right" }}
                         onClick={() => menu}
                         aria-label="app.getLz('term.more')">
-                        <div className="svg-icon"></div>
+                        <div className="svg-icon" />
                       </button>
                     </div>
                   </div>
@@ -564,10 +576,11 @@ export const Component = ({ data }: { data: object }) => {
               <div
                 className="artworkContainer"
                 v-if="data.attributes.artwork != null">
-                <artwork-material
+                <ArtworkMaterial
                   url="data.attributes.artwork.url"
                   size="260"
-                  images="1"></artwork-material>
+                  images="1"
+                />
               </div>
             </div>
             <div
@@ -623,7 +636,7 @@ export const Component = ({ data }: { data: object }) => {
                     style={{ float: "right" }}
                     onClick={() => menu}
                     aria-label="term.more">
-                    <div className="svg-icon"></div>
+                    <div className="svg-icon" />
                   </button>
                 </div>
               </div>
@@ -642,7 +655,7 @@ export const Component = ({ data }: { data: object }) => {
                         start="drag=true"
                         end="drag=false;put()">
                         <template v-if="nestedPlaylist == [] || nestedPlaylist.length <= 1">
-                          <mediaitem-list-item
+                          <MediaItemListItem
                             item="item"
                             parent="getItemParent(data)"
                             index="index"
@@ -650,12 +663,13 @@ export const Component = ({ data }: { data: object }) => {
                             showIndexPlaylist="(data.attributes.playParams.kind ?? data.type ?? '').includes('playlist')"
                             context-ext="buildContextMenu()"
                             v-bind:key="item.id"
-                            v-for="(item,index) in data.relationships.tracks.data"></mediaitem-list-item>
+                            v-for="(item,index) in data.relationships.tracks.data"
+                          />
                         </template>
                         <template v-else>
                           <div v-for="disc in nestedPlaylist">
                             <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
-                            <mediaitem-list-item
+                            <MediaItemListItem
                               item="item"
                               parent="getItemParent(data)"
                               index="index"
@@ -663,7 +677,8 @@ export const Component = ({ data }: { data: object }) => {
                               showIndexPlaylist="(data.attributes.playParams.kind ?? data.type ?? '').includes('playlist')"
                               context-ext="buildContextMenu()"
                               v-bind:key="item.id"
-                              v-for="(item,index) in disc.tracks"></mediaitem-list-item>
+                              v-for="(item,index) in disc.tracks"
+                            />
                           </div>
                         </template>
                       </draggable>
@@ -679,9 +694,10 @@ export const Component = ({ data }: { data: object }) => {
                           title="`${badge.attributes.name} - ${badge.attributes.handle}`"
                           v-bind:key="badge.id"
                           v-for="badge in itemBadges">
-                          <mediaitem-artwork
+                          <MediaItemArtwork
                             url="badge.attributes.artwork.url"
-                            size="60"></mediaitem-artwork>
+                            size="60"
+                          />
                         </div>
                       </div>
                     </div>
@@ -718,7 +734,7 @@ export const Component = ({ data }: { data: object }) => {
                       </div>
                       <div className="row">
                         <div className="col">
-                          <mediaitem-scroller-horizontal items="data.views[view].data"></mediaitem-scroller-horizontal>
+                          <MediaItemScrollerHorizontal items="data.views[view].data" />
                         </div>
                       </div>
                     </div>
@@ -751,7 +767,7 @@ export const Component = ({ data }: { data: object }) => {
           </div>
           <template v-if="app.playlists.loadingState == 0">
             <div className="content-inner centered">
-              <div className="spinner"></div>
+              <div className="spinner" />
             </div>
           </template>
         </div>

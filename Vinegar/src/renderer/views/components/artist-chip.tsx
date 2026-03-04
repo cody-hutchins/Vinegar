@@ -1,3 +1,5 @@
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
+
 export const ArtistChip = ({ item }: { item: object }) => {
   let image = false;
   let artist = {
@@ -28,14 +30,16 @@ export const ArtistChip = ({ item }: { item: object }) => {
           className="artist-chip__image"
           v-if="image"
           style={{ backgroundColor: "#" + (artist.attributes.artwork?.bgColor ?? "000") }}>
-          <mediaitem-artwork
+          <MediaItemArtwork
             v-if="artist.id != null"
             url="artist.attributes.artwork.url"
-            size="80"></mediaitem-artwork>
+            size="80"
+          />
         </div>
         <div
           className="artist-chip__image"
-          v-else></div>
+          v-else
+        />
         <div className="artist-chip__name">
           <span>{item.attributes.name}</span>
         </div>
@@ -43,12 +47,14 @@ export const ArtistChip = ({ item }: { item: object }) => {
           onClick={() => $root.setArtistFavorite(artist.id, true)}
           title="Follow"
           v-if="!$root.followingArtist(artist.id)"
-          className="artist-chip__follow codicon codicon-add"></button>
+          className="artist-chip__follow codicon codicon-add"
+        />
         <button
           onClick={() => $root.setArtistFavorite(artist.id, false)}
           title="Following"
           v-else
-          className="artist-chip__follow codicon codicon-check"></button>
+          className="artist-chip__follow codicon codicon-check"
+        />
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
+
 const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size: string | number; images: string | number }) => {
   let src = "";
   function mounted() {
@@ -6,7 +8,7 @@ const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size
   return (
     <div id="artwork-material">
       <div className="artworkMaterial">
-        <mediaitem-artwork
+        <MediaItemArtwork
           url={src}
           size="500"
           v-for={image in images}

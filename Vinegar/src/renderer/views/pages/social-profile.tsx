@@ -1,4 +1,7 @@
-export const Component = ({ data }: { data: object }) => {
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+
+const SocialProfile = ({ data }: { data: object }) => {
   const app = this.$root;
   let topSongsExpanded = false;
   function getArtistPalette(artist) {
@@ -32,11 +35,12 @@ export const Component = ({ data }: { data: object }) => {
               className="col-sm"
               style={{ width: "auto" }}>
               <div className="artist-image">
-                <mediaitem-artwork
+                <MediaItemArtwork
                   shadow="large"
                   url="data.attributes.artwork ? data.attributes.artwork.url : ''"
                   size="220"
-                  type="artists"></mediaitem-artwork>
+                  type="artists"
+                />
               </div>
             </div>
             <div className="col cider-flex-center">
@@ -60,12 +64,15 @@ export const Component = ({ data }: { data: object }) => {
                 </button>
               </div>
             </div>
-            <mediaitem-square
+            <MediaItemSquare
               item="item"
-              v-for="item in data.relationships['shared-playlists'].data.limit(10)"></mediaitem-square>
+              v-for="item in data.relationships['shared-playlists'].data.limit(10)"
+            />
           </template>
         </div>
       </div>
     </div>
   );
 };
+
+export default SocialProfile;

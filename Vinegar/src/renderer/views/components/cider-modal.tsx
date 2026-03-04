@@ -1,4 +1,6 @@
-export const Component = ({ playlists }: { playlists: object[] }) => {
+import { useEffect } from "react";
+
+const CiderModal = ({ playlists }: { playlists: object[] }) => {
   const playlistSorted = [];
   const searchQuery = "";
   const focused = "";
@@ -14,7 +16,9 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
       }
     });
   }
-
+  useEffect(() => {
+    mounted();
+  }, []);
   const addToPlaylist = (id) => {
     app.addSelectedToPlaylist(id);
   };
@@ -44,7 +48,8 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
               <button
                 className="close-btn"
                 onClick={() => app.resetState()}
-                aria-label="app.getLz('action.close')"></button>
+                aria-label="app.getLz('action.close')"
+              />
             </div>
             <div className="modal-content">
               <button
@@ -62,7 +67,7 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
               <div
                 className="search-input-container"
                 style={{ width: "100%", margin: "16px 0" }}>
-                <div className="search-input--icon"></div>
+                <div className="search-input--icon" />
                 <input
                   type="search"
                   ref="searchInput"
@@ -81,3 +86,5 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
     </div>
   );
 };
+
+export default CiderModal;

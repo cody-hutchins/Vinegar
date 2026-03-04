@@ -1,4 +1,4 @@
-export const Component = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
+const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   const isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
@@ -159,10 +159,11 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
           className="artwork"
           v-show="isVisible"
           v-if="showArtwork == true">
-          <mediaitem-artwork
+          <MediaItemArtwork
             url="getArtwork()"
             size="50"
-            type="item.type"></mediaitem-artwork>
+            type="item.type"
+          />
         </div>
         <div
           className="info-rect"
@@ -174,3 +175,5 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     </div>
   );
 };
+
+export default LibraryArtistItem;

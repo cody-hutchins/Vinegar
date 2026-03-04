@@ -1,7 +1,15 @@
-export const Component = () => {
+import AddToPlaylist from "../components/add-to-playlist-panel.jsx";
+import EQView from "../components/eq-view.jsx";
+import MenuPanel from "../components/menu-panel.jsx";
+import MoreInfoModal from "../components/moreinfo-modal.jsx";
+import PluginMenu from "../components/plugin-menu.jsx";
+import QRCodeModal from "../components/qrcode-modal.jsx";
+import SettingsWindow from "../components/settings-window.jsx";
+
+const Panels = () => {
   return (
     <>
-      <cider-menu-panel v-if="menuPanel.visible"> </cider-menu-panel>
+      <MenuPanel v-if="menuPanel.visible" />
       <transition name="wpfade">
         <div
           className="bg-artwork-container"
@@ -15,53 +23,56 @@ export const Component = () => {
         </div>
       </transition>
       <transition name="wpfade">
-        <div className="bg-artwork--placeholder"></div>
+        <div className="bg-artwork--placeholder" />
       </transition>
       <transition name="modal">
-        <c2-upgrade v-if="modals.c2Upgrade"></c2-upgrade>
+        <c2-upgrade v-if="modals.c2Upgrade" />
       </transition>
       <transition name="modal">
-        <add-to-playlist
+        <AddToPlaylist
           playlists="playlists.listing"
-          v-if="modals.addToPlaylist"></add-to-playlist>
+          v-if="modals.addToPlaylist"
+        />
       </transition>
       <transition name="modal">
-        <audio-controls v-if="modals.audioControls"></audio-controls>
+        <audio-controls v-if="modals.audioControls" />
       </transition>
       <transition name="modal">
-        <audio-playbackrate v-if="modals.audioPlaybackRate"></audio-playbackrate>
+        <audio-playbackrate v-if="modals.audioPlaybackRate" />
       </transition>
       <transition name="modal">
-        <audio-settings v-if="modals.audioSettings"></audio-settings>
+        <audio-settings v-if="modals.audioSettings" />
       </transition>
       <transition name="modal">
-        <castmenu v-if="modals.castMenu"></castmenu>
+        <castmenu v-if="modals.castMenu" />
       </transition>
       <transition name="modal">
-        <pathmenu v-if="modals.pathMenu"></pathmenu>
+        <pathmenu v-if="modals.pathMenu" />
       </transition>
       <transition name="modal">
-        <airplay-modal v-if="modals.airplayPW"></airplay-modal>
+        <airplay-modal v-if="modals.airplayPW" />
       </transition>
       <transition name="modal">
-        <plugin-menu v-if="modals.pluginMenu"></plugin-menu>
+        <PluginMenu v-if="modals.pluginMenu" />
       </transition>
       <transition name="modal">
-        <settings-window v-if="modals.settings"></settings-window>
+        <SettingsWindow v-if="modals.settings" />
       </transition>
       <transition name="modal">
-        <eq-view v-if="modals.equalizer"></eq-view>
+        <EQView v-if="modals.equalizer" />
       </transition>
       <transition name="modal">
-        <qrcode-modal
+        <QRCodeModal
           v-if="modals.qrcode"
           src="webremoteqr"
-          url="webremoteurl"></qrcode-modal>
+          url="webremoteurl"
+        />
       </transition>
       <transition name="modal">
-        <moreinfo-modal
+        <MoreInfoModal
           v-if="modals.moreInfo"
-          data="moreinfodata"></moreinfo-modal>
+          data="moreinfodata"
+        />
       </transition>
       <div
         id="apple-music-video-container"
@@ -115,7 +126,8 @@ export const Component = () => {
               <div
                 className="explicit-icon"
                 v-if="mk.nowPlayingItem?.attributes?.contentRating == 'explicit'"
-                style={{ display: "inline-block" }}></div>
+                style={{ display: "inline-block" }}
+              />
             </div>
             <div
               className="song-progress"
@@ -145,7 +157,8 @@ export const Component = () => {
                   onClick={() => muteButtonPressed()}
                   className="{'active': cfg.audio.volume == 0}"
                   title="cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
-                  v-b-tooltiphover></button>
+                  v-b-tooltiphover
+                />
                 <input
                   type="range"
                   wheel="volumeWheel"
@@ -165,13 +178,15 @@ export const Component = () => {
                   onClick={() => mk.pause()}
                   v-if="mk.isPlaying"
                   title="$root.getLz('term.pause')"
-                  v-b-tooltiphover></button>
+                  v-b-tooltiphover
+                />
                 <button
                   className="playback-button play"
                   onClick={() => mk.play()}
                   v-else
                   title="$root.getLz('term.play')"
-                  v-b-tooltiphover></button>
+                  v-b-tooltiphover
+                />
               </template>
               <div
                 className="app-chrome-item generic"
@@ -182,12 +197,14 @@ export const Component = () => {
                     title="$root.getLz('term.lyrics')"
                     v-b-tooltiphover
                     className="{'active': drawer.panel == 'lyrics'}"
-                    onClick={() => invokeDrawer("lyrics")}></button>
+                    onClick={() => invokeDrawer("lyrics")}
+                  />
                 </template>
                 <template v-else>
                   <button
                     className="playback-button--small lyrics"
-                    style={{ opacity: 0.3, pointerEvents: "none" }}></button>
+                    style={{ opacity: 0.3, pointerEvents: "none" }}
+                  />
                 </template>
               </div>
               <div
@@ -209,8 +226,10 @@ export const Component = () => {
             </div>
           </div>
         </div>
-        <div id="apple-music-video-player"></div>
+        <div id="apple-music-video-player" />
       </div>
     </>
   );
 };
+
+export default Panels;

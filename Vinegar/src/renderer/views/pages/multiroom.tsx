@@ -1,4 +1,8 @@
-export const Component = ({ data }: { data: object }) => {
+import ArtworkMaterial from "../components/artwork-material.jsx";
+import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
+
+const Multiroom = ({ data }: { data: object }) => {
   const app = this.$root;
 
   return (
@@ -7,16 +11,18 @@ export const Component = ({ data }: { data: object }) => {
         <div
           className="artworkContainer"
           v-if="data.attributes?.uber?.masterArt?.url">
-          <artwork-material
+          <ArtworkMaterial
             url="data.attributes?.uber?.masterArt?.url ?? ''"
             size="800"
-            images="1"></artwork-material>
+            images="1"
+          />
         </div>
         <div className="detail">
           <h1 className="header-text">{data.attributes?.title ?? ""}</h1>
           <h2
             className="header-desc"
-            v-html='data.relationships?.children?.data[0]?.attributes?.description ?? ""'></h2>
+            v-html='data.relationships?.children?.data[0]?.attributes?.description ?? ""'
+          />
           <template v-if="data.relationships">
             <template v-if="datatype=='rooms' &&  (data?.relationships?.contents?.data ?? []).length > 0">
               {/* <div className="row">
@@ -29,10 +35,11 @@ export const Component = ({ data }: { data: object }) => {
                         </div>
                     </div>  */}
               <template>
-                <mediaitem-square
+                <MediaItemSquare
                   item="item"
                   key="item?.id ?? ''"
-                  v-for="item in data?.relationships?.contents?.data"></mediaitem-square>
+                  v-for="item in data?.relationships?.contents?.data"
+                />
               </template>
             </template>
             <template
@@ -57,14 +64,15 @@ export const Component = ({ data }: { data: object }) => {
                 </div>
                 <template v-if="recom.relationships && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data))">
                   <template v-if="(recom.attributes.name && recom.attributes.name.includes('ideo')) || index === 0">
-                    <mediaitem-scroller-horizontal-mvview
+                    <MediaItemScrollerHorizontalMVView
                       imagesize="800"
                       browsesp="index == 0"
-                      items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                      items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"
+                    />
                   </template>
-                  <template v-else-if="recom.attributes.name == 'Chart Set'"></template>
+                  <template v-else-if="recom.attributes.name == 'Chart Set'" />
                   <template v-else>
-                    <mediaitem-scroller-horizontal-large items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-large>
+                    <MediaItemScrollerHorizontalLarge items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)" />
                   </template>
                 </template>
               </template>
@@ -75,3 +83,5 @@ export const Component = ({ data }: { data: object }) => {
     </div>
   );
 };
+
+export default Multiroom;

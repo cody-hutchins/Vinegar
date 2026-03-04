@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = () => {
+const RemotePair = () => {
   async function mounted() {
     ipcRenderer.send("get-remote-pair-url");
     ipcRenderer.on("send-remote-pair-url", (event, url) => {
@@ -18,8 +18,11 @@ export const Component = () => {
         <webview
           id="foo"
           src="https://cider.sh"
-          style={{ display: "inline-flex", width: "100%" }}></webview>
+          style={{ display: "inline-flex", width: "100%" }}
+        />
       </div>
     </div>
   );
 };
+
+export default RemotePair;

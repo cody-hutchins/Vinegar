@@ -1,4 +1,6 @@
-export const Component = ({ playlists }: { playlists: object[] }) => {
+import SidebarPlaylist from "./sidebar-playlist.jsx";
+
+const ShareSheet = ({ playlists }: { playlists: object[] }) => {
   let playlistSorted = [];
   let searchQuery = "";
   let focused = "";
@@ -48,7 +50,8 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
               <button
                 className="close-btn"
                 onClick={() => app.resetState()}
-                aria-label="app.getLz('action.close')"></button>
+                aria-label="app.getLz('action.close')"
+              />
             </div>
             <div className="modal-content">
               <button
@@ -58,17 +61,18 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
                 <div className="icon">{import("../svg/plus.svg")}</div>
                 <div className="name">{app.getLz("action.createPlaylist")}</div>
               </button>
-              <sidebar-playlist
+              <SidebarPlaylist
                 playlist-select="playlistSelect"
                 v-for="item in $root.getPlaylistFolderChildren('p.playlistsroot')"
                 v-bind:key="item.id"
-                item="item"></sidebar-playlist>
+                item="item"
+              />
             </div>
             <div className="modal-search">
               <div
                 className="search-input-container"
                 style={{ width: "100%", margin: "16px 0" }}>
-                <div className="search-input--icon"></div>
+                <div className="search-input--icon" />
                 <input
                   type="search"
                   ref="searchInput"
@@ -87,3 +91,5 @@ export const Component = ({ playlists }: { playlists: object[] }) => {
     </div>
   );
 };
+
+export default ShareSheet;

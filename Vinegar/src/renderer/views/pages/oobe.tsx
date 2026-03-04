@@ -1,4 +1,4 @@
-export const Component = () => {
+const Component = () => {
   let screen = "before_we_start";
   function signIn() {
     if (localStorage.getItem("music.ampwebplay.media-user-token")) {
@@ -105,7 +105,7 @@ export const Component = () => {
           className="oobe-view"
           v-if="screen == 'general'">
           <div className="oobe-header">{getLz("oobe.general.title")}</div>
-          <div className="oobe-body text"></div>
+          <div className="oobe-body text" />
           <div className="oobe-footer">
             <div className="btn-group">
               <div
@@ -229,7 +229,7 @@ export const Component = () => {
           v-if="screen == 'signin'">
           <div className="oobe-header">Sign in with Apple Music</div>
           <div className="oobe-body">
-            <div className="blurb"></div>
+            <div className="blurb" />
           </div>
           <div className="oobe-footer">
             <div className="btn-group">
@@ -247,10 +247,12 @@ export const Component = () => {
             v-if="$root.platform !== 'darwin'">
             <button
               className="min"
-              onClick={() => $root.ipcRenderer.send("minimize")}></button>
+              onClick={() => $root.ipcRenderer.send("minimize")}
+            />
             <button
               className="close"
-              onClick={() => $root.ipcRenderer.send("close")}></button>
+              onClick={() => $root.ipcRenderer.send("close")}
+            />
           </div>
         </div>
       </div>

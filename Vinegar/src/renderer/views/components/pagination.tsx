@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-export const Component = ({ length, pageSize, scroll, scrollSelector }: { length: number; pageSize: number; scroll: string; scrollSelector: string }) => {
+import { useEffect, useMemo } from "react";
+const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: number; pageSize: number; scroll: string; scrollSelector: string }) => {
   let currentPage = 1;
   function mounted() {
     document.querySelector(scrollSelector).addEventListener("scroll", handleScroll);
@@ -7,6 +7,10 @@ export const Component = ({ length, pageSize, scroll, scrollSelector }: { length
   function destroyed() {
     document.querySelector(scrollSelector).removeEventListener("scroll", handleScroll);
   }
+  useEffect(() => {
+    mounted();
+    return destroyed;
+  });
   const watch = {
     length: function () {
       if (isInfinite) {
@@ -164,3 +168,5 @@ export const Component = ({ length, pageSize, scroll, scrollSelector }: { length
     </div>
   );
 };
+
+export default Pagination;

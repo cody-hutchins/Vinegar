@@ -1,3 +1,6 @@
+import LyricsView from "../components/lyrics-view.jsx";
+import Queue from "../components/queue.jsx";
+
 <div
   className="app-navigation"
   v-cloak>
@@ -129,9 +132,9 @@
     </div>
   </transition>
   <transition name="sidebartransition">
-    <cider-app-sidebar v-if="!chrome.sidebarCollapsed"></cider-app-sidebar>
+    <cider-app-sidebar v-if="!chrome.sidebarCollapsed" />
   </transition>
-  <app-content-area></app-content-area>
+  <app-content-area />
   <transition name="drawertransition">
     <div
       className="app-drawer"
@@ -155,11 +158,12 @@
           />
         </div>
       </div>
-      <lyrics-view
+      <LyricsView
         v-if="drawer.panel == 'lyrics'"
         time="mk.currentPlaybackTime - lyricOffset"
         lyrics="lyrics"
-        richlyrics="richlyrics"></lyrics-view>
+        richlyrics="richlyrics"
+      />
       <div
         v-if="drawer.panel == 'lyrics'"
         className="lyric-footer">
@@ -175,9 +179,10 @@
     <div
       className="app-drawer"
       v-if="drawer.open && drawer.panel == 'queue'">
-      <cider-queue
+      <Queue
         ref="queue"
-        v-if="drawer.panel == 'queue'"></cider-queue>
+        v-if="drawer.panel == 'queue'"
+      />
     </div>
   </transition>
 </div>;

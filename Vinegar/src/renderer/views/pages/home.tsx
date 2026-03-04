@@ -1,6 +1,7 @@
 import { useEffect } from "react";
+import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 
-export const Component = () => {
+const Component = () => {
   const app = this.$root;
   let followedArtists = this.$root.cfg.home.followedArtists;
   let favoriteItems = this.$root.cfg.home.favoriteItems;
@@ -188,14 +189,16 @@ export const Component = () => {
               </div>
               <div className="well artistfeed-well">
                 <template v-if="isSectionReady('recentlyPlayed')">
-                  <mediaitem-list-item
+                  <MediaItemListItem
                     v-for="item in recentlyPlayed.limit(6)"
                     item="item"
-                    v-bind:key="item.id"></mediaitem-list-item>
+                    v-bind:key="item.id"
+                  />
                 </template>
                 <div
                   className="spinner"
-                  v-else></div>
+                  v-else
+                />
               </div>
             </div>
             <div className="col">
@@ -213,7 +216,8 @@ export const Component = () => {
                   <div
                     className="spinner"
                     style={{ height: "26px" }}
-                    v-else></div>
+                    v-else
+                  />
                   <button
                     className="cd-btn-seeall"
                     onClick={() => app.appRoute("artist-feed")}>
@@ -225,14 +229,16 @@ export const Component = () => {
                 className="well artistfeed-well"
                 style={{ marginTop: 0 }}>
                 <template v-if="artistFeed.length > 0">
-                  <mediaitem-list-item
+                  <MediaItemListItem
                     v-for="item in artistFeed.limit(6)"
                     item="item"
-                    v-bind:key="item.id"></mediaitem-list-item>
+                    v-bind:key="item.id"
+                  />
                 </template>
                 <div
                   className="spinner"
-                  v-else-if="followedArtists.length > 0"></div>
+                  v-else-if="followedArtists.length > 0"
+                />
                 <div
                   className="no-artist"
                   v-else>
@@ -249,8 +255,8 @@ export const Component = () => {
           {/*                        <div className="hint-text" v-if="favorites.length == 0">Items you have added to your favorites will */}
           {/*                            appear here. */}
           {/*                        </div> */}
-          {/*                        <mediaitem-scroller-horizontal kind="small" items="favorites" */}
-          {/*                                                       item="item"></mediaitem-scroller-horizontal> */}
+          {/*                        <MediaItemScrollerHorizontal kind="small" items="favorites" */}
+          {/*                                                       item="item" /> */}
           {/*                    </div> */}
           {/*                </div> */}
           {/*            </div> */}
@@ -281,12 +287,14 @@ export const Component = () => {
                 </div>
               </div>
               <div className="well">
-                <mediaitem-scroller-horizontal
+                <MediaItemScrollerHorizontal
                   items="madeForYou"
-                  v-if="isSectionReady('madeForYou')"></mediaitem-scroller-horizontal>
+                  v-if="isSectionReady('madeForYou')"
+                />
                 <div
                   className="spinner"
-                  v-else></div>
+                  v-else
+                />
               </div>
             </div>
           </div>
@@ -307,12 +315,14 @@ export const Component = () => {
                 </div>
               </div>
               <div className="well">
-                <mediaitem-scroller-horizontal
+                <MediaItemScrollerHorizontal
                   items="friendsListeningTo"
-                  v-if="isSectionReady('friendsListeningTo')"></mediaitem-scroller-horizontal>
+                  v-if="isSectionReady('friendsListeningTo')"
+                />
                 <div
                   className="spinner"
-                  v-else></div>
+                  v-else
+                />
               </div>
             </div>
           </div>

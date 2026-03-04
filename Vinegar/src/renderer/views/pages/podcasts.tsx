@@ -20,14 +20,16 @@ export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected:
     </div>
   );
 };
+
 export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   return (
     <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
       <div className="artwork">
-        <mediaitem-artwork
+        <MediaItemArtwork
           url="item.attributes.artwork.url"
           size="50"
-          type="podcast"></mediaitem-artwork>
+          type="podcast"
+        />
       </div>
       <div className="info-rect">
         <div className="title text-overflow-elipsis">{item.attributes.name}</div>
@@ -161,7 +163,7 @@ export const Podcasts = () => {
               <div
                 className="search-input-container"
                 style={{ width: "100%" }}>
-                <div className="search-input--icon"></div>
+                <div className="search-input--icon" />
                 <input
                   type="search"
                   style={{ width: "100%" }}
@@ -212,7 +214,8 @@ export const Podcasts = () => {
                 isSelected="podcastSelected.id == podcast.id"
                 clicknative="selectPodcast(podcast)"
                 v-for="podcast in search.results"
-                item="podcast"></PodcastTab>
+                item="podcast"
+              />
             </div>
           </div>
           <div className="episodes-list">
@@ -222,10 +225,11 @@ export const Podcasts = () => {
               <div className="row">
                 <div className="col-auto cider-flex-center">
                   <div className="podcast-artwork">
-                    <mediaitem-artwork
+                    <MediaItemArtwork
                       shadow="large"
                       url="podcastSelected.attributes.artwork.url"
-                      size="300"></mediaitem-artwork>
+                      size="300"
+                    />
                   </div>
                 </div>
                 <div className="col podcast-show-info">
@@ -270,13 +274,15 @@ export const Podcasts = () => {
                 <button
                   className="close-btn"
                   onClick={() => (selected.id = -1)}
-                  aria-label="$root.getLz('action.close')"></button>
+                  aria-label="$root.getLz('action.close')"
+                />
               </div>
               <div className="podcast-artwork">
-                <mediaitem-artwork
+                <MediaItemArtwork
                   shadow="large"
                   url="selected.attributes.artwork.url"
-                  size="300"></mediaitem-artwork>
+                  size="300"
+                />
               </div>
               <h3 className="podcast-header">{selected.attributes.name}</h3>
               <button
@@ -316,10 +322,11 @@ export const Podcasts = () => {
       <div id="podcast-tab">
         <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
           <div className="artwork">
-            <mediaitem-artwork
+            <MediaItemArtwork
               url="item.attributes.artwork.url"
               size="50"
-              type="podcast"></mediaitem-artwork>
+              type="podcast"
+            />
           </div>
           <div className="info-rect">
             <div className="title text-overflow-elipsis">{item.attributes.name}</div>

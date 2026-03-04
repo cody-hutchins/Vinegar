@@ -1,4 +1,4 @@
-export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation: string[]; onindex: () => void; yoffset: number }) => {
+const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation: string[]; onindex: () => void; yoffset: number }) => {
   const app = this.$root;
   const watch = {
     time: function () {
@@ -189,9 +189,9 @@ export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoff
               end="lyric.endTime"
               v-bind:line-index="index.toString()">
               <div className="lyricWaiting">
-                <div class="WaitingDot1"></div>
-                <div class="WaitingDot2"></div>
-                <div class="WaitingDot3"></div>
+                <div class="WaitingDot1" />
+                <div class="WaitingDot2" />
+                <div class="WaitingDot3" />
               </div>
             </h3>
           </template>
@@ -203,3 +203,5 @@ export const Component = ({ time, lyrics, richlyrics, translation, onindex, yoff
     </div>
   );
 };
+
+export default LyricsView;

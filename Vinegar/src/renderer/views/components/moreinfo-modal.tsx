@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = ({ data }: { data: object }) => {
+const MoreInfoModal = ({ data }: { data: object }) => {
   const app = this.$root;
   const timedelay = false;
   function close() {
@@ -23,15 +23,19 @@ export const Component = ({ data }: { data: object }) => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="app.getLz('action.close')"></button>
+              aria-label="app.getLz('action.close')"
+            />
           </div>
           <div className="modal-content">
             <div
               className="content"
-              v-html="data.content"></div>
+              v-html="data.content"
+            />
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default MoreInfoModal;

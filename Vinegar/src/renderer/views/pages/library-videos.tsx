@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = ({ data }: { data: object }) => {
+const Component = ({ data }: { data: object }) => {
   let videos = [];
   let loaded = false;
   useEffect(() => {
@@ -22,10 +22,11 @@ export const Component = ({ data }: { data: object }) => {
         </div>
         <div className="madeforyou-body">
           <template v-if="videos.length > 0">
-            <mediaitem-square
+            <MediaItemSquare
               size="300"
               item="item"
-              v-for="item in videos"></mediaitem-square>
+              v-for="item in videos"
+            />
           </template>
           <template v-else-if="loaded == true">
             <div>{$root.getLz("term.noVideos")}</div>

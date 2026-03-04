@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const Component = () => {
+const Component = () => {
   const app = this.$root;
   const [playbackRate, setPlaybackRate] = useState(this.$root.cfg.audio.playbackRate);
   const playbackRateWheel = (event) => {
@@ -31,7 +31,8 @@ export const Component = () => {
             <button
               className="close-btn"
               onClick={() => (app.modals.audioPlaybackRate = false)}
-              aria-label="app.getLz('action.close')"></button>
+              aria-label="app.getLz('action.close')"
+            />
           </div>
           <div className="modal-content">
             <div className="md-option-line">

@@ -1,4 +1,4 @@
-export const Component = () => {
+const Keybinds = () => {
   const app = this.$root;
 
   const keyBindUpdate = (action) => {
@@ -307,3 +307,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default Keybinds;

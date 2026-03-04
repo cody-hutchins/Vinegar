@@ -1,4 +1,4 @@
-export const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
+const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
   const app = this.$root;
   let triggerEnabled = true;
   let canSeeTrigger = false;
@@ -103,17 +103,19 @@ export const Component = ({ data, title, type = "artists" }: { data: object; tit
           className="getClasses()">
           <template v-for="(item, key) in data.data">
             <template v-if="item.type == 'artists'">
-              <mediaitem-square item="item"></mediaitem-square>
+              <MediaItemSquare item="item" />
             </template>
             <template v-else>
-              <mediaitem-list-item
+              <MediaItemListItem
                 v-if="getKind(item) == 'song'"
                 index="key"
-                item="item"></mediaitem-list-item>
-              <mediaitem-square
+                item="item"
+              />
+              <MediaItemSquare
                 v-else
                 item="item"
-                type="getKind(item)"></mediaitem-square>
+                type="getKind(item)"
+              />
             </template>
           </template>
           <button
@@ -135,7 +137,7 @@ export const Component = ({ data, title, type = "artists" }: { data: object; tit
         <div
           className="well itemContainer"
           v-show="loading">
-          <div className="spinner"></div>
+          <div className="spinner" />
         </div>
       </div>
     </div>

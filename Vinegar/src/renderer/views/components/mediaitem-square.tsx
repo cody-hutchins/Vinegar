@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt: { type: Object; required: false } }) => {
+const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt: { type: Object; required: false } }) => {
   const isVisible = false;
   const addedToLibrary = false;
   const guid = uuidv4();
@@ -525,12 +525,12 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
             <div
               className="unavailable-overlay"
               v-if="unavailable">
-              <div className="codicon codicon-circle-slash"></div>
+              <div className="codicon codicon-circle-slash" />
             </div>
             <div
               className="artwork"
               onClick={() => app.routeView(item)}>
-              <mediaitem-artwork
+              <MediaItemArtwork
                 url="getArtworkUrl()"
                 video="(item.attributes != null && item.attributes.editorialVideo != null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
                 size="size"
@@ -538,7 +538,8 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
                 shadow="subtle"
                 bgcolor="getBgColor()"
                 video-priority="forceVideo"
-                type="item.type"></mediaitem-artwork>
+                type="item.type"
+              />
             </div>
             <button
               className="menu-btn"
@@ -561,9 +562,10 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
                 className="socialBadge"
                 v-for="badge in itemBadges.limit(1)"
                 v-bind:key="badge.id">
-                <mediaitem-artwork
+                <MediaItemArtwork
                   url="(badge.attributes.artwork ? badge.attributes.artwork.url : '')"
-                  size="32"></mediaitem-artwork>
+                  size="32"
+                />
               </div>
             </div>
           </div>
@@ -581,7 +583,8 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
               <div
                 className="explicit-icon"
                 v-if="item.attributes && item.attributes.contentRating == 'explicit'"
-                style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}></div>
+                style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
+              />
             </div>
             <div
               title="getSubtitle()"
@@ -601,3 +604,5 @@ export const Component = ({ item, kind = "", size = "190", forceVideo = false, r
     </div>
   );
 };
+
+export default MediaItemSquare;

@@ -1,4 +1,4 @@
-export const Component = () => {
+const Component = () => {
   let devices: {
     cast: [];
     airplay: [];
@@ -91,7 +91,8 @@ export const Component = () => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="$root.getLz('action.close')"></button>
+              aria-label="$root.getLz('action.close')"
+            />
           </div>
           <div
             className="modal-content"
@@ -132,7 +133,8 @@ export const Component = () => {
                         className="castPlayIndicator">
                         <path
                           d="M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"
-                          style={{ fillRule: "nonzero" }}></path>
+                          style={{ fillRule: "nonzero" }}
+                        />
                       </svg>
                     </div>
                   </div>
@@ -201,7 +203,8 @@ export const Component = () => {
                           className="castPlayIndicator">
                           <path
                             d="M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"
-                            style={{ fillRule: "nonzero" }}></path>
+                            style={{ fillRule: "nonzero" }}
+                          />
                         </svg>
                       </div>
                     </div>

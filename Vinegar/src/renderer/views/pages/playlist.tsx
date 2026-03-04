@@ -1,6 +1,12 @@
 import { useEffect, useMemo } from "react";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import ArtistChip from "../components/artist-chip.jsx";
+import ArtworkMaterial from "../components/artwork-material.jsx";
+import MediaItemListItem from "../components/mediaitem-list-item.jsx";
+import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
+import SVGIcon from "../../main/components/svg-icon.jsx";
 
-export const Component = ({ data }: { data: object }) => {
+const Playlist = ({ data }: { data: object }) => {
   const app = this.$root;
   let editorialNotesExpanded = false;
   let drag = false;
@@ -711,7 +717,7 @@ export const Component = ({ data }: { data: object }) => {
         style={{ bgColor: data.attributes.artwork != null && data.attributes.artwork["bgColor"] != null ? "#" + data.attributes.artwork.bgColor : "" }}>
         <template v-if="app.playlists.loadingState == 0">
           <div className="content-inner centered">
-            <div className="spinner"></div>
+            <div className="spinner" />
           </div>
         </template>
         <template v-if="app.playlists.loadingState == 1">
@@ -723,26 +729,28 @@ export const Component = ({ data }: { data: object }) => {
               <div
                 className="playlist-hero"
                 v-if="hasHero()">
-                <mediaitem-artwork
+                <MediaItemArtwork
                   shadow="none"
                   url="hasHero()"
                   size="2160"
                 />
                 <div
                   className="hero-tint"
-                  style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}></div>
+                  style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                />
               </div>
               <div className="row">
                 <div
                   className="col-auto cider-flex-center"
                   mouseover="minClass(false)">
                   <div className="mediaContainer">
-                    <mediaitem-artwork
+                    <MediaItemArtwork
                       shadow="large"
                       video-priority="true"
                       url="(data.attributes != null && data.attributes.artwork != null) ? data.attributes.artwork.url : ((data.relationships != null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes != null) ? ((data.relationships.tracks.data[0].attributes.artwork != null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')"
                       video="(data.attributes != null && data.attributes.editorialVideo != null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
-                      size="500"></mediaitem-artwork>
+                      size="500"
+                    />
                   </div>
                 </div>
                 <div className="col playlist-info">
@@ -783,10 +791,11 @@ export const Component = ({ data }: { data: object }) => {
                         {getArtistName(data)}
                       </div>
                       <template v-if="useArtistChip">
-                        <artist-chip
+                        <ArtistChip
                           v-for="artist in data.relationships.artists?.data"
                           style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                          item="artist"></artist-chip>
+                          item="artist"
+                        />
                       </template>
                       <div
                         className="playlist-desc"
@@ -796,12 +805,14 @@ export const Component = ({ data }: { data: object }) => {
                           v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) != null"
                           className="content"
                           v-html="data.attributes.description?.short ?? data.attributes.editorialNotes?.short"
-                          onClick={() => openInfoModal()}></div>
+                          onClick={() => openInfoModal()}
+                        />
                         <div
                           v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null) && (descriptionEditing == false)"
                           mouseover="minClass(false)"
                           onClick={() => editPlaylistDescription()}
-                          v-html="(data.attributes.description?.standard ?? (data.attributes.editorialNotes?.standard ?? '')).substring(0, 255) +'...'"></div>
+                          v-html="(data.attributes.description?.standard ?? (data.attributes.editorialNotes?.standard ?? '')).substring(0, 255) +'...'"
+                        />
                         <div
                           v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null) && (descriptionEditing)"
                           mouseover="minClass(false)">
@@ -826,7 +837,8 @@ export const Component = ({ data }: { data: object }) => {
                     <div className="playlist-desc-expanded">
                       <div
                         className="content"
-                        v-html="((data.attributes.editorialNotes) ? (data.attributes.editorialNotes.standard ?? (data.attributes.editorialNotes.short ?? '') ) : (data.attributes.description ? (data.attributes.description.standard ?? (data.attributes.description.short ?? '')) : ''))"></div>
+                        v-html="((data.attributes.editorialNotes) ? (data.attributes.editorialNotes.standard ?? (data.attributes.editorialNotes.short ?? '') ) : (data.attributes.description ? (data.attributes.description.standard ?? (data.attributes.description.short ?? '')) : ''))"
+                      />
                       <button
                         className="more-btn"
                         onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
@@ -889,9 +901,10 @@ export const Component = ({ data }: { data: object }) => {
                         className="['search-btn', showSearch ? 'active' : '']"
                         onClick={() => toggleSearch()}
                         aria-label="showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')">
-                        <svg-icon
+                        <SVGIcon
                           style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-                          url="showSearch ? './assets/search-alt.svg' : './assets/search.svg'"></svg-icon>
+                          url="showSearch ? './assets/search-alt.svg' : './assets/search.svg'"
+                        />
                       </button>
                       <button
                         style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
@@ -900,7 +913,8 @@ export const Component = ({ data }: { data: object }) => {
                         aria-label="app.getLz('term.more')">
                         <div
                           style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
-                          className="svg-icon"></div>
+                          className="svg-icon"
+                        />
                       </button>
                     </div>
                   </div>
@@ -910,10 +924,11 @@ export const Component = ({ data }: { data: object }) => {
             <div
               className="artworkContainer"
               v-if="data.attributes.artwork != null && !hasHero()">
-              <artwork-material
+              <ArtworkMaterial
                 url="data.attributes.artwork.url"
                 size="500"
-                images="1"></artwork-material>
+                images="1"
+              />
             </div>
             <button
               className="md-btn md-btn-small editTracksBtn"
@@ -922,10 +937,10 @@ export const Component = ({ data }: { data: object }) => {
                 editing = !editing;
               }}>
               <span v-if="!editing">
-                <div class="codicon codicon-edit"></div> {$root.getLz("action.editTracklist")}
+                <div class="codicon codicon-edit" /> {$root.getLz("action.editTracklist")}
               </span>
               <span v-else>
-                <div class="codicon codicon-check"></div> {$root.getLz("action.done")}
+                <div class="codicon codicon-check" /> {$root.getLz("action.done")}
               </span>
             </button>
           </div>
@@ -991,7 +1006,7 @@ export const Component = ({ data }: { data: object }) => {
                   style={{ float: right }}
                   onClick={() => menu}
                   aria-label="app.getLz('term.more')">
-                  <div className="svg-icon"></div>
+                  <div className="svg-icon" />
                 </button>
               </div>
             </div>
@@ -1017,7 +1032,7 @@ export const Component = ({ data }: { data: object }) => {
                       <div
                         v-if="showSearch"
                         className="search-input-container">
-                        <div className="search-input--icon"></div>
+                        <div className="search-input--icon" />
                         <input
                           type="search"
                           spellcheck="false"
@@ -1043,7 +1058,7 @@ export const Component = ({ data }: { data: object }) => {
                         start="drag=true"
                         end="drag=false;put()">
                         <template v-if="!hasNestedPlaylist">
-                          <mediaitem-list-item
+                          <MediaItemListItem
                             item="item"
                             parent="getItemParent(data)"
                             index="index + start"
@@ -1051,12 +1066,13 @@ export const Component = ({ data }: { data: object }) => {
                             showIndexPlaylist="(data.attributes.playParams?.kind ?? data.type ?? '').includes('playlist')"
                             context-ext="buildContextMenu()"
                             v-bind:key="item.id"
-                            v-for="(item,index) in currentSlice"></mediaitem-list-item>
+                            v-for="(item,index) in currentSlice"
+                          />
                         </template>
                         <template v-else>
                           <div v-for="disc in nestedSlices">
                             <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
-                            <mediaitem-list-item
+                            <MediaItemListItem
                               item="item"
                               parent="getItemParent(data)"
                               index="index"
@@ -1064,7 +1080,8 @@ export const Component = ({ data }: { data: object }) => {
                               showIndexPlaylist="(data.attributes.playParams?.kind ?? data.type ?? '').includes('playlist')"
                               context-ext="buildContextMenu()"
                               v-bind:key="item.id"
-                              v-for="(item,index) in disc.tracks"></mediaitem-list-item>
+                              v-for="(item,index) in disc.tracks"
+                            />
                           </div>
                         </template>
                       </draggable>
@@ -1079,9 +1096,10 @@ export const Component = ({ data }: { data: object }) => {
                           className="socialBadge"
                           title="`${badge.attributes.name} - ${badge.attributes.handle}`"
                           v-for="badge in itemBadges">
-                          <mediaitem-artwork
+                          <MediaItemArtwork
                             url="badge.attributes.artwork.url"
-                            size="60"></mediaitem-artwork>
+                            size="60"
+                          />
                         </div>
                       </div>
                     </div>
@@ -1118,7 +1136,7 @@ export const Component = ({ data }: { data: object }) => {
                     </div>
                     <div className="row">
                       <div className="col">
-                        <mediaitem-scroller-horizontal items="data.views[view].data"></mediaitem-scroller-horizontal>
+                        <MediaitemScrollerHorizontal items="data.views[view].data" />
                       </div>
                     </div>
                   </div>
@@ -1131,3 +1149,5 @@ export const Component = ({ data }: { data: object }) => {
     </div>
   );
 };
+
+export default Playlist;

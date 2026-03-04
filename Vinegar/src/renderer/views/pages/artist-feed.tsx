@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
-export const Component = () => {
+const ArtistFeed = () => {
   const app = this.$root;
   let followedArtists = this.$root.cfg.home.followedArtists;
   let artistFeed = [];
@@ -94,16 +96,18 @@ export const Component = () => {
                   <div
                     className="spinner"
                     style={{ height: "26px" }}
-                    v-else></div>
+                    v-else
+                  />
                 </div>
               </div>
               <vue-horizontal>
                 <div
                   v-for="artist in artists"
                   style={{ margin: "6px" }}>
-                  <mediaitem-square
+                  <MediaItemSquare
                     item="artist"
-                    kind="small"></mediaitem-square>
+                    kind="small"
+                  />
                   <button
                     onClick={() => unfollow(artist.id)}
                     className="md-btn md-btn-glyph"
@@ -111,7 +115,8 @@ export const Component = () => {
                     <div className="sidebar-icon">
                       <div
                         className="svg-icon"
-                        style={{ "--url": "url(./assets/feather/x-circle.svg)" }}></div>
+                        style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
+                      />
                     </div>
                     {app.getLz("action.removeFavorite")}
                   </button>
@@ -133,13 +138,14 @@ export const Component = () => {
                 className="well"
                 style={{ marginTop: 0 }}>
                 <template v-if="artistFeed.length > 0">
-                  <mediaitem-list-item
+                  <MediaItemListItem
                     v-for="item in artistFeed"
                     v-bind:key="item.id"
-                    item="item"></mediaitem-list-item>
+                    item="item"
+                  />
                 </template>
                 <template v-else>
-                  <div className="spinner"></div>
+                  <div className="spinner" />
                 </template>
               </div>
             </div>
@@ -149,3 +155,4 @@ export const Component = () => {
     </div>
   );
 };
+export default ArtistFeed;

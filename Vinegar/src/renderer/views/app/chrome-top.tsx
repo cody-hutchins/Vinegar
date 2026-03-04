@@ -1,3 +1,7 @@
+import SVGIcon from "../../main/components/svg-icon.jsx";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import MediaItemSmarthints from "../components/mediaitem-smarthints.jsx";
+
 export const ChromeTop = () => (
   <div
     className="app-chrome"
@@ -9,18 +13,22 @@ export const ChromeTop = () => (
         <div className="window-controls-macos">
           <div
             className="close"
-            onClick={() => ipcRenderer.send("close")}></div>
+            onClick={() => ipcRenderer.send("close")}
+          />
           <div
             className="minimize"
-            onClick={() => ipcRenderer.send("minimize")}></div>
+            onClick={() => ipcRenderer.send("minimize")}
+          />
           <div
             className="minmax restore"
             v-if="chrome.maximized"
-            onClick={() => ipcRenderer.send("maximize")}></div>
+            onClick={() => ipcRenderer.send("maximize")}
+          />
           <div
             className="minmax"
             v-else
-            onClick={() => ipcRenderer.send("maximize")}></div>
+            onClick={() => ipcRenderer.send("maximize")}
+          />
         </div>
       </div>
       <div
@@ -32,19 +40,21 @@ export const ChromeTop = () => (
           onClick={() => mainMenuVisibility(true)}
           contextmenu="mainMenuVisibility(true)"
           className="{active: chrome.menuOpened}"
-          aria-label="$root.getLz('term.quickNav')"></button>
+          aria-label="$root.getLz('term.quickNav')"
+        />
       </div>
       <template v-if="getThemeDirective('appNavigation') != 'seperate'">
         <div
           className="vdiv"
-          v-if="getThemeDirective('windowLayout') == 'twopanel'"></div>
+          v-if="getThemeDirective('windowLayout') == 'twopanel'"
+        />
         <div className="app-chrome-item">
           <button
             className="playback-button navigation"
             onClick={() => navigateBack()}
             title="$root.getLz('term.navigateBack')"
             v-b-tooltiphover>
-            <svg-icon url="./views/svg/chevron-left.svg"></svg-icon>
+            <SVGIcon url="./views/svg/chevron-left.svg" />
           </button>
         </div>
         <div className="app-chrome-item">
@@ -53,7 +63,7 @@ export const ChromeTop = () => (
             onClick={() => navigateForward()}
             title="$root.getLz('term.navigateForward')"
             v-b-tooltiphover>
-            <svg-icon url="./views/svg/chevron-right.svg"></svg-icon>
+            <SVGIcon url="./views/svg/chevron-right.svg" />
           </button>
         </div>
         <div
@@ -76,7 +86,8 @@ export const ChromeTop = () => (
         </div>
         <div
           className="vdiv display--large"
-          v-if="getThemeDirective('windowLayout') != 'twopanel'"></div>
+          v-if="getThemeDirective('windowLayout') != 'twopanel'"
+        />
       </template>
       <template v-if="getThemeDirective('windowLayout') != 'twopanel'">
         <div className="app-chrome-item playback-control-buttons">
@@ -89,7 +100,8 @@ export const ChromeTop = () => (
                 mk.shuffleMode = 1;
               }}
               title="$root.getLz('term.enableShuffle')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
             <button
               className="playback-button--small shuffle active"
               v-else
@@ -98,7 +110,8 @@ export const ChromeTop = () => (
                 mk.shuffleMode = 0;
               }}
               title="$root.getLz('term.disableShuffle')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
           </div>
           <div className="app-chrome-item display--large">
             <button
@@ -106,7 +119,8 @@ export const ChromeTop = () => (
               onClick={() => prevButton()}
               className="isPrevDisabled() && 'disabled'"
               title="$root.getLz('term.previous')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
           </div>
           <div className="app-chrome-item display--large">
             <button
@@ -114,19 +128,22 @@ export const ChromeTop = () => (
               onClick={() => mk.stop()}
               v-if="mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
               title="$root.getLz('term.stop')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
             <button
               className="playback-button pause"
               onClick={() => mk.pause()}
               v-else-if="mk.isPlaying"
               title="$root.getLz('term.pause')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
             <button
               className="playback-button play"
               onClick={() => mk.play()}
               v-else
               title="$root.getLz('term.play')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
           </div>
           <div className="app-chrome-item display--large">
             <button
@@ -134,7 +151,8 @@ export const ChromeTop = () => (
               onClick={() => skipToNextItem()}
               className="isNextDisabled() && 'disabled'"
               title="$root.getLz('term.next')"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
           </div>
           <div className="app-chrome-item display--large">
             <button
@@ -143,7 +161,8 @@ export const ChromeTop = () => (
               className="isDisabled() && 'disabled'"
               onClick={() => repeatIncrement()}
               title="$root.lz.repeat[mk.repeatMode]"
-              v-b-tooltiphover></button>
+              v-b-tooltiphover
+            />
           </div>
         </div>
       </template>
@@ -161,7 +180,7 @@ export const ChromeTop = () => (
             <div
               className="artwork"
               id="artworkLCD">
-              <mediaitem-artwork url="currentArtUrl"></mediaitem-artwork>
+              <MediaItemArtwork url="currentArtUrl" />
             </div>
             <b-popover
               custom-className="mediainfo-popover"
@@ -170,12 +189,13 @@ export const ChromeTop = () => (
               placement="bottom">
               <div className="content">
                 <div className="shadow-artwork">
-                  <mediaitem-artwork url="currentArtUrl"></mediaitem-artwork>
+                  <MediaItemArtwork url="currentArtUrl" />
                 </div>
                 <div className="popover-artwork">
-                  <mediaitem-artwork
+                  <MediaItemArtwork
                     size="210"
-                    url="currentArtUrl"></mediaitem-artwork>
+                    url="currentArtUrl"
+                  />
                 </div>
                 <div className="song-name">{mk.nowPlayingItem["attributes"]["name"]}</div>
                 <div
@@ -219,22 +239,26 @@ export const ChromeTop = () => (
                   className="audio-type private-icon"
                   v-if="cfg.general.privateEnabled === true"
                   title="$root.getLz('term.privateSession')"
-                  v-b-tooltiphover></div>
+                  v-b-tooltiphover
+                />
                 <div
                   className="audio-type spatial-icon"
                   v-if="cfg.audio.maikiwiAudio.spatial === true"
                   title="$root.getLz('settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization') + ' (' + getProfileLz('CTS', cfg.audio.maikiwiAudio.spatialProfile) + ')'"
-                  v-b-tooltiphover></div>
+                  v-b-tooltiphover
+                />
                 <div
                   className="audio-type lossless-icon"
                   v-if="(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true"
                   title="mk.nowPlayingItem?.localFilesMetadata?.bitDepth +'-bit / '+ mk.nowPlayingItem?.localFilesMetadata?.sampleRate/1000 + ' kHz ' + mk.nowPlayingItem.localFilesMetadata.container"
-                  v-b-tooltiphover></div>
+                  v-b-tooltiphover
+                />
                 <div
                   className="audio-type ppe-icon"
                   v-if="mk.nowPlayingItem.localFilesMetadata == null && cfg.audio.maikiwiAudio.ciderPPE === true"
                   title="$root.getLz('settings.option.audio.enableAdvancedFunctionality.ciderPPE')"
-                  v-b-tooltiphover></div>
+                  v-b-tooltiphover
+                />
                 <svg
                   className="audio-type live-icon"
                   v-if="mk.nowPlayingItem?.attributes?.isLive === true"
@@ -249,14 +273,15 @@ export const ChromeTop = () => (
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   v-b-tooltiphover>
-                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
                   <line
                     x1="12"
                     y1="20"
                     x2="12.01"
-                    y2="20"></line>
+                    y2="20"
+                  />
                 </svg>
               </div>
               <div className="info-rect">
@@ -267,7 +292,8 @@ export const ChromeTop = () => (
                   <div
                     className="explicit-icon"
                     v-if="mk.nowPlayingItem['attributes']['contentRating'] == 'explicit'"
-                    style={{ display: "inline-block" }}></div>
+                    style={{ display: "inline-block" }}
+                  />
                 </div>
                 <div className="song-artist-album">
                   <div
@@ -325,7 +351,7 @@ export const ChromeTop = () => (
                   onClick={nowPlayingContextMenu}
                   title="$root.getLz('term.more')"
                   v-b-tooltiphover>
-                  <div className="svg-icon"></div>
+                  <div className="svg-icon" />
                 </button>
               </div>
             </template>
@@ -337,10 +363,10 @@ export const ChromeTop = () => (
               className="artwork"
               id="artworkLCD"
               style={{ pointerEvents: "none" }}>
-              <mediaitem-artwork url="currentArtUrl"></mediaitem-artwork>
+              <MediaItemArtwork url="currentArtUrl" />
             </div>
             <div className="playback-info">
-              <div className="info-rect"></div>
+              <div className="info-rect" />
             </div>
           </div>
         </template>
@@ -349,26 +375,30 @@ export const ChromeTop = () => (
         className="app-chrome-item"
         v-else>
         <div className="top-nav-group">
-          <sidebar-library-item
+          <SidebarLibraryItem
             name="$root.getLz('home.title')"
             svg-icon="./assets/feather/home.svg"
             svg-icon-name="home"
-            page="home"></sidebar-library-item>
-          <sidebar-library-item
+            page="home"
+          />
+          <SidebarLibraryItem
             name="$root.getLz('term.listenNow')"
             svg-icon="./assets/feather/play-circle.svg"
             svg-icon-name="listenNow"
-            page="listen_now"></sidebar-library-item>
-          <sidebar-library-item
+            page="listen_now"
+          />
+          <SidebarLibraryItem
             name="$root.getLz('term.browse')"
             svg-icon="./assets/feather/globe.svg"
             svg-icon-name="browse"
-            page="browse"></sidebar-library-item>
-          <sidebar-library-item
+            page="browse"
+          />
+          <SidebarLibraryItem
             name="$root.getLz('term.radio')"
             svg-icon="./assets/feather/radio.svg"
             svg-icon-name="radio"
-            page="radio"></sidebar-library-item>
+            page="radio"
+          />
         </div>
       </div>
     </div>
@@ -380,7 +410,8 @@ export const ChromeTop = () => (
             onClick={() => muteButtonPressed()}
             className="{'active': cfg.audio.volume == 0}"
             title="cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
-            v-b-tooltiphover></button>
+            v-b-tooltiphover
+          />
           <input
             type="range"
             wheel="volumeWheel"
@@ -401,7 +432,8 @@ export const ChromeTop = () => (
             onClick={() => {
               modals.castMenu = true;
             }}
-            v-b-tooltiphover></button>
+            v-b-tooltiphover
+          />
         </div>
         <div className="app-chrome-item generic">
           <button
@@ -409,7 +441,8 @@ export const ChromeTop = () => (
             title="$root.getLz('term.queue')"
             v-b-tooltiphover
             className="{'active': drawer.panel == 'queue'}"
-            onClick={() => invokeDrawer("queue")}></button>
+            onClick={() => invokeDrawer("queue")}
+          />
         </div>
         <div className="app-chrome-item generic">
           <template v-if="lyrics && lyrics != [] && lyrics.length > 0">
@@ -418,19 +451,21 @@ export const ChromeTop = () => (
               title="$root.getLz('term.lyrics')"
               v-b-tooltiphover
               className="{'active': drawer.panel == 'lyrics'}"
-              onClick={() => invokeDrawer("lyrics")}></button>
+              onClick={() => invokeDrawer("lyrics")}
+            />
           </template>
           <template v-else>
             <button
               className="playback-button--small lyrics"
-              style={{ opacity: 0.3, pointerEvents: "none" }}></button>
+              style={{ opacity: 0.3, pointerEvents: "none" }}
+            />
           </template>
         </div>
       </template>
       <template v-else>
         <div className="app-chrome-item search">
           <div className="search-input-container">
-            <div className="search-input--icon"></div>
+            <div className="search-input--icon" />
             <input
               type="search"
               spellcheck="false"
@@ -468,11 +503,11 @@ export const ChromeTop = () => (
                   {hint.displayTerm}
                 </button>
                 <template v-for="(item, position) in search.hints.filter((a) => {return a.content != null})">
-                  <mediaitem-smarthints
+                  <MediaItemSmarthints
                     item="item.content"
                     position="position">
                     {" "}
-                  </mediaitem-smarthints>
+                  </MediaItemSmarthints>
                 </template>
               </div>
             </div>
@@ -486,18 +521,22 @@ export const ChromeTop = () => (
         <div className="window-controls">
           <div
             className="minimize"
-            onClick={() => ipcRenderer.send("minimize")}></div>
+            onClick={() => ipcRenderer.send("minimize")}
+          />
           <div
             className="minmax restore"
             v-if="chrome.maximized"
-            onClick={() => ipcRenderer.send("maximize")}></div>
+            onClick={() => ipcRenderer.send("maximize")}
+          />
           <div
             className="minmax"
             v-else
-            onClick={() => ipcRenderer.send("maximize")}></div>
+            onClick={() => ipcRenderer.send("maximize")}
+          />
           <div
             className="close"
-            onClick={() => ipcRenderer.send("close")}></div>
+            onClick={() => ipcRenderer.send("close")}
+          />
         </div>
       </div>
       <div
@@ -508,7 +547,8 @@ export const ChromeTop = () => (
           blur="mainMenuVisibility(false)"
           onClick={() => mainMenuVisibility(true)}
           contextmenu="mainMenuVisibility(true)"
-          className="{active: chrome.menuOpened}"></button>
+          className="{active: chrome.menuOpened}"
+        />
       </div>
     </div>
   </div>

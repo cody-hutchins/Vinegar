@@ -1,4 +1,11 @@
-export const Component = () => {
+import SVGIcon from "../../main/components/SVGIcon.jsx";
+import Audiolabs from "../pages/audiolabs.jsx";
+import { InstalledThemes } from "./settings-installed-themes.jsx";
+import Keybinds from "./settings-keybinds.jsx";
+import PluginsGithub from "./settings-plugins-github.jsx";
+import ThemesGithub from "./settings-themes-github.jsx";
+
+const SettingsWindow = () => {
   const app = this.$root;
   let themes = ipcRenderer.sendSync("get-themes");
   let tabIndex = 0;
@@ -170,10 +177,12 @@ export const Component = () => {
             onClick={() => {
               $store.state.pageState["settings"].fullscreen = !$store.state.pageState["settings"].fullscreen;
             }}
-            className="{'min': $store.state.pageState['settings'].fullscreen}"></button>
+            className="{'min': $store.state.pageState['settings'].fullscreen}"
+          />
           <button
             className="close-btn"
-            onClick={() => close()}></button>
+            onClick={() => close()}
+          />
           <b-tabs
             className="no-style"
             pills
@@ -181,9 +190,9 @@ export const Component = () => {
             content-className="mt-3"
             v-model="$store.state.pageState['settings'].currentTabIndex">
             <b-tab>
-              <template #title>
+              <template title>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/settings.svg"
                     classes="svg-md"
                     name="settings-general"
@@ -470,7 +479,7 @@ export const Component = () => {
             <b-tab>
               <template title="#">
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/headphones.svg"
                     classes="svg-md"
                     name="settings-audio"
@@ -610,7 +619,7 @@ export const Component = () => {
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/zap.svg"
                     classes="svg-md"
                     name="settings-audiolabs"
@@ -619,13 +628,13 @@ export const Component = () => {
                 <div>{$root.getLz("settings.option.audio.audioLab")}</div>
               </template>
               <div className="settings-tab-content">
-                <audiolabs-page />
+                <Audiolabs />
               </div>
             </b-tab>
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/style.svg"
                     classes="svg-md"
                     name="settings-styles"
@@ -634,13 +643,13 @@ export const Component = () => {
                 <div>{$root.getLz("settings.header.visual.styles")}</div>
               </template>
               <div className="settings-tab-content">
-                <installed-themes />
+                <InstalledThemes />
               </div>
             </b-tab>
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/pen-tool.svg"
                     classes="svg-md"
                     name="settings-visual"
@@ -931,7 +940,7 @@ export const Component = () => {
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/plugins.svg"
                     classes="svg-md"
                     name="settings-plugins"
@@ -940,13 +949,13 @@ export const Component = () => {
                 <div>{$root.getLz("term.plugins")}</div>
               </template>
               <div className="settings-tab-content">
-                <plugins-github />
+                <PluginsGithub />
               </div>
             </b-tab>
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/mic.svg"
                     classes="svg-md"
                     name="settings-lyrics"
@@ -1295,7 +1304,7 @@ export const Component = () => {
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/radio.svg"
                     classes="svg-md"
                     name="settings-connectivity"
@@ -1606,7 +1615,7 @@ export const Component = () => {
             <b-tab>
               <template>
                 <div>
-                  <svg-icon
+                  <SVGIcon
                     url="./assets/feather/hard-drive.svg"
                     classes="svg-md"
                     name="settings-advanced"
@@ -1835,14 +1844,14 @@ export const Component = () => {
             {/*keybinds Settings  */}
             <b-tab id="hid">
               <template>
-                <keybinds-settings />
+                <Keybinds />
               </template>
             </b-tab>
             {/*keybinds-settings  */}
             {/*Github-theme-settings  */}
             <b-tab id="hid">
               <template>
-                <themes-github />
+                <ThemesGithub />
               </template>
             </b-tab>
             {/*Github-theme-settings  */}
@@ -1886,7 +1895,7 @@ export const Component = () => {
                             <div className="md-option-header" style={{marginLeft: -0.55em}}>
                                 <span>{app.cfg.connectUser.username}</span>
                                 <img src="'https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32'"
-                                     alt="Discord Avatar"></img>
+                                     alt="Discord Avatar" />
                             </div>
 
                             <div className="md-option-line">
@@ -1939,3 +1948,4 @@ export const Component = () => {
     </div>
   );
 };
+export default SettingsWindow;

@@ -93,7 +93,8 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
           ref="video"
           className="animated-artwork-video"
           loop
-          id="animated-artwork"></video>
+          id="animated-artwork"
+        />
       </div>
     </div>
   );

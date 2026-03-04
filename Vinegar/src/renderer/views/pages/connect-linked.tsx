@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const Component = () => {
+const Component = () => {
   useEffect(() => {
     ipcRenderer.send("get-connected-url");
     ipcRenderer.on("send-connected-url", (event, url) => {
@@ -15,7 +15,8 @@ export const Component = () => {
         <webview
           id="foo"
           src="https://cider.sh"
-          style={{ display: "inline-flex", width: "100%" }}></webview>
+          style={{ display: "inline-flex", width: "100%" }}
+        />
       </div>
     </div>
   );

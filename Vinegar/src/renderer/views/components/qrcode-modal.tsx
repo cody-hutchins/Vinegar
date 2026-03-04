@@ -1,4 +1,4 @@
-export const Component = ({ src, url }: { src: string; url: string }) => {
+const QRCodeModal = ({ src, url }: { src: string; url: string }) => {
   const app = this.$root;
   function close() {
     app.resetState();
@@ -8,11 +8,12 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
       <div className="modal-fullscreen spatialproperties-panel">
         <div className="modal-window">
           <div className="modal-header">
-            <div className="modal-title">{`Web Remote QR : ` + url}</div>
+            <div className="modal-title">Web Remote QR : {url}</div>
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="app.getLz('action.close')"></button>
+              aria-label="app.getLz('action.close')"
+            />
           </div>
           <div className="modal-content">
             <img
@@ -25,3 +26,5 @@ export const Component = ({ src, url }: { src: string; url: string }) => {
     </div>
   );
 };
+
+export default QRCodeModal;

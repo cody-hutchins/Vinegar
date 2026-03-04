@@ -1,4 +1,4 @@
-export const Component = () => {
+const Component = () => {
   const app = this.$root;
   const openEqualizer = () => {
     app.modals.equalizer = true;
@@ -27,7 +27,8 @@ export const Component = () => {
                 onClick={() => {
                   app.modals.audioSettings = false;
                 }}
-                aria-label="app.getLz('action.close')"></button>
+                aria-label="app.getLz('action.close')"
+              />
             </div>
             <div className="modal-content">
               <button

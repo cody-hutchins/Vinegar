@@ -1,4 +1,6 @@
-export const Component = ({ data }: { data: string }) => {
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+
+const RecordLabel = ({ data }: { data: string }) => {
   let topSongsExpanded = false;
   function getArtistPalette(artist) {
     if (artist?.attributes?.artwork != null) {
@@ -31,11 +33,12 @@ export const Component = ({ data }: { data: string }) => {
               className="col-sm"
               style={{ width: "auto" }}>
               <div className="artist-image">
-                <mediaitem-artwork
+                <MediaItemArtwork
                   shadow="large"
                   url="data.attributes.artwork ? data.attributes.artwork.url : ''"
                   size="220"
-                  type="artists"></mediaitem-artwork>
+                  type="artists"
+                />
               </div>
             </div>
             <div className="col cider-flex-center">
@@ -67,9 +70,10 @@ export const Component = ({ data }: { data: string }) => {
                 </button>
               </div>
             </div>
-            <mediaitem-square
+            <MediaItemSquare
               item="item"
-              v-for="item in data.views['latest-releases'].data"></mediaitem-square>
+              v-for="item in data.views['latest-releases'].data"
+            />
           </template>
           <template v-if="data.views && data.views['top-releases']">
             <div className="row">
@@ -86,9 +90,10 @@ export const Component = ({ data }: { data: string }) => {
                 </button>
               </div>
             </div>
-            <mediaitem-square
+            <MediaItemSquare
               item="item"
-              v-for="item in data.views['top-releases'].data"></mediaitem-square>
+              v-for="item in data.views['top-releases'].data"
+            />
           </template>
           <template v-if="data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0">
             <div className="row">
@@ -105,12 +110,14 @@ export const Component = ({ data }: { data: string }) => {
                 </button>
               </div>
             </div>
-            <mediaitem-square
+            <MediaItemSquare
               item="item"
-              v-for="item in data.relationships.playlists.data.limit(5)"></mediaitem-square>
+              v-for="item in data.relationships.playlists.data.limit(5)"
+            />
           </template>
         </div>
       </div>
     </div>
   );
 };
+export default RecordLabel;

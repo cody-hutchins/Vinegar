@@ -1,4 +1,6 @@
-export const Component = () => {
+import { useEffect } from "react";
+
+const MenuPanel = () => {
   const app = this.$root;
   const menuPanel = this.$root.menuPanel;
   const content = this.$root.menuPanel.content;
@@ -30,7 +32,9 @@ export const Component = () => {
       );
     }
   }
-
+  useEffect(() => {
+    mounted();
+  }, []);
   function getBodyClasses() {
     if (direction == "down") {
       return ["menu-panel-body-down"];
@@ -148,7 +152,8 @@ export const Component = () => {
                   v-if="item.icon">
                   <div
                     className="svg-icon"
-                    style={{ "--url": "url(" + item.icon + ")" }}></div>
+                    style={{ "--url": "url(" + item.icon + ")" }}
+                  />
                 </div>
               </button>
             </template>
@@ -165,7 +170,8 @@ export const Component = () => {
                   v-if="item.icon">
                   <div
                     className="svg-icon"
-                    style={{ "--url": "url(" + item.icon + ")" }}></div>
+                    style={{ "--url": "url(" + item.icon + ")" }}
+                  />
                 </div>
                 {item.name}
               </button>
@@ -176,3 +182,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default MenuPanel;

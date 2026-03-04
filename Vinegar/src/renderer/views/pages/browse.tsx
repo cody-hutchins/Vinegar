@@ -1,6 +1,9 @@
 import { useEffect } from "react";
+import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
+import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 
-export const Component = ({ data }: { data: object }) => {
+const Browse = ({ data }: { data: object }) => {
   const app = this.$root;
   useEffect(() => {
     this.$root.getBrowsePage();
@@ -36,26 +39,28 @@ export const Component = ({ data }: { data: object }) => {
             </div>
             <template v-if="(recom.relationships != null && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data)))">
               <template v-if="index === 0|| (data.relationships.tabs.data[0].relationships.children.data[0].relationships == null && index === 1)">
-                <mediaitem-scroller-horizontal-mvview
+                <MediaItemScrollerHorizontalMVView
                   imagesize="800"
                   browsesp="index == 0|| (data.relationships.tabs.data[0].relationships.children.data[0].relationships == null && index === 1)"
                   kind="recom.attributes.editorialElementKind"
-                  items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                  items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"
+                />
               </template>
               <template v-else-if="(['327']).includes(recom.attributes.editorialElementKind)">
                 <div className="mediaitem-list-item__grid">
-                  <listitem-horizontal items="recom.relationships.contents.data.limit(20)"></listitem-horizontal>
+                  <ListitemHorizontal items="recom.relationships.contents.data.limit(20)" />
                 </div>
               </template>
               <template v-else-if="(['385']).includes(recom.attributes.editorialElementKind)">
-                <mediaitem-scroller-horizontal-mvview
+                <MediaItemScrollerHorizontalMVView
                   imagesize="800"
                   kind="recom.attributes.editorialElementKind"
-                  items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                  items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"
+                />
               </template>
               <template v-else-if="recom.attributes.name == 'Chart Set'">{/* ignored  */}</template>
               <template v-else>
-                <mediaitem-scroller-horizontal-large items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-large>
+                <MediaItemScrollerHorizontalLarge items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)" />
               </template>
             </template>
             <template v-else>
@@ -76,3 +81,5 @@ export const Component = ({ data }: { data: object }) => {
     </div>
   );
 };
+
+export default Browse;

@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import ListItemHorizontal from "../components/listitem-horizontal.jsx";
 
-export const Component = () => {
+const Charts = () => {
   const app = this.$root;
   let songs = [];
   let albums = [];
@@ -64,7 +66,7 @@ export const Component = () => {
             </div>
           </div>
           <div className="mediaitem-list-item__grid">
-            <listitem-horizontal items="(songs?.data ?? []).limit(12)"></listitem-horizontal>
+            <ListItemHorizontal items="(songs?.data ?? []).limit(12)" />
           </div>
         </template>
         <template v-if="albums != []">
@@ -82,7 +84,7 @@ export const Component = () => {
               </button>
             </div>
           </div>
-          <mediaitem-scroller-horizontal-large items="(albums?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+          <MediaItemScrollerHorizontalLarge items="(albums?.data ?? []).limit(10)" />
         </template>
         <template v-if="playlists != []">
           <div className="row">
@@ -99,7 +101,7 @@ export const Component = () => {
               </button>
             </div>
           </div>
-          <mediaitem-scroller-horizontal-large items="(playlists?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+          <MediaItemScrollerHorizontalLarge items="(playlists?.data ?? []).limit(10)" />
         </template>
         <template v-if="musicvideos != []">
           <div className="row">
@@ -116,7 +118,7 @@ export const Component = () => {
               </button>
             </div>
           </div>
-          <mediaitem-scroller-horizontal-large items="(musicvideos?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+          <MediaItemScrollerHorizontalLarge items="(musicvideos?.data ?? []).limit(10)" />
         </template>
         <template v-if="globalcharts != []">
           <div className="row">
@@ -133,7 +135,7 @@ export const Component = () => {
               </button>
             </div>
           </div>
-          <mediaitem-scroller-horizontal-large items="(globalcharts?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+          <MediaItemScrollerHorizontalLarge items="(globalcharts?.data ?? []).limit(10)" />
         </template>
         <template v-if="citycharts != []">
           <div className="row">
@@ -150,9 +152,11 @@ export const Component = () => {
               </button>
             </div>
           </div>
-          <mediaitem-scroller-horizontal-large items="(citycharts?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+          <MediaItemScrollerHorizontalLarge items="(citycharts?.data ?? []).limit(10)" />
         </template>
       </div>
     </div>
   );
 };
+
+export default Charts;

@@ -1,5 +1,6 @@
 import plus from "../svg/plus.svg";
-export const addToPlay = ({ playlists }: { playlists: string[] }) => {
+
+const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
   let playlistSorted = [];
   let searchQuery = "";
   let focused = "";
@@ -47,7 +48,8 @@ export const addToPlay = ({ playlists }: { playlists: string[] }) => {
           <button
             className="close-btn"
             onClick={app.resetState}
-            aria-label={app.getLz("action.close")}></button>
+            aria-label={app.getLz("action.close")}
+          />
         </div>
         <div className="modal-content">
           <button
@@ -59,7 +61,7 @@ export const addToPlay = ({ playlists }: { playlists: string[] }) => {
             </div>
             <div className="name">{app.getLz("action.createPlaylist")}</div>
           </button>
-          <sidebar-playlist
+          <SidebarPlaylist
             playlist-select={playlistSelect}
             relate-media-items="relateItems"
             v-for="item in $root.getPlaylistFolderChildren('p.playlistsroot')"
@@ -71,7 +73,7 @@ export const addToPlay = ({ playlists }: { playlists: string[] }) => {
           <div
             className="search-input-container"
             style={{ width: "100%", margin: "16px 0" }}>
-            <div className="search-input--icon"></div>
+            <div className="search-input--icon" />
             <input
               type="search"
               ref="searchInput"
@@ -88,3 +90,5 @@ export const addToPlay = ({ playlists }: { playlists: string[] }) => {
     </div>
   );
 };
+
+export default AddToPlaylist;

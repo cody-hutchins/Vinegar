@@ -1,4 +1,12 @@
-export const Component = ({ data }: { data: object }) => {
+import AnimatedArtworkView from "../components/animatedartwork-view.jsx";
+import ArtworkMaterial from "../components/artwork-material.jsx";
+import ListitemHorizontal from "../components/listitem-horizontal.jsx";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+
+const Artist = ({ data }: { data: object }) => {
   let topSongsExpanded = false;
   const app = this.$root;
   let headerVisible = true;
@@ -131,10 +139,11 @@ export const Component = ({ data }: { data: object }) => {
           className="['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"
           key="data.id"
           v-observe-visibility="{callback: isHeaderVisible}">
-          <animatedartwork-view
+          <AnimatedArtworkView
             priority="true"
             v-if="hasAnimated()"
-            video="data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"></animatedartwork-view>
+            video="data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"
+          />
           <div
             className="header-content"
             style={{ pointerEvents: all }}>
@@ -145,11 +154,12 @@ export const Component = ({ data }: { data: object }) => {
                 <div
                   className="artist-image"
                   v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9))&& !hasHero()">
-                  <mediaitem-artwork
+                  <MediaItemArtwork
                     shadow="large"
                     url="data.attributes.artwork ? data.attributes.artwork.url : ''"
                     size="190"
-                    type="artists"></mediaitem-artwork>
+                    type="artists"
+                  />
                   <button
                     className="overlay-play"
                     onClick={() =>
@@ -184,28 +194,29 @@ export const Component = ({ data }: { data: object }) => {
               onClick={() => artistMenu}
               style={{ pointerEvents: all }}
               aria-label="app.getLz('term.more')">
-              <div className="svg-icon"></div>
+              <div className="svg-icon" />
             </button>
             <button
               className="more-btn-round menu"
               onClick={() => artistMenu}
               style={{ pointerEvents: all }}
               aria-label="app.getLz('term.more')">
-              <div className="svg-icon"></div>
+              <div className="svg-icon" />
             </button>
           </div>
           <div
             className="artworkContainer"
             v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()">
-            <artwork-material
+            <ArtworkMaterial
               url="data.attributes.artwork.url"
               size="190"
-              images="1"></artwork-material>
+              images="1"
+            />
           </div>
           <div
             className="artist-hero"
             v-if="hasHero() && !hasAnimated()">
-            <mediaitem-artwork
+            <MediaItemArtwork
               shadow="none"
               url="hasHero()"
               size="2048"
@@ -237,7 +248,7 @@ export const Component = ({ data }: { data: object }) => {
                 className="more-btn-round menu"
                 onClick={() => artistMenu}
                 aria-label="app.getLz('term.more')">
-                <div className="svg-icon"></div>
+                <div className="svg-icon" />
               </button>
             </div>
           </div>
@@ -251,11 +262,12 @@ export const Component = ({ data }: { data: object }) => {
               v-if="data.views['latest-release'].data.length != 0">
               <h3>{app.getLz("term.latestReleases")}</h3>
               <div style={{ width: "auto", margin: "0 auto" }}>
-                <mediaitem-square
+                <MediaItemSquare
                   kind="card"
                   no-scale="true"
                   v-for="song in data.views['latest-release'].data"
-                  item="song"></mediaitem-square>
+                  item="song"
+                />
               </div>
             </div>
             <div
@@ -283,7 +295,7 @@ export const Component = ({ data }: { data: object }) => {
                   className="col cider-flex-center"
                   style={{ padding: 0 }}>
                   <div className="mediaitem-list-item__grid">
-                    <listitem-horizontal items="data.views['top-songs'].data.limit(20)"></listitem-horizontal>
+                    <ListitemHorizontal items="data.views['top-songs'].data.limit(20)" />
                   </div>
                 </div>
               </div>
@@ -312,10 +324,10 @@ export const Component = ({ data }: { data: object }) => {
                   v-if="!((data.views[view].attributes.title ?
                         data.views[view].attributes.title : '???').includes('Video') || (data.views[view].attributes.title ?
                         data.views[view].attributes.title : '???').includes('More To See'))">
-                  <mediaitem-scroller-horizontal-large items="data.views[view].data.limit(10)"></mediaitem-scroller-horizontal-large>
+                  <MediaItemScrollerHorizontalLarge items="data.views[view].data.limit(10)" />
                 </template>
                 <template v-else>
-                  <mediaitem-scroller-horizontal-mvview items="data.views[view].data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                  <MediaItemScrollerHorizontalMVView items="data.views[view].data.limit(10)" />
                 </template>
               </template>
               <div className="row">
@@ -323,7 +335,7 @@ export const Component = ({ data }: { data: object }) => {
                   className="col"
                   v-if="data.attributes.artistBio">
                   <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
-                  <p v-html="data.attributes.artistBio"></p>
+                  <p v-html="data.attributes.artistBio" />
                 </div>
                 <div className="col">
                   <div v-if="data.attributes.origin">
@@ -347,3 +359,5 @@ export const Component = ({ data }: { data: object }) => {
     </div>
   );
 };
+
+export default Artist;

@@ -1,4 +1,4 @@
-export const Component = () => {
+const PathMenu = () => {
   let folders = [];
   function mounted() {
     folders = this.$root.cfg.libraryPrefs.localPaths;
@@ -33,7 +33,8 @@ export const Component = () => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="$root.getLz('action.close')"></button>
+              aria-label="$root.getLz('action.close')"
+            />
           </div>
           <div className="modal-content">
             <template v-for="folder of folders">
@@ -63,3 +64,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default PathMenu;

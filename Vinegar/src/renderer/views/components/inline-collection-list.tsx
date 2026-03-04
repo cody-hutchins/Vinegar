@@ -1,4 +1,4 @@
-export const Component = ({ data, title, type, parentSelector = null }: { data: object; title?: string; type?: string; parentSelector?: string | null }) => {
+const InlineCollectionList = ({ data, title, type, parentSelector = null }: { data: object; title?: string; type?: string; parentSelector?: string | null }) => {
   let triggerEnabled = true;
   let canSeeTrigger = false;
   let showFab = false;
@@ -83,17 +83,19 @@ export const Component = ({ data, title, type, parentSelector = null }: { data: 
           className="well itemContainer">
           <template v-for="(item, key) in data.data">
             <template v-if="item.type == 'artists'">
-              <mediaitem-square item="item"></mediaitem-square>
+              <MediaItemSquare item="item" />
             </template>
             <template v-else>
-              <mediaitem-list-item
+              <MediaItemListItem
                 v-if="getKind(item) == 'song'"
                 index="key"
-                item="item"></mediaitem-list-item>
-              <mediaitem-square
+                item="item"
+              />
+              <MediaItemSquare
                 v-else
                 item="item"
-                type="getKind(item)"></mediaitem-square>
+                type="getKind(item)"
+              />
             </template>
           </template>
           <button
@@ -115,9 +117,11 @@ export const Component = ({ data, title, type, parentSelector = null }: { data: 
         <div
           className="well itemContainer"
           v-show="loading">
-          <div className="spinner"></div>
+          <div className="spinner" />
         </div>
       </div>
     </div>
   );
 };
+
+export default InlineCollectionList;

@@ -1,4 +1,6 @@
-export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { item: object; playlistSelect: () => void; relateMediaItems: string[] }) => {
+import SVGIcon from "../../main/components/svg-icon.jsx";
+
+const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: object; playlistSelect: () => void; relateMediaItems: string[] }) => {
   let folderOpened = false;
   let children = [];
   let playlistRoot = "p.playlistsroot";
@@ -249,7 +251,7 @@ export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { ite
           href="item.href"
           onClick={() => clickEvent()}>
           <template v-if="!renaming">
-            <svg-icon
+            <SVGIcon
               url="icon"
               name="sidebar-playlist"
             />
@@ -273,18 +275,21 @@ export const Component = ({ item, playlistSelect, relateMediaItems = [] }: { ite
           className="folder-body"
           v-if="item.type === 'library-playlist-folders' && folderOpened">
           <template v-if="children.length != 0">
-            <sidebar-playlist
+            <SidebarPlaylist
               v-for="item in children"
               relate-media-items="relateMediaItems"
               playlist-select="playlistSelect"
               item="item"
-              v-bind:key="item.id"></sidebar-playlist>
+              v-bind:key="item.id"
+            />
           </template>
           <template v-else>
-            <div className="spinner"></div>
+            <div className="spinner" />
           </template>
         </div>
       </div>
     </div>
   );
 };
+
+export default SidebarPlaylist;

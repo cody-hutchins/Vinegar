@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 
-export const Component = ({ data }: { data: object }) => {
+const AppleCurator = ({ data }: { data: object }) => {
   const app = this.$root;
   useEffect(() => {
     console.log("ping");
@@ -29,14 +31,15 @@ export const Component = ({ data }: { data: object }) => {
             </div>
             <template v-if="recom.relationships && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data))">
               <template v-if="(recom.attributes.name && recom.attributes.name.includes('ideo')) || index === 0">
-                <mediaitem-scroller-horizontal-mvview
+                <MediaItemScrollerHorizontalMVView
                   imagesize="800"
                   browsesp="index == 0"
-                  items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-mvview>
+                  items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"
+                />
               </template>
-              <template v-else-if="recom.attributes.name == 'Chart Set'"></template>
+              <template v-else-if="recom.attributes.name == 'Chart Set'" />
               <template v-else>
-                <mediaitem-scroller-horizontal-large items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"></mediaitem-scroller-horizontal-large>
+                <MediaItemScrollerHorizontalLarge items="recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)" />
               </template>
             </template>
           </template>
@@ -45,3 +48,5 @@ export const Component = ({ data }: { data: object }) => {
     </div>
   );
 };
+
+export default AppleCurator;

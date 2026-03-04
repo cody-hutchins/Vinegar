@@ -1,4 +1,6 @@
-export const Component = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
+import { useEffect } from "react";
+
+const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
   const showInLibrary = false;
   const isVisible = false;
   const addedToLibrary = false;
@@ -9,6 +11,7 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
   const itemId = 0;
   const isLibrary = false;
   const isLoved = null;
+
   function mounted() {
     if (item.attributes.playParams) {
       itemId = item.attributes.playParams?.id ?? item.id;
@@ -25,6 +28,11 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     }
     getClasses();
   }
+
+  useEffect(() => {
+    mounted();
+  }, []);
+
   function getBgColor() {
     let color = `#${item.attributes.artwork != null && item.attributes.artwork.bgColor != null ? item.attributes.artwork.bgColor : ``}`;
     return color;
@@ -571,7 +579,8 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
           className="listitem-content">
           <div
             className="popular"
-            v-if="!showInLibrary && item?.meta?.popularity != null && item?.meta?.popularity > 0.7"></div>
+            v-if="!showInLibrary && item?.meta?.popularity != null && item?.meta?.popularity > 0.7"
+          />
           <div
             className="isLibrary"
             v-if="showLibraryStatus == true">
@@ -584,7 +593,8 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
                 aria-label="$root.getLz('action.addToLibrary')">
                 <div
                   className="svg-icon addIcon"
-                  style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}></div>
+                  style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}
+                />
               </button>
               <button
                 v-else-if="!(showArtwork == true && (showIndex == false ||(showIndex == true && showIndexPlaylist != false)))"
@@ -607,17 +617,18 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
             <div
               v-if="app.mk.isPlaying && (((app.mk.nowPlayingItem._songId ?? (app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id ))  == itemId) || (app.mk.nowPlayingItem.id == item.id))"
               style={{ display: showInLibrary ? "none" : "block" }}>
-              <div className="loadbar-sound"></div>
+              <div className="loadbar-sound" />
             </div>
           </div>
           <div
             className="artwork"
             v-if="showArtwork == true && (showIndex == false ||(showIndex == true && showIndexPlaylist != false)) ">
-            <mediaitem-artwork
+            <MediaItemArtwork
               url="item.attributes.artwork ? item.attributes.artwork.url : ''"
               size="48"
               bgcolor="getBgColor()"
-              type="item.type"></mediaitem-artwork>
+              type="item.type"
+            />
             <button
               className="overlay-play"
               onClick={() => playTrack()}
@@ -666,7 +677,8 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
           </div>
           <div
             className="explicit-icon"
-            v-if="item.attributes && item.attributes.contentRating == 'explicit'"></div>
+            v-if="item.attributes && item.attributes.contentRating == 'explicit'"
+          />
           <template
             v-if="showMetaData == true"
             dblclick="route()">
@@ -690,3 +702,5 @@ export const Component = ({ item, parent, index = -1, showArtwork = true, showLi
     </div>
   );
 };
+
+export default MediaItemListItem;
