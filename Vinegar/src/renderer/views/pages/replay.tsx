@@ -181,7 +181,7 @@ const Replay = () => {
             <div className="well">
               <ListitemHorizontal
                 show-library-status="false"
-                items={songsToArray(loaded.views['top-songs'].data)}
+                items={songsToArray(loaded.views["top-songs"].data)}
               />
             </div>
             <h3>{$root.getLz("term.topGenres")}</h3>

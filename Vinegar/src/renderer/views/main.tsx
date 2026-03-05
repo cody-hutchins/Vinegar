@@ -147,7 +147,7 @@ export const Main = () => {
           v-if={appVisible}
           window-state={chrome.windowState}
           style={getAppStyle()}
-          library-visible={(chrome.sidebarCollapsed ? 0 : 1)}
+          library-visible={chrome.sidebarCollapsed ? 0 : 1}
           window-style={cfg.visual.directives.windowLayout}>
           <transition name="fsModeSwitch">
             <div
@@ -203,7 +203,7 @@ export const Main = () => {
           async
           src={process.env.useV3 ? "https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js" : "https://js-cdn.music.apple.com/musickit/v2/amp/musickit.js"}
           data-web-components></script>
-        <script src={index.js?v=1}></script>
+        <script src={"index.js?v=1"}></script>
 
         <div id="am-musiccovershelf">
           <h1>{component.attributes.title.stringForDisplay}</h1>

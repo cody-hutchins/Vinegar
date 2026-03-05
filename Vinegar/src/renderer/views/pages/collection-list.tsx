@@ -1,3 +1,4 @@
+import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
 const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
@@ -96,33 +97,31 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
       <div className="content-inner collection-page">
         <h3
           className="header-text"
-          v-observe-visibility={{callback: headerVisibility}}>
+          v-observe-visibility={{ callback: headerVisibility }}>
           {title}
         </h3>
         <div
           v-if={data["data"] !== "null"}
           className={"well itemContainer " + getClasses()}>
-          <template v-for={(item, key) in data.data}>
-            <template v-if={item.type === "artists"}>
+          {data.data.map((item, key) =>
+            item.type === "artists" ? (
               <MediaItemSquare item={item} />
-            </template>
-            <template v-else>
+            ) : getKind(item) === "song" ? (
               <MediaItemListItem
-                v-if={getKind(item) === "song"}
                 index={key}
                 item={item}
               />
+            ) : (
               <MediaItemSquare
-                v-else
                 item={item}
                 type={getKind(item)}
               />
-            </template>
-          </template>
+            ),
+          )}
           <button
             v-if={triggerEnabled}
             style={{ opacity: 0, height: "32px" }}
-            v-observe-visibility={{callback: visibilityChanged}}>
+            v-observe-visibility={{ callback: visibilityChanged }}>
             {app.getLz("term.showMore")}
           </button>
         </div>

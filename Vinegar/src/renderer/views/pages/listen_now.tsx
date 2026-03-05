@@ -10,12 +10,12 @@ const ListenNow = ({ data }: { data: object }) => {
     <div id="cider-listen-now">
       <div className="content-inner">
         <h1 className="header-text">{app.getLz("term.listenNow")}</h1>
-        <template v-for={(recom, index) in data.data}>
+        {data.data.map((recom, index) => (
           <ListenNowChild
             recom="recom"
             index="index"
           />
-        </template>
+        ))}
       </div>
     </div>
   );

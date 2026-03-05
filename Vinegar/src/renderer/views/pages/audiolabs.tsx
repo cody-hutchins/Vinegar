@@ -42,7 +42,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.ciderPPE}
-                  v-on:change={CiderAudio.hierarchical_loading();}
+                  v-on:change={() => CiderAudio.hierarchical_loading()}
                   switch
                 />
               </div>
@@ -97,7 +97,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.atmosphereRealizer1}
-                  v-on:change={CiderAudio.hierarchical_loading();}
+                  v-on:change={() => CiderAudio.hierarchical_loading()}
                   switch
                 />
               </div>
@@ -115,7 +115,7 @@ const Audiolabs = () => {
                   className="md-select"
                   style={{ width: "230px" }}
                   v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer1_value}
-                  v-on:change={CiderAudio.hierarchical_loading();}>
+                  v-on:change={() => CiderAudio.hierarchical_loading()}>
                   <option
                     v-for={profile in arprofiles}
                     value={profile.id}>
@@ -134,7 +134,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.atmosphereRealizer2}
-                  v-on:change={CiderAudio.hierarchical_loading();}
+                  v-on:change={() => CiderAudio.hierarchical_loading()}
                   switch
                 />
               </div>
@@ -152,7 +152,7 @@ const Audiolabs = () => {
                   className="md-select"
                   style={{ width: "230px" }}
                   v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer2_value}
-                  v-on:change={CiderAudio.hierarchical_loading();}>
+                  v-on:change={() => CiderAudio.hierarchical_loading()}>
                   <option
                     v-for={profile in arprofiles}
                     value={profile.id}>
@@ -171,7 +171,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.spatial}
-                  v-on:change={CiderAudio.hierarchical_loading();}
+                  v-on:change={() => CiderAudio.hierarchical_loading()}
                   switch
                 />
               </div>
@@ -189,7 +189,7 @@ const Audiolabs = () => {
                   className="md-select"
                   style={{ width: "180px" }}
                   v-model={$root.cfg.audio.maikiwiAudio.spatialProfile}
-                  v-on:change={CiderAudio.hierarchical_loading();}>
+                  v-on:change={() => CiderAudio.hierarchical_loading()}>
                   <option
                     v-for={profile in spprofiles}
                     value={profile.id}>

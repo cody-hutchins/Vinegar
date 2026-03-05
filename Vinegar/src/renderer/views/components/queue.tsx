@@ -152,14 +152,17 @@ const Queue = () => {
             </button>
           </div>
         </div>
-        {page === "history" && <div
-          className="queue-body">
-          {history.map((item) => <MediaItemListItem
-            show-library-status="false"
-            v-bind:key={item.id}
-            item={item}
-          />)}
-        </div>}
+        {page === "history" && (
+          <div className="queue-body">
+            {history.map((item) => (
+              <MediaItemListItem
+                show-library-status="false"
+                v-bind:key={item.id}
+                item={item}
+              />
+            ))}
+          </div>
+        )}
         <div
           className="queue-body"
           v-if={page === "queue"}>
@@ -167,44 +170,47 @@ const Queue = () => {
             v-model={queueItems}
             start="drag=true"
             end="drag=false;move()">
-            {displayQueueItems.map((queueItem, position) => <template>
-              {position === 0 ? <div
-                key={queueItem.item.id}
-              />:
-              <div
-                className="cd-queue-item"
-                v-else
-                className="{selected: selectedItems.includes(queueItem.item.id)}"
-                onClick={(e) => select(e, queueItem.item.id)}
-                onDoubleClick={() => playQueueItem(queueItem.item.id)}
-                key={queueItem.item.id}
-                onContextMenu={(e) => queueContext(e, queueItem.item)}>
-                <div className="row">
-                  <div className="col-auto cider-flex-center">
-                    <div className="artwork">
-                      <MediaItemArtwork
-                        url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ''}
-                        size="32"
-                      />
-                    </div>
-                  </div>
-                  <div className="col queue-info">
-                    <div className="queue-title text-overflow-elipsis">{queueItem.item.attributes.name}</div>
-                    <div className="queue-subtitle text-overflow-elipsis">
-                      {queueItem.item.attributes.artistName} — {queueItem.item.attributes.albumName}
-                    </div>
-                  </div>
+            {displayQueueItems.map((queueItem, position) => (
+              <template>
+                {position === 0 ? (
+                  <div key={queueItem.item.id} />
+                ) : (
                   <div
-                    className="queue-explicit-icon cider-flex-center"
-                    v-if={queueItem.item.attributes.contentRating === "explicit"}>
-                    <div className="explicit-icon" />
+                    className="cd-queue-item"
+                    v-else
+                    className="{selected: selectedItems.includes(queueItem.item.id)}"
+                    onClick={(e) => select(e, queueItem.item.id)}
+                    onDoubleClick={() => playQueueItem(queueItem.item.id)}
+                    key={queueItem.item.id}
+                    onContextMenu={(e) => queueContext(e, queueItem.item)}>
+                    <div className="row">
+                      <div className="col-auto cider-flex-center">
+                        <div className="artwork">
+                          <MediaItemArtwork
+                            url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ""}
+                            size="32"
+                          />
+                        </div>
+                      </div>
+                      <div className="col queue-info">
+                        <div className="queue-title text-overflow-elipsis">{queueItem.item.attributes.name}</div>
+                        <div className="queue-subtitle text-overflow-elipsis">
+                          {queueItem.item.attributes.artistName} — {queueItem.item.attributes.albumName}
+                        </div>
+                      </div>
+                      <div
+                        className="queue-explicit-icon cider-flex-center"
+                        v-if={queueItem.item.attributes.contentRating === "explicit"}>
+                        <div className="explicit-icon" />
+                      </div>
+                      <div className="col queue-duration-info">
+                        <div className="queue-duration cider-flex-center">{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col queue-duration-info">
-                    <div className="queue-duration cider-flex-center">{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
-                  </div>
-                </div>
-              </div>}
-            </template>)}
+                )}
+              </template>
+            ))}
           </draggable>
         </div>
         <div className="queue-footer">

@@ -169,8 +169,11 @@ export const Podcasts = () => {
                   type="search"
                   style={{ width: "100%" }}
                   spellCheck="false"
-                  placeholder={$root.getLz('term.search') + '...'}
-                  onChange={() => searchPodcasts();librarySearch()}
+                  placeholder={$root.getLz("term.search") + "..."}
+                  onChange={() => {
+                    searchPodcasts();
+                    librarySearch();
+                  }}
                   v-model={search.term}
                   className="search-input"
                 />
@@ -275,7 +278,7 @@ export const Podcasts = () => {
                 <button
                   className="close-btn"
                   onClick={() => (selected.id = -1)}
-                  aria-label={$root.getLz('action.close')}
+                  aria-label={$root.getLz("action.close")}
                 />
               </div>
               <div className="podcast-artwork">

@@ -142,7 +142,7 @@ const Artist = ({ data }: { data: object }) => {
           <AnimatedArtworkView
             priority="true"
             v-if={hasAnimated()}
-            video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"
+            video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? ""}
           />
           <div
             className="header-content"
@@ -156,7 +156,7 @@ const Artist = ({ data }: { data: object }) => {
                   v-if={!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()}>
                   <MediaItemArtwork
                     shadow="large"
-                    url={data.attributes.artwork ? data.attributes.artwork.url : ''}
+                    url={data.attributes.artwork ? data.attributes.artwork.url : ""}
                     size="190"
                     type="artists"
                   />
@@ -262,12 +262,13 @@ const Artist = ({ data }: { data: object }) => {
               v-if={data.views["latest-release"].data.length !== 0}>
               <h3>{app.getLz("term.latestReleases")}</h3>
               <div style={{ width: "auto", margin: "0 auto" }}>
-                <MediaItemSquare
-                  kind="card"
-                  no-scale="true"
-                  v-for={song in data.views["latest-release"].data}
-                  item={song}
-                />
+                {data.views["latest-release"].data.map((song) => (
+                  <MediaItemSquare
+                    kind="card"
+                    no-scale="true"
+                    item={song}
+                  />
+                ))}
               </div>
             </div>
             <div
@@ -295,7 +296,7 @@ const Artist = ({ data }: { data: object }) => {
                   className="col cider-flex-center"
                   style={{ padding: 0 }}>
                   <div className="mediaitem-list-item__grid">
-                    <ListitemHorizontal items={data.views['top-songs'].data.limit(20)} />
+                    <ListitemHorizontal items={data.views["top-songs"].data.limit(20)} />
                   </div>
                 </div>
               </div>
@@ -303,30 +304,30 @@ const Artist = ({ data }: { data: object }) => {
           </div>
           <div className="row well">
             <div className="col">
-              <template
-                v-for={view in data.meta.views.order}
-                v-if={data.views[view].data.length !== 0 && view !== "latest-release" && view !== "top-songs"}>
-                <div className="row">
-                  <div className="col">
-                    <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
-                  </div>
-                  <div
-                    className="col-auto cider-flex-center"
-                    v-if={data.views[view].data.length >= 10}>
-                    <button
-                      className="cd-btn-seeall"
-                      onClick={() => app.showArtistView(data.id, data.attributes.name + " - " + data.views[view].attributes.title, view)}>
-                      {app.getLz("term.seeAll")}
-                    </button>
-                  </div>
-                </div>
-                <template v-if={!((data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") || (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See"))}>
-                  <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)} />
-                </template>
-                <template v-else>
-                  <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)} />
-                </template>
-              </template>
+              {data.meta.views.order.map(
+                (view) =>
+                  data.views[view].data.length !== 0 &&
+                  view !== "latest-release" &&
+                  view !== "top-songs" && (
+                    <>
+                      <div className="row">
+                        <div className="col">
+                          <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
+                        </div>
+                        <div
+                          className="col-auto cider-flex-center"
+                          v-if={data.views[view].data.length >= 10}>
+                          <button
+                            className="cd-btn-seeall"
+                            onClick={() => app.showArtistView(data.id, data.attributes.name + " - " + data.views[view].attributes.title, view)}>
+                            {app.getLz("term.seeAll")}
+                          </button>
+                        </div>
+                      </div>
+                      {!((data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") || (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See")) ? <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)} /> : <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)} />}
+                    </>
+                  ),
+              )}
               <div className="row">
                 <div
                   className="col"
@@ -335,18 +336,24 @@ const Artist = ({ data }: { data: object }) => {
                   <p v-html={data.attributes.artistBio} />
                 </div>
                 <div className="col">
-                  <div v-if={data.attributes.origin}>
-                    <h3>{data.attributes.isGroup ? "Origin" : "Hometown"}</h3>
-                    {data.attributes.origin}
-                  </div>
-                  <div v-if={data.attributes.bornOrFormed}>
-                    <h3>{data.attributes.isGroup ? "Formed" : "Born"}</h3>
-                    {data.attributes.bornOrFormed}
-                  </div>
-                  <div v-if={data.attributes.genreNames}>
-                    <h3>{app.getLz("term.sortBy.genre")}</h3>
-                    {data.attributes.genreNames.join(", ")}
-                  </div>
+                  {data.attributes.origin && (
+                    <div>
+                      <h3>{data.attributes.isGroup ? "Origin" : "Hometown"}</h3>
+                      {data.attributes.origin}
+                    </div>
+                  )}
+                  {data.attributes.bornOrFormed && (
+                    <div>
+                      <h3>{data.attributes.isGroup ? "Formed" : "Born"}</h3>
+                      {data.attributes.bornOrFormed}
+                    </div>
+                  )}
+                  {data.attributes.genreNames && (
+                    <div>
+                      <h3>{app.getLz("term.sortBy.genre")}</h3>
+                      {data.attributes.genreNames.join(", ")}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

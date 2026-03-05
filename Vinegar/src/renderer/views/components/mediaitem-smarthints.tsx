@@ -443,19 +443,35 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           $root.search.cursor = -1;
           $root.search.term === "";
         }}
-        onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}
-        className={{'hintactive': ($root.search.cursor === position + $root.search.hints.filter((a) => {return a.content === null}).length)}}>
+        onContextMenu={() => {
+          $root.hintscontext = true;
+          getContextMenu();
+        }}
+        className={{
+          hintactive:
+            $root.search.cursor ===
+            position +
+              $root.search.hints.filter((a) => {
+                return a.content === null;
+              }).length,
+        }}>
         <div
           className="row"
-          onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}>
+          onContextMenu={() => {
+            $root.hintscontext = true;
+            getContextMenu();
+          }}>
           <div
             className="col-auto cider-flex-center"
-            onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}>
+            onContextMenu={() => {
+              $root.hintscontext = true;
+              getContextMenu();
+            }}>
             <div
               className="artwork"
               className="{'circle': item.type === 'artists'}">
               <MediaItemArtwork
-                url={item.attributes.artwork ? item.attributes.artwork.url : ''}
+                url={item.attributes.artwork ? item.attributes.artwork.url : ""}
                 size="32"
                 style={{ position: "relative", zIndex: "-1" }}
               />
@@ -471,13 +487,16 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           </div>
           <div
             className="col queue-info"
-            onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}>
+            onContextMenu={() => {
+              $root.hintscontext = true;
+              getContextMenu();
+            }}>
             <div className="queue-title text-overflow-elipsis">{item.attributes.name}</div>
             <div className="queue-subtitle text-overflow-elipsis">{item.attributes.artistName}</div>
           </div>
           <div
             className="queue-explicit-icon cider-flex-center"
-            v-if={item.attributes.contentRating === 'explicit'}>
+            v-if={item.attributes.contentRating === "explicit"}>
             <div className="explicit-icon" />
           </div>
           {/* <div className="col queue-duration-info">

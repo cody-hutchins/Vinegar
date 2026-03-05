@@ -101,7 +101,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
             />
           </template>
         </template>
-        <template v-else-if={recom.attributes.display.kind !== 'MusicSuperHeroShelf'}>
+        <template v-else-if={recom.attributes.display.kind !== "MusicSuperHeroShelf"}>
           <div style={{ height: "330px" }} />
         </template>
       </div>

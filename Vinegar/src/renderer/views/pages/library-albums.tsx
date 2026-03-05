@@ -43,7 +43,7 @@ const Component = () => {
               v-if={library.albums.downloadState === 2}
               onClick={() => $root.getLibraryAlbumsFull(true, 1)}
               className="reload-btn"
-              aria-label={app.getLz('menubar.options.reload')}>
+              aria-label={app.getLz("menubar.options.reload")}>
               {import("../svg/redo.svg")}
             </button>
           </div>
@@ -60,7 +60,7 @@ const Component = () => {
                 type="search"
                 style={{ width: "100%" }}
                 spellCheck="false"
-                placeholder={$root.getLz('term.search') + '...'}
+                placeholder={$root.getLz("term.search") + "..."}
                 input={$root.searchLibraryAlbums}
                 v-model={library.albums.search}
                 className="search-input"
@@ -73,8 +73,11 @@ const Component = () => {
                 <select
                   className="md-select"
                   v-model={prefs.sort}
-                  onChange={() => library.albums.sorting[1] = prefs.sort; $root.searchLibraryAlbums(1)}>
-                  <optgroup label={$root.getLz('term.sortBy')}>
+                  onChange={() => {
+                    library.albums.sorting[1] = prefs.sort;
+                    $root.searchLibraryAlbums(1);
+                  }}>
+                  <optgroup label={$root.getLz("term.sortBy")}>
                     <option
                       v-for={(sort, index) in library.albums.sortingOptions}
                       value="index">
@@ -87,8 +90,11 @@ const Component = () => {
                 <select
                   className="md-select"
                   v-model={prefs.sortOrder}
-                  onChange={() => library.albums.sortOrder[1] = prefs.sortOrder; $root.searchLibraryAlbums(1)}>
-                  <optgroup label={$root.getLz('term.sortOrder')}>
+                  onChange={() => {
+                    library.albums.sortOrder[1] = prefs.sortOrder;
+                    $root.searchLibraryAlbums(1);
+                  }}>
+                  <optgroup label={$root.getLz("term.sortOrder")}>
                     <option value="asc">{$root.getLz("term.sortOrder.ascending")}</option>
                     <option value="desc">{$root.getLz("term.sortOrder.descending")}</option>
                   </optgroup>
@@ -98,7 +104,7 @@ const Component = () => {
                 <select
                   className="md-select"
                   v-model={prefs.viewAs}>
-                  <optgroup label={$root.getLz('term.viewAs')}>
+                  <optgroup label={$root.getLz("term.viewAs")}>
                     <option value="covers">{$root.getLz("term.viewAs.coverArt")}</option>
                     <option value="list">{$root.getLz("term.viewAs.list")}</option>
                   </optgroup>
@@ -108,7 +114,7 @@ const Component = () => {
                 <select
                   className="md-select"
                   v-model={prefs.scroll}>
-                  <optgroup label={app.getLz('term.scroll')}>
+                  <optgroup label={app.getLz("term.scroll")}>
                     <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
                     <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                   </optgroup>

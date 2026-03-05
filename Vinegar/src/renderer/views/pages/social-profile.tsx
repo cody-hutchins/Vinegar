@@ -37,7 +37,7 @@ const SocialProfile = ({ data }: { data: object }) => {
               <div className="artist-image">
                 <MediaItemArtwork
                   shadow="large"
-                  url={data.attributes.artwork ? data.attributes.artwork.url : ''}
+                  url={data.attributes.artwork ? data.attributes.artwork.url : ""}
                   size="220"
                   type="artists"
                 />
@@ -64,10 +64,9 @@ const SocialProfile = ({ data }: { data: object }) => {
                 </button>
               </div>
             </div>
-            <MediaItemSquare
-              item={item}
-              v-for={item in data.relationships["shared-playlists"].data.limit(10)}
-            />
+            {data.relationships["shared-playlists"].data.limit(10).map((item) => (
+              <MediaItemSquare item={item} />
+            ))}
           </template>
         </div>
       </div>

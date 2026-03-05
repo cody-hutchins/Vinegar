@@ -10,8 +10,12 @@ export const ChromeBottom = () => (
         <template v-if={mkReady()}>
           <div
             className="app-playback-controls"
-            onMouseOver={() => {chrome.progresshover = true}}
-            onMouseLeave={() => {chrome.progresshover = false}}
+            onMouseOver={() => {
+              chrome.progresshover = true;
+            }}
+            onMouseLeave={() => {
+              chrome.progresshover = false;
+            }}
             onContextMenu={nowPlayingContextMenu}>
             <div
               v-if={cfg.visual.artworkDisplayLayout === "default"}
@@ -104,7 +108,7 @@ export const ChromeBottom = () => (
                 <div
                   className="audio-type lossless-icon"
                   v-if={(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true}
-                  title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth +'-bit / '+ mk.nowPlayingItem?.localFilesMetadata?.sampleRate/1000 + ' kHz ' + mk.nowPlayingItem.localFilesMetadata.container"
+                  title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}
                   v-b-tooltiphover
                 />
                 <div
@@ -179,9 +183,24 @@ export const ChromeBottom = () => (
               step={0.01}
               min="0"
               style={progressBarStyle()}
-              onInput={() => {playerLCD.desiredDuration = $event.target.value;playerLCD.userInteraction = true}}
-              onMouseUp={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
-              onTouchEnd={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
+              onInput={() => {
+                playerLCD.desiredDuration = $event.target.value;
+                playerLCD.userInteraction = true;
+              }}
+              onMouseUp={() => {
+                mk.seekToTime($event.target.value);
+                setTimeout(() => {
+                  playerLCD.desiredDuration = 0;
+                  playerLCD.userInteraction = false;
+                }, 1000);
+              }}
+              onTouchEnd={() => {
+                mk.seekToTime($event.target.value);
+                setTimeout(() => {
+                  playerLCD.desiredDuration = 0;
+                  playerLCD.userInteraction = false;
+                }, 1000);
+              }}
               max={mk.currentPlaybackDuration}
               value={getSongProgress()}
             />
@@ -203,7 +222,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button--small shuffle"
             v-if={mk.shuffleMode === 0}
-            className={isDisabled() && 'disabled'}
+            className={isDisabled() && "disabled"}
             onClick={() => {
               mk.shuffleMode = 1;
             }}
@@ -213,7 +232,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button--small shuffle active"
             v-else
-            className={isDisabled() && 'disabled'}
+            className={isDisabled() && "disabled"}
             onClick={() => (mk.shuffleMode = 0)}
             title={$root.getLz("term.disableShuffle")}
             v-b-tooltiphover
@@ -223,7 +242,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button previous"
             onClick={prevButton}
-            className={isPrevDisabled() && 'disabled'}
+            className={isPrevDisabled() && "disabled"}
             title={$root.getLz("term.previous")}
             v-b-tooltiphover
           />
@@ -255,7 +274,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button next"
             onClick={skipToNextItem}
-            className={isNextDisabled() && 'disabled'}
+            className={isNextDisabled() && "disabled"}
             title={$root.getLz("term.next")}
             v-b-tooltiphover
           />
@@ -263,8 +282,8 @@ export const ChromeBottom = () => (
         <div className="app-chrome-item">
           <button
             className="playback-button--small repeat"
-            className={mk.repeatMode === 1 ? 'repeatOne' : mk.repeatMode === 2 ? 'active' : ''}
-            className={isDisabled() && 'disabled'}
+            className={mk.repeatMode === 1 ? "repeatOne" : mk.repeatMode === 2 ? "active" : ""}
+            className={isDisabled() && "disabled"}
             onClick={repeatIncrement}
             title={$root.lz.repeat[mk.repeatMode]}
             v-b-tooltiphover
@@ -278,7 +297,7 @@ export const ChromeBottom = () => (
           className="volume-button--small volume"
           onClick={muteButtonPressed}
           className="{'active': cfg.audio.volume === 0}"
-          title={cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')}
+          title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
           v-b-tooltiphover
         />
         <input

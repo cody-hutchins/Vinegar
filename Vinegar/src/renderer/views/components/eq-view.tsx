@@ -343,16 +343,14 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                 v-model={$root.cfg.audio.equalizer.preset}
                 v-on:onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
                 <optgroup label={$root.getLz("term.userPresets")}>
-                  {$root.cfg.audio.equalizer.presets.map((preset) => <option
-                    value={preset.preset}>
-                    {preset.name}
-                  </option>)}
+                  {$root.cfg.audio.equalizer.presets.map((preset) => (
+                    <option value={preset.preset}>{preset.name}</option>
+                  ))}
                 </optgroup>
                 <optgroup label={$root.getLz("term.defaultPresets")}>
-                  {defaultPresets.map((preset) => <option
-                    value={preset.preset}>
-                    {preset.name}
-                  </option>)}
+                  {defaultPresets.map((preset) => (
+                    <option value={preset.preset}>{preset.name}</option>
+                  ))}
                 </optgroup>
               </select>
             </div>

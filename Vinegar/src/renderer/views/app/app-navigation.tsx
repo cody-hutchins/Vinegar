@@ -81,16 +81,18 @@ import Queue from "../components/queue.jsx";
           <span className="usermenu-item-icon"> {import("../svg/settings.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.settings")}</span>
         </button>
-        {$root.pluginMenuTopEntries.map((entry) => <button
-          className="usermenu-item"
-          onClick={() => entry.onClick()}>
-          <span
-            className="usermenu-item-icon"
-            style={{ right: "2.5px" }}>
-            {import("../svg/grid.svg")}
-          </span>
-          <span className="usermenu-item-name">{entry.name}</span>
-        </button>)}
+        {$root.pluginMenuTopEntries.map((entry) => (
+          <button
+            className="usermenu-item"
+            onClick={() => entry.onClick()}>
+            <span
+              className="usermenu-item-icon"
+              style={{ right: "2.5px" }}>
+              {import("../svg/grid.svg")}
+            </span>
+            <span className="usermenu-item-name">{entry.name}</span>
+          </button>
+        ))}
         <button
           className="usermenu-item"
           onClick={() => unauthorize()}>

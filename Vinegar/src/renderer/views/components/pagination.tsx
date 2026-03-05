@@ -57,7 +57,6 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
     return Math.min(currentPage, numPages);
   }, [currentPage, numPages]);
 
-
   const pagesToShow = useMemo(() => {
     let start = currentPage - 2;
     let end = currentPage + 2;
@@ -137,11 +136,13 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
           onClick={() => goToPrevious()}>
           <img className="md-ico-prev" />
         </button>
-        {pagesToShow.map((page) => <button
-          className={`md-btn page-btn ${isCurrentPage(page) ? ' md-btn-primary': ''}`}
-          onClick={() => goToPage(page)}>
-          {page}
-        </button>)}
+        {pagesToShow.map((page) => (
+          <button
+            className={`md-btn page-btn ${isCurrentPage(page) ? " md-btn-primary" : ""}`}
+            onClick={() => goToPage(page)}>
+            {page}
+          </button>
+        ))}
         <button
           className="md-btn page-btn next"
           disabled={effectivePage === numPages}

@@ -105,15 +105,19 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
             onClick={() => app.miniPlayer(false)}>
             <MediaItemArtwork
               size="600"
-              url={image ?? ''}
+              url={image ?? ""}
             />
           </div>
           <div className="controls-parents">
             <template v-if={app.mkReady()}>
               <div
                 className="app-playback-controls"
-                onMouseOver={() => {app.chrome.progresshover = true}}
-                onMouseLeave={() => {app.chrome.progresshover = false}}
+                onMouseOver={() => {
+                  app.chrome.progresshover = true;
+                }}
+                onMouseLeave={() => {
+                  app.chrome.progresshover = false;
+                }}
                 onContextMenu={app.nowPlayingContextMenu}>
                 <div className="playback-info">
                   <div className="song-name">{app.mk.nowPlayingItem["attributes"]["name"]}</div>
@@ -145,8 +149,15 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                       step={0.01}
                       min="0"
                       style={app.progressBarStyle()}
-                      onInput={() => {app.playerLCD.desiredDuration = $event.target.value;app.playerLCD.userInteraction = true}}
-                      onMouseUp={() => {app.mk.seekToTime($event.target.value);app.playerLCD.desiredDuration = 0;app.playerLCD.userInteraction = false}}
+                      onInput={() => {
+                        app.playerLCD.desiredDuration = $event.target.value;
+                        app.playerLCD.userInteraction = true;
+                      }}
+                      onMouseUp={() => {
+                        app.mk.seekToTime($event.target.value);
+                        app.playerLCD.desiredDuration = 0;
+                        app.playerLCD.userInteraction = false;
+                      }}
                       max={app.mk.currentPlaybackDuration}
                       value={app.getSongProgress()}
                     />
@@ -157,17 +168,17 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button--small shuffle"
                       v-if={$root.mk.shuffleMode === 0}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       onClick={() => ($root.mk.shuffleMode = 1)}
-                      title={$root.getLz('term.enableShuffle')}
+                      title={$root.getLz("term.enableShuffle")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small shuffle active"
                       v-else
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       onClick={() => ($root.mk.shuffleMode = 0)}
-                      title={$root.getLz('term.disableShuffle')}
+                      title={$root.getLz("term.disableShuffle")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -175,8 +186,8 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button previous"
                       onClick={() => $root.prevButton()}
-                      className={$root.isPrevDisabled() && 'disabled'}
-                      title={$root.getLz('term.previous')}
+                      className={$root.isPrevDisabled() && "disabled"}
+                      title={$root.getLz("term.previous")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -184,22 +195,22 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button stop"
                       onClick={() => $root.mk.stop()}
-                      v-if={$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === 'radioStation'}
-                      title={$root.getLz('term.stop')}
+                      v-if={$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation"}
+                      title={$root.getLz("term.stop")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button pause"
                       onClick={() => $root.mk.pause()}
                       v-else-if={$root.mk.isPlaying}
-                      title={$root.getLz('term.pause')}
+                      title={$root.getLz("term.pause")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button play"
                       onClick={() => $root.mk.play()}
                       v-else
-                      title={$root.getLz('term.play')}
+                      title={$root.getLz("term.play")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -207,8 +218,8 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button next"
                       onClick={() => $root.skipToNextItem()}
-                      className={$root.isNextDisabled() && 'disabled'}
-                      title={$root.getLz('term.next')}
+                      className={$root.isNextDisabled() && "disabled"}
+                      title={$root.getLz("term.next")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -216,25 +227,25 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button--small repeat"
                       v-if={$root.mk.repeatMode === 0}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       onClick={() => ($root.mk.repeatMode = 1)}
-                      title={$root.getLz('term.enableRepeatOne')}
+                      title={$root.getLz("term.enableRepeatOne")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small repeat repeatOne"
                       onClick={() => ($root.mk.repeatMode = 2)}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       v-else-if={$root.mk.repeatMode === 1}
-                      title={$root.getLz('term.disableRepeatOne')}
+                      title={$root.getLz("term.disableRepeatOne")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small repeat active"
                       onClick={() => ($root.mk.repeatMode = 0)}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       v-else-if={$root.mk.repeatMode === 2}
-                      title={$root.getLz('term.disableRepeat')}
+                      title={$root.getLz("term.disableRepeat")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -254,7 +265,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                       min="0"
                       max={app.cfg.audio.maxVolume}
                       v-model={app.mk.volume}
-                      v-if={typeof app.mk.volume !== 'undefined'}
+                      v-if={typeof app.mk.volume !== "undefined"}
                       onChange={() => app.checkMuteChange()}
                     />
                   </div>

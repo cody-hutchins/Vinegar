@@ -79,13 +79,14 @@ const Component = () => {
               </div>
             </div>
             <div className="podcasts-list">
-              <LibraryArtistItem
-                show-duration="false"
-                show-meta-data="true"
-                show-library-status="false"
-                item={item}
-                v-for={item in library.artists.displayListing}
-              />
+              {library.artists.displayListing.map((item) => (
+                <LibraryArtistItem
+                  show-duration="false"
+                  show-meta-data="true"
+                  show-library-status="false"
+                  item={item}
+                />
+              ))}
             </div>
           </div>
           <div className="episodes-list">
@@ -94,9 +95,9 @@ const Component = () => {
               v-if={clready}>
               <InlineCollectionList
                 parentSelector="'.episodes-list'"
-                data="clresponse"
-                type="cltype"
-                title="cltitle"
+                data={clresponse}
+                type={cltype}
+                title={cltitle}
               />
             </div>
           </div>

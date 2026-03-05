@@ -35,7 +35,7 @@ const RecordLabel = ({ data }: { data: string }) => {
               <div className="artist-image">
                 <MediaItemArtwork
                   shadow="large"
-                  url={data.attributes.artwork ? data.attributes.artwork.url : ''}
+                  url={data.attributes.artwork ? data.attributes.artwork.url : ""}
                   size="220"
                   type="artists"
                 />

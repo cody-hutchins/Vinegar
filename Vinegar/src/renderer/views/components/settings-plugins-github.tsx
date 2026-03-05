@@ -129,20 +129,21 @@ const PluginsGithub = () => {
         <div className="gh-content">
           <div className="repos-list">
             <ul className="list-group list-group-flush">
-              <li
-                onClick={() => showRepo(repo)}
-                className="list-group-item list-group-item-dark"
-                style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "", borderRadius: "5px" }}
-                v-for={repo in repos}>
-                <div className="row">
-                  <div className="col cider-flex-center">
-                    <div>
-                      <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
-                      <div>⭐ {repo.stargazers_count}</div>
+              {repos.map((repo) => (
+                <li
+                  onClick={() => showRepo(repo)}
+                  className="list-group-item list-group-item-dark"
+                  style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "", borderRadius: "5px" }}>
+                  <div className="row">
+                    <div className="col cider-flex-center">
+                      <div>
+                        <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
+                        <div>⭐ {repo.stargazers_count}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
+                </li>
+              ))}
             </ul>
           </div>
 

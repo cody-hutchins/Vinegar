@@ -15,7 +15,9 @@ const MoreInfoModal = ({ data }: { data: object }) => {
     <div id="moreinfo-modal">
       <div
         className="modal-fullscreen spatialproperties-panel moreinfo-modal"
-        clickself={if(timedelay) close()">
+        clickself={() => {
+          if (timedelay) close();
+        }}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{data.title}</div>

@@ -61,12 +61,13 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
                 <div className="icon">{import("../svg/plus.svg")}</div>
                 <div className="name">{app.getLz("action.createPlaylist")}</div>
               </button>
-              <SidebarPlaylist
-                playlist-select="playlistSelect"
-                v-for={item in $root.getPlaylistFolderChildren("p.playlistsroot")}
-                v-bind:key={item.id}
-                item={item}
-              />
+              {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
+                <SidebarPlaylist
+                  playlist-select="playlistSelect"
+                  v-bind:key={item.id}
+                  item={item}
+                />
+              ))}
             </div>
             <div className="modal-search">
               <div

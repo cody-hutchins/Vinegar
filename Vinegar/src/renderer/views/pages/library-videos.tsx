@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
 
 const Component = ({ data }: { data: object }) => {
   let videos = [];
@@ -21,16 +22,18 @@ const Component = ({ data }: { data: object }) => {
           </div>
         </div>
         <div className="madeforyou-body">
-          <template v-if={videos.length > 0}>
-            <MediaItemSquare
-              size="300"
-              item={item}
-              v-for={item in videos}
-            />
-          </template>
-          <template v-else-if="loaded === true">
+          {videos.length > 0 ? (
+            videos.map((item) => (
+              <MediaItemSquare
+                size="300"
+                item={item}
+              />
+            ))
+          ) : loaded === true ? (
             <div>{$root.getLz("term.noVideos")}</div>
-          </template>
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </div>

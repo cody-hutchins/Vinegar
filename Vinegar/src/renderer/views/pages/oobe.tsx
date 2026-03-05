@@ -47,7 +47,10 @@ const Component = () => {
                 <label>
                   <select
                     className="md-select"
-                    onChange={() => $root.setLz('');$root.setLzManual()}
+                    onChange={() => {
+                      $root.setLz("");
+                      $root.setLzManual();
+                    }}
                     v-model={$root.cfg.general.language}>
                     <optgroup
                       label="index"

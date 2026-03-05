@@ -140,26 +140,27 @@ const ThemesGithub = () => {
         <div className="gh-content">
           <div className="repos-list">
             <ul className="list-group list-group-flush">
-              <li
-                onClick={() => showRepo(repo)}
-                className="list-group-item list-group-item-dark"
-                style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "" }}
-                v-for={repo in repos}>
-                <div className="row">
-                  <div className="col flex-center">
-                    <div>
-                      <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
-                      <div>⭐ {repo.stargazers_count}</div>
+              {repos.map((repo) => (
+                <li
+                  onClick={() => showRepo(repo)}
+                  className="list-group-item list-group-item-dark"
+                  style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "" }}>
+                  <div className="row">
+                    <div className="col flex-center">
+                      <div>
+                        <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
+                        <div>⭐ {repo.stargazers_count}</div>
+                      </div>
+                    </div>
+                    <div className="col-auto">
+                      <span
+                        v-if={themesInstalled.includes(repo.full_name.toLowerCase())}
+                        className="codicon codicon-cloud-download"
+                      />
                     </div>
                   </div>
-                  <div className="col-auto">
-                    <span
-                      v-if={themesInstalled.includes(repo.full_name.toLowerCase())}
-                      className="codicon codicon-cloud-download"
-                    />
-                  </div>
-                </div>
-              </li>
+                </li>
+              ))}
             </ul>
           </div>
 

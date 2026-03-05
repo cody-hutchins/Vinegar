@@ -66,12 +66,12 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           <div className="bgArtworkMaterial">
             <div className="bg-artwork-container">
               <img
-                v-if={(app.cfg.visual.bg_artwork_rotation && app.animateBackground)}
+                v-if={app.cfg.visual.bg_artwork_rotation && app.animateBackground}
                 className="bg-artwork a"
                 src={(image ?? "").replace("{w}", "30").replace("{h}", "30")}
               />
               <img
-                v-if={(app.cfg.visual.bg_artwork_rotation && app.animateBackground)}
+                v-if={app.cfg.visual.bg_artwork_rotation && app.animateBackground}
                 className="bg-artwork b"
                 src={(image ?? "").replace("{w}", "30").replace("{h}", "30")}
               />
@@ -89,42 +89,42 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           <div className="top-nav-group">
             <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
-              name={$root.getLz('home.title')}
+              name={$root.getLz("home.title")}
               svg-icon="./assets/feather/home.svg"
               svg-icon-name="home"
               page="home"
             />
             <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
-              name={$root.getLz('term.listenNow')}
+              name={$root.getLz("term.listenNow")}
               svg-icon="./assets/feather/play-circle.svg"
               svg-icon-name="listenNow"
               page="listen_now"
             />
             <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
-              name={$root.getLz('term.browse')}
+              name={$root.getLz("term.browse")}
               svg-icon="./assets/feather/globe.svg"
               svg-icon-name="browse"
               page="browse"
             />
             <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
-              name={$root.getLz('term.radio')}
+              name={$root.getLz("term.radio")}
               svg-icon="./assets/feather/radio.svg"
               svg-icon-name="radio"
               page="radio"
             />
             <SidebarLibraryItem
               clicknative="tabMode = 'catalog'"
-              name={$root.getLz('term.library')}
+              name={$root.getLz("term.library")}
               svg-icon="./assets/feather/radio.svg"
               svg-icon-name="library"
               page="library"
             />
             <SidebarLibraryItem
               clicknative="tabMode = ''"
-              name={$root.getLz('term.nowPlaying')}
+              name={$root.getLz("term.nowPlaying")}
               svg-icon="./assets/play.svg"
               svg-icon-name="nowPlaying"
               page="nowPlaying"
@@ -140,17 +140,17 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
         </div>
         <div
           className="row fs-row"
-          v-if={tabMode !== 'catalog'}>
+          v-if={tabMode !== "catalog"}>
           <div className="col artwork-col">
             <div
               className="artwork"
-              className={$root.mk.isPlaying && 'playing'}
+              className={$root.mk.isPlaying && "playing"}
               onClick={() => app.fullscreen(false)}>
               <MediaItemArtwork
                 size="600"
                 video="video"
                 videoPriority="true"
-                url={(image ?? '').replace('{w}','600').replace('{h}','600')}
+                url={(image ?? "").replace("{w}", "600").replace("{h}", "600")}
               />
             </div>
             <div
@@ -158,8 +158,12 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
               v-if={app.mkReady()}>
               <div
                 className="app-playback-controls"
-                onMouseOver={() => {app.chrome.progresshover = true}}
-                onMouseLeave={() => {app.chrome.progresshover = false}}
+                onMouseOver={() => {
+                  app.chrome.progresshover = true;
+                }}
+                onMouseLeave={() => {
+                  app.chrome.progresshover = false;
+                }}
                 contextmenu={app.nowPlayingContextMenu}>
                 <div className="playback-info">
                   <div className="song-name">{app.mk.nowPlayingItem["attributes"]["name"]}</div>
@@ -194,8 +198,15 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       step={0.01}
                       min="0"
                       style={app.progressBarStyle()}
-                      onInput={() => {app.playerLCD.desiredDuration = $event.target.value;app.playerLCD.userInteraction = true}}
-                      onMouseUp={() => {app.mk.seekToTime($event.target.value);app.playerLCD.desiredDuration = 0;app.playerLCD.userInteraction = false}}
+                      onInput={() => {
+                        app.playerLCD.desiredDuration = $event.target.value;
+                        app.playerLCD.userInteraction = true;
+                      }}
+                      onMouseUp={() => {
+                        app.mk.seekToTime($event.target.value);
+                        app.playerLCD.desiredDuration = 0;
+                        app.playerLCD.userInteraction = false;
+                      }}
                       max={app.mk.currentPlaybackDuration}
                       value={app.getSongProgress()}
                     />
@@ -206,17 +217,17 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <button
                       className="playback-button--small shuffle"
                       v-if={$root.mk.shuffleMode === 0}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       onClick={() => ($root.mk.shuffleMode = 1)}
-                      title={$root.getLz('term.enableShuffle')}
+                      title={$root.getLz("term.enableShuffle")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small shuffle active"
                       v-else
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       onClick={() => ($root.mk.shuffleMode = 0)}
-                      title={$root.getLz('term.disableShuffle')}
+                      title={$root.getLz("term.disableShuffle")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -224,8 +235,8 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <button
                       className="playback-button previous"
                       onClick={() => $root.prevButton()}
-                      className={$root.isPrevDisabled() && 'disabled'}
-                      title={$root.getLz('term.previous')}
+                      className={$root.isPrevDisabled() && "disabled"}
+                      title={$root.getLz("term.previous")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -233,22 +244,22 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <button
                       className="playback-button stop"
                       onClick={() => $root.mk.stop()}
-                      v-if={$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === 'radioStation'}
-                      title={$root.getLz('term.stop')}
+                      v-if={$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation"}
+                      title={$root.getLz("term.stop")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button pause"
                       onClick={() => $root.mk.pause()}
                       v-else-if={$root.mk.isPlaying}
-                      title={$root.getLz('term.pause')}
+                      title={$root.getLz("term.pause")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button play"
                       onClick={() => $root.mk.play()}
                       v-else
-                      title={$root.getLz('term.play')}
+                      title={$root.getLz("term.play")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -256,8 +267,8 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <button
                       className="playback-button next"
                       onClick={() => $root.skipToNextItem()}
-                      className={$root.isNextDisabled() && 'disabled'}
-                      title={$root.getLz('term.next')}
+                      className={$root.isNextDisabled() && "disabled"}
+                      title={$root.getLz("term.next")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -265,25 +276,25 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <button
                       className="playback-button--small repeat"
                       v-if={$root.mk.repeatMode === 0}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       onClick={() => ($root.mk.repeatMode = 1)}
-                      title={$root.getLz('term.enableRepeatOne')}
+                      title={$root.getLz("term.enableRepeatOne")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small repeat repeatOne"
                       onClick={() => (mk.repeatMode = 2)}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       v-else-if={$root.mk.repeatMode === 1}
-                      title={$root.getLz('term.disableRepeatOne')}
+                      title={$root.getLz("term.disableRepeatOne")}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small repeat active"
                       onClick={() => ($root.mk.repeatMode = 0)}
-                      className={$root.isDisabled() && 'disabled'}
+                      className={$root.isDisabled() && "disabled"}
                       v-else-if={$root.mk.repeatMode === 2}
-                      title={$root.getLz('term.disableRepeat')}
+                      title={$root.getLz("term.disableRepeat")}
                       v-b-tooltiphover
                     />
                   </div>
@@ -295,7 +306,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     className="volume-button--small volume"
                     onClick={() => app.muteButtonPressed()}
                     className="{'active': app.cfg.audio.volume === 0}"
-                    title={app.cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')}
+                    title={app.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
                     v-b-tooltiphover
                   />
                   <input
@@ -306,7 +317,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     min="0"
                     max={app.cfg.audio.maxVolume}
                     v-model={app.mk.volume}
-                    v-if={typeof app.mk.volume !== 'undefined'}
+                    v-if={typeof app.mk.volume !== "undefined"}
                     onChange={() => app.checkMuteChange()}
                     v-b-tooltiphover
                     title={$root.formatVolumeTooltip()}
@@ -317,10 +328,10 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           </div>
           <div
             className="col right-col"
-            v-if={tabMode !== ''}>
+            v-if={tabMode !== ""}>
             <div
               className="lyrics-col"
-              v-if={tabMode === 'lyrics'}>
+              v-if={tabMode === "lyrics"}>
               <LyricsView
                 yoffset="120"
                 time={time}
@@ -355,7 +366,9 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
             className="queue"
             className="{active: tabMode === 'catalog'}"
             v-if={false}
-            onClick={() => {tabMode = tabMode === "catalog" ? "" : "catalog"}}
+            onClick={() => {
+              tabMode = tabMode === "catalog" ? "" : "catalog";
+            }}
           />
         </div>
       </div>

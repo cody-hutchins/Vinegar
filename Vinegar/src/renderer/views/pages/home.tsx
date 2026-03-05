@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
+import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
 const Component = () => {
   const app = this.$root;
@@ -188,17 +189,16 @@ const Component = () => {
                 </div>
               </div>
               <div className="well artistfeed-well">
-                <template v-if={isSectionReady("recentlyPlayed")}>
-                  <MediaItemListItem
-                    v-for={item in recentlyPlayed.limit(6)}
-                    item={item}
-                    v-bind:key={item.id}
-                  />
-                </template>
-                <div
-                  className="spinner"
-                  v-else
-                />
+                {isSectionReady("recentlyPlayed") ? (
+                  recentlyPlayed.limit(6).map((item) => (
+                    <MediaItemListItem
+                      item={item}
+                      v-bind:key={item.id}
+                    />
+                  ))
+                ) : (
+                  <div className="spinner" />
+                )}
               </div>
             </div>
             <div className="col">
@@ -228,23 +228,18 @@ const Component = () => {
               <div
                 className="well artistfeed-well"
                 style={{ marginTop: 0 }}>
-                <template v-if={artistFeed.length > 0}>
-                  <MediaItemListItem
-                    v-for={item in artistFeed.limit(6)}
-                    item={item}
-                    v-bind:key={item.id}
-                  />
-                </template>
-                <div
-                  className="spinner"
-                  v-else-if={followedArtists.length > 0}
-                />
-                <div
-                  className="no-artist"
-                  v-else>
-                  {" "}
-                  {app.getLz("home.artistsFeed.noArtist")}
-                </div>
+                {artistFeed.length > 0 ? (
+                  artistFeed.limit(6).map((item) => (
+                    <MediaItemListItem
+                      item={item}
+                      v-bind:key={item.id}
+                    />
+                  ))
+                ) : followedArtists.length > 0 ? (
+                  <div className="spinner" />
+                ) : (
+                  <div className="no-artist"> {app.getLz("home.artistsFeed.noArtist")}</div>
+                )}
               </div>
             </div>
           </div>

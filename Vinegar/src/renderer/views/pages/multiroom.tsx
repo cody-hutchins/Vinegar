@@ -12,7 +12,7 @@ const Multiroom = ({ data }: { data: object }) => {
           className="artworkContainer"
           v-if={data.attributes?.uber?.masterArt?.url}>
           <ArtworkMaterial
-            url={data.attributes?.uber?.masterArt?.url ?? ''}
+            url={data.attributes?.uber?.masterArt?.url ?? ""}
             size="800"
             images="1"
           />
@@ -67,12 +67,12 @@ const Multiroom = ({ data }: { data: object }) => {
                     <MediaItemScrollerHorizontalMVView
                       imagesize="800"
                       browsesp="index === 0"
-                      items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)"
+                      items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
                     />
                   </template>
-                  <template v-else-if={recom.attributes.name === 'Chart Set'} />
+                  <template v-else-if={recom.attributes.name === "Chart Set"} />
                   <template v-else>
-                    <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)" />
+                    <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
                   </template>
                 </template>
               </template>

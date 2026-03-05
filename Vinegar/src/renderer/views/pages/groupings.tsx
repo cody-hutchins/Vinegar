@@ -73,24 +73,24 @@ const Component = () => {
                 <template v-if={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}>
                   <MediaItemScrollerHorizontalMVView
                     imagesize={800}
-                    browsesp={index === 0|| (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}
+                    browsesp={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}
                     kind={recom.attributes.editorialElementKind}
                     items={recom.relationships.children ? recom.relationships.children.data : recom.relationships.contents.data}
                   />
                 </template>
-                <template v-else-if={(['327']).includes(recom.attributes.editorialElementKind)}>
+                <template v-else-if={["327"].includes(recom.attributes.editorialElementKind)}>
                   <div className="mediaitem-list-item__grid">
                     <ListItemHorizontal items={recom.relationships.contents.data.limit(20)} />
                   </div>
                 </template>
-                <template v-else-if={(['385']).includes(recom.attributes.editorialElementKind)}>
+                <template v-else-if={["385"].includes(recom.attributes.editorialElementKind)}>
                   <MediaItemScrollerHorizontalMVView
                     imagesize={800}
                     kind={recom.attributes.editorialElementKind}
                     items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
                   />
                 </template>
-                <template v-else-if={recom.attributes.name === 'Chart Set'}>{/* ignored  */}</template>
+                <template v-else-if={recom.attributes.name === "Chart Set"}>{/* ignored  */}</template>
                 <template v-else>
                   <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
                 </template>

@@ -118,8 +118,20 @@ const MenuPanel = () => {
     <div id="cider-menu-panel">
       <div
         className="menu-panel"
-        clickself={() => {menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}}
-        contextmenuself={() => {menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}}>
+        clickself={() => {
+          menuPanel.visible = false;
+          if ($root.hintscontext) {
+            $root.hintscontext = false;
+            focusOther();
+          }
+        }}
+        contextmenuself={() => {
+          menuPanel.visible = false;
+          if ($root.hintscontext) {
+            $root.hintscontext = false;
+            focusOther();
+          }
+        }}>
         <div
           className="menu-panel-body"
           ref="menubody"
@@ -137,7 +149,7 @@ const MenuPanel = () => {
           <div
             className="menu-header-body"
             v-if={Object.keys(content.headerItems).length !== 0}>
-            {content.headerItems.map((item) =>
+            {content.headerItems.map((item) => (
               <button
                 className="menu-option-header"
                 className={getClasses(item)}
@@ -156,10 +168,10 @@ const MenuPanel = () => {
                   />
                 </div>
               </button>
-            )}
+            ))}
           </div>
           <div className="menu-body">
-            {content.items.map((item) =>
+            {content.items.map((item) => (
               <button
                 className="menu-option"
                 v-if={canDisplay(item)}
@@ -174,7 +186,8 @@ const MenuPanel = () => {
                   />
                 </div>
                 {item.name}
-              </button>)}
+              </button>
+            ))}
           </div>
         </div>
       </div>

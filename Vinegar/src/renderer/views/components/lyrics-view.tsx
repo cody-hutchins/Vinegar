@@ -150,51 +150,53 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
       <div
         ref="lyricsview"
         className="md-body lyric-body">
-        {lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics) ?
-        lyrics.map((lyric, index) => lyric && lyric.line && lyric.line !== "lrcInstrumental" ?
-            <h3
-              className="lyric-line"
-              onClick={() => seekTo(lyric.startTime)}
-              className="{unsynced : lyric.startTime === 9999999}"
-              v-bind:line-index={index.toString()}>
-              <template v-if={richlyrics && richlyrics !== [] && richlyrics.length > 0}>
-                <div className="richl">
-                  {getVerseLine(index - 1).map((verse) =>
-                    <span
-                      className="verse"
-                      lyricstart={lyric.startTime}
-                      versestart={verse.o}>
-                      {verse.c}
-                    </span>
-                  )}
+        {lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics) ? (
+          lyrics.map((lyric, index) =>
+            lyric && lyric.line && lyric.line !== "lrcInstrumental" ? (
+              <h3
+                className="lyric-line"
+                onClick={() => seekTo(lyric.startTime)}
+                className="{unsynced : lyric.startTime === 9999999}"
+                v-bind:line-index={index.toString()}>
+                <template v-if={richlyrics && richlyrics !== [] && richlyrics.length > 0}>
+                  <div className="richl">
+                    {getVerseLine(index - 1).map((verse) => (
+                      <span
+                        className="verse"
+                        lyricstart={lyric.startTime}
+                        versestart={verse.o}>
+                        {verse.c}
+                      </span>
+                    ))}
+                  </div>
+                </template>
+                <template v-else>
+                  <div className="norm">{lyric.line}</div>
+                </template>
+                <div
+                  className="lyrics-translation"
+                  v-if={lyric.translation && lyric.translation !== ""}>
+                  {lyric.translation}
                 </div>
-              </template>
-              <template v-else>
-                <div className="norm">{lyric.line}</div>
-              </template>
-              <div
-                className="lyrics-translation"
-                v-if={lyric.translation && lyric.translation !== ""}>
-                {lyric.translation}
-              </div>
-            </h3>
-          :
-            <h3
-              className="lyric-line"
-              onClick={() => seekTo(lyric.startTime)}
-              start={lyric.startTime}
-              end={lyric.endTime}
-              v-bind:line-index={index.toString()}>
-              <div className="lyricWaiting">
-                <div class="WaitingDot1" />
-                <div class="WaitingDot2" />
-                <div class="WaitingDot3" />
-              </div>
-            </h3>)
-
-          :
+              </h3>
+            ) : (
+              <h3
+                className="lyric-line"
+                onClick={() => seekTo(lyric.startTime)}
+                start={lyric.startTime}
+                end={lyric.endTime}
+                v-bind:line-index={index.toString()}>
+                <div className="lyricWaiting">
+                  <div class="WaitingDot1" />
+                  <div class="WaitingDot2" />
+                  <div class="WaitingDot3" />
+                </div>
+              </h3>
+            ),
+          )
+        ) : (
           <div className="no-lyrics">{app.getLz("term.noLyrics")}</div>
-        }
+        )}
       </div>
     </div>
   );

@@ -101,26 +101,26 @@ const ArtistFeed = () => {
                 </div>
               </div>
               <vue-horizontal>
-                <div
-                  v-for={artist in artists}
-                  style={{ margin: "6px" }}>
-                  <MediaItemSquare
-                    item={artist}
-                    kind="small"
-                  />
-                  <button
-                    onClick={() => unfollow(artist.id)}
-                    className="md-btn md-btn-glyph"
-                    style={{ display: flex }}>
-                    <div className="sidebar-icon">
-                      <div
-                        className="svg-icon"
-                        style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
-                      />
-                    </div>
-                    {app.getLz("action.removeFavorite")}
-                  </button>
-                </div>
+                {artists.map((artist) => (
+                  <div style={{ margin: "6px" }}>
+                    <MediaItemSquare
+                      item={artist}
+                      kind="small"
+                    />
+                    <button
+                      onClick={() => unfollow(artist.id)}
+                      className="md-btn md-btn-glyph"
+                      style={{ display: flex }}>
+                      <div className="sidebar-icon">
+                        <div
+                          className="svg-icon"
+                          style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
+                        />
+                      </div>
+                      {app.getLz("action.removeFavorite")}
+                    </button>
+                  </div>
+                ))}
               </vue-horizontal>
             </div>
           </div>
@@ -137,16 +137,16 @@ const ArtistFeed = () => {
               <div
                 className="well"
                 style={{ marginTop: 0 }}>
-                <template v-if={artistFeed.length > 0}>
-                  <MediaItemListItem
-                    v-for={item in artistFeed}
-                    v-bind:key={item.id}
-                    item={item}
-                  />
-                </template>
-                <template v-else>
+                {artistFeed.length > 0 ? (
+                  artistFeed.map((item) => (
+                    <MediaItemListItem
+                      v-bind:key={item.id}
+                      item={item}
+                    />
+                  ))
+                ) : (
                   <div className="spinner" />
-                </template>
+                )}
               </div>
             </div>
           </div>

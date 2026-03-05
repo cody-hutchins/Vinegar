@@ -58,16 +58,28 @@ const Component = ({ search }: { search: object }) => {
       <div className="content-inner search-page">
         <div
           className="search-input-container fs-search"
-          v-if={$root.appMode === 'fullscreen'}>
+          v-if={$root.appMode === "fullscreen"}>
           <div className="search-input--icon" />
           <input
             type="search"
             spellCheck="false"
-            onFocus={() => {$root.search.showHints = true}}
-            onBlur={() => $root.setTimeout(()=>{if($root.hintscontext !== true){$root.search.showHints = false} }, 300)}
-            v-on:keyupenter={() => $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false; $root.search.showSearchView = true}
+            onFocus={() => {
+              $root.search.showHints = true;
+            }}
+            onBlur={() =>
+              $root.setTimeout(() => {
+                if ($root.hintscontext !== true) {
+                  $root.search.showHints = false;
+                }
+              }, 300)
+            }
+            v-on:keyupenter={() => {
+              $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+              $root.search.showHints = false;
+              $root.search.showSearchView = true;
+            }}
             onInput={() => $root.getSearchHints()}
-            placeholder={$root.getLz('term.search') + '...'}
+            placeholder={$root.getLz("term.search") + "..."}
             v-model={$root.search.term}
             className="search-input"
           />
@@ -78,7 +90,12 @@ const Component = ({ search }: { search: object }) => {
             <div className="search-hints">
               <button
                 className="search-hint text-overflow-elipsis"
-                v-for={(hint, index) in $root.search.hints.filter((a) => {return a.content === null})}
+                v-for={
+                  (hint, index) in
+                  $root.search.hints.filter((a) => {
+                    return a.content === null;
+                  })
+                }
                 className="{active: ($root.search.cursor === index)}"
                 onClick={() => {
                   $root.search.term = hint.searchTerm;
@@ -87,7 +104,13 @@ const Component = ({ search }: { search: object }) => {
                 }}>
                 {hint.displayTerm}
               </button>
-              <template v-for={(item, position) in $root.search.hints.filter((a) => {return a.content !== null})}>
+              <template
+                v-for={
+                  (item, position) in
+                  $root.search.hints.filter((a) => {
+                    return a.content !== null;
+                  })
+                }>
                 <MediaitemSmarthints
                   item={item.content}
                   position={position}>
@@ -115,8 +138,8 @@ const Component = ({ search }: { search: object }) => {
             {$root.getLz("term.library")}
           </button>
         </div>
-        <div v-if={search !== null && search !== [] && search.term !== '' && $root.search.showSearchView}>
-          <template v-if={searchType === 'catalog'}>
+        <div v-if={search !== null && search !== [] && search.term !== "" && $root.search.showSearchView}>
+          <template v-if={searchType === "catalog"}>
             <h3>{app.getLz("term.topResult")}</h3>
             <MediaitemScrollerHorizontal items="search?.results[search?.results?.meta?.results?.order[0]]?.data" />
             <div className="row">
@@ -146,10 +169,10 @@ const Component = ({ search }: { search: object }) => {
               </div>
             </div>
 
-            <template v-if={search.results['meta'] !== null}>
+            <template v-if={search.results["meta"] !== null}>
               <template
                 v-for={section in search.results.meta.results.order}
-                v-if={section !== 'song' && section !== 'top'}>
+                v-if={section !== "song" && section !== "top"}>
                 <div className="row">
                   <div className="col">
                     <h3>{app.friendlyTypes(section)}</h3>
@@ -164,7 +187,7 @@ const Component = ({ search }: { search: object }) => {
                     </button>
                   </div>
                 </div>
-                <template v-if={!app.friendlyTypes(section).includes('Video')}>
+                <template v-if={!app.friendlyTypes(section).includes("Video")}>
                   <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
                 </template>
                 <template v-else>
@@ -213,7 +236,7 @@ const Component = ({ search }: { search: object }) => {
               <h3>{app.friendlyTypes(key)}</h3>
               <div
                 className="mediaitem-list-item__grid"
-                v-if={key.includes('songs')}>
+                v-if={key.includes("songs")}>
                 <ListitemHorizontal items={section.data} />
               </div>
               <div
@@ -239,15 +262,16 @@ const Component = ({ search }: { search: object }) => {
               </div>
             </div>
             <div className="categories">
-              <MediaItemSquare
-                kind="'385'"
-                imageformat="'bb'"
-                size="600"
-                removeamtext="true"
-                item={item ? (item.attributes.kind ? item : ((item.relationships && item.relationships.contents ) ? item.relationships.contents.data[0] : item)) : []}
-                imagesize="800"
-                v-for={item of getFlattenedCategories()}
-              />
+              {getFlattenedCategories().map((item) => (
+                <MediaItemSquare
+                  kind="'385'"
+                  imageformat="'bb'"
+                  size="600"
+                  removeamtext="true"
+                  item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
+                  imagesize="800"
+                />
+              ))}
             </div>
           </div>
         </div>

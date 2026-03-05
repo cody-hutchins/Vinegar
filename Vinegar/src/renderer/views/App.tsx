@@ -209,7 +209,7 @@ export default function App(): ReactElement {
           async
           src="https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js"
           data-web-components></script>
-        <script src={index.js?v=1}></script>
+        <script src={"index.js?v=1"}></script>
         <div id="am-musiccovershelf">
           <h1>{component.attributes.title.stringForDisplay}</h1>
         </div>

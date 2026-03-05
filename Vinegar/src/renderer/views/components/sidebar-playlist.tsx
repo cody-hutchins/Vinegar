@@ -243,7 +243,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
         <button
           key={item.id}
           className="app-sidebar-item app-sidebar-item-playlist"
-          className={item.type !== 'library-playlist-folders' ? {'active': $root.page.includes(item.id)} : ['playlist-folder', {'folder-button-active': folderOpened}, isPlaylistSelected]}
+          className={item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected]}
           onContextMenu={(e) => playlistContextMenu(e, item.id)}
           onDragStart={(e) => startDrag(e, item)}
           onDragOver={dragOver}
@@ -267,26 +267,28 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
             v-model={item.attributes.name}
             className="pl-rename-field"
             onBlur={() => rename()}
-            onKeyDown={(e) => {if(e.key === 'enter') rename();}}
+            onKeyDown={(e) => {
+              if (e.key === "enter") rename();
+            }}
             v-else
           />
         </button>
-        <div
-          className="folder-body"
-          v-if={item.type === "library-playlist-folders" && folderOpened}>
-          <template v-if={children.length !== 0}>
-            <SidebarPlaylist
-              v-for={item in children}
-              relate-media-items={relateMediaItems}
-              playlist-select={playlistSelect}
-              item={item}
-              v-bind:key={item.id}
-            />
-          </template>
-          <template v-else>
-            <div className="spinner" />
-          </template>
-        </div>
+        {item.type === "library-playlist-folders" && folderOpened && (
+          <div className="folder-body">
+            {children.length !== 0 ? (
+              children.map((item) => (
+                <SidebarPlaylist
+                  relate-media-items={relateMediaItems}
+                  playlist-select={playlistSelect}
+                  item={item}
+                  v-bind:key={item.id}
+                />
+              ))
+            ) : (
+              <div className="spinner" />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

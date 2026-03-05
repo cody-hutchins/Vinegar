@@ -81,22 +81,24 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
         <div
           v-if={data["data"] !== "null"}
           className="well itemContainer">
-          {data.data.map((item) => (
-            item.type === "artists" ?
-              (<MediaItemSquare item={item} />)
-            : (<>
-              <MediaItemListItem
-                v-if={getKind(item) === "song"}
-                index="key"
-                item={item}
-              />
-              <MediaItemSquare
-                v-else
-                item={item}
-                type={getKind(item)}
-              />
-            </>)
-          ))}
+          {data.data.map((item) =>
+            item.type === "artists" ? (
+              <MediaItemSquare item={item} />
+            ) : (
+              <>
+                <MediaItemListItem
+                  v-if={getKind(item) === "song"}
+                  index="key"
+                  item={item}
+                />
+                <MediaItemSquare
+                  v-else
+                  item={item}
+                  type={getKind(item)}
+                />
+              </>
+            ),
+          )}
           <button
             v-if={triggerEnabled}
             style={{ opacity: 0, height: "32px" }}

@@ -442,8 +442,8 @@ const Component = ({ data }: { data: object }) => {
                       <MediaItemArtwork
                         shadow="large"
                         video-priority="true"
-                        url={(data.attributes !== null && data.attributes.artwork !== null) ? data.attributes.artwork.url : ((data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null) ? ((data.relationships.tracks.data[0].attributes.artwork !== null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')}
-                        video={(data.attributes !== null && data.attributes.editorialVideo !== null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : ''}
+                        url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
+                        video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
                         size="260"
                       />
                     </div>
@@ -467,7 +467,9 @@ const Component = ({ data }: { data: object }) => {
                             v-model={data.attributes.name}
                             onBlur={editPlaylist}
                             onChange={editPlaylist}
-                            onKeyDown={(e) => {if (e.key === 'enter') editPlaylist();}}
+                            onKeyDown={(e) => {
+                              if (e.key === "enter") editPlaylist();
+                            }}
                           />
                         </div>
                         <div
@@ -551,7 +553,7 @@ const Component = ({ data }: { data: object }) => {
                         style={{ minWidth: "180px" }}
                         v-if={inLibrary !== null && confirm !== true}
                         onClick={() => confirmButton()}>
-                        <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
+                        <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                         {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                       </button>
                       <button
@@ -559,7 +561,7 @@ const Component = ({ data }: { data: object }) => {
                         style={{ minWidth: "180px" }}
                         v-if={confirm === true}
                         onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                        <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
+                        <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                         {app.getLz("term.confirm")}
                       </button>
                       <button
@@ -617,7 +619,7 @@ const Component = ({ data }: { data: object }) => {
                       style={{ minWidth: "180px" }}
                       v-if={inLibrary !== null && confirm !== true}
                       onClick={() => confirmButton()}>
-                      <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
+                      <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                       {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                     </button>
                     <button
@@ -625,7 +627,7 @@ const Component = ({ data }: { data: object }) => {
                       style={{ minWidth: "180px" }}
                       v-if={confirm === true}
                       onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                      <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
+                      <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                       {app.getLz("term.confirm")}
                     </button>
                   </div>
@@ -650,7 +652,7 @@ const Component = ({ data }: { data: object }) => {
                   <div className="">
                     <div style={{ width: "100%" }}>
                       <draggable
-                        sort={data.attributes.canEdit && data.type === 'library-playlists'}
+                        sort={data.attributes.canEdit && data.type === "library-playlists"}
                         v-model={data.relationships.tracks.data}
                         start="drag=true"
                         end="drag=false;put()">
@@ -660,7 +662,7 @@ const Component = ({ data }: { data: object }) => {
                             parent={getItemParent(data)}
                             index={index}
                             showIndex={true}
-                            showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? '').includes('playlist')}
+                            showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
                             context-ext={buildContextMenu()}
                             v-bind:key={item.id}
                             v-for={(item, index) in data.relationships.tracks.data}
@@ -674,7 +676,7 @@ const Component = ({ data }: { data: object }) => {
                               parent={getItemParent(data)}
                               index={index}
                               showIndex={true}
-                              showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? '').includes('playlist')}
+                              showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
                               context-ext={buildContextMenu()}
                               v-bind:key={item.id}
                               v-for={(item, index) in disc.tracks}

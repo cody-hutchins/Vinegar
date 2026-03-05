@@ -16,7 +16,7 @@ const Panels = () => {
           v-if={cfg.visual.window_background_style === "artwork"}
           className="{noanimation: (!cfg.visual.bg_artwork_rotation || !animateBackground)}">
           <img
-            load={chrome.artworkReady = true}
+            load={(chrome.artworkReady = true)}
             className="bg-artwork a"
           />
           <img className="bg-artwork b" />
@@ -137,11 +137,25 @@ const Panels = () => {
                 type="range"
                 step={0.01}
                 min="0"
-                style={progressBarStyle()}
-                style={{ width: "95%" }}
-                onInput={() => playerLCD.desiredDuration = $event.target.value;playerLCD.userInteraction = true}}
-                onMouseUp={() => mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
-                onTouchEnd={() => mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
+                style={{ ...progressBarStyle(), width: "95%" }}
+                onInput={() => {
+                  playerLCD.desiredDuration = $event.target.value;
+                  playerLCD.userInteraction = true;
+                }}
+                onMouseUp={() => {
+                  mk.seekToTime($event.target.value);
+                  setTimeout(() => {
+                    playerLCD.desiredDuration = 0;
+                    playerLCD.userInteraction = false;
+                  }, 1000);
+                }}
+                onTouchEnd={() => {
+                  mk.seekToTime($event.target.value);
+                  setTimeout(() => {
+                    playerLCD.desiredDuration = 0;
+                    playerLCD.userInteraction = false;
+                  }, 1000);
+                }}
                 max={mk.currentPlaybackDuration}
                 value={getSongProgress()}
               />
@@ -156,7 +170,7 @@ const Panels = () => {
                   className="volume-button--small volume"
                   onClick={() => muteButtonPressed()}
                   className="{'active': cfg.audio.volume === 0}"
-                  title={cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')}
+                  title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
                   v-b-tooltiphover
                 />
                 <input

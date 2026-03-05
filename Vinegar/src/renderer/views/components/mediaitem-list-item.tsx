@@ -567,8 +567,12 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
         key={itemId}
         className="cd-mediaitem-list-item"
         onMouseEnter={checkLibrary}
-        onMouseOver={() => {showInLibrary = true;}}
-        onMouseLeave={() => {showInLibrary = false;}}
+        onMouseOver={() => {
+          showInLibrary = true;
+        }}
+        onMouseLeave={() => {
+          showInLibrary = false;
+        }}
         onDoubleClick={route}
         controller-click={route()}
         tabIndex={0}
@@ -623,7 +627,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             className="artwork"
             v-if={showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false))}>
             <MediaItemArtwork
-              url={item.attributes.artwork ? item.attributes.artwork.url : ''}
+              url={item.attributes.artwork ? item.attributes.artwork.url : ""}
               size="48"
               bgcolor={getBgColor()}
               type={item.type}

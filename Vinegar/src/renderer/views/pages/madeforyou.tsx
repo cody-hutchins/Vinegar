@@ -1,3 +1,5 @@
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+
 export const MadeForYou = ({ item }: { item: object }) => (
   <div className="content-inner">
     <div className="row">
@@ -8,11 +10,12 @@ export const MadeForYou = ({ item }: { item: object }) => (
       </div>
     </div>
     <div className="madeforyou-body">
-      <MediaItemSquare
-        item={item}
-        v-for={item in madeforyou.data}
-        v-bind:key={item.id}
-      />
+      {madeforyou.data.map((item) => (
+        <MediaItemSquare
+          item={item}
+          v-bind:key={item.id}
+        />
+      ))}
     </div>
   </div>
 );

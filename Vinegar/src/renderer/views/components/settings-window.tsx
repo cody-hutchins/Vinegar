@@ -1,3 +1,4 @@
+import { ipcRenderer } from "electron";
 import SVGIcon from "../../main/components/SVGIcon.jsx";
 import Audiolabs from "../pages/audiolabs.jsx";
 import { InstalledThemes } from "./settings-installed-themes.jsx";
@@ -188,7 +189,7 @@ const SettingsWindow = () => {
             pills
             vertical
             content-className="mt-3"
-            v-model={$store.state.pageState['settings'].currentTabIndex}>
+            v-model={$store.state.pageState["settings"].currentTabIndex}>
             <b-tab>
               <template title>
                 <div>
@@ -213,7 +214,10 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            onChange={() => {$root.setLz('');$root.setLzManual()}}
+                            onChange={() => {
+                              $root.setLz("");
+                              $root.setLzManual();
+                            }}
                             v-model={app.cfg.general.language}>
                             <optgroup
                               label="index"
@@ -245,7 +249,7 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={$root.cfg.general.privateEnabled}
-                            v-on:change={$root.mk.privateEnabled = $root.cfg.general.privateEnabled}
+                            v-on:change={($root.mk.privateEnabled = $root.cfg.general.privateEnabled)}
                             switch
                           />
                         </label>
@@ -253,7 +257,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show={app.platform !== 'linux'}>
+                      v-show={app.platform !== "linux"}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
@@ -351,7 +355,7 @@ const SettingsWindow = () => {
                         id="modal-1"
                         centered
                         size="lg"
-                        title={$root.getLz('settings.option.general.customizeSidebar')}>
+                        title={$root.getLz("settings.option.general.customizeSidebar")}>
                         <div className="settings-option-body">
                           <div className="md-option-line">
                             <div className="md-option-segment">{$root.getLz("term.recentlyAdded")}</div>
@@ -542,7 +546,7 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.audio.seamless_audio}
-                            v-on:change={app.mk._bag.features['seamless-audio-transitions'] = app.cfg.audio.seamless_audio}
+                            v-on:change={(app.mk._bag.features["seamless-audio-transitions"] = app.cfg.audio.seamless_audio)}
                             switch
                           />
                         </label>
@@ -571,7 +575,7 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.audio.normalization}
                             v-on:change="toggleNormalization"
-                            disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true"
+                            disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}
                             switch
                           />
                         </label>
@@ -715,7 +719,7 @@ const SettingsWindow = () => {
                             <option value="image">{$root.getLz("settings.header.visual.windowBackgroundStyle.image")}</option>
                             <option value="color">{$root.getLz("settings.header.visual.windowBackgroundStyle.color")}</option>
                             <option
-                              v-if={$root.platform === 'win32'}
+                              v-if={$root.platform === "win32"}
                               value="mica">
                               Mica (Beta)
                             </option>
@@ -725,7 +729,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line child"
-                      v-if={app.cfg.visual.window_background_style === 'color'}>
+                      v-if={app.cfg.visual.window_background_style === "color"}>
                       <div className="md-option-segment">{$root.getLz("settings.option.visual.windowColor")}</div>
                       <div className="md-option-segment_auto">
                         <input
@@ -837,7 +841,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show={app.platform !== 'darwin'}>
+                      v-show={app.platform !== "darwin"}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.close_button_hide")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
@@ -851,7 +855,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show={app.platform !== 'darwin'}>
+                      v-show={app.platform !== "darwin"}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.window.useNativeTitleBar")}
                         <br />
@@ -870,7 +874,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show={app.platform !== 'darwin' && !app.cfg.visual.nativeTitleBar}>
+                      v-show={app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.windowControlStyle")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
@@ -905,7 +909,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-if={app.cfg.visual.animated_artwork === 'always' || app.cfg.visual.animated_artwork === 'limited'}>
+                      v-if={app.cfg.visual.animated_artwork === "always" || app.cfg.visual.animated_artwork === "limited"}>
                       <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedArtworkQuality")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
@@ -1454,7 +1458,7 @@ const SettingsWindow = () => {
                               <select
                                 className="md-select"
                                 v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
-                                onChange={(e) => e.target.value === 'disabled' ? app.cfg.connectivity.discord_rpc.activity.buttons.second = 'disabled' : ''}>
+                                onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
                                 <option
                                   v-for={option in app.cfg.connectivity.discord_rpc.activity.buttons.options}
                                   v-bind:value="option"
@@ -1469,7 +1473,7 @@ const SettingsWindow = () => {
 
                         <div
                           className="md-option-line"
-                          v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== 'disabled'}>
+                          v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled"}>
                           <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.secondButton")}</div>
                           <div className="md-option-segment md-option-segment_auto">
                             <label>
@@ -1533,7 +1537,7 @@ const SettingsWindow = () => {
                             <input
                               type="submit"
                               className="md-btn"
-                              value={$root.getLz('action.submit')}
+                              value={$root.getLz("action.submit")}
                             />
                           </form>
                         </label>
@@ -1596,13 +1600,13 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model={app.cfg.connectivity.lastfm.filter_types['song']}
+                            v-model={app.cfg.connectivity.lastfm.filter_types["song"]}
                           />
                           {$root.getLz("term.songs")}
                           <br />
                           <input
                             type="checkbox"
-                            v-model={app.cfg.connectivity.lastfm.filter_types['musicVideo']}
+                            v-model={app.cfg.connectivity.lastfm.filter_types["musicVideo"]}
                           />
                           {$root.getLz("term.musicVideos")}
                         </label>
@@ -1700,7 +1704,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes('immersive-preview')}
+                            v-model={app.cfg.advanced.experiments.includes("immersive-preview")}
                             onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}
                             switch
                           />
@@ -1718,7 +1722,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes('unknown-sources')}
+                            v-model={app.cfg.advanced.experiments.includes("unknown-sources")}
                             onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}
                             switch
                           />
@@ -1735,7 +1739,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes('cider_mirror')}
+                            v-model={app.cfg.advanced.experiments.includes("cider_mirror")}
                             onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}
                             switch
                           />
@@ -1762,13 +1766,13 @@ const SettingsWindow = () => {
                     <div className="md-option-line">
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.experimental.compactUI")}
-                        <small v-if={!!app.getThemeDirective('forceUI')}>{$root.getLz('term.themeManaged')}</small>
+                        <small v-if={!!app.getThemeDirective("forceUI")}>{$root.getLz("term.themeManaged")}</small>
                       </div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes('compactui')}
+                            v-model={app.cfg.advanced.experiments.includes("compactui")}
                             onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
                             switch
                             disabled="!!app.getThemeDirective('forceUI')"
@@ -1784,7 +1788,7 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             disabled
-                            v-model={app.cfg.advanced.experiments.includes('inline-playlists')}
+                            v-model={app.cfg.advanced.experiments.includes("inline-playlists")}
                             onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}
                             switch
                           />
@@ -1794,7 +1798,7 @@ const SettingsWindow = () => {
 
                     <div
                       className="md-option-line update-check"
-                      v-if={app.platform === 'win32' || app.platform === 'linux'}>
+                      v-if={app.platform === "win32" || app.platform === "linux"}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.visual.transparent")}
                         <br />

@@ -8,7 +8,7 @@ const PathMenu = () => {
   }
   useEffect(() => {
     mounted();
-  }, [])
+  }, []);
   function close() {
     this.$root.modals.pathMenu = false;
   }
@@ -39,11 +39,11 @@ const PathMenu = () => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label={$root.getLz('action.close')}
+              aria-label={$root.getLz("action.close")}
             />
           </div>
           <div className="modal-content">
-            {folders.map((folder) =>
+            {folders.map((folder) => (
               <div className="md-option-line">
                 <div className="md-option-segment">{folder}</div>
                 <div className="md-option-segment md-option-segment_auto">
@@ -54,7 +54,7 @@ const PathMenu = () => {
                   </button>
                 </div>
               </div>
-           )}
+            ))}
             <div className="md-option-line">
               <div className="md-option-segment md-option-segment_auto">
                 <button

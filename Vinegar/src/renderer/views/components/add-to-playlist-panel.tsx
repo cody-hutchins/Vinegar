@@ -62,13 +62,14 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
             </div>
             <div className="name">{app.getLz("action.createPlaylist")}</div>
           </button>
-          {$root.getPlaylistFolderChildren("p.playlistsroot").map((item)=>
-          <SidebarPlaylist
-            playlist-select={playlistSelect}
-            relate-media-items="relateItems"
-            v-bind:key={item.id}
-            item={item}
-          />)}
+          {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
+            <SidebarPlaylist
+              playlist-select={playlistSelect}
+              relate-media-items="relateItems"
+              v-bind:key={item.id}
+              item={item}
+            />
+          ))}
         </div>
         <div className="modal-search">
           <div

@@ -52,14 +52,18 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
               />
             </div>
             <div className="modal-content">
-              {playlist.attributes.canEdit && playlist.type !== "library-playlist-folders"&& playlistSorted.map((playlist) => <button
-                className="playlist-item"
-                className="{ focused: playlist.id === focused }"
-                onClick={() => addToPlaylist(playlist.id)}
-                style={{ width: "100%" }}>
-                <div className="icon">{import("../svg/playlist.svg")}</div>
-                <div className="name">{playlist.attributes.name}</div>
-              </button>)}
+              {playlist.attributes.canEdit &&
+                playlist.type !== "library-playlist-folders" &&
+                playlistSorted.map((playlist) => (
+                  <button
+                    className="playlist-item"
+                    className="{ focused: playlist.id === focused }"
+                    onClick={() => addToPlaylist(playlist.id)}
+                    style={{ width: "100%" }}>
+                    <div className="icon">{import("../svg/playlist.svg")}</div>
+                    <div className="name">{playlist.attributes.name}</div>
+                  </button>
+                ))}
             </div>
             <div className="modal-search">
               <div
