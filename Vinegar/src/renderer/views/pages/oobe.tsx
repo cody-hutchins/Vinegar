@@ -1,4 +1,4 @@
-import { useAppStore } from "../../store/index.js";
+import { useAppStore } from "../../store/app.js";
 const OOBE = () => {
   let screen = "before_we_start";
   const cfg = useAppStore((state) => state.cfg);
@@ -54,15 +54,15 @@ const OOBE = () => {
                       $root.setLzManual();
                     }}
                     v-model={cfg.general.language}>
-                    <optgroup
-                      label="index"
-                      v-for={(categories, index) in getLanguages()}>
-                      <option
-                        v-for={lang in categories}
-                        value={lang.code}>
-                        {lang.nameNative}({lang.nameEnglish})
-                      </option>
-                    </optgroup>
+                    {getLanguages().map((categories, index) => (
+                      <optgroup label={index}>
+                        {categories.map((lang) => (
+                          <option value={lang.code}>
+                            {lang.nameNative}({lang.nameEnglish})
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
                 </label>
               </div>
@@ -206,7 +206,6 @@ const OOBE = () => {
                     <input
                       type="checkbox"
                       v-model={cfg.audio.maikiwiAudio.ciderPPE}
-                      switch
                     />
                   </div>
                 </div>

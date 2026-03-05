@@ -168,6 +168,9 @@ importers:
       '@types/adm-zip':
         specifier: ^0.5.7
         version: 0.5.7
+      '@types/bootbox':
+        specifier: ^5.2.9
+        version: 5.2.9
       '@types/bootstrap':
         specifier: ^5.2.10
         version: 5.2.10
@@ -1924,6 +1927,9 @@ packages:
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
+  '@types/bootbox@5.2.9':
+    resolution: {integrity: sha512-lNtFr624WN0PfdV46MBqe0VvnDBO3v1bEXRoEI+FLwztKAxkTB2547dtdb364VP3QsAOQ2O4qlEywOyesFiRVw==}
+
   '@types/bootstrap@5.2.10':
     resolution: {integrity: sha512-F2X+cd6551tep0MvVZ6nM8v7XgGN/twpdNDjqS1TUM7YFNEtQYWk+dKAnH+T1gr6QgCoGMPl487xw/9hXooa2g==}
 
@@ -1980,6 +1986,9 @@ packages:
 
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
+
+  '@types/jquery@4.0.0':
+    resolution: {integrity: sha512-Z+to+A2VkaHq1DfI2oSwsoCdhCHMpTSgjWzNcbNlRGYzksDBpPUgEcAL+RQjOBJRaLoEAOHXxqDGBVP+BblBwg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -9437,6 +9446,10 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/node': 20.19.35
 
+  '@types/bootbox@5.2.9':
+    dependencies:
+      '@types/jquery': 4.0.0
+
   '@types/bootstrap@5.2.10':
     dependencies:
       '@popperjs/core': 2.11.8
@@ -9511,6 +9524,8 @@ snapshots:
   '@types/istanbul-reports@3.0.4':
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
+
+  '@types/jquery@4.0.0': {}
 
   '@types/json-schema@7.0.15': {}
 

@@ -78,11 +78,9 @@ const Component = () => {
                     $root.searchLibraryAlbums(1);
                   }}>
                   <optgroup label={$root.getLz("term.sortBy")}>
-                    <option
-                      v-for={(sort, index) in library.albums.sortingOptions}
-                      value="index">
-                      {sort}
-                    </option>
+                    {library.albums.sortingOptions.map((sort, index) => (
+                      <option value="index">{sort}</option>
+                    ))}
                   </optgroup>
                 </select>
               </div>
@@ -134,23 +132,25 @@ const Component = () => {
         <div className="well">
           <div className="albums-square-container">
             <div>
-              <MediaItemSquare
-                v-if={prefs.viewAs === "covers"}
-                size="'300'"
-                item={item}
-                v-for={item in currentSlice}
-              />
+              {currentSlice.map((item) => (
+                <MediaItemSquare
+                  v-if={prefs.viewAs === "covers"}
+                  size="'300'"
+                  item={item}
+                />
+              ))}
             </div>
           </div>
-          <MediaItemListItem
-            v-if={prefs.viewAs === "list"}
-            show-duration="false"
-            show-meta-data="true"
-            show-library-status="false"
-            v-bind:key={item.id}
-            item={item}
-            v-for={item in currentSlice}
-          />
+          {currentSlice.map((item) => (
+            <MediaItemListItem
+              v-if={prefs.viewAs === "list"}
+              show-duration="false"
+              show-meta-data="true"
+              show-library-status="false"
+              v-bind:key={item.id}
+              item={item}
+            />
+          ))}
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { html } from "../html.js";
+import bootbox from "bootbox";
 
 export const i18nEditor = () => {
   let listing = ipcRenderer.sendSync("get-i18n-listing");
@@ -29,44 +30,44 @@ export const i18nEditor = () => {
   }
 
   return (
-    <div class="content-inner i18n-page">
-      <div class="row nopadding">
-        <div class="col nopadding">
+    <div className="content-inner i18n-page">
+      <div className="row nopadding">
+        <div className="col nopadding">
           <h1>i18n Editor</h1>
         </div>
-        <div class="col-auto nopadding selectCol">
-          <select class="md-select" change="$root.setLz('');$root.setLzManual()" v-model="$root.cfg.general.language">
-            <optgroup label="index" v-for="(categories, index) in getLanguages()">
-              <option v-for="lang in categories" value="lang.code">{lang.nameNative} ({lang.nameEnglish})</option>
-            </optgroup>
+        <div className="col-auto nopadding selectCol">
+          <select className="md-select" change="$root.setLz('');$root.setLzManual()" v-model="$root.cfg.general.language">
+            {getLanguages().map((categories, index) => <optgroup label="index">
+              {categories.map((lang) => <option value={lang.code}>{lang.nameNative} ({lang.nameEnglish})</option>)}
+            </optgroup>)}
           </select>
-          <button class="md-btn" click="exportLz">Export</button>
+          <button className="md-btn" onClick={exportLz}>Export</button>
         </div>
       </div>
       <hr />
-      <div class="md-option-container">
-        <template v-for="(val, key) in baseLz">
-          <div class="md-option-line" v-if="$root.lz[key]">
-            <div class="md-option-segment">{{ key }}</div>
-            <div class="md-option-segment">
+      <div className="md-option-container">
+        {baseLz.map((val, key) => <template>
+          <div className="md-option-line" v-if="$root.lz[key]">
+            <div className="md-option-segment">{key }</div>
+            <div className="md-option-segment">
               <template v-if='typeof $root.lz[key] == "object"'>
-                <div v-for="(variant, vkey) in $root.lz[key]">
-                  {{variant}}
+                {$root.lz[key].map((variant, vkey) => <div>
+                  {variant}
                   <input type="text" v-model="$root.lz[key][vkey]" />
-                </div>
+                </div>)}
               </template>
               <textarea type="text" v-model="$root.lz[key]" v-else></textarea>
             </div>
           </div>
-          <div class="md-option-line" v-else>
-            <div class="md-option-segment">
-              <b>{{ key }}</b>
+          <div className="md-option-line" v-else>
+            <div className="md-option-segment">
+              <b>{ key }</b>
             </div>
-            <div class="md-option-segment">
+            <div className="md-option-segment">
               <textarea type="text" v-model="$root.lz[key]" placeholder="val"></textarea>
             </div>
           </div>
-        </template>
+        </template>)}
       </div>
     </div>);
   };

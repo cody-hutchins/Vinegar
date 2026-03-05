@@ -793,11 +793,12 @@ const Playlist = ({ data }: { data: object }) => {
                         {getArtistName(data)}
                       </div>
                       <template v-if={useArtistChip}>
-                        <ArtistChip
-                          v-for={artist in data.relationships.artists?.data}
-                          style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                          item={artist}
-                        />
+                        {data.relationships.artists?.data.map((artist) => (
+                          <ArtistChip
+                            style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
+                            item={artist}
+                          />
+                        ))}
                       </template>
                       <div
                         className="playlist-desc"
@@ -830,7 +831,7 @@ const Playlist = ({ data }: { data: object }) => {
                             }}
                           />
                         </div>
-                        {/* <button v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null} className=}more-btn}
+                        {/* <button v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null} className="more-btn"}
                                                 onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
                                             {app.getLz('term.showMore')}
                                         </button>  */}
@@ -1062,31 +1063,35 @@ const Playlist = ({ data }: { data: object }) => {
                         start="drag=true"
                         end="drag=false;put()">
                         <template v-if={!hasNestedPlaylist}>
-                          <MediaItemListItem
-                            item={item}
-                            parent={getItemParent(data)}
-                            index={index + start}
-                            showIndex={true}
-                            showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
-                            context-ext={buildContextMenu()}
-                            v-bind:key={item.id}
-                            v-for={(item, index) in currentSlice}
-                          />
-                        </template>
-                        <template v-else>
-                          <div v-for={disc in nestedSlices}>
-                            <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                          {currentSlice.map((item, index) => (
                             <MediaItemListItem
                               item={item}
                               parent={getItemParent(data)}
-                              index={index}
+                              index={index + start}
                               showIndex={true}
                               showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
                               context-ext={buildContextMenu()}
                               v-bind:key={item.id}
-                              v-for={(item, index) in disc.tracks}
                             />
-                          </div>
+                          ))}
+                        </template>
+                        <template v-else>
+                          {nestedSlices.map((disc) => (
+                            <div>
+                              <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                              {disc.tracks.map((item, index) => (
+                                <MediaItemListItem
+                                  item={item}
+                                  parent={getItemParent(data)}
+                                  index={index}
+                                  showIndex={true}
+                                  showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
+                                  context-ext={buildContextMenu()}
+                                  v-bind:key={item.id}
+                                />
+                              ))}
+                            </div>
+                          ))}
                         </template>
                       </draggable>
                     </div>
@@ -1096,15 +1101,16 @@ const Playlist = ({ data }: { data: object }) => {
                     v-if={itemBadges.length !== 0}>
                     <div className="well">
                       <div className="badge-container">
-                        <div
-                          className="socialBadge"
-                          title="`${badge.attributes.name} - ${badge.attributes.handle}`"
-                          v-for={badge in itemBadges}>
-                          <MediaItemArtwork
-                            url={badge.attributes.artwork.url}
-                            size="60"
-                          />
-                        </div>
+                        {itemBadges.map((badge) => (
+                          <div
+                            className="socialBadge"
+                            title={`${badge.attributes.name} - ${badge.attributes.handle}`}>
+                            <MediaItemArtwork
+                              url={badge.attributes.artwork.url}
+                              size="60"
+                            />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -1127,24 +1133,25 @@ const Playlist = ({ data }: { data: object }) => {
                 </div>
               </b-tab>
               <template v-if={typeof data.views !== "undefined"}>
-                <b-tab
-                  lazy
-                  title={data.views[view].attributes.title}
-                  v-for={view in data.meta.views.order}
-                  v-if={data.views[view].data.length !== 0}>
-                  <div>
-                    <div className="row">
-                      <div className="col">
-                        <h3>{data.views[view].attributes.title}</h3>
+                {data.meta.views.order.map((view) => (
+                  <b-tab
+                    lazy
+                    title={data.views[view].attributes.title}
+                    v-if={data.views[view].data.length !== 0}>
+                    <div>
+                      <div className="row">
+                        <div className="col">
+                          <h3>{data.views[view].attributes.title}</h3>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col">
+                          <MediaitemScrollerHorizontal items={data.views[view].data} />
+                        </div>
                       </div>
                     </div>
-                    <div className="row">
-                      <div className="col">
-                        <MediaitemScrollerHorizontal items={data.views[view].data} />
-                      </div>
-                    </div>
-                  </div>
-                </b-tab>
+                  </b-tab>
+                ))}
               </template>
             </b-tabs>
           </div>

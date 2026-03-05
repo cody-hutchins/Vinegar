@@ -31,85 +31,88 @@ const Radio = ({ data }: { data: object }) => {
       <div className="content-inner">
         <h1 className="header-text">{$root.getLz("term.radio")}</h1>
         <template v-if={data.relationships && data.relationships.tabs}>
-          <template v-for={(recom, index) in data.relationships.tabs.data[0].relationships.children.data}>
-            <div className="row">
-              <div
-                className="col"
-                v-if={recom.attributes.name !== "Chart Set"}>
-                <h3>{recom.attributes.name ?? ""}</h3>
-              </div>
-              <div className="col-auto cider-flex-center">
-                <button
-                  className="cd-btn-seeall"
-                  v-if={recom.attributes.name === "Recently Played" && recent.length > 10}
-                  onClick={() => app.showCollection({ data: recent }, recom.attributes.name ?? "", "listen_now")}>
-                  {app.getLz("term.seeAll")}
-                </button>
-                <template v-if={index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10))}>
+          {data.relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
+            <template>
+              <div className="row">
+                <div
+                  className="col"
+                  v-if={recom.attributes.name !== "Chart Set"}>
+                  <h3>{recom.attributes.name ?? ""}</h3>
+                </div>
+                <div className="col-auto cider-flex-center">
                   <button
                     className="cd-btn-seeall"
-                    v-if={recom.relationships.room}
-                    onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
+                    v-if={recom.attributes.name === "Recently Played" && recent.length > 10}
+                    onClick={() => app.showCollection({ data: recent }, recom.attributes.name ?? "", "listen_now")}>
                     {app.getLz("term.seeAll")}
                   </button>
-                  <button
-                    className="cd-btn-seeall"
-                    v-else
-                    onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                    {app.getLz("term.seeAll")}
-                  </button>
-                </template>
+                  <template v-if={index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10))}>
+                    <button
+                      className="cd-btn-seeall"
+                      v-if={recom.relationships.room}
+                      onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                    <button
+                      className="cd-btn-seeall"
+                      v-else
+                      onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </template>
+                </div>
               </div>
-            </div>
 
-            <div v-if={recom.attributes.name === "Recently Played"}>
-              <MediaItemScrollerHorizontalMVView
-                imagesize={800}
-                browsesp={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}
-                kind={recom.attributes.editorialElementKind}
-                items={recent.limit(10)}
-              />
-            </div>
-            <template v-else-if={recom.relationships !== null && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data))}>
-              <template v-if={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}>
+              <div v-if={recom.attributes.name === "Recently Played"}>
                 <MediaItemScrollerHorizontalMVView
                   imagesize={800}
                   browsesp={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}
                   kind={recom.attributes.editorialElementKind}
-                  items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
+                  items={recent.limit(10)}
                 />
+              </div>
+              <template v-else-if={recom.relationships !== null && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data))}>
+                <template v-if={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}>
+                  <MediaItemScrollerHorizontalMVView
+                    imagesize={800}
+                    browsesp={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}
+                    kind={recom.attributes.editorialElementKind}
+                    items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
+                  />
+                </template>
+                <template v-else-if={["327"].includes(recom.attributes.editorialElementKind)}>
+                  <div className="mediaitem-list-item__grid">
+                    <ListItemHorizontal items={recom.relationships.contents.data.limit(20)} />
+                  </div>
+                </template>
+                <template v-else-if={["385"].includes(recom.attributes.editorialElementKind)}>
+                  <MediaItemScrollerHorizontalMVView
+                    imagesize={800}
+                    kind={recom.attributes.editorialElementKind}
+                    items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
+                  />
+                </template>
+                <template v-else-if={recom.attributes.name === "Chart Set"}>{/* ignored  */}</template>
+                <template v-else-if={["488"].includes(recom.attributes.editorialElementKind)}>{/* ignored  */}</template>
+                <template v-else>
+                  <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
+                </template>
               </template>
-              <template v-else-if={["327"].includes(recom.attributes.editorialElementKind)}>
-                <div className="mediaitem-list-item__grid">
-                  <ListItemHorizontal items={recom.relationships.contents.data.limit(20)} />
-                </div>
-              </template>
-              <template v-else-if={["385"].includes(recom.attributes.editorialElementKind)}>
-                <MediaItemScrollerHorizontalMVView
-                  imagesize={800}
-                  kind={recom.attributes.editorialElementKind}
-                  items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
-                />
-              </template>
-              <template v-else-if={recom.attributes.name === "Chart Set"}>{/* ignored  */}</template>
-              <template v-else-if={["488"].includes(recom.attributes.editorialElementKind)}>{/* ignored  */}</template>
               <template v-else>
-                <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
+                <template v-if={recom.attributes.links && recom.attributes.editorialElementKind.includes("391")}>
+                  <div className="grouping-container">
+                    {recom.attributes.links.map((link) => (
+                      <button
+                        className="grouping-btn"
+                        onClick={() => $root.goToGrouping(link.url)}>
+                        {link.label}
+                      </button>
+                    ))}
+                  </div>
+                </template>
               </template>
             </template>
-            <template v-else>
-              <template v-if={recom.attributes.links && recom.attributes.editorialElementKind.includes("391")}>
-                <div className="grouping-container">
-                  <button
-                    className="grouping-btn"
-                    onClick={() => $root.goToGrouping(link.url)}
-                    v-for={link in recom.attributes.links}>
-                    {link.label}
-                  </button>
-                </div>
-              </template>
-            </template>
-          </template>
+          ))}
         </template>
       </div>
     </div>

@@ -1,12 +1,12 @@
-import plus from "../svg/plus.svg";
 import SidebarPlaylist from "./sidebar-playlist.jsx";
+import { useAppStore } from "../../store/app.js";
 
 const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
   let playlistSorted = [];
   let searchQuery = "";
   let focused = "";
-  const app = this.$root;
-  const relateItems = [this.$root.selectedMediaItems[0].id];
+  const app = useAppStore();
+  const relateItems = [app.selectedMediaItems[0].id];
   this.$refs.searchInput.focus();
   this.$refs.searchInput.addEventListener("keydown", (e) => {
     if (e.keyCode === 13) {
@@ -57,15 +57,13 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
             className="playlist-item"
             onClick={app.addSelectedToNewPlaylist()}
             style={{ width: "100%" }}>
-            <div className="icon">
-              <plus />
-            </div>
+            <div className="icon">{import("../svg/plus.svg")}</div>
             <div className="name">{app.getLz("action.createPlaylist")}</div>
           </button>
           {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
             <SidebarPlaylist
               playlist-select={playlistSelect}
-              relate-media-items="relateItems"
+              relate-media-items={relateItems}
               v-bind:key={item.id}
               item={item}
             />

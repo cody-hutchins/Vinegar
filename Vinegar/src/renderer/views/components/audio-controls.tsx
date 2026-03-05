@@ -92,7 +92,6 @@ const Component = () => {
                   <input
                     type="checkbox"
                     v-model={app.cfg.audio.advanced}
-                    switch
                   />
                 </label>
               </div>

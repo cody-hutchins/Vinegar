@@ -68,23 +68,24 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
         className="list-group"
         v-model={$root.cfg.visual.styles}
         end={$root.reloadStyles()}>
-        <b-list-group-item
-          variant="dark"
-          v-for={theme in $root.cfg.visual.styles}
-          key="theme">
-          <b-row>
-            <b-col sm="auto">
-              <div className="handle codicon codicon-grabber" />
-            </b-col>
-            <b-col className="themeLabel">{getThemeName(theme)}</b-col>
-            <b-col sm="auto">
-              <button
-                className="removeItem codicon codicon-close"
-                onClick={() => remove(theme)}
-              />
-            </b-col>
-          </b-row>
-        </b-list-group-item>
+        {$root.cfg.visual.styles.map((theme) => (
+          <b-list-group-item
+            variant="dark"
+            key="theme">
+            <b-row>
+              <b-col sm="auto">
+                <div className="handle codicon codicon-grabber" />
+              </b-col>
+              <b-col className="themeLabel">{getThemeName(theme)}</b-col>
+              <b-col sm="auto">
+                <button
+                  className="removeItem codicon codicon-close"
+                  onClick={() => remove(theme)}
+                />
+              </b-col>
+            </b-row>
+          </b-list-group-item>
+        ))}
       </draggable>
     </div>
   );
@@ -292,61 +293,64 @@ export const InstalledThemes = () => {
               <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
             </div>
             <ul className="list-group list-group-flush">
-              <template v-for={theme in themes}>
-                <li
-                  onClick={() => addStyle(theme.file)}
-                  onContextMenu={() => contextMenu($event, theme)}
-                  className="list-group-item list-group-item-dark"
-                  className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
-                  <b-row>
-                    <b-col className="themeLabel">{theme.name}</b-col>
-                    <template v-if={$root.cfg.visual.styles.includes(theme.file)}>
-                      <b-col
-                        sm="auto"
-                        v-if={theme.pack}>
-                        <button className="themeContextMenu codicon codicon-package" />
-                      </b-col>
-                      <b-col sm="auto">
-                        <button className="themeContextMenu codicon codicon-check" />
-                      </b-col>
-                    </template>
-                    <template v-else>
-                      <b-col
-                        sm="auto"
-                        v-if={theme.pack}>
-                        <button className="themeContextMenu codicon codicon-package" />
-                      </b-col>
-                      <b-col sm="auto">
-                        <button
-                          clickstop={contextMenu($event, theme)}
-                          className="themeContextMenu codicon codicon-list-unordered"
-                        />
-                      </b-col>
-                    </template>
-                  </b-row>
-                </li>
-                <li
-                  onClick={() => addStyle(packEntry.file)}
-                  onContextMenu={() => contextMenu($event, theme)}
-                  className="list-group-item list-group-item-dark addon"
-                  v-for={packEntry in theme.pack}
-                  className="{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"
-                  v-if={theme.pack}>
-                  <b-row>
-                    <b-col className="themeLabel">{packEntry.name}</b-col>
-                    <template v-if={$root.cfg.visual.styles.includes(packEntry.file)}>
-                      <b-col sm="auto">
-                        <button className="themeContextMenu codicon codicon-check" />
-                      </b-col>
-                    </template>
-                    <template v-else>
-                      <b-col sm="auto">
-                        <button className="themeContextMenu codicon codicon-diff-added" />
-                      </b-col>
-                    </template>
-                  </b-row>
-                </li>
-              </template>
+              {themes.map((theme) => (
+                <template>
+                  <li
+                    onClick={() => addStyle(theme.file)}
+                    onContextMenu={() => contextMenu($event, theme)}
+                    className="list-group-item list-group-item-dark"
+                    className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
+                    <b-row>
+                      <b-col className="themeLabel">{theme.name}</b-col>
+                      <template v-if={$root.cfg.visual.styles.includes(theme.file)}>
+                        <b-col
+                          sm="auto"
+                          v-if={theme.pack}>
+                          <button className="themeContextMenu codicon codicon-package" />
+                        </b-col>
+                        <b-col sm="auto">
+                          <button className="themeContextMenu codicon codicon-check" />
+                        </b-col>
+                      </template>
+                      <template v-else>
+                        <b-col
+                          sm="auto"
+                          v-if={theme.pack}>
+                          <button className="themeContextMenu codicon codicon-package" />
+                        </b-col>
+                        <b-col sm="auto">
+                          <button
+                            clickstop={contextMenu($event, theme)}
+                            className="themeContextMenu codicon codicon-list-unordered"
+                          />
+                        </b-col>
+                      </template>
+                    </b-row>
+                  </li>
+                  {theme.pack.map((packEntry) => (
+                    <li
+                      onClick={() => addStyle(packEntry.file)}
+                      onContextMenu={() => contextMenu($event, theme)}
+                      className="list-group-item list-group-item-dark addon"
+                      className="{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"
+                      v-if={theme.pack}>
+                      <b-row>
+                        <b-col className="themeLabel">{packEntry.name}</b-col>
+                        <template v-if={$root.cfg.visual.styles.includes(packEntry.file)}>
+                          <b-col sm="auto">
+                            <button className="themeContextMenu codicon codicon-check" />
+                          </b-col>
+                        </template>
+                        <template v-else>
+                          <b-col sm="auto">
+                            <button className="themeContextMenu codicon codicon-diff-added" />
+                          </b-col>
+                        </template>
+                      </b-row>
+                    </li>
+                  ))}
+                </template>
+              ))}
             </ul>
           </div>
 

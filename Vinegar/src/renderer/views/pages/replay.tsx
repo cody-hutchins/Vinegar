@@ -78,18 +78,19 @@ const Replay = () => {
     <div id="replay-page">
       <div className="content-inner replay-page">
         <vue-horizontal style={{ height: "300px" }}>
-          <div
-            className="replay-period"
-            v-for={year in years}
-            onClick={() => getReplayYear(year.attributes.year)}>
-            <div className="artwork-container">
-              <MediaItemArtwork
-                size="200"
-                url={year.relationships.playlist.data[0].attributes.artwork.url}
-              />
+          {years.map((year) => (
+            <div
+              className="replay-period"
+              onClick={() => getReplayYear(year.attributes.year)}>
+              <div className="artwork-container">
+                <MediaItemArtwork
+                  size="200"
+                  url={year.relationships.playlist.data[0].attributes.artwork.url}
+                />
+              </div>
+              {year.attributes.year}
             </div>
-            {year.attributes.year}
-          </div>
+          ))}
         </vue-horizontal>
         <hr />
         <transition name="replaycard">
@@ -141,39 +142,39 @@ const Replay = () => {
             <h3>{$root.getLz("term.topArtists")}</h3>
             <div className="well">
               <MediaItemScrollerHorizontal>
-                <div
-                  className="card replay-card"
-                  v-for={artistData in loaded.views["top-artists"].data}>
-                  <div className="card-body">
-                    <MediaItemSquare item={artistData.relationships.artist.data[0]} />
+                {loaded.views["top-artists"].data.map((artistData) => (
+                  <div className="card replay-card">
+                    <div className="card-body">
+                      <MediaItemSquare item={artistData.relationships.artist.data[0]} />
+                    </div>
+                    <div className="card-footer">
+                      {convertToHours(artistData.attributes.listenTimeInMinutes)}
+                      {$root.getLz("term.time.hours", { count: convertToHours(artistData.attributes.listenTimeInMinutes) })}
+                      <br />
+                      {$root.getLz("term.listenedTo")} {artistData.attributes.playCount}
+                      {$root.getLz("term.times")}
+                    </div>
                   </div>
-                  <div className="card-footer">
-                    {convertToHours(artistData.attributes.listenTimeInMinutes)}
-                    {$root.getLz("term.time.hours", { count: convertToHours(artistData.attributes.listenTimeInMinutes) })}
-                    <br />
-                    {$root.getLz("term.listenedTo")} {artistData.attributes.playCount}
-                    {$root.getLz("term.times")}
-                  </div>
-                </div>
+                ))}
               </MediaItemScrollerHorizontal>
             </div>
             {/*            Top Albums */}
             <h3>{$root.getLz("term.topAlbums")}</h3>
             <div className="well">
               <MediaItemScrollerHorizontal>
-                <div
-                  className="card replay-card"
-                  v-for={albumData in loaded.views["top-albums"].data}>
-                  <div className="card-body">
-                    <MediaItemSquare item={albumData.relationships.album.data[0]} />
+                {loaded.views["top-albums"].data.map((albumData) => (
+                  <div className="card replay-card">
+                    <div className="card-body">
+                      <MediaItemSquare item={albumData.relationships.album.data[0]} />
+                    </div>
+                    <div className="card-footer">
+                      {convertToHours(albumData.attributes.listenTimeInMinutes)}
+                      {$root.getLz("term.time.hours", { count: convertToHours(albumData.attributes.listenTimeInMinutes) })}
+                      <br />
+                      {albumData.attributes.playCount} {$root.getLz("term.plays")}
+                    </div>
                   </div>
-                  <div className="card-footer">
-                    {convertToHours(albumData.attributes.listenTimeInMinutes)}
-                    {$root.getLz("term.time.hours", { count: convertToHours(albumData.attributes.listenTimeInMinutes) })}
-                    <br />
-                    {albumData.attributes.playCount} {$root.getLz("term.plays")}
-                  </div>
-                </div>
+                ))}
               </MediaItemScrollerHorizontal>
             </div>
             {/*            Top Songs */}
@@ -186,18 +187,18 @@ const Replay = () => {
             </div>
             <h3>{$root.getLz("term.topGenres")}</h3>
             <div className="top-genres-container">
-              <div
-                v-for={genre in loaded.topGenres}
-                className="replay-genre-display">
-                <div className="genre-name">{genre.genre}</div>
-                <div className="genre-count">
-                  <div
-                    className="genre-count-bar"
-                    style={{ width: genre.count + "%" }}>
-                    {genre.count}%
+              {loaded.topGenres.map((genre) => (
+                <div className="replay-genre-display">
+                  <div className="genre-name">{genre.genre}</div>
+                  <div className="genre-count">
+                    <div
+                      className="genre-count-bar"
+                      style={{ width: genre.count + "%" }}>
+                      {genre.count}%
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </transition>

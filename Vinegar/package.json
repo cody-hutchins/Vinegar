@@ -81,6 +81,7 @@
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.7",
+    "@types/bootbox": "^5.2.9",
     "@types/bootstrap": "^5.2.10",
     "@types/discord-rpc": "4.0.8",
     "@types/express": "^4.17.25",

@@ -95,11 +95,9 @@ const Component = () => {
                     v-model={prefs.sort}
                     onChange={() => $root.searchLibrarySongs()}>
                     <optgroup label={app.getLz("term.sortBy")}>
-                      <option
-                        v-for={(sort, index) in library.songs.sortingOptions}
-                        value="index">
-                        {sort}
-                      </option>
+                      {library.songs.sortingOptions.map((sort, index) => (
+                        <option value="index">{sort}</option>
+                      ))}
                     </optgroup>
                   </select>
                 </div>
@@ -168,30 +166,32 @@ const Component = () => {
           className="well"
           key="1"
           v-if={prefs.size === "compact"}>
-          <MediaItemListItem
-            class-list="compact"
-            item={item}
-            parent="'librarysongs'"
-            index="index"
-            show-meta-data="true"
-            show-library-status="false"
-            v-bind:key={item.id}
-            v-for={(item, index) in currentSlice}
-          />
+          {currentSlice.map((item, index) => (
+            <MediaItemListItem
+              class-list="compact"
+              item={item}
+              parent="'librarysongs'"
+              index={index}
+              show-meta-data="true"
+              show-library-status="false"
+              v-bind:key={item.id}
+            />
+          ))}
         </div>
         <div
           className="well"
           key="2"
           v-else>
-          <MediaItemListItem
-            item={item}
-            parent="'librarysongs'"
-            index="index"
-            show-meta-data="true"
-            show-library-status="false"
-            v-bind:key={item.id}
-            v-for={(item, index) in currentSlice}
-          />
+          {currentSlice.map((item, index) => (
+            <MediaItemListItem
+              item={item}
+              parent="'librarysongs'"
+              index={index}
+              show-meta-data="true"
+              show-library-status="false"
+              v-bind:key={item.id}
+            />
+          ))}
         </div>
       </div>
     </div>

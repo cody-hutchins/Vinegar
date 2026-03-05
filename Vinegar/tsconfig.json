@@ -20,7 +20,7 @@
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
     "experimentalDecorators": true,
-    "baseUrl": "./",
+    "rootDir": "./",
     "allowSyntheticDefaultImports": true,
     "noImplicitThis": true,
     "skipLibCheck": true /* Skip type checking of declaration files. */,

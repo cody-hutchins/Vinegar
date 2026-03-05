@@ -58,22 +58,24 @@ const Component = () => {
         <div
           className="well itemContainer collection-list-square"
           v-if={itemSize === "normal"}>
-          <MediaItemSquare
-            v-for={item in items}
-            item={item}
-            v-bind:key={item.id}
-          />
+          {items.map((item) => (
+            <MediaItemSquare
+              item={item}
+              v-bind:key={item.id}
+            />
+          ))}
         </div>
         <div
           className="well itemContainer collection-list-square"
           v-else={itemSize === "compact"}>
-          <MediaItemListItem
-            show-meta-data="true"
-            show-library-status="false"
-            v-for={item in items}
-            item={item}
-            v-bind:key={item.id}
-          />
+          {items.map((ite) => (
+            <MediaItemListItem
+              show-meta-data="true"
+              show-library-status="false"
+              item={item}
+              v-bind:key={item.id}
+            />
+          ))}
         </div>
         <div
           className="well itemContainer collection-list-square"

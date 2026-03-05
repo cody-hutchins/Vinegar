@@ -219,15 +219,15 @@ const SettingsWindow = () => {
                               $root.setLzManual();
                             }}
                             v-model={app.cfg.general.language}>
-                            <optgroup
-                              label="index"
-                              v-for={(categories, index) in getLanguages()}>
-                              <option
-                                v-for={lang in categories}
-                                value={lang.code}>
-                                {lang.nameNative}({lang.nameEnglish})
-                              </option>
-                            </optgroup>
+                            {getLanguages().map((categories, index) => (
+                              <optgroup label="index">
+                                {categories.map((lang) => (
+                                  <option value={lang.code}>
+                                    {lang.nameNative}({lang.nameEnglish})
+                                  </option>
+                                ))}
+                              </optgroup>
+                            ))}
                           </select>
                         </label>
                       </div>
@@ -250,7 +250,6 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={$root.cfg.general.privateEnabled}
                             v-on:change={($root.mk.privateEnabled = $root.cfg.general.privateEnabled)}
-                            switch
                           />
                         </label>
                       </div>
@@ -264,7 +263,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.general.onStartup.enabled}
-                            switch
                           />
                         </label>
                       </div>
@@ -278,7 +276,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.general.onStartup.hidden}
-                            switch
                           />
                         </label>
                       </div>
@@ -364,7 +361,6 @@ const SettingsWindow = () => {
                                 <input
                                   type="checkbox"
                                   v-model={app.cfg.general.sidebarItems.recentlyAdded}
-                                  switch
                                 />
                               </label>
                             </div>
@@ -376,7 +372,6 @@ const SettingsWindow = () => {
                                 <input
                                   type="checkbox"
                                   v-model={app.cfg.general.sidebarItems.songs}
-                                  switch
                                 />
                               </label>
                             </div>
@@ -388,7 +383,6 @@ const SettingsWindow = () => {
                                 <input
                                   type="checkbox"
                                   v-model={app.cfg.general.sidebarItems.albums}
-                                  switch
                                 />
                               </label>
                             </div>
@@ -400,7 +394,6 @@ const SettingsWindow = () => {
                                 <input
                                   type="checkbox"
                                   v-model={app.cfg.general.sidebarItems.artists}
-                                  switch
                                 />
                               </label>
                             </div>
@@ -412,7 +405,6 @@ const SettingsWindow = () => {
                                 <input
                                   type="checkbox"
                                   v-model={app.cfg.general.sidebarItems.videos}
-                                  switch
                                 />
                               </label>
                             </div>
@@ -424,7 +416,6 @@ const SettingsWindow = () => {
                                 <input
                                   type="checkbox"
                                   v-model={app.cfg.general.sidebarItems.podcasts}
-                                  switch
                                 />
                               </label>
                             </div>
@@ -449,7 +440,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.general.themeUpdateNotification}
-                            switch
                           />
                         </label>
                       </div>
@@ -461,7 +451,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.general.showLovedTracksInline}
-                            switch
                           />
                         </label>
                       </div>
@@ -547,7 +536,6 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.audio.seamless_audio}
                             v-on:change={(app.mk._bag.features["seamless-audio-transitions"] = app.cfg.audio.seamless_audio)}
-                            switch
                           />
                         </label>
                       </div>
@@ -576,7 +564,6 @@ const SettingsWindow = () => {
                             v-model={app.cfg.audio.normalization}
                             v-on:change="toggleNormalization"
                             disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}
-                            switch
                           />
                         </label>
                       </div>
@@ -594,7 +581,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.audio.dBSPL}
-                            switch
                           />
                         </label>
                       </div>
@@ -745,7 +731,6 @@ const SettingsWindow = () => {
                           type="checkbox"
                           v-model={app.cfg.visual.customAccentColor}
                           disabled={app.cfg.visual.purplePodcastPlaybackBar}
-                          switch
                         />
                       </div>
                     </div>
@@ -767,7 +752,6 @@ const SettingsWindow = () => {
                           type="checkbox"
                           v-model={app.cfg.visual.purplePodcastPlaybackBar}
                           disabled={app.cfg.visual.customAccentColor}
-                          switch
                         />
                       </div>
                     </div>
@@ -777,7 +761,6 @@ const SettingsWindow = () => {
                         <input
                           type="checkbox"
                           v-model={app.cfg.visual.compactArtistHeader}
-                          switch
                         />
                       </div>
                     </div>
@@ -809,7 +792,6 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.visual.showuserinfo}
                             v-on:change="toggleUserInfo"
-                            switch
                           />
                         </label>
                       </div>
@@ -848,7 +830,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.general.close_button_hide}
-                            switch
                           />
                         </label>
                       </div>
@@ -866,7 +847,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.visual.nativeTitleBar}
-                            switch
                             onChange={() => promptForRelaunch()}
                           />
                         </label>
@@ -931,7 +911,6 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            switch
                             v-model={app.cfg.visual.bg_artwork_rotation}
                           />
                         </label>
@@ -981,7 +960,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.lyrics.enable_mxm}
-                            switch
                           />
                         </label>
                       </div>
@@ -995,7 +973,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.lyrics.mxm_karaoke}
-                            switch
                           />
                         </label>
                       </div>
@@ -1284,7 +1261,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.lyrics.enable_yt}
-                            switch
                           />
                         </label>
                       </div>
@@ -1296,7 +1272,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.lyrics.enable_qq}
-                            switch
                           />
                         </label>
                       </div>
@@ -1330,7 +1305,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.general.playbackNotifications}
-                            switch
                           />
                         </label>
                       </div>
@@ -1344,7 +1318,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.connectivity.discord_rpc.enabled}
-                            switch
                           />
                         </label>
                       </div>
@@ -1383,7 +1356,6 @@ const SettingsWindow = () => {
                             <input
                               type="checkbox"
                               v-model={app.cfg.connectivity.discord_rpc.clear_on_pause}
-                              switch
                             />
                           </label>
                         </div>
@@ -1396,7 +1368,6 @@ const SettingsWindow = () => {
                             <input
                               type="checkbox"
                               v-model={app.cfg.connectivity.discord_rpc.activity.hide_timestamp}
-                              switch
                             />
                           </label>
                         </div>
@@ -1444,7 +1415,6 @@ const SettingsWindow = () => {
                             <input
                               type="checkbox"
                               v-model={app.cfg.connectivity.discord_rpc.activity.buttons.enabled}
-                              switch
                             />
                           </label>
                         </div>
@@ -1459,12 +1429,13 @@ const SettingsWindow = () => {
                                 className="md-select"
                                 v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
                                 onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
-                                <option
-                                  v-for={option in app.cfg.connectivity.discord_rpc.activity.buttons.options}
-                                  v-bind:value="option"
-                                  v-show={app.cfg.connectivity.discord_rpc.activity.buttons.second !== option}>
-                                  {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
-                                </option>
+                                {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
+                                  <option
+                                    v-bind:value="option"
+                                    v-show={app.cfg.connectivity.discord_rpc.activity.buttons.second !== option}>
+                                    {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
+                                  </option>
+                                ))}
                                 <option value="disabled">{$root.getLz("term.disabled")}</option>
                               </select>
                             </label>
@@ -1480,12 +1451,13 @@ const SettingsWindow = () => {
                               <select
                                 className="md-select"
                                 v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
-                                <option
-                                  v-for={option in app.cfg.connectivity.discord_rpc.activity.buttons.options}
-                                  v-bind:value="option"
-                                  v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== option}>
-                                  {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
-                                </option>
+                                {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
+                                  <option
+                                    v-bind:value="option"
+                                    v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== option}>
+                                    {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
+                                  </option>
+                                ))}
                                 <option value="disabled">{$root.getLz("term.disabled")}</option>
                               </select>
                             </label>
@@ -1570,7 +1542,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.connectivity.lastfm.filter_loop}
-                            switch
                           />
                         </label>
                       </div>
@@ -1584,7 +1555,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.connectivity.lastfm.remove_featured}
-                            switch
                           />
                         </label>
                       </div>
@@ -1664,7 +1634,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.advanced.disableLogging}
-                            switch
                           />
                         </label>
                       </div>
@@ -1706,7 +1675,6 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.advanced.experiments.includes("immersive-preview")}
                             onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}
-                            switch
                           />
                         </label>
                       </div>
@@ -1724,7 +1692,6 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.advanced.experiments.includes("unknown-sources")}
                             onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}
-                            switch
                           />
                         </label>
                       </div>
@@ -1741,7 +1708,6 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.advanced.experiments.includes("cider_mirror")}
                             onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}
-                            switch
                           />
                         </label>
                       </div>
@@ -1758,7 +1724,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.advanced.playlistTrackMapping}
-                            switch
                           />
                         </label>
                       </div>
@@ -1774,8 +1739,7 @@ const SettingsWindow = () => {
                             type="checkbox"
                             v-model={app.cfg.advanced.experiments.includes("compactui")}
                             onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
-                            switch
-                            disabled="!!app.getThemeDirective('forceUI')"
+                            disabled={!!app.getThemeDirective("forceUI")}
                           />
                         </label>
                       </div>
@@ -1790,7 +1754,6 @@ const SettingsWindow = () => {
                             disabled
                             v-model={app.cfg.advanced.experiments.includes("inline-playlists")}
                             onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}
-                            switch
                           />
                         </label>
                       </div>
@@ -1809,7 +1772,6 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             v-model={app.cfg.visual.transparent}
-                            switch
                             onChange={() => promptForRelaunch()}
                           />
                         </label>

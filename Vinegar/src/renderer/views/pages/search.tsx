@@ -88,35 +88,31 @@ const Component = ({ search }: { search: object }) => {
             className="search-hints-container"
             v-if={$root.search.showHints && $root.search.hints.length !== 0}>
             <div className="search-hints">
-              <button
-                className="search-hint text-overflow-elipsis"
-                v-for={
-                  (hint, index) in
-                  $root.search.hints.filter((a) => {
-                    return a.content === null;
-                  })
-                }
-                className="{active: ($root.search.cursor === index)}"
-                onClick={() => {
-                  $root.search.term = hint.searchTerm;
-                  $root.search.showHints = false;
-                  $root.searchQuery(hint.searchTerm);
-                }}>
-                {hint.displayTerm}
-              </button>
-              <template
-                v-for={
-                  (item, position) in
-                  $root.search.hints.filter((a) => {
-                    return a.content !== null;
-                  })
-                }>
-                <MediaitemSmarthints
-                  item={item.content}
-                  position={position}>
-                  {" "}
-                </MediaitemSmarthints>
-              </template>
+              {$root.search.hints
+                .filter((a) => a.content === null)
+                .map((hint, index) => (
+                  <button
+                    className="search-hint text-overflow-elipsis"
+                    className="{active: ($root.search.cursor === index)}"
+                    onClick={() => {
+                      $root.search.term = hint.searchTerm;
+                      $root.search.showHints = false;
+                      $root.searchQuery(hint.searchTerm);
+                    }}>
+                    {hint.displayTerm}
+                  </button>
+                ))}
+              {$root.search.hints
+                .filter((a) => a.content !== null)
+                .map((item, position) => (
+                  <template>
+                    <MediaitemSmarthints
+                      item={item.content}
+                      position={position}>
+                      {" "}
+                    </MediaitemSmarthints>
+                  </template>
+                ))}
             </div>
           </div>
         </div>
@@ -170,30 +166,30 @@ const Component = ({ search }: { search: object }) => {
             </div>
 
             <template v-if={search.results["meta"] !== null}>
-              <template
-                v-for={section in search.results.meta.results.order}
-                v-if={section !== "song" && section !== "top"}>
-                <div className="row">
-                  <div className="col">
-                    <h3>{app.friendlyTypes(section)}</h3>
+              {search.results.meta.results.order.map((section) => (
+                <template v-if={section !== "song" && section !== "top"}>
+                  <div className="row">
+                    <div className="col">
+                      <h3>{app.friendlyTypes(section)}</h3>
+                    </div>
+                    <div
+                      className="col-auto cider-flex-center"
+                      v-if={search.results[section].data.length >= 10}>
+                      <button
+                        className="cd-btn-seeall"
+                        onClick={() => app.showSearchView(app.search.term, section, app.friendlyTypes(section))}>
+                        {app.getLz("term.seeAll")}
+                      </button>
+                    </div>
                   </div>
-                  <div
-                    className="col-auto cider-flex-center"
-                    v-if={search.results[section].data.length >= 10}>
-                    <button
-                      className="cd-btn-seeall"
-                      onClick={() => app.showSearchView(app.search.term, section, app.friendlyTypes(section))}>
-                      {app.getLz("term.seeAll")}
-                    </button>
-                  </div>
-                </div>
-                <template v-if={!app.friendlyTypes(section).includes("Video")}>
-                  <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
+                  <template v-if={!app.friendlyTypes(section).includes("Video")}>
+                    <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
+                  </template>
+                  <template v-else>
+                    <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
+                  </template>
                 </template>
-                <template v-else>
-                  <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
-                </template>
-              </template>
+              ))}
             </template>
             <template v-if={search.resultsSocial.playlist}>
               <div className="row">
@@ -232,19 +228,21 @@ const Component = ({ search }: { search: object }) => {
           </template>
           <template v-else>
             <h1>{$root.getLz("term.library")}</h1>
-            <div v-for={(section, key) in $root.search.resultsLibrary}>
-              <h3>{app.friendlyTypes(key)}</h3>
-              <div
-                className="mediaitem-list-item__grid"
-                v-if={key.includes("songs")}>
-                <ListitemHorizontal items={section.data} />
+            {$root.search.resultsLibrary.map((section, key) => (
+              <div>
+                <h3>{app.friendlyTypes(key)}</h3>
+                <div
+                  className="mediaitem-list-item__grid"
+                  v-if={key.includes("songs")}>
+                  <ListitemHorizontal items={section.data} />
+                </div>
+                <div
+                  className="well"
+                  v-else>
+                  <MediaItemScrollerHorizontalLarge items={section.data} />
+                </div>
               </div>
-              <div
-                className="well"
-                v-else>
-                <MediaItemScrollerHorizontalLarge items={section.data} />
-              </div>
-            </div>
+            ))}
           </template>
         </div>
         <div v-else>
@@ -257,7 +255,7 @@ const Component = ({ search }: { search: object }) => {
                 <div className="mediaitem-list-item__grid">
                   <ListitemHorizontal items={recentlyPlayed.limit(10)} />
                 </div>
-                {/* <MediaItemSquare kind="'385'" size="600" v-for={item in recentlyPlayed.limit(10)} item=}item} imagesize=}800} /> */}
+                {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="'385'" size="600" item="item" imagesize"800" />)} */}
                 <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
               </div>
             </div>

@@ -62,12 +62,13 @@ const Audiolabs = () => {
                   style={{ width: "180px" }}
                   v-model={app.cfg.audio.maikiwiAudio.ciderPPE_value}
                   v-on:onChange={() => CiderAudio.hierarchical_loading()}>
-                  <option
-                    v-for={(item, index) in ciderPPE}
-                    value={item.name}
-                    key={index.name}>
-                    {item.displayName}
-                  </option>
+                  {ciderPPE.map((item, index) => (
+                    <option
+                      value={item.name}
+                      key={index.name}>
+                      {item.displayName}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -116,11 +117,9 @@ const Audiolabs = () => {
                   style={{ width: "230px" }}
                   v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer1_value}
                   v-on:change={() => CiderAudio.hierarchical_loading()}>
-                  <option
-                    v-for={profile in arprofiles}
-                    value={profile.id}>
-                    {$root.getProfileLz("CAR", profile.id)}
-                  </option>
+                  {arprofiles.map((profile) => (
+                    <option value={profile.id}>{$root.getProfileLz("CAR", profile.id)}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -152,11 +151,9 @@ const Audiolabs = () => {
                   style={{ width: "230px" }}
                   v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer2_value}
                   v-on:change={() => CiderAudio.hierarchical_loading()}>
-                  <option
-                    v-for={profile in arprofiles}
-                    value={profile.id}>
-                    {$root.getProfileLz("CAR", profile.id)}
-                  </option>
+                  {arprofiles.map((profile) => (
+                    <option value={profile.id}>{$root.getProfileLz("CAR", profile.id)}</option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -188,11 +185,9 @@ const Audiolabs = () => {
                   style={{ width: "180px" }}
                   v-model={$root.cfg.audio.maikiwiAudio.spatialProfile}
                   v-on:change={() => CiderAudio.hierarchical_loading()}>
-                  <option
-                    v-for={profile in spprofiles}
-                    value={profile.id}>
-                    {$root.getProfileLz("CTS", profile.name)}
-                  </option>
+                  {spprofiles.map((profile) => (
+                    <option value={profile.id}>{$root.getProfileLz("CTS", profile.name)}</option>
+                  ))}
                 </select>
               </div>
             </div>

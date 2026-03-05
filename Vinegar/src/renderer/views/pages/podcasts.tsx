@@ -190,12 +190,13 @@ export const Podcasts = () => {
                 v-if={podcasts.length !== 0}>
                 {$root.getLz("podcast.subscribedOnItunes")}
               </div>
-              <PodcastTab
-                isSelected={podcastSelected.id === podcast.id}
-                clicknative={selectPodcast(podcast)}
-                v-for={podcast in podcasts}
-                item={podcast}
-              />
+              {podcasts.map((podcast) => (
+                <PodcastTab
+                  isSelected={podcastSelected.id === podcast.id}
+                  clicknative={selectPodcast(podcast)}
+                  item={podcast}
+                />
+              ))}
             </div>
             <div v-else>
               <div
@@ -203,23 +204,25 @@ export const Podcasts = () => {
                 v-if={podcasts.length !== 0}>
                 {$root.getLz("term.library")}
               </div>
-              <PodcastTab
-                isSelected={podcastSelected.id === podcast.id}
-                clicknative={selectPodcast(podcast)}
-                v-for={podcast in search.resultsLibrary}
-                item={podcast}
-              />
+              {search.resultsLibrary.map((podcast) => (
+                <PodcastTab
+                  isSelected={podcastSelected.id === podcast.id}
+                  clicknative={selectPodcast(podcast)}
+                  item={podcast}
+                />
+              ))}
               <div
                 className="podcast-list-header"
                 v-if={podcasts.length !== 0}>
                 {$root.getLz("podcast.itunesStore")}
               </div>
-              <PodcastTab
-                isSelected={podcastSelected.id === podcast.id}
-                clicknative={selectPodcast(podcast)}
-                v-for={podcast in search.results}
-                item={podcast}
-              />
+              {search.results.map((podcast) => (
+                <PodcastTab
+                  isSelected={podcastSelected.id === podcast.id}
+                  clicknative={selectPodcast(podcast)}
+                  item={podcast}
+                />
+              ))}
             </div>
           </div>
           <div className="episodes-list">
@@ -262,13 +265,14 @@ export const Podcasts = () => {
               <h3>{$root.getLz("error.noResults")}</h3>
               <p>{$root.getLz("error.noResults.description")}</p>
             </div>
-            <PodcastEpisode
-              isSelected={selected.id === episode.id}
-              dblclicknative={() => playEpisode(episode)}
-              clicknative={() => selectEpisode(episode)}
-              item={episode}
-              v-for={episode in episodes}
-            />
+            {episodes.map((episode) => (
+              <PodcastEpisode
+                isSelected={selected.id === episode.id}
+                dblclicknative={() => playEpisode(episode)}
+                clicknative={() => selectEpisode(episode)}
+                item={episode}
+              />
+            ))}
           </div>
           <transition name="wpfade">
             <div

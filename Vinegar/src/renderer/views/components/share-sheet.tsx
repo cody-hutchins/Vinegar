@@ -63,7 +63,7 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
               </button>
               {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
                 <SidebarPlaylist
-                  playlist-select="playlistSelect"
+                  playlist-select={playlistSelect}
                   v-bind:key={item.id}
                   item={item}
                 />

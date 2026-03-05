@@ -70,10 +70,9 @@ const RecordLabel = ({ data }: { data: string }) => {
                 </button>
               </div>
             </div>
-            <MediaItemSquare
-              item={item}
-              v-for={item in data.views["latest-releases"].data}
-            />
+            {data.views["latest-releases"].data.map((item) => (
+              <MediaItemSquare item={item} />
+            ))}
           </template>
           <template v-if={data.views && data.views["top-releases"]}>
             <div className="row">
@@ -90,10 +89,9 @@ const RecordLabel = ({ data }: { data: string }) => {
                 </button>
               </div>
             </div>
-            <MediaItemSquare
-              item={item}
-              v-for={item in data.views["top-releases"].data}
-            />
+            {data.views["top-releases"].data.map((item) => (
+              <MediaItemSquare item={item} />
+            ))}
           </template>
           <template v-if={data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0}>
             <div className="row">
@@ -110,10 +108,9 @@ const RecordLabel = ({ data }: { data: string }) => {
                 </button>
               </div>
             </div>
-            <MediaItemSquare
-              item={item}
-              v-for={item in data.relationships.playlists.data.limit(5)}
-            />
+            {data.relationships.playlists.data.limit(5).map((item) => (
+              <MediaItemSquare item={item} />
+            ))}
           </template>
         </div>
       </div>

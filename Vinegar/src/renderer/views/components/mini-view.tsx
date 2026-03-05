@@ -288,7 +288,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                 richlyrics="richlyrics" />
             </div>
             <div className="queue-col" v-if={tabMode === 'queue'}>
-                <Queue v-if={tabMode === 'queue'} ref=}queue}  />
+                <Queue v-if={tabMode === 'queue'} ref="queue"  />
             </div>
         </div>
     </div>  */}

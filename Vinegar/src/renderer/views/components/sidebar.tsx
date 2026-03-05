@@ -61,35 +61,30 @@ const Sidebar = () => {
                 className="search-hints-container"
                 v-if={$root.search.showHints && $root.search.hints.length !== 0}>
                 <div className="search-hints">
-                  <button
-                    className="search-hint text-overflow-elipsis"
-                    v-for={
-                      (hint, index) in
-                      $root.search.hints.filter((a) => {
-                        return a.content === null;
-                      })
-                    }
-                    className="{active: ($root.search.cursor === index)}"
-                    onClick={() => {
-                      $root.search.term = hint.searchTerm;
-                      $root.search.showHints = false;
-                      $root.searchQuery(hint.searchTerm);
-                      $root.search.cursor = -1;
-                    }}>
-                    {hint.displayTerm}
-                  </button>
-                  <template
-                    v-for={
-                      (item, position) in
-                      $root.search.hints.filter((a) => {
-                        return a.content !== null;
-                      })
-                    }>
-                    <MediaItemSmarthints
-                      item={item.content}
-                      position={position}>
-                      {" "}
-                    </MediaItemSmarthints>
+                  {$root.search.hints
+                    .filter((a) => a.content === null)
+                    .map((hint, index) => (
+                      <button
+                        className="search-hint text-overflow-elipsis"
+                        className="{active: ($root.search.cursor === index)}"
+                        onClick={() => {
+                          $root.search.term = hint.searchTerm;
+                          $root.search.showHints = false;
+                          $root.searchQuery(hint.searchTerm);
+                          $root.search.cursor = -1;
+                        }}>
+                        {hint.displayTerm}
+                      </button>
+                    ))}
+                  <template>
+                    {$root.search.hints
+                      .filter((a) => a.content !== null)
+                      .map((item, position) => (
+                        <MediaItemSmarthints
+                          item={item.content}
+                          position={position}
+                        />
+                      ))}
                   </template>
                 </div>
               </div>
@@ -224,11 +219,12 @@ const Sidebar = () => {
               {$root.getLz("term.playlists")}
             </div>
             <template v-if={!$root.cfg.general.sidebarCollapsed.amplaylists}>
-              <SidebarPlaylist
-                v-for={item in $root.getPlaylistFolderChildren("p.applemusic")}
-                v-bind:key={item.id}
-                item={item}
-              />
+              {$root.getPlaylistFolderChildren("p.applemusic").map((item) => (
+                <SidebarPlaylist
+                  v-bind:key={item.id}
+                  item={item}
+                />
+              ))}
             </template>
           </template>
           <div
@@ -247,12 +243,13 @@ const Sidebar = () => {
               <SVGIcon url="./assets/feather/plus.svg" />
               <div className="sidebar-item-text">{$root.getLz("action.createNew")}</div>
             </button>
-            <SidebarPlaylist
-              v-for={item in $root.getPlaylistFolderChildren("p.playlistsroot")}
-              v-bind:key={item.id}
-              madeforyou
-              item={item}
-            />
+            {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
+              <SidebarPlaylist
+                v-bind:key={item.id}
+                madeforyou
+                item={item}
+              />
+            ))}
           </template>
           <div
             v-if={$root.cfg.visual.artworkDisplayLayout === "sidebar"}
