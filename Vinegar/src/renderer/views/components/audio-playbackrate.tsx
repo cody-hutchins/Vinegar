@@ -23,15 +23,15 @@ const Component = () => {
     <div id="audio-playbackrate">
       <div
         className="modal-fullscreen addtoplaylist-panel"
-        clickself="app.modals.audioPlaybackRate = false"
-        contextmenuself="app.modals.audioPlaybackRate = false">
+        clickself={(app.modals.audioPlaybackRate = false)}
+        contextmenuself={(app.modals.audioPlaybackRate = false)}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{app.getLz("settings.option.audio.changePlaybackRate")}</div>
             <button
               className="close-btn"
               onClick={() => (app.modals.audioPlaybackRate = false)}
-              aria-label="app.getLz('action.close')"
+              aria-label={app.getLz("action.close")}
             />
           </div>
           <div className="modal-content">
@@ -39,18 +39,18 @@ const Component = () => {
               <div className="md-option-segment">{app.getLz("settings.option.audio.playbackRate")}</div>
               <div
                 className="md-option-segment playbackrate-text"
-                v-if="playbackRate">
+                v-if={playbackRate}>
                 {playbackRate} ×
               </div>
               <div className="md-option-segment md-option-segment_auto">
                 <input
                   type="range"
-                  step="0.05"
-                  min="0.25"
+                  step={0.05}
+                  min={0.25}
                   max="2"
                   onWheel={playbackRateWheel}
                   onChange={(e) => playbackRateClick(e.target.value)}
-                  v-model="playbackRate"
+                  v-model={playbackRate}
                 />
               </div>
             </div>

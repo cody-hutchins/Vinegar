@@ -26,7 +26,7 @@ const Keybinds = () => {
     }, 30000);
     const keyBindUpdate = function (e) {
       if (document.body.contains(blur)) {
-        if (e.key == "Escape") {
+        if (e.key === "Escape") {
           document.body.removeChild(blur);
           clearTimeout(keyBindTimeout);
           return;
@@ -55,23 +55,23 @@ const Keybinds = () => {
     document.addEventListener("keydown", keyBindUpdate);
   };
   const keyBindReset = () => {
-    app.cfg.general.keybindings.search = [app.platform == "darwin" ? "Command" : "Control", "F"];
-    app.cfg.general.keybindings.listnow = [app.platform == "darwin" ? "Command" : "Control", "L"];
-    app.cfg.general.keybindings.browse = [app.platform == "darwin" ? "Command" : "Control", "B"];
-    app.cfg.general.keybindings.recentAdd = [app.platform == "darwin" ? "Command" : "Control", "G"];
-    app.cfg.general.keybindings.songs = [app.platform == "darwin" ? "Command" : "Control", "J"];
-    app.cfg.general.keybindings.albums = [app.platform == "darwin" ? "Command" : "Control", "A"];
-    app.cfg.general.keybindings.artists = [app.platform == "darwin" ? "Command" : "Control", "D"];
-    app.cfg.general.keybindings.togglePrivateSession = [app.platform == "darwin" ? "Command" : "Control", "P"];
-    app.cfg.general.keybindings.webRemote = [app.platform == "darwin" ? "Command" : "Control", app.platform == "darwin" ? "Option" : app.platform == "linux" ? "Shift" : "Alt", "W"];
-    app.cfg.general.keybindings.audioSettings = [app.platform == "darwin" ? "Command" : "Control", app.platform == "darwin" ? "Option" : app.platform == "linux" ? "Shift" : "Alt", "A"];
-    app.cfg.general.keybindings.pluginMenu = [app.platform == "darwin" ? "Command" : "Control", app.platform == "darwin" ? "Option" : app.platform == "linux" ? "Shift" : "Alt", "P"];
-    app.cfg.general.keybindings.castToDevices = [app.platform == "darwin" ? "Command" : "Control", app.platform == "darwin" ? "Option" : app.platform == "linux" ? "Shift" : "Alt", "C"];
-    app.cfg.general.keybindings.settings = [app.platform == "darwin" ? "Command" : "Control", ","];
-    app.cfg.general.keybindings.zoomn = [app.platform == "darwin" ? "Command" : "Control", "numadd"];
-    app.cfg.general.keybindings.zoomt = [app.platform == "darwin" ? "Command" : "Control", "numsub"];
-    app.cfg.general.keybindings.zoomrst = [app.platform == "darwin" ? "Command" : "Control", "num0"];
-    app.cfg.general.keybindings.openDeveloperTools = [app.platform == "darwin" ? "Command" : "Control", app.platform == "darwin" ? "Option" : "Shift", "I"];
+    app.cfg.general.keybindings.search = [app.platform === "darwin" ? "Command" : "Control", "F"];
+    app.cfg.general.keybindings.listnow = [app.platform === "darwin" ? "Command" : "Control", "L"];
+    app.cfg.general.keybindings.browse = [app.platform === "darwin" ? "Command" : "Control", "B"];
+    app.cfg.general.keybindings.recentAdd = [app.platform === "darwin" ? "Command" : "Control", "G"];
+    app.cfg.general.keybindings.songs = [app.platform === "darwin" ? "Command" : "Control", "J"];
+    app.cfg.general.keybindings.albums = [app.platform === "darwin" ? "Command" : "Control", "A"];
+    app.cfg.general.keybindings.artists = [app.platform === "darwin" ? "Command" : "Control", "D"];
+    app.cfg.general.keybindings.togglePrivateSession = [app.platform === "darwin" ? "Command" : "Control", "P"];
+    app.cfg.general.keybindings.webRemote = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "W"];
+    app.cfg.general.keybindings.audioSettings = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "A"];
+    app.cfg.general.keybindings.pluginMenu = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "P"];
+    app.cfg.general.keybindings.castToDevices = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "C"];
+    app.cfg.general.keybindings.settings = [app.platform === "darwin" ? "Command" : "Control", ","];
+    app.cfg.general.keybindings.zoomn = [app.platform === "darwin" ? "Command" : "Control", "numadd"];
+    app.cfg.general.keybindings.zoomt = [app.platform === "darwin" ? "Command" : "Control", "numsub"];
+    app.cfg.general.keybindings.zoomrst = [app.platform === "darwin" ? "Command" : "Control", "num0"];
+    app.cfg.general.keybindings.openDeveloperTools = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : "Shift", "I"];
     notyf.success(app.getLz("settings.notyf.general.keybindings.update.success"));
     app.confirm(app.getLz("settings.prompt.general.keybindings.update.success"), (ok) => {
       if (ok) ipcRenderer.invoke("relaunchApp");
@@ -245,12 +245,12 @@ const Keybinds = () => {
           </div>
           <div
             className="md-option-header-sub"
-            v-if="app.platform !== 'darwin'">
+            v-if={app.platform !== "darwin"}>
             <span>{$root.getLz("settings.option.general.keybindings.interface")}</span>
           </div>
           <div
             className="md-option-line"
-            v-if="app.platform !== 'darwin'">
+            v-if={app.platform !== "darwin"}>
             <div className="md-option-segment">{$root.getLz("term.zoomin")}</div>
             <div className="md-option-segment md-option-segment_auto">
               <button
@@ -262,7 +262,7 @@ const Keybinds = () => {
           </div>
           <div
             className="md-option-line"
-            v-if="app.platform !== 'darwin'">
+            v-if={app.platform !== "darwin"}>
             <div className="md-option-segment">{$root.getLz("term.zoomout")}</div>
             <div className="md-option-segment md-option-segment_auto">
               <button
@@ -274,7 +274,7 @@ const Keybinds = () => {
           </div>
           <div
             className="md-option-line"
-            v-if="app.platform !== 'darwin'">
+            v-if={app.platform !== "darwin"}>
             <div className="md-option-segment">{$root.getLz("term.zoomreset")}</div>
             <div className="md-option-segment md-option-segment_auto">
               <button

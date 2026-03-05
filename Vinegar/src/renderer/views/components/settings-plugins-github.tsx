@@ -133,11 +133,11 @@ const PluginsGithub = () => {
                 onClick={() => showRepo(repo)}
                 className="list-group-item list-group-item-dark"
                 style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "", borderRadius: "5px" }}
-                v-for="repo in repos">
+                v-for={repo in repos}>
                 <div className="row">
                   <div className="col cider-flex-center">
                     <div>
-                      <h4 className="repo-name">{repo.description != null ? repo.description : repo.full_name}</h4>
+                      <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
                       <div>⭐ {repo.stargazers_count}</div>
                     </div>
                   </div>
@@ -148,7 +148,7 @@ const PluginsGithub = () => {
 
           <div
             className="github-preview"
-            v-if="openRepo.full_name">
+            v-if={openRepo.full_name}>
             <div className="gh-preview-header">
               <div className="row nopadding">
                 <div className="col nopadding cider-flex-center">
@@ -162,7 +162,7 @@ const PluginsGithub = () => {
                       <a
                         className="repo-url"
                         target="_blank"
-                        href="openRepo.html_url">
+                        href={openRepo.html_url}>
                         {openRepo.full_name}
                       </a>
                     </div>
@@ -173,7 +173,7 @@ const PluginsGithub = () => {
                   <button
                     className="md-btn md-btn-primary"
                     onClick={() => installThemeRepo(openRepo)}>
-                    <span v-if="!themesInstalled.includes(openRepo.full_name)">{$root.getLz("action.install")}</span>
+                    <span v-if={!themesInstalled.includes(openRepo.full_name)}>{$root.getLz("action.install")}</span>
                     <span v-else>{$root.getLz("action.update")}</span>
                   </button>
                 </div>
@@ -181,7 +181,7 @@ const PluginsGithub = () => {
             </div>
             <hr />
             <div
-              v-html="openRepo.readme"
+              v-html={openRepo.readme}
               className="github-content"
             />
           </div>

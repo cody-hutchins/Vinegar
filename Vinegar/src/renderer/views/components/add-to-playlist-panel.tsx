@@ -1,4 +1,5 @@
 import plus from "../svg/plus.svg";
+import SidebarPlaylist from "./sidebar-playlist.jsx";
 
 const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
   let playlistSorted = [];
@@ -8,8 +9,8 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
   const relateItems = [this.$root.selectedMediaItems[0].id];
   this.$refs.searchInput.focus();
   this.$refs.searchInput.addEventListener("keydown", (e) => {
-    if (e.keyCode == 13) {
-      if (focused != "") {
+    if (e.keyCode === 13) {
+      if (focused !== "") {
         addToPlaylist(focused);
       }
     }
@@ -31,7 +32,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
       playlistSorted = playlists.filter((playlist) => {
         return playlist.attributes.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
       });
-      if (playlistSorted.length == 1) {
+      if (playlistSorted.length === 1) {
         focused = playlistSorted[0].id;
       }
     }
@@ -41,7 +42,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
     <div
       className="modal-fullscreen addtoplaylist-panel"
       onClick={app.resetState()}
-      contextmenuSelf="app.resetState()">
+      contextmenuSelf={app.resetState()}>
       <div className="modal-window">
         <div className="modal-header">
           <div className="modal-title">{app.getLz("action.addToPlaylist")}</div>
@@ -64,9 +65,9 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
           <SidebarPlaylist
             playlist-select={playlistSelect}
             relate-media-items="relateItems"
-            v-for="item in $root.getPlaylistFolderChildren('p.playlistsroot')"
-            v-bind:key="item.id"
-            item="item"
+            v-for={item in $root.getPlaylistFolderChildren("p.playlistsroot")}
+            v-bind:key={item.id}
+            item={item}
           />
         </div>
         <div className="modal-search">
@@ -80,7 +81,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
               style={{ width: "100%" }}
               spellcheck="false"
               placeholder={app.getLz("term.search") + "..."}
-              v-model="searchQuery"
+              v-model={searchQuery}
               input={search()}
               className="search-input"
             />

@@ -40,10 +40,10 @@ const Component = () => {
           </div>
           <div className="col-auto">
             <button
-              v-if="library.albums.downloadState == 2"
+              v-if={library.albums.downloadState === 2}
               onClick={() => $root.getLibraryAlbumsFull(true, 1)}
               className="reload-btn"
-              aria-label="app.getLz('menubar.options.reload')">
+              aria-label={app.getLz('menubar.options.reload')}>
               {import("../svg/redo.svg")}
             </button>
           </div>
@@ -60,9 +60,9 @@ const Component = () => {
                 type="search"
                 style={{ width: "100%" }}
                 spellcheck="false"
-                placeholder="$root.getLz('term.search') + '...'"
-                input="$root.searchLibraryAlbums"
-                v-model="library.albums.search"
+                placeholder={$root.getLz('term.search') + '...'}
+                input={$root.searchLibraryAlbums}
+                v-model={library.albums.search}
                 className="search-input"
               />
             </div>
@@ -72,11 +72,11 @@ const Component = () => {
               <div className="col">
                 <select
                   className="md-select"
-                  v-model="prefs.sort"
-                  change="library.albums.sorting[1] = prefs.sort; $root.searchLibraryAlbums(1)">
-                  <optgroup label="$root.getLz('term.sortBy')">
+                  v-model={prefs.sort}
+                  onChange={() => library.albums.sorting[1] = prefs.sort; $root.searchLibraryAlbums(1)}>
+                  <optgroup label={$root.getLz('term.sortBy')}>
                     <option
-                      v-for="(sort, index) in library.albums.sortingOptions"
+                      v-for={(sort, index) in library.albums.sortingOptions}
                       value="index">
                       {sort}
                     </option>
@@ -86,9 +86,9 @@ const Component = () => {
               <div className="col">
                 <select
                   className="md-select"
-                  v-model="prefs.sortOrder"
-                  change="library.albums.sortOrder[1] = prefs.sortOrder; $root.searchLibraryAlbums(1)">
-                  <optgroup label="$root.getLz('term.sortOrder')">
+                  v-model={prefs.sortOrder}
+                  onChange={() => library.albums.sortOrder[1] = prefs.sortOrder; $root.searchLibraryAlbums(1)}>
+                  <optgroup label={$root.getLz('term.sortOrder')}>
                     <option value="asc">{$root.getLz("term.sortOrder.ascending")}</option>
                     <option value="desc">{$root.getLz("term.sortOrder.descending")}</option>
                   </optgroup>
@@ -97,8 +97,8 @@ const Component = () => {
               <div className="col">
                 <select
                   className="md-select"
-                  v-model="prefs.viewAs">
-                  <optgroup label="$root.getLz('term.viewAs')">
+                  v-model={prefs.viewAs}>
+                  <optgroup label={$root.getLz('term.viewAs')}>
                     <option value="covers">{$root.getLz("term.viewAs.coverArt")}</option>
                     <option value="list">{$root.getLz("term.viewAs.list")}</option>
                   </optgroup>
@@ -107,8 +107,8 @@ const Component = () => {
               <div className="col">
                 <select
                   className="md-select"
-                  v-model="prefs.scroll">
-                  <optgroup label="app.getLz('term.scroll')">
+                  v-model={prefs.scroll}>
+                  <optgroup label={app.getLz('term.scroll')}>
                     <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
                     <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                   </optgroup>
@@ -117,9 +117,9 @@ const Component = () => {
             </div>
           </div>
           <pagination
-            length="app.library.albums.displayListing.length"
+            length={app.library.albums.displayListing.length}
             pageSize="pageSize"
-            scroll="prefs.scroll"
+            scroll={prefs.scroll}
             scrollSelector="#app-content"
             onRangeChange={onRangeChange}
             style={{ marginBottom: 0 }}
@@ -129,21 +129,21 @@ const Component = () => {
           <div className="albums-square-container">
             <div>
               <MediaItemSquare
-                v-if="prefs.viewAs == 'covers'"
+                v-if={prefs.viewAs === "covers"}
                 size="'300'"
-                item="item"
-                v-for="item in currentSlice"
+                item={item}
+                v-for={item in currentSlice}
               />
             </div>
           </div>
           <MediaItemListItem
-            v-if="prefs.viewAs == 'list'"
+            v-if={prefs.viewAs === "list"}
             show-duration="false"
             show-meta-data="true"
             show-library-status="false"
-            v-bind:key="item.id"
-            item="item"
-            v-for="item in currentSlice"
+            v-bind:key={item.id}
+            item={item}
+            v-for={item in currentSlice}
           />
         </div>
       </div>

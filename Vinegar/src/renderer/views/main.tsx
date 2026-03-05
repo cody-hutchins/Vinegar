@@ -84,7 +84,7 @@ export const Main = () => {
           href="./manifest.json?v=2"
         />
         <script src="https://js-cdn.music.apple.com/hls.js/2.141.0/hls.js/hls.js"></script>
-        <script src="hlscider.js"></script>
+        <script src={hlscider.js}></script>
         <script src="./lib/jquery-3.2.1.slim.min.js"></script>
         <script src="./lib/popper.min.js"></script>
         <script src="./lib/bootstrap.min.js"></script>
@@ -143,16 +143,16 @@ export const Main = () => {
         <div id="LOADER">{import("../assets/cider-round.svg")}</div>
         <div
           id="app"
-          className="getAppClasses()"
-          v-if="appVisible"
-          window-state="chrome.windowState"
+          className={getAppClasses()}
+          v-if={appVisible}
+          window-state={chrome.windowState}
           style={getAppStyle()}
           library-visible="(chrome.sidebarCollapsed ? 0 : 1)"
           window-style={cfg.visual.directives.windowLayout}>
           <transition name="fsModeSwitch">
             <div
               id="app-main"
-              v-show="appMode == 'player'">
+              v-show={appMode === "player"}>
               {import("app/chrome-top")}
               {import("app/app-navigation")}
               {import("app/chrome-bottom")}
@@ -161,11 +161,11 @@ export const Main = () => {
           <transition name="fsModeSwitch">
             <div
               className="fullscreen-view-container"
-              v-if="appMode == 'fullscreen'">
+              v-if={appMode === "fullscreen"}>
               <FullscreenView
                 ref="fsView"
                 image="currentArtUrlRaw"
-                time="mk.currentPlaybackTime - lyricOffset"
+                time={mk.currentPlaybackTime - lyricOffset}
                 lyrics="lyrics"
                 richlyrics="richlyrics"
               />
@@ -174,10 +174,10 @@ export const Main = () => {
           <transition name="fsModeSwitch">
             <div
               className="fullscreen-view-container"
-              v-if="appMode == 'mini'">
+              v-if={appMode === "mini"}>
               <MiniView
                 image="currentArtUrlRaw"
-                time="mk.currentPlaybackTime - lyricOffset"
+                time={mk.currentPlaybackTime - lyricOffset}
                 lyrics="lyrics"
                 richlyrics="richlyrics"
               />
@@ -186,14 +186,14 @@ export const Main = () => {
           <transition name="fsModeSwitch">
             <div
               className="fullscreen-view-container oobe"
-              v-if="appMode == 'oobe'">
+              v-if={appMode === "oobe"}>
               <cider-oobe />
             </div>
           </transition>
           {import("app/panels")}
           <div
             className="cursor"
-            v-if="chrome.showCursor"
+            v-if={chrome.showCursor}
           />
         </div>
 
@@ -203,7 +203,7 @@ export const Main = () => {
           async
           src={process.env.useV3 ? "https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js" : "https://js-cdn.music.apple.com/musickit/v2/amp/musickit.js"}
           data-web-components></script>
-        <script src="index.js?v=1"></script>
+        <script src={index.js?v=1}></script>
 
         <div id="am-musiccovershelf">
           <h1>{component.attributes.title.stringForDisplay}</h1>

@@ -35,8 +35,8 @@ const Replay = () => {
       songs.push(song);
       genrePlayCount += song.attributes.playCount;
       song.attributes.genreNames.forEach(function (genre) {
-        if (genre != self.musicTypeGenre) {
-          if (topGenres[genre] == undefined) {
+        if (genre !== self.musicTypeGenre) {
+          if (topGenres[genre] === undefined) {
             topGenres[genre] = song.attributes.playCount;
           } else {
             topGenres[genre] += song.attributes.playCount;
@@ -80,12 +80,12 @@ const Replay = () => {
         <vue-horizontal style={{ height: "300px" }}>
           <div
             className="replay-period"
-            v-for="year in years"
+            v-for={year in years}
             onClick={() => getReplayYear(year.attributes.year)}>
             <div className="artwork-container">
               <MediaItemArtwork
                 size="200"
-                url="year.relationships.playlist.data[0].attributes.artwork.url"
+                url={year.relationships.playlist.data[0].attributes.artwork.url}
               />
             </div>
             {year.attributes.year}
@@ -95,14 +95,14 @@ const Replay = () => {
         <transition name="replaycard">
           <div
             className="replay-viewport"
-            v-if="loaded.id != -1">
+            v-if={loaded.id !== -1}>
             {/* Stats  */}
             <div
               className="replay-video"
-              v-if="false">
+              v-if={false}>
               <MediaItemArtwork
-                url="loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.previewFrame.url"
-                video="loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.video"
+                url={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.previewFrame.url}
+                video={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.video}
                 video-priority="true"
               />
             </div>
@@ -133,7 +133,7 @@ const Replay = () => {
                   kind="card"
                   no-scale="true"
                   force-video="true"
-                  item="loaded.playlist"
+                  item={loaded.playlist}
                 />
               </div>
             </div>
@@ -143,9 +143,9 @@ const Replay = () => {
               <MediaItemScrollerHorizontal>
                 <div
                   className="card replay-card"
-                  v-for="artistData in loaded.views['top-artists'].data">
+                  v-for={artistData in loaded.views["top-artists"].data}>
                   <div className="card-body">
-                    <MediaItemSquare item="artistData.relationships.artist.data[0]" />
+                    <MediaItemSquare item={artistData.relationships.artist.data[0]} />
                   </div>
                   <div className="card-footer">
                     {convertToHours(artistData.attributes.listenTimeInMinutes)}
@@ -163,9 +163,9 @@ const Replay = () => {
               <MediaItemScrollerHorizontal>
                 <div
                   className="card replay-card"
-                  v-for="albumData in loaded.views['top-albums'].data">
+                  v-for={albumData in loaded.views["top-albums"].data}>
                   <div className="card-body">
-                    <MediaItemSquare item="albumData.relationships.album.data[0]" />
+                    <MediaItemSquare item={albumData.relationships.album.data[0]} />
                   </div>
                   <div className="card-footer">
                     {convertToHours(albumData.attributes.listenTimeInMinutes)}
@@ -181,13 +181,13 @@ const Replay = () => {
             <div className="well">
               <ListitemHorizontal
                 show-library-status="false"
-                items="songsToArray(loaded.views['top-songs'].data)"
+                items={songsToArray(loaded.views['top-songs'].data)}
               />
             </div>
             <h3>{$root.getLz("term.topGenres")}</h3>
             <div className="top-genres-container">
               <div
-                v-for="genre in loaded.topGenres"
+                v-for={genre in loaded.topGenres}
                 className="replay-genre-display">
                 <div className="genre-name">{genre.genre}</div>
                 <div className="genre-count">

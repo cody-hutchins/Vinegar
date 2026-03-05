@@ -3,7 +3,7 @@ import MediaItemSquare from "../components/mediaitem-square.jsx";
 const RecordLabel = ({ data }: { data: string }) => {
   let topSongsExpanded = false;
   function getArtistPalette(artist) {
-    if (artist?.attributes?.artwork != null) {
+    if (artist?.attributes?.artwork !== null) {
       return {
         background: "#" + artist["attributes"]["artwork"]["bgColor"],
         color: "#" + artist["attributes"]["artwork"]["textColor1"],
@@ -35,7 +35,7 @@ const RecordLabel = ({ data }: { data: string }) => {
               <div className="artist-image">
                 <MediaItemArtwork
                   shadow="large"
-                  url="data.attributes.artwork ? data.attributes.artwork.url : ''"
+                  url={data.attributes.artwork ? data.attributes.artwork.url : ''}
                   size="220"
                   type="artists"
                 />
@@ -47,7 +47,7 @@ const RecordLabel = ({ data }: { data: string }) => {
           </div>
         </div>
         <div className="artist-body">
-          <div v-if="$root.showingPlaylist.attributes.description">
+          <div v-if={$root.showingPlaylist.attributes.description}>
             <div className="row">
               <h3>{$root.getLz("term.about")}</h3>
             </div>
@@ -55,14 +55,14 @@ const RecordLabel = ({ data }: { data: string }) => {
               <div>{$root.showingPlaylist.attributes.description.standard}</div>
             </div>
           </div>
-          <template v-if="data.views && data.views['latest-releases']">
+          <template v-if={data.views && data.views["latest-releases"]}>
             <div className="row">
               <div className="col">
                 <h3>{data.views["latest-releases"].attributes.title ?? ""}</h3>
               </div>
               <div
                 className="col-auto cider-flex-center"
-                v-if="data.views['latest-releases'].data.length >= 10">
+                v-if={data.views["latest-releases"].data.length >= 10}>
                 <button
                   className="cd-btn-seeall"
                   onClick={() => $root.showRecordLabelView(data.id, data.attributes.name + " -  Latest Releases", "latest-releases")}>
@@ -71,18 +71,18 @@ const RecordLabel = ({ data }: { data: string }) => {
               </div>
             </div>
             <MediaItemSquare
-              item="item"
-              v-for="item in data.views['latest-releases'].data"
+              item={item}
+              v-for={item in data.views["latest-releases"].data}
             />
           </template>
-          <template v-if="data.views && data.views['top-releases']">
+          <template v-if={data.views && data.views["top-releases"]}>
             <div className="row">
               <div className="col">
                 <h3>{data.views["top-releases"].attributes.title ?? ""}</h3>
               </div>
               <div
                 className="col-auto cider-flex-center"
-                v-if="data.views['top-releases'].data.length >= 10">
+                v-if={data.views["top-releases"].data.length >= 10}>
                 <button
                   className="cd-btn-seeall"
                   onClick={() => $root.showRecordLabelView(data.id, data.attributes.name + " -  Top Releases", "top-releases")}>
@@ -91,18 +91,18 @@ const RecordLabel = ({ data }: { data: string }) => {
               </div>
             </div>
             <MediaItemSquare
-              item="item"
-              v-for="item in data.views['top-releases'].data"
+              item={item}
+              v-for={item in data.views["top-releases"].data}
             />
           </template>
-          <template v-if="data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0">
+          <template v-if={data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0}>
             <div className="row">
               <div className="col">
                 <h3>{$root.getLz("term.playlists")}</h3>
               </div>
               <div
                 className="col-auto cider-flex-center"
-                v-if="data.relationships.playlists.data.length >= 5">
+                v-if={data.relationships.playlists.data.length >= 5}>
                 <button
                   className="cd-btn-seeall"
                   onClick={() => $root.showCollection(data.relationships.playlists, data.attributes.name + " -  Playlists", "curator")}>
@@ -111,8 +111,8 @@ const RecordLabel = ({ data }: { data: string }) => {
               </div>
             </div>
             <MediaItemSquare
-              item="item"
-              v-for="item in data.relationships.playlists.data.limit(5)"
+              item={item}
+              v-for={item in data.relationships.playlists.data.limit(5)}
             />
           </template>
         </div>

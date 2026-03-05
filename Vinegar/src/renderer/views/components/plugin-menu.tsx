@@ -7,21 +7,21 @@ const PluginMenu = () => {
     <div id="plugin-menu">
       <div
         className="modal-fullscreen addtoplaylist-panel"
-        clickself="app.resetState()"
-        contextmenuself="app.resetState()">
+        clickself={app.resetState()}
+        contextmenuself={app.resetState()}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{$root.getLz("term.pluginMenu")}</div>
             <button
               className="close-btn"
               onClick={() => app.resetState()}
-              aria-label="app.getLz('action.close')"
+              aria-label={app.getLz("action.close")}
             />
           </div>
           <div className="modal-content">
             <span
               className="playlist-item"
-              v-if="!app.pluginInstalled">
+              v-if={!app.pluginInstalled}>
               <span className="icon">{import("../svg/x.svg")}</span>
               <span
                 className="name"
@@ -35,7 +35,7 @@ const PluginMenu = () => {
                 entry.onClick();
                 closeMenu();
               }}
-              v-for="entry in app.pluginMenuEntries">
+              v-for={entry in app.pluginMenuEntries}>
               <span className="icon">{import("../svg/grid.svg")}</span>
               <span
                 className="name"

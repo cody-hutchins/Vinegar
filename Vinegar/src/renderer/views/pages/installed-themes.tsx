@@ -66,11 +66,11 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
     <div className="stylestack-editor">
       <draggable
         className="list-group"
-        v-model="$root.cfg.visual.styles"
-        end="$root.reloadStyles()">
+        v-model={$root.cfg.visual.styles}
+        end={$root.reloadStyles()}>
         <b-list-group-item
           variant="dark"
-          v-for="theme in $root.cfg.visual.styles"
+          v-for={theme in $root.cfg.visual.styles}
           key="theme">
           <b-row>
             <b-col sm="auto">
@@ -175,7 +175,7 @@ export const InstalledThemes = () => {
     const themes = ipcRenderer.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
-      if (theme.github_repo !== "" && typeof theme.commit != "") {
+      if (theme.github_repo !== "" && typeof theme.commit !== "") {
         self.themesInstalled.push(theme.github_repo.toLowerCase());
       }
     });
@@ -292,18 +292,18 @@ export const InstalledThemes = () => {
               <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
             </div>
             <ul className="list-group list-group-flush">
-              <template v-for="theme in themes">
+              <template v-for={theme in themes}>
                 <li
                   onClick={() => addStyle(theme.file)}
-                  contextmenu="contextMenu($event, theme)"
+                  onContextMenu={() => contextMenu($event, theme)}
                   className="list-group-item list-group-item-dark"
                   className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
                   <b-row>
                     <b-col className="themeLabel">{theme.name}</b-col>
-                    <template v-if="$root.cfg.visual.styles.includes(theme.file)">
+                    <template v-if={$root.cfg.visual.styles.includes(theme.file)}>
                       <b-col
                         sm="auto"
-                        v-if="theme.pack">
+                        v-if={theme.pack}>
                         <button className="themeContextMenu codicon codicon-package" />
                       </b-col>
                       <b-col sm="auto">
@@ -313,12 +313,12 @@ export const InstalledThemes = () => {
                     <template v-else>
                       <b-col
                         sm="auto"
-                        v-if="theme.pack">
+                        v-if={theme.pack}>
                         <button className="themeContextMenu codicon codicon-package" />
                       </b-col>
                       <b-col sm="auto">
                         <button
-                          clickstop="contextMenu($event, theme)"
+                          clickstop={contextMenu($event, theme)}
                           className="themeContextMenu codicon codicon-list-unordered"
                         />
                       </b-col>
@@ -327,14 +327,14 @@ export const InstalledThemes = () => {
                 </li>
                 <li
                   onClick={() => addStyle(packEntry.file)}
-                  contextmenu="contextMenu($event, theme)"
+                  onContextMenu={() => contextMenu($event, theme)}
                   className="list-group-item list-group-item-dark addon"
-                  v-for="packEntry in theme.pack"
+                  v-for={packEntry in theme.pack}
                   className="{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"
-                  v-if="theme.pack">
+                  v-if={theme.pack}>
                   <b-row>
                     <b-col className="themeLabel">{packEntry.name}</b-col>
-                    <template v-if="$root.cfg.visual.styles.includes(packEntry.file)">
+                    <template v-if={$root.cfg.visual.styles.includes(packEntry.file)}>
                       <b-col sm="auto">
                         <button className="themeContextMenu codicon codicon-check" />
                       </b-col>
@@ -356,7 +356,7 @@ export const InstalledThemes = () => {
             </div>
             <StylestackEditor
               ref="stackEditor"
-              v-if="themes.length != 0"
+              v-if={themes.length !== 0}
               themes="themes"
             />
           </div>

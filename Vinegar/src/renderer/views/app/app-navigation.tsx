@@ -7,7 +7,7 @@ import Queue from "../components/queue.jsx";
   <transition name="wpfade">
     <div
       className="usermenu-container"
-      v-if="chrome.menuOpened">
+      v-if={chrome.menuOpened}>
       <div className="usermenu-body">
         <button
           className="app-sidebar-button"
@@ -21,10 +21,10 @@ import Queue from "../components/queue.jsx";
 
           <div
             className="sidebar-user-text"
-            v-if="!chrome.hideUserInfo">
-            <template v-if="chrome.userinfo.id || mk.isAuthorized">
-              <div className="fullname text-overflow-elipsis">{chrome.userinfo != null && chrome.userinfo.attributes != null ? (chrome.userinfo.attributes.name ?? "") : ""}</div>
-              <div className="handle-text text-overflow-elipsis">{chrome.userinfo != null && chrome.userinfo.attributes != null ? (chrome.userinfo.attributes.handle ?? "") : ""}</div>
+            v-if={!chrome.hideUserInfo}>
+            <template v-if={chrome.userinfo.id || mk.isAuthorized}>
+              <div className="fullname text-overflow-elipsis">{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.name ?? "") : ""}</div>
+              <div className="handle-text text-overflow-elipsis">{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.handle ?? "") : ""}</div>
             </template>
             <template v-else>
               <div onClick={() => mk.authorize()}>{$root.getLz("term.login")}</div>
@@ -39,7 +39,7 @@ import Queue from "../components/queue.jsx";
         {/* Use 20px SVG for usermenu icon  */}
         <button
           className="usermenu-item"
-          v-if="cfg.general.privateEnabled"
+          v-if={cfg.general.privateEnabled}
           onClick={() => (cfg.general.privateEnabled = false)}>
           <span className="usermenu-item-icon"> {import("../svg/x.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.disablePrivateSession")}</span>
@@ -64,7 +64,7 @@ import Queue from "../components/queue.jsx";
         </button>
         <button
           className="usermenu-item"
-          v-if="pluginInstalled"
+          v-if={pluginInstalled}
           onClick={() => (modals.pluginMenu = true)}>
           <span className="usermenu-item-icon"> {import("../svg/grid.svg")} </span>
           <span className="usermenu-item-name">{$root.getLz("term.plugin")}</span>
@@ -83,7 +83,7 @@ import Queue from "../components/queue.jsx";
         </button>
         <button
           className="usermenu-item"
-          v-for="entry in $root.pluginMenuTopEntries"
+          v-for={entry in $root.pluginMenuTopEntries}
           onClick={() => entry.onClick()}>
           <span
             className="usermenu-item-icon"
@@ -113,7 +113,7 @@ import Queue from "../components/queue.jsx";
           <span className="usermenu-item-name">{$root.getLz("term.quit")}</span>
         </button>
         <button
-          v-if="!chrome.noC2Upgrade"
+          v-if={!chrome.noC2Upgrade}
           className="usermenu-item"
           onClick={() => c2offer()}>
           <span
@@ -132,40 +132,40 @@ import Queue from "../components/queue.jsx";
     </div>
   </transition>
   <transition name="sidebartransition">
-    <cider-app-sidebar v-if="!chrome.sidebarCollapsed" />
+    <cider-app-sidebar v-if={!chrome.sidebarCollapsed} />
   </transition>
   <app-content-area />
   <transition name="drawertransition">
     <div
       className="app-drawer"
-      v-if="drawer.open && drawer.panel == 'lyrics' && lyrics && lyrics != [] && lyrics.length > 0">
+      v-if={drawer.open && drawer.panel === "lyrics" && lyrics && lyrics !== [] && lyrics.length > 0}>
       <div className="bgArtworkMaterial">
         <div className="bg-artwork-container">
           <img
-            v-if="(cfg.visual.bg_artwork_rotation && animateBackground)"
+            v-if={cfg.visual.bg_artwork_rotation && animateBackground}
             className="bg-artwork a"
-            src="$store.state.artwork.playerLCD"
+            src={$store.state.artwork.playerLCD}
           />
           <img
-            v-if="(cfg.visual.bg_artwork_rotation && animateBackground)"
+            v-if={cfg.visual.bg_artwork_rotation && animateBackground}
             className="bg-artwork b"
-            src="$store.state.artwork.playerLCD"
+            src={$store.state.artwork.playerLCD}
           />
           <img
-            v-if="!(cfg.visual.bg_artwork_rotation && animateBackground)"
+            v-if={!(cfg.visual.bg_artwork_rotation && animateBackground)}
             className="bg-artwork no-animation"
-            src="$store.state.artwork.playerLCD"
+            src={$store.state.artwork.playerLCD}
           />
         </div>
       </div>
       <LyricsView
-        v-if="drawer.panel == 'lyrics'"
-        time="mk.currentPlaybackTime - lyricOffset"
+        v-if={drawer.panel === "lyrics"}
+        time={mk.currentPlaybackTime - lyricOffset}
         lyrics="lyrics"
         richlyrics="richlyrics"
       />
       <div
-        v-if="drawer.panel == 'lyrics'"
+        v-if={drawer.panel === "lyrics"}
         className="lyric-footer">
         <button
           className="md-btn"
@@ -178,10 +178,10 @@ import Queue from "../components/queue.jsx";
   <transition name="drawertransition">
     <div
       className="app-drawer"
-      v-if="drawer.open && drawer.panel == 'queue'">
+      v-if={drawer.open && drawer.panel === "queue"}>
       <Queue
         ref="queue"
-        v-if="drawer.panel == 'queue'"
+        v-if={drawer.panel === "queue"}
       />
     </div>
   </transition>

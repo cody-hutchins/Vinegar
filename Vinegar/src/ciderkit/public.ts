@@ -24,3 +24,4 @@ const CiderKit = {
     },
   },
 };
+export default CiderKit;

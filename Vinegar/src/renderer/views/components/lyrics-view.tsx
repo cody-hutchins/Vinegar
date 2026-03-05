@@ -2,7 +2,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
   const app = this.$root;
   const watch = {
     time: function () {
-      if (((app.lyricon && app.drawer.open) || app.appMode == "fullscreen") && this.$refs.lyricsview) {
+      if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview) {
         let currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
         if (currentLine && currentLine.getElementsByClassName("lyricWaiting").length > 0) {
           let duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
@@ -57,23 +57,23 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
     },
   };
   const seekTo = (startTime) => {
-    if (startTime != 9999999) app.seekTo(startTime, false);
+    if (startTime !== 9999999) app.seekTo(startTime, false);
   };
   const getActiveLyric = () => {
     const delayfix = app.activeCasts[0]?.hasOwnProperty("airplay2") ? -2.5 : 0.1;
     const prevLine = app.currentLyricsLine;
     for (let i = 0; i < lyrics.length; i++) {
       if (time + delayfix >= lyrics[i].startTime && time + delayfix <= app.lyrics[i].endTime) {
-        if (app.currentLyricsLine != i) {
+        if (app.currentLyricsLine !== i) {
           app.currentLyricsLine = i;
-          if (((app.lyricon && app.drawer.open) || app.appMode == "fullscreen") && this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`)) {
-            if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`)) {
-              this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`).classList.remove("active");
+          if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`)) {
+            if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${prevLine}}]`)) {
+              this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${prevLine}}]`).classList.remove("active");
             }
-            this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`).classList.add("active");
+            this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`).classList.add("active");
             if (checkIfScrollIsStatic) {
-              let lyricElement = this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`);
-              // this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${i}"]`).scrollIntoView({
+              let lyricElement = this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`);
+              // this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`).scrollIntoView({
               //     behavior: "smooth",
               //     block: "nearest", inline: 'start'
               // })
@@ -97,18 +97,18 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
               });
             }
           }
-        } else if (app.currentLyricsLine == 0 && app.drawer.open) {
+        } else if (app.currentLyricsLine === 0 && app.drawer.open) {
           if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`) && !this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.contains("active")) this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.add("active");
         }
         break;
       }
     }
     try {
-      if (app.drawer.open || app.appMode == "fullscreen") {
+      if (app.drawer.open || app.appMode === "fullscreen") {
         try {
-          this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${prevLine}"]`).childNodes.classList.remove("verse-active");
+          this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${prevLine}}]`).childNodes.classList.remove("verse-active");
         } catch (e) {}
-        for (child of this.$refs.lyricsview.querySelector(`.lyric-line[line-index="${app.currentLyricsLine}"]`).querySelectorAll(".verse")) {
+        for (child of this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${app.currentLyricsLine}}]`).querySelectorAll(".verse")) {
           if (time + delayfix >= child.getAttribute("lyricstart") * 1 + child.getAttribute("versestart") * 1) {
             child.classList.add("verse-active");
           } else {
@@ -124,7 +124,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
     return relativeTime >= verseTime && relativeTime <= timeEnd - timeStart;
   };
   const getVerseLine = (index) => {
-    if (richlyrics[index] != null && richlyrics[index].l != null) {
+    if (richlyrics[index] !== null && richlyrics[index].l !== null) {
       return richlyrics[index].l;
     } else return [];
   };
@@ -150,22 +150,22 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
       <div
         ref="lyricsview"
         className="md-body lyric-body">
-        <template v-if="lyrics && lyrics != [] && lyrics.length > 0 && !qqInstrumental(lyrics)">
+        <template v-if={lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics)}>
           <template
-            v-for="(lyric, index) in lyrics"
-            v-if="lyric && lyric.line && lyric.line != 'lrcInstrumental'">
+            v-for={(lyric, index) in lyrics}
+            v-if={lyric && lyric.line && lyric.line !== "lrcInstrumental"}>
             <h3
               className="lyric-line"
               onClick={() => seekTo(lyric.startTime)}
-              className="{unsynced : lyric.startTime == 9999999}"
-              v-bind:line-index="index.toString()">
-              <template v-if="richlyrics && richlyrics != [] && richlyrics.length > 0">
+              className="{unsynced : lyric.startTime === 9999999}"
+              v-bind:line-index={index.toString()}>
+              <template v-if={richlyrics && richlyrics !== [] && richlyrics.length > 0}>
                 <div className="richl">
-                  <template v-for="verse in getVerseLine(index-1)">
+                  <template v-for={verse in getVerseLine(index - 1)}>
                     <span
                       className="verse"
-                      lyricstart="lyric.startTime"
-                      versestart="verse.o">
+                      lyricstart={lyric.startTime}
+                      versestart={verse.o}>
                       {verse.c}
                     </span>
                   </template>
@@ -176,7 +176,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
               </template>
               <div
                 className="lyrics-translation"
-                v-if="lyric.translation && lyric.translation != ''">
+                v-if={lyric.translation && lyric.translation !== ""}>
                 {lyric.translation}
               </div>
             </h3>
@@ -185,9 +185,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             <h3
               className="lyric-line"
               onClick={() => seekTo(lyric.startTime)}
-              start="lyric.startTime"
-              end="lyric.endTime"
-              v-bind:line-index="index.toString()">
+              start={lyric.startTime}
+              end={lyric.endTime}
+              v-bind:line-index={index.toString()}>
               <div className="lyricWaiting">
                 <div class="WaitingDot1" />
                 <div class="WaitingDot2" />

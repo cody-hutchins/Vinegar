@@ -9,9 +9,9 @@ export const MadeForYou = ({ item }: { item: object }) => (
     </div>
     <div className="madeforyou-body">
       <MediaItemSquare
-        item="item"
-        v-for="item in madeforyou.data"
-        v-bind:key="item.id"
+        item={item}
+        v-for={item in madeforyou.data}
+        v-bind:key={item.id}
       />
     </div>
   </div>

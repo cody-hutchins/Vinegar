@@ -5,6 +5,7 @@ import ArtworkMaterial from "../components/artwork-material.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import SVGIcon from "../../main/components/svg-icon.jsx";
+import Pagination from "../components/pagination.jsx";
 
 const Playlist = ({ data }: { data: object }) => {
   const app = this.$root;
@@ -34,14 +35,14 @@ const Playlist = ({ data }: { data: object }) => {
 
   const mounted = () => {
     setTimeout(function () {
-      if (data.id != "ciderlocal") {
+      if (data.id !== "ciderlocal") {
         isInLibrary();
       } else {
-        if (data.relationships != null && data.id == "ciderlocal") {
+        if (data.relationships !== null && data.id === "ciderlocal") {
           displayListing = data.relationships.tracks.data;
         }
 
-        inPlaylist = data.type == "library-playlists";
+        inPlaylist = data.type === "library-playlists";
       }
     });
   };
@@ -70,8 +71,8 @@ const Playlist = ({ data }: { data: object }) => {
         isInLibrary();
         getBadges();
 
-        if (data.relationships != null) {
-          if (data.id == "ciderlocal") {
+        if (data.relationships !== null) {
+          if (data.id === "ciderlocal") {
             displayListing = data.relationships.tracks.data;
           } else {
             generateNestedPlaylist(data.relationships.tracks.data);
@@ -81,7 +82,7 @@ const Playlist = ({ data }: { data: object }) => {
           }
         }
 
-        inPlaylist = data.type == "library-playlists";
+        inPlaylist = data.type === "library-playlists";
       },
       deep: true,
     },
@@ -129,7 +130,7 @@ const Playlist = ({ data }: { data: object }) => {
     return (data.attributes?.playParams?.kind ?? data.type ?? "").includes("album");
   }
   function minClass(val) {
-    if (app.appMode == "fullscreen") {
+    if (app.appMode === "fullscreen") {
       return;
     }
     if (val) {
@@ -143,7 +144,7 @@ const Playlist = ({ data }: { data: object }) => {
     app.moreinfodata = {
       title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title ?? "" ?? "") : "",
       subtitle: data?.attributes?.artistName ?? "",
-      content: data?.attributes?.editorialNotes != null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
+      content: data?.attributes?.editorialNotes !== null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
     };
     app.modals.moreInfo = true;
   }
@@ -160,14 +161,14 @@ const Playlist = ({ data }: { data: object }) => {
 
       if ((discs && discs.length > 1) || (discs && hasNestedPlaylist)) {
         for (disc of discs) {
-          let songs = songlists.filter((x) => x.attributes.discNumber == disc);
+          let songs = songlists.filter((x) => x.attributes.discNumber === disc);
           nestedPlaylist.push({ disc: disc, tracks: songs });
         }
       }
       console.log(nestedPlaylist);
     }
 
-    if (!hasNestedPlaylist) hasNestedPlaylist = nestedPlaylist != [] && nestedPlaylist.length > 1;
+    if (!hasNestedPlaylist) hasNestedPlaylist = nestedPlaylist !== [] && nestedPlaylist.length > 1;
   }
   function isHeaderVisible(visible) {
     headerVisible = visible;
@@ -238,7 +239,7 @@ const Playlist = ({ data }: { data: object }) => {
   function getAlbumGenre() {
     if (data.type.includes("albums")) {
       let date = data.attributes.releaseDate;
-      if (date == null || date === "") return "";
+      if (date === null || date === "") return "";
       return `${data.attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
     }
   }
@@ -370,7 +371,7 @@ const Playlist = ({ data }: { data: object }) => {
     // for each app.selectedMediaItems splice the items from the playlist
     for (let i = 0; i < app.selectedMediaItems.length; i++) {
       let item = app.selectedMediaItems[i];
-      let index = data.relationships.tracks.data.findIndex((x) => x.id == item.id);
+      let index = data.relationships.tracks.data.findIndex((x) => x.id === item.id);
       if (index > -1) {
         data.relationships.tracks.data.splice(index, 1);
       }
@@ -398,9 +399,9 @@ const Playlist = ({ data }: { data: object }) => {
   async function menu(event) {
     let artistId = null;
 
-    if (typeof data.relationships.artists != "undefined") {
+    if (typeof data.relationships.artists !== "undefined") {
       artistId = data.relationships.artists.data[0].id;
-      if (data.relationships.artists.data[0].type == "library-artists") {
+      if (data.relationships.artists.data[0].type === "library-artists") {
         artistId = data.relationships.artists.data[0].relationships.catalog.data[0].id;
       }
     }
@@ -492,15 +493,15 @@ const Playlist = ({ data }: { data: object }) => {
 
     try {
       let rating = await app.getRating(self.data);
-      if (rating == 0) {
-        menuItems.headerItems.find((x) => x.id == "love").disabled = false;
-        menuItems.headerItems.find((x) => x.id == "dislike").disabled = false;
-      } else if (rating == 1) {
-        menuItems.headerItems.find((x) => x.id == "unlove").hidden = false;
-        menuItems.headerItems.find((x) => x.id == "love").hidden = true;
-      } else if (rating == -1) {
-        menuItems.headerItems.find((x) => x.id == "undo_dislike").hidden = false;
-        menuItems.headerItems.find((x) => x.id == "dislike").hidden = true;
+      if (rating === 0) {
+        menuItems.headerItems.find((x) => x.id === "love").disabled = false;
+        menuItems.headerItems.find((x) => x.id === "dislike").disabled = false;
+      } else if (rating === 1) {
+        menuItems.headerItems.find((x) => x.id === "unlove").hidden = false;
+        menuItems.headerItems.find((x) => x.id === "love").hidden = true;
+      } else if (rating === -1) {
+        menuItems.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
+        menuItems.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
     } catch (err) {}
   }
@@ -512,7 +513,7 @@ const Playlist = ({ data }: { data: object }) => {
   function getFormattedDate() {
     let date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
     let prefix = "";
-    if (date == null || date === "") return "";
+    if (date === null || date === "") return "";
     switch (date) {
       case data.attributes.releaseDate:
         prefix = app.getLz("term.time.released") + " ";
@@ -539,7 +540,7 @@ const Playlist = ({ data }: { data: object }) => {
         }).format(releaseDate);
       } catch (e) {
         // use the format in json instead
-        if (app.getLz("date.format") != null) {
+        if (app.getLz("date.format") !== null) {
           formatted = new app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
         } else {
           formatted = new Intl.DateTimeFormat("en-US", {
@@ -568,7 +569,7 @@ const Playlist = ({ data }: { data: object }) => {
     //console.log("1")
     const kind = data.attributes.playParams?.kind ?? data.type ?? "";
     //console.log("1")
-    if (kind == "podcast-episodes") {
+    if (kind === "podcast-episodes") {
       kind = "episode";
     }
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
@@ -576,12 +577,12 @@ const Playlist = ({ data }: { data: object }) => {
     let query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
 
     app.mk.stop().then(() => {
-      if (id != "ciderlocal") {
+      if (id !== "ciderlocal") {
         app.mk.setQueue({ [truekind]: [id], parameters: { l: app.mklang } }).then(function () {
           app.mk.play().then(function () {
             if (query.length > 100) {
               let u = query.slice(100);
-              if (app.mk.shuffleMode == 1) {
+              if (app.mk.shuffleMode === 1) {
                 shuffleArray(u);
               }
               app.mk.queue.append(u);
@@ -599,7 +600,7 @@ const Playlist = ({ data }: { data: object }) => {
     });
   }
   function navClass(data) {
-    if (data && typeof data.views != "undefined") return "";
+    if (data && typeof data.views !== "undefined") return "";
     return "d-none";
   }
   async function getCopiedPlayListSongs(event) {
@@ -654,7 +655,7 @@ const Playlist = ({ data }: { data: object }) => {
   function toggleSearch() {
     showSearch = !showSearch;
 
-    if (!showSearch && searchQuery != "") {
+    if (!showSearch && searchQuery !== "") {
       // Clear search query if the search bar becomes hidden
       searchQuery = "";
       search();
@@ -668,7 +669,7 @@ const Playlist = ({ data }: { data: object }) => {
   function search() {
     let filtered = [];
 
-    if (searchQuery == "") {
+    if (searchQuery === "") {
       filtered = data.relationships.tracks.data;
     } else {
       filtered = data.relationships.tracks.data.filter((item) => {
@@ -676,10 +677,10 @@ const Playlist = ({ data }: { data: object }) => {
         let searchTerm = searchQuery.toLowerCase();
         let artistName = "";
         let albumName = "";
-        if (item.attributes.artistName != null) {
+        if (item.attributes.artistName !== null) {
           artistName = item.attributes.artistName.toLowerCase();
         }
-        if (item.attributes.albumName != null) {
+        if (item.attributes.albumName !== null) {
           albumName = item.attributes.albumName.toLowerCase();
         }
 
@@ -691,7 +692,7 @@ const Playlist = ({ data }: { data: object }) => {
 
         let match = itemName.includes(searchTerm) || artistName.includes(searchTerm);
         // only include album name in playlists
-        // allows to search for the title track (itemName == albumName)
+        // allows to search for the title track (itemName === albumName)
         if (inPlaylist) match = match || albumName.includes(searchTerm);
 
         if (match) return item;
@@ -711,27 +712,27 @@ const Playlist = ({ data }: { data: object }) => {
     <div id="cider-playlist">
       <div
         className="content-inner playlist-page"
-        className="classes"
-        is-album="isAlbum()"
-        v-if="data != [] && data.attributes != null"
-        style={{ bgColor: data.attributes.artwork != null && data.attributes.artwork["bgColor"] != null ? "#" + data.attributes.artwork.bgColor : "" }}>
-        <template v-if="app.playlists.loadingState == 0">
+        className={classes}
+        is-album={isAlbum()}
+        v-if={data !== [] && data.attributes !== null}
+        style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
+        <template v-if={app.playlists.loadingState === 0}>
           <div className="content-inner centered">
             <div className="spinner" />
           </div>
         </template>
-        <template v-if="app.playlists.loadingState == 1">
+        <template v-if={app.playlists.loadingState === 1}>
           <div
             className="playlist-display"
             style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-            mouseoverself="minClass(false)">
+            mouseoverself={minClass(false)}>
             <div className="playlistInfo">
               <div
                 className="playlist-hero"
-                v-if="hasHero()">
+                v-if={hasHero()}>
                 <MediaItemArtwork
                   shadow="none"
-                  url="hasHero()"
+                  url={hasHero()}
                   size="2160"
                 />
                 <div
@@ -742,37 +743,37 @@ const Playlist = ({ data }: { data: object }) => {
               <div className="row">
                 <div
                   className="col-auto cider-flex-center"
-                  mouseover="minClass(false)">
+                  onMouseOver={() => minClass(false)}>
                   <div className="mediaContainer">
                     <MediaItemArtwork
                       shadow="large"
                       video-priority="true"
-                      url="(data.attributes != null && data.attributes.artwork != null) ? data.attributes.artwork.url : ((data.relationships != null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes != null) ? ((data.relationships.tracks.data[0].attributes.artwork != null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')"
-                      video="(data.attributes != null && data.attributes.editorialVideo != null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                      url="(data.attributes !== null && data.attributes.artwork !== null) ? data.attributes.artwork.url : ((data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null) ? ((data.relationships.tracks.data[0].attributes.artwork !== null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')"
+                      video="(data.attributes !== null && data.attributes.editorialVideo !== null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
                       size="500"
                     />
                   </div>
                 </div>
                 <div className="col playlist-info">
-                  <template v-if="!editorialNotesExpanded">
+                  <template v-if={!editorialNotesExpanded}>
                     <div>
                       <div
                         className="playlist-name"
-                        mouseover="minClass(false)"
+                        onMouseOver={() => minClass(false)}
                         onClick={() => editPlaylistName()}
-                        v-show="!nameEditing"
+                        v-show={!nameEditing}
                         style={{ color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
                         {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                       </div>
                       <div
                         className="playlist-name"
-                        mouseover="minClass(false)"
-                        v-show="nameEditing">
+                        onMouseOver={() => minClass(false)}
+                        v-show={nameEditing}>
                         <input
                           type="text"
                           spellcheck="false"
                           className="nameEdit"
-                          v-model="data.attributes.name"
+                          v-model={data.attributes.name}
                           blur="editPlaylist"
                           change="editPlaylist"
                           keydownenter="editPlaylist"
@@ -780,64 +781,63 @@ const Playlist = ({ data }: { data: object }) => {
                       </div>
                       <div
                         className="playlist-time genre"
-                        style={{ margin: "0px" }}
-                        style={{ color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
+                        style={{ margin: "0px", color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
                         {getAlbumGenre()}
                       </div>
                       <div
                         className="playlist-artist item-navigate"
-                        v-if="getArtistName(data) != '' && !useArtistChip"
+                        v-if={getArtistName(data) !== "" && !useArtistChip}
                         onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
                         {getArtistName(data)}
                       </div>
-                      <template v-if="useArtistChip">
+                      <template v-if={useArtistChip}>
                         <ArtistChip
-                          v-for="artist in data.relationships.artists?.data"
+                          v-for={artist in data.relationships.artists?.data}
                           style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                          item="artist"
+                          item={artist}
                         />
                       </template>
                       <div
                         className="playlist-desc"
                         style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                        v-if="(data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))">
+                        v-if={(data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))}>
                         <div
-                          v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) != null"
+                          v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null}
                           className="content"
-                          v-html="data.attributes.description?.short ?? data.attributes.editorialNotes?.short"
+                          v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
                           onClick={() => openInfoModal()}
                         />
                         <div
-                          v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null) && (descriptionEditing == false)"
-                          mouseover="minClass(false)"
+                          v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null) && (descriptionEditing === false)"
+                          onMouseOver={() => minClass(false)}
                           onClick={() => editPlaylistDescription()}
-                          v-html="(data.attributes.description?.standard ?? (data.attributes.editorialNotes?.standard ?? '')).substring(0, 255) +'...'"
+                          v-html={(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard ?? "").substring(0, 255) + "..."}
                         />
                         <div
-                          v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) != null) && (descriptionEditing)"
-                          mouseover="minClass(false)">
+                          v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null) && (descriptionEditing)"
+                          onMouseOver={() => minClass(false)}>
                           <input
                             type="text"
                             spellcheck="false"
                             className="descriptionEdit"
-                            v-model="data.attributes.description.standard"
+                            v-model={data.attributes.description.standard}
                             blur="editPlaylist"
                             change="editPlaylist"
                             keydownenter="editPlaylist"
                           />
                         </div>
-                        {/* <button v-if="(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) != null" className="more-btn"
+                        {/* <button v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null} className=}more-btn}
                                                 onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
                                             {app.getLz('term.showMore')}
                                         </button>  */}
                       </div>
                     </div>
                   </template>
-                  <template v-if="editorialNotesExpanded">
+                  <template v-if={editorialNotesExpanded}>
                     <div className="playlist-desc-expanded">
                       <div
                         className="content"
-                        v-html="((data.attributes.editorialNotes) ? (data.attributes.editorialNotes.standard ?? (data.attributes.editorialNotes.short ?? '') ) : (data.attributes.description ? (data.attributes.description.standard ?? (data.attributes.description.short ?? '')) : ''))"
+                        v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
                       />
                       <button
                         className="more-btn"
@@ -873,24 +873,24 @@ const Playlist = ({ data }: { data: object }) => {
                     <button
                       className="md-btn md-btn-icon"
                       style={{ minWidth: "180px" }}
-                      v-if="inLibrary!=null && confirm!=true"
+                      v-if={inLibrary !== null && confirm !== true}
                       onClick={() => confirmButton()}>
-                      <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
+                      <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
                       {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                     </button>
                     <button
                       className="md-btn md-btn-icon"
                       style={{ minWidth: "180px" }}
-                      v-if="confirm==true"
+                      v-if={confirm === true}
                       onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                      <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
+                      <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
                       {app.getLz("term.confirm")}
                     </button>
                     <select
-                      v-if="shouldPaginate"
+                      v-if={shouldPaginate}
                       className="md-select"
-                      v-model="prefs.scroll">
-                      <optgroup label="app.getLz('term.scroll')">
+                      v-model={prefs.scroll}>
+                      <optgroup label={app.getLz("term.scroll")}>
                         <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
                         <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                       </optgroup>
@@ -910,7 +910,7 @@ const Playlist = ({ data }: { data: object }) => {
                         style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
                         className="more-btn-round"
                         onClick={() => menu}
-                        aria-label="app.getLz('term.more')">
+                        aria-label={app.getLz("term.more")}>
                         <div
                           style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
                           className="svg-icon"
@@ -923,20 +923,20 @@ const Playlist = ({ data }: { data: object }) => {
             </div>
             <div
               className="artworkContainer"
-              v-if="data.attributes.artwork != null && !hasHero()">
+              v-if={data.attributes.artwork !== null && !hasHero()}>
               <ArtworkMaterial
-                url="data.attributes.artwork.url"
+                url={data.attributes.artwork.url}
                 size="500"
                 images="1"
               />
             </div>
             <button
               className="md-btn md-btn-small editTracksBtn"
-              v-if="(data.attributes.canEdit && data.type == 'library-playlists')"
+              v-if={data.attributes.canEdit && data.type === "library-playlists"}
               onClick={() => {
                 editing = !editing;
               }}>
-              <span v-if="!editing">
+              <span v-if={!editing}>
                 <div class="codicon codicon-edit" /> {$root.getLz("action.editTracklist")}
               </span>
               <span v-else>
@@ -976,24 +976,24 @@ const Playlist = ({ data }: { data: object }) => {
                   <button
                     className="md-btn md-btn-icon"
                     style={{ minWidth: "180px" }}
-                    v-if="inLibrary!=null && confirm!=true"
+                    v-if={inLibrary !== null && confirm !== true}
                     onClick={() => confirmButton()}>
-                    <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
+                    <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
                     {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                   </button>
                   <button
                     className="md-btn md-btn-icon"
                     style={{ minWidth: "180px" }}
-                    v-if="confirm==true"
+                    v-if={confirm === true}
                     onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                    <img className="(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'" />
+                    <img className={(!inLibrary) ? 'md-ico-add' : 'md-ico-remove'} />
                     {app.getLz("term.confirm")}
                   </button>
                   <select
-                    v-if="shouldPaginate"
+                    v-if={shouldPaginate}
                     className="md-select"
-                    v-model="prefs.scroll">
-                    <optgroup label="app.getLz('term.scroll')">
+                    v-model={prefs.scroll}>
+                    <optgroup label={app.getLz("term.scroll")}>
                       <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
                       <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                     </optgroup>
@@ -1005,7 +1005,7 @@ const Playlist = ({ data }: { data: object }) => {
                   className="more-btn-round"
                   style={{ float: right }}
                   onClick={() => menu}
-                  aria-label="app.getLz('term.more')">
+                  aria-label={app.getLz("term.more")}>
                   <div className="svg-icon" />
                 </button>
               </div>
@@ -1017,70 +1017,70 @@ const Playlist = ({ data }: { data: object }) => {
               className="track-pills pilldim fancy-pills"
               align="center"
               content-className="mt-3"
-              nav-wrapper-className="navClass(data)">
+              nav-wrapper-className={navClass(data)}>
               <b-tab
-                title="$root.getLz('term.tracks')"
+                title={$root.getLz("term.tracks")}
                 id="songList"
                 active>
                 <div
-                  wheel="minClass(true)"
-                  scroll="minClass(true)">
+                  onWheel={() => minClass(true)}
+                  onScroll={() => minClass(true)}>
                   <div className="">
                     <div
                       style={{ width: "100%" }}
                       onClick={() => minClass(true)}>
                       <div
-                        v-if="showSearch"
+                        v-if={showSearch}
                         className="search-input-container">
                         <div className="search-input--icon" />
                         <input
                           type="search"
                           spellcheck="false"
-                          placeholder="$root.getLz('term.search') + '...'"
-                          input="search()"
-                          v-model="searchQuery"
+                          placeholder={$root.getLz("term.search") + "..."}
+                          onInput={() => search()}
+                          v-model={searchQuery}
                           className="search-input"
                           ref="search-bar"
                         />
                       </div>
-                      <pagination
-                        v-if="shouldPaginate"
+                      <Pagination
+                        v-if={shouldPaginate}
                         style={{ marginTop: "10px" }}
-                        length="hasNestedPlaylist ? nestedDisplayLength: displayListing.length"
-                        pageSize="pageSize"
-                        scroll="prefs.scroll"
+                        length={hasNestedPlaylist ? nestedDisplayLength: displayListing.length}
+                        pageSize={pageSize}
+                        scroll={prefs.scroll}
                         scrollSelector="#songList"
                         onRangeChange="onRangeChange"
                       />
                       <draggable
                         options="{disabled: !editing}"
-                        v-model="data.relationships.tracks.data"
+                        v-model={data.relationships.tracks.data}
                         start="drag=true"
                         end="drag=false;put()">
-                        <template v-if="!hasNestedPlaylist">
+                        <template v-if={!hasNestedPlaylist}>
                           <MediaItemListItem
-                            item="item"
-                            parent="getItemParent(data)"
-                            index="index + start"
-                            showIndex="true"
-                            showIndexPlaylist="(data.attributes.playParams?.kind ?? data.type ?? '').includes('playlist')"
-                            context-ext="buildContextMenu()"
-                            v-bind:key="item.id"
-                            v-for="(item,index) in currentSlice"
+                            item={item}
+                            parent={getItemParent(data)}
+                            index={index + start}
+                            showIndex={true}
+                            showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? '').includes('playlist')}
+                            context-ext={buildContextMenu()}
+                            v-bind:key={item.id}
+                            v-for={(item, index) in currentSlice}
                           />
                         </template>
                         <template v-else>
-                          <div v-for="disc in nestedSlices">
+                          <div v-for={disc in nestedSlices}>
                             <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                             <MediaItemListItem
-                              item="item"
-                              parent="getItemParent(data)"
-                              index="index"
-                              showIndex="true"
-                              showIndexPlaylist="(data.attributes.playParams?.kind ?? data.type ?? '').includes('playlist')"
-                              context-ext="buildContextMenu()"
-                              v-bind:key="item.id"
-                              v-for="(item,index) in disc.tracks"
+                              item={item}
+                              parent={getItemParent(data)}
+                              index={index}
+                              showIndex={true}
+                              showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? '').includes('playlist')}
+                              context-ext={buildContextMenu()}
+                              v-bind:key={item.id}
+                              v-for={(item, index) in disc.tracks}
                             />
                           </div>
                         </template>
@@ -1089,15 +1089,15 @@ const Playlist = ({ data }: { data: object }) => {
                   </div>
                   <div
                     className="friends-info"
-                    v-if="itemBadges.length != 0">
+                    v-if={itemBadges.length !== 0}>
                     <div className="well">
                       <div className="badge-container">
                         <div
                           className="socialBadge"
                           title="`${badge.attributes.name} - ${badge.attributes.handle}`"
-                          v-for="badge in itemBadges">
+                          v-for={badge in itemBadges}>
                           <MediaItemArtwork
-                            url="badge.attributes.artwork.url"
+                            url={badge.attributes.artwork.url}
                             size="60"
                           />
                         </div>
@@ -1112,7 +1112,7 @@ const Playlist = ({ data }: { data: object }) => {
                     style={{ width: "50%" }}>
                     {data.attributes.copyright}
                   </div>
-                  <template v-if="(data.attributes?.playParams?.kind ?? data.type ?? '').includes('album') &&  data.relationships.catalog != null && data.relationships.catalog != null && data.relationships.catalog.data.length > 0">
+                  <template v-if={(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0}>
                     <div
                       className="playlist-time showExtended item-navigate"
                       style={{ color: "#fa586a", fontWeight: "bold" }}
@@ -1122,12 +1122,12 @@ const Playlist = ({ data }: { data: object }) => {
                   </template>
                 </div>
               </b-tab>
-              <template v-if="typeof data.views != 'undefined'">
+              <template v-if={typeof data.views !== "undefined"}>
                 <b-tab
                   lazy
-                  title="data.views[view].attributes.title"
-                  v-for="view in data.meta.views.order"
-                  v-if="data.views[view].data.length != 0">
+                  title={data.views[view].attributes.title}
+                  v-for={view in data.meta.views.order}
+                  v-if={data.views[view].data.length !== 0}>
                   <div>
                     <div className="row">
                       <div className="col">
@@ -1136,7 +1136,7 @@ const Playlist = ({ data }: { data: object }) => {
                     </div>
                     <div className="row">
                       <div className="col">
-                        <MediaitemScrollerHorizontal items="data.views[view].data" />
+                        <MediaitemScrollerHorizontal items={data.views[view].data} />
                       </div>
                     </div>
                   </div>

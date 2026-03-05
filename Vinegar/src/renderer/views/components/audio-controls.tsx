@@ -39,15 +39,15 @@ const Component = () => {
     <div id="audio-controls">
       <div
         className="modal-fullscreen addtoplaylist-panel"
-        clickself="app.modals.audioControls = false"
-        contextmenuself="app.modals.audioControls = false">
+        clickself={(app.modals.audioControls = false)}
+        contextmenuself={(app.modals.audioControls = false)}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{app.getLz("term.audioControls")}</div>
             <button
               className="close-btn"
               onClick={() => (app.modals.audioControls = false)}
-              aria-label="app.getLz('action.close')"
+              aria-label={app.getLz("action.close")}
             />
           </div>
           <div className="modal-content">
@@ -59,7 +59,7 @@ const Component = () => {
                   style={{ width: "100%", textAlign: "center", marginRight: "5px" }}
                   min="0"
                   step="2"
-                  v-model="volume"
+                  v-model={volume}
                 />
               </div>
             </div>
@@ -70,7 +70,7 @@ const Component = () => {
                   type="number"
                   style={{ width: "100%", textAlign: "center", marginRight: "5px" }}
                   min="0"
-                  v-model="volumeStep"
+                  v-model={volumeStep}
                 />
               </div>
             </div>
@@ -81,7 +81,7 @@ const Component = () => {
                   type="number"
                   style={{ width: "100%", textAlign: "center", marginRight: "5px" }}
                   min="0"
-                  v-model="maxVolume"
+                  v-model={maxVolume}
                 />
               </div>
             </div>
@@ -91,7 +91,7 @@ const Component = () => {
                 <label>
                   <input
                     type="checkbox"
-                    v-model="app.cfg.audio.advanced"
+                    v-model={app.cfg.audio.advanced}
                     switch
                   />
                 </label>

@@ -25,7 +25,7 @@ const Component = () => {
     await getArtistFeed();
     await getFavorites();
     await getRecentlyPlayed();
-    if (new Date().getMonth() == 11) {
+    if (new Date().getMonth() === 11) {
       seenReplay = false;
       localStorage.setItem("seenReplay", false);
     }
@@ -62,7 +62,7 @@ const Component = () => {
     return {
       name: "Remove from Favorites",
       action: function (item) {
-        let index = self.favoriteItems.findIndex((x) => x.id == item.id);
+        let index = self.favoriteItems.findIndex((x) => x.id === item.id);
         if (index > -1) {
           self.favoriteItems.splice(index, 1);
           self.app.cfg.home.favoriteItems = self.favoriteItems;
@@ -74,13 +74,13 @@ const Component = () => {
     let libraryPlaylists = [];
     let playlists = [];
     for (let item of favoriteItems) {
-      if (item.type == "library-playlists") {
+      if (item.type === "library-playlists") {
         libraryPlaylists.push(item.id);
-      } else if (item.type == "playlists") {
+      } else if (item.type === "playlists") {
         playlists.push(item.id);
       }
     }
-    if (playlists.length != 0) {
+    if (playlists.length !== 0) {
       app.mk.api.v3
         .music(`/v1/catalog/${app.mk.storefrontId}/playlists/${playlists.toString()}`, {
           l: this.$root.mklang,
@@ -89,7 +89,7 @@ const Component = () => {
           self.favorites.push(...playlistsData.data);
         });
     }
-    if (libraryPlaylists.length != 0) {
+    if (libraryPlaylists.length !== 0) {
       app.mk.api.v3
         .music(`v1/me/library/playlists/${playlists.toString()}`, {
           l: this.$root.mklang,
@@ -110,7 +110,7 @@ const Component = () => {
       const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
       chunkArtistData.forEach((chunkResult) =>
         chunkResult.data.data.forEach((item) => {
-          if (item.views["latest-release"].data.length != 0) {
+          if (item.views["latest-release"].data.length !== 0) {
             self.artistFeed.push(item.views["latest-release"].data[0]);
           }
         }),
@@ -141,7 +141,7 @@ const Component = () => {
         console.log(data.data.data[1]);
         try {
           self.madeForYou = data.data.data.filter((section) => {
-            if (section.meta.metrics.moduleType == "6") {
+            if (section.meta.metrics.moduleType === "6") {
               return section;
             }
           })[0].relationships.contents.data;
@@ -150,7 +150,7 @@ const Component = () => {
 
         try {
           self.friendsListeningTo = data.data.data.filter((section) => {
-            if (section.meta.metrics.moduleType == "11") {
+            if (section.meta.metrics.moduleType === "11") {
               return section;
             }
           })[0].relationships.contents.data;
@@ -167,7 +167,7 @@ const Component = () => {
   return (
     <div id="cider-home">
       <div className="content-inner home-page">
-        <div v-if="page == 'main'">
+        <div v-if={page === "main"}>
           <div className="row">
             <div className="col">
               <div className="row">
@@ -188,11 +188,11 @@ const Component = () => {
                 </div>
               </div>
               <div className="well artistfeed-well">
-                <template v-if="isSectionReady('recentlyPlayed')">
+                <template v-if={isSectionReady("recentlyPlayed")}>
                   <MediaItemListItem
-                    v-for="item in recentlyPlayed.limit(6)"
-                    item="item"
-                    v-bind:key="item.id"
+                    v-for={item in recentlyPlayed.limit(6)}
+                    item={item}
+                    v-bind:key={item.id}
                   />
                 </template>
                 <div
@@ -210,7 +210,7 @@ const Component = () => {
                   <button
                     className="cd-btn-seeall"
                     onClick={() => syncFavorites()}
-                    v-if="!syncingFavs">
+                    v-if={!syncingFavs}>
                     {app.getLz("home.syncFavorites")}
                   </button>
                   <div
@@ -228,16 +228,16 @@ const Component = () => {
               <div
                 className="well artistfeed-well"
                 style={{ marginTop: 0 }}>
-                <template v-if="artistFeed.length > 0">
+                <template v-if={artistFeed.length > 0}>
                   <MediaItemListItem
-                    v-for="item in artistFeed.limit(6)"
-                    item="item"
-                    v-bind:key="item.id"
+                    v-for={item in artistFeed.limit(6)}
+                    item={item}
+                    v-bind:key={item.id}
                   />
                 </template>
                 <div
                   className="spinner"
-                  v-else-if="followedArtists.length > 0"
+                  v-else-if={followedArtists.length > 0}
                 />
                 <div
                   className="no-artist"
@@ -248,21 +248,21 @@ const Component = () => {
               </div>
             </div>
           </div>
-          {/*            <div className="row" v-if="app.isDev"> */}
+          {/*            <div className="row" v-if={app.isDev}> */}
           {/*                <div className="col"> */}
           {/*                    <h3>Your Favorites</h3> */}
           {/*                    <div className="well"> */}
-          {/*                        <div className="hint-text" v-if="favorites.length == 0">Items you have added to your favorites will */}
+          {/*                        <div className="hint-text" v-if={favorites.length === 0}>Items you have added to your favorites will */}
           {/*                            appear here. */}
           {/*                        </div> */}
           {/*                        <MediaItemScrollerHorizontal kind="small" items="favorites" */}
-          {/*                                                       item="item" /> */}
+          {/*                                                       item={item} /> */}
           {/*                    </div> */}
           {/*                </div> */}
           {/*            </div> */}
           <div
             className="row"
-            v-if="!seenReplay">
+            v-if={!seenReplay}>
             <div className="col">
               <button
                 className="md-btn md-btn-block md-btn-replay--hero"
@@ -280,7 +280,7 @@ const Component = () => {
                 <div className="col-auto nopadding cider-flex-center">
                   <button
                     className="md-btn md-btn-replay"
-                    v-if="seenReplay"
+                    v-if={seenReplay}
                     onClick={() => $root.appRoute("replay")}>
                     {$root.getLz("term.replay")} {year}
                   </button>
@@ -289,7 +289,7 @@ const Component = () => {
               <div className="well">
                 <MediaItemScrollerHorizontal
                   items="madeForYou"
-                  v-if="isSectionReady('madeForYou')"
+                  v-if={isSectionReady("madeForYou")}
                 />
                 <div
                   className="spinner"
@@ -300,7 +300,7 @@ const Component = () => {
           </div>
           <div
             className="row"
-            v-if="friendsListeningTo && friendsListeningTo.length > 0">
+            v-if={friendsListeningTo && friendsListeningTo.length > 0}>
             <div className="col">
               <div className="row">
                 <div className="col nopadding">
@@ -317,7 +317,7 @@ const Component = () => {
               <div className="well">
                 <MediaItemScrollerHorizontal
                   items="friendsListeningTo"
-                  v-if="isSectionReady('friendsListeningTo')"
+                  v-if={isSectionReady("friendsListeningTo")}
                 />
                 <div
                   className="spinner"

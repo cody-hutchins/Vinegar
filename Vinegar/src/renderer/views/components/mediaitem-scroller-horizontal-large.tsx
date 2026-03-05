@@ -5,9 +5,9 @@ const MediaItemScrollerHorizontalLarge = ({ items }: { items: object[] }) => {
     <div id="mediaitem-scroller-horizontal-large">
       <vue-horizontal>
         <MediaItemSquare
-          item="item"
+          item={item}
           key="item?.id ?? ''"
-          v-for="item in items"
+          v-for={item in items}
         />
       </vue-horizontal>
     </div>

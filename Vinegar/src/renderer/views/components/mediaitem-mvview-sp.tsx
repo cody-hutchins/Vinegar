@@ -8,7 +8,7 @@ const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: object; imagesize
   return (
     <div id="mediaitem-mvview-sp">
       <div
-        v-if="(item.attributes?.editorialArtwork?.subscriptionHero?.url ?? item.attributes?.artwork?.url ?? '') !='' "
+        v-if={(item.attributes?.editorialArtwork?.subscriptionHero?.url ?? item.attributes?.artwork?.url ?? "") !== ""}
         style={{ position: "relative", display: "inline-flex" }}>
         <div
           clickself="log(item);app.routeView(item)"
@@ -23,7 +23,7 @@ const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: object; imagesize
               style={{ color: "darkgrey" }}>
               {badge ? badge?.designBadge : ""}
             </div>
-            <div className="title-browse-sp ">{badge != null && badge?.designTag != null ? badge?.designTag : (item.attributes?.name ?? "")}</div>
+            <div className="title-browse-sp ">{badge !== null && badge?.designTag !== null ? badge?.designTag : (item.attributes?.name ?? "")}</div>
             <div
               className="title-browse-sp semibold"
               style={{ color: "darkgrey" }}>
@@ -33,7 +33,7 @@ const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: object; imagesize
           <div className="artwork">
             <MediaItemArtwork
               url={item.attributes?.editorialArtwork?.subscriptionHero?.url ?? item.attributes?.artwork?.url}
-              video={item.attributes != null && item.attributes?.editorialVideo != null ? (item.attributes?.editorialVideo?.motionDetailSquare ? item.attributes?.editorialVideo?.motionDetailSquare?.video : item.attributes?.editorialVideo?.motionSquareVideo1x1 ? item?.attributes?.editorialVideo?.motionSquareVideo1x1?.video : "") : ""}
+              video={item.attributes !== null && item.attributes?.editorialVideo !== null ? (item.attributes?.editorialVideo?.motionDetailSquare ? item.attributes?.editorialVideo?.motionDetailSquare?.video : item.attributes?.editorialVideo?.motionSquareVideo1x1 ? item?.attributes?.editorialVideo?.motionSquareVideo1x1?.video : "") : ""}
               size="516"
               width="900"
             />

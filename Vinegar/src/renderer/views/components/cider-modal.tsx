@@ -9,8 +9,8 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
     search();
     $refs.searchInput.focus();
     $refs.searchInput.addEventListener("keydown", (e) => {
-      if (e.keyCode == 13) {
-        if (focused != "") {
+      if (e.keyCode === 13) {
+        if (focused !== "") {
           addToPlaylist(focused);
         }
       }
@@ -24,13 +24,13 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
   };
   const search = () => {
     focused = "";
-    if (searchQuery == "") {
+    if (searchQuery === "") {
       playlistSorted = playlists;
     } else {
       playlistSorted = playlists.filter((playlist) => {
         return playlist.attributes.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
       });
-      if (playlistSorted.length == 1) {
+      if (playlistSorted.length === 1) {
         focused = playlistSorted[0].id;
       }
     }
@@ -40,25 +40,25 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
       <template>
         <div
           className="modal-fullscreen modal-generic"
-          clickself="app.resetState()"
-          contextmenuself="app.resetState()">
+          clickself={app.resetState()}
+          contextmenuself={app.resetState()}>
           <div className="modal-window">
             <div className="modal-header">
               <div className="modal-title">{app.getLz("action.addToLibrary")}</div>
               <button
                 className="close-btn"
                 onClick={() => app.resetState()}
-                aria-label="app.getLz('action.close')"
+                aria-label={app.getLz("action.close")}
               />
             </div>
             <div className="modal-content">
               <button
                 className="playlist-item"
-                className="{ focused: playlist.id == focused }"
+                className="{ focused: playlist.id === focused }"
                 onClick={() => addToPlaylist(playlist.id)}
                 style={{ width: "100%" }}
-                v-for="playlist in playlistSorted"
-                v-if="playlist.attributes.canEdit && playlist.type != 'library-playlist-folders'">
+                v-for={playlist in playlistSorted}
+                v-if={playlist.attributes.canEdit && playlist.type !== "library-playlist-folders"}>
                 <div className="icon">{import("../svg/playlist.svg")}</div>
                 <div className="name">{playlist.attributes.name}</div>
               </button>
@@ -73,8 +73,8 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
                   ref="searchInput"
                   style={{ width: "100%" }}
                   spellcheck="false"
-                  placeholder="app.getLz('term.search') + '...'"
-                  v-model="searchQuery"
+                  placeholder={app.getLz("term.search") + "..."}
+                  v-model={searchQuery}
                   input="search()"
                   className="search-input"
                 />

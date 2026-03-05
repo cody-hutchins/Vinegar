@@ -1,3 +1,5 @@
+import MediaItemSquare from "../components/mediaitem-square.jsx";
+
 const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
   const app = this.$root;
   let triggerEnabled = true;
@@ -9,15 +11,15 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
   function getClasses() {
     if ((data?.data?.length ?? 0) > 0) {
       let item = data.data[0];
-      if (typeof item.kind != "undefined") {
+      if (typeof item.kind !== "undefined") {
         commonKind = item.kind;
         return item.kind;
       }
-      if (typeof item.attributes.playParams != "undefined") {
+      if (typeof item.attributes.playParams !== "undefined") {
         commonKind = item.attributes.playParams.kind;
         return item.attributes.playParams.kind;
       }
-      if (commonKind != "song") {
+      if (commonKind !== "song") {
         return "collection-list-square";
       } else {
         return "";
@@ -27,11 +29,11 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
     }
   }
   function getKind(item) {
-    if (typeof item.kind != "undefined") {
+    if (typeof item.kind !== "undefined") {
       //  commonKind = item.kind;
       return item.kind;
     }
-    if (typeof item.attributes.playParams != "undefined") {
+    if (typeof item.attributes.playParams !== "undefined") {
       //  commonKind = item.attributes.playParams.kind
       return item.attributes.playParams.kind;
     }
@@ -46,7 +48,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
     });
   }
   function getNext() {
-    if (typeof data.next == "undefined") {
+    if (typeof data.next === "undefined") {
       return;
     }
     loading = true;
@@ -94,49 +96,48 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
       <div className="content-inner collection-page">
         <h3
           className="header-text"
-          v-observe-visibility="{callback: headerVisibility}">
+          v-observe-visibility={{callback: headerVisibility}}>
           {title}
         </h3>
         <div
-          v-if="data['data'] != 'null'"
-          className="well itemContainer"
-          className="getClasses()">
-          <template v-for="(item, key) in data.data">
-            <template v-if="item.type == 'artists'">
-              <MediaItemSquare item="item" />
+          v-if={data["data"] !== "null"}
+          className={"well itemContainer " + getClasses()}>
+          <template v-for={(item, key) in data.data}>
+            <template v-if={item.type === "artists"}>
+              <MediaItemSquare item={item} />
             </template>
             <template v-else>
               <MediaItemListItem
-                v-if="getKind(item) == 'song'"
-                index="key"
-                item="item"
+                v-if={getKind(item) === "song"}
+                index={key}
+                item={item}
               />
               <MediaItemSquare
                 v-else
-                item="item"
-                type="getKind(item)"
+                item={item}
+                type={getKind(item)}
               />
             </template>
           </template>
           <button
-            v-if="triggerEnabled"
+            v-if={triggerEnabled}
             style={{ opacity: 0, height: "32px" }}
-            v-observe-visibility="{callback: visibilityChanged}">
+            v-observe-visibility={{callback: visibilityChanged}}>
             {app.getLz("term.showMore")}
           </button>
         </div>
         <transition name="fabfade">
           <button
             className="top-fab"
-            v-show="showFab"
+            v-show={showFab}
             onClick={() => scrollToTop()}
-            aria-label="app.getLz('action.scrollToTop')">
+            aria-label={app.getLz("action.scrollToTop")}>
             {import("../svg/arrow-up.svg")}
           </button>
         </transition>
         <div
           className="well itemContainer"
-          v-show="loading">
+          v-show={loading}>
           <div className="spinner" />
         </div>
       </div>

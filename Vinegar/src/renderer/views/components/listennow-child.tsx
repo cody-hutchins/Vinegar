@@ -12,7 +12,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
     app.showCollection(recom.relationships.contents, recom.attributes.title ? recom.attributes.title.stringForDisplay : "", "listen_now");
   };
   const navigateContent = async (id) => {
-    if (typeof id != "string") {
+    if (typeof id !== "string") {
       app.routeView(id);
     } else {
       try {
@@ -45,19 +45,19 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   return (
     <div id="listennow-child">
       <div v-observe-visibility="{callback: visibilityChanged}">
-        <template v-if="isVisible && recom.attributes.display.kind != 'MusicSuperHeroShelf'">
+        <template v-if={isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf"}>
           <div className="row">
             <div
               className="col"
-              v-if="recom?.relationships['primary-content']?.data?.length > 0"
+              v-if={recom?.relationships["primary-content"]?.data?.length > 0}
               style={{ display: "flex", marginBlock: "1rem" }}>
               <div
                 onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
                 className="listennow-chip"
                 style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
-                className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type == 'artists'  }">
+                className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }">
                 <MediaItemArtwork
-                  v-if="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork != null"
+                  v-if={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null}
                   url="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork?.url"
                   size="100"
                 />
@@ -83,7 +83,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
             </div>
             <div
               className="col-auto cider-flex-center"
-              v-if="recom.relationships.contents.data.length >= 10">
+              v-if={recom.relationships.contents.data.length >= 10}>
               <button
                 className="cd-btn-seeall"
                 onClick={() => showCollection(recom)}>
@@ -91,17 +91,17 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
               </button>
             </div>
           </div>
-          <template v-if="recom.attributes.display.kind == 'MusicCoverShelf' || recom.attributes.display.kind == 'MusicCircleCoverShelf'">
-            <MediaItemScrollerHorizontalLarge items="recom.relationships.contents.data.limit(10)" />
+          <template v-if={recom.attributes.display.kind === "MusicCoverShelf" || recom.attributes.display.kind === "MusicCircleCoverShelf"}>
+            <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)} />
           </template>
           <template v-else>
             <MediaItemScrollerHorizontalSP
               withReason="index==0"
-              items="recom.relationships.contents.data.limit(10)"
+              items={recom.relationships.contents.data.limit(10)}
             />
           </template>
         </template>
-        <template v-else-if="recom.attributes.display.kind != 'MusicSuperHeroShelf'">
+        <template v-else-if={recom.attributes.display.kind !== 'MusicSuperHeroShelf'}>
           <div style={{ height: "330px" }} />
         </template>
       </div>

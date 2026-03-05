@@ -71,9 +71,9 @@ const Component = () => {
                   type="search"
                   style={{ width: "100%" }}
                   spellcheck="false"
-                  placeholder="$root.getLz('term.search') + '...'"
-                  input="$root.searchLibraryArtists"
-                  v-model="library.artists.search"
+                  placeholder={$root.getLz("term.search") + "..."}
+                  input={$root.searchLibraryArtists}
+                  v-model={library.artists.search}
                   className="search-input"
                 />
               </div>
@@ -83,15 +83,15 @@ const Component = () => {
                 show-duration="false"
                 show-meta-data="true"
                 show-library-status="false"
-                item="item"
-                v-for="item in library.artists.displayListing"
+                item={item}
+                v-for={item in library.artists.displayListing}
               />
             </div>
           </div>
           <div className="episodes-list">
             <div
               className="episodes-inline-info"
-              v-if="clready">
+              v-if={clready}>
               <InlineCollectionList
                 parentSelector="'.episodes-list'"
                 data="clresponse"
@@ -255,7 +255,7 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
     let parent = parent;
     let childIndex = index;
     console.log(item, parent, childIndex);
-    if (parent != null && childIndex != null) {
+    if (parent !== null && childIndex !== null) {
       app.queueParentandplayChild(parent, childIndex, item);
     } else {
       app.playMediaItemById(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.url);
@@ -268,10 +268,10 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
         onClick={() => select}
         className={`cd-mediaitem-list-item ${app.select_hasMediaItem(guid) ? "mediaitem-selected" : ""}`}
         onContextMenu={contextMenu}>
-        <template v-if="isVisible">
+        <template v-if={isVisible}>
           <div
             className="artwork"
-            v-if="showArtwork == true">
+            v-if={showArtwork === true}>
             <MediaItemArtwork
               url={getArtwork()}
               size="50"

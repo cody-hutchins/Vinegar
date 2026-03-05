@@ -9,15 +9,15 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
     search();
     this.$refs.searchInput.focus();
     this.$refs.searchInput.addEventListener("keydown", (e) => {
-      if (e.keyCode == 13) {
-        if (focused != "") {
+      if (e.keyCode === 13) {
+        if (focused !== "") {
           addToPlaylist(focused);
         }
       }
     });
   }
   function playlistSelect(playlist) {
-    if (playlist.type != "library-playlist-folders") {
+    if (playlist.type !== "library-playlist-folders") {
       addToPlaylist(playlist.id);
     }
   }
@@ -26,13 +26,13 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
   }
   function search() {
     focused = "";
-    if (searchQuery == "") {
+    if (searchQuery === "") {
       playlistSorted = playlists;
     } else {
       playlistSorted = playlists.filter((playlist) => {
         return playlist.attributes.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
       });
-      if (playlistSorted.length == 1) {
+      if (playlistSorted.length === 1) {
         focused = playlistSorted[0].id;
       }
     }
@@ -42,15 +42,15 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
       <template>
         <div
           className="modal-fullscreen addtoplaylist-panel"
-          clickself="app.resetState()"
-          contextmenuself="app.resetState()">
+          clickself={app.resetState()}
+          contextmenuself={app.resetState()}>
           <div className="modal-window">
             <div className="modal-header">
               <div className="modal-title">{app.getLz("action.addToPlaylist")}</div>
               <button
                 className="close-btn"
                 onClick={() => app.resetState()}
-                aria-label="app.getLz('action.close')"
+                aria-label={app.getLz("action.close")}
               />
             </div>
             <div className="modal-content">
@@ -63,9 +63,9 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
               </button>
               <SidebarPlaylist
                 playlist-select="playlistSelect"
-                v-for="item in $root.getPlaylistFolderChildren('p.playlistsroot')"
-                v-bind:key="item.id"
-                item="item"
+                v-for={item in $root.getPlaylistFolderChildren("p.playlistsroot")}
+                v-bind:key={item.id}
+                item={item}
               />
             </div>
             <div className="modal-search">
@@ -78,9 +78,9 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
                   ref="searchInput"
                   style={{ width: "100%" }}
                   spellcheck="false"
-                  placeholder="app.getLz('term.search') + '...'"
-                  v-model="searchQuery"
-                  input="search()"
+                  placeholder={app.getLz("term.search") + "..."}
+                  v-model={searchQuery}
+                  onInput={() => search()}
                   className="search-input"
                 />
               </div>

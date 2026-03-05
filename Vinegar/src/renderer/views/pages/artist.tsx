@@ -137,12 +137,12 @@ const Artist = ({ data }: { data: object }) => {
         className="[(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9) || hasHero()) ? 'animated' : '']">
         <div
           className="['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"
-          key="data.id"
+          key={data.id}
           v-observe-visibility="{callback: isHeaderVisible}">
           <AnimatedArtworkView
             priority="true"
-            v-if="hasAnimated()"
-            video="data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"
+            v-if={hasAnimated()}
+            video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? (data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? '')"
           />
           <div
             className="header-content"
@@ -153,10 +153,10 @@ const Artist = ({ data }: { data: object }) => {
                 style={{ width: auto }}>
                 <div
                   className="artist-image"
-                  v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9))&& !hasHero()">
+                  v-if={!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()}>
                   <MediaItemArtwork
                     shadow="large"
-                    url="data.attributes.artwork ? data.attributes.artwork.url : ''"
+                    url={data.attributes.artwork ? data.attributes.artwork.url : ''}
                     size="190"
                     type="artists"
                   />
@@ -167,7 +167,7 @@ const Artist = ({ data }: { data: object }) => {
                         app.mk.play();
                       })
                     }
-                    aria-label="app.getLz('term.play')">
+                    aria-label={app.getLz("term.play")}>
                     {import("../svg/play.svg")}
                   </button>
                 </div>
@@ -183,7 +183,7 @@ const Artist = ({ data }: { data: object }) => {
                       app.mk.play();
                     })
                   }
-                  aria-label="app.getLz('term.play')">
+                  aria-label={app.getLz("term.play")}>
                   {import("../svg/play.svg")}
                 </button>
                 <h1>{data.attributes.name}</h1>
@@ -193,32 +193,32 @@ const Artist = ({ data }: { data: object }) => {
               className="more-btn-round favorite"
               onClick={() => artistMenu}
               style={{ pointerEvents: all }}
-              aria-label="app.getLz('term.more')">
+              aria-label={app.getLz("term.more")}>
               <div className="svg-icon" />
             </button>
             <button
               className="more-btn-round menu"
               onClick={() => artistMenu}
               style={{ pointerEvents: all }}
-              aria-label="app.getLz('term.more')">
+              aria-label={app.getLz("term.more")}>
               <div className="svg-icon" />
             </button>
           </div>
           <div
             className="artworkContainer"
-            v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()">
+            v-if={!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()}>
             <ArtworkMaterial
-              url="data.attributes.artwork.url"
+              url={data.attributes.artwork.url}
               size="190"
               images="1"
             />
           </div>
           <div
             className="artist-hero"
-            v-if="hasHero() && !hasAnimated()">
+            v-if={hasHero() && !hasAnimated()}>
             <MediaItemArtwork
               shadow="none"
-              url="hasHero()"
+              url={hasHero()}
               size="2048"
             />
           </div>
@@ -236,7 +236,7 @@ const Artist = ({ data }: { data: object }) => {
                     app.mk.play();
                   })
                 }
-                aria-label="app.getLz('term.play')">
+                aria-label={app.getLz("term.play")}>
                 {import("../svg/play.svg")}
               </button>
             </div>
@@ -247,7 +247,7 @@ const Artist = ({ data }: { data: object }) => {
               <button
                 className="more-btn-round menu"
                 onClick={() => artistMenu}
-                aria-label="app.getLz('term.more')">
+                aria-label={app.getLz("term.more")}>
                 <div className="svg-icon" />
               </button>
             </div>
@@ -256,23 +256,23 @@ const Artist = ({ data }: { data: object }) => {
         <div className="artist-body">
           <div
             className="arow well"
-            className="{arowb: data.views['latest-release'].data.length == 0}">
+            className="{arowb: data.views['latest-release'].data.length === 0}">
             <div
               className="latestRelease"
-              v-if="data.views['latest-release'].data.length != 0">
+              v-if={data.views["latest-release"].data.length !== 0}>
               <h3>{app.getLz("term.latestReleases")}</h3>
               <div style={{ width: "auto", margin: "0 auto" }}>
                 <MediaItemSquare
                   kind="card"
                   no-scale="true"
-                  v-for="song in data.views['latest-release'].data"
-                  item="song"
+                  v-for={song in data.views["latest-release"].data}
+                  item={song}
                 />
               </div>
             </div>
             <div
               className="topSongs"
-              v-if="data.views['top-songs']">
+              v-if={data.views["top-songs"]}>
               <div className="row">
                 <div
                   className="col"
@@ -281,7 +281,7 @@ const Artist = ({ data }: { data: object }) => {
                 </div>
                 <div
                   className="col-auto cider-flex-center"
-                  v-if="data.views['top-songs'].data.length >= 20"
+                  v-if={data.views["top-songs"].data.length >= 20}
                   style={{ padding: 0 }}>
                   <button
                     className="cd-btn-seeall"
@@ -295,7 +295,7 @@ const Artist = ({ data }: { data: object }) => {
                   className="col cider-flex-center"
                   style={{ padding: 0 }}>
                   <div className="mediaitem-list-item__grid">
-                    <ListitemHorizontal items="data.views['top-songs'].data.limit(20)" />
+                    <ListitemHorizontal items={data.views['top-songs'].data.limit(20)} />
                   </div>
                 </div>
               </div>
@@ -304,15 +304,15 @@ const Artist = ({ data }: { data: object }) => {
           <div className="row well">
             <div className="col">
               <template
-                v-for="(view) in data.meta.views.order"
-                v-if="(data.views[view].data.length != 0) && (view != 'latest-release') && (view != 'top-songs')">
+                v-for={view in data.meta.views.order}
+                v-if={data.views[view].data.length !== 0 && view !== "latest-release" && view !== "top-songs"}>
                 <div className="row">
                   <div className="col">
                     <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
                   </div>
                   <div
                     className="col-auto cider-flex-center"
-                    v-if="data.views[view].data.length >= 10">
+                    v-if={data.views[view].data.length >= 10}>
                     <button
                       className="cd-btn-seeall"
                       onClick={() => app.showArtistView(data.id, data.attributes.name + " - " + data.views[view].attributes.title, view)}>
@@ -320,33 +320,30 @@ const Artist = ({ data }: { data: object }) => {
                     </button>
                   </div>
                 </div>
-                <template
-                  v-if="!((data.views[view].attributes.title ?
-                        data.views[view].attributes.title : '???').includes('Video') || (data.views[view].attributes.title ?
-                        data.views[view].attributes.title : '???').includes('More To See'))">
-                  <MediaItemScrollerHorizontalLarge items="data.views[view].data.limit(10)" />
+                <template v-if={!((data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") || (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See"))}>
+                  <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)} />
                 </template>
                 <template v-else>
-                  <MediaItemScrollerHorizontalMVView items="data.views[view].data.limit(10)" />
+                  <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)} />
                 </template>
               </template>
               <div className="row">
                 <div
                   className="col"
-                  v-if="data.attributes.artistBio">
+                  v-if={data.attributes.artistBio}>
                   <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
-                  <p v-html="data.attributes.artistBio" />
+                  <p v-html={data.attributes.artistBio} />
                 </div>
                 <div className="col">
-                  <div v-if="data.attributes.origin">
+                  <div v-if={data.attributes.origin}>
                     <h3>{data.attributes.isGroup ? "Origin" : "Hometown"}</h3>
                     {data.attributes.origin}
                   </div>
-                  <div v-if="data.attributes.bornOrFormed">
+                  <div v-if={data.attributes.bornOrFormed}>
                     <h3>{data.attributes.isGroup ? "Formed" : "Born"}</h3>
                     {data.attributes.bornOrFormed}
                   </div>
-                  <div v-if="data.attributes.genreNames">
+                  <div v-if={data.attributes.genreNames}>
                     <h3>{app.getLz("term.sortBy.genre")}</h3>
                     {data.attributes.genreNames.join(", ")}
                   </div>

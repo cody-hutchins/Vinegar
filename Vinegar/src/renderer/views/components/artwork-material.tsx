@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size: string | number; images: string | number }) => {
   let src = "";
   function mounted() {
-    src = app.getMediaItemArtwork(url, size);
   }
+  useEffect(() => {
+    src = app.getMediaItemArtwork(url, size);
+  }, []);
   return (
     <div id="artwork-material">
       <div className="artworkMaterial">

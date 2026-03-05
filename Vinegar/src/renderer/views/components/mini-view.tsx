@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
   const app = this.$root;
@@ -33,7 +34,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
         <div
           className="player-pin"
           title="Pin to Top"
-          v-if="app.cfg.visual.miniplayer_top_toggle === false"
+          v-if={app.cfg.visual.miniplayer_top_toggle === false}
           onClick={() => app.pinMiniPlayer()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +50,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
         <div
           className="player-pin"
           title="Unpin to Top"
-          v-if="app.cfg.visual.miniplayer_top_toggle === true"
+          v-if={app.cfg.visual.miniplayer_top_toggle === true}
           onClick={() => app.pinMiniPlayer(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,9 +78,9 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
             <defs>
               <radialGradient
                 gradientUnits="userSpaceOnUse"
-                cx="10.5"
-                cy="10.5"
-                r="10.5"
+                cx={10.5}
+                cy={10.5}
+                r={10.5}
                 id="gradient-0">
                 <stop
                   offset="0"
@@ -104,16 +105,16 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
             onClick={() => app.miniPlayer(false)}>
             <MediaItemArtwork
               size="600"
-              url="image ?? ''"
+              url={image ?? ''}
             />
           </div>
           <div className="controls-parents">
-            <template v-if="app.mkReady()">
+            <template v-if={app.mkReady()}>
               <div
                 className="app-playback-controls"
-                mouseover="app.chrome.progresshover = true"
-                mouseleave="app.chrome.progresshover = false"
-                contextmenu="app.nowPlayingContextMenu">
+                onMouseOver={() => {app.chrome.progresshover = true}}
+                onMouseLeave={() => {app.chrome.progresshover = false}}
+                onContextMenu={app.nowPlayingContextMenu}>
                 <div className="playback-info">
                   <div className="song-name">{app.mk.nowPlayingItem["attributes"]["name"]}</div>
                   <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden", marginBottom: "5px" }}>
@@ -141,13 +142,13 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
 
                     <input
                       type="range"
-                      step="0.01"
+                      step={0.01}
                       min="0"
                       style={app.progressBarStyle()}
-                      input="app.playerLCD.desiredDuration = $event.target.value;app.playerLCD.userInteraction = true"
-                      mouseup="app.mk.seekToTime($event.target.value);app.playerLCD.desiredDuration = 0;app.playerLCD.userInteraction = false"
-                      max="app.mk.currentPlaybackDuration"
-                      value="app.getSongProgress()"
+                      onInput={() => {app.playerLCD.desiredDuration = $event.target.value;app.playerLCD.userInteraction = true}}
+                      onMouseUp={() => {app.mk.seekToTime($event.target.value);app.playerLCD.desiredDuration = 0;app.playerLCD.userInteraction = false}}
+                      max={app.mk.currentPlaybackDuration}
+                      value={app.getSongProgress()}
                     />
                   </div>
                 </div>
@@ -155,18 +156,18 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button--small shuffle"
-                      v-if="$root.mk.shuffleMode == 0"
-                      className="$root.isDisabled() && 'disabled'"
+                      v-if={$root.mk.shuffleMode === 0}
+                      className={$root.isDisabled() && 'disabled'}
                       onClick={() => ($root.mk.shuffleMode = 1)}
-                      title="$root.getLz('term.enableShuffle')"
+                      title={$root.getLz('term.enableShuffle')}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small shuffle active"
                       v-else
-                      className="$root.isDisabled() && 'disabled'"
+                      className={$root.isDisabled() && 'disabled'}
                       onClick={() => ($root.mk.shuffleMode = 0)}
-                      title="$root.getLz('term.disableShuffle')"
+                      title={$root.getLz('term.disableShuffle')}
                       v-b-tooltiphover
                     />
                   </div>
@@ -174,8 +175,8 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button previous"
                       onClick={() => $root.prevButton()}
-                      className="$root.isPrevDisabled() && 'disabled'"
-                      title="$root.getLz('term.previous')"
+                      className={$root.isPrevDisabled() && 'disabled'}
+                      title={$root.getLz('term.previous')}
                       v-b-tooltiphover
                     />
                   </div>
@@ -183,22 +184,22 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button stop"
                       onClick={() => $root.mk.stop()}
-                      v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
-                      title="$root.getLz('term.stop')"
+                      v-if={$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === 'radioStation'}
+                      title={$root.getLz('term.stop')}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button pause"
                       onClick={() => $root.mk.pause()}
-                      v-else-if="$root.mk.isPlaying"
-                      title="$root.getLz('term.pause')"
+                      v-else-if={$root.mk.isPlaying}
+                      title={$root.getLz('term.pause')}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button play"
                       onClick={() => $root.mk.play()}
                       v-else
-                      title="$root.getLz('term.play')"
+                      title={$root.getLz('term.play')}
                       v-b-tooltiphover
                     />
                   </div>
@@ -206,34 +207,34 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="playback-button next"
                       onClick={() => $root.skipToNextItem()}
-                      className="$root.isNextDisabled() && 'disabled'"
-                      title="$root.getLz('term.next')"
+                      className={$root.isNextDisabled() && 'disabled'}
+                      title={$root.getLz('term.next')}
                       v-b-tooltiphover
                     />
                   </div>
                   <div className="app-chrome-item display--large">
                     <button
                       className="playback-button--small repeat"
-                      v-if="$root.mk.repeatMode == 0"
-                      className="$root.isDisabled() && 'disabled'"
+                      v-if={$root.mk.repeatMode === 0}
+                      className={$root.isDisabled() && 'disabled'}
                       onClick={() => ($root.mk.repeatMode = 1)}
-                      title="$root.getLz('term.enableRepeatOne')"
+                      title={$root.getLz('term.enableRepeatOne')}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small repeat repeatOne"
                       onClick={() => ($root.mk.repeatMode = 2)}
-                      className="$root.isDisabled() && 'disabled'"
-                      v-else-if="$root.mk.repeatMode == 1"
-                      title="$root.getLz('term.disableRepeatOne')"
+                      className={$root.isDisabled() && 'disabled'}
+                      v-else-if={$root.mk.repeatMode === 1}
+                      title={$root.getLz('term.disableRepeatOne')}
                       v-b-tooltiphover
                     />
                     <button
                       className="playback-button--small repeat active"
                       onClick={() => ($root.mk.repeatMode = 0)}
-                      className="$root.isDisabled() && 'disabled'"
-                      v-else-if="$root.mk.repeatMode == 2"
-                      title="$root.getLz('term.disableRepeat')"
+                      className={$root.isDisabled() && 'disabled'}
+                      v-else-if={$root.mk.repeatMode === 2}
+                      title={$root.getLz('term.disableRepeat')}
                       v-b-tooltiphover
                     />
                   </div>
@@ -243,18 +244,18 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <button
                       className="volume-button--small volume"
                       onClick={() => app.muteButtonPressed()}
-                      className="{'active': app.cfg.audio.volume == 0}"
+                      className="{'active': app.cfg.audio.volume === 0}"
                     />
                     <input
                       type="range"
                       className="slider"
-                      wheel="app.volumeWheel"
-                      step="app.cfg.audio.volumeStep"
+                      wheel={app.volumeWheel}
+                      step={app.cfg.audio.volumeStep}
                       min="0"
-                      max="app.cfg.audio.maxVolume"
-                      v-model="app.mk.volume"
-                      v-if="typeof app.mk.volume != 'undefined'"
-                      change="app.checkMuteChange()"
+                      max={app.cfg.audio.maxVolume}
+                      v-model={app.mk.volume}
+                      v-if={typeof app.mk.volume !== 'undefined'}
+                      change={app.checkMuteChange()}
                     />
                   </div>
                 </div>
@@ -265,24 +266,24 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
       </div>
       {/* <div className="row fs-row">
 
-        <div className="col right-col" v-if="tabMode != ''">
+        <div className="col right-col" v-if={tabMode !== ''}>
             <div className="fs-info">
                 <div>Name</div>
                 <div>Name</div>
                 <div>Name</div>
             </div>
-            <div className="lyrics-col" v-if="tabMode == 'lyrics'">
+            <div className="lyrics-col" v-if={tabMode === 'lyrics'}>
                 <LyricsView yoffset="120" time="time" lyrics="lyrics"
                 richlyrics="richlyrics" />
             </div>
-            <div className="queue-col" v-if="tabMode == 'queue'">
-                <Queue v-if="tabMode == 'queue'" ref="queue"  />
+            <div className="queue-col" v-if={tabMode === 'queue'}>
+                <Queue v-if={tabMode === 'queue'} ref=}queue}  />
             </div>
         </div>
     </div>  */}
       {/* <div className="tab-toggles">
-        <div className="lyrics" className="{active: tabMode == 'lyrics'}" onClick={() =>tabMode = (tabMode == 'lyrics') ? '' : 'lyrics'} />
-        <div className="queue"  className="{active: tabMode == 'queue'}" onClick={() =>tabMode =  (tabMode == 'queue') ? '' :'queue'} />
+        <div className="lyrics" className="{active: tabMode === 'lyrics'}" onClick={() =>tabMode = (tabMode === 'lyrics') ? '' : 'lyrics'} />
+        <div className="queue"  className="{active: tabMode === 'queue'}" onClick={() =>tabMode =  (tabMode === 'queue') ? '' :'queue'} />
     </div>   */}
     </div>
   );

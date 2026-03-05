@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const Queue = () => {
   let drag = false;
@@ -128,12 +129,12 @@ const Queue = () => {
           <div className="col">
             <h3
               className="queue-header-text"
-              v-if="page == 'queue'">
+              v-if={page === "queue"}>
               {app.getLz("term.queue")}
             </h3>
             <h3
               className="queue-header-text"
-              v-if="page == 'history'">
+              v-if={page === "history"}>
               {app.getLz("term.history")}
             </h3>
           </div>
@@ -144,7 +145,7 @@ const Queue = () => {
               onClick={() => {
                 app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
               }}
-              title="app.getLz('term.autoplay')"
+              title={app.getLz("term.autoplay")}
               v-b-tooltiphover>
               <img className="infinity" />
             </button>
@@ -152,39 +153,39 @@ const Queue = () => {
         </div>
         <div
           className="queue-body"
-          v-if="page == 'history'">
+          v-if={page === "history"}>
           <MediaItemListItem
             show-library-status="false"
-            v-for="item in history"
-            v-bind:key="item.id"
-            item="item"
+            v-for={item in history}
+            v-bind:key={item.id}
+            item={item}
           />
         </div>
         <div
           className="queue-body"
-          v-if="page == 'queue'">
+          v-if={page === "queue"}>
           <draggable
-            v-model="queueItems"
+            v-model={queueItems}
             start="drag=true"
             end="drag=false;move()">
-            <template v-for="(queueItem, position) in displayQueueItems">
+            <template v-for={(queueItem, position) in displayQueueItems}>
               <div
-                v-if="position === 0"
-                key="queueItem.item.id"
+                v-if={position === 0}
+                key={queueItem.item.id}
               />
               <div
                 className="cd-queue-item"
                 v-else
                 className="{selected: selectedItems.includes(queueItem.item.id)}"
                 onClick={() => select($event, queueItem.item.id)}
-                dblclick="playQueueItem(queueItem.item.id)"
-                key="queueItem.item.id"
+                onDoubleClick={() => playQueueItem(queueItem.item.id)}
+                key={queueItem.item.id}
                 contextmenu="queueContext($event, queueItem.item)">
                 <div className="row">
                   <div className="col-auto cider-flex-center">
                     <div className="artwork">
                       <MediaItemArtwork
-                        url="queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ''"
+                        url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ''}
                         size="32"
                       />
                     </div>
@@ -197,7 +198,7 @@ const Queue = () => {
                   </div>
                   <div
                     className="queue-explicit-icon cider-flex-center"
-                    v-if="queueItem.item.attributes.contentRating == 'explicit'">
+                    v-if={queueItem.item.attributes.contentRating === "explicit"}>
                     <div className="explicit-icon" />
                   </div>
                   <div className="col queue-duration-info">
@@ -214,7 +215,7 @@ const Queue = () => {
             style={{ width: "100%" }}>
             <button
               className="md-btn md-btn-small"
-              className="{'md-btn-primary': (page == 'queue')}"
+              className="{'md-btn-primary': (page === 'queue')}"
               onClick={() => {
                 page = "queue";
               }}>
@@ -222,7 +223,7 @@ const Queue = () => {
             </button>
             <button
               className="md-btn md-btn-small"
-              className="{'md-btn-primary': (page == 'history')}"
+              className="{'md-btn-primary': (page === 'history')}"
               onClick={() => {
                 geory();
                 page = "history";
@@ -233,7 +234,7 @@ const Queue = () => {
           <button
             className="md-btn md-btn-small"
             style={{ width: "100%", marginTop: "6px" }}
-            v-if="queueItems.length > 1"
+            v-if={queueItems.length > 1}
             onClick={() => {
               app.mk.clearQueue();
               updateQueue();

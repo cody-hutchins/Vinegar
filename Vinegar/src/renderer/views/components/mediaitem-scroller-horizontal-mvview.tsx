@@ -6,13 +6,13 @@ const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp, kind = 
   return (
     <div id="mediaitem-scroller-horizontal-mvview">
       <vue-horizontal>
-        <template v-if="browsesp">
+        <template v-if={browsesp}>
           <MediaItemMVViewSP
-            item={(item?.attributes?.kind != null || item?.attributes?.type == "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) ?? item}
+            item={(item?.attributes?.kind !== null || item?.attributes?.type === "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) ?? item}
             imagesize={imagesize}
-            v-bind:key="item.id"
+            v-bind:key={item.id}
             badge={item.attributes ?? []}
-            v-for="item in items"
+            v-for={item in items}
           />
         </template>
         <template v-else>
@@ -20,10 +20,10 @@ const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp, kind = 
             kind={kind}
             size="600"
             key={item?.id ?? ""}
-            item={item ? (item.attributes?.kind != null || item.type == "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
+            item={item ? (item.attributes?.kind !== null || item.type === "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
             imagesize={imagesize}
-            v-bind:key="item.id"
-            v-for="item in items"
+            v-bind:key={item.id}
+            v-for={item in items}
           />
         </template>
       </vue-horizontal>

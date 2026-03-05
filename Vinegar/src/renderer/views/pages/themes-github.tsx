@@ -28,7 +28,7 @@ const ThemesGithub = () => {
     const themes = ipcRenderer.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
-      if (theme.github_repo !== "" && typeof theme.commit != "") {
+      if (theme.github_repo !== "" && typeof theme.commit !== "") {
         self.themesInstalled.push(theme.github_repo.toLowerCase());
       }
     });
@@ -143,18 +143,18 @@ const ThemesGithub = () => {
               <li
                 onClick={() => showRepo(repo)}
                 className="list-group-item list-group-item-dark"
-                style={{ background: repo.id == openRepo.id ? "var(--keyColor)" : "" }}
-                v-for="repo in repos">
+                style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "" }}
+                v-for={repo in repos}>
                 <div className="row">
                   <div className="col flex-center">
                     <div>
-                      <h4 className="repo-name">{repo.description != null ? repo.description : repo.full_name}</h4>
+                      <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
                       <div>⭐ {repo.stargazers_count}</div>
                     </div>
                   </div>
                   <div className="col-auto">
                     <span
-                      v-if="themesInstalled.includes(repo.full_name.toLowerCase())"
+                      v-if={themesInstalled.includes(repo.full_name.toLowerCase())}
                       className="codicon codicon-cloud-download"
                     />
                   </div>
@@ -165,7 +165,7 @@ const ThemesGithub = () => {
 
           <div
             className="github-preview"
-            v-if="openRepo.full_name">
+            v-if={openRepo.full_name}>
             <div className="gh-preview-header">
               <div className="row nopadding">
                 <div className="col nopadding flex-center">
@@ -179,7 +179,7 @@ const ThemesGithub = () => {
                       <a
                         className="repo-url"
                         target="_blank"
-                        href="openRepo.html_url">
+                        href={openRepo.html_url}>
                         {openRepo.full_name}
                       </a>
                     </div>
@@ -190,7 +190,7 @@ const ThemesGithub = () => {
                   <button
                     className="md-btn md-btn-primary"
                     onClick={() => installThemeRepo(openRepo)}>
-                    <span v-if="!themesInstalled.includes(openRepo.full_name.toLowerCase())">{$root.getLz("action.install")}</span>
+                    <span v-if={!themesInstalled.includes(openRepo.full_name.toLowerCase())}>{$root.getLz("action.install")}</span>
                     <span v-else>{$root.getLz("action.update")}</span>
                   </button>
                 </div>
@@ -198,7 +198,7 @@ const ThemesGithub = () => {
             </div>
             <hr />
             <div
-              v-html="openRepo.readme"
+              v-html={openRepo.readme}
               className="github-content"
             />
           </div>

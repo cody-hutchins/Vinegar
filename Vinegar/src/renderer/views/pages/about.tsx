@@ -191,9 +191,9 @@ const About = () => {
                 <h3>{$root.getLz("term.ciderTeam")}</h3>
                 <div
                   className="md-btn teamBtn"
-                  v-for="member in team"
+                  v-for={member in team}
                   onClick={() => window.open(member.link)}>
-                  <img src="member.avatar" />
+                  <img src={member.avatar} />
                   <div
                     className="row"
                     style={{ width: "100%" }}>
@@ -206,9 +206,9 @@ const About = () => {
                       className="col"
                       style={{ textAlign: "right" }}>
                       <button
-                        clickstop="window.open(member.twitter)"
+                        clickstop={window.open(member.twitter)}
                         className="social-btn"
-                        v-if="member.twitter">
+                        v-if={member.twitter}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"

@@ -1,10 +1,10 @@
-var notyf = new Notyf();
+export const notyf = new Notyf();
 
-function clamp(num, min, max) {
+export function clamp(num, min, max) {
   return Math.min(Math.max(num, min), max);
 }
 
-const MusicKitObjects = {
+export const MusicKitObjects = {
   LibraryPlaylist: function () {
     this.id = "";
     this.type = "library-playlist-folders";

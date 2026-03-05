@@ -1,4 +1,6 @@
 import { useEffect, useMemo } from "react";
+import Pagination from "../components/pagination.jsx";
+import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
 const Component = () => {
   const app = this.$root;
@@ -34,7 +36,7 @@ const Component = () => {
     let query = app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
     if (!app.mk.queue.isEmpty) app.mk.queue.splice(0, app.mk.queue._itemIDs.length);
     app.mk.stop().then(() => {
-      if (app.mk.shuffleMode == 1) {
+      if (app.mk.shuffleMode === 1) {
         shuffleArray(query);
       }
       app.mk.queue.append(query);
@@ -58,9 +60,9 @@ const Component = () => {
                   type="search"
                   style={{ width: "100%" }}
                   spellcheck="false"
-                  placeholder="app.getLz('term.search') + '...'"
-                  input="$root.searchLibrarySongs"
-                  v-model="library.songs.search"
+                  placeholder={app.getLz("term.search") + "..."}
+                  input={$root.searchLibrarySongs}
+                  v-model={library.songs.search}
                   className="search-input"
                 />
               </div>
@@ -90,11 +92,11 @@ const Component = () => {
                 <div className="col">
                   <select
                     className="md-select"
-                    v-model="prefs.sort"
-                    change="$root.searchLibrarySongs()">
-                    <optgroup label="app.getLz('term.sortBy')">
+                    v-model={prefs.sort}
+                    onChange={() => $root.searchLibrarySongs()}>
+                    <optgroup label={app.getLz("term.sortBy")}>
                       <option
-                        v-for="(sort, index) in library.songs.sortingOptions"
+                        v-for={(sort, index) in library.songs.sortingOptions}
                         value="index">
                         {sort}
                       </option>
@@ -104,9 +106,9 @@ const Component = () => {
                 <div className="col">
                   <select
                     className="md-select"
-                    v-model="prefs.sortOrder"
-                    change="$root.searchLibrarySongs()">
-                    <optgroup label="app.getLz('term.sortOrder')">
+                    v-model={prefs.sortOrder}
+                    onChange={() => $root.searchLibrarySongs()}>
+                    <optgroup label={app.getLz("term.sortOrder")}>
                       <option value="asc">{app.getLz("term.sortOrder.ascending")}</option>
                       <option value="desc">{app.getLz("term.sortOrder.descending")}</option>
                     </optgroup>
@@ -115,9 +117,9 @@ const Component = () => {
                 <div className="col">
                   <select
                     className="md-select"
-                    v-model="prefs.size"
-                    change="$root.searchLibrarySongs()">
-                    <optgroup label="app.getLz('term.size')">
+                    v-model={prefs.size}
+                    onChange={() => $root.searchLibrarySongs()}>
+                    <optgroup label={app.getLz("term.size")}>
                       <option value="normal">{app.getLz("term.size.normal")}</option>
                       <option value="compact">{app.getLz("term.size.compact")}</option>
                     </optgroup>
@@ -126,8 +128,8 @@ const Component = () => {
                 <div className="col">
                   <select
                     className="md-select"
-                    v-model="prefs.scroll">
-                    <optgroup label="app.getLz('term.scroll')">
+                    v-model={prefs.scroll}>
+                    <optgroup label={app.getLz("term.scroll")}>
                       <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
                       <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                     </optgroup>
@@ -137,44 +139,44 @@ const Component = () => {
             </div>
             <div className="col-auto cider-flex-center">
               <button
-                v-if="library.songs.downloadState == 2"
+                v-if={library.songs.downloadState === 2}
                 onClick={() => $root.getLibrarySongsFull(true)}
                 className="reload-btn"
-                aria-label="app.getLz('menubar.options.reload')">
+                aria-label={app.getLz("menubar.options.reload")}>
                 {import("../svg/redo.svg")}
               </button>
               <button
                 v-else
                 className="reload-btn"
-                style={{ opacity: 0.8, pointerEvents: none }}
-                aria-label="app.getLz('menubar.options.reload')">
+                style={{ opacity: 0.8, pointerEvents: "none" }}
+                aria-label={app.getLz("menubar.options.reload")}>
                 <div className="spinner" />
               </button>
             </div>
           </div>
-          <pagination
-            length="library.songs.displayListing.length"
-            pageSize="pageSize"
-            scroll="prefs.scroll"
+          <Pagination
+            length={library.songs.displayListing.length}
+            pageSize={pageSize}
+            scroll={prefs.scroll}
             scrollSelector="#app-content"
-            onRangeChange="onRangeChange"
+            onRangeChange={onRangeChange}
           />
         </div>
 
-        <div v-if="library.songs.downloadState == 3">Library contains no songs.</div>
+        <div v-if={library.songs.downloadState === 3}>Library contains no songs.</div>
         <div
           className="well"
           key="1"
-          v-if="prefs.size == 'compact'">
+          v-if={prefs.size === "compact"}>
           <MediaItemListItem
             class-list="compact"
-            item="item"
+            item={item}
             parent="'librarysongs'"
             index="index"
             show-meta-data="true"
             show-library-status="false"
-            v-bind:key="item.id"
-            v-for="(item, index) in currentSlice"
+            v-bind:key={item.id}
+            v-for={(item, index) in currentSlice}
           />
         </div>
         <div
@@ -182,13 +184,13 @@ const Component = () => {
           key="2"
           v-else>
           <MediaItemListItem
-            item="item"
+            item={item}
             parent="'librarysongs'"
             index="index"
             show-meta-data="true"
             show-library-status="false"
-            v-bind:key="item.id"
-            v-for="(item, index) in currentSlice"
+            v-bind:key={item.id}
+            v-for={(item, index) in currentSlice}
           />
         </div>
       </div>

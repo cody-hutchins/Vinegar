@@ -12,18 +12,18 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   const unavailable = false;
   async function mounted() {
     await getBadges();
-    if (typeof item.attributes.playParams == "object") {
-      if (item.attributes.playParams.kind.includes("radioStation") && item.attributes.playParams.streamingKind == 1) {
+    if (typeof item.attributes.playParams === "object") {
+      if (item.attributes.playParams.kind.includes("radioStation") && item.attributes.playParams.streamingKind === 1) {
         unavailable = true;
       }
     } else {
-      if (item.type == "music-movies" || item.type == "tv-episodes") {
+      if (item.type === "music-movies" || item.type === "tv-episodes") {
         unavailable = true;
       }
     }
   }
   function getBgColor() {
-    return `#${item.attributes.artwork != null && item.attributes.artwork.bgColor != null ? item.attributes.artwork.bgColor : ``}`;
+    return `#${item.attributes.artwork !== null && item.attributes.artwork.bgColor !== null ? item.attributes.artwork.bgColor : ``}`;
   }
   function getContextMenu(event) {
     if (item.type === "artists") {
@@ -33,22 +33,22 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     }
   }
   function getSubtitle() {
-    if (kind == "card") {
-      if (typeof item.attributes.artistNames != "undefined") {
+    if (kind === "card") {
+      if (typeof item.attributes.artistNames !== "undefined") {
         return item.attributes.artistNames;
-      } else if (typeof item.attributes.editorialNotes != "undefined") {
+      } else if (typeof item.attributes.editorialNotes !== "undefined") {
         return item?.attributes?.editorialNotes?.short ?? item.attributes?.editorialNotes?.name ?? "";
-      } else if (typeof item.attributes.artistName != "undefined") {
+      } else if (typeof item.attributes.artistName !== "undefined") {
         return item.attributes.artistName;
       } else {
         return "";
       }
     } else {
-      if (typeof item.attributes.artistName != "undefined") {
+      if (typeof item.attributes.artistName !== "undefined") {
         return item.attributes.artistName;
-      } else if (typeof item.attributes.artist != "undefined") {
+      } else if (typeof item.attributes.artist !== "undefined") {
         return item.attributes.artist.attributes.name;
-      } else if (typeof item.attributes.curatorName != "undefined") {
+      } else if (typeof item.attributes.curatorName !== "undefined") {
         return item.attributes.curatorName;
       } else {
         return "";
@@ -58,7 +58,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   function getSubtitleNavigation() {
     if (kind === "card" || item.type === "playlists") {
       try {
-        if (typeof item.attributes.artistName != "undefined") {
+        if (typeof item.attributes.artistName !== "undefined") {
           return app.searchAndNavigate(item, "artist");
         } else {
           return app.routeView(item);
@@ -67,7 +67,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
         return app.routeView(item);
       }
     } else {
-      if (typeof item.attributes.artistName != "undefined") {
+      if (typeof item.attributes.artistName !== "undefined") {
         return app.searchAndNavigate(item, "artist");
       } else {
         return app.routeView(item);
@@ -120,7 +120,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     };
     let kind = item.type ?? item.attributes.playParams.kind;
     let truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    if (truekind == "musicVideos") {
+    if (truekind === "musicVideos") {
       truekind = "music-videos";
     }
     let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`, params);
@@ -145,7 +145,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   }
   function getArtworkUrl(size = -1, includeUrl = false) {
     let artwork = item?.attributes?.artwork ? item?.attributes?.artwork?.url : (item?.attributes?.editorialArtwork?.subscriptionCover?.url ?? "");
-    if (size != -1) {
+    if (size !== -1) {
       artwork = artwork
         .replace("{w}", size)
         .replace("{h}", size)
@@ -399,7 +399,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     if ((self.item.attributes.playParams.kind ?? self.item.type).includes("playlist")) {
       // remove the add to playlist option by id "addToPlaylist" using the .filter() method
       menus.normal.items = menus.normal.items.filter(function (item) {
-        return item.id != "addToPlaylist";
+        return item.id !== "addToPlaylist";
       });
     }
     app.showMenuPanel(menus[useMenu], event);
@@ -407,24 +407,24 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     try {
       await isInLibrary().then((_) => {
         if (self.addedToLibrary) {
-          menus.normal.items.find((x) => x.id == "addToLibrary").hidden = true;
-          menus.normal.items.find((x) => x.id == "removeFromLibrary").hidden = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary").hidden = true;
+          menus.normal.items.find((x) => x.id === "removeFromLibrary").hidden = false;
         } else {
-          menus.normal.items.find((x) => x.id == "addToLibrary").disabled = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary").disabled = false;
         }
       });
     } catch (e) {}
     try {
       let rating = await app.getRating(self.item);
-      if (rating == 0) {
-        menus.normal.headerItems.find((x) => x.id == "love").disabled = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").disabled = false;
-      } else if (rating == 1) {
-        menus.normal.headerItems.find((x) => x.id == "unlove").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "love").hidden = true;
-      } else if (rating == -1) {
-        menus.normal.headerItems.find((x) => x.id == "undo_dislike").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").hidden = true;
+      if (rating === 0) {
+        menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
+      } else if (rating === 1) {
+        menus.normal.headerItems.find((x) => x.id === "unlove").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "love").hidden = true;
+      } else if (rating === -1) {
+        menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
     } catch (err) {}
 
@@ -505,12 +505,12 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
       <div
         tabindex="0"
         className="cd-mediaitem-square-container"
-        clickself="app.routeView(item)"
-        controller-click="app.routeView(item)"
+        clickself={app.routeView(item)}
+        controller-click={app.routeView(item)}
         contextmenuself="getContextMenu"
         v-observe-visibility="{callback: visibilityChanged}">
         <div
-          v-if="reasonShown"
+          v-if={reasonShown}
           className="reasonSP ">
           {item?.meta?.reason?.stringForDisplay ?? ""}
         </div>
@@ -521,10 +521,10 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
           contextmenu="getContextMenu">
           <div
             className="artwork-container"
-            v-show="isVisible">
+            v-show={isVisible}>
             <div
               className="unavailable-overlay"
-              v-if="unavailable">
+              v-if={unavailable}>
               <div className="codicon codicon-circle-slash" />
             </div>
             <div
@@ -532,36 +532,36 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               onClick={() => app.routeView(item)}>
               <MediaItemArtwork
                 url="getArtworkUrl()"
-                video="(item.attributes != null && item.attributes.editorialVideo != null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                video="(item.attributes !== null && item.attributes.editorialVideo !== null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
                 size="size"
                 upscaling="true"
                 shadow="subtle"
                 bgcolor="getBgColor()"
                 video-priority="forceVideo"
-                type="item.type"
+                type={item.type}
               />
             </div>
             <button
               className="menu-btn"
-              v-if="!nomenu.includes(item.type)"
+              v-if={!nomenu.includes(item.type)}
               onClick={() => getContextMenu}
-              aria-label="$root.getLz('term.more')">
+              aria-label={$root.getLz("term.more")}>
               {import("../svg/more.svg")}
             </button>
             <button
               className="play-btn"
-              v-if="!noplay.includes(item.type)"
+              v-if={!noplay.includes(item.type)}
               onClick={() => app.playMediaItem(item)}
-              aria-label="$root.getLz('term.play')">
+              aria-label={$root.getLz("term.play")}>
               {import("../svg/play.svg")}
             </button>
             <div
               className="badge-container"
-              v-if="itemBadges.length != 0">
+              v-if={itemBadges.length !== 0}>
               <div
                 className="socialBadge"
-                v-for="badge in itemBadges.limit(1)"
-                v-bind:key="badge.id">
+                v-for={badge in itemBadges.limit(1)}
+                v-bind:key={badge.id}>
                 <MediaItemArtwork
                   url="(badge.attributes.artwork ? badge.attributes.artwork.url : '')"
                   size="32"
@@ -571,18 +571,18 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
           </div>
           <div
             className="info-rect"
-            className="{'info-rect-card': kind == 'card'}"
-            v-show="isVisible"
+            className="{'info-rect-card': kind === 'card'}"
+            v-show={isVisible}
             style={{ "--bgartwork": getArtworkUrl(size, true) }}>
             <div
               className="title"
-              title="item.attributes?.name ?? (item.relationships?.contents?.data[0]?.attributes?.name ?? (item.attributes?.editorialNotes?.name ?? ''))"
-              v-if="item.attributes.artistNames == null || kind != 'card'"
+              title={item.attributes?.name ?? (item.relationships?.contents?.data[0]?.attributes?.name ?? (item.attributes?.editorialNotes?.name ?? ''))"
+              v-if={item.attributes.artistNames === null || kind !== "card"}
               onClick={() => app.routeView(item)}>
-              <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind == "394" && item.relationships?.contents?.data[0]?.attributes?.shortName != null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
+              <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
               <div
                 className="explicit-icon"
-                v-if="item.attributes && item.attributes.contentRating == 'explicit'"
+                v-if={item.attributes && item.attributes.contentRating === "explicit"}
                 style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
               />
             </div>
@@ -590,12 +590,12 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               title="getSubtitle()"
               className="subtitle item-navigate text-overflow-elipsis"
               onClick={() => getSubtitleNavigation()}
-              v-if="getSubtitle() != ''">
+              v-if={getSubtitle() !== ""}>
               {getSubtitle()}
             </div>
             <div
               className="subtitle"
-              v-if="getSubtitle() == '' && kind != 'card'">
+              v-if={getSubtitle() === "" && kind !== "card"}>
               &nbsp;
             </div>
           </div>

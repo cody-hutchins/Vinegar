@@ -17,8 +17,8 @@ const Component = () => {
       <template>
         <div
           className="modal-fullscreen addtoplaylist-panel"
-          clickself="app.modals.audioSettings = false"
-          contextmenuself="app.modals.audioSettings = false">
+          clickself={(app.modals.audioSettings = false)}
+          contextmenuself={(app.modals.audioSettings = false)}>
           <div className="modal-window">
             <div className="modal-header">
               <div className="modal-title">{app.getLz("term.audioSettings")}</div>
@@ -27,7 +27,7 @@ const Component = () => {
                 onClick={() => {
                   app.modals.audioSettings = false;
                 }}
-                aria-label="app.getLz('action.close')"
+                aria-label={app.getLz("action.close")}
               />
             </div>
             <div className="modal-content">

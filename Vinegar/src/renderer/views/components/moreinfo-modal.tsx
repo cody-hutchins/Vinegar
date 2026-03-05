@@ -23,13 +23,13 @@ const MoreInfoModal = ({ data }: { data: object }) => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="app.getLz('action.close')"
+              aria-label={app.getLz("action.close")}
             />
           </div>
           <div className="modal-content">
             <div
               className="content"
-              v-html="data.content"
+              v-html={data.content}
             />
           </div>
         </div>

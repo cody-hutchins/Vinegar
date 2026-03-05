@@ -28,7 +28,7 @@ const Audiolabs = () => {
           <div className="settings-option-body">
             <div className="md-option-line">
               <b-jumbotron
-                header="$root.getLz('settings.option.audio.audioLab')"
+                header={$root.getLz("settings.option.audio.audioLab")}
                 lead="Designed by Cider Acoustic Technologies in California"
               />
             </div>
@@ -41,15 +41,15 @@ const Audiolabs = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <input
                   type="checkbox"
-                  v-model="app.cfg.audio.maikiwiAudio.ciderPPE"
-                  v-on:change="CiderAudio.hierarchical_loading();"
+                  v-model={app.cfg.audio.maikiwiAudio.ciderPPE}
+                  v-on:change={CiderAudio.hierarchical_loading();}
                   switch
                 />
               </div>
             </div>
             <div
               className="md-option-line"
-              v-show="app.cfg.audio.maikiwiAudio.ciderPPE === true">
+              v-show={app.cfg.audio.maikiwiAudio.ciderPPE === true}>
               <div className="md-option-segment">
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength")}
                 <br />
@@ -59,12 +59,12 @@ const Audiolabs = () => {
                 <select
                   className="md-select"
                   style={{ width: "180px" }}
-                  v-model="app.cfg.audio.maikiwiAudio.ciderPPE_value"
-                  v-on:change="CiderAudio.hierarchical_loading()">
+                  v-model={app.cfg.audio.maikiwiAudio.ciderPPE_value}
+                  v-on:onChange={() => CiderAudio.hierarchical_loading()}>
                   <option
-                    v-for="(item, index) in ciderPPE"
-                    value="item.name"
-                    key="index.name">
+                    v-for={(item, index) in ciderPPE}
+                    value={item.name}
+                    key={index.name}>
                     {item.displayName}
                   </option>
                 </select>
@@ -80,8 +80,8 @@ const Audiolabs = () => {
                 <select
                   className="md-select"
                   style={{ width: "180px" }}
-                  v-model="app.cfg.audio.maikiwiAudio.opportunisticCorrection_state"
-                  v-on:change="CiderAudio.hierarchical_loading()">
+                  v-model={app.cfg.audio.maikiwiAudio.opportunisticCorrection_state}
+                  v-on:onChange={() => CiderAudio.hierarchical_loading()}>
                   <option value="OFF">OFF</option>
                   <option value="CHU">Moondrop Chu</option>
                 </select>
@@ -96,15 +96,15 @@ const Audiolabs = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <input
                   type="checkbox"
-                  v-model="app.cfg.audio.maikiwiAudio.atmosphereRealizer1"
-                  v-on:change="CiderAudio.hierarchical_loading();"
+                  v-model={app.cfg.audio.maikiwiAudio.atmosphereRealizer1}
+                  v-on:change={CiderAudio.hierarchical_loading();}
                   switch
                 />
               </div>
             </div>
             <div
               className="md-option-line"
-              v-show="app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true">
+              v-show={app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true}>
               <div className="md-option-segment">
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [1]
                 <br />
@@ -114,11 +114,11 @@ const Audiolabs = () => {
                 <select
                   className="md-select"
                   style={{ width: "230px" }}
-                  v-model="$root.cfg.audio.maikiwiAudio.atmosphereRealizer1_value"
-                  v-on:change="CiderAudio.hierarchical_loading();">
+                  v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer1_value}
+                  v-on:change={CiderAudio.hierarchical_loading();}>
                   <option
-                    v-for="profile in arprofiles"
-                    value="profile.id">
+                    v-for={profile in arprofiles}
+                    value={profile.id}>
                     {$root.getProfileLz("CAR", profile.id)}
                   </option>
                 </select>
@@ -133,15 +133,15 @@ const Audiolabs = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <input
                   type="checkbox"
-                  v-model="app.cfg.audio.maikiwiAudio.atmosphereRealizer2"
-                  v-on:change="CiderAudio.hierarchical_loading();"
+                  v-model={app.cfg.audio.maikiwiAudio.atmosphereRealizer2}
+                  v-on:change={CiderAudio.hierarchical_loading();}
                   switch
                 />
               </div>
             </div>
             <div
               className="md-option-line"
-              v-show="app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true">
+              v-show={app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}>
               <div className="md-option-segment">
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [2]
                 <br />
@@ -151,11 +151,11 @@ const Audiolabs = () => {
                 <select
                   className="md-select"
                   style={{ width: "230px" }}
-                  v-model="$root.cfg.audio.maikiwiAudio.atmosphereRealizer2_value"
-                  v-on:change="CiderAudio.hierarchical_loading();">
+                  v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer2_value}
+                  v-on:change={CiderAudio.hierarchical_loading();}>
                   <option
-                    v-for="profile in arprofiles"
-                    value="profile.id">
+                    v-for={profile in arprofiles}
+                    value={profile.id}>
                     {$root.getProfileLz("CAR", profile.id)}
                   </option>
                 </select>
@@ -170,15 +170,15 @@ const Audiolabs = () => {
               <div className="md-option-segment md-option-segment_auto">
                 <input
                   type="checkbox"
-                  v-model="app.cfg.audio.maikiwiAudio.spatial"
-                  v-on:change="CiderAudio.hierarchical_loading();"
+                  v-model={app.cfg.audio.maikiwiAudio.spatial}
+                  v-on:change={CiderAudio.hierarchical_loading();}
                   switch
                 />
               </div>
             </div>
             <div
               className="md-option-line"
-              v-show="app.cfg.audio.maikiwiAudio.spatial === true">
+              v-show={app.cfg.audio.maikiwiAudio.spatial === true}>
               <div className="md-option-segment">
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile")}
                 <br />
@@ -188,11 +188,11 @@ const Audiolabs = () => {
                 <select
                   className="md-select"
                   style={{ width: "180px" }}
-                  v-model="$root.cfg.audio.maikiwiAudio.spatialProfile"
-                  v-on:change="CiderAudio.hierarchical_loading();">
+                  v-model={$root.cfg.audio.maikiwiAudio.spatialProfile}
+                  v-on:change={CiderAudio.hierarchical_loading();}>
                   <option
-                    v-for="profile in spprofiles"
-                    value="profile.id">
+                    v-for={profile in spprofiles}
+                    value={profile.id}>
                     {$root.getProfileLz("CTS", profile.name)}
                   </option>
                 </select>

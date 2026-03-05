@@ -9,12 +9,12 @@ const EditorialNotes = () => (
         </button>
         <h4
           className="modal-title"
-          v-html="title"
+          v-html={title}
         />
       </div>
       <div
         className="modal-content"
-        v-html="content"
+        v-html={content}
       />
       <div className="modal-footer" />
     </div>

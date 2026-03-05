@@ -1,3 +1,5 @@
+import { ipcRenderer } from "electron";
+
 const MusicKitTools = {
   async v3Backend({ route = "", getBody = {}, options = {} }) {
     return await await ipcRenderer.invoke("mkv3", {

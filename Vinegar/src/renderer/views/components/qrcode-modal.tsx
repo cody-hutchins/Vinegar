@@ -12,7 +12,7 @@ const QRCodeModal = ({ src, url }: { src: string; url: string }) => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="app.getLz('action.close')"
+              aria-label={app.getLz("action.close")}
             />
           </div>
           <div className="modal-content">

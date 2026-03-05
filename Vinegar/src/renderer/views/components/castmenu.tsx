@@ -1,7 +1,10 @@
+import { ipcRenderer } from "electron";
+import { CiderAudio } from "../../audio/audio.js";
+
 const Component = () => {
-  let devices: {
-    cast: [];
-    airplay: [];
+  let devices = {
+    cast: [],
+    airplay: [],
   };
   let scanning = false;
   let activeCasts = this.$root.activeCasts;
@@ -40,7 +43,7 @@ const Component = () => {
   const setAirPlayCast = (device) => {
     if (
       !activeCasts.some((item) => {
-        return item.host == device.host && item.name == device.name && item.port == device.port;
+        return item.host === device.host && item.name === device.name && item.port === device.port;
       })
     ) {
       activeCasts.push(device);
@@ -54,17 +57,17 @@ const Component = () => {
         ipcRenderer.send("disconnectAirplay", device.host + ":" + device.port + "ap");
         console.log("disconnectAirplay", device.host + ":" + device.port + "ap");
         let idx = activeCasts.findIndex((a) => {
-          return a.host == device.host && a.port == device.port;
+          return a.host === device.host && a.port === device.port;
         });
         console.log(idx);
-        if (idx != -1) {
+        if (idx !== -1) {
           delete activeCasts[idx];
           delete this.$root.activeCasts[idx];
           activeCasts = activeCasts.filter((a) => {
-            return !(a.host == device.host && a.port == device.port);
+            return !(a.host === device.host && a.port === device.port);
           });
           console.log(activeCasts);
-          if (activeCasts.length == 0) {
+          if (activeCasts.length === 0) {
             stopCasting();
           }
         }
@@ -91,7 +94,7 @@ const Component = () => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="$root.getLz('action.close')"
+              aria-label={$root.getLz("action.close")}
             />
           </div>
           <div
@@ -101,8 +104,8 @@ const Component = () => {
             <div
               className="md-option-container"
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
-              <template v-if="!scanning">
-                <template v-for="(device) in devices.cast">
+              <template v-if={!scanning}>
+                <template v-for={device in devices.cast}>
                   <div
                     className="md-option-line"
                     style={{ cursor: "pointer" }}
@@ -115,7 +118,7 @@ const Component = () => {
                     <div
                       className="md-option-segment_auto"
                       style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-                      v-if="activeCasts.includes(device)">
+                      v-if={activeCasts.includes(device)}>
                       Connected
                     </div>
                     <div
@@ -157,8 +160,8 @@ const Component = () => {
                   Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to "Everyone" or "Anyone on the same network".
                   {/* {$root.getLz('action.cast.airplay.underdevelopment')}  */}
                   <template
-                    v-if="true"
-                    v-for="(device) in devices.airplay">
+                    v-if={true}
+                    v-for={device in devices.airplay}>
                     <div
                       className="md-option-line"
                       style={{ cursor: pointer }}
@@ -172,7 +175,9 @@ const Component = () => {
                         className="md-option-segment_auto"
                         style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                         onClick={() => disconnectAirPlayCast(device)}
-                        v-if="activeCasts.some(item => { return item.host == device.host && item.name == device.name && item.port == device.port})">
+                        v-if={activeCasts.some((item) => {
+                          return item.host === device.host && item.name === device.name && item.port === device.port;
+                        })}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -217,7 +222,7 @@ const Component = () => {
             <div className="row">
               <div
                 className="col"
-                v-if="activeCasts.length != 0">
+                v-if={activeCasts.length !== 0}>
                 <button
                   style={{ width: "100%" }}
                   onClick={() => stopCasting()}

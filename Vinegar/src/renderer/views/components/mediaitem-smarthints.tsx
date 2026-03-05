@@ -244,17 +244,17 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
     if ((item.attributes.playParams.kind ?? item.type).includes("playlist")) {
       // remove the add to playlist option by id "addToPlaylist" using the .filter() method
       menus.normal.items = menus.normal.items.filter(function (item) {
-        return item.id != "addToPlaylist";
+        return item.id !== "addToPlaylist";
       });
     }
     app.showMenuPanel(menus[useMenu], event);
     try {
       await isInLibrary().then((_) => {
         if (addedToLibrary) {
-          menus.normal.items.find((x) => x.id == "addToLibrary").hidden = true;
-          menus.normal.items.find((x) => x.id == "removeFromLibrary").hidden = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary").hidden = true;
+          menus.normal.items.find((x) => x.id === "removeFromLibrary").hidden = false;
         } else {
-          menus.normal.items.find((x) => x.id == "addToLibrary").disabled = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary").disabled = false;
         }
       });
     } catch (e) {
@@ -262,15 +262,15 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
     }
     try {
       let rating = await app.getRating(item);
-      if (rating == 0) {
-        menus.normal.headerItems.find((x) => x.id == "love").disabled = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").disabled = false;
-      } else if (rating == 1) {
-        menus.normal.headerItems.find((x) => x.id == "unlove").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "love").hidden = true;
-      } else if (rating == -1) {
-        menus.normal.headerItems.find((x) => x.id == "undo_dislike").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").hidden = true;
+      if (rating === 0) {
+        menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
+      } else if (rating === 1) {
+        menus.normal.headerItems.find((x) => x.id === "unlove").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "love").hidden = true;
+      } else if (rating === -1) {
+        menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
     } catch (err) {}
 
@@ -338,7 +338,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
   }
   function getArtworkUrl(size = -1, includeUrl = false) {
     let artwork = item.attributes.artwork ? item.attributes.artwork.url : "";
-    if (size != -1) {
+    if (size !== -1) {
       artwork = artwork
         .replace("{w}", size)
         .replace("{h}", size)
@@ -363,9 +363,9 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
     let id = item.attributes.playParams ? (item.attributes.playParams?.id ?? item.id ?? "") : (item.id ?? "");
     let isLibrary = item.attributes.playParams ? (item.attributes.playParams?.isLibrary ?? false) : false;
     let truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    console.log(item, parent, childIndex, kind, id, isLibrary, kind == "playlists", id.startsWith("p.") || id.startsWith("pl.u"));
+    console.log(item, parent, childIndex, kind, id, isLibrary, kind === "playlists", id.startsWith("p.") || id.startsWith("pl.u"));
     app.mk.stop().then(() => {
-      if (parent != null && childIndex != null) {
+      if (parent !== null && childIndex !== null) {
         app.queueParentandplayChild(parent, childIndex, item);
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
         function shuffleArray(array) {
@@ -397,7 +397,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
               try {
                 getPlaylist(id, isLibrary).then((res) => {
                   //let query = res.relationships.tracks.data.map(item => new MusicKit.MediaItem(item));
-                  //if (app.mk.shuffleMode == 1){shuffleArray(query); }
+                  //if (app.mk.shuffleMode === 1){shuffleArray(query); }
                   // console.log(query)
                   // app.mk.queue.append(query)
                   if (!res.data.relationships.tracks.next) {
@@ -408,12 +408,12 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
 
                   function getPlaylistTracks(next) {
                     app.apiCall(app.musicBaseUrl + next, (res) => {
-                      // if (res.id != playlistId || next.includes(playlistId)) {
+                      // if (res.id !== playlistId || next.includes(playlistId)) {
                       //     return
                       // }
                       console.log("nextres", res);
                       let query = res.data.map((item) => new MusicKit.MediaItem(item));
-                      if (app.mk.shuffleMode == 1) {
+                      if (app.mk.shuffleMode === 1) {
                         shuffleArray(query);
                         console.log("shf");
                       }
@@ -441,21 +441,21 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           $root.search.showHints = false;
           $root.routeView(item);
           $root.search.cursor = -1;
-          $root.search.term == "";
+          $root.search.term === "";
         }}
-        contextmenu="$root.hintscontext = true;getContextMenu()"
-        className="{'hintactive': ($root.search.cursor == position + $root.search.hints.filter((a) => {return a.content == null}).length)}">
+        contextmenu={$root.hintscontext = true;getContextMenu()}
+        className="{'hintactive': ($root.search.cursor === position + $root.search.hints.filter((a) => {return a.content === null}).length)}">
         <div
           className="row"
-          contextmenu="$root.hintscontext = true;getContextMenu()">
+          contextmenu={$root.hintscontext = true;getContextMenu()}>
           <div
             className="col-auto cider-flex-center"
-            contextmenu="$root.hintscontext = true;getContextMenu()">
+            contextmenu={$root.hintscontext = true;getContextMenu()}>
             <div
               className="artwork"
-              className="{'circle': item.type == 'artists'}">
+              className="{'circle': item.type === 'artists'}">
               <MediaItemArtwork
-                url="item.attributes.artwork ? item.attributes.artwork.url : ''"
+                url={item.attributes.artwork ? item.attributes.artwork.url : ''}
                 size="32"
                 style={{ position: "relative", zIndex: "-1" }}
               />
@@ -471,13 +471,13 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           </div>
           <div
             className="col queue-info"
-            contextmenu="$root.hintscontext = true;getContextMenu()">
+            contextmenu={$root.hintscontext = true;getContextMenu()}>
             <div className="queue-title text-overflow-elipsis">{item.attributes.name}</div>
             <div className="queue-subtitle text-overflow-elipsis">{item.attributes.artistName}</div>
           </div>
           <div
             className="queue-explicit-icon cider-flex-center"
-            v-if="item.attributes.contentRating == 'explicit'">
+            v-if={item.attributes.contentRating === 'explicit'}>
             <div className="explicit-icon" />
           </div>
           {/* <div className="col queue-duration-info">

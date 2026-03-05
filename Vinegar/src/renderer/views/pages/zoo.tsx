@@ -24,8 +24,8 @@ const Zoo = () => {
         <div className="spinner" />
         <button className="md-btn">Cider Button</button>
         <ArtistChip
-          v-if="artistLoaded"
-          item="artist"
+          v-if={artistLoaded}
+          item={artist}
         />
 
         <amp-chrome-player />

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 export const ArtistChip = ({ item }: { item: object }) => {
@@ -8,7 +9,7 @@ export const ArtistChip = ({ item }: { item: object }) => {
 
   async function mounted() {
     let artistId = item.id;
-    if (typeof item.relationships == "object") {
+    if (typeof item.relationships === "object") {
       artistId = item.relationships.catalog.data[0].id;
     }
     app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artistId}`).then((response) => {
@@ -16,6 +17,11 @@ export const ArtistChip = ({ item }: { item: object }) => {
       image = true;
     });
   }
+
+  useEffect(() => {
+    mounted();
+  });
+
   function route() {
     app.appRoute(`artist/${artist.id}`);
   }
@@ -28,11 +34,11 @@ export const ArtistChip = ({ item }: { item: object }) => {
         tabindex="0">
         <div
           className="artist-chip__image"
-          v-if="image"
+          v-if={image}
           style={{ backgroundColor: "#" + (artist.attributes.artwork?.bgColor ?? "000") }}>
           <MediaItemArtwork
-            v-if="artist.id != null"
-            url="artist.attributes.artwork.url"
+            v-if={artist.id !== null}
+            url={artist.attributes.artwork.url}
             size="80"
           />
         </div>
@@ -46,7 +52,7 @@ export const ArtistChip = ({ item }: { item: object }) => {
         <button
           onClick={() => $root.setArtistFavorite(artist.id, true)}
           title="Follow"
-          v-if="!$root.followingArtist(artist.id)"
+          v-if={!$root.followingArtist(artist.id)}
           className="artist-chip__follow codicon codicon-add"
         />
         <button

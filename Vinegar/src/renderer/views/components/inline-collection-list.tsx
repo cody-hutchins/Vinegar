@@ -8,11 +8,11 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
   const app = this.$root;
 
   const getKind = (item) => {
-    if (typeof item.kind != "undefined") {
+    if (typeof item.kind !== "undefined") {
       commonKind = item.kind;
       return item.kind;
     }
-    if (typeof item.attributes.playParams != "undefined") {
+    if (typeof item.attributes.playParams !== "undefined") {
       commonKind = item.attributes.playParams.kind;
       return item.attributes.playParams.kind;
     }
@@ -27,7 +27,7 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
     });
   };
   const getNext = () => {
-    if (typeof data.next == "undefined") {
+    if (typeof data.next === "undefined") {
       return;
     }
     loading = true;
@@ -79,27 +79,27 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
           {title}
         </h3>
         <div
-          v-if="data['data'] != 'null'"
+          v-if={data["data"] !== "null"}
           className="well itemContainer">
-          <template v-for="(item, key) in data.data">
-            <template v-if="item.type == 'artists'">
-              <MediaItemSquare item="item" />
+          <template v-for={(item, key) in data.data}>
+            <template v-if={item.type === "artists"}>
+              <MediaItemSquare item={item} />
             </template>
             <template v-else>
               <MediaItemListItem
-                v-if="getKind(item) == 'song'"
+                v-if={getKind(item) === "song"}
                 index="key"
-                item="item"
+                item={item}
               />
               <MediaItemSquare
                 v-else
-                item="item"
+                item={item}
                 type="getKind(item)"
               />
             </template>
           </template>
           <button
-            v-if="triggerEnabled"
+            v-if={triggerEnabled}
             style={{ opacity: 0, height: "32px" }}
             v-observe-visibility="{callback: visibilityChanged}">
             {app.getLz("term.showMore")}
@@ -108,15 +108,15 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
         <transition name="fabfade">
           <button
             className="top-fab"
-            v-show="showFab"
+            v-show={showFab}
             onClick={() => scrollToTop()}
-            aria-label="app.getLz('action.scrollToTop')">
+            aria-label={app.getLz("action.scrollToTop")}>
             {import("../svg/arrow-up.svg")}
           </button>
         </transition>
         <div
           className="well itemContainer"
-          v-show="loading">
+          v-show={loading}>
           <div className="spinner" />
         </div>
       </div>

@@ -9,7 +9,7 @@ const PathMenu = () => {
   async function add() {
     const result = await ipcRenderer.invoke("folderSelector");
     for (i of result) {
-      if (folders.findIndex((x) => x.startsWith(i)) == -1) {
+      if (folders.findIndex((x) => x.startsWith(i)) === -1) {
         folders.push(i);
       }
     }
@@ -33,11 +33,11 @@ const PathMenu = () => {
             <button
               className="close-btn"
               onClick={() => close()}
-              aria-label="$root.getLz('action.close')"
+              aria-label={$root.getLz('action.close')}
             />
           </div>
           <div className="modal-content">
-            <template v-for="folder of folders">
+            <template v-for={folder of folders}>
               <div className="md-option-line">
                 <div className="md-option-segment">{folder}</div>
                 <div className="md-option-segment md-option-segment_auto">

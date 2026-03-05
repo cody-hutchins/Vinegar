@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
   const showInLibrary = false;
@@ -23,7 +24,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       getHeartStatus();
     }
     let duration = item.attributes.durationInMillis ?? 0;
-    if (duration == 0 || !showDuration) {
+    if (duration === 0 || !showDuration) {
       displayDuration = false;
     }
     getClasses();
@@ -34,7 +35,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   }, []);
 
   function getBgColor() {
-    let color = `#${item.attributes.artwork != null && item.attributes.artwork.bgColor != null ? item.attributes.artwork.bgColor : ``}`;
+    let color = `#${item.attributes.artwork !== null && item.attributes.artwork.bgColor !== null ? item.attributes.artwork.bgColor : ``}`;
     return color;
   }
   async function checkLibrary() {
@@ -55,7 +56,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   }
   function getClasses() {
     addClasses = {};
-    if (typeof item.attributes.playParams == "undefined" && item.type != "podcast-episodes") {
+    if (typeof item.attributes.playParams === "undefined" && item.type !== "podcast-episodes") {
       addClasses["disabled"] = true;
     }
     if (classList) {
@@ -84,7 +85,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   }
   function getDataType() {
     let type = "";
-    if (typeof item.attributes.playParams != "undefined") {
+    if (typeof item.attributes.playParams !== "undefined") {
       if (item.attributes.playParams?.isLibrary) {
         type = item.type;
       } else {
@@ -93,7 +94,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     } else {
       type = item.type;
     }
-    if (type == "podcast-episodes") type = "episode";
+    if (type === "podcast-episodes") type = "episode";
     return type;
   }
   function select(e) {
@@ -102,8 +103,8 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     let isLibrary = item.attributes.playParams?.isLibrary ?? false;
 
     if (e.shiftKey) {
-      if (index != -1) {
-        if (app.selectedMediaItems.length == 0) {
+      if (index !== -1) {
+        if (app.selectedMediaItems.length === 0) {
           app.select_selectMediaItem(item_id, getDataType(), index, guid, isLibrary);
         }
         let allMediaItems = document.querySelectorAll(".cd-mediaitem-list-item[data-index]");
@@ -292,7 +293,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             icon: "./assets/arrow-bend-up.svg",
             action: function () {
               let type = item.attributes.playParams?.kind ?? item.type;
-              if (type == "podcast-episodes") {
+              if (type === "podcast-episodes") {
                 type = "episode";
               }
               app.mk.playNext({ [type]: item.attributes.playParams?.id ?? item.id });
@@ -305,7 +306,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             icon: "./assets/arrow-bend-down.svg",
             action: function () {
               let type = item.attributes.playParams?.kind ?? item.type;
-              if (type == "podcast-episodes") {
+              if (type === "podcast-episodes") {
                 type = "episode";
               }
               app.mk.playLater({ [type]: item.attributes.playParams?.id ?? item.id });
@@ -397,24 +398,24 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       await checkLibrary().then((res) => {
         console.log(res);
         if (res) {
-          menus.normal.items.find((x) => x.id == "addToLibrary").hidden = true;
-          menus.normal.items.find((x) => x.id == "removeFromLibrary").hidden = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary").hidden = true;
+          menus.normal.items.find((x) => x.id === "removeFromLibrary").hidden = false;
         } else {
-          menus.normal.items.find((x) => x.id == "addToLibrary").disabled = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary").disabled = false;
         }
       });
     } catch (e) {}
     try {
       let rating = await app.getRating(item);
-      if (rating == 0) {
-        menus.normal.headerItems.find((x) => x.id == "love").disabled = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").disabled = false;
-      } else if (rating == 1) {
-        menus.normal.headerItems.find((x) => x.id == "unlove").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "love").hidden = true;
-      } else if (rating == -1) {
-        menus.normal.headerItems.find((x) => x.id == "undo_dislike").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").hidden = true;
+      if (rating === 0) {
+        menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
+      } else if (rating === 1) {
+        menus.normal.headerItems.find((x) => x.id === "unlove").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "love").hidden = true;
+      } else if (rating === -1) {
+        menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
     } catch (err) {
       console.log(err);
@@ -426,7 +427,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   async function getHeartStatus() {
     try {
       await app.getRating(item).then((res) => {
-        if (res == 1) {
+        if (res === 1) {
           isLoved = true;
         } else {
           isLoved = false;
@@ -476,9 +477,9 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     let id = item.attributes.playParams ? (item.attributes.playParams?.id ?? item.id ?? "") : (item.id ?? "");
     let isLibrary = item.attributes.playParams ? (item.attributes.playParams?.isLibrary ?? false) : false;
     let truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    console.log(item, parent, childIndex, kind, id, isLibrary, kind == "playlists", id.startsWith("p.") || id.startsWith("pl.u"));
+    console.log(item, parent, childIndex, kind, id, isLibrary, kind === "playlists", id.startsWith("p.") || id.startsWith("pl.u"));
     app.mk.stop().then(() => {
-      if (parent != null && childIndex != null) {
+      if (parent !== null && childIndex !== null) {
         app.queueParentandplayChild(parent, childIndex, item);
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
         function shuffleArray(array) {
@@ -510,7 +511,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               try {
                 getPlaylist(id, isLibrary).then((res) => {
                   //let query = res.relationships.tracks.data.map(item => new MusicKit.MediaItem(item));
-                  //if (app.mk.shuffleMode == 1){shuffleArray(query); }
+                  //if (app.mk.shuffleMode === 1){shuffleArray(query); }
                   // console.log(query)
                   // app.mk.queue.append(query)
                   if (!res.data.relationships.tracks.next) {
@@ -521,12 +522,12 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
 
                   function getPlaylistTracks(next) {
                     app.apiCall(app.musicBaseUrl + next, (res) => {
-                      // if (res.id != playlistId || next.includes(playlistId)) {
+                      // if (res.id !== playlistId || next.includes(playlistId)) {
                       //     return
                       // }
                       console.log("nextres", res);
                       let query = res.data.map((item) => new MusicKit.MediaItem(item));
-                      if (app.mk.shuffleMode == 1) {
+                      if (app.mk.shuffleMode === 1) {
                         shuffleArray(query);
                         console.log("shf");
                       }
@@ -558,48 +559,48 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     <div id="mediaitem-list-item">
       <div
         v-observe-visibility="{callback: visibilityChanged, throttle: 100}"
-        contextmenu="contextMenu"
+        onContextMenu={contextMenu}
         onClick={() => select}
-        data-id="itemId"
-        data-type="getDataType()"
-        data-index="index"
-        data-guid="guid"
-        data-islibrary="isLibrary"
-        key="itemId"
+        data-id={itemId}
+        data-type={getDataType()}
+        data-index={index}
+        data-guid={guid}
+        data-islibrary={isLibrary}
+        key={itemId}
         className="cd-mediaitem-list-item"
-        mouseenter="checkLibrary"
-        mouseover="showInLibrary = true"
-        mouseleave="showInLibrary = false"
-        dblclick="route()"
+        onMouseEnter={checkLibrary}
+        onMouseOver={() => {showInLibrary = true;}}
+        onMouseLeave={() => {showInLibrary = false;}}
+        onDoubleClick={route}
         controller-click="route()"
-        tabindex="0"
+        tabIndex={0}
         className="[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]">
         <div
-          v-show="isVisible"
+          v-show={isVisible}
           className="listitem-content">
           <div
             className="popular"
-            v-if="!showInLibrary && item?.meta?.popularity != null && item?.meta?.popularity > 0.7"
+            v-if={!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7}
           />
           <div
             className="isLibrary"
-            v-if="showLibraryStatus == true">
+            v-if={showLibraryStatus === true}>
             <div
-              v-if="showInLibrary"
+              v-if={showInLibrary}
               style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
               <button
                 onClick={() => addToLibrary()}
-                v-if="!addedToLibrary && (showIndex == false ||(showIndex == true && showIndexPlaylist != false))"
-                aria-label="$root.getLz('action.addToLibrary')">
+                v-if={!addedToLibrary && (showIndex === false || (showIndex === true && showIndexPlaylist !== false))}
+                aria-label={$root.getLz("action.addToLibrary")}>
                 <div
                   className="svg-icon addIcon"
                   style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}
                 />
               </button>
               <button
-                v-else-if="!(showArtwork == true && (showIndex == false ||(showIndex == true && showIndexPlaylist != false)))"
+                v-else-if="!(showArtwork === true && (showIndex === false ||(showIndex === true && showIndexPlaylist !== false)))"
                 onClick={() => playTrack()}
-                aria-label="$root.getLz('term.play')">
+                aria-label={$root.getLz("term.play")}>
                 <div
                   className="svg-icon playIcon"
                   style={{ color: "var(--keyColor)" }}>
@@ -608,58 +609,58 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               </button>
             </div>
             <div
-              v-if="!(app.mk.isPlaying && (((app.mk.nowPlayingItem._songId ?? (app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id ))  == itemId) || (app.mk.nowPlayingItem.id  == item.id ))) && showIndex"
+              v-if={!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex}
               style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
               <div>
                 <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
               </div>
             </div>
             <div
-              v-if="app.mk.isPlaying && (((app.mk.nowPlayingItem._songId ?? (app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id ))  == itemId) || (app.mk.nowPlayingItem.id == item.id))"
+              v-if={app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)}
               style={{ display: showInLibrary ? "none" : "block" }}>
               <div className="loadbar-sound" />
             </div>
           </div>
           <div
             className="artwork"
-            v-if="showArtwork == true && (showIndex == false ||(showIndex == true && showIndexPlaylist != false)) ">
+            v-if={showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false))}>
             <MediaItemArtwork
-              url="item.attributes.artwork ? item.attributes.artwork.url : ''"
+              url={item.attributes.artwork ? item.attributes.artwork.url : ''}
               size="48"
               bgcolor="getBgColor()"
-              type="item.type"
+              type={item.type}
             />
             <button
               className="overlay-play"
               onClick={() => playTrack()}
-              aria-label="$root.getLz('term.play')">
+              aria-label={$root.getLz("term.play")}>
               {import("../svg/play.svg")}
             </button>
           </div>
           <div
             className="info-rect"
             style={{ paddingLeft: showArtwork ? "" : "16px" }}
-            dblclick="route()">
+            onDoubleClick={route}>
             <div
               className="title text-overflow-elipsis"
-              title="item.attributes.name">
+              title={item.attributes.name}>
               {item.attributes.name}
             </div>
             <div
               className="subtitle text-overflow-elipsis"
               style={{ "-webkit-box-orient": "horizontal" }}>
-              <template v-if="item.attributes.artistName">
+              <template v-if={item.attributes.artistName}>
                 <div
                   className="artist item-navigate text-overflow-elipsis"
-                  title="item.attributes.artistName"
+                  title={item.attributes.artistName}
                   onClick={() => app.searchAndNavigate(item, "artist")}>
                   {item.attributes.artistName}
                 </div>
-                <template v-if="item.attributes.albumName">&nbsp;—&nbsp;</template>
-                <template v-if="item.attributes.albumName">
+                <template v-if={item.attributes.albumName}>&nbsp;—&nbsp;</template>
+                <template v-if={item.attributes.albumName}>
                   <div
                     className="artist item-navigate text-overflow-elipsis"
-                    title="item.attributes.albumName"
+                    title={item.attributes.albumName}
                     onClick={() => app.searchAndNavigate(item, "album")}>
                     {item.attributes.albumName}
                   </div>
@@ -668,33 +669,33 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             </div>
           </div>
           <div className="heart-icon">
-            {/* <div className="heart-unfilled" v-if="isLoved == false" style={{'--url': 'url(./assets/feather/heart.svg)'}} />  */}
+            {/* <div className="heart-unfilled" v-if={isLoved === false} style={{'--url': 'url(./assets/feather/heart.svg)'}} />  */}
             <div
               className="heart-filled"
-              v-if="isLoved == true"
+              v-if={isLoved === true}
               style={{ url: "url(./assets/feather/heart-fill.svg)" }}
             />
           </div>
           <div
             className="explicit-icon"
-            v-if="item.attributes && item.attributes.contentRating == 'explicit'"
+            v-if={item.attributes && item.attributes.contentRating === "explicit"}
           />
           <template
-            v-if="showMetaData == true"
-            dblclick="route()">
+            v-if={showMetaData === true}
+            onDoubleClick={route}>
             <div className="metainfo">{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
             <div className="metainfo">{item.attributes.genreNames[0] ?? ""}</div>
           </template>
           <div
             className="duration"
-            v-if="displayDuration"
-            dblclick="route()">
+            v-if={displayDuration}
+            onDoubleClick={route}>
             {msToMinSec(item.attributes.durationInMillis ?? 0)}
           </div>
           <div
             className="duration"
-            v-if="item.attributes.playCount"
-            dblclick="route()">
+            v-if={item.attributes.playCount}
+            onDoubleClick={route}>
             {item.attributes.playCount}
           </div>
         </div>

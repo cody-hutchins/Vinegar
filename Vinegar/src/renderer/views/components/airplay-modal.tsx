@@ -1,6 +1,6 @@
 import { useState } from "react";
-
-export const AirplayModal = () => {
+import { ipcRenderer } from "electron";
+const AirplayModal = () => {
   const [passcode, setPasscode] = useState("");
   const close = () => {
     this.$root.modals.airplayPW = false;

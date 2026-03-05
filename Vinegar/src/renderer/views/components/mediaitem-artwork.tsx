@@ -1,6 +1,6 @@
 import AnimatedartworkView from "./animatedartwork-view.jsx";
 
-const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
+const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size?: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
   const app = this.$root;
   const isVisible = false;
   const style = {
@@ -66,11 +66,11 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
   };
 
   const getVideoPriority = () => {
-    if (app.cfg.visual.animated_artwork == "always") {
+    if (app.cfg.visual.animated_artwork === "always") {
       return true;
-    } else if (videoPriority && app.cfg.visual.animated_artwork == "limited") {
+    } else if (videoPriority && app.cfg.visual.animated_artwork === "limited") {
       return true;
-    } else if (app.cfg.visual.animated_artwork == "disabled") {
+    } else if (app.cfg.visual.animated_artwork === "disabled") {
       return false;
     }
     return videoPriority;
@@ -106,7 +106,7 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
         className="mediaitem-artwork"
         style={awStyle}
         contextmenu="contextMenu"
-        className="[{'rounded': (type == 'artists')}, classes]"
+        className="[{'rounded': (type === 'artists')}, classes]"
         key="url">
         <img
           src="imgSrc"
@@ -118,7 +118,7 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
           className="mediaitem-artwork--img"
         />
         <div
-          v-if="video && getVideoPriority()"
+          v-if={video && getVideoPriority()}
           className="animatedartwork-view-box"
         />
         <AnimatedartworkView

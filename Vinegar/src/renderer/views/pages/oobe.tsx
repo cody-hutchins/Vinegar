@@ -36,7 +36,7 @@ const Component = () => {
         {/* <transition name="">  */}
         <div
           className="oobe-view"
-          v-if="screen == 'before_we_start'">
+          v-if={screen === "before_we_start"}>
           <div className="oobe-header">{getLz("oobe.amupsell.title")}</div>
           <div className="oobe-body text">
             {getLz("oobe.amupsell.text")}
@@ -47,14 +47,14 @@ const Component = () => {
                 <label>
                   <select
                     className="md-select"
-                    change="$root.setLz('');$root.setLzManual()"
-                    v-model="$root.cfg.general.language">
+                    onChange={() => $root.setLz('');$root.setLzManual()}
+                    v-model={$root.cfg.general.language}>
                     <optgroup
                       label="index"
-                      v-for="(categories, index) in getLanguages()">
+                      v-for={(categories, index) in getLanguages()}>
                       <option
-                        v-for="lang in categories"
-                        value="lang.code">
+                        v-for={lang in categories}
+                        value={lang.code}>
                         {lang.nameNative}({lang.nameEnglish})
                       </option>
                     </optgroup>
@@ -79,7 +79,7 @@ const Component = () => {
         {/* <transition name="">  */}
         <div
           className="oobe-view"
-          v-if="screen == 'welcome'">
+          v-if={screen === "welcome"}>
           <div className="oobe-header">{getLz("oobe.intro.title")}</div>
           <div className="oobe-body text">{getLz("oobe.intro.text")}</div>
           <div className="oobe-footer">
@@ -103,7 +103,7 @@ const Component = () => {
         {/* <transition name="">  */}
         <div
           className="oobe-view"
-          v-if="screen == 'general'">
+          v-if={screen === "general"}>
           <div className="oobe-header">{getLz("oobe.general.title")}</div>
           <div className="oobe-body text" />
           <div className="oobe-footer">
@@ -127,7 +127,7 @@ const Component = () => {
         {/* <transition name="">  */}
         <div
           className="oobe-view"
-          v-if="screen == 'visual'">
+          v-if={screen === "visual"}>
           <div className="oobe-header">{getLz("oobe.visual.title")}</div>
           <div className="oobe-body visual">
             <b-row>
@@ -135,7 +135,7 @@ const Component = () => {
                 <div
                   className="card bg-dark text-white stylePicker"
                   onClick={() => ($root.cfg.visual.directives.windowLayout = "twopanel")}
-                  className="{'style-active': ($root.cfg.visual.directives.windowLayout == 'twopanel')}">
+                  className="{'style-active': ($root.cfg.visual.directives.windowLayout === 'twopanel')}">
                   <div className="card-body">
                     <img
                       className="visualPreview"
@@ -150,7 +150,7 @@ const Component = () => {
                 <div
                   className="card bg-dark text-white stylePicker"
                   onClick={() => ($root.cfg.visual.directives.windowLayout = "default")}
-                  className="{'style-active': ($root.cfg.visual.directives.windowLayout == 'default')}">
+                  className="{'style-active': ($root.cfg.visual.directives.windowLayout === 'default')}">
                   <div className="card-body">
                     <img
                       className="visualPreview"
@@ -185,7 +185,7 @@ const Component = () => {
         {/* <transition name="">  */}
         <div
           className="oobe-view"
-          v-if="screen == 'audio'">
+          v-if={screen === "audio"}>
           <div className="oobe-header">{getLz("oobe.audio.title")}</div>
           <div className="oobe-body">
             <div className="blurb">{getLz("oobe.audio.text")}</div>
@@ -200,7 +200,7 @@ const Component = () => {
                   <div className="md-option-segment md-option-segment_auto">
                     <input
                       type="checkbox"
-                      v-model="$root.cfg.audio.maikiwiAudio.ciderPPE"
+                      v-model={$root.cfg.audio.maikiwiAudio.ciderPPE}
                       switch
                     />
                   </div>
@@ -226,7 +226,7 @@ const Component = () => {
         {/* </transition>  */}
         <div
           className="oobe-view"
-          v-if="screen == 'signin'">
+          v-if={screen === "signin"}>
           <div className="oobe-header">Sign in with Apple Music</div>
           <div className="oobe-body">
             <div className="blurb" />
@@ -244,7 +244,7 @@ const Component = () => {
         <div className="oobe-titlebar">
           <div
             className="button-group"
-            v-if="$root.platform !== 'darwin'">
+            v-if={$root.platform !== "darwin"}>
             <button
               className="min"
               onClick={() => $root.ipcRenderer.send("minimize")}

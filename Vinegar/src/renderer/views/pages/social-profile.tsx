@@ -5,7 +5,7 @@ const SocialProfile = ({ data }: { data: object }) => {
   const app = this.$root;
   let topSongsExpanded = false;
   function getArtistPalette(artist) {
-    if (artist?.attributes?.artwork != null) {
+    if (artist?.attributes?.artwork !== null) {
       return {
         background: "#" + artist["attributes"]["artwork"]["bgColor"],
         color: "#" + artist["attributes"]["artwork"]["textColor1"],
@@ -37,7 +37,7 @@ const SocialProfile = ({ data }: { data: object }) => {
               <div className="artist-image">
                 <MediaItemArtwork
                   shadow="large"
-                  url="data.attributes.artwork ? data.attributes.artwork.url : ''"
+                  url={data.attributes.artwork ? data.attributes.artwork.url : ''}
                   size="220"
                   type="artists"
                 />
@@ -49,14 +49,14 @@ const SocialProfile = ({ data }: { data: object }) => {
           </div>
         </div>
         <div className="artist-body">
-          <template v-if="data.relationships && data.relationships['shared-playlists']">
+          <template v-if={data.relationships && data.relationships["shared-playlists"]}>
             <div className="row">
               <div className="col">
                 <h3>{"Shared Playlists" ?? ""}</h3>
               </div>
               <div
                 className="col-auto cider-flex-center"
-                v-if="data.relationships['shared-playlists'].data.length >= 10">
+                v-if={data.relationships["shared-playlists"].data.length >= 10}>
                 <button
                   className="cd-btn-seeall"
                   onClick={() => app.showCollection(data.relationships["shared-playlists"], "Shared Playlists" ?? "", "default")}>
@@ -65,8 +65,8 @@ const SocialProfile = ({ data }: { data: object }) => {
               </div>
             </div>
             <MediaItemSquare
-              item="item"
-              v-for="item in data.relationships['shared-playlists'].data.limit(10)"
+              item={item}
+              v-for={item in data.relationships["shared-playlists"].data.limit(10)}
             />
           </template>
         </div>

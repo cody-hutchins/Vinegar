@@ -7,18 +7,18 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
       <template>
         <div style={{ position: "relative", display: "inline-flex" }}>
           <div
-            clickself="app.routeView(item)"
+            clickself={app.routeView(item)}
             className="cd-mediaitem-mvview">
             <div className="artwork">
               <MediaItemArtwork
-                url="item.attributes.artwork ? item.attributes.artwork.url : ''"
-                video="(item.attributes != null && item.attributes.editorialVideo != null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                url={item.attributes.artwork ? item.attributes.artwork.url : ''}
+                video="(item.attributes !== null && item.attributes.editorialVideo !== null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
                 size={imagesize ?? 300}
               />
             </div>
             <div
               className="cd-mediaitem-mvview-overlay"
-              clickself="app.routeView(item)">
+              clickself={app.routeView(item)}>
               <div
                 className="button"
                 style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
@@ -33,8 +33,8 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
             </div>
             <div
               className="subtitle text-overflow-elipsis item-navigate"
-              v-if="item.attributes.artistName"
-              style={{ zIndex: item.attributes.editorialNotes == null && item.attributes.artistName ? "4" : "" }}
+              v-if={item.attributes.artistName}
+              style={{ zIndex: item.attributes.editorialNotes === null && item.attributes.artistName ? "4" : "" }}
               onClick={() => {
                 if (item.attributes.artistName) app.searchAndNavigate(item, "artist");
               }}>
@@ -43,7 +43,7 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
           </div>
           <div
             className="cd-mediaitem-mvview-overlay"
-            clickself="app.routeView(item)"
+            clickself={app.routeView(item)}
             tabindex="0">
             <div
               className="button"

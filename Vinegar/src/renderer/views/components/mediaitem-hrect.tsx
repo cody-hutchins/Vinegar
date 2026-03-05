@@ -19,7 +19,7 @@ const MediaItemHrect = ({ item }: { item: object }) => {
             <div className="title text-overflow-elipsis">{item.attributes.name}</div>
             <div className="subtitle text-overflow-elipsis">
               {item.type}
-              <template v-if="item.attributes.artistName">∙ {item.attributes.artistName}</template>
+              <template v-if={item.attributes.artistName}>∙ {item.attributes.artistName}</template>
             </div>
           </div>
         </div>

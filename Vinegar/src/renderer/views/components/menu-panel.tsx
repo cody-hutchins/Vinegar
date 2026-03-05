@@ -36,9 +36,9 @@ const MenuPanel = () => {
     mounted();
   }, []);
   function getBodyClasses() {
-    if (direction == "down") {
+    if (direction === "down") {
       return ["menu-panel-body-down"];
-    } else if (direction == "up") {
+    } else if (direction === "up") {
       return ["menu-panel-body-up"];
     } else {
       return ["foo"];
@@ -118,8 +118,8 @@ const MenuPanel = () => {
     <div id="cider-menu-panel">
       <div
         className="menu-panel"
-        clickself="menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}"
-        contextmenuself="menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}">
+        clickself={menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}
+        contextmenuself={menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}>
         <div
           className="menu-panel-body"
           ref="menubody"
@@ -127,7 +127,7 @@ const MenuPanel = () => {
           className="getBodyClasses()">
           <div
             className="menu-header-text"
-            v-if="content.name != ''">
+            v-if={content.name !== ""}>
             <div className="row">
               <div className="col">
                 <h3 className="queue-header-text">{content.name}</h3>
@@ -136,20 +136,20 @@ const MenuPanel = () => {
           </div>
           <div
             className="menu-header-body"
-            v-if="Object.keys(content.headerItems).length != 0">
-            <template v-for="item in content.headerItems">
+            v-if={Object.keys(content.headerItems).length !== 0}>
+            <template v-for={item in content.headerItems}>
               <button
                 className="menu-option-header"
                 className="getClasses(item)"
                 v-b-tooltiphover
-                title="item.name"
-                v-if="canDisplay(item)"
+                title={item.name}
+                v-if={canDisplay(item)}
                 style={getItemStyle(item)}
                 onClick={() => action(item)}>
                 <div
                   className="sidebar-icon"
                   style={{ margin: 0 }}
-                  v-if="item.icon">
+                  v-if={item.icon}>
                   <div
                     className="svg-icon"
                     style={{ "--url": "url(" + item.icon + ")" }}
@@ -159,15 +159,15 @@ const MenuPanel = () => {
             </template>
           </div>
           <div className="menu-body">
-            <template v-for="item in content.items">
+            <template v-for={item in content.items}>
               <button
                 className="menu-option"
-                v-if="canDisplay(item)"
+                v-if={canDisplay(item)}
                 style={getItemStyle(item)}
                 onClick={() => action(item)}>
                 <div
                   className="sidebar-icon"
-                  v-if="item.icon">
+                  v-if={item.icon}>
                   <div
                     className="svg-icon"
                     style={{ "--url": "url(" + item.icon + ")" }}

@@ -123,7 +123,7 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
     <div id="pagination">
       <div
         className="pagination-container"
-        v-if="!isInfinite">
+        v-if={!isInfinite}>
         <button
           className="md-btn page-btn"
           disabled="effectivePage === 1"
@@ -139,7 +139,7 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
         <button
           className="`md-btn page-btn${ isCurrentPage(page) ? ' md-btn-primary': ''}`"
           onClick={() => goToPage(page)}
-          v-for="page in pagesToShow">
+          v-for={page in pagesToShow}>
           {page}
         </button>
         <button

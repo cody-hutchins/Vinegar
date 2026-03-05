@@ -141,7 +141,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     let parent = parent;
     let childIndex = index;
     console.log(item, parent, childIndex);
-    if (parent != null && childIndex != null) {
+    if (parent !== null && childIndex !== null) {
       app.queueParentandplayChild(parent, childIndex, item);
     } else {
       app.playMediaItemById(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.url);
@@ -157,18 +157,18 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
         contextmenu="contextMenu">
         <div
           className="artwork"
-          v-show="isVisible"
-          v-if="showArtwork == true">
+          v-show={isVisible}
+          v-if={showArtwork === true}>
           <MediaItemArtwork
             url="getArtwork()"
             size="50"
-            type="item.type"
+            type={item.type}
           />
         </div>
         <div
           className="info-rect"
           style={{ paddingLeft: showArtwork ? "" : "16px" }}
-          dblclick="app.routeView(item)">
+          dblclick={app.routeView(item)}>
           <div className="title text-overflow-elipsis">{item.attributes.name}</div>
         </div>
       </div>

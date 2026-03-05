@@ -20,7 +20,7 @@ const Sidebar = () => {
   return (
     <div id="cider-app-sidebar">
       <div id="app-sidebar">
-        <template v-if="$root.getThemeDirective('windowLayout') != 'twopanel'">
+        <template v-if={$root.getThemeDirective('windowLayout') !== 'twopanel'}>
           <div className="app-sidebar-header">
             <div className="search-input-container">
               <div className="search-input--icon" />
@@ -31,26 +31,26 @@ const Sidebar = () => {
                   $root.appRoute("search");
                   $root.search.showHints = true;
                 }}
-                focus="$root.search.showHints = true"
-                blur="$root.setTimeout(()=>{if($root.hintscontext != true){$root.search.showHints = false} }, 300)"
-                v-on:keyupenter="$root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false;$root.search.showSearchView = true;$root.search.cursor = -1"
-                v-on:keyup="$root.searchCursor"
-                change="$root.appRoute('search');"
-                input="$root.getSearchHints()"
-                placeholder="$root.getLz('term.search') + '...'"
-                v-model="$root.search.term"
+                focus={$root.search.showHints = true}
+                blur={$root.setTimeout(()=>{if($root.hintscontext !== true){$root.search.showHints = false} }, 300)}
+                v-on:keyupenter={$root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false;$root.search.showSearchView = true;$root.search.cursor = -1}
+                v-on:keyup={$root.searchCursor}
+                change={$root.appRoute('search');}
+                input={$root.getSearchHints()}
+                placeholder={$root.getLz('term.search') + '...'}
+                v-model={$root.search.term}
                 ref="searchInput"
                 className="search-input"
               />
 
               <div
                 className="search-hints-container"
-                v-if="$root.search.showHints && $root.search.hints.length != 0">
+                v-if={$root.search.showHints && $root.search.hints.length !== 0}>
                 <div className="search-hints">
                   <button
                     className="search-hint text-overflow-elipsis"
-                    v-for="(hint, index) in $root.search.hints.filter((a) => {return a.content == null})"
-                    className="{active: ($root.search.cursor == index)}"
+                    v-for={(hint, index) in $root.search.hints.filter((a) => {return a.content === null})}
+                    className="{active: ($root.search.cursor === index)}"
                     onClick={() => {
                       $root.search.term = hint.searchTerm;
                       $root.search.showHints = false;
@@ -59,9 +59,9 @@ const Sidebar = () => {
                     }}>
                     {hint.displayTerm}
                   </button>
-                  <template v-for="(item, position) in $root.search.hints.filter((a) => {return a.content != null})">
+                  <template v-for={(item, position) in $root.search.hints.filter((a) => {return a.content !== null})}>
                     <MediaItemSmarthints
-                      item="item.content"
+                      item={item.content}
                       position="position">
                       {" "}
                     </MediaItemSmarthints>
@@ -76,7 +76,7 @@ const Sidebar = () => {
           scrollaxis="y">
           {/* AM Navigation  */}
           <div
-            v-show="$root.getThemeDirective('windowLayout') != 'twopanel'"
+            v-show={$root.getThemeDirective('windowLayout') !== 'twopanel'}
             className="sidebarCatalogSection">
             <div
               className="app-sidebar-header-text"
@@ -86,9 +86,9 @@ const Sidebar = () => {
               className="{collapsed: $root.cfg.general.sidebarCollapsed.cider}">
               {$root.getLz("app.name")}
             </div>
-            <template v-if="!$root.cfg.general.sidebarCollapsed.cider">
+            <template v-if={!$root.cfg.general.sidebarCollapsed.cider}>
               <SidebarLibraryItem
-                name="$root.getLz('home.title')"
+                name={$root.getLz('home.title')}
                 svg-icon="./assets/feather/home.svg"
                 svg-icon-name="home"
                 page="home"
@@ -103,21 +103,21 @@ const Sidebar = () => {
               className="{collapsed: $root.cfg.general.sidebarCollapsed.applemusic}">
               {$root.getLz("term.appleMusic")}
             </div>
-            <template v-if="!$root.cfg.general.sidebarCollapsed.applemusic">
+            <template v-if={!$root.cfg.general.sidebarCollapsed.applemusic}>
               <SidebarLibraryItem
-                name="$root.getLz('term.listenNow')"
+                name={$root.getLz('term.listenNow')}
                 svg-icon="./assets/feather/play-circle.svg"
                 svg-icon-name="listenNow"
                 page="listen_now"
               />
               <SidebarLibraryItem
-                name="$root.getLz('term.browse')"
+                name={$root.getLz('term.browse')}
                 svg-icon="./assets/feather/globe.svg"
                 svg-icon-name="browse"
                 page="browse"
               />
               <SidebarLibraryItem
-                name="$root.getLz('term.radio')"
+                name={$root.getLz('term.radio')}
                 svg-icon="./assets/feather/radio.svg"
                 svg-icon-name="radio"
                 page="radio"
@@ -133,76 +133,76 @@ const Sidebar = () => {
             className="{collapsed: $root.cfg.general.sidebarCollapsed.library}">
             {$root.getLz("term.library")}
           </div>
-          <template v-if="!$root.cfg.general.sidebarCollapsed.library">
+          <template v-if={!$root.cfg.general.sidebarCollapsed.library}>
             <SidebarLibraryItem
-              name="$root.getLz('term.recentlyAdded')"
+              name={$root.getLz('term.recentlyAdded')}
               svg-icon="./assets/feather/plus-circle.svg"
               svg-icon-name="recentlyAdded"
-              v-if="$root.cfg.general.sidebarItems.recentlyAdded"
+              v-if={$root.cfg.general.sidebarItems.recentlyAdded}
               page="library-recentlyadded"
             />
             <SidebarLibraryItem
-              name="$root.getLz('term.songs')"
+              name={$root.getLz('term.songs')}
               svg-icon="./assets/feather/music.svg"
               svg-icon-name="songs"
-              v-if="$root.cfg.general.sidebarItems.songs"
+              v-if={$root.cfg.general.sidebarItems.songs}
               page="library-songs"
             />
             <SidebarLibraryItem
-              name="$root.getLz('term.albums')"
+              name={$root.getLz('term.albums')}
               svg-icon="./assets/feather/disc.svg"
               svg-icon-name="albums"
-              v-if="$root.cfg.general.sidebarItems.albums"
+              v-if={$root.cfg.general.sidebarItems.albums}
               page="library-albums"
             />
             <SidebarLibraryItem
-              name="$root.getLz('term.artists')"
+              name={$root.getLz('term.artists')}
               svg-icon="./assets/feather/user.svg"
               svg-icon-name="artists"
-              v-if="$root.cfg.general.sidebarItems.artists"
+              v-if={$root.cfg.general.sidebarItems.artists}
               page="library-artists"
             />
             <SidebarLibraryItem
-              name="$root.getLz('term.videos')"
+              name={$root.getLz('term.videos')}
               svg-icon="./assets/feather/video.svg"
               svg-icon-name="videos"
-              v-if="$root.cfg.general.sidebarItems.videos"
+              v-if={$root.cfg.general.sidebarItems.videos}
               page="library-videos"
             />
             <SidebarLibraryItem
-              name="$root.getLz('term.podcasts')"
+              name={$root.getLz('term.podcasts')}
               svg-icon="./assets/feather/mic.svg"
               svg-icon-name="podcasts"
-              v-if="$root.cfg.general.sidebarItems.podcasts"
+              v-if={$root.cfg.general.sidebarItems.podcasts}
               page="podcasts"
             />
           </template>
-          {/* <template v-if="$root.cfg.libraryPrefs.localPaths.length != 0">
+          {/* <template v-if={$root.cfg.libraryPrefs.localPaths.length !== 0}>
                 <div className="app-sidebar-header-text"
                      onClick={() =>{$root.cfg.general.sidebarCollapsed.localLibrary = !$root.cfg.general.sidebarCollapsed.localLibrary}}
                      className="{collapsed: $root.cfg.general.sidebarCollapsed.localLibrary}">
                     Local Library
                 </div>
-                <template v-if="!$root.cfg.general.sidebarCollapsed.localLibrary">
-                    <SidebarPlaylist item="{attributes: { name:'Songs'} , id:'ciderlocal'}" />
+                <template v-if={!$root.cfg.general.sidebarCollapsed.localLibrary}>
+                    <SidebarPlaylist item={{attributes: { name:'Songs'} , id:'ciderlocal'}} />
                 </template>
             </template>  */}
-          <template v-if="$root.getPlaylistFolderChildren('p.applemusic').length != 0">
+          <template v-if={$root.getPlaylistFolderChildren('p.applemusic').length !== 0}>
             <div
               className="app-sidebar-header-text"
               onClick={() => {
                 $root.cfg.general.sidebarCollapsed.amplaylists = !$root.cfg.general.sidebarCollapsed.amplaylists;
               }}
-              contextmenu="$root.playlistHeaderContextMenu"
+              contextmenu={$root.playlistHeaderContextMenu}
               className="{collapsed: $root.cfg.general.sidebarCollapsed.amplaylists}">
               {$root.getLz("term.appleMusic")}
               {$root.getLz("term.playlists")}
             </div>
-            <template v-if="!$root.cfg.general.sidebarCollapsed.amplaylists">
+            <template v-if={!$root.cfg.general.sidebarCollapsed.amplaylists}>
               <SidebarPlaylist
-                v-for="item in $root.getPlaylistFolderChildren('p.applemusic')"
-                v-bind:key="item.id"
-                item="item"
+                v-for={item in $root.getPlaylistFolderChildren('p.applemusic')}
+                v-bind:key={item.id}
+                item={item}
               />
             </template>
           </template>
@@ -211,11 +211,11 @@ const Sidebar = () => {
             onClick={() => {
               $root.cfg.general.sidebarCollapsed.playlists = !$root.cfg.general.sidebarCollapsed.playlists;
             }}
-            contextmenu="$root.playlistHeaderContextMenu"
+            contextmenu={$root.playlistHeaderContextMenu}
             className="{collapsed: $root.cfg.general.sidebarCollapsed.playlists}">
             {$root.getLz("term.playlists")}
           </div>
-          <template v-if="!$root.cfg.general.sidebarCollapsed.playlists">
+          <template v-if={!$root.cfg.general.sidebarCollapsed.playlists}>
             <button
               className="app-sidebar-item"
               onClick={() => $root.playlistHeaderContextMenu}>
@@ -223,35 +223,35 @@ const Sidebar = () => {
               <div className="sidebar-item-text">{$root.getLz("action.createNew")}</div>
             </button>
             <SidebarPlaylist
-              v-for="item in $root.getPlaylistFolderChildren('p.playlistsroot')"
-              v-bind:key="item.id"
+              v-for={item in $root.getPlaylistFolderChildren('p.playlistsroot')}
+              v-bind:key={item.id}
               madeforyou
-              item="item"
+              item={item}
             />
           </template>
           <div
-            v-if="$root.cfg.visual.artworkDisplayLayout == 'sidebar'"
+            v-if={$root.cfg.visual.artworkDisplayLayout === 'sidebar'}
             clickstop={switchArtworkDisplayLayout()}
             className="artwork"
             id="artworkLCD"
             style={{ position: "sticky", bottom: "0px" }}>
-            <MediaItemArtwork url="$root.currentArtUrl" />
+            <MediaItemArtwork url={$root.currentArtUrl} />
           </div>
         </div>
         <div className="app-sidebar-footer display--small app-sidebar-footer--controls">
           <div
             className="app-playback-controls"
-            contextmenu="$root.nowPlayingContextMenu">
+            contextmenu={$root.nowPlayingContextMenu}>
             <div className="control-buttons">
               <div className="app-chrome-item">
                 <button
                   className="playback-button--small shuffle"
-                  v-if="$root.mk.shuffleMode == 0"
+                  v-if={$root.mk.shuffleMode === 0}
                   onClick={() => {
                     $root.mk.shuffleMode = 1;
                   }}
-                  title="$root.getLz('term.enableShuffle')"
-                  className="$root.isDisabled() && 'disabled'"
+                  title={$root.getLz('term.enableShuffle')}
+                  className={$root.isDisabled() && 'disabled'}
                   v-b-tooltiphoverrighttop
                 />
                 <button
@@ -260,8 +260,8 @@ const Sidebar = () => {
                   onClick={() => {
                     $root.mk.shuffleMode = 0;
                   }}
-                  title="$root.getLz('term.disableShuffle')"
-                  className="$root.isDisabled() && 'disabled'"
+                  title={$root.getLz('term.disableShuffle')}
+                  className={$root.isDisabled() && 'disabled'}
                   v-b-tooltiphoverrighttop
                 />
               </div>
@@ -269,8 +269,8 @@ const Sidebar = () => {
                 <button
                   className="playback-button previous"
                   onClick={() => $root.prevButton()}
-                  className="$root.isPrevDisabled() && 'disabled'"
-                  title="$root.getLz('term.previous')"
+                  className={$root.isPrevDisabled() && 'disabled'}
+                  title={$root.getLz('term.previous')}
                   v-b-tooltiphover
                 />
               </div>
@@ -278,22 +278,22 @@ const Sidebar = () => {
                 <button
                   className="playback-button stop"
                   onClick={() => $root.mk.stop()}
-                  v-if="$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind == 'radioStation'"
-                  title="$root.getLz('term.stop')"
+                  v-if={$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === 'radioStation'}
+                  title={$root.getLz('term.stop')}
                   v-b-tooltiphover
                 />
                 <button
                   className="playback-button pause"
                   onClick={() => $root.mk.pause()}
-                  v-else-if="$root.mk.isPlaying"
-                  title="$root.getLz('term.pause')"
+                  v-else-if={$root.mk.isPlaying}
+                  title={$root.getLz('term.pause')}
                   v-b-tooltiphover
                 />
                 <button
                   className="playback-button play"
                   onClick={() => $root.mk.play()}
                   v-else
-                  title="$root.getLz('term.play')"
+                  title={$root.getLz('term.play')}
                   v-b-tooltiphover
                 />
               </div>
@@ -301,20 +301,20 @@ const Sidebar = () => {
                 <button
                   className="playback-button next"
                   onClick={() => $root.skipToNextItem()}
-                  title="$root.getLz('term.next')"
-                  className="$root.isNextDisabled() && 'disabled'"
+                  title={$root.getLz('term.next')}
+                  className={$root.isNextDisabled() && 'disabled'}
                   v-b-tooltiphover
                 />
               </div>
               <div className="app-chrome-item">
                 <button
                   className="playback-button--small repeat"
-                  v-if="$root.mk.repeatMode == 0"
+                  v-if={$root.mk.repeatMode === 0}
                   onClick={() => {
                     $root.mk.repeatMode = 1;
                   }}
-                  className="$root.isDisabled() && 'disabled'"
-                  title="$root.getLz('term.enableRepeatOne')"
+                  className={$root.isDisabled() && 'disabled'}
+                  title={$root.getLz('term.enableRepeatOne')}
                   v-b-tooltiphover
                 />
                 <button
@@ -322,9 +322,9 @@ const Sidebar = () => {
                   onClick={() => {
                     $root.mk.repeatMode = 2;
                   }}
-                  v-else-if="$root.mk.repeatMode == 1"
-                  title="$root.getLz('term.disableRepeatOne')"
-                  className="$root.isDisabled() && 'disabled'"
+                  v-else-if={$root.mk.repeatMode === 1}
+                  title={$root.getLz('term.disableRepeatOne')}
+                  className={$root.isDisabled() && 'disabled'}
                   v-b-tooltiphover
                 />
                 <button
@@ -332,9 +332,9 @@ const Sidebar = () => {
                   onClick={() => {
                     $root.mk.repeatMode = 0;
                   }}
-                  v-else-if="$root.mk.repeatMode == 2"
-                  title="$root.getLz('term.disableRepeat')"
-                  className="$root.isDisabled() && 'disabled'"
+                  v-else-if={$root.mk.repeatMode === 2}
+                  title={$root.getLz('term.disableRepeat')}
+                  className={$root.isDisabled() && 'disabled'}
                   v-b-tooltiphover
                 />
               </div>
@@ -344,22 +344,22 @@ const Sidebar = () => {
                 <button
                   className="volume-button--small volume"
                   onClick={() => $root.muteButtonPressed()}
-                  className="{'active': $root.cfg.audio.volume == 0}"
-                  title="$root.cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')"
+                  className="{'active': $root.cfg.audio.volume === 0}"
+                  title={$root.cfg.audio.muted ? $root.getLz('term.unmute') : $root.getLz('term.mute')}
                   v-b-tooltiphover
                 />
                 <input
                   type="range"
                   className=""
-                  wheel="$root.volumeWheel"
-                  step="$root.cfg.audio.volumeStep"
+                  onWheel={$root.volumeWheel}
+                  step={$root.cfg.audio.volumeStep}
                   min="0"
-                  max="$root.cfg.audio.maxVolume"
-                  v-model="$root.mk.volume"
-                  v-if="typeof $root.mk.volume != 'undefined'"
-                  change="$root.checkMuteChange()"
+                  max={$root.cfg.audio.maxVolume}
+                  v-model={$root.mk.volume}
+                  v-if={typeof $root.mk.volume !== 'undefined'}
+                  onChange={() => $root.checkMuteChange()}
                   v-b-tooltiphover
-                  title="$root.formatVolumeTooltip()"
+                  title={$root.formatVolumeTooltip()}
                 />
               </div>
             </div>
@@ -367,7 +367,7 @@ const Sidebar = () => {
         </div>
         <div
           className="app-sidebar-notification backgroundNotification"
-          v-if="$root.library.backgroundNotification.show">
+          v-if={$root.library.backgroundNotification.show}>
           <div className="message">
             {$root.library.backgroundNotification.message} ({$root.library.backgroundNotification.progress} / {$root.library.backgroundNotification.total})
           </div>

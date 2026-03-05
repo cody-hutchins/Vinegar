@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 
 export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   function msToMinSec(ms: number) {
@@ -26,7 +27,7 @@ export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boo
     <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
       <div className="artwork">
         <MediaItemArtwork
-          url="item.attributes.artwork.url"
+          url={item.attributes.artwork.url}
           size="50"
           type="podcast"
         />
@@ -77,11 +78,11 @@ export const Podcasts = () => {
   }
 
   function isSubscribed(id) {
-    return podcasts.filter((podcast) => podcast.id == id).length > 0;
+    return podcasts.filter((podcast) => podcast.id === id).length > 0;
   }
 
   function searchPodcasts() {
-    if (search.term == "") {
+    if (search.term === "") {
       return;
     }
     app.mk.api.v3
@@ -135,7 +136,7 @@ export const Podcasts = () => {
 
   async function getNextEpisodes(next, podcastId) {
     let podcastShow = await app.mk.api.v3.podcasts(next);
-    if (podcastId != podcastSelected.id) {
+    if (podcastId !== podcastSelected.id) {
       return;
     }
     podcastShow.data.data.forEach((ep) => {
@@ -168,66 +169,66 @@ export const Podcasts = () => {
                   type="search"
                   style={{ width: "100%" }}
                   spellcheck="false"
-                  placeholder="$root.getLz('term.search') + '...'"
-                  change="searchPodcasts();librarySearch()"
-                  v-model="search.term"
+                  placeholder={$root.getLz('term.search') + '...'}
+                  onChange={() => searchPodcasts();librarySearch()}
+                  v-model={search.term}
                   className="search-input"
                 />
               </div>
             </div>
-            <div v-if="search.term == ''">
+            <div v-if={search.term === ""}>
               <div
                 className="podcast-list-header"
-                v-if="ciderPodcasts.length != 0">
+                v-if={ciderPodcasts.length !== 0}>
                 {$root.getLz("podcast.followedOnCider")}
               </div>
               <div
                 className="podcast-list-header"
-                v-if="podcasts.length != 0">
+                v-if={podcasts.length !== 0}>
                 {$root.getLz("podcast.subscribedOnItunes")}
               </div>
               <PodcastTab
-                isSelected="podcastSelected.id == podcast.id"
-                clicknative="selectPodcast(podcast)"
-                v-for="podcast in podcasts"
-                item="podcast"
+                isSelected={podcastSelected.id === podcast.id}
+                clicknative={selectPodcast(podcast)}
+                v-for={podcast in podcasts}
+                item={podcast}
               />
             </div>
             <div v-else>
               <div
                 className="podcast-list-header"
-                v-if="podcasts.length != 0">
+                v-if={podcasts.length !== 0}>
                 {$root.getLz("term.library")}
               </div>
               <PodcastTab
-                isSelected="podcastSelected.id == podcast.id"
-                clicknative="selectPodcast(podcast)"
-                v-for="podcast in search.resultsLibrary"
-                item="podcast"
+                isSelected={podcastSelected.id === podcast.id}
+                clicknative={selectPodcast(podcast)}
+                v-for={podcast in search.resultsLibrary}
+                item={podcast}
               />
               <div
                 className="podcast-list-header"
-                v-if="podcasts.length != 0">
+                v-if={podcasts.length !== 0}>
                 {$root.getLz("podcast.itunesStore")}
               </div>
               <PodcastTab
-                isSelected="podcastSelected.id == podcast.id"
-                clicknative="selectPodcast(podcast)"
-                v-for="podcast in search.results"
-                item="podcast"
+                isSelected={podcastSelected.id === podcast.id}
+                clicknative={selectPodcast(podcast)}
+                v-for={podcast in search.results}
+                item={podcast}
               />
             </div>
           </div>
           <div className="episodes-list">
             <div
-              v-if="podcastSelected.id != -1"
+              v-if={podcastSelected.id !== -1}
               className="episodes-inline-info">
               <div className="row">
                 <div className="col-auto cider-flex-center">
                   <div className="podcast-artwork">
                     <MediaItemArtwork
                       shadow="large"
-                      url="podcastSelected.attributes.artwork.url"
+                      url={podcastSelected.attributes.artwork.url}
                       size="300"
                     />
                   </div>
@@ -242,7 +243,7 @@ export const Podcasts = () => {
               <div className="well podcast-show-description">{podcastSelected.attributes.description.standard}</div>
               <div
                 className="row"
-                v-if="!isSubscribed(podcastSelected.id)">
+                v-if={!isSubscribed(podcastSelected.id)}>
                 <div className="col">
                   <button className="md-btn md-btn-block">{$root.getLz("podcast.followOnCider")}</button>
                 </div>
@@ -253,34 +254,34 @@ export const Podcasts = () => {
               <h3>{$root.getLz("podcast.episodes")}</h3>
             </div>
             <div
-              v-if="search.results.length == 0 && podcastSelected.id == -1"
+              v-if={search.results.length === 0 && podcastSelected.id === -1}
               className="podcast-no-search-results">
               <h3>{$root.getLz("error.noResults")}</h3>
               <p>{$root.getLz("error.noResults.description")}</p>
             </div>
             <PodcastEpisode
-              isSelected="selected.id == episode.id"
-              dblclicknative="playEpisode(episode)"
-              clicknative="selectEpisode(episode)"
-              item="episode"
-              v-for="episode in episodes"
+              isSelected={selected.id === episode.id}
+              dblclicknative={() => playEpisode(episode)}
+              clicknative={() => selectEpisode(episode)}
+              item={episode}
+              v-for={episode in episodes}
             />
           </div>
           <transition name="wpfade">
             <div
               className="podcasts-details"
-              v-if="selected.id != -1">
+              v-if={selected.id !== -1}>
               <div className="podcasts-details-header">
                 <button
                   className="close-btn"
                   onClick={() => (selected.id = -1)}
-                  aria-label="$root.getLz('action.close')"
+                  aria-label={$root.getLz('action.close')}
                 />
               </div>
               <div className="podcast-artwork">
                 <MediaItemArtwork
                   shadow="large"
-                  url="selected.attributes.artwork.url"
+                  url={selected.attributes.artwork.url}
                   size="300"
                 />
               </div>
@@ -296,7 +297,7 @@ export const Podcasts = () => {
               </div>
               <div
                 className="well podcast-description"
-                v-if="selected.attributes.description.standard">
+                v-if={selected.attributes.description.standard}>
                 {selected.attributes.description.standard}
               </div>
               <div className="row">
@@ -323,7 +324,7 @@ export const Podcasts = () => {
         <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
           <div className="artwork">
             <MediaItemArtwork
-              url="item.attributes.artwork.url"
+              url={item.attributes.artwork.url}
               size="50"
               type="podcast"
             />

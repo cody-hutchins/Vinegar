@@ -8,10 +8,10 @@ const MediaItemScrollerHorizontalSP = ({ items, withReason }: { items?: object[]
           <template>
             <MediaItemSquare
               kind="card"
-              item="item"
+              item={item}
               size="300"
               reasonShown={withReason}
-              v-bind:key="item.id"
+              v-bind:key={item.id}
               v-for={item in items}
             />
           </template>

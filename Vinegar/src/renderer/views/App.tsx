@@ -89,7 +89,7 @@ export default function App(): ReactElement {
           href="./manifest.json?v=2"
         />
         <script src="https://js-cdn.music.apple.com/hls.js/2.141.0/hls.js/hls.js"></script>
-        <script src="hlscider.js"></script>
+        <script src={hlscider.js}></script>
         <script src="./lib/jquery-3.2.1.slim.min.js"></script>
         <script src="./lib/popper.min.js"></script>
         <script src="./lib/bootstrap.min.js"></script>
@@ -150,7 +150,7 @@ export default function App(): ReactElement {
         <div
           id="app"
           className={getAppClasses()}
-          v-if="appVisible"
+          v-if={appVisible}
           window-state={chrome.windowState}
           style={getAppStyle()}
           library-visible={chrome.sidebarCollapsed ? 0 : 1}
@@ -199,7 +199,7 @@ export default function App(): ReactElement {
           <panels />
           <div
             className="cursor"
-            v-if="chrome.showCursor"
+            v-if={chrome.showCursor}
           />
         </div>
 
@@ -209,7 +209,7 @@ export default function App(): ReactElement {
           async
           src="https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js"
           data-web-components></script>
-        <script src="index.js?v=1"></script>
+        <script src={index.js?v=1}></script>
         <div id="am-musiccovershelf">
           <h1>{component.attributes.title.stringForDisplay}</h1>
         </div>

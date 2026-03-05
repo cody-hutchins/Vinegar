@@ -4,9 +4,9 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
   const app = this.$root;
   let hls = null;
   const mounted = () => {
-    if (!priority && app.cfg.visual.animated_artwork == "limited") {
+    if (!priority && app.cfg.visual.animated_artwork === "limited") {
       return;
-    } else if (app.cfg.visual.animated_artwork == "disabled") {
+    } else if (app.cfg.visual.animated_artwork === "disabled") {
       return;
     }
     if (video) {
@@ -49,16 +49,16 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
               let qualities = [];
               let qualities2 = [];
               for (let i = 0; i < levelsnum.length; i++) {
-                if (qualities2.indexOf(levelsnum[i]) == -1) {
+                if (qualities2.indexOf(levelsnum[i]) === -1) {
                   qualities.push({ level: i, quality: levelsnum[i] });
                   qualities2.push(levelsnum[i]);
                 }
               }
               let actualnum = Math.floor(qualities[qualities.length - 1].level * (quality / 4));
-              if (quality != 0) {
+              if (quality !== 0) {
                 quality = qualities[Math.min(actualnum, qualities.length - 1)].level;
               }
-              if (quality == 4) {
+              if (quality === 4) {
                 quality = qualities[qualities.length - 1].level;
               }
             }
@@ -87,8 +87,8 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
     <div id="animatedartwork-view">
       <div
         className="animated"
-        v-bind:vid="app.hashCode(video).toString()"
-        v-if="video">
+        v-bind:vid={app.hashCode(video).toString()}
+        v-if={video}>
         <video
           ref="video"
           className="animated-artwork-video"

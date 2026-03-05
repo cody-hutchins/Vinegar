@@ -57,31 +57,31 @@ const Component = () => {
         <h1 className="header-text">{$root.getLz("term.recentlyAdded")}</h1>
         <div
           className="well itemContainer collection-list-square"
-          v-if="itemSize == 'normal'">
+          v-if={itemSize === "normal"}>
           <MediaItemSquare
-            v-for="item in items"
-            item="item"
-            v-bind:key="item.id"
+            v-for={item in items}
+            item={item}
+            v-bind:key={item.id}
           />
         </div>
         <div
           className="well itemContainer collection-list-square"
-          v-else="itemSize == 'compact'">
+          v-else={itemSize === "compact"}>
           <MediaItemListItem
             show-meta-data="true"
             show-library-status="false"
-            v-for="item in items"
-            item="item"
-            v-bind:key="item.id"
+            v-for={item in items}
+            item={item}
+            v-bind:key={item.id}
           />
         </div>
         <div
           className="well itemContainer collection-list-square"
-          v-show="loading">
+          v-show={loading}>
           <div className="spinner" />
         </div>
         <button
-          v-if="nextUrl && !loading"
+          v-if={nextUrl && !loading}
           style={{ opacity: 0, height: "32px" }}
           v-observe-visibility="{callback: visibilityChanged}">
           {$root.getLz("term.showMore")}

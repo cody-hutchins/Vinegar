@@ -25,7 +25,7 @@ const ArtistFeed = () => {
     if (index > -1) {
       followedArtists.splice(index, 1);
     }
-    let artist = artists.find((a) => a.id == id);
+    let artist = artists.find((a) => a.id === id);
     let index2 = artists.indexOf(artist);
     if (index2 > -1) {
       artists.splice(index2, 1);
@@ -62,7 +62,7 @@ const ArtistFeed = () => {
       chunkArtistData.forEach((chunkResult) =>
         chunkResult.data.data.forEach((item) => {
           self.artists.push(item);
-          if (item.views["latest-release"].data.length != 0) {
+          if (item.views["latest-release"].data.length !== 0) {
             self.artistFeed.push(item.views["latest-release"].data[0]);
           }
         }),
@@ -90,7 +90,7 @@ const ArtistFeed = () => {
                   <button
                     className="cd-btn-seeall"
                     onClick={() => syncFavorites()}
-                    v-if="!syncingFavs">
+                    v-if={!syncingFavs}>
                     {app.getLz("home.syncFavorites")}
                   </button>
                   <div
@@ -102,10 +102,10 @@ const ArtistFeed = () => {
               </div>
               <vue-horizontal>
                 <div
-                  v-for="artist in artists"
+                  v-for={artist in artists}
                   style={{ margin: "6px" }}>
                   <MediaItemSquare
-                    item="artist"
+                    item={artist}
                     kind="small"
                   />
                   <button
@@ -137,11 +137,11 @@ const ArtistFeed = () => {
               <div
                 className="well"
                 style={{ marginTop: 0 }}>
-                <template v-if="artistFeed.length > 0">
+                <template v-if={artistFeed.length > 0}>
                   <MediaItemListItem
-                    v-for="item in artistFeed"
-                    v-bind:key="item.id"
-                    item="item"
+                    v-for={item in artistFeed}
+                    v-bind:key={item.id}
+                    item={item}
                   />
                 </template>
                 <template v-else>

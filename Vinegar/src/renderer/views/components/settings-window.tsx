@@ -20,7 +20,7 @@ const SettingsWindow = () => {
   };
   function sidebarVis() {
     const tabIndex = app.$store.state.pageState["settings"].currentTabIndex;
-    if (tabIndex == 3 || tabIndex == 5 || tabIndex == 10) {
+    if (tabIndex === 3 || tabIndex === 5 || tabIndex === 10) {
       return true;
     }
     return false;
@@ -168,7 +168,7 @@ const SettingsWindow = () => {
     <div id="settings-window">
       <div
         className="settings-panel"
-        clickself="close()">
+        clickself={close()}>
         <div
           className="settings-window"
           className="{'maxed': $store.state.pageState['settings'].fullscreen, 'no-sidebar': sidebarVis()}">
@@ -188,7 +188,7 @@ const SettingsWindow = () => {
             pills
             vertical
             content-className="mt-3"
-            v-model="$store.state.pageState['settings'].currentTabIndex">
+            v-model={$store.state.pageState['settings'].currentTabIndex}>
             <b-tab>
               <template title>
                 <div>
@@ -213,14 +213,14 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            change="$root.setLz('');$root.setLzManual()"
-                            v-model="app.cfg.general.language">
+                            change={$root.setLz('');$root.setLzManual()}
+                            v-model={app.cfg.general.language}>
                             <optgroup
                               label="index"
-                              v-for="(categories, index) in getLanguages()">
+                              v-for={(categories, index) in getLanguages()}>
                               <option
-                                v-for="lang in categories"
-                                value="lang.code">
+                                v-for={lang in categories}
+                                value={lang.code}>
                                 {lang.nameNative}({lang.nameEnglish})
                               </option>
                             </optgroup>
@@ -244,8 +244,8 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="$root.cfg.general.privateEnabled"
-                            v-on:change="$root.mk.privateEnabled = $root.cfg.general.privateEnabled"
+                            v-model={$root.cfg.general.privateEnabled}
+                            v-on:change={$root.mk.privateEnabled = $root.cfg.general.privateEnabled}
                             switch
                           />
                         </label>
@@ -253,13 +253,13 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.platform !== 'linux'">
+                      v-show={app.platform !== 'linux'}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.general.onStartup.enabled"
+                            v-model={app.cfg.general.onStartup.enabled}
                             switch
                           />
                         </label>
@@ -267,13 +267,13 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.general.onStartup.enabled">
+                      v-show={app.cfg.general.onStartup.enabled}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup.hidden")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.general.onStartup.hidden"
+                            v-model={app.cfg.general.onStartup.hidden}
                             switch
                           />
                         </label>
@@ -298,7 +298,7 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             style={{ width: "180px" }}
-                            v-model="$root.cfg.general.resumeOnStartupBehavior">
+                            v-model={$root.cfg.general.resumeOnStartupBehavior}>
                             <option value="disabled">{$root.getLz("term.disabled")}</option>
                             <option value="local">{$root.getLz("settings.option.general.resumebehavior.locally")}</option>
                             <option value="history">{$root.getLz("settings.option.general.resumebehavior.history")}</option>
@@ -322,7 +322,7 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             style={{ width: "180px" }}
-                            v-model="$root.cfg.general.resumeTabs.tab">
+                            v-model={$root.cfg.general.resumeTabs.tab}>
                             <option value="dynamic">{$root.getLz("settings.option.general.resumetabs.dynamic")}</option>
                             <option value="home">{$root.getLz("home.title")}</option>
                             <option value="listen_now">{$root.getLz("term.listenNow")}</option>
@@ -351,7 +351,7 @@ const SettingsWindow = () => {
                         id="modal-1"
                         centered
                         size="lg"
-                        title="$root.getLz('settings.option.general.customizeSidebar')">
+                        title={$root.getLz('settings.option.general.customizeSidebar')}>
                         <div className="settings-option-body">
                           <div className="md-option-line">
                             <div className="md-option-segment">{$root.getLz("term.recentlyAdded")}</div>
@@ -359,7 +359,7 @@ const SettingsWindow = () => {
                               <label>
                                 <input
                                   type="checkbox"
-                                  v-model="app.cfg.general.sidebarItems.recentlyAdded"
+                                  v-model={app.cfg.general.sidebarItems.recentlyAdded}
                                   switch
                                 />
                               </label>
@@ -371,7 +371,7 @@ const SettingsWindow = () => {
                               <label>
                                 <input
                                   type="checkbox"
-                                  v-model="app.cfg.general.sidebarItems.songs"
+                                  v-model={app.cfg.general.sidebarItems.songs}
                                   switch
                                 />
                               </label>
@@ -383,7 +383,7 @@ const SettingsWindow = () => {
                               <label>
                                 <input
                                   type="checkbox"
-                                  v-model="app.cfg.general.sidebarItems.albums"
+                                  v-model={app.cfg.general.sidebarItems.albums}
                                   switch
                                 />
                               </label>
@@ -395,7 +395,7 @@ const SettingsWindow = () => {
                               <label>
                                 <input
                                   type="checkbox"
-                                  v-model="app.cfg.general.sidebarItems.artists"
+                                  v-model={app.cfg.general.sidebarItems.artists}
                                   switch
                                 />
                               </label>
@@ -407,7 +407,7 @@ const SettingsWindow = () => {
                               <label>
                                 <input
                                   type="checkbox"
-                                  v-model="app.cfg.general.sidebarItems.videos"
+                                  v-model={app.cfg.general.sidebarItems.videos}
                                   switch
                                 />
                               </label>
@@ -419,7 +419,7 @@ const SettingsWindow = () => {
                               <label>
                                 <input
                                   type="checkbox"
-                                  v-model="app.cfg.general.sidebarItems.podcasts"
+                                  v-model={app.cfg.general.sidebarItems.podcasts}
                                   switch
                                 />
                               </label>
@@ -444,7 +444,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.general.themeUpdateNotification"
+                            v-model={app.cfg.general.themeUpdateNotification}
                             switch
                           />
                         </label>
@@ -456,7 +456,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.general.showLovedTracksInline"
+                            v-model={app.cfg.general.showLovedTracksInline}
                             switch
                           />
                         </label>
@@ -501,7 +501,7 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             style={{ width: "180px" }}
-                            v-model="app.cfg.audio.quality"
+                            v-model={app.cfg.audio.quality}
                             v-on:change="changeAudioQuality">
                             {/* // <option value="">{$root.getLz('settings.header.audio.quality.hireslossless')}</option>  */}
                             {/* <option value="">{$root.getLz('settings.header.audio.quality.lossless')}</option>  */}
@@ -541,8 +541,8 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.audio.seamless_audio"
-                            v-on:change="app.mk._bag.features['seamless-audio-transitions'] = app.cfg.audio.seamless_audio"
+                            v-model={app.cfg.audio.seamless_audio}
+                            v-on:change={app.mk._bag.features['seamless-audio-transitions'] = app.cfg.audio.seamless_audio}
                             switch
                           />
                         </label>
@@ -563,15 +563,15 @@ const SettingsWindow = () => {
                         className="md-option-segment"
                         style={{ whiteSpace: "pre-line" }}>
                         {$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
-                        <small>{app.cfg.audio.equalizer.vibrantBass != 0 || app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
+                        <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
                       </div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.audio.normalization"
+                            v-model={app.cfg.audio.normalization}
                             v-on:change="toggleNormalization"
-                            disabled="app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true"
+                            disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true"
                             switch
                           />
                         </label>
@@ -579,7 +579,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.audio.normalization && app.cfg.audio.advanced">
+                      v-show={app.cfg.audio.normalization && app.cfg.audio.advanced}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.audio.dbspl.display")}
                         <br />
@@ -589,7 +589,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.audio.dBSPL"
+                            v-model={app.cfg.audio.dBSPL}
                             switch
                           />
                         </label>
@@ -597,7 +597,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.audio.dBSPL">
+                      v-show={app.cfg.audio.dBSPL}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.audio.dbfs.calibration")}
                         <br />
@@ -607,7 +607,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="number"
-                            v-model="app.cfg.audio.dBSPLcalibration"
+                            v-model={app.cfg.audio.dBSPLcalibration}
                           />
                         </label>
                       </div>
@@ -680,7 +680,7 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            v-model="$root.cfg.visual.directives.windowLayout">
+                            v-model={$root.cfg.visual.directives.windowLayout}>
                             <option value="default">Maverick</option>
                             <option value="twopanel">Mojave</option>
                           </select>
@@ -693,7 +693,7 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            v-model="$root.cfg.visual.overrideDisplayTheme"
+                            v-model={$root.cfg.visual.overrideDisplayTheme}
                             change="changeDisplayTheme">
                             <option value="system">System</option>
                             <option value="dark">Dark</option>
@@ -709,13 +709,13 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             change="windowBgStyleChange"
-                            v-model="app.cfg.visual.window_background_style">
+                            v-model={app.cfg.visual.window_background_style}>
                             <option value="none">{$root.getLz("settings.header.visual.windowBackgroundStyle.none")}</option>
                             <option value="artwork">{$root.getLz("settings.header.visual.windowBackgroundStyle.artwork")}</option>
                             <option value="image">{$root.getLz("settings.header.visual.windowBackgroundStyle.image")}</option>
                             <option value="color">{$root.getLz("settings.header.visual.windowBackgroundStyle.color")}</option>
                             <option
-                              v-if="$root.platform == 'win32'"
+                              v-if={$root.platform === 'win32'}
                               value="mica">
                               Mica (Beta)
                             </option>
@@ -725,12 +725,12 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line child"
-                      v-if="app.cfg.visual.window_background_style == 'color'">
+                      v-if={app.cfg.visual.window_background_style === 'color'}>
                       <div className="md-option-segment">{$root.getLz("settings.option.visual.windowColor")}</div>
                       <div className="md-option-segment_auto">
                         <input
                           type="color"
-                          v-model="app.cfg.visual.windowColor"
+                          v-model={app.cfg.visual.windowColor}
                         />
                       </div>
                     </div>
@@ -739,20 +739,20 @@ const SettingsWindow = () => {
                       <div className="md-option-segment_auto">
                         <input
                           type="checkbox"
-                          v-model="app.cfg.visual.customAccentColor"
-                          disabled="app.cfg.visual.purplePodcastPlaybackBar"
+                          v-model={app.cfg.visual.customAccentColor}
+                          disabled={app.cfg.visual.purplePodcastPlaybackBar}
                           switch
                         />
                       </div>
                     </div>
                     <div
                       className="md-option-line child"
-                      v-if="app.cfg.visual.customAccentColor">
+                      v-if={app.cfg.visual.customAccentColor}>
                       <div className="md-option-segment">{$root.getLz("settings.option.visual.accentColor")}</div>
                       <div className="md-option-segment_auto">
                         <input
                           type="color"
-                          v-model="app.cfg.visual.accentColor"
+                          v-model={app.cfg.visual.accentColor}
                         />
                       </div>
                     </div>
@@ -761,8 +761,8 @@ const SettingsWindow = () => {
                       <div className="md-option-segment_auto">
                         <input
                           type="checkbox"
-                          v-model="app.cfg.visual.purplePodcastPlaybackBar"
-                          disabled="app.cfg.visual.customAccentColor"
+                          v-model={app.cfg.visual.purplePodcastPlaybackBar}
+                          disabled={app.cfg.visual.customAccentColor}
                           switch
                         />
                       </div>
@@ -772,7 +772,7 @@ const SettingsWindow = () => {
                       <div className="md-option-segment_auto">
                         <input
                           type="checkbox"
-                          v-model="app.cfg.visual.compactArtistHeader"
+                          v-model={app.cfg.visual.compactArtistHeader}
                           switch
                         />
                       </div>
@@ -788,8 +788,8 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             style={{ width: " 180px" }}
-                            v-model="app.cfg.visual.hw_acceleration"
-                            change="promptForRelaunch()">
+                            v-model={app.cfg.visual.hw_acceleration}
+                            onChange={() => promptForRelaunch()}>
                             <option value="default">{$root.getLz("settings.header.visual.hardwareAcceleration.default")}</option>
                             <option value="webgpu">{$root.getLz("settings.header.visual.hardwareAcceleration.webGPU")}</option>
                             <option value="disabled">{$root.getLz("term.disabled")}</option>
@@ -803,7 +803,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.visual.showuserinfo"
+                            v-model={app.cfg.visual.showuserinfo}
                             v-on:change="toggleUserInfo"
                             switch
                           />
@@ -821,29 +821,29 @@ const SettingsWindow = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <select
-                            change="$root.setWindowScaleFactor()"
+                            change={$root.setWindowScaleFactor()}
                             className="md-select"
-                            v-model="app.cfg.visual.maxElementScale">
+                            v-model={app.cfg.visual.maxElementScale}>
                             <option value="-1">Default (1.5x)</option>
                             <option value="1">1.0x</option>
-                            <option value="1.1">1.1x</option>
-                            <option value="1.2">1.2x</option>
-                            <option value="1.3">1.3x</option>
-                            <option value="1.4">1.4x</option>
-                            <option value="1.5">1.5x</option>
+                            <option value={1.1}>1.1x</option>
+                            <option value={1.2}>1.2x</option>
+                            <option value={1.3}>1.3x</option>
+                            <option value={1.4}>1.4x</option>
+                            <option value={1.5}>1.5x</option>
                           </select>
                         </label>
                       </div>
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.platform !== 'darwin'">
+                      v-show={app.platform !== 'darwin'}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.close_button_hide")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.general.close_button_hide"
+                            v-model={app.cfg.general.close_button_hide}
                             switch
                           />
                         </label>
@@ -851,7 +851,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.platform !== 'darwin'">
+                      v-show={app.platform !== 'darwin'}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.window.useNativeTitleBar")}
                         <br />
@@ -861,22 +861,22 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.visual.nativeTitleBar"
+                            v-model={app.cfg.visual.nativeTitleBar}
                             switch
-                            change="promptForRelaunch()"
+                            onChange={() => promptForRelaunch()}
                           />
                         </label>
                       </div>
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.platform !== 'darwin' && !app.cfg.visual.nativeTitleBar">
+                      v-show={app.platform !== 'darwin' && !app.cfg.visual.nativeTitleBar}>
                       <div className="md-option-segment">{$root.getLz("settings.option.window.windowControlStyle")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <select
                             className="md-select"
-                            v-model="app.cfg.visual.windowControlPosition">
+                            v-model={app.cfg.visual.windowControlPosition}>
                             <option value="0">{$root.getLz("settings.option.window.windowControlStyle.right")}</option>
                             <option value="1">{$root.getLz("settings.option.window.windowControlStyle.left")}</option>
                           </select>
@@ -895,7 +895,7 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            v-model="app.cfg.visual.animated_artwork">
+                            v-model={app.cfg.visual.animated_artwork}>
                             <option value="always">{$root.getLz("settings.header.visual.animatedArtwork.always")}</option>
                             <option value="limited">{$root.getLz("settings.header.visual.animatedArtwork.limited")}</option>
                             <option value="disabled">{$root.getLz("settings.header.visual.animatedArtwork.disable")}</option>
@@ -905,13 +905,13 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-if="app.cfg.visual.animated_artwork == 'always' || app.cfg.visual.animated_artwork == 'limited'">
+                      v-if={app.cfg.visual.animated_artwork === 'always' || app.cfg.visual.animated_artwork === 'limited'}>
                       <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedArtworkQuality")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <select
                             className="md-select"
-                            v-model="app.cfg.visual.animated_artwork_qualityLevel">
+                            v-model={app.cfg.visual.animated_artwork_qualityLevel}>
                             <option value="0">{$root.getLz("settings.header.visual.animatedArtworkQuality.low")}</option>
                             <option value="1">{$root.getLz("settings.header.visual.animatedArtworkQuality.medium")}</option>
                             <option value="2">{$root.getLz("settings.header.visual.animatedArtworkQuality.high")}</option>
@@ -928,7 +928,7 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             switch
-                            v-model="app.cfg.visual.bg_artwork_rotation"
+                            v-model={app.cfg.visual.bg_artwork_rotation}
                           />
                         </label>
                       </div>
@@ -976,7 +976,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.lyrics.enable_mxm"
+                            v-model={app.cfg.lyrics.enable_mxm}
                             switch
                           />
                         </label>
@@ -984,13 +984,13 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-if="app.cfg.lyrics.enable_mxm">
+                      v-if={app.cfg.lyrics.enable_mxm}>
                       <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableMusixmatchKaraoke")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.lyrics.mxm_karaoke"
+                            v-model={app.cfg.lyrics.mxm_karaoke}
                             switch
                           />
                         </label>
@@ -1002,7 +1002,7 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            v-model="app.cfg.lyrics.mxm_language">
+                            v-model={app.cfg.lyrics.mxm_language}>
                             <option value="disabled">Disabled</option>
                             <option value="ab">Abkhazian</option>
                             <option value="aa">Afar</option>
@@ -1279,7 +1279,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.lyrics.enable_yt"
+                            v-model={app.cfg.lyrics.enable_yt}
                             switch
                           />
                         </label>
@@ -1291,7 +1291,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.lyrics.enable_qq"
+                            v-model={app.cfg.lyrics.enable_qq}
                             switch
                           />
                         </label>
@@ -1325,7 +1325,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.general.playbackNotifications"
+                            v-model={app.cfg.general.playbackNotifications}
                             switch
                           />
                         </label>
@@ -1339,14 +1339,14 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.connectivity.discord_rpc.enabled"
+                            v-model={app.cfg.connectivity.discord_rpc.enabled}
                             switch
                           />
                         </label>
                       </div>
                     </div>
 
-                    <div v-show="app.cfg.connectivity.discord_rpc.enabled != false">
+                    <div v-show={app.cfg.connectivity.discord_rpc.enabled !== false}>
                       <div className="md-option-line">
                         <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.reload")}</div>
                         <div className="md-option-segment md-option-segment_auto">
@@ -1364,7 +1364,7 @@ const SettingsWindow = () => {
                           <label>
                             <select
                               className="md-select"
-                              v-model="app.cfg.connectivity.discord_rpc.client">
+                              v-model={app.cfg.connectivity.discord_rpc.client}>
                               <option value="Cider">{$root.getLz("app.name")}</option>
                               <option value="AppleMusic">{$root.getLz("term.appleMusic")}</option>
                             </select>
@@ -1378,7 +1378,7 @@ const SettingsWindow = () => {
                           <label>
                             <input
                               type="checkbox"
-                              v-model="app.cfg.connectivity.discord_rpc.clear_on_pause"
+                              v-model={app.cfg.connectivity.discord_rpc.clear_on_pause}
                               switch
                             />
                           </label>
@@ -1391,7 +1391,7 @@ const SettingsWindow = () => {
                           <label>
                             <input
                               type="checkbox"
-                              v-model="app.cfg.connectivity.discord_rpc.activity.hide_timestamp"
+                              v-model={app.cfg.connectivity.discord_rpc.activity.hide_timestamp}
                               switch
                             />
                           </label>
@@ -1410,7 +1410,7 @@ const SettingsWindow = () => {
                           <label>
                             <input
                               type="text"
-                              v-model="app.cfg.connectivity.discord_rpc.activity.details_format"
+                              v-model={app.cfg.connectivity.discord_rpc.activity.details_format}
                             />
                           </label>
                         </div>
@@ -1427,7 +1427,7 @@ const SettingsWindow = () => {
                           <label>
                             <input
                               type="text"
-                              v-model="app.cfg.connectivity.discord_rpc.activity.state_format"
+                              v-model={app.cfg.connectivity.discord_rpc.activity.state_format}
                             />
                           </label>
                         </div>
@@ -1439,26 +1439,26 @@ const SettingsWindow = () => {
                           <label>
                             <input
                               type="checkbox"
-                              v-model="app.cfg.connectivity.discord_rpc.activity.buttons.enabled"
+                              v-model={app.cfg.connectivity.discord_rpc.activity.buttons.enabled}
                               switch
                             />
                           </label>
                         </div>
                       </div>
 
-                      <div v-show="app.cfg.connectivity.discord_rpc.activity.buttons.enabled == true">
+                      <div v-show={app.cfg.connectivity.discord_rpc.activity.buttons.enabled === true}>
                         <div className="md-option-line">
                           <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.firstButton")}</div>
                           <div className="md-option-segment md-option-segment_auto">
                             <label>
                               <select
                                 className="md-select"
-                                v-model="app.cfg.connectivity.discord_rpc.activity.buttons.first"
-                                change="$event.target.value == 'disabled' ? app.cfg.connectivity.discord_rpc.activity.buttons.second = 'disabled' : ''">
+                                v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
+                                change={$event.target.value === 'disabled' ? app.cfg.connectivity.discord_rpc.activity.buttons.second = 'disabled' : ''}>
                                 <option
-                                  v-for="option in app.cfg.connectivity.discord_rpc.activity.buttons.options"
+                                  v-for={option in app.cfg.connectivity.discord_rpc.activity.buttons.options}
                                   v-bind:value="option"
-                                  v-show="app.cfg.connectivity.discord_rpc.activity.buttons.second != option">
+                                  v-show={app.cfg.connectivity.discord_rpc.activity.buttons.second !== option}>
                                   {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                                 </option>
                                 <option value="disabled">{$root.getLz("term.disabled")}</option>
@@ -1469,17 +1469,17 @@ const SettingsWindow = () => {
 
                         <div
                           className="md-option-line"
-                          v-show="app.cfg.connectivity.discord_rpc.activity.buttons.first != 'disabled'">
+                          v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== 'disabled'}>
                           <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.secondButton")}</div>
                           <div className="md-option-segment md-option-segment_auto">
                             <label>
                               <select
                                 className="md-select"
-                                v-model="app.cfg.connectivity.discord_rpc.activity.buttons.second">
+                                v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
                                 <option
-                                  v-for="option in app.cfg.connectivity.discord_rpc.activity.buttons.options"
+                                  v-for={option in app.cfg.connectivity.discord_rpc.activity.buttons.options}
                                   v-bind:value="option"
-                                  v-show="app.cfg.connectivity.discord_rpc.activity.buttons.first != option">
+                                  v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== option}>
                                   {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                                 </option>
                                 <option value="disabled">{$root.getLz("term.disabled")}</option>
@@ -1511,7 +1511,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="lastfmConnecting">
+                      v-show={lastfmConnecting}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken")}
                         <small>
@@ -1533,7 +1533,7 @@ const SettingsWindow = () => {
                             <input
                               type="submit"
                               className="md-btn"
-                              value="$root.getLz('action.submit')"
+                              value={$root.getLz('action.submit')}
                             />
                           </form>
                         </label>
@@ -1541,7 +1541,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.connectivity.lastfm.enabled">
+                      v-show={app.cfg.connectivity.lastfm.enabled}>
                       <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble.delay")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
@@ -1549,14 +1549,14 @@ const SettingsWindow = () => {
                             type="number"
                             min="50"
                             max="100"
-                            v-model="app.cfg.connectivity.lastfm.scrobble_after"
+                            v-model={app.cfg.connectivity.lastfm.scrobble_after}
                           />
                         </label>
                       </div>
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.connectivity.lastfm.enabled">
+                      v-show={app.cfg.connectivity.lastfm.enabled}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop")}
                         <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
@@ -1565,7 +1565,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.connectivity.lastfm.filter_loop"
+                            v-model={app.cfg.connectivity.lastfm.filter_loop}
                             switch
                           />
                         </label>
@@ -1573,13 +1573,13 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.connectivity.lastfm.enabled">
+                      v-show={app.cfg.connectivity.lastfm.enabled}>
                       <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.connectivity.lastfm.remove_featured"
+                            v-model={app.cfg.connectivity.lastfm.remove_featured}
                             switch
                           />
                         </label>
@@ -1587,7 +1587,7 @@ const SettingsWindow = () => {
                     </div>
                     <div
                       className="md-option-line"
-                      v-show="app.cfg.connectivity.lastfm.enabled">
+                      v-show={app.cfg.connectivity.lastfm.enabled}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes")}
                         <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>
@@ -1596,13 +1596,13 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.connectivity.lastfm.filter_types['song']"
+                            v-model={app.cfg.connectivity.lastfm.filter_types['song']}
                           />
                           {$root.getLz("term.songs")}
                           <br />
                           <input
                             type="checkbox"
-                            v-model="app.cfg.connectivity.lastfm.filter_types['musicVideo']"
+                            v-model={app.cfg.connectivity.lastfm.filter_types['musicVideo']}
                           />
                           {$root.getLz("term.musicVideos")}
                         </label>
@@ -1659,7 +1659,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.advanced.disableLogging"
+                            v-model={app.cfg.advanced.disableLogging}
                             switch
                           />
                         </label>
@@ -1700,7 +1700,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.advanced.experiments.includes('immersive-preview')"
+                            v-model={app.cfg.advanced.experiments.includes('immersive-preview')}
                             onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}
                             switch
                           />
@@ -1718,7 +1718,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.advanced.experiments.includes('unknown-sources')"
+                            v-model={app.cfg.advanced.experiments.includes('unknown-sources')}
                             onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}
                             switch
                           />
@@ -1735,7 +1735,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.advanced.experiments.includes('cider_mirror')"
+                            v-model={app.cfg.advanced.experiments.includes('cider_mirror')}
                             onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}
                             switch
                           />
@@ -1753,7 +1753,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.advanced.playlistTrackMapping"
+                            v-model={app.cfg.advanced.playlistTrackMapping}
                             switch
                           />
                         </label>
@@ -1762,13 +1762,13 @@ const SettingsWindow = () => {
                     <div className="md-option-line">
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.experimental.compactUI")}
-                        <small v-if="!!app.getThemeDirective('forceUI')">{$root.getLz("term.themeManaged")}</small>
+                        <small v-if={!!app.getThemeDirective('forceUI')}>{$root.getLz('term.themeManaged')}</small>
                       </div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.advanced.experiments.includes('compactui')"
+                            v-model={app.cfg.advanced.experiments.includes('compactui')}
                             onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
                             switch
                             disabled="!!app.getThemeDirective('forceUI')"
@@ -1784,7 +1784,7 @@ const SettingsWindow = () => {
                           <input
                             type="checkbox"
                             disabled
-                            v-model="app.cfg.advanced.experiments.includes('inline-playlists')"
+                            v-model={app.cfg.advanced.experiments.includes('inline-playlists')}
                             onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}
                             switch
                           />
@@ -1794,7 +1794,7 @@ const SettingsWindow = () => {
 
                     <div
                       className="md-option-line update-check"
-                      v-if="app.platform === 'win32' || app.platform === 'linux'">
+                      v-if={app.platform === 'win32' || app.platform === 'linux'}>
                       <div className="md-option-segment">
                         {$root.getLz("settings.option.visual.transparent")}
                         <br />
@@ -1804,9 +1804,9 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type="checkbox"
-                            v-model="app.cfg.visual.transparent"
+                            v-model={app.cfg.visual.transparent}
                             switch
-                            change="promptForRelaunch()"
+                            onChange={() => promptForRelaunch()}
                           />
                         </label>
                       </div>
@@ -1826,7 +1826,7 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             style={{ width: "180px" }}
-                            v-modelnumber="$root.cfg.libraryPrefs.pageSize"
+                            v-modelnumber={$root.cfg.libraryPrefs.pageSize}
                             type="number">
                             <option value="50">50</option>
                             <option value="100">100</option>
@@ -1857,14 +1857,14 @@ const SettingsWindow = () => {
             {/*Github-theme-settings  */}
             {/* Connect Settings  */}
             {/* Not Prod Ready
-            <b-tab title="$root.getLz('settings.header.connect')">
+            <b-tab title={$root.getLz('settings.header.connect')}>
                 <div className="md-option-container">
                     <!!!!!-- Cider Connect / Linking Settings -!->
                     <div className="md-option-header">
                         <span>{$root.getLz('settings.header.connect')}</span>
                     </div>
                     <div className="settings-option-body">
-                        <div className="md-option-line update-check" v-if="app.cfg.connectUser.auth == null">
+                        <div className="md-option-line update-check" v-if={app.cfg.connectUser.auth === null}>
                             <div className="md-option-segment">
                                 {$root.getLz('settings.option.connect.link_account')}
                                 <small>{$root.getLz('settings.option.connect.link_account.description')}</small>
@@ -1877,7 +1877,7 @@ const SettingsWindow = () => {
                                 </button>
                             </div>
                         </div>
-                        <div v-if="app.cfg.connectUser.auth != null">
+                        <div v-if={app.cfg.connectUser.auth !== null}>
                             <div className="md-option-line">
                                 <div className="md-option-segment">
                                     {$root.getLz('settings.option.connect.link_account')}
@@ -1904,7 +1904,7 @@ const SettingsWindow = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
-                                        <input type="checkbox" a-v-model="app.cfg.connectUser.sync.settings"
+                                        <input type="checkbox" a-v-model={app.cfg.connectUser.sync.settings}
                                                onClick={() =>app.cfg.connectUser.sync.settings = !app.cfg.connectUser.sync.settings}
                                                switch/>
                                     </label>
@@ -1917,7 +1917,7 @@ const SettingsWindow = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
-                                        <input type="checkbox" disabled a-v-model="app.cfg.connectUser.sync.themes"
+                                        <input type="checkbox" disabled a-v-model={app.cfg.connectUser.sync.themes}
                                                onClick={() =>app.cfg.connectUser.sync.themes = !app.cfg.connectUser.sync.themes}
                                                switch/>
                                     </label>
@@ -1930,7 +1930,7 @@ const SettingsWindow = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
-                                        <input type="checkbox" disabled a-v-model="app.cfg.connectUser.sync.plugins"
+                                        <input type="checkbox" disabled a-v-model={app.cfg.connectUser.sync.plugins}
                                                onClick={() =>app.cfg.connectUser.sync.plugins = !app.cfg.connectUser.sync.plugins}
                                                switch/>
                                     </label>

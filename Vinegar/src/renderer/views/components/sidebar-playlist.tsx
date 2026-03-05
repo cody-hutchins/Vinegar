@@ -15,7 +15,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
       icon = "./assets/feather/folder.svg";
     }
     let playlistMap = this.$root.playlists.trackMapping;
-    if (relateMediaItems.length != 0) {
+    if (relateMediaItems.length !== 0) {
       if (playlistMap[relateMediaItems[0]]) {
         if (playlistMap[relateMediaItems[0]].includes(item.id)) {
           hasRelatedMediaItems = true;
@@ -24,7 +24,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     }
   }
   function clickEvent() {
-    if (item.type != "library-playlist-folders") {
+    if (item.type !== "library-playlist-folders") {
       if (playlistSelect) {
         playlistSelect(item);
       } else {
@@ -45,7 +45,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
   }
   async function getChildren() {
     children = this.$root.playlists.listing.filter((child) => {
-      if (child.parent == item.id) {
+      if (child.parent === item.id) {
         return child;
       }
     });
@@ -73,12 +73,12 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
 
     // find the item in this.$root.playlists.listing and store it in a variable
     this.$root.playlists.listing.filter((playlist) => {
-      if (playlist.id == item.id) {
+      if (playlist.id === item.id) {
         console.log(playlist);
         playlist.parent = sendTo.id;
       }
     });
-    if (typeof this.$root.getChildren == "function") {
+    if (typeof this.$root.getChildren === "function") {
       this.$root.getChildren();
       console.log(this.$root.children);
     }
@@ -139,13 +139,13 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
   function onDrop(evt) {
     let data = JSON.parse(evt.dataTransfer.getData("text/plain"));
     evt.preventDefault();
-    if (data.id == item.id) {
+    if (data.id === item.id) {
       return;
     }
     console.log(data);
     if (data) {
-      if (item.type == "library-playlists" || item.type == "library-playlist-folders") {
-        if (data.type == "library-playlists" && item.type == "library-playlists") {
+      if (item.type === "library-playlists" || item.type === "library-playlist-folders") {
+        if (data.type === "library-playlists" && item.type === "library-playlists") {
           return;
         }
         move(data, item);
@@ -160,7 +160,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
   function openPlaylist(item) {
     this.$root.appRoute(`playlist_` + item.id);
     this.$root.showingPlaylist = [];
-    if (item.id == "ciderlocal") {
+    if (item.id === "ciderlocal") {
       this.$root.showingPlaylist = {
         id: "ciderlocal",
         type: "library-playlists",
@@ -207,7 +207,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     this.$root.mk.api.v3.music(`v1/me/library/playlist-folders/${item.id}/children`).then((data) => {
       let children = data.data.data;
       children.forEach((child) => {
-        if (!$root.playlists.listing.find((listing) => listing.id == child.id)) {
+        if (!$root.playlists.listing.find((listing) => listing.id === child.id)) {
           child.parent = item.id;
           $root.playlists.listing.push(child);
         }
@@ -226,7 +226,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     });
   }
   function isPlaylistSelected(item) {
-    if (this.$root.showingPlaylist.id == item.id) {
+    if (this.$root.showingPlaylist.id === item.id) {
       return ["active"];
     } else {
       return [];
@@ -239,18 +239,18 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     <div id="sidebar-playlist">
       <div
         className="sidebar-playlist"
-        key="item.id">
+        key={item.id}>
         <button
+          key={item.id}
           className="app-sidebar-item app-sidebar-item-playlist"
-          key="item.id"
-          className="item.type != 'library-playlist-folders' ? {'active': $root.page.includes(item.id)} : ['playlist-folder', {'folder-button-active': folderOpened}, isPlaylistSelected]"
-          contextmenu="playlistContextMenu($event, item.id)"
-          dragstart="startDrag($event, item)"
-          dragover="dragOver"
-          drop="onDrop"
-          href="item.href"
+          className={item.type !== 'library-playlist-folders' ? {'active': $root.page.includes(item.id)} : ['playlist-folder', {'folder-button-active': folderOpened}, isPlaylistSelected]}
+          onContextMenu={(e) => playlistContextMenu(e, item.id)}
+          onDragStart={(e) => startDrag(e, item)}
+          onDragOver={dragOver}
+          onDrop={onDrop}
+          href={item.href}
           onClick={() => clickEvent()}>
-          <template v-if="!renaming">
+          <template v-if={!renaming}>
             <SVGIcon
               url="icon"
               name="sidebar-playlist"
@@ -258,29 +258,29 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
             {item.attributes.name}
             <small
               className="presentNotice"
-              v-if="hasRelatedMediaItems">
+              v-if={hasRelatedMediaItems}>
               (Track present)
             </small>
           </template>
           <input
             type="text"
-            v-model="item.attributes.name"
+            v-model={item.attributes.name}
             className="pl-rename-field"
-            blur="rename()"
-            keydownenter="rename()"
+            onBlur={() => rename()}
+            onKeyDown={(e) => {if(e.key === 'enter') rename();}}
             v-else
           />
         </button>
         <div
           className="folder-body"
-          v-if="item.type === 'library-playlist-folders' && folderOpened">
-          <template v-if="children.length != 0">
+          v-if={item.type === "library-playlist-folders" && folderOpened}>
+          <template v-if={children.length !== 0}>
             <SidebarPlaylist
-              v-for="item in children"
-              relate-media-items="relateMediaItems"
-              playlist-select="playlistSelect"
-              item="item"
-              v-bind:key="item.id"
+              v-for={item in children}
+              relate-media-items={relateMediaItems}
+              playlist-select={playlistSelect}
+              item={item}
+              v-bind:key={item.id}
             />
           </template>
           <template v-else>
