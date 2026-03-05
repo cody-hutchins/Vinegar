@@ -434,7 +434,7 @@ const Component = ({ data }: { data: object }) => {
           <template v-if={app.playlists.loadingState === 1}>
             <div
               className="playlist-display"
-              style={{ bgColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null ? "#" + data.attributes.artwork.textColor1 : "" }}>
+              style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null ? "#" + data.attributes.artwork.textColor1 : "" }}>
               <div className="playlistInfo">
                 <div className="row">
                   <div className="col-auto cider-flex-center">
@@ -442,8 +442,8 @@ const Component = ({ data }: { data: object }) => {
                       <MediaItemArtwork
                         shadow="large"
                         video-priority="true"
-                        url="(data.attributes !== null && data.attributes.artwork !== null) ? data.attributes.artwork.url : ((data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null) ? ((data.relationships.tracks.data[0].attributes.artwork !== null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')"
-                        video="(data.attributes !== null && data.attributes.editorialVideo !== null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                        url={(data.attributes !== null && data.attributes.artwork !== null) ? data.attributes.artwork.url : ((data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null) ? ((data.relationships.tracks.data[0].attributes.artwork !== null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')}
+                        video={(data.attributes !== null && data.attributes.editorialVideo !== null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : ''}
                         size="260"
                       />
                     </div>
@@ -462,12 +462,12 @@ const Component = ({ data }: { data: object }) => {
                           v-show={nameEditing}>
                           <input
                             type="text"
-                            spellcheck="false"
+                            spellCheck="false"
                             className="nameEdit"
                             v-model={data.attributes.name}
-                            blur="editPlaylist"
-                            change="editPlaylist"
-                            keydownenter="editPlaylist"
+                            onBlur={editPlaylist}
+                            onChange={editPlaylist}
+                            onKeyDown={(e) => {if (e.key === 'enter') editPlaylist();}}
                           />
                         </div>
                         <div

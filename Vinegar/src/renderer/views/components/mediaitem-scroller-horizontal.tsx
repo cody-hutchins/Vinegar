@@ -6,12 +6,11 @@ const MediaItemScrollerHorizontal = ({ items, kind = "" }: { items?: object[]; k
     <div id="mediaitem-scroller-horizontal">
       <vue-horizontal ref="horizontal">
         <slot />
-        <MediaItemSquare
-          key={item?.id ?? ""}
+        {items?.map((item) => <MediaItemSquare
+          key={item.id ?? ""}
           kind={kind}
           item={item}
-          v-for={item in items}
-        />
+        />)}
       </vue-horizontal>
     </div>
   );

@@ -470,8 +470,6 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     }
   }
   function playTrack() {
-    let item = item;
-    let parent = parent;
     let childIndex = index;
     let kind = item.attributes.playParams ? (item.attributes.playParams?.kind ?? item.type ?? "") : (item.type ?? "");
     let id = item.attributes.playParams ? (item.attributes.playParams?.id ?? item.id ?? "") : (item.id ?? "");
@@ -572,7 +570,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
         onMouseOver={() => {showInLibrary = true;}}
         onMouseLeave={() => {showInLibrary = false;}}
         onDoubleClick={route}
-        controller-click="route()"
+        controller-click={route()}
         tabIndex={0}
         className="[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]">
         <div
@@ -627,7 +625,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             <MediaItemArtwork
               url={item.attributes.artwork ? item.attributes.artwork.url : ''}
               size="48"
-              bgcolor="getBgColor()"
+              bgcolor={getBgColor()}
               type={item.type}
             />
             <button

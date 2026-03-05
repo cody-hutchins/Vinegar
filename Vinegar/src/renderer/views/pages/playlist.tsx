@@ -748,8 +748,8 @@ const Playlist = ({ data }: { data: object }) => {
                     <MediaItemArtwork
                       shadow="large"
                       video-priority="true"
-                      url="(data.attributes !== null && data.attributes.artwork !== null) ? data.attributes.artwork.url : ((data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null) ? ((data.relationships.tracks.data[0].attributes.artwork !== null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')"
-                      video="(data.attributes !== null && data.attributes.editorialVideo !== null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                      url={(data.attributes !== null && data.attributes.artwork !== null) ? data.attributes.artwork.url : ((data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null) ? ((data.relationships.tracks.data[0].attributes.artwork !== null)? data.relationships.tracks.data[0].attributes.artwork.url : ''):'')}
+                      video={(data.attributes !== null && data.attributes.editorialVideo !== null) ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : (data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' }
                       size="500"
                     />
                   </div>
@@ -771,12 +771,12 @@ const Playlist = ({ data }: { data: object }) => {
                         v-show={nameEditing}>
                         <input
                           type="text"
-                          spellcheck="false"
+                          spellCheck="false"
                           className="nameEdit"
                           v-model={data.attributes.name}
-                          blur="editPlaylist"
-                          change="editPlaylist"
-                          keydownenter="editPlaylist"
+                          onBlur={editPlaylist}
+                          onChange={editPlaylist}
+                          onKeyDown={(e) => {if (e.key === 'enter') editPlaylist();}}
                         />
                       </div>
                       <div
@@ -808,22 +808,22 @@ const Playlist = ({ data }: { data: object }) => {
                           onClick={() => openInfoModal()}
                         />
                         <div
-                          v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null) && (descriptionEditing === false)"
+                          v-else-if={((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null) && (descriptionEditing === false)}
                           onMouseOver={() => minClass(false)}
                           onClick={() => editPlaylistDescription()}
                           v-html={(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard ?? "").substring(0, 255) + "..."}
                         />
                         <div
-                          v-else-if="((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null) && (descriptionEditing)"
+                          v-else-if={((data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null) && (descriptionEditing)}
                           onMouseOver={() => minClass(false)}>
                           <input
                             type="text"
-                            spellcheck="false"
+                            spellCheck="false"
                             className="descriptionEdit"
                             v-model={data.attributes.description.standard}
-                            blur="editPlaylist"
-                            change="editPlaylist"
-                            keydownenter="editPlaylist"
+                            onBlur={editPlaylist}
+                            onChange={editPlaylist}
+                            onKeyDown={(e) => {if (e.key === 'enter') editPlaylist();}}
                           />
                         </div>
                         {/* <button v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null} className=}more-btn}
@@ -1035,7 +1035,7 @@ const Playlist = ({ data }: { data: object }) => {
                         <div className="search-input--icon" />
                         <input
                           type="search"
-                          spellcheck="false"
+                          spellCheck="false"
                           placeholder={$root.getLz("term.search") + "..."}
                           onInput={() => search()}
                           v-model={searchQuery}

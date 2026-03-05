@@ -168,7 +168,7 @@ export const Podcasts = () => {
                 <input
                   type="search"
                   style={{ width: "100%" }}
-                  spellcheck="false"
+                  spellCheck="false"
                   placeholder={$root.getLz('term.search') + '...'}
                   onChange={() => searchPodcasts();librarySearch()}
                   v-model={search.term}

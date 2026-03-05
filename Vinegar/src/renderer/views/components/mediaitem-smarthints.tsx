@@ -443,14 +443,14 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           $root.search.cursor = -1;
           $root.search.term === "";
         }}
-        contextmenu={$root.hintscontext = true;getContextMenu()}
-        className="{'hintactive': ($root.search.cursor === position + $root.search.hints.filter((a) => {return a.content === null}).length)}">
+        onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}
+        className={{'hintactive': ($root.search.cursor === position + $root.search.hints.filter((a) => {return a.content === null}).length)}}>
         <div
           className="row"
-          contextmenu={$root.hintscontext = true;getContextMenu()}>
+          onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}>
           <div
             className="col-auto cider-flex-center"
-            contextmenu={$root.hintscontext = true;getContextMenu()}>
+            onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}>
             <div
               className="artwork"
               className="{'circle': item.type === 'artists'}">
@@ -461,7 +461,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
               />
               <button
                 className="circular-play-button"
-                clickstop="playTrack(item)">
+                clickstop={playTrack(item)}>
                 <div
                   className="_svg-icon"
                   style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}
@@ -471,7 +471,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           </div>
           <div
             className="col queue-info"
-            contextmenu={$root.hintscontext = true;getContextMenu()}>
+            onContextMenu={() => {$root.hintscontext = true;getContextMenu()}}>
             <div className="queue-title text-overflow-elipsis">{item.attributes.name}</div>
             <div className="queue-subtitle text-overflow-elipsis">{item.attributes.artistName}</div>
           </div>

@@ -326,8 +326,8 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     <div id="eq-view">
       <div
         className="modal-fullscreen equalizer-panel"
-        clickself="close()"
-        contextmenuself="close()">
+        clickself={close()}
+        contextmenuself={close()}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{$root.getLz("term.equalizer")}</div>
@@ -343,18 +343,16 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                 v-model={$root.cfg.audio.equalizer.preset}
                 v-on:onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
                 <optgroup label={$root.getLz("term.userPresets")}>
-                  <option
-                    v-for={preset in $root.cfg.audio.equalizer.presets}
+                  {$root.cfg.audio.equalizer.presets.map((preset) => <option
                     value={preset.preset}>
                     {preset.name}
-                  </option>
+                  </option>)}
                 </optgroup>
                 <optgroup label={$root.getLz("term.defaultPresets")}>
-                  <option
-                    v-for={preset in defaultPresets}
+                  {defaultPresets.map((preset) => <option
                     value={preset.preset}>
                     {preset.name}
-                  </option>
+                  </option>)}
                 </optgroup>
               </select>
             </div>

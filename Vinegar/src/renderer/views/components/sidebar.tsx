@@ -1,3 +1,4 @@
+import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemSmarthints from "./mediaitem-smarthints.jsx";
@@ -26,17 +27,17 @@ const Sidebar = () => {
               <div className="search-input--icon" />
               <input
                 type="search"
-                spellcheck="false"
+                spellCheck="false"
                 onClick={() => {
                   $root.appRoute("search");
                   $root.search.showHints = true;
                 }}
-                focus={$root.search.showHints = true}
-                blur={$root.setTimeout(()=>{if($root.hintscontext !== true){$root.search.showHints = false} }, 300)}
-                v-on:keyupenter={$root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false;$root.search.showSearchView = true;$root.search.cursor = -1}
+                onFocus={() => {$root.search.showHints = true}}
+                onBlur={() => $root.setTimeout(()=>{if($root.hintscontext !== true){$root.search.showHints = false} }, 300)}
+                v-on:keyupenter={() => {$root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false;$root.search.showSearchView = true;$root.search.cursor = -1}}
                 v-on:keyup={$root.searchCursor}
-                change={$root.appRoute('search');}
-                input={$root.getSearchHints()}
+                onChange={() => $root.appRoute('search')}
+                onInput={() => $root.getSearchHints()}
                 placeholder={$root.getLz('term.search') + '...'}
                 v-model={$root.search.term}
                 ref="searchInput"
@@ -62,7 +63,7 @@ const Sidebar = () => {
                   <template v-for={(item, position) in $root.search.hints.filter((a) => {return a.content !== null})}>
                     <MediaItemSmarthints
                       item={item.content}
-                      position="position">
+                      position={position}>
                       {" "}
                     </MediaItemSmarthints>
                   </template>

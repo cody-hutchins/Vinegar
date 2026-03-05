@@ -150,7 +150,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                 size="600"
                 video="video"
                 videoPriority="true"
-                url="(image ?? '').replace('{w}','600').replace('{h}','600')"
+                url={(image ?? '').replace('{w}','600').replace('{h}','600')}
               />
             </div>
             <div
@@ -307,7 +307,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     max={app.cfg.audio.maxVolume}
                     v-model={app.mk.volume}
                     v-if={typeof app.mk.volume !== 'undefined'}
-                    change={app.checkMuteChange()}
+                    onChange={() => app.checkMuteChange()}
                     v-b-tooltiphover
                     title={$root.formatVolumeTooltip()}
                   />

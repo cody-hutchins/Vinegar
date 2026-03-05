@@ -81,11 +81,10 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
         <div
           v-if={data["data"] !== "null"}
           className="well itemContainer">
-          <template v-for={(item, key) in data.data}>
-            <template v-if={item.type === "artists"}>
-              <MediaItemSquare item={item} />
-            </template>
-            <template v-else>
+          {data.data.map((item) => (
+            item.type === "artists" ?
+              (<MediaItemSquare item={item} />)
+            : (<>
               <MediaItemListItem
                 v-if={getKind(item) === "song"}
                 index="key"
@@ -94,10 +93,10 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
               <MediaItemSquare
                 v-else
                 item={item}
-                type="getKind(item)"
+                type={getKind(item)}
               />
-            </template>
-          </template>
+            </>)
+          ))}
           <button
             v-if={triggerEnabled}
             style={{ opacity: 0, height: "32px" }}

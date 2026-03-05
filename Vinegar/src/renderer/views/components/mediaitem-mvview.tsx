@@ -12,7 +12,7 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
             <div className="artwork">
               <MediaItemArtwork
                 url={item.attributes.artwork ? item.attributes.artwork.url : ''}
-                video="(item.attributes !== null && item.attributes.editorialVideo !== null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                video={(item.attributes !== null && item.attributes.editorialVideo !== null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : ''}
                 size={imagesize ?? 300}
               />
             </div>

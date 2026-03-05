@@ -1,14 +1,20 @@
+import { ipcRenderer } from "electron";
+import { useEffect } from "react";
+
 const PathMenu = () => {
   let folders = [];
   function mounted() {
     folders = this.$root.cfg.libraryPrefs.localPaths;
   }
+  useEffect(() => {
+    mounted();
+  }, [])
   function close() {
     this.$root.modals.pathMenu = false;
   }
   async function add() {
     const result = await ipcRenderer.invoke("folderSelector");
-    for (i of result) {
+    for (const i of result) {
       if (folders.findIndex((x) => x.startsWith(i)) === -1) {
         folders.push(i);
       }
@@ -25,8 +31,8 @@ const PathMenu = () => {
     <div id="pathmenu">
       <div
         className="spatialproperties-panel castmenu pathmenu modal-fullscreen"
-        clickself="close()"
-        contextmenuself="close()">
+        clickself={close()}
+        contextmenuself={close()}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{"Edit Paths"}</div>
@@ -37,7 +43,7 @@ const PathMenu = () => {
             />
           </div>
           <div className="modal-content">
-            <template v-for={folder of folders}>
+            {folders.map((folder) =>
               <div className="md-option-line">
                 <div className="md-option-segment">{folder}</div>
                 <div className="md-option-segment md-option-segment_auto">
@@ -48,7 +54,7 @@ const PathMenu = () => {
                   </button>
                 </div>
               </div>
-            </template>
+           )}
             <div className="md-option-line">
               <div className="md-option-segment md-option-segment_auto">
                 <button

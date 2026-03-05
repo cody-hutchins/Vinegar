@@ -11,11 +11,10 @@ const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size
   return (
     <div id="artwork-material">
       <div className="artworkMaterial">
-        <MediaItemArtwork
+        {images.map((image) => <MediaItemArtwork
           url={src}
           size="500"
-          v-for={image in images}
-        />
+        />)}
       </div>
     </div>
   );

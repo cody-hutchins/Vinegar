@@ -114,7 +114,7 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
           decoding="async"
           loading="lazy"
           style={imgStyle}
-          load="imgLoaded()"
+          load={imgLoaded()}
           className="mediaitem-artwork--img"
         />
         <div
@@ -122,7 +122,7 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
           className="animatedartwork-view-box"
         />
         <AnimatedartworkView
-          priority="getVideoPriority()"
+          priority={getVideoPriority()}
           video="video"
         />
       </div>

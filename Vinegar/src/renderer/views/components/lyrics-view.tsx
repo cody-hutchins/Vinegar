@@ -150,10 +150,8 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
       <div
         ref="lyricsview"
         className="md-body lyric-body">
-        <template v-if={lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics)}>
-          <template
-            v-for={(lyric, index) in lyrics}
-            v-if={lyric && lyric.line && lyric.line !== "lrcInstrumental"}>
+        {lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics) ?
+        lyrics.map((lyric, index) => lyric && lyric.line && lyric.line !== "lrcInstrumental" ?
             <h3
               className="lyric-line"
               onClick={() => seekTo(lyric.startTime)}
@@ -161,14 +159,14 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
               v-bind:line-index={index.toString()}>
               <template v-if={richlyrics && richlyrics !== [] && richlyrics.length > 0}>
                 <div className="richl">
-                  <template v-for={verse in getVerseLine(index - 1)}>
+                  {getVerseLine(index - 1).map((verse) =>
                     <span
                       className="verse"
                       lyricstart={lyric.startTime}
                       versestart={verse.o}>
                       {verse.c}
                     </span>
-                  </template>
+                  )}
                 </div>
               </template>
               <template v-else>
@@ -180,8 +178,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
                 {lyric.translation}
               </div>
             </h3>
-          </template>
-          <template v-else>
+          :
             <h3
               className="lyric-line"
               onClick={() => seekTo(lyric.startTime)}
@@ -193,12 +190,11 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
                 <div class="WaitingDot2" />
                 <div class="WaitingDot3" />
               </div>
-            </h3>
-          </template>
-        </template>
-        <template v-else>
+            </h3>)
+
+          :
           <div className="no-lyrics">{app.getLz("term.noLyrics")}</div>
-        </template>
+        }
       </div>
     </div>
   );

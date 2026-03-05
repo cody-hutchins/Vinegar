@@ -29,20 +29,19 @@ const PluginMenu = () => {
                 {$root.getLz("term.pluginMenu.none")}
               </span>
             </span>
-            <button
+            {app.pluginMenuEntries.map((entry) => <button
               className="playlist-item"
               onClick={() => {
                 entry.onClick();
                 closeMenu();
-              }}
-              v-for={entry in app.pluginMenuEntries}>
+              }}>
               <span className="icon">{import("../svg/grid.svg")}</span>
               <span
                 className="name"
                 style={{ top: "0.5px" }}>
                 {entry.name}
               </span>
-            </button>
+            </button>)}
           </div>
         </div>
       </div>

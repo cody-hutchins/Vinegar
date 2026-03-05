@@ -1,5 +1,6 @@
 import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
+import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import MediaitemSmarthints from "../components/mediaitem-smarthints.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
@@ -7,7 +8,7 @@ import MediaItemSquare from "../components/mediaitem-square.jsx";
 const Component = ({ search }: { search: object }) => {
   const app = this.$root;
   let recentlyPlayed = [];
-  let goriesView = [];
+  let categoriesView = [];
   let categoriesReady = false;
   let searchType = "catalog";
 
@@ -61,11 +62,11 @@ const Component = ({ search }: { search: object }) => {
           <div className="search-input--icon" />
           <input
             type="search"
-            spellcheck="false"
-            focus={$root.search.showHints = true}
-            blur={$root.setTimeout(()=>{if($root.hintscontext !== true){$root.search.showHints = false} }, 300)}
-            v-on:keyupenter={$root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false; $root.search.showSearchView = true"
-            input={$root.getSearchHints()}
+            spellCheck="false"
+            onFocus={() => {$root.search.showHints = true}}
+            onBlur={() => $root.setTimeout(()=>{if($root.hintscontext !== true){$root.search.showHints = false} }, 300)}
+            v-on:keyupenter={() => $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);$root.search.showHints = false; $root.search.showSearchView = true}
+            onInput={() => $root.getSearchHints()}
             placeholder={$root.getLz('term.search') + '...'}
             v-model={$root.search.term}
             className="search-input"
@@ -89,7 +90,7 @@ const Component = ({ search }: { search: object }) => {
               <template v-for={(item, position) in $root.search.hints.filter((a) => {return a.content !== null})}>
                 <MediaitemSmarthints
                   item={item.content}
-                  position="position">
+                  position={position}>
                   {" "}
                 </MediaitemSmarthints>
               </template>
@@ -243,7 +244,7 @@ const Component = ({ search }: { search: object }) => {
                 imageformat="'bb'"
                 size="600"
                 removeamtext="true"
-                item={item ? (item.attributes.kind ? item : ((item.relationships && item.relationships.contents ) ? item.relationships.contents.data[0] : item)) : []"
+                item={item ? (item.attributes.kind ? item : ((item.relationships && item.relationships.contents ) ? item.relationships.contents.data[0] : item)) : []}
                 imagesize="800"
                 v-for={item of getFlattenedCategories()}
               />

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt: { type: Object; required: false } }) => {
   const isVisible = false;
-  const addedToLibrary = false;
+  let addedToLibrary = false;
   const guid = uuidv4();
   const noplay = ["apple-curators", "editorial-elements", "editorial-items"];
   const nomenu = ["stations", "apple-curators", "editorial-elements", "editorial-items"];
@@ -517,7 +518,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
         <div
           style={{ "--spcolor": getBgColor() }}
           className="cd-mediaitem-square"
-          className="getClasses()"
+          className={getClasses()}
           contextmenu="getContextMenu">
           <div
             className="artwork-container"
@@ -531,13 +532,13 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               className="artwork"
               onClick={() => app.routeView(item)}>
               <MediaItemArtwork
-                url="getArtworkUrl()"
-                video="(item.attributes !== null && item.attributes.editorialVideo !== null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : '' "
+                url={getArtworkUrl()}
+                video={(item.attributes !== null && item.attributes.editorialVideo !== null) ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : (item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : '')) : ''}
                 size="size"
                 upscaling="true"
                 shadow="subtle"
-                bgcolor="getBgColor()"
-                video-priority="forceVideo"
+                bgcolor={getBgColor()}
+                video-priority={forceVideo}
                 type={item.type}
               />
             </div>
@@ -555,19 +556,14 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               aria-label={$root.getLz("term.play")}>
               {import("../svg/play.svg")}
             </button>
-            <div
-              className="badge-container"
-              v-if={itemBadges.length !== 0}>
-              <div
+            {itemBadges.length !== 0 && itemBadges.limit(1).map((badge) => <div
                 className="socialBadge"
-                v-for={badge in itemBadges.limit(1)}
                 v-bind:key={badge.id}>
                 <MediaItemArtwork
-                  url="(badge.attributes.artwork ? badge.attributes.artwork.url : '')"
+                  url={(badge.attributes.artwork ? badge.attributes.artwork.url : '')}
                   size="32"
                 />
-              </div>
-            </div>
+              </div>)}
           </div>
           <div
             className="info-rect"
@@ -576,7 +572,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             style={{ "--bgartwork": getArtworkUrl(size, true) }}>
             <div
               className="title"
-              title={item.attributes?.name ?? (item.relationships?.contents?.data[0]?.attributes?.name ?? (item.attributes?.editorialNotes?.name ?? ''))"
+              title={item.attributes?.name ?? (item.relationships?.contents?.data[0]?.attributes?.name ?? (item.attributes?.editorialNotes?.name ?? ''))}
               v-if={item.attributes.artistNames === null || kind !== "card"}
               onClick={() => app.routeView(item)}>
               <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
@@ -587,7 +583,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               />
             </div>
             <div
-              title="getSubtitle()"
+              title={getSubtitle()}
               className="subtitle item-navigate text-overflow-elipsis"
               onClick={() => getSubtitleNavigation()}
               v-if={getSubtitle() !== ""}>

@@ -1,3 +1,5 @@
+import MediaItemListItem from "./mediaitem-list-item.jsx";
+
 const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object[]; showLibraryStatus?: boolean }) => {
   const itemPages = [];
   const simplifiedParent = [];
@@ -44,16 +46,14 @@ const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object
     <div id="listitem-horizontal">
       <div className="listitem-horizontal">
         <vue-horizontal>
-          <div v-for={items in itemPages}>
+          {itemPages.map((items) =>items.map((song)=> (
             <MediaItemListItem
-              v-for={(song, index) in items}
               show-library-status={showLibraryStatus}
               v-bind:key={song.id}
               parent="'listitem-hr' + simplifiedParent"
               index={song.index}
               item={song}
-            />
-          </div>
+            />)))}
         </vue-horizontal>
       </div>
     </div>

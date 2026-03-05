@@ -77,7 +77,7 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
                   type="search"
                   ref="searchInput"
                   style={{ width: "100%" }}
-                  spellcheck="false"
+                  spellCheck="false"
                   placeholder={app.getLz("term.search") + "..."}
                   v-model={searchQuery}
                   onInput={() => search()}

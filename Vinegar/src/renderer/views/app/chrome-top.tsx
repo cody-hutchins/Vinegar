@@ -4,7 +4,7 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemSmarthints from "../components/mediaitem-smarthints.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 
-export const ChromeTop = () => (
+export const ChromeTop = ({search}: {search: object[]}) => (
   <div
     className="app-chrome"
     style={{ display: chrome.topChromeVisible ? "" : "none" }}>
@@ -38,9 +38,9 @@ export const ChromeTop = () => (
         v-else>
         <button
           className="app-mainmenu"
-          blur="mainMenuVisibility(false)"
+          blur={mainMenuVisibility(false)}
           onClick={() => mainMenuVisibility(true)}
-          contextmenu="mainMenuVisibility(true)"
+          contextmenu={mainMenuVisibility(true)}
           className="{active: chrome.menuOpened}"
           aria-label={$root.getLz('term.quickNav')}
         />
@@ -97,7 +97,7 @@ export const ChromeTop = () => (
             <button
               className="playback-button--small shuffle"
               v-if={mk.shuffleMode === 0}
-              className="isDisabled() && 'disabled'"
+              className={isDisabled() && 'disabled'}
               onClick={() => {
                 mk.shuffleMode = 1;
               }}
@@ -107,7 +107,7 @@ export const ChromeTop = () => (
             <button
               className="playback-button--small shuffle active"
               v-else
-              className="isDisabled() && 'disabled'"
+              className={isDisabled() && 'disabled'}
               onClick={() => {
                 mk.shuffleMode = 0;
               }}
@@ -119,7 +119,7 @@ export const ChromeTop = () => (
             <button
               className="playback-button previous"
               onClick={() => prevButton()}
-              className="isPrevDisabled() && 'disabled'"
+              className={isPrevDisabled() && 'disabled'}
               title={$root.getLz('term.previous')}
               v-b-tooltiphover
             />
@@ -151,7 +151,7 @@ export const ChromeTop = () => (
             <button
               className="playback-button next"
               onClick={() => skipToNextItem()}
-              className="isNextDisabled() && 'disabled'"
+              className={isNextDisabled() && 'disabled'}
               title={$root.getLz('term.next')}
               v-b-tooltiphover
             />
@@ -160,7 +160,7 @@ export const ChromeTop = () => (
             <button
               className="playback-button--small repeat"
               className={mk.repeatMode === 1 ? 'repeatOne' : mk.repeatMode === 2 ? 'active' : ''}
-              className="isDisabled() && 'disabled'"
+              className={isDisabled() && 'disabled'}
               onClick={() => repeatIncrement()}
               title={$root.lz.repeat[mk.repeatMode]}
               v-b-tooltiphover
@@ -288,8 +288,7 @@ export const ChromeTop = () => (
               </div>
               <div className="info-rect">
                 <div
-                  className="song-name"
-                  className="[isElementOverflowing('#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name') ? 'marquee' : '']">
+                  className={`song-name ${[isElementOverflowing('#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name') ? 'marquee' : '']}`}>
                   {mk.nowPlayingItem["attributes"]["name"]}
                   <div
                     className="explicit-icon"
@@ -299,8 +298,7 @@ export const ChromeTop = () => (
                 </div>
                 <div className="song-artist-album">
                   <div
-                    className="song-artist-album-content"
-                    className="[isElementOverflowing('#app-main > .app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content') ? 'marquee' : '']"
+                    className={"song-artist-album-content " +[isElementOverflowing('#app-main > .app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content') ? 'marquee' : '']}
                     style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap" }}>
                     <div
                       className="item-navigate song-artist"
@@ -340,7 +338,7 @@ export const ChromeTop = () => (
                   style={progressBarStyle()}
                   onInput={() => {playerLCD.desiredDuration = $event.target.value;playerLCD.userInteraction = true}}
                   onMouseUp={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
-                  ontouchend={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
+                  onTouchEnd={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
                   max={mk.currentPlaybackDuration}
                   value={getSongProgress()}
                 />
@@ -416,7 +414,7 @@ export const ChromeTop = () => (
           />
           <input
             type="range"
-            wheel="volumeWheel"
+            onWheel={volumeWheel}
             step={cfg.audio.volumeStep}
             min="0"
             max={cfg.audio.maxVolume}
@@ -424,7 +422,7 @@ export const ChromeTop = () => (
             v-if={typeof mk.volume !== "undefined"}
             onChange={() => checkMuteChange()}
             v-b-tooltiphover
-            title="formatVolumeTooltip()"
+            title={formatVolumeTooltip()}
           />
         </div>
         <div className="app-chrome-item generic">
@@ -470,37 +468,32 @@ export const ChromeTop = () => (
             <div className="search-input--icon" />
             <input
               type="search"
-              spellcheck="false"
+              spellCheck="false"
               onClick={() => {
                 $root.appRoute("search");
                 search.showHints = true;
               }}
-              focus={search.showHints = true}
-              blur="setTimeout(()=>{if(hintscontext !== true){search.showHints = false} }, 300)"
+              onFocus={() => search.showHints = true}
+              onBlur={() => setTimeout(()=>{if(hintscontext !== true){search.showHints = false} }, 300)}
               v-on:keyupenter="searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);search.showHints = false;search.showSearchView = true;search.cursor = -1"
-              change={$root.appRoute('search');}
+              onChange={() => $root.appRoute('search')}
               v-on:keyup="searchCursor"
-              input="getSearchHints()"
+              onInput={() => getSearchHints()}
               placeholder={$root.getLz('term.search') + '...'}
               v-model={search.term}
               ref="searchInput"
               className="search-input"
             />
-
             <div
               className="search-hints-container"
               v-if={search.showHints && search.hints.length !== 0}
               style={{ right: "-13px", left: "unset", paddingTop: 0 }}>
               <div className="search-hints">
-                <button
+                {search.hints.filter((a) => {
+                      return a.content === null;
+                    }).map((hint, index) => <button
                   className="search-hint text-overflow-elipsis"
                   className="{active: (search.cursor === index)}"
-                  v-for={
-                    (hint, index) in
-                    search.hints.filter((a) => {
-                      return a.content === null;
-                    })
-                  }
                   onClick={() => {
                     search.term = hint.searchTerm;
                     search.showHints = false;
@@ -508,20 +501,14 @@ export const ChromeTop = () => (
                     search.cursor = -1;
                   }}>
                   {hint.displayTerm}
-                </button>
-                <template
-                  v-for={
-                    (item, position) in
-                    search.hints.filter((a) => {
+                </button>)}
+                {search.hints.filter((a) => {
                       return a.content !== null;
-                    })
-                  }>
+                    }).map((item, position) => <template>
                   <MediaItemSmarthints
                     item={item.content}
-                    position="position">
-                    {" "}
-                  </MediaItemSmarthints>
-                </template>
+                    position={position}/>
+                </template>)}
               </div>
             </div>
           </div>
@@ -557,9 +544,9 @@ export const ChromeTop = () => (
         v-else-if="platform !== 'darwin' && !chrome.nativeControls">
         <button
           className="app-mainmenu"
-          blur="mainMenuVisibility(false)"
+          blur={mainMenuVisibility(false)}
           onClick={() => mainMenuVisibility(true)}
-          contextmenu="mainMenuVisibility(true)"
+          contextmenu={mainMenuVisibility(true)}
           className="{active: chrome.menuOpened}"
         />
       </div>

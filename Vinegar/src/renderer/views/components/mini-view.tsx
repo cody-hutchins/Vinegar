@@ -249,13 +249,13 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <input
                       type="range"
                       className="slider"
-                      wheel={app.volumeWheel}
+                      onWheel={app.volumeWheel}
                       step={app.cfg.audio.volumeStep}
                       min="0"
                       max={app.cfg.audio.maxVolume}
                       v-model={app.mk.volume}
                       v-if={typeof app.mk.volume !== 'undefined'}
-                      change={app.checkMuteChange()}
+                      onChange={() => app.checkMuteChange()}
                     />
                   </div>
                 </div>

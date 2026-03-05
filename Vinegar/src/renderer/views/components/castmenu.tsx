@@ -86,8 +86,8 @@ const Component = () => {
     <div id="castmenu">
       <div
         className="spatialproperties-panel castmenu modal-fullscreen"
-        clickself="close()"
-        contextmenuself="close()">
+        clickself={close()}
+        contextmenuself={close()}>
         <div className="modal-window">
           <div className="modal-header">
             <div className="modal-title">{$root.getLz("action.cast.todevices")}</div>
@@ -105,7 +105,7 @@ const Component = () => {
               className="md-option-container"
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
               <template v-if={!scanning}>
-                <template v-for={device in devices.cast}>
+                {devices.cast.map((device) => <template>
                   <div
                     className="md-option-line"
                     style={{ cursor: "pointer" }}
@@ -141,7 +141,7 @@ const Component = () => {
                       </svg>
                     </div>
                   </div>
-                </template>
+                </template>)}
               </template>
               <template v-else>
                 <div
@@ -159,9 +159,7 @@ const Component = () => {
                 <div className="md-option-segment">
                   Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to "Everyone" or "Anyone on the same network".
                   {/* {$root.getLz('action.cast.airplay.underdevelopment')}  */}
-                  <template
-                    v-if={true}
-                    v-for={device in devices.airplay}>
+                  {devices.airplay.map((device) =><template>
                     <div
                       className="md-option-line"
                       style={{ cursor: pointer }}
@@ -213,7 +211,7 @@ const Component = () => {
                         </svg>
                       </div>
                     </div>
-                  </template>
+                  </template>)}
                 </div>
               </div>
             </div>

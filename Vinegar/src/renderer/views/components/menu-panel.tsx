@@ -118,13 +118,13 @@ const MenuPanel = () => {
     <div id="cider-menu-panel">
       <div
         className="menu-panel"
-        clickself={menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}
-        contextmenuself={menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}>
+        clickself={() => {menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}}
+        contextmenuself={() => {menuPanel.visible = false; if($root.hintscontext){$root.hintscontext = false;focusOther()}}}>
         <div
           className="menu-panel-body"
           ref="menubody"
           style={elStyle}
-          className="getBodyClasses()">
+          className={getBodyClasses()}>
           <div
             className="menu-header-text"
             v-if={content.name !== ""}>
@@ -137,10 +137,10 @@ const MenuPanel = () => {
           <div
             className="menu-header-body"
             v-if={Object.keys(content.headerItems).length !== 0}>
-            <template v-for={item in content.headerItems}>
+            {content.headerItems.map((item) =>
               <button
                 className="menu-option-header"
-                className="getClasses(item)"
+                className={getClasses(item)}
                 v-b-tooltiphover
                 title={item.name}
                 v-if={canDisplay(item)}
@@ -156,10 +156,10 @@ const MenuPanel = () => {
                   />
                 </div>
               </button>
-            </template>
+            )}
           </div>
           <div className="menu-body">
-            <template v-for={item in content.items}>
+            {content.items.map((item) =>
               <button
                 className="menu-option"
                 v-if={canDisplay(item)}
@@ -174,8 +174,7 @@ const MenuPanel = () => {
                   />
                 </div>
                 {item.name}
-              </button>
-            </template>
+              </button>)}
           </div>
         </div>
       </div>

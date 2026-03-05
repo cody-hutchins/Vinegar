@@ -160,7 +160,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           v-show={isVisible}
           v-if={showArtwork === true}>
           <MediaItemArtwork
-            url="getArtwork()"
+            url={getArtwork()}
             size="50"
             type={item.type}
           />

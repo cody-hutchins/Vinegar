@@ -147,7 +147,7 @@ export const Main = () => {
           v-if={appVisible}
           window-state={chrome.windowState}
           style={getAppStyle()}
-          library-visible="(chrome.sidebarCollapsed ? 0 : 1)"
+          library-visible={(chrome.sidebarCollapsed ? 0 : 1)}
           window-style={cfg.visual.directives.windowLayout}>
           <transition name="fsModeSwitch">
             <div

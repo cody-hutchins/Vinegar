@@ -213,7 +213,7 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            change={$root.setLz('');$root.setLzManual()}
+                            onChange={() => {$root.setLz('');$root.setLzManual()}}
                             v-model={app.cfg.general.language}>
                             <optgroup
                               label="index"
@@ -694,7 +694,7 @@ const SettingsWindow = () => {
                           <select
                             className="md-select"
                             v-model={$root.cfg.visual.overrideDisplayTheme}
-                            change="changeDisplayTheme">
+                            onChange={changeDisplayTheme}>
                             <option value="system">System</option>
                             <option value="dark">Dark</option>
                             <option value="light">Light</option>
@@ -708,7 +708,7 @@ const SettingsWindow = () => {
                         <label>
                           <select
                             className="md-select"
-                            change="windowBgStyleChange"
+                            onChange={windowBgStyleChange}
                             v-model={app.cfg.visual.window_background_style}>
                             <option value="none">{$root.getLz("settings.header.visual.windowBackgroundStyle.none")}</option>
                             <option value="artwork">{$root.getLz("settings.header.visual.windowBackgroundStyle.artwork")}</option>
@@ -821,7 +821,7 @@ const SettingsWindow = () => {
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <select
-                            change={$root.setWindowScaleFactor()}
+                            onChange={() => $root.setWindowScaleFactor()}
                             className="md-select"
                             v-model={app.cfg.visual.maxElementScale}>
                             <option value="-1">Default (1.5x)</option>
@@ -1454,7 +1454,7 @@ const SettingsWindow = () => {
                               <select
                                 className="md-select"
                                 v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
-                                change={$event.target.value === 'disabled' ? app.cfg.connectivity.discord_rpc.activity.buttons.second = 'disabled' : ''}>
+                                onChange={(e) => e.target.value === 'disabled' ? app.cfg.connectivity.discord_rpc.activity.buttons.second = 'disabled' : ''}>
                                 <option
                                   v-for={option in app.cfg.connectivity.discord_rpc.activity.buttons.options}
                                   v-bind:value="option"

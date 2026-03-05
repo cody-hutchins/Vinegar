@@ -143,7 +143,7 @@ const Panels = () => {
                 onMouseUp={() => mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
                 onTouchEnd={() => mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
                 max={mk.currentPlaybackDuration}
-                value="getSongProgress()"
+                value={getSongProgress()}
               />
               <p style={{ width: "auto" }}>{convertTime(mk.currentPlaybackDuration)}</p>
             </div>

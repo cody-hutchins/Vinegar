@@ -183,7 +183,7 @@ export const ChromeBottom = () => (
               onMouseUp={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
               onTouchEnd={() => {mk.seekToTime($event.target.value);setTimeout(()=>{playerLCD.desiredDuration = 0;playerLCD.userInteraction = false}, 1000);}}
               max={mk.currentPlaybackDuration}
-              value="getSongProgress()"
+              value={getSongProgress()}
             />
           </b-col>
           <b-col
@@ -203,7 +203,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button--small shuffle"
             v-if={mk.shuffleMode === 0}
-            className="isDisabled() && 'disabled'"
+            className={isDisabled() && 'disabled'}
             onClick={() => {
               mk.shuffleMode = 1;
             }}
@@ -213,7 +213,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button--small shuffle active"
             v-else
-            className="isDisabled() && 'disabled'"
+            className={isDisabled() && 'disabled'}
             onClick={() => (mk.shuffleMode = 0)}
             title={$root.getLz("term.disableShuffle")}
             v-b-tooltiphover
@@ -223,7 +223,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button previous"
             onClick={prevButton}
-            className="isPrevDisabled() && 'disabled'"
+            className={isPrevDisabled() && 'disabled'}
             title={$root.getLz("term.previous")}
             v-b-tooltiphover
           />
@@ -255,7 +255,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button next"
             onClick={skipToNextItem}
-            className="isNextDisabled() && 'disabled'"
+            className={isNextDisabled() && 'disabled'}
             title={$root.getLz("term.next")}
             v-b-tooltiphover
           />
@@ -264,7 +264,7 @@ export const ChromeBottom = () => (
           <button
             className="playback-button--small repeat"
             className={mk.repeatMode === 1 ? 'repeatOne' : mk.repeatMode === 2 ? 'active' : ''}
-            className="isDisabled() && 'disabled'"
+            className={isDisabled() && 'disabled'}
             onClick={repeatIncrement}
             title={$root.lz.repeat[mk.repeatMode]}
             v-b-tooltiphover

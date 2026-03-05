@@ -62,13 +62,13 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
             </div>
             <div className="name">{app.getLz("action.createPlaylist")}</div>
           </button>
+          {$root.getPlaylistFolderChildren("p.playlistsroot").map((item)=>
           <SidebarPlaylist
             playlist-select={playlistSelect}
             relate-media-items="relateItems"
-            v-for={item in $root.getPlaylistFolderChildren("p.playlistsroot")}
             v-bind:key={item.id}
             item={item}
-          />
+          />)}
         </div>
         <div className="modal-search">
           <div
@@ -79,7 +79,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
               type="search"
               ref="searchInput"
               style={{ width: "100%" }}
-              spellcheck="false"
+              spellCheck="false"
               placeholder={app.getLz("term.search") + "..."}
               v-model={searchQuery}
               input={search()}

@@ -59,7 +59,7 @@ const Component = () => {
                 <input
                   type="search"
                   style={{ width: "100%" }}
-                  spellcheck="false"
+                  spellCheck="false"
                   placeholder={app.getLz("term.search") + "..."}
                   input={$root.searchLibrarySongs}
                   v-model={library.songs.search}
