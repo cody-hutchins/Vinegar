@@ -1,4 +1,4 @@
-const Component = () => {
+const OOBE = () => {
   let screen = "before_we_start";
   function signIn() {
     if (localStorage.getItem("music.ampwebplay.media-user-token")) {
@@ -32,7 +32,7 @@ const Component = () => {
   return (
     <div id="cider-oobe">
       <div className="content-inner oobe">
-        {/*        before_we_start */}
+        {/* before_we_start */}
         {/* <transition name="">  */}
         <div
           className="oobe-view"
@@ -262,3 +262,5 @@ const Component = () => {
     </div>
   );
 };
+
+export default OOBE;

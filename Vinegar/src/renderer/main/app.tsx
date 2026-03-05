@@ -10,6 +10,8 @@ import { spawnMica } from "./mica.tsx";
 import SVGIcon from "./components/svg-icon.tsx";
 import SidebarLibraryItem from "./components/sidebar-library-item.tsx";
 import i18nEditor from "./components/i18n-editor.tsx";
+import { StrictMode } from "react";
+import { createRoot} from "react-dom/client";
 
 // Define window objects
 window.app = app;
@@ -45,7 +47,7 @@ Events.InitEvents();
 
 const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
+  const root = createRoot(rootElement);
   root.render(
     <StrictMode>
       <app />

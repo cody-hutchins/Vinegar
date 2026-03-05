@@ -1,6 +1,7 @@
 import ArtworkMaterial from "../components/artwork-material.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
+import MediaItemSquare from "../components/mediaitem-square.jsx";
 
 const Multiroom = ({ data }: { data: object }) => {
   const app = this.$root;

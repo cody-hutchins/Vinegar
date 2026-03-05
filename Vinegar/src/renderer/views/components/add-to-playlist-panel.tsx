@@ -93,4 +93,4 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
   );
 };
 
-export default AddToPlaylist;
+export default AddToPlaylistPanel;

@@ -27,5 +27,5 @@
     "typeRoots": ["../../node_modules/@types/musickit-js", "../../node_modules/@types"],
     "types": ["node"],
   },
-  "include": ["./**/*.tsx", "./**/*.ts"],
+  "include": ["./**/*.tsx", "./**/*.ts", "hlscider.js", "apple-hls-old.js", "apple-hls.js"],
 }
