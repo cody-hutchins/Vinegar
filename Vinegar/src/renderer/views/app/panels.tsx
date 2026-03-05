@@ -1,3 +1,4 @@
+import { useChromeStore } from "../../store/chrome.js";
 import AddToPlaylist from "../components/add-to-playlist-panel.jsx";
 import EQView from "../components/eq-view.jsx";
 import MenuPanel from "../components/menu-panel.jsx";
@@ -7,6 +8,8 @@ import QRCodeModal from "../components/qrcode-modal.jsx";
 import SettingsWindow from "../components/settings-window.jsx";
 
 const Panels = () => {
+  const chrome = useChromeStore((state) => state.chrome);
+
   return (
     <>
       <MenuPanel v-if={menuPanel.visible} />

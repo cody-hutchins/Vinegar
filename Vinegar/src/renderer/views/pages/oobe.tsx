@@ -1,5 +1,7 @@
+import { useAppStore } from "../../store/index.js";
 const OOBE = () => {
   let screen = "before_we_start";
+  const cfg = useAppStore((state) => state.cfg);
   function signIn() {
     if (localStorage.getItem("music.ampwebplay.media-user-token")) {
       localStorage.setItem("seenOOBE", 1);
@@ -51,7 +53,7 @@ const OOBE = () => {
                       $root.setLz("");
                       $root.setLzManual();
                     }}
-                    v-model={$root.cfg.general.language}>
+                    v-model={cfg.general.language}>
                     <optgroup
                       label="index"
                       v-for={(categories, index) in getLanguages()}>
@@ -137,8 +139,8 @@ const OOBE = () => {
               <b-col>
                 <div
                   className="card bg-dark text-white stylePicker"
-                  onClick={() => ($root.cfg.visual.directives.windowLayout = "twopanel")}
-                  className="{'style-active': ($root.cfg.visual.directives.windowLayout === 'twopanel')}">
+                  onClick={() => (cfg.visual.directives.windowLayout = "twopanel")}
+                  className="{'style-active': (cfg.visual.directives.windowLayout === 'twopanel')}">
                   <div className="card-body">
                     <img
                       className="visualPreview"
@@ -152,8 +154,8 @@ const OOBE = () => {
               <b-col>
                 <div
                   className="card bg-dark text-white stylePicker"
-                  onClick={() => ($root.cfg.visual.directives.windowLayout = "default")}
-                  className="{'style-active': ($root.cfg.visual.directives.windowLayout === 'default')}">
+                  onClick={() => (cfg.visual.directives.windowLayout = "default")}
+                  className="{'style-active': (cfg.visual.directives.windowLayout === 'default')}">
                   <div className="card-body">
                     <img
                       className="visualPreview"
@@ -203,7 +205,7 @@ const OOBE = () => {
                   <div className="md-option-segment md-option-segment_auto">
                     <input
                       type="checkbox"
-                      v-model={$root.cfg.audio.maikiwiAudio.ciderPPE}
+                      v-model={cfg.audio.maikiwiAudio.ciderPPE}
                       switch
                     />
                   </div>

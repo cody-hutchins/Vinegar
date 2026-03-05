@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { Jumbotron } from "react-bootstrap";
+import { CiderAudio } from "../../audio/audio.js";
 
 const Audiolabs = () => {
   const app = this.$root;
@@ -27,7 +29,7 @@ const Audiolabs = () => {
         <div className="md-option-container">
           <div className="settings-option-body">
             <div className="md-option-line">
-              <b-jumbotron
+              <Jumbotron
                 header={$root.getLz("settings.option.audio.audioLab")}
                 lead="Designed by Cider Acoustic Technologies in California"
               />
@@ -42,8 +44,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.ciderPPE}
-                  v-on:change={() => CiderAudio.hierarchical_loading()}
-                  switch
+                  onChange={() => CiderAudio.hierarchical_loading()}
                 />
               </div>
             </div>
@@ -97,8 +98,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.atmosphereRealizer1}
-                  v-on:change={() => CiderAudio.hierarchical_loading()}
-                  switch
+                  onChange={() => CiderAudio.hierarchical_loading()}
                 />
               </div>
             </div>
@@ -134,8 +134,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.atmosphereRealizer2}
-                  v-on:change={() => CiderAudio.hierarchical_loading()}
-                  switch
+                  onChange={() => CiderAudio.hierarchical_loading()}
                 />
               </div>
             </div>
@@ -171,8 +170,7 @@ const Audiolabs = () => {
                 <input
                   type="checkbox"
                   v-model={app.cfg.audio.maikiwiAudio.spatial}
-                  v-on:change={() => CiderAudio.hierarchical_loading()}
-                  switch
+                  onChange={() => CiderAudio.hierarchical_loading()}
                 />
               </div>
             </div>

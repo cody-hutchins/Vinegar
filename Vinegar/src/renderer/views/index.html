@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link
+      rel="preconnect"
+      href="https://amp-api.music.apple.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://api.music.apple.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://is1-ssl.mzstatic.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://is2-ssl.mzstatic.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://is3-ssl.mzstatic.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://is4-ssl.mzstatic.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://is5-ssl.mzstatic.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://play.itunes.apple.com/"
+      crossorigin />
+    <link
+      rel="preconnect"
+      href="https://aod-ssl.itunes.apple.com/"
+      crossorigin />
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Cider</title>
+    <script src="https://js-cdn.music.apple.com/hls.js/2.141.0/hls.js/hls.js"></script>
+    <script
+      async
+      src="https://js-cdn.music.apple.com/musickit/v3/amp/musickit.js"
+      data-web-components></script>
+
+    <style>
+      #LOADER {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1e1e1e;
+        z-index: 99999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #LOADER > svg {
+        width: 128px;
+      }
+
+      @media (prefers-color-scheme: light) {
+        #LOADER {
+          background-color: #eee;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root">
+      <div id="LOADER">
+        <svg>...</svg>
+      </div>
+    </div>
+    <script
+      type="module"
+      src="./main.jsx"></script>
+  </body>
+</html>

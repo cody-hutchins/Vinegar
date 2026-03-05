@@ -2,14 +2,11 @@ import { app } from "./vueapp.js";
 import { CiderCache } from "./cidercache.js";
 import { CiderFrontAPI } from "./ciderfrontapi.js";
 import { simulateGamepad } from "./gamepad.js";
-import { CiderAudio } from "../audio/cideraudio.js";
 import { Events } from "./events.js";
 import { wsapi } from "./wsapi_interop.js";
 import { MusicKitTools } from "./musickittools.js";
 import { spawnMica } from "./mica.js";
-import { svgIcon } from "./components/svg-icon.js";
-import { sidebarLibraryItem } from "./components/sidebar-library-item.js";
-import { i18nEditor } from "./components/i18n-editor.js";
+import { CiderAudio } from "../audio/audio.js";
 
 // Define window objects
 window.app = app;

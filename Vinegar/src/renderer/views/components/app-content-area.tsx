@@ -1,4 +1,4 @@
-const AppContent = () => {
+const AppContentArea = () => {
   const scrollPos = 0;
   return (
     <div id="app-content-area">
@@ -34,7 +34,7 @@ const AppContent = () => {
         <transition
           name={$root.chrome.desiredPageTransition}
           v-on:enter={$root.getMadeForYou()}>
-          <template v-if={$root.page === "library-madeforyou"}>{import("../pages/madeforyou")}</template>
+          <template v-if={$root.page === "library-madeforyou"}>{import("../pages/madeforyou.jsx")}</template>
         </transition>
         {/* <!-- Library - Artists--> */}
       </div>
@@ -42,4 +42,4 @@ const AppContent = () => {
   );
 };
 
-export default AppContent;
+export default AppContentArea;

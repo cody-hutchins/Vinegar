@@ -1,11 +1,241 @@
 import ElectronStore from "electron-store";
 import { app, ipcMain } from "electron";
 import fetch from "node-fetch";
+import { Platform } from "node";
+
+export interface CfgStore {
+    main: {
+      PLATFORM: Platform | undefined,
+      UPDATABLE: boolean,
+    },
+    general: {
+      close_button_hide: boolean,
+      language: string,
+      playbackNotifications: boolean,
+      resumeOnStartupBehavior: string,
+      privateEnabled: boolean,
+      themeUpdateNotification: boolean,
+      sidebarItems: {
+        recentlyAdded: boolean,
+        songs: boolean,
+        albums: boolean,
+        artists: boolean,
+        videos: boolean,
+        podcasts: boolean,
+      },
+      sidebarCollapsed: {
+        cider: boolean,
+        applemusic: boolean,
+        library: boolean,
+        amplaylists: boolean,
+        playlists: boolean,
+        localLibrary: boolean,
+      },
+      onStartup: {
+        enabled: boolean,
+        hidden: boolean,
+      },
+      resumeTabs: {
+        tab: string,
+        dynamicData: string,
+      },
+      keybindings: {
+        search: string[],
+        listnow: string[],
+        browse: string[],
+        recentAdd: string[],
+        songs: string[],
+        albums: string[],
+        artists: string[],
+        togglePrivateSession: string[],
+        webRemote: string[],
+        audioSettings: string[],
+        pluginMenu: string[],
+        castToDevices: string[],
+        settings: string[],
+        zoomn: string[],
+        zoomt: string[],
+        zoomrst: string[],
+        openDeveloperTools: string[],
+      },
+      showLovedTracksInline: boolean,
+    },
+    connectivity: {
+      discord_rpc: {
+        enabled: boolean,
+        client: string,
+        activity: {
+          state_format: string,
+          details_format: string,
+          hide_timestamp: boolean,
+          buttons: {
+            enabled: boolean,
+            first: string,
+            second: string,
+            options: string[],
+          },
+        },
+        clear_on_pause: boolean,
+      },
+      lastfm: {
+        enabled: boolean,
+        scrobble_after: number,
+        filter_loop: boolean,
+        filter_types: {},
+        remove_featured: boolean,
+        secrets: {
+          username: string,
+          key: string,
+        },
+      },
+    },
+    home: {
+      followedArtists: string[],
+      favoriteItems: string[],
+    },
+    libraryPrefs: {
+      songs: {
+        scroll: string,
+        sort: string,
+        sortOrder: string,
+        size: string,
+      },
+      albums: {
+        scroll: string,
+        sort: string,
+        sortOrder: string,
+        viewAs: string,
+      },
+      playlists: {
+        scroll: string,
+      },
+      localPaths: [],
+      pageSize: number,
+    },
+    audio: {
+      volume: number,
+      volumeStep: number,
+      maxVolume: number,
+      lastVolume: number,
+      muted: boolean,
+      playbackRate: number,
+      quality: string,
+      seamless_audio: boolean,
+      normalization: boolean,
+      dBSPL: boolean,
+      dBSPLcalibration: number,
+      maikiwiAudio: {
+        ciderPPE: boolean,
+        ciderPPE_value: string,
+        staticOptimizer: {
+          state: boolean,
+          lock: boolean,
+        },
+        opportunisticCorrection_state: string,
+        atmosphereRealizer1: boolean,
+        atmosphereRealizer1_value: string,
+        atmosphereRealizer2: boolean,
+        atmosphereRealizer2_value: string,
+        spatial: boolean,
+        spatialProfile: string,
+        vibrantBass: {
+          // Hard coded into the app. Don't include any of this config into exporting presets in store.ts
+          frequencies: number[],
+          Q: number[],
+          gain: number[],
+        },
+        cloud: boolean,
+      },
+      spatial: boolean,
+      spatial_properties: {
+        presets: [],
+        gain: number,
+        listener_position: number[],
+        audio_position: number[],
+        room_dimensions: {
+          width: number,
+          height: number,
+          depth: number,
+        },
+        room_materials: {
+          left: string,
+          right: string,
+          front: string,
+          back: string,
+          down: string,
+          up: string,
+        },
+      },
+      equalizer: {
+        preset: string,
+        frequencies: number[],
+        gain: number[],
+        Q: number[],
+        mix: number,
+        vibrantBass: number,
+        presets: [],
+        userGenerated: boolean,
+      },
+    },
+    visual: {
+      theme: string,
+      styles: [],
+      scrollbars: number, // 0 = show on hover, 2 = always hide, 3 = always show
+      refresh_rate: number,
+      window_background_style: string, // "none", "artwork", "color"
+      animated_artwork: string, // 0 = always, 1 = limited, 2 = never
+      animated_artwork_qualityLevel: number,
+      bg_artwork_rotation: boolean,
+      hw_acceleration: string, // default, webgpu, disabled
+      showuserinfo: boolean,
+      transparent: boolean,
+      miniplayer_top_toggle: boolean,
+      directives: {
+        windowLayout: string,
+      },
+      windowControlPosition: number, // 0 default right
+      nativeTitleBar: boolean,
+      windowColor: string,
+      customAccentColor: boolean,
+      accentColor: string,
+      purplePodcastPlaybackBar: boolean,
+      maxElementScale: number, // -1 default, anything else is a custom scale
+      overrideDisplayTheme: string, // system , dark, light
+      artworkDisplayLayout: string,
+    },
+    lyrics: {
+      enable_mxm: boolean,
+      mxm_karaoke: boolean,
+      mxm_language: string,
+      enable_qq: boolean,
+      enable_yt: boolean,
+    },
+    advanced: {
+      AudioContext: boolean,
+      experiments: [],
+      playlistTrackMapping: boolean,
+      ffmpegLocation: string,
+      disableLogging: boolean,
+    },
+    connectUser: {
+      auth: null,
+      sync: {
+        themes: boolean,
+        plugins: boolean,
+        settings: boolean,
+      },
+    },
+    musickit: {
+      "stored-attributes": {
+        autoplayEnabled: string,
+      },
+    },
+  };
 
 export class Store {
-  static cfg: ElectronStore<any>;
+  static cfg: ElectronStore<CfgStore>;
 
-  private defaults = {
+  private defaults: CfgStore = {
     main: {
       PLATFORM: process.platform,
       UPDATABLE: app.isPackaged && (!process.mas || !process.windowsStore || !process.env.FLATPAK_ID),
@@ -95,8 +325,8 @@ export class Store {
       },
     },
     home: {
-      followedArtists: [],
-      favoriteItems: [],
+      followedArtists: [] as string[],
+      favoriteItems: [] as string[],
     },
     libraryPrefs: {
       songs: {
