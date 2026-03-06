@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   function msToMinSec(ms: number) {
@@ -274,7 +275,8 @@ export const Podcasts = () => {
               />
             ))}
           </div>
-          <transition name="wpfade">
+          <AnimatePresence>
+          <motion.div name="wpfade">
             <div
               className="podcasts-details"
               v-if={selected.id !== -1}>
@@ -324,7 +326,8 @@ export const Podcasts = () => {
                 </div>
               </div>
             </div>
-          </transition>
+          </motion.div>
+          </AnimatePresence>
         </div>
       </div>
       <div id="podcast-tab">

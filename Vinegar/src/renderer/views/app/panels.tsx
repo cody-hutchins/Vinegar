@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useChromeStore } from "../../store/chrome.js";
 import AddToPlaylist from "../components/add-to-playlist-panel.jsx";
 import EQView from "../components/eq-view.jsx";
@@ -12,8 +13,10 @@ const Panels = () => {
 
   return (
     <>
-      <MenuPanel v-if={menuPanel.visible} />
-      <transition name="wpfade">
+    <MenuPanel v-if={menuPanel.visible} />
+    <AnimatePresence>
+
+      <motion.div name="wpfade">
         <div
           className="bg-artwork-container"
           v-if={cfg.visual.window_background_style === "artwork"}
@@ -24,59 +27,61 @@ const Panels = () => {
           />
           <img className="bg-artwork b" />
         </div>
-      </transition>
-      <transition name="wpfade">
+      </motion.div>
+      <motion.div name="wpfade">
         <div className="bg-artwork--placeholder" />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <c2-upgrade v-if={modals.c2Upgrade} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <AddToPlaylist
           playlists={playlists.listing}
           v-if={modals.addToPlaylist}
         />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <audio-controls v-if={modals.audioControls} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <audio-playbackrate v-if={modals.audioPlaybackRate} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <audio-settings v-if={modals.audioSettings} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <castmenu v-if={modals.castMenu} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <pathmenu v-if={modals.pathMenu} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <airplay-modal v-if={modals.airplayPW} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <PluginMenu v-if={modals.pluginMenu} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <SettingsWindow v-if={modals.settings} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <EQView v-if={modals.equalizer} />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <QRCodeModal
           v-if={modals.qrcode}
           src="webremoteqr"
           url="webremoteurl"
         />
-      </transition>
-      <transition name="modal">
+      </motion.div>
+      <motion.div name="modal">
         <MoreInfoModal
           v-if={modals.moreInfo}
           data="moreinfodata"
         />
-      </transition>
+      </motion.div>
+    </AnimatePresence>
+
       <div
         id="apple-music-video-container"
         className="{'mini': mvViewMode === 'mini'}">
@@ -245,7 +250,7 @@ const Panels = () => {
         </div>
         <div id="apple-music-video-player" />
       </div>
-    </>
+      </>
   );
 };
 

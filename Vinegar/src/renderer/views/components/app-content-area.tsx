@@ -1,3 +1,5 @@
+import { AnimatePresence, motion } from "framer-motion";
+
 const AppContentArea = () => {
   const scrollPos = 0;
   return (
@@ -23,19 +25,21 @@ const AppContentArea = () => {
         </div>
 
         {/* <!-- Include App Routes --> */}
+        <AnimatePresence>
         {Object.keys(process.env.appRoutes).map((appRoute) => (
-          <transition
+          <motion.div
             v-onenter={appRoute.onEnter}
             name={$root.chrome.desiredPageTransition}>
             <template v-if={appRoute.condition}>{appRoute.component}</template>
-          </transition>
+          </motion.div>
         ))}
         {/* <!-- Library - Made For You --> */}
-        <transition
+        <motion.div
           name={$root.chrome.desiredPageTransition}
           v-on:enter={$root.getMadeForYou()}>
           <template v-if={$root.page === "library-madeforyou"}>{import("../pages/madeforyou.jsx")}</template>
-        </transition>
+        </motion.div>
+        </AnimatePresence>
         {/* <!-- Library - Artists--> */}
       </div>
     </div>

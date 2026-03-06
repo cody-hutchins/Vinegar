@@ -6,7 +6,7 @@ import MiniView from "./components/mini-view.jsx";
 import FullscreenView from "./components/fullscreen-view.jsx";
 import OOBE from "./pages/oobe.jsx";
 import { useEffect, useState } from "react";
-
+import {AnimatePresence, motion} from "framer-motion";
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,47 +42,52 @@ const App = () => {
             style={getAppStyle()}
             library-visible={chrome.sidebarCollapsed ? 0 : 1}
             window-style={cfg.visual.directives.windowLayout}>
-            <transition name="fsModeSwitch">
-              <div
-                id="app-main"
-                v-show="appMode == 'player'">
-                <ChromeTop />
-                <AppNavigation />
-                <ChromeBottom />
-              </div>
-            </transition>
-            <transition name="fsModeSwitch">
-              <div
-                className="fullscreen-view-container"
-                v-if="appMode == 'fullscreen'">
-                <FullscreenView
-                  ref="fsView"
-                  image={currentArtUrlRaw}
-                  time={mk.currentPlaybackTime - lyricOffset}
-                  lyrics={lyrics}
-                  richlyrics={richlyrics}
-                />
-              </div>
-            </transition>
-            <transition name="fsModeSwitch">
-              <div
-                className="fullscreen-view-container"
-                v-if="appMode == 'mini'">
-                <MiniView
-                  image={currentArtUrlRaw}
-                  time={mk.currentPlaybackTime - lyricOffset}
-                  lyrics={lyrics}
-                  richlyrics={richlyrics}
-                />
-              </div>
-            </transition>
-            <transition name="fsModeSwitch">
-              <div
-                className="fullscreen-view-container oobe"
-                v-if="appMode == 'oobe'">
-                <OOBE />
-              </div>
-            </transition>
+            <AnimatePresence>
+              <motion.div name="fsModeSwitch">
+                <div
+                  id="app-main"
+                  v-show="appMode == 'player'">
+                  <ChromeTop />
+                  <AppNavigation />
+                  <ChromeBottom />
+                </div>
+              </motion.div>
+
+              <motion.div name="fsModeSwitch">
+                <div
+                  className="fullscreen-view-container"
+                  v-if="appMode == 'fullscreen'">
+                  <FullscreenView
+                    ref="fsView"
+                    image={currentArtUrlRaw}
+                    time={mk.currentPlaybackTime - lyricOffset}
+                    lyrics={lyrics}
+                    richlyrics={richlyrics}
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div name="fsModeSwitch">
+                <div
+                  className="fullscreen-view-container"
+                  v-if="appMode == 'mini'">
+                  <MiniView
+                    image={currentArtUrlRaw}
+                    time={mk.currentPlaybackTime - lyricOffset}
+                    lyrics={lyrics}
+                    richlyrics={richlyrics}
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div name="fsModeSwitch">
+                <div
+                  className="fullscreen-view-container oobe"
+                  v-if="appMode == 'oobe'">
+                  <OOBE />
+                </div>
+              </motion.div>
+            </AnimatePresence>
             <Panels />
             {chrome.showCursor && <div className="cursor"></div>}
           </div>

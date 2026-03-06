@@ -1,3 +1,7 @@
+import { AnimatePresence, motion } from "framer-motion";
+import MediaItemListItem from "./mediaitem-list-item";
+import MediaItemSquare from "./mediaitem-square";
+
 const InlineCollectionList = ({ data, title, type, parentSelector = null }: { data: object; title?: string; type?: string; parentSelector?: string | null }) => {
   let triggerEnabled = true;
   let canSeeTrigger = false;
@@ -88,7 +92,7 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
               <>
                 <MediaItemListItem
                   v-if={getKind(item) === "song"}
-                  index="key"
+                  index={key}
                   item={item}
                 />
                 <MediaItemSquare
@@ -106,15 +110,17 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
             {app.getLz("term.showMore")}
           </button>
         </div>
-        <transition name="fabfade">
-          <button
-            className="top-fab"
-            v-show={showFab}
-            onClick={() => scrollToTop()}
-            aria-label={app.getLz("action.scrollToTop")}>
-            {import("../svg/arrow-up.svg")}
-          </button>
-        </transition>
+        <AnimatePresence>
+          <motion.div name="fabfade">
+            <button
+              className="top-fab"
+              v-show={showFab}
+              onClick={() => scrollToTop()}
+              aria-label={app.getLz("action.scrollToTop")}>
+              {import("../svg/arrow-up.svg")}
+            </button>
+          </motion.div>
+        </AnimatePresence>
         <div
           className="well itemContainer"
           v-show={loading}>

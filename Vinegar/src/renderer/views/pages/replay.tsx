@@ -3,6 +3,7 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import ListitemHorizontal from "../components/listitem-horizontal.jsx";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Replay = () => {
   let years = [];
@@ -93,7 +94,8 @@ const Replay = () => {
           ))}
         </vue-horizontal>
         <hr />
-        <transition name="replaycard">
+        <AnimatePresence>
+        <motion.div name="replaycard">
           <div
             className="replay-viewport"
             v-if={loaded.id !== -1}>
@@ -201,7 +203,8 @@ const Replay = () => {
               ))}
             </div>
           </div>
-        </transition>
+        </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

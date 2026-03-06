@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
@@ -125,15 +126,17 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             {app.getLz("term.showMore")}
           </button>
         </div>
-        <transition name="fabfade">
-          <button
-            className="top-fab"
-            v-show={showFab}
-            onClick={() => scrollToTop()}
-            aria-label={app.getLz("action.scrollToTop")}>
-            {import("../svg/arrow-up.svg")}
-          </button>
-        </transition>
+        <AnimatePresence>
+          <motion.div name="fabfade">
+            <button
+              className="top-fab"
+              v-show={showFab}
+              onClick={() => scrollToTop()}
+              aria-label={app.getLz("action.scrollToTop")}>
+              {import("../svg/arrow-up.svg")}
+            </button>
+          </motion.div>
+        </AnimatePresence>
         <div
           className="well itemContainer"
           v-show={loading}>

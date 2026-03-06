@@ -4,6 +4,7 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemSmarthints from "../components/mediaitem-smarthints.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import { useChromeStore } from "../../store/chrome.js";
+import { AnimatePresence } from "framer-motion";
 
 const ChromeTop = ({ search = {} }: { search?: object }) => {
   const chrome = useChromeStore((state) => state.chrome);
@@ -81,12 +82,14 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               onClick={() => {
                 chrome.sidebarCollapsed = !chrome.sidebarCollapsed;
               }}>
-              <transition name="fade">
-                <span v-if={chrome.sidebarCollapsed}></span>
-              </transition>
-              <transition name="fade">
-                <span v-if={!chrome.sidebarCollapsed}></span>
-              </transition>
+              <AnimatePresence>
+                <motion.div name="fade">
+                  <span v-if={chrome.sidebarCollapsed}></span>
+                </motion.div>
+                <motion.div name="fade">
+                  <span v-if={!chrome.sidebarCollapsed}></span>
+                </motion.div>
+              </AnimatePresence>
             </button>
           </div>
           <div
