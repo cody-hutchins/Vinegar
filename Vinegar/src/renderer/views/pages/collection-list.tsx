@@ -8,11 +8,11 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
   let canSeeTrigger = false;
   let showFab = false;
   let commonKind = "song";
-  let api = this.$root.mk.api;
+  const api = this.$root.mk.api;
   let loading = false;
   function getClasses() {
     if ((data?.data?.length ?? 0) > 0) {
-      let item = data.data[0];
+      const item = data.data[0];
       if (typeof item.kind !== "undefined") {
         commonKind = item.kind;
         return item.kind;
@@ -42,7 +42,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
     return commonKind;
   }
   function scrollToTop() {
-    let target = document.querySelector(".header-text");
+    const target = document.querySelector(".header-text");
     document.querySelector("#app-content").scrollTo({
       top: 0,
       left: 0,
@@ -95,10 +95,10 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
   }
   return (
     <>
-      <div id="cider-collection-list">
-        <div className="content-inner collection-page">
+      <div id={"cider-collection-list"}>
+        <div className={"content-inner collection-page"}>
           <h3
-            className="header-text"
+            className={"header-text"}
             v-observe-visibility={{ callback: headerVisibility }}>
             {title}
           </h3>
@@ -106,15 +106,17 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             <div className={"well itemContainer " + getClasses()}>
               {data.data.map((item, key) =>
                 item.type === "artists" ? (
-                  <MediaItemSquare item={item}></MediaItemSquare>
+                  <MediaItemSquare item={item} />
                 ) : getKind(item) === "song" ? (
                   <MediaItemListItem
                     index={key}
-                    item={item}></MediaItemListItem>
+                    item={item}
+                  />
                 ) : (
                   <MediaItemSquare
                     item={item}
-                    type={getKind(item)}></MediaItemSquare>
+                    type={getKind(item)}
+                  />
                 ),
               )}
               {triggerEnabled && (
@@ -127,9 +129,9 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             </div>
           )}
           <AnimatePresence>
-            <motion.div name="fabfade">
+            <motion.div name={"fabfade"}>
               <button
-                className="top-fab"
+                className={"top-fab"}
                 v-show={showFab}
                 onClick={() => scrollToTop()}
                 aria-label={app.getLz("action.scrollToTop")}>
@@ -138,9 +140,9 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             </motion.div>
           </AnimatePresence>
           <div
-            className="well itemContainer"
+            className={"well itemContainer"}
             v-show={loading}>
-            <div className="spinner"></div>
+            <div className={"spinner"} />
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import MediaItemSquare from "./mediaitem-square.jsx";
 
 const MediaItemScrollerHorizontalLarge = ({ items }: { items: object[] }) => {
   return (
-    <div id="mediaitem-scroller-horizontal-large">
+    <div id={"mediaitem-scroller-horizontal-large"}>
       <vue-horizontal>
         {items.map((item) => (
           <MediaItemSquare

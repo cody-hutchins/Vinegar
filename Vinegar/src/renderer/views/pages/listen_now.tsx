@@ -7,13 +7,13 @@ const ListenNow = ({ data }: { data: object }) => {
     this.$root.getListenNow();
   }, []);
   return (
-    <div id="cider-listen-now">
-      <div className="content-inner">
-        <h1 className="header-text">{app.getLz("term.listenNow")}</h1>
+    <div id={"cider-listen-now"}>
+      <div className={"content-inner"}>
+        <h1 className={"header-text"}>{app.getLz("term.listenNow")}</h1>
         {data.data.map((recom, index) => (
           <ListenNowChild
-            recom="recom"
-            index="index"
+            recom={"recom"}
+            index={"index"}
           />
         ))}
       </div>

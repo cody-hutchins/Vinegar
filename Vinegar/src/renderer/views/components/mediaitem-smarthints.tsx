@@ -9,12 +9,12 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
   };
   async function isInLibrary() {
     if (item.type && !item.type.includes("library")) {
-      let params = {
+      const params = {
         relate: "library",
         fields: "inLibrary",
         extend: revisedRandId(),
       };
-      let kind = item.type ?? item.attributes.playParams.kind;
+      const kind = item.type ?? item.attributes.playParams.kind;
       let truekind = !kind.endsWith("s") ? kind + "s" : kind;
       if (truekind === "musicVideos") {
         truekind = "music-videos";
@@ -64,14 +64,14 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
     } else {
       useMenu = "multiple";
     }
-    let menus = {
+    const menus = {
       multiple: {
         items: [
           {
             name: app.getLz("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-up.svg",
             action: () => {
-              let itemsToPlay = {};
+              const itemsToPlay = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -79,8 +79,8 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
                 itemsToPlay[item.kind].push(item.id);
               });
               // loop through itemsToPlay
-              for (let kind in itemsToPlay) {
-                let ids = itemsToPlay[kind];
+              for (const kind in itemsToPlay) {
+                const ids = itemsToPlay[kind];
                 if (ids.length > 0) {
                   app.mk.playNext({ [kind + "s"]: itemsToPlay[kind] });
                 }
@@ -93,7 +93,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
             name: app.getLz("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-down.svg",
             action: () => {
-              let itemsToPlay = {};
+              const itemsToPlay = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -101,8 +101,8 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
                 itemsToPlay[item.kind].push(item.id);
               });
               // loop through itemsToPlay
-              for (let kind in itemsToPlay) {
-                let ids = itemsToPlay[kind];
+              for (const kind in itemsToPlay) {
+                const ids = itemsToPlay[kind];
                 if (ids.length > 0) {
                   app.mk.playLater({ [kind + "s"]: itemsToPlay[kind] });
                 }
@@ -171,8 +171,8 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
             hidden: false,
             disabled: true,
             action: function () {
-              let item_id = item.attributes.playParams.id ?? item.id;
-              let data_type = item.attributes.playParams.kind ?? item.type;
+              const item_id = item.attributes.playParams.id ?? item.id;
+              const data_type = item.attributes.playParams.kind ?? item.type;
               app.addToLibrary(item_id);
               addedToLibrary = true;
             },
@@ -184,8 +184,8 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
             hidden: true,
             action: async function () {
               console.log("remove");
-              let item_id = item.attributes.playParams.id ?? item.id;
-              let data_type = item.attributes.playParams.kind ?? item.type;
+              const item_id = item.attributes.playParams.id ?? item.id;
+              const data_type = item.attributes.playParams.kind ?? item.type;
               await removeFromLibrary(item_id);
               addedToLibrary = false;
             },
@@ -261,7 +261,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
       console.log(e);
     }
     try {
-      let rating = await app.getRating(item);
+      const rating = await app.getRating(item);
       if (rating === 0) {
         menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
         menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
@@ -285,7 +285,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
   }
   async function artistMenu(event) {
     let followAction = "follow";
-    let followActions = {
+    const followActions = {
       follow: {
         icon: "./assets/star.svg",
         name: app.getLz("action.favorite"),
@@ -357,12 +357,12 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
     }
   }
   function playTrack(item) {
-    let parent = parent;
-    let childIndex = index;
-    let kind = item.attributes.playParams ? (item.attributes.playParams?.kind ?? item.type ?? "") : (item.type ?? "");
-    let id = item.attributes.playParams ? (item.attributes.playParams?.id ?? item.id ?? "") : (item.id ?? "");
-    let isLibrary = item.attributes.playParams ? (item.attributes.playParams?.isLibrary ?? false) : false;
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const parent = parent;
+    const childIndex = index;
+    const kind = item.attributes.playParams ? (item.attributes.playParams?.kind ?? item.type ?? "") : (item.type ?? "");
+    const id = item.attributes.playParams ? (item.attributes.playParams?.id ?? item.id ?? "") : (item.id ?? "");
+    const isLibrary = item.attributes.playParams ? (item.attributes.playParams?.isLibrary ?? false) : false;
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     console.log(item, parent, childIndex, kind, id, isLibrary, kind === "playlists", id.startsWith("p.") || id.startsWith("pl.u"));
     app.mk.stop().then(() => {
       if (parent !== null && childIndex !== null) {
@@ -370,8 +370,8 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
         function shuffleArray(array) {
           for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            let temp = array[i];
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = array[i];
             array[i] = array[j];
             array[j] = temp;
           }
@@ -384,7 +384,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
           })
           .then(function () {
             app.mk.play().then(function () {
-              let playlistId = id;
+              const playlistId = id;
 
               function getPlaylist(id, isLibrary) {
                 if (isLibrary) {
@@ -412,7 +412,7 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
                       //     return
                       // }
                       console.log("nextres", res);
-                      let query = res.data.map((item) => new MusicKit.MediaItem(item));
+                      const query = res.data.map((item) => new MusicKit.MediaItem(item));
                       if (app.mk.shuffleMode === 1) {
                         shuffleArray(query);
                         console.log("shf");
@@ -435,9 +435,9 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
   }
   return (
     <>
-      <div id="mediaitem-smarthints">
+      <div id={"mediaitem-smarthints"}>
         <div
-          className="cd-queue-item"
+          className={"cd-queue-item"}
           onClick={() => {
             $root.search.showHints = false;
             $root.routeView(item);
@@ -457,45 +457,47 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
                 }).length,
           }}>
           <div
-            className="row"
+            className={"row"}
             onContextMenu={() => {
               $root.hintscontext = true;
               getContextMenu();
             }}>
             <div
-              className="col-auto cider-flex-center"
+              className={"col-auto cider-flex-center"}
               onContextMenu={() => {
                 $root.hintscontext = true;
                 getContextMenu();
               }}>
               <div
-                className="artwork"
-                className="{'circle': item.type === 'artists'}">
+                className={"artwork"}
+                className={"{'circle': item.type === 'artists'}"}>
                 <MediaItemArtwork
                   url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-                  size="32"
-                  style={{ position: "relative", zIndex: "-1" }}></MediaItemArtwork>
+                  size={"32"}
+                  style={{ position: "relative", zIndex: "-1" }}
+                />
                 <button
-                  className="circular-play-button"
+                  className={"circular-play-button"}
                   clickstop={playTrack(item)}>
                   <div
-                    className="_svg-icon"
-                    style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}></div>
+                    className={"_svg-icon"}
+                    style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}
+                  />
                 </button>
               </div>
             </div>
             <div
-              className="col queue-info"
+              className={"col queue-info"}
               onContextMenu={() => {
                 $root.hintscontext = true;
                 getContextMenu();
               }}>
-              <div className="queue-title text-overflow-elipsis">{item.attributes.name}</div>
-              <div className="queue-subtitle text-overflow-elipsis">{item.attributes.artistName}</div>
+              <div className={"queue-title text-overflow-elipsis"}>{item.attributes.name}</div>
+              <div className={"queue-subtitle text-overflow-elipsis"}>{item.attributes.artistName}</div>
             </div>
             {item.attributes.contentRating === "explicit" && (
-              <div className="queue-explicit-icon cider-flex-center">
-                <div className="explicit-icon"></div>
+              <div className={"queue-explicit-icon cider-flex-center"}>
+                <div className={"explicit-icon"} />
               </div>
             )}
             {/*<div className="col queue-duration-info">

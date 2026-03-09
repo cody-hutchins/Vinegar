@@ -13,51 +13,51 @@ const Component = () => {
     app.modals.audioSettings = false;
   };
   return (
-    <div id="audio-settings">
+    <div id={"audio-settings"}>
       <template>
         <div
-          className="modal-fullscreen addtoplaylist-panel"
+          className={"modal-fullscreen addtoplaylist-panel"}
           clickself={(app.modals.audioSettings = false)}
           contextmenuself={(app.modals.audioSettings = false)}>
-          <div className="modal-window">
-            <div className="modal-header">
-              <div className="modal-title">{app.getLz("term.audioSettings")}</div>
+          <div className={"modal-window"}>
+            <div className={"modal-header"}>
+              <div className={"modal-title"}>{app.getLz("term.audioSettings")}</div>
               <button
-                className="close-btn"
+                className={"close-btn"}
                 onClick={() => {
                   app.modals.audioSettings = false;
                 }}
                 aria-label={app.getLz("action.close")}
               />
             </div>
-            <div className="modal-content">
+            <div className={"modal-content"}>
               <button
-                className="playlist-item"
+                className={"playlist-item"}
                 onClick={openEqualizer}
                 style={{ width: "100%" }}>
-                <div className="icon">{import("../svg/speaker.svg")}</div>
-                <div className="name">{app.getLz("term.equalizer")}</div>
+                <div className={"icon"}>{import("../svg/speaker.svg")}</div>
+                <div className={"name"}>{app.getLz("term.equalizer")}</div>
               </button>
               <button
-                className="playlist-item"
+                className={"playlist-item"}
                 onClick={openAudioControls}
                 style={{ width: "100%" }}>
-                <div className="icon">{import("../svg/speaker.svg")}</div>
-                <div className="name">{app.getLz("term.audioControls")}</div>
+                <div className={"icon"}>{import("../svg/speaker.svg")}</div>
+                <div className={"name"}>{app.getLz("term.audioControls")}</div>
               </button>
               <button
-                className="playlist-item"
+                className={"playlist-item"}
                 onClick={openAudioPlaybackRate}
                 style={{ width: "100%" }}>
-                <div className="icon">{import("../svg/speaker.svg")}</div>
-                <div className="name">{app.getLz("settings.option.audio.changePlaybackRate")}</div>
+                <div className={"icon"}>{import("../svg/speaker.svg")}</div>
+                <div className={"name"}>{app.getLz("settings.option.audio.changePlaybackRate")}</div>
               </button>
               <button
-                className="playlist-item"
+                className={"playlist-item"}
                 onClick={() => $root.openSettingsPage("audiolabs")}
                 style={{ width: "100%" }}>
-                <div className="icon">{import("../svg/speaker.svg")}</div>
-                <div className="name">{app.getLz("settings.option.audio.audioLab")}</div>
+                <div className={"icon"}>{import("../svg/speaker.svg")}</div>
+                <div className={"name"}>{app.getLz("settings.option.audio.audioLab")}</div>
               </button>
             </div>
           </div>

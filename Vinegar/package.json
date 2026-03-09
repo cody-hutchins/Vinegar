@@ -29,7 +29,9 @@
     "mstest": "npm run build && electron-builder -c msft-test.json",
     "steamdeck": "npm run build && electron-builder --linux -c steam-deck.json",
     "format:check": "npx prettier --check \"src/**/*.{js,json,ts,less}\"",
-    "format:write": "npx prettier --write \"src/**/*.{js,json,ts,less}\""
+    "format:write": "npx prettier --write \"src/**/*.{js,json,ts,less}\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@crowdin/ota-client": "^2.0.2",
@@ -80,6 +82,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/adm-zip": "^0.5.7",
     "@types/bootbox": "^5.2.9",
     "@types/bootstrap": "^5.2.10",
@@ -95,9 +98,13 @@
     "@types/xml2js": "^0.4.14",
     "electron": "github:castlabs/electron-releases#v40.1.0+wvcus",
     "electron-builder": "^26.7.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react": "^7.37.5",
     "less": "^4.5.1",
     "prettier": "3.8.1",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
     "vue-devtools": "^5.1.4",
     "webpack": "~5.105.2"
   },

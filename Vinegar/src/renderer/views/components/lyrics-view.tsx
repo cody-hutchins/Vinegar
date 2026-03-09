@@ -3,10 +3,10 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
   const watch = {
     time: function () {
       if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview) {
-        let currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
+        const currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
         if (currentLine && currentLine.getElementsByClassName("lyricWaiting").length > 0) {
-          let duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
-          let u = (time - currentLine.getAttribute("start")) / duration;
+          const duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
+          const u = (time - currentLine.getAttribute("start")) / duration;
           if (u < 0.25 && !currentLine.classList.contains("mode1")) {
             try {
               currentLine.classList.add("mode1");
@@ -72,24 +72,24 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             }
             this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`).classList.add("active");
             if (checkIfScrollIsStatic) {
-              let lyricElement = this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`);
+              const lyricElement = this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`);
               // this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`).scrollIntoView({
               //     behavior: "smooth",
               //     block: "nearest", inline: 'start'
               // })
-              let parent = lyricElement.parentElement;
-              let parentRect = parent.getBoundingClientRect();
-              let lyricElementRect = lyricElement.getBoundingClientRect();
-              let parentScrollTop = parent.scrollTop;
-              let parentScrollLeft = parent.scrollLeft;
-              let parentScrollTopDiff = parentScrollTop - parentRect.top;
-              let parentScrollLeftDiff = parentScrollLeft - parentRect.left;
-              let lyricElementScrollTop = lyricElementRect.top + parentScrollTopDiff;
-              let lyricElementScrollLeft = lyricElementRect.left + parentScrollLeftDiff;
-              let scrollTopDiff = lyricElementScrollTop - parentScrollTop;
-              let scrollLeftDiff = lyricElementScrollLeft - parentScrollLeft;
-              let scrollTop = parent.scrollTop + scrollTopDiff;
-              let scrollLeft = parent.scrollLeft + scrollLeftDiff;
+              const parent = lyricElement.parentElement;
+              const parentRect = parent.getBoundingClientRect();
+              const lyricElementRect = lyricElement.getBoundingClientRect();
+              const parentScrollTop = parent.scrollTop;
+              const parentScrollLeft = parent.scrollLeft;
+              const parentScrollTopDiff = parentScrollTop - parentRect.top;
+              const parentScrollLeftDiff = parentScrollLeft - parentRect.left;
+              const lyricElementScrollTop = lyricElementRect.top + parentScrollTopDiff;
+              const lyricElementScrollLeft = lyricElementRect.left + parentScrollLeftDiff;
+              const scrollTopDiff = lyricElementScrollTop - parentScrollTop;
+              const scrollLeftDiff = lyricElementScrollLeft - parentScrollLeft;
+              const scrollTop = parent.scrollTop + scrollTopDiff;
+              const scrollLeft = parent.scrollLeft + scrollLeftDiff;
               parent.scrollTo({
                 top: scrollTop - (yoffset ?? 128),
                 left: scrollLeft,
@@ -119,7 +119,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
     } catch (e) {}
   };
   const getActiveVerse = (timeStart, timeEnd, verseTime) => {
-    let relativeTime = time - timeStart;
+    const relativeTime = time - timeStart;
     console.log(time, timeEnd, timeStart, relativeTime >= verseTime && relativeTime <= timeEnd - timeStart);
     return relativeTime >= verseTime && relativeTime <= timeEnd - timeStart;
   };
@@ -147,24 +147,24 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
   }, 50);
   return (
     <>
-      <div id="lyrics-view">
+      <div id={"lyrics-view"}>
         <div
-          ref="lyricsview"
-          className="md-body lyric-body">
+          ref={"lyricsview"}
+          className={"md-body lyric-body"}>
           {lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics) ? (
             lyrics.map((lyric, index) =>
               lyric && lyric.line && lyric.line !== "lrcInstrumental" ? (
                 <h3
-                  className="lyric-line"
+                  className={"lyric-line"}
                   onClick={() => seekTo(lyric.startTime)}
-                  className="{unsynced : lyric.startTime === 9999999}"
+                  className={"{unsynced : lyric.startTime === 9999999}"}
                   v-bind:line-index={index.toString()}>
                   {richlyrics && richlyrics !== [] && richlyrics.length > 0 ? (
                     <template>
-                      <div className="richl">
+                      <div className={"richl"}>
                         {getVerseLine(index - 1).map((verse) => (
                           <span
-                            className="verse"
+                            className={"verse"}
                             lyricstart={lyric.startTime}
                             versestart={verse.o}>
                             {verse.c}
@@ -174,28 +174,28 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
                     </template>
                   ) : (
                     <template>
-                      <div className="norm">{lyric.line}</div>
+                      <div className={"norm"}>{lyric.line}</div>
                     </template>
                   )}
-                  {lyric.translation && lyric.translation !== "" ? <div className="lyrics-translation">{lyric.translation}</div> : null}
+                  {lyric.translation && lyric.translation !== "" ? <div className={"lyrics-translation"}>{lyric.translation}</div> : null}
                 </h3>
               ) : (
                 <h3
-                  className="lyric-line"
+                  className={"lyric-line"}
                   onClick={() => seekTo(lyric.startTime)}
                   start={lyric.startTime}
                   end={lyric.endTime}
                   v-bind:line-index={index.toString()}>
-                  <div className="lyricWaiting">
-                    <div class="WaitingDot1"></div>
-                    <div class="WaitingDot2"></div>
-                    <div class="WaitingDot3"></div>
+                  <div className={"lyricWaiting"}>
+                    <div className={"WaitingDot1"} />
+                    <div className={"WaitingDot2"} />
+                    <div className={"WaitingDot3"} />
                   </div>
                 </h3>
               ),
             )
           ) : (
-            <div className="no-lyrics">{app.getLz("term.noLyrics")}</div>
+            <div className={"no-lyrics"}>{app.getLz("term.noLyrics")}</div>
           )}
         </div>
       </div>

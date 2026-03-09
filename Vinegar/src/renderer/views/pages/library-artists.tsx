@@ -5,24 +5,24 @@ import InlineCollectionList from "../components/inline-collection-list.jsx";
 
 const Component = () => {
   const app = this.$root;
-  let library = this.$root.library;
-  let ciderPodcasts = [];
-  let podcasts = [];
-  let episodes = [];
-  let search = {
+  const library = this.$root.library;
+  const ciderPodcasts = [];
+  const podcasts = [];
+  const episodes = [];
+  const search = {
     term: "",
     loading: false,
     results: [],
     resultsLibrary: [],
     next: "",
   };
-  let podcastSelected = {
+  const podcastSelected = {
     id: -1,
   };
-  let selected = {
+  const selected = {
     id: -1,
   };
-  let collectionList = {
+  const collectionList = {
     response: null,
     title: null,
     type: null,
@@ -51,51 +51,54 @@ const Component = () => {
   }
   return (
     <>
-      <div id="cider-library-artists">
-        <div className="content-inner library-artists-page">
+      <div id={"cider-library-artists"}>
+        <div className={"content-inner library-artists-page"}>
           {/* <div className="row">
                 <div className="col" style={{padding:0}}>
                     <h1 className="header-text">{$root.getLz('term.artists')}</h1>
                 </div>
 
             </div>  */}
-          <div className="inner-container">
-            <div className="list-container">
+          <div className={"inner-container"}>
+            <div className={"list-container"}>
               <div
-                className="col"
+                className={"col"}
                 style={{ padding: 0 }}>
                 <div
-                  className="search-input-container"
+                  className={"search-input-container"}
                   style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
-                  <div className="search-input--icon"></div>
+                  <div className={"search-input--icon"} />
                   <input
-                    type="search"
+                    type={"search"}
                     style={{ width: "100%" }}
-                    spellCheck="false"
+                    spellCheck={"false"}
                     placeholder={$root.getLz("term.search") + "..."}
                     input={$root.searchLibraryArtists}
                     v-model={library.artists.search}
-                    className="search-input"></input>
+                    className={"search-input"}
+                  />
                 </div>
               </div>
-              <div className="podcasts-list">
+              <div className={"podcasts-list"}>
                 {library.artists.displayListing.map((item) => (
                   <LibraryArtistItem
-                    show-duration="false"
-                    show-meta-data="true"
-                    show-library-status="false"
-                    item={item}></LibraryArtistItem>
+                    show-duration={"false"}
+                    show-meta-data={"true"}
+                    show-library-status={"false"}
+                    item={item}
+                  />
                 ))}
               </div>
             </div>
-            <div className="episodes-list">
+            <div className={"episodes-list"}>
               {clready && (
-                <div className="episodes-inline-info">
+                <div className={"episodes-inline-info"}>
                   <InlineCollectionList
-                    parentSelector="'.episodes-list'"
+                    parentSelector={"'.episodes-list'"}
                     data={clresponse}
                     type={cltype}
-                    title={cltitle}></InlineCollectionList>
+                    title={cltitle}
+                  />
                 </div>
               )}
             </div>
@@ -106,25 +109,25 @@ const Component = () => {
   );
 };
 
-export const Component2 = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: Object; parent?: String; index?: Number; showArtwork?: Boolean; showLibraryStatus?: Boolean; showMetadata?: Boolean; showDuration?: Boolean; contextExt?: Object }) => {
-  let isVisible = false;
+export const Component2 = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
+  const isVisible = false;
   let addedToLibrary = false;
-  let guid = uuidv4();
+  const guid = uuidv4();
   const app = this.$root;
   function uuidv4() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
   }
   function msToMinSec(ms) {
-    let minutes = Math.floor(ms / 60000);
-    let seconds = ((ms % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
   function getDataType() {
     return item.type;
   }
   async function select(e) {
-    let u = item;
-    let u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
+    const u = item;
+    const u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
       platform: "web",
       "include[library-albums]": "artists,tracks",
       "include[library-artists]": "catalog",
@@ -150,9 +153,9 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
     return u;
   }
   function contextMenu(event) {
-    let data_type = getDataType();
+    const data_type = getDataType();
 
-    let item = item;
+    const item = item;
     item.attributes.artistName = item.attributes.name;
 
     let useMenu = "normal";
@@ -163,7 +166,7 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
       useMenu = "multiple";
     }
 
-    let menus = {
+    const menus = {
       multiple: {
         items: [], //
       },
@@ -219,7 +222,7 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
     isVisible = isVisible;
   }
   function addToLibrary() {
-    let item = item;
+    const item = item;
     if (item.attributes.playParams.id) {
       console.log("adding to library", item.attributes.playParams.id);
       app.addToLibrary(item.attributes.playParams.id.toString());
@@ -231,15 +234,15 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
     }
   }
   async function removeFromLibrary() {
-    let item = item;
-    let params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
+    const item = item;
+    const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
     let id = item.id ?? item.attributes.playParams.id;
-    let res = await app.mkapi(item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.playParams.id ?? item.id, params);
+    const res = await app.mkapi(item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.playParams.id ?? item.id, params);
     if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
       id = res.relationships.library.data[0].id;
     }
-    let kind = item.attributes.playParams.kind ?? data.item ?? "";
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const kind = item.attributes.playParams.kind ?? data.item ?? "";
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     if (item.attributes.playParams.id) {
       console.log("remove from library", id);
       app.removeFromLibrary(truekind, id);
@@ -251,9 +254,9 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
     }
   }
   function playTrack() {
-    let item = item;
-    let parent = parent;
-    let childIndex = index;
+    const item = item;
+    const parent = parent;
+    const childIndex = index;
     console.log(item, parent, childIndex);
     if (parent !== null && childIndex !== null) {
       app.queueParentandplayChild(parent, childIndex, item);
@@ -263,27 +266,28 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
   }
   return (
     <>
-      <div id="libraryartist-item">
+      <div id={"libraryartist-item"}>
         <div
-          v-observe-visibility="{callback: visibilityChanged}"
+          v-observe-visibility={"{callback: visibilityChanged}"}
           onClick={() => select}
           className={`cd-mediaitem-list-item ${app.select_hasMediaItem(guid) ? "mediaitem-selected" : ""}`}
           onContextMenu={contextMenu}>
           {isVisible && (
             <template>
               {showArtwork === true && (
-                <div className="artwork">
+                <div className={"artwork"}>
                   <MediaItemArtwork
                     url={getArtwork()}
-                    size="50"
-                    type={item.type}></MediaItemArtwork>
+                    size={"50"}
+                    type={item.type}
+                  />
                 </div>
               )}
               <div
-                className="info-rect"
+                className={"info-rect"}
                 style={{ paddingLeft: showArtwork ? "" : "16px" }}
                 onDoubleClick={select}>
-                <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+                <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
               </div>
             </template>
           )}

@@ -22,32 +22,34 @@ const Component = () => {
   };
   return (
     <>
-      <div id="audio-playbackrate">
+      <div id={"audio-playbackrate"}>
         <div
-          className="modal-fullscreen addtoplaylist-panel"
+          className={"modal-fullscreen addtoplaylist-panel"}
           clickself={(app.modals.audioPlaybackRate = false)}
           contextmenuself={(app.modals.audioPlaybackRate = false)}>
-          <div className="modal-window">
-            <div className="modal-header">
-              <div className="modal-title">{app.getLz("settings.option.audio.changePlaybackRate")}</div>
+          <div className={"modal-window"}>
+            <div className={"modal-header"}>
+              <div className={"modal-title"}>{app.getLz("settings.option.audio.changePlaybackRate")}</div>
               <button
-                className="close-btn"
+                className={"close-btn"}
                 onClick={() => (app.modals.audioPlaybackRate = false)}
-                aria-label={app.getLz("action.close")}></button>
+                aria-label={app.getLz("action.close")}
+              />
             </div>
-            <div className="modal-content">
-              <div className="md-option-line">
-                <div className="md-option-segment">{app.getLz("settings.option.audio.playbackRate")}</div>
-                {playbackRate && <div className="md-option-segment playbackrate-text">{playbackRate} ×</div>}
-                <div className="md-option-segment md-option-segment_auto">
+            <div className={"modal-content"}>
+              <div className={"md-option-line"}>
+                <div className={"md-option-segment"}>{app.getLz("settings.option.audio.playbackRate")}</div>
+                {playbackRate && <div className={"md-option-segment playbackrate-text"}>{playbackRate} ×</div>}
+                <div className={"md-option-segment md-option-segment_auto"}>
                   <input
-                    type="range"
+                    type={"range"}
                     step={0.05}
                     min={0.25}
-                    max="2"
+                    max={"2"}
                     onWheel={playbackRateWheel}
                     onChange={(e) => playbackRateClick(e.target.value)}
-                    v-model={playbackRate}></input>
+                    v-model={playbackRate}
+                  />
                 </div>
               </div>
             </div>

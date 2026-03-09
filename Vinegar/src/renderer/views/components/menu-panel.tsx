@@ -53,7 +53,7 @@ const MenuPanel = () => {
     document.querySelector(".search-input-container input").focus();
   }
   function getStyle() {
-    let style: Record<string, string | number> = {};
+    const style: Record<string, string | number> = {};
     size = [this.$refs.menubody.offsetWidth, this.$refs.menubody.offsetHeight];
     if (event) {
       style["position"] = "absolute";
@@ -116,9 +116,9 @@ const MenuPanel = () => {
 
   return (
     <>
-      <div id="cider-menu-panel">
+      <div id={"cider-menu-panel"}>
         <div
-          className="menu-panel"
+          className={"menu-panel"}
           clickself={() => {
             menuPanel.visible = false;
             if ($root.hintscontext) {
@@ -134,26 +134,26 @@ const MenuPanel = () => {
             }
           }}>
           <div
-            className="menu-panel-body"
-            ref="menubody"
+            className={"menu-panel-body"}
+            ref={"menubody"}
             style={elStyle}
             className={getBodyClasses()}>
             {content.name !== "" && (
-              <div className="menu-header-text">
-                <div className="row">
-                  <div className="col">
-                    <h3 className="queue-header-text">{content.name}</h3>
+              <div className={"menu-header-text"}>
+                <div className={"row"}>
+                  <div className={"col"}>
+                    <h3 className={"queue-header-text"}>{content.name}</h3>
                   </div>
                 </div>
               </div>
             )}
             {Object.keys(content.headerItems).length !== 0 && (
-              <div className="menu-header-body">
+              <div className={"menu-header-body"}>
                 {content.headerItems.map(
                   (item) =>
                     canDisplay(item) && (
                       <button
-                        className="menu-option-header"
+                        className={"menu-option-header"}
                         className={getClasses(item)}
                         v-b-tooltiphover
                         title={item.name}
@@ -161,11 +161,12 @@ const MenuPanel = () => {
                         onClick={() => action(item)}>
                         {item.icon && (
                           <div
-                            className="sidebar-icon"
+                            className={"sidebar-icon"}
                             style={{ margin: 0 }}>
                             <div
-                              className="svg-icon"
-                              style={{ "--url": "url(" + item.icon + ")" }}></div>
+                              className={"svg-icon"}
+                              style={{ "--url": "url(" + item.icon + ")" }}
+                            />
                           </div>
                         )}
                       </button>
@@ -173,19 +174,20 @@ const MenuPanel = () => {
                 )}
               </div>
             )}
-            <div className="menu-body">
+            <div className={"menu-body"}>
               {content.items.map(
                 (item) =>
                   canDisplay(item) && (
                     <button
-                      className="menu-option"
+                      className={"menu-option"}
                       style={getItemStyle(item)}
                       onClick={() => action(item)}>
                       {item.icon && (
-                        <div className="sidebar-icon">
+                        <div className={"sidebar-icon"}>
                           <div
-                            className="svg-icon"
-                            style={{ "--url": "url(" + item.icon + ")" }}></div>
+                            className={"svg-icon"}
+                            style={{ "--url": "url(" + item.icon + ")" }}
+                          />
                         </div>
                       )}
                       {item.name}

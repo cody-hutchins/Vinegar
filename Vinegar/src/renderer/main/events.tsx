@@ -45,7 +45,7 @@ const Events = {
       }
       // CTRL+SHIFT+H
       if (event.ctrlKey && event.shiftKey && event.keyCode == 72) {
-        let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+        const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
           l: app.mklang,
         });
         app.showCollection(hist.data, app.getLz("term.history"));
@@ -63,7 +63,7 @@ const Events = {
           this.radiohls = null;
         } catch (_) {}
         try {
-          let searchInt = setInterval(function () {
+          const searchInt = setInterval(function () {
             if (document.getElementById("apple-music-player")) {
               //AudioOutputs.eqReady = true;
               document.getElementById("apple-music-player").crossOrigin = "anonymous";

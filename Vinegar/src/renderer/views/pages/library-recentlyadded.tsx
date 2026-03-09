@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 
 const Component = () => {
   let loading = false;
-  let firstRoute = `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`;
+  const firstRoute = `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`;
   const items = useMemo(() => {
     return this.$store.state.pageState["recentlyAdded"].items;
   }, [this.$store.state.pageState]);
@@ -53,37 +53,39 @@ const Component = () => {
 
   return (
     <>
-      <div id="cider-recentlyadded">
-        <div className="content-inner">
-          <h1 className="header-text">{$root.getLz("term.recentlyAdded")}</h1>
+      <div id={"cider-recentlyadded"}>
+        <div className={"content-inner"}>
+          <h1 className={"header-text"}>{$root.getLz("term.recentlyAdded")}</h1>
           {itemSize === "normal" ? (
-            <div className="well itemContainer collection-list-square">
+            <div className={"well itemContainer collection-list-square"}>
               {items.map((item) => (
                 <MediaItemSquare
                   item={item}
-                  v-bind:key={item.id}></MediaItemSquare>
+                  v-bind:key={item.id}
+                />
               ))}
             </div>
           ) : itemSize === "compact" ? (
-            <div className="well itemContainer collection-list-square">
+            <div className={"well itemContainer collection-list-square"}>
               {items.map((ite) => (
                 <MediaItemListItem
-                  show-meta-data="true"
-                  show-library-status="false"
+                  show-meta-data={"true"}
+                  show-library-status={"false"}
                   item={item}
-                  v-bind:key={item.id}></MediaItemListItem>
+                  v-bind:key={item.id}
+                />
               ))}
             </div>
           ) : null}
           <div
-            className="well itemContainer collection-list-square"
+            className={"well itemContainer collection-list-square"}
             v-show={loading}>
-            <div className="spinner"></div>
+            <div className={"spinner"} />
           </div>
           {nextUrl && !loading ? (
             <button
               style={{ opacity: 0, height: "32px" }}
-              v-observe-visibility="{callback: visibilityChanged}">
+              v-observe-visibility={"{callback: visibilityChanged}"}>
               {$root.getLz("term.showMore")}
             </button>
           ) : null}

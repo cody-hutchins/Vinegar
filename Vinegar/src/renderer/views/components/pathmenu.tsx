@@ -28,39 +28,39 @@ const PathMenu = () => {
     ipcRenderer.invoke("scanLibrary");
   }
   return (
-    <div id="pathmenu">
+    <div id={"pathmenu"}>
       <div
-        className="spatialproperties-panel castmenu pathmenu modal-fullscreen"
+        className={"spatialproperties-panel castmenu pathmenu modal-fullscreen"}
         clickself={close()}
         contextmenuself={close()}>
-        <div className="modal-window">
-          <div className="modal-header">
-            <div className="modal-title">{"Edit Paths"}</div>
+        <div className={"modal-window"}>
+          <div className={"modal-header"}>
+            <div className={"modal-title"}>Edit Paths</div>
             <button
-              className="close-btn"
+              className={"close-btn"}
               onClick={() => close()}
               aria-label={$root.getLz("action.close")}
             />
           </div>
-          <div className="modal-content">
+          <div className={"modal-content"}>
             {folders.map((folder) => (
-              <div className="md-option-line">
-                <div className="md-option-segment">{folder}</div>
-                <div className="md-option-segment md-option-segment_auto">
+              <div className={"md-option-line"}>
+                <div className={"md-option-segment"}>{folder}</div>
+                <div className={"md-option-segment md-option-segment_auto"}>
                   <button
-                    className="md-btn"
+                    className={"md-btn"}
                     onClick={() => remove(folder)}>
-                    {"Remove"}
+                    Remove
                   </button>
                 </div>
               </div>
             ))}
-            <div className="md-option-line">
-              <div className="md-option-segment md-option-segment_auto">
+            <div className={"md-option-line"}>
+              <div className={"md-option-segment md-option-segment_auto"}>
                 <button
-                  className="md-btn"
+                  className={"md-btn"}
                   onClick={() => add()}>
-                  {"Add Path"}
+                  Add Path
                 </button>
               </div>
             </div>

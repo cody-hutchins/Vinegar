@@ -18,20 +18,21 @@ const Multiroom = ({ data }: { data: object }) => {
   return (
     <>
       <>
-        <div id="cider-multiroom">
-          <div className="content-inner cider-multiroom">
+        <div id={"cider-multiroom"}>
+          <div className={"content-inner cider-multiroom"}>
             {data.attributes?.uber?.masterArt?.url && (
-              <div className="artworkContainer">
+              <div className={"artworkContainer"}>
                 <ArtworkMaterial
                   url={data.attributes?.uber?.masterArt?.url ?? ""}
-                  size="800"
-                  images="1"></ArtworkMaterial>
+                  size={"800"}
+                  images={"1"}
+                />
               </div>
             )}
-            <div className="detail">
-              <h1 className="header-text">{data.attributes?.title ?? ""}</h1>
+            <div className={"detail"}>
+              <h1 className={"header-text"}>{data.attributes?.title ?? ""}</h1>
               <h2
-                className="header-desc"
+                className={"header-desc"}
                 v-html={data.relationships?.children?.data[0]?.attributes?.description ?? ""}></h2>
               {data.relationships && (
                 <template>
@@ -41,7 +42,8 @@ const Multiroom = ({ data }: { data: object }) => {
                         {data?.relationships?.contents?.data.map((item) => (
                           <MediaItemSquare
                             item={item}
-                            key={item?.id ?? ""}></MediaItemSquare>
+                            key={item?.id ?? ""}
+                          />
                         ))}
                       </template>
                     </template>
@@ -52,16 +54,16 @@ const Multiroom = ({ data }: { data: object }) => {
                           (recom, index) =>
                             (recom.relationships?.contents?.data ?? []).length > 0 && (
                               <template>
-                                <div className="row">
+                                <div className={"row"}>
                                   {recom.attributes.name !== "Chart Set" && (
-                                    <div className="col">
+                                    <div className={"col"}>
                                       <h3>{recom.attributes?.title ?? ""}</h3>
                                     </div>
                                   )}
                                   {index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
-                                    <div className="col-auto cider-flex-center">
+                                    <div className={"col-auto cider-flex-center"}>
                                       <button
-                                        className="cd-btn-seeall"
+                                        className={"cd-btn-seeall"}
                                         onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
                                         {app.getLz("term.seeAll")}
                                       </button>
@@ -73,13 +75,14 @@ const Multiroom = ({ data }: { data: object }) => {
                                     {(recom.attributes.name && recom.attributes.name.includes("ideo")) || index === 0 ? (
                                       <template>
                                         <MediaItemScrollerHorizontalMVView
-                                          imagesize="800"
-                                          browsesp="index === 0"
-                                          items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}></MediaItemScrollerHorizontalMVView>
+                                          imagesize={"800"}
+                                          browsesp={"index === 0"}
+                                          items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
+                                        />
                                       </template>
                                     ) : (
                                       <template>
-                                        <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                                        <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
                                       </template>
                                     )}
                                   </template>

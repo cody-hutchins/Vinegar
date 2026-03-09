@@ -4,9 +4,9 @@ import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
 const ArtistFeed = () => {
   const app = this.$root;
-  let followedArtists = this.$root.cfg.home.followedArtists;
+  const followedArtists = this.$root.cfg.home.followedArtists;
   let artistFeed = [];
-  let artists = [];
+  const artists = [];
   let syncingFavs = false;
 
   useEffect(() => {
@@ -21,12 +21,12 @@ const ArtistFeed = () => {
   }
 
   async function unfollow(id) {
-    let index = followedArtists.indexOf(id);
+    const index = followedArtists.indexOf(id);
     if (index > -1) {
       followedArtists.splice(index, 1);
     }
-    let artist = artists.find((a) => a.id === id);
-    let index2 = artists.indexOf(artist);
+    const artist = artists.find((a) => a.id === id);
+    const index2 = artists.indexOf(artist);
     if (index2 > -1) {
       artists.splice(index2, 1);
     }
@@ -48,12 +48,12 @@ const ArtistFeed = () => {
   }
 
   async function getArtistFeed() {
-    let artists = followedArtists;
+    const artists = followedArtists;
     artistFeed = [];
 
     // Apple limits the number of IDs we can provide in a single API call to 50.
     // Divide it into groups of 50 and send parallel requests
-    let chunks = [];
+    const chunks = [];
     for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
       chunks.push(artists.slice(artistIdx, artistIdx + 50));
     }
@@ -69,8 +69,8 @@ const ArtistFeed = () => {
       );
       // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
       artistFeed.sort((a, b) => {
-        let dateA = new Date(a.attributes.releaseDate);
-        let dateB = new Date(b.attributes.releaseDate);
+        const dateA = new Date(a.attributes.releaseDate);
+        const dateB = new Date(b.attributes.releaseDate);
         return dateB - dateA;
       });
     } catch (err) {}
@@ -78,26 +78,27 @@ const ArtistFeed = () => {
 
   return (
     <>
-      <div id="cider-artist-feed">
-        <div className="content-inner">
+      <div id={"cider-artist-feed"}>
+        <div className={"content-inner"}>
           <div>
-            <div className="row">
-              <div className="col">
-                <div className="row nopadding">
-                  <div className="col nopadding">
+            <div className={"row"}>
+              <div className={"col"}>
+                <div className={"row nopadding"}>
+                  <div className={"col nopadding"}>
                     <h3>{app.getLz("home.followedArtists")}</h3>
                   </div>
-                  <div className="col-auto nopadding cider-flex-center">
+                  <div className={"col-auto nopadding cider-flex-center"}>
                     {!syncingFavs ? (
                       <button
-                        className="cd-btn-seeall"
+                        className={"cd-btn-seeall"}
                         onClick={() => syncFavorites()}>
                         {app.getLz("home.syncFavorites")}
                       </button>
                     ) : (
                       <div
-                        className="spinner"
-                        style={{ height: "26px" }}></div>
+                        className={"spinner"}
+                        style={{ height: "26px" }}
+                      />
                     )}
                   </div>
                 </div>
@@ -106,15 +107,17 @@ const ArtistFeed = () => {
                     <div style={{ margin: "6px" }}>
                       <MediaItemSquare
                         item={artist}
-                        kind="small"></MediaItemSquare>
+                        kind={"small"}
+                      />
                       <button
                         onClick={() => unfollow(artist.id)}
-                        className="md-btn md-btn-glyph"
+                        className={"md-btn md-btn-glyph"}
                         style={{ display: flex }}>
-                        <div className="sidebar-icon">
+                        <div className={"sidebar-icon"}>
                           <div
-                            className="svg-icon"
-                            style={{ "--url": "url(./assets/feather/x-circle.svg)" }}></div>
+                            className={"svg-icon"}
+                            style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
+                          />
                         </div>
                         {app.getLz("action.removeFavorite")}
                       </button>
@@ -126,24 +129,25 @@ const ArtistFeed = () => {
           </div>
 
           <div>
-            <div className="row">
-              <div className="col">
-                <div className="row nopadding">
-                  <div className="col nopadding">
+            <div className={"row"}>
+              <div className={"col"}>
+                <div className={"row nopadding"}>
+                  <div className={"col nopadding"}>
                     <h3>{app.getLz("home.artistsFeed")}</h3>
                   </div>
                 </div>
                 <div
-                  className="well"
+                  className={"well"}
                   style={{ marginTop: 0 }}>
                   {artistFeed.length > 0 ? (
                     artistFeed.map((item) => (
                       <MediaItemListItem
                         v-bind:key={item.id}
-                        item={item}></MediaItemListItem>
+                        item={item}
+                      />
                     ))
                   ) : (
-                    <div className="spinner"></div>
+                    <div className={"spinner"} />
                   )}
                 </div>
               </div>

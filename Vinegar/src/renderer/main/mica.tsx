@@ -37,9 +37,9 @@ async function spawnMica() {
     });
     CiderCache.putCache("mica-cache", imgSrc);
   }
-  let canvas = document.createElement("canvas");
-  let ctx = canvas.getContext("2d");
-  let img = new Image();
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  const img = new Image();
   micaDiv.style.backgroundImage = `url(${imgSrc.data})`;
   document.body.appendChild(micaDiv);
 

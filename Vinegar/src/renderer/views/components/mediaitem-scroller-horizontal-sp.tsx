@@ -2,14 +2,14 @@ import MediaItemSquare from "./mediaitem-square.jsx";
 
 const MediaItemScrollerHorizontalSP = ({ items, withReason }: { items?: object[]; withReason?: boolean }) => {
   return (
-    <div id="mediaitem-scroller-horizontal-sp">
-      <div className="cd-hmedia-scroller hmedia-scroller-card">
+    <div id={"mediaitem-scroller-horizontal-sp"}>
+      <div className={"cd-hmedia-scroller hmedia-scroller-card"}>
         <vue-horizontal>
           {items.map((item) => (
             <MediaItemSquare
-              kind="card"
+              kind={"card"}
               item={item}
-              size="300"
+              size={"300"}
               reasonShown={withReason}
               v-bind:key={item.id}
             />

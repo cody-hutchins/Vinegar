@@ -3,7 +3,7 @@ import SVGIcon from "../../main/components/svg-icon.jsx";
 const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: object; playlistSelect: () => void; relateMediaItems: string[] }) => {
   let folderOpened = false;
   let children = [];
-  let playlistRoot = "p.playlistsroot";
+  const playlistRoot = "p.playlistsroot";
   let renaming = false;
   let icon = "";
   let hasRelatedMediaItems = false;
@@ -14,7 +14,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     } else {
       icon = "./assets/feather/folder.svg";
     }
-    let playlistMap = this.$root.playlists.trackMapping;
+    const playlistMap = this.$root.playlists.trackMapping;
     if (relateMediaItems.length !== 0) {
       if (playlistMap[relateMediaItems[0]]) {
         if (playlistMap[relateMediaItems[0]].includes(item.id)) {
@@ -51,8 +51,8 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     });
   }
   async function move(item, sendTo) {
-    let type = item.type.replace("library-", "");
-    let typeTo = sendTo.type;
+    const type = item.type.replace("library-", "");
+    const typeTo = sendTo.type;
     this.$root.mk.api.v3.music(
       `/v1/me/library/${type}/${item.id}/parent`,
       {},
@@ -87,7 +87,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     // await this.$root.refreshPlaylists()
   }
   function playlistContextMenu(event, playlist_id) {
-    let menu = {
+    const menu = {
       items: {
         moveToParent: {
           name: this.$root.getLz("action.moveToTop"),
@@ -137,7 +137,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     evt.dataTransfer.dropEffect = "move";
   }
   function onDrop(evt) {
-    let data = JSON.parse(evt.dataTransfer.getData("text/plain"));
+    const data = JSON.parse(evt.dataTransfer.getData("text/plain"));
     evt.preventDefault();
     if (data.id === item.id) {
       return;
@@ -205,7 +205,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     toggleFolder();
 
     this.$root.mk.api.v3.music(`v1/me/library/playlist-folders/${item.id}/children`).then((data) => {
-      let children = data.data.data;
+      const children = data.data.data;
       children.forEach((child) => {
         if (!$root.playlists.listing.find((listing) => listing.id === child.id)) {
           child.parent = item.id;
@@ -237,13 +237,13 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
   }
   return (
     <>
-      <div id="sidebar-playlist">
+      <div id={"sidebar-playlist"}>
         <div
-          className="sidebar-playlist"
+          className={"sidebar-playlist"}
           key={item.id}>
           <button
             key={item.id}
-            className="app-sidebar-item app-sidebar-item-playlist"
+            className={"app-sidebar-item app-sidebar-item-playlist"}
             className={item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected]}
             onContextMenu={(e) => playlistContextMenu(e, item.id)}
             onDragStart={(e) => startDrag(e, item)}
@@ -254,34 +254,37 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
             {!renaming ? (
               <template>
                 <SVGIcon
-                  url="icon"
-                  name="sidebar-playlist"></SVGIcon>
+                  url={"icon"}
+                  name={"sidebar-playlist"}
+                />
                 {item.attributes.name}
-                {hasRelatedMediaItems && <small className="presentNotice">(Track present)</small>}
+                {hasRelatedMediaItems && <small className={"presentNotice"}>(Track present)</small>}
               </template>
             ) : (
               <input
-                type="text"
+                type={"text"}
                 v-model={item.attributes.name}
-                className="pl-rename-field"
+                className={"pl-rename-field"}
                 onBlur={() => rename()}
                 onKeyDown={(e) => {
                   if (e.key === "enter") rename();
-                }}></input>
+                }}
+              />
             )}
           </button>
           {item.type === "library-playlist-folders" && folderOpened && (
-            <div className="folder-body">
+            <div className={"folder-body"}>
               {children.length !== 0 ? (
                 children.map((item) => (
                   <SidebarPlaylist
                     relate-media-items={relateMediaItems}
                     playlist-select={playlistSelect}
                     item={item}
-                    v-bind:key={item.id}></SidebarPlaylist>
+                    v-bind:key={item.id}
+                  />
                 ))
               ) : (
-                <div className="spinner"></div>
+                <div className={"spinner"} />
               )}
             </div>
           )}

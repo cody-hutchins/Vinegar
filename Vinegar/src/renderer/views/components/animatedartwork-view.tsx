@@ -11,7 +11,7 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
     }
     if (video) {
       setTimeout(() => {
-        let config = {
+        const config = {
           backBufferLength: 0,
           enableWebVTT: false,
           enableCEA708Captions: false,
@@ -26,35 +26,35 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
         }
         // bind them together
         if (this.$refs.video) {
-          let d = "WIDEVINE_SOFTWARE";
-          let h = {
+          const d = "WIDEVINE_SOFTWARE";
+          const h = {
             initDataTypes: ["cenc", "keyids"],
             distinctiveIdentifier: "optional",
             persistentState: "required",
           };
-          let p = {
+          const p = {
             platformInfo: { requiresCDMAttachOnStart: !0, maxSecurityLevel: d, keySystemConfig: h },
             appData: { serviceName: "Apple Music" },
           };
 
           hls.attachMedia(this.$refs.video);
           hls.loadSource(video, p);
-          let u = hls;
+          const u = hls;
           let quality = app.cfg.visual.animated_artwork_qualityLevel;
           setTimeout(() => {
-            let levelsnum = u.levels.map((level) => {
+            const levelsnum = u.levels.map((level) => {
               return level.width;
             });
             if (levelsnum.length > 0) {
-              let qualities = [];
-              let qualities2 = [];
+              const qualities = [];
+              const qualities2 = [];
               for (let i = 0; i < levelsnum.length; i++) {
                 if (qualities2.indexOf(levelsnum[i]) === -1) {
                   qualities.push({ level: i, quality: levelsnum[i] });
                   qualities2.push(levelsnum[i]);
                 }
               }
-              let actualnum = Math.floor(qualities[qualities.length - 1].level * (quality / 4));
+              const actualnum = Math.floor(qualities[qualities.length - 1].level * (quality / 4));
               if (quality !== 0) {
                 quality = qualities[Math.min(actualnum, qualities.length - 1)].level;
               }
@@ -85,16 +85,17 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
 
   return (
     <>
-      <div id="animatedartwork-view">
+      <div id={"animatedartwork-view"}>
         {video && (
           <div
-            className="animated"
+            className={"animated"}
             v-bind:vid={app.hashCode(video).toString()}>
             <video
-              ref="video"
-              className="animated-artwork-video"
+              ref={"video"}
+              className={"animated-artwork-video"}
               loop
-              id="animated-artwork"></video>
+              id={"animated-artwork"}
+            />
           </div>
         )}
       </div>

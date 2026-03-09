@@ -10,7 +10,7 @@ import Pagination from "../components/pagination.jsx";
 const Playlist = ({ data }: { data: object }) => {
   const app = this.$root;
   let editorialNotesExpanded = false;
-  let drag = false;
+  const drag = false;
   let nameEditing = false;
   let descriptionEditing = false;
   let inLibrary = null;
@@ -31,7 +31,7 @@ const Playlist = ({ data }: { data: object }) => {
   const pageSize = this.$root.cfg.libraryPrefs.pageSize;
   let start = 0;
   let end = pageSize;
-  let prefs = this.$root.cfg.libraryPrefs.playlists;
+  const prefs = this.$root.cfg.libraryPrefs.playlists;
 
   const mounted = () => {
     setTimeout(function () {
@@ -153,7 +153,7 @@ const Playlist = ({ data }: { data: object }) => {
     nestedDisplayLength = songlists.length;
 
     if (data?.type?.includes("album")) {
-      let discs = songlists
+      const discs = songlists
         .map((x) => {
           return x.attributes.discNumber;
         })
@@ -161,7 +161,7 @@ const Playlist = ({ data }: { data: object }) => {
 
       if ((discs && discs.length > 1) || (discs && hasNestedPlaylist)) {
         for (disc of discs) {
-          let songs = songlists.filter((x) => x.attributes.discNumber === disc);
+          const songs = songlists.filter((x) => x.attributes.discNumber === disc);
           nestedPlaylist.push({ disc: disc, tracks: songs });
         }
       }
@@ -207,7 +207,7 @@ const Playlist = ({ data }: { data: object }) => {
       id = data.id;
     }
     this.$root.getSocialBadges((badges) => {
-      let friends = badges[id];
+      const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
           self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
@@ -238,7 +238,7 @@ const Playlist = ({ data }: { data: object }) => {
   }
   function getAlbumGenre() {
     if (data.type.includes("albums")) {
-      let date = data.attributes.releaseDate;
+      const date = data.attributes.releaseDate;
       if (date === null || date === "") return "";
       return `${data.attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
     }
@@ -291,7 +291,7 @@ const Playlist = ({ data }: { data: object }) => {
     if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
       id = res.data.data[0].relationships.library.data[0].id;
     }
-    let kind = data.attributes.playParams.kind ?? data.type ?? "";
+    const kind = data.attributes.playParams.kind ?? data.type ?? "";
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     app.mk.api.v3.music(
       `v1/me/library/${truekind}/${id.toString()}`,
@@ -370,8 +370,8 @@ const Playlist = ({ data }: { data: object }) => {
     }
     // for each app.selectedMediaItems splice the items from the playlist
     for (let i = 0; i < app.selectedMediaItems.length; i++) {
-      let item = app.selectedMediaItems[i];
-      let index = data.relationships.tracks.data.findIndex((x) => x.id === item.id);
+      const item = app.selectedMediaItems[i];
+      const index = data.relationships.tracks.data.findIndex((x) => x.id === item.id);
       if (index > -1) {
         data.relationships.tracks.data.splice(index, 1);
       }
@@ -379,7 +379,7 @@ const Playlist = ({ data }: { data: object }) => {
     await put();
   }
   function convert() {
-    let pl_tracks = [];
+    const pl_tracks = [];
     for (let i = 0; i < data.relationships.tracks.data.length; i++) {
       pl_tracks.push({
         id: data.relationships.tracks.data[i].id,
@@ -406,7 +406,7 @@ const Playlist = ({ data }: { data: object }) => {
       }
     }
 
-    let menuItems = {
+    const menuItems = {
       headerItems: [
         {
           icon: "./assets/feather/heart.svg",
@@ -492,7 +492,7 @@ const Playlist = ({ data }: { data: object }) => {
     app.showMenuPanel(menuItems, event);
 
     try {
-      let rating = await app.getRating(self.data);
+      const rating = await app.getRating(self.data);
       if (rating === 0) {
         menuItems.headerItems.find((x) => x.id === "love").disabled = false;
         menuItems.headerItems.find((x) => x.id === "dislike").disabled = false;
@@ -511,7 +511,7 @@ const Playlist = ({ data }: { data: object }) => {
     return `${kind}:${id}`;
   }
   function getFormattedDate() {
-    let date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
+    const date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
     let prefix = "";
     if (date === null || date === "") return "";
     switch (date) {
@@ -558,8 +558,8 @@ const Playlist = ({ data }: { data: object }) => {
   function play() {
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        let temp = array[i];
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
         array[i] = array[j];
         array[j] = temp;
       }
@@ -574,14 +574,14 @@ const Playlist = ({ data }: { data: object }) => {
     }
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
-    let query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+    const query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
 
     app.mk.stop().then(() => {
       if (id !== "ciderlocal") {
         app.mk.setQueue({ [truekind]: [id], parameters: { l: app.mklang } }).then(function () {
           app.mk.play().then(function () {
             if (query.length > 100) {
-              let u = query.slice(100);
+              const u = query.slice(100);
               if (app.mk.shuffleMode === 1) {
                 shuffleArray(u);
               }
@@ -590,7 +590,7 @@ const Playlist = ({ data }: { data: object }) => {
           });
         });
       } else {
-        let u = app.library.localsongs.map((i) => {
+        const u = app.library.localsongs.map((i) => {
           return i.id;
         });
         app.mk.setQueue({ episodes: u }).then(() => {
@@ -605,7 +605,7 @@ const Playlist = ({ data }: { data: object }) => {
   }
   async function getCopiedPlayListSongs(event) {
     if (event.ctrlKey && event.keyCode === 67) {
-      let urls = [];
+      const urls = [];
       app.selectedMediaItems.forEach((item) => {
         app.mk.api.v3.music(`/v1/me/library/songs/${item.id}`).then((response) => {
           app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${response.data.data[0].attributes.playParams.catalogId}`).then((response1) => {
@@ -620,7 +620,7 @@ const Playlist = ({ data }: { data: object }) => {
   async function pasteSongs(event) {
     if (event.ctrlKey && event.keyCode === 86 && data.attributes.canEdit) {
       let clipboard = await navigator.clipboard.readText();
-      let songs = [];
+      const songs = [];
 
       clipboard = clipboard.split(",");
       clipboard.forEach((item) => {
@@ -709,57 +709,60 @@ const Playlist = ({ data }: { data: object }) => {
   }
 
   return (
-    <div id="cider-playlist">
+    <div id={"cider-playlist"}>
       {data !== [] && data.attributes !== null && (
         <div
-          className="content-inner playlist-page"
+          className={"content-inner playlist-page"}
           className={classes}
           is-album={isAlbum()}
           style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
           {app.playlists.loadingState === 0 && (
             <template>
-              <div className="content-inner centered">
-                <div className="spinner"></div>
+              <div className={"content-inner centered"}>
+                <div className={"spinner"} />
               </div>
             </template>
           )}
           {app.playlists.loadingState === 1 && (
             <template>
               <div
-                className="playlist-display"
+                className={"playlist-display"}
                 style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
                 mouseoverself={minClass(false)}>
-                <div className="playlistInfo">
+                <div className={"playlistInfo"}>
                   {hasHero() && (
-                    <div className="playlist-hero">
+                    <div className={"playlist-hero"}>
                       <MediaItemArtwork
-                        shadow="none"
+                        shadow={"none"}
                         url={hasHero()}
-                        size="2160"></MediaItemArtwork>
+                        size={"2160"}
+                      />
                       <div
-                        className="hero-tint"
-                        style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}></div>
+                        className={"hero-tint"}
+                        style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                      />
                     </div>
                   )}
-                  <div className="row">
+                  <div className={"row"}>
                     <div
-                      className="col-auto cider-flex-center"
+                      className={"col-auto cider-flex-center"}
                       onMouseOver={() => minClass(false)}>
-                      <div className="mediaContainer">
+                      <div className={"mediaContainer"}>
                         <MediaItemArtwork
-                          shadow="large"
-                          video-priority="true"
+                          shadow={"large"}
+                          video-priority={"true"}
                           url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
                           video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                          size="500"></MediaItemArtwork>
+                          size={"500"}
+                        />
                       </div>
                     </div>
-                    <div className="col playlist-info">
+                    <div className={"col playlist-info"}>
                       {!editorialNotesExpanded && (
                         <template>
                           <div>
                             <div
-                              className="playlist-name"
+                              className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
                               onClick={() => editPlaylistName()}
                               v-show={!nameEditing}
@@ -767,28 +770,29 @@ const Playlist = ({ data }: { data: object }) => {
                               {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                             </div>
                             <div
-                              className="playlist-name"
+                              className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
                               v-show={nameEditing}>
                               <input
-                                type="text"
-                                spellCheck="false"
-                                className="nameEdit"
+                                type={"text"}
+                                spellCheck={"false"}
+                                className={"nameEdit"}
                                 v-model={data.attributes.name}
                                 onBlur={editPlaylist}
                                 onChange={editPlaylist}
                                 onKeyDown={(e) => {
                                   if (e.key === "enter") editPlaylist();
-                                }}></input>
+                                }}
+                              />
                             </div>
                             <div
-                              className="playlist-time genre"
+                              className={"playlist-time genre"}
                               style={{ margin: "0px", color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
                               {getAlbumGenre()}
                             </div>
                             {getArtistName(data) !== "" && !useArtistChip && (
                               <div
-                                className="playlist-artist item-navigate"
+                                className={"playlist-artist item-navigate"}
                                 onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
                                 {getArtistName(data)}
                               </div>
@@ -798,19 +802,21 @@ const Playlist = ({ data }: { data: object }) => {
                                 {data.relationships.artists?.data.map((artist) => (
                                   <ArtistChip
                                     style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                                    item={artist}></ArtistChip>
+                                    item={artist}
+                                  />
                                 ))}
                               </template>
                             )}
                             {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
                               <div
-                                className="playlist-desc"
+                                className={"playlist-desc"}
                                 style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}>
                                 {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                   <div
-                                    className="content"
+                                    className={"content"}
                                     v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
-                                    onClick={() => openInfoModal()}></div>
+                                    onClick={() => openInfoModal()}
+                                  />
                                 ) : (
                                   <>
                                     {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
@@ -826,12 +832,13 @@ const Playlist = ({ data }: { data: object }) => {
                       )}
                       {editorialNotesExpanded && (
                         <template>
-                          <div className="playlist-desc-expanded">
+                          <div className={"playlist-desc-expanded"}>
                             <div
-                              className="content"
-                              v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}></div>
+                              className={"content"}
+                              v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
+                            />
                             <button
-                              className="more-btn"
+                              className={"more-btn"}
                               onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
                               {app.getLz("term.showLess")}
                             </button>
@@ -839,75 +846,77 @@ const Playlist = ({ data }: { data: object }) => {
                         </template>
                       )}
                       <div
-                        className="playlist-controls"
-                        v-observe-visibility="{callback: isHeaderVisible}"
+                        className={"playlist-controls"}
+                        v-observe-visibility={"{callback: isHeaderVisible}"}
                         style={{ zIndex: 20 }}>
                         <button
-                          className="md-btn md-btn-primary md-btn-icon"
+                          className={"md-btn md-btn-primary md-btn-icon"}
                           style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
                           onClick={() => {
                             app.mk.shuffleMode = 0;
                             play();
                           }}>
-                          <img className="md-ico-play"></img>
+                          <img className={"md-ico-play"} />
                           {app.getLz("term.play")}
                         </button>
                         <button
-                          className="md-btn md-btn-primary md-btn-icon"
+                          className={"md-btn md-btn-primary md-btn-icon"}
                           style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
                           onClick={() => {
                             app.mk.shuffleMode = 1;
                             play();
                           }}>
-                          <img className="md-ico-shuffle"></img>
+                          <img className={"md-ico-shuffle"} />
                           {app.getLz("term.shuffle")}
                         </button>
                         {inLibrary !== null && confirm !== true && (
                           <button
-                            className="md-btn md-btn-icon"
+                            className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
                             onClick={() => confirmButton()}>
-                            <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                            <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                             {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                           </button>
                         )}
                         {confirm === true && (
                           <button
-                            className="md-btn md-btn-icon"
+                            className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
                             onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                            <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                            <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                             {app.getLz("term.confirm")}
                           </button>
                         )}
                         {shouldPaginate && (
                           <select
-                            className="md-select"
+                            className={"md-select"}
                             v-model={prefs.scroll}>
                             <optgroup label={app.getLz("term.scroll")}>
-                              <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
-                              <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                              <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
+                              <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                             </optgroup>
                           </select>
                         )}
                         <div style={{ display: "flex", float: "right" }}>
                           <button
                             style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
-                            className="['search-btn', showSearch ? 'active' : '']"
+                            className={"['search-btn', showSearch ? 'active' : '']"}
                             onClick={() => toggleSearch()}
-                            aria-label="showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')">
+                            aria-label={"showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')"}>
                             <SVGIcon
                               style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-                              url="showSearch ? './assets/search-alt.svg' : './assets/search.svg'"></SVGIcon>
+                              url={"showSearch ? './assets/search-alt.svg' : './assets/search.svg'"}
+                            />
                           </button>
                           <button
                             style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
-                            className="more-btn-round"
+                            className={"more-btn-round"}
                             onClick={() => menu}
                             aria-label={app.getLz("term.more")}>
                             <div
                               style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
-                              className="svg-icon"></div>
+                              className={"svg-icon"}
+                            />
                           </button>
                         </div>
                       </div>
@@ -915,130 +924,132 @@ const Playlist = ({ data }: { data: object }) => {
                   </div>
                 </div>
                 {data.attributes.artwork !== null && !hasHero() && (
-                  <div className="artworkContainer">
+                  <div className={"artworkContainer"}>
                     <ArtworkMaterial
                       url={data.attributes.artwork.url}
-                      size="500"
-                      images="1"></ArtworkMaterial>
+                      size={"500"}
+                      images={"1"}
+                    />
                   </div>
                 )}
                 {data.attributes.canEdit && data.type === "library-playlists" && (
                   <button
-                    className="md-btn md-btn-small editTracksBtn"
+                    className={"md-btn md-btn-small editTracksBtn"}
                     onClick={() => {
                       editing = !editing;
                     }}>
                     {!editing ? (
                       <span>
-                        <div class="codicon codicon-edit"></div> {$root.getLz("action.editTracklist")}
+                        <div className={"codicon codicon-edit"} /> {$root.getLz("action.editTracklist")}
                       </span>
                     ) : (
                       <span>
-                        <div class="codicon codicon-check"></div> {$root.getLz("action.done")}
+                        <div className={"codicon codicon-check"} /> {$root.getLz("action.done")}
                       </span>
                     )}
                   </button>
                 )}
               </div>
               <div
-                className="floating-header"
+                className={"floating-header"}
                 style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
-                <div className="row">
-                  <div className="col">
+                <div className={"row"}>
+                  <div className={"col"}>
                     <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
                   </div>
-                  <div className="col-auto cider-flex-center">
+                  <div className={"col-auto cider-flex-center"}>
                     <div>
                       <button
-                        className="md-btn md-btn-primary  md-btn-icon"
+                        className={"md-btn md-btn-primary  md-btn-icon"}
                         style={{ minWidth: "100px" }}
                         onClick={() => {
                           app.mk.shuffleMode = 0;
                           play();
                         }}>
-                        <img className="md-ico-play"></img>
+                        <img className={"md-ico-play"} />
                         {app.getLz("term.play")}
                       </button>
                       <button
-                        className="md-btn md-btn-primary  md-btn-icon"
+                        className={"md-btn md-btn-primary  md-btn-icon"}
                         style={{ minWidth: "100px" }}
                         onClick={() => {
                           app.mk.shuffleMode = 1;
                           play();
                         }}>
-                        <img className="md-ico-shuffle"></img>
+                        <img className={"md-ico-shuffle"} />
                         {app.getLz("term.shuffle")}
                       </button>
                       {inLibrary !== null && confirm !== true && (
                         <button
-                          className="md-btn md-btn-icon"
+                          className={"md-btn md-btn-icon"}
                           style={{ minWidth: "180px" }}
                           onClick={() => confirmButton()}>
-                          <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                          <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                           {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                         </button>
                       )}
                       {confirm === true && (
                         <button
-                          className="md-btn md-btn-icon"
+                          className={"md-btn md-btn-icon"}
                           style={{ minWidth: "180px" }}
                           onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                          <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                          <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                           {app.getLz("term.confirm")}
                         </button>
                       )}
                       {shouldPaginate && (
                         <select
-                          className="md-select"
+                          className={"md-select"}
                           v-model={prefs.scroll}>
                           <optgroup label={app.getLz("term.scroll")}>
-                            <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
-                            <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                            <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
+                            <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                           </optgroup>
                         </select>
                       )}
                     </div>
                   </div>
-                  <div className="col-auto cider-flex-center">
+                  <div className={"col-auto cider-flex-center"}>
                     <button
-                      className="more-btn-round"
+                      className={"more-btn-round"}
                       style={{ float: right }}
                       onClick={() => menu}
                       aria-label={app.getLz("term.more")}>
-                      <div className="svg-icon"></div>
+                      <div className={"svg-icon"} />
                     </button>
                   </div>
                 </div>
               </div>
-              <div className="playlist-body scrollbody">
+              <div className={"playlist-body scrollbody"}>
                 <b-tabs
                   pills
-                  className="track-pills pilldim fancy-pills"
-                  align="center"
-                  content-className="mt-3"
+                  className={"track-pills pilldim fancy-pills"}
+                  align={"center"}
+                  content-className={"mt-3"}
                   nav-wrapper-className={navClass(data)}>
                   <b-tab
                     title={$root.getLz("term.tracks")}
-                    id="songList"
+                    id={"songList"}
                     active>
                     <div
                       onWheel={() => minClass(true)}
                       onScroll={() => minClass(true)}>
-                      <div className="">
+                      <div className={""}>
                         <div
                           style={{ width: "100%" }}
                           onClick={() => minClass(true)}>
                           {showSearch && (
-                            <div className="search-input-container">
-                              <div className="search-input--icon"></div>
+                            <div className={"search-input-container"}>
+                              <div className={"search-input--icon"} />
                               <input
-                                type="search"
-                                spellCheck="false"
+                                type={"search"}
+                                spellCheck={"false"}
                                 placeholder={$root.getLz("term.search") + "..."}
                                 onInput={() => search()}
                                 v-model={searchQuery}
-                                className="search-input"
-                                ref="search-bar"></input>
+                                className={"search-input"}
+                                ref={"search-bar"}
+                              />
                             </div>
                           )}
                           {shouldPaginate && (
@@ -1047,14 +1058,15 @@ const Playlist = ({ data }: { data: object }) => {
                               length={hasNestedPlaylist ? nestedDisplayLength : displayListing.length}
                               pageSize={pageSize}
                               scroll={prefs.scroll}
-                              scrollSelector="#songList"
-                              onRangeChange="onRangeChange"></Pagination>
+                              scrollSelector={"#songList"}
+                              onRangeChange={"onRangeChange"}
+                            />
                           )}
                           <draggable
-                            options="{disabled: !editing}"
+                            options={"{disabled: !editing}"}
                             v-model={data.relationships.tracks.data}
-                            start="drag=true"
-                            end="drag=false;put()">
+                            start={"drag=true"}
+                            end={"drag=false;put()"}>
                             {!hasNestedPlaylist ? (
                               <template>
                                 {currentSlice.map((item, index) => (
@@ -1065,14 +1077,15 @@ const Playlist = ({ data }: { data: object }) => {
                                     showIndex={true}
                                     showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
                                     context-ext={buildContextMenu()}
-                                    v-bind:key={item.id}></MediaItemListItem>
+                                    v-bind:key={item.id}
+                                  />
                                 ))}
                               </template>
                             ) : (
                               <template>
                                 {nestedSlices.map((disc) => (
                                   <div>
-                                    <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                    <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                     {disc.tracks.map((item, index) => (
                                       <MediaItemListItem
                                         item={item}
@@ -1081,7 +1094,8 @@ const Playlist = ({ data }: { data: object }) => {
                                         showIndex={true}
                                         showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
                                         context-ext={buildContextMenu()}
-                                        v-bind:key={item.id}></MediaItemListItem>
+                                        v-bind:key={item.id}
+                                      />
                                     ))}
                                   </div>
                                 ))}
@@ -1091,26 +1105,27 @@ const Playlist = ({ data }: { data: object }) => {
                         </div>
                       </div>
                       {itemBadges.length !== 0 && (
-                        <div className="friends-info">
-                          <div className="well">
-                            <div className="badge-container">
+                        <div className={"friends-info"}>
+                          <div className={"well"}>
+                            <div className={"badge-container"}>
                               {itemBadges.map((badge) => (
                                 <div
-                                  className="socialBadge"
+                                  className={"socialBadge"}
                                   title={`${badge.attributes.name} - ${badge.attributes.handle}`}>
                                   <MediaItemArtwork
                                     url={badge.attributes.artwork.url}
-                                    size="60"></MediaItemArtwork>
+                                    size={"60"}
+                                  />
                                 </div>
                               ))}
                             </div>
                           </div>
                         </div>
                       )}
-                      <div className="playlist-time">{getFormattedDate()}</div>
-                      <div className="playlist-time total">{app.getTotalTime()}</div>
+                      <div className={"playlist-time"}>{getFormattedDate()}</div>
+                      <div className={"playlist-time total"}>{app.getTotalTime()}</div>
                       <div
-                        className="playlist-time item-navigate"
+                        className={"playlist-time item-navigate"}
                         onClick={() => app.searchAndNavigate(data, "recordLabel")}
                         style={{ width: "50%" }}>
                         {data.attributes.copyright}
@@ -1118,7 +1133,7 @@ const Playlist = ({ data }: { data: object }) => {
                       {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
                         <template>
                           <div
-                            className="playlist-time showExtended item-navigate"
+                            className={"playlist-time showExtended item-navigate"}
                             style={{ color: "#fa586a", fontWeight: "bold" }}
                             onClick={() => app.routeView(data.relationships.catalog.data[0])}>
                             {$root.getLz("action.showAlbum")}
@@ -1136,14 +1151,14 @@ const Playlist = ({ data }: { data: object }) => {
                               lazy
                               title={data.views[view].attributes.title}>
                               <div>
-                                <div className="row">
-                                  <div className="col">
+                                <div className={"row"}>
+                                  <div className={"col"}>
                                     <h3>{data.views[view].attributes.title}</h3>
                                   </div>
                                 </div>
-                                <div className="row">
-                                  <div className="col">
-                                    <MediaitemScrollerHorizontal items={data.views[view].data}></MediaitemScrollerHorizontal>
+                                <div className={"row"}>
+                                  <div className={"col"}>
+                                    <MediaitemScrollerHorizontal items={data.views[view].data} />
                                   </div>
                                 </div>
                               </div>

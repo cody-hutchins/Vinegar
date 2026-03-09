@@ -7,16 +7,16 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
   };
   const msToMinSec = (ms) => {
-    let minutes = Math.floor(ms / 60000);
-    let seconds = ((ms % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   };
   const getDataType = () => {
     return item.type;
   };
   const select = async (e) => {
-    let u = item;
-    let u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
+    const u = item;
+    const u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
       platform: "web",
       "include[library-albums]": "artists,tracks",
       "include[library-artists]": "catalog",
@@ -34,9 +34,9 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     return u;
   };
   const contextMenu = (event) => {
-    let data_type = getDataType();
+    const data_type = getDataType();
 
-    let item = item;
+    const item = item;
     item.attributes.artistName = item.attributes.name;
 
     let useMenu = "normal";
@@ -47,7 +47,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
       useMenu = "multiple";
     }
 
-    let menus = {
+    const menus = {
       multiple: {
         items: [], //
       },
@@ -105,7 +105,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     isVisible = _isVisible;
   };
   const addToLibrary = () => {
-    let item = item;
+    const item = item;
     if (item.attributes.playParams.id) {
       console.log("adding to library", item.attributes.playParams.id);
       app.addToLibrary(item.attributes.playParams.id.toString());
@@ -117,15 +117,15 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     }
   };
   const removeFromLibrary = async () => {
-    let item = item;
-    let params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
+    const item = item;
+    const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
     let id = item.id ?? item.attributes.playParams.id;
-    let res = await app.mkapi(item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.playParams.id ?? item.id, params);
+    const res = await app.mkapi(item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.playParams.id ?? item.id, params);
     if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
       id = res.relationships.library.data[0].id;
     }
-    let kind = item.attributes.playParams.kind ?? data.item ?? "";
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const kind = item.attributes.playParams.kind ?? data.item ?? "";
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     if (item.attributes.playParams.id) {
       console.log("remove from library", id);
       app.removeFromLibrary(truekind, id);
@@ -137,9 +137,9 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     }
   };
   const playTrack = () => {
-    let item = item;
-    let parent = parent;
-    let childIndex = index;
+    const item = item;
+    const parent = parent;
+    const childIndex = index;
     console.log(item, parent, childIndex);
     if (parent !== null && childIndex !== null) {
       app.queueParentandplayChild(parent, childIndex, item);
@@ -149,28 +149,29 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
   };
   return (
     <>
-      <div id="libraryartist-item">
+      <div id={"libraryartist-item"}>
         <div
-          v-observe-visibility="{callback: visibilityChanged}"
+          v-observe-visibility={"{callback: visibilityChanged}"}
           onClick={() => select}
-          className="cd-mediaitem-list-item"
-          className="{'mediaitem-selected': app.select_hasMediaItem(guid)}"
-          contextmenu="contextMenu">
+          className={"cd-mediaitem-list-item"}
+          className={"{'mediaitem-selected': app.select_hasMediaItem(guid)}"}
+          contextMenu={"contextMenu"}>
           {showArtwork === true && (
             <div
-              className="artwork"
+              className={"artwork"}
               v-show={isVisible}>
               <MediaItemArtwork
                 url={getArtwork()}
-                size="50"
-                type={item.type}></MediaItemArtwork>
+                size={"50"}
+                type={item.type}
+              />
             </div>
           )}
           <div
-            className="info-rect"
+            className={"info-rect"}
             style={{ paddingLeft: showArtwork ? "" : "16px" }}
             dblclick={app.routeView(item)}>
-            <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+            <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
           </div>
         </div>
       </div>

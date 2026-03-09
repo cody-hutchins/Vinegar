@@ -18,8 +18,8 @@ const CiderFrontAPI = {
   StyleSheets: {
     Add(href) {
       console.log("Adding stylesheet: " + href);
-      let id = uuidv4();
-      let link = document.createElement("link");
+      const id = uuidv4();
+      const link = document.createElement("link");
       link.rel = "stylesheet/less";
       link.type = "text/css";
       link.href = href;

@@ -105,7 +105,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   ];
 
   const presetOptions = (event) => {
-    let menu = {
+    const menu = {
       items: {
         new: {
           icon: "./assets/feather/plus.svg",
@@ -146,7 +146,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   };
 
   const sharePreset = (event) => {
-    let menu = {
+    const menu = {
       items: [
         {
           icon: "./assets/feather/share.svg",
@@ -168,12 +168,12 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   };
 
   const deletePreset = () => {
-    let presets = this.$root.cfg.audio.equalizer.presets;
+    const presets = this.$root.cfg.audio.equalizer.presets;
     app.confirm(app.getLz("term.deletepreset.warn"), (result) => {
       if (result) {
         changePreset("default");
         // find the preset by id (preset) and remove it
-        let index = presets.findIndex((p) => p.preset === preset);
+        const index = presets.findIndex((p) => p.preset === preset);
         presets.splice(index, 1);
         notyf.success(app.getLz("term.deletedpreset"));
       }
@@ -247,8 +247,8 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   const addPreset = () => {
     app.prompt(app.getLz("term.newpreset.name"), (res) => {
       if (res) {
-        let eqSettings = Clone(app.cfg.audio.equalizer);
-        let newPreset = new eqPreset();
+        const eqSettings = Clone(app.cfg.audio.equalizer);
+        const newPreset = new eqPreset();
         newPreset.name = res;
         newPreset.frequencies = eqSettings.frequencies;
         newPreset.gain = eqSettings.gain;
@@ -266,7 +266,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     // TODO ERROR Save the current settings to the selected preset
     //let preset = app.cfg.audio.equalizer.presets[app.cfg.audio.equalizer.preset]
     // find the preset by its id (preset)
-    let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset === app.cfg.audio.equalizer.preset);
+    const preset = app.cfg.audio.equalizer.presets.find((p) => p.preset === app.cfg.audio.equalizer.preset);
     preset.frequencies = app.cfg.audio.equalizer.frequencies;
     preset.gain = app.cfg.audio.equalizer.gain;
     preset.Q = app.cfg.audio.equalizer.Q;
@@ -275,13 +275,13 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     notyf.success("Saved Preset");
   };
   const exportPreset = () => {
-    let preset = app.cfg.audio.equalizer.presets.find((p) => p.preset === app.cfg.audio.equalizer.preset);
+    const preset = app.cfg.audio.equalizer.presets.find((p) => p.preset === app.cfg.audio.equalizer.preset);
     this.$root.copyToClipboard(btoa(JSON.stringify(preset)));
   };
   const importPreset = () => {
     app.prompt("Enter preset share code", (res) => {
       if (res) {
-        let preset = JSON.parse(atob(res));
+        const preset = JSON.parse(atob(res));
         if (preset.frequencies && preset.gain && preset.Q && preset.mix && preset.vibrantBass) {
           // applyPreset(preset)
           app.cfg.audio.equalizer.presets.push(preset);
@@ -309,12 +309,12 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     CiderAudio.intelliGainComp_n0_0();
   };
   const changePreset = (id) => {
-    let userPresets = app.cfg.audio.equalizer.presets;
-    let defaultPresets = Clone(defaultPresets);
+    const userPresets = app.cfg.audio.equalizer.presets;
+    const defaultPresets = Clone(defaultPresets);
 
-    let presets = defaultPresets.concat(userPresets);
+    const presets = defaultPresets.concat(userPresets);
     console.log(presets);
-    let preset = presets.find((p) => p.preset === id);
+    const preset = presets.find((p) => p.preset === id);
 
     console.log(preset);
 
@@ -323,22 +323,22 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     }
   };
   return (
-    <div id="eq-view">
+    <div id={"eq-view"}>
       <div
-        className="modal-fullscreen equalizer-panel"
+        className={"modal-fullscreen equalizer-panel"}
         clickself={close()}
         contextmenuself={close()}>
-        <div className="modal-window">
-          <div className="modal-header">
-            <div className="modal-title">{$root.getLz("term.equalizer")}</div>
+        <div className={"modal-window"}>
+          <div className={"modal-header"}>
+            <div className={"modal-title"}>{$root.getLz("term.equalizer")}</div>
             <button
-              className="close-btn"
+              className={"close-btn"}
               onClick={() => close()}
               aria-label={$root.getLz("action.close")}
             />
-            <div className="md-option-segment md-option-segment_auto">
+            <div className={"md-option-segment md-option-segment_auto"}>
               <select
-                className="md-select"
+                className={"md-select"}
                 style={{ width: "220px", textAlign: "center", marginRight: "245px" }}
                 v-model={$root.cfg.audio.equalizer.preset}
                 v-on:onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
@@ -355,507 +355,507 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </select>
             </div>
           </div>
-          <div className="modal-content">
+          <div className={"modal-content"}>
             {/* BANDS = [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000];  */}
-            <div className="inputs-container">
-              <div className="input-container mini">
+            <div className={"inputs-container"}>
+              <div className={"input-container mini"}>
                 {$root.cfg.audio.equalizer.vibrantBass}
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider mini"
-                  orient="vertical"
-                  min="-15"
-                  max="15"
-                  step="1"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider mini"}
+                  orient={"vertical"}
+                  min={"-15"}
+                  max={"15"}
+                  step={"1"}
                   v-model={$root.cfg.audio.equalizer.vibrantBass}
                   onChange={() => changeVibrantBass()}
                 />
                 Vibrant Bass
               </div>
-              <div className="input-container mini">
+              <div className={"input-container mini"}>
                 {$root.cfg.audio.equalizer.mix}
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider mini"
-                  orient="vertical"
-                  min="0"
-                  max="2"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider mini"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"2"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.mix}
                   onChange={() => changeMix()}
                 />
                 Mix
               </div>
-              <div className="input-container header mini">
+              <div className={"input-container header mini"}>
                 Gain
                 <input
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                 />
-                <div className="freq-header">Freq</div>
+                <div className={"freq-header"}>Freq</div>
                 <div>Q</div>
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[0]}
                   onChange={() => changeGain(0)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[0]}
                   onChange={() => changeGain(0)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="22"
-                  max="44"
-                  step="2"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"22"}
+                  max={"44"}
+                  step={"2"}
                   v-model={$root.cfg.audio.equalizer.frequencies[0]}
                   onChange={() => changeFreq(0)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[0]}
                   onChange={() => changeQ(0)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[1]}
                   onChange={() => changeGain(1)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[1]}
                   onChange={() => changeGain(1)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="44"
-                  max="88"
-                  step="4"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"44"}
+                  max={"88"}
+                  step={"4"}
                   v-model={$root.cfg.audio.equalizer.frequencies[1]}
                   onChange={() => changeFreq(1)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[1]}
                   onChange={() => changeQ(1)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[2]}
                   onChange={() => changeGain(2)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[2]}
                   onChange={() => changeGain(2)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="88"
-                  max="177"
-                  step="8"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"88"}
+                  max={"177"}
+                  step={"8"}
                   v-model={$root.cfg.audio.equalizer.frequencies[2]}
                   onChange={() => changeFreq(2)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[2]}
                   onChange={() => changeQ(2)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[3]}
                   onChange={() => changeGain(3)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[3]}
                   onChange={() => changeGain(3)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="177"
-                  max="355"
-                  step="16"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"177"}
+                  max={"355"}
+                  step={"16"}
                   v-model={$root.cfg.audio.equalizer.frequencies[3]}
                   onChange={() => changeFreq(3)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[3]}
                   onChange={() => changeQ(3)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[4]}
                   onChange={() => changeGain(4)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[4]}
                   onChange={() => changeGain(4)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="355"
-                  max="710"
-                  step="32"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"355"}
+                  max={"710"}
+                  step={"32"}
                   v-model={$root.cfg.audio.equalizer.frequencies[4]}
                   onChange={() => changeFreq(4)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[4]}
                   onChange={() => changeQ(4)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[5]}
                   onChange={() => changeGain(5)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[5]}
                   onChange={() => changeGain(5)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="710"
-                  max="1420"
-                  step="64"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"710"}
+                  max={"1420"}
+                  step={"64"}
                   v-model={$root.cfg.audio.equalizer.frequencies[5]}
                   onChange={() => changeFreq(5)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[5]}
                   onChange={() => changeQ(5)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[6]}
                   onChange={() => changeGain(6)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[6]}
                   onChange={() => changeGain(6)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="1420"
-                  max="2840"
-                  step="128"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"1420"}
+                  max={"2840"}
+                  step={"128"}
                   v-model={$root.cfg.audio.equalizer.frequencies[6]}
                   onChange={() => changeFreq(6)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[6]}
                   onChange={() => changeQ(6)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[7]}
                   onChange={() => changeGain(7)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[7]}
                   onChange={() => changeGain(7)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="2840"
-                  max="5680"
-                  step="256"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"2840"}
+                  max={"5680"}
+                  step={"256"}
                   v-model={$root.cfg.audio.equalizer.frequencies[7]}
                   onChange={() => changeFreq(7)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[7]}
                   onChange={() => changeQ(7)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[8]}
                   onChange={() => changeGain(8)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[8]}
                   onChange={() => changeGain(8)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="5680"
-                  max="11360"
-                  step="512"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"5680"}
+                  max={"11360"}
+                  step={"512"}
                   v-model={$root.cfg.audio.equalizer.frequencies[8]}
                   onChange={() => changeFreq(8)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.Q[8]}
                   onChange={() => changeQ(8)}
                 />
               </div>
-              <div className="input-container">
+              <div className={"input-container"}>
                 <input
-                  tabindex="0"
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[9]}
                   onChange={() => changeGain(9)}
                 />
                 <input
-                  tabindex="0"
-                  type="range"
-                  className="eq-slider"
-                  orient="vertical"
-                  min="-12"
-                  max="12"
+                  tabIndex={"0"}
+                  type={"range"}
+                  className={"eq-slider"}
+                  orient={"vertical"}
+                  min={"-12"}
+                  max={"12"}
                   step={0.1}
                   v-model={$root.cfg.audio.equalizer.gain[9]}
                   onChange={() => changeGain(9)}
                 />
                 <input
-                  type="number"
-                  className="eq-freq"
-                  orient="vertical"
-                  min="11360"
-                  max="22720"
-                  step="1024"
+                  type={"number"}
+                  className={"eq-freq"}
+                  orient={"vertical"}
+                  min={"11360"}
+                  max={"22720"}
+                  step={"1024"}
                   v-model={$root.cfg.audio.equalizer.frequencies[9]}
                   onChange={() => changeFreq(9)}
                 />
                 <input
-                  type="number"
-                  className="eq-q"
-                  orient="vertical"
-                  min="0"
-                  max="5"
-                  step=""
+                  type={"number"}
+                  className={"eq-q"}
+                  orient={"vertical"}
+                  min={"0"}
+                  max={"5"}
+                  step={""}
                   v-model={$root.cfg.audio.equalizer.Q[9]}
                   onChange={() => changeQ(9)}
                 />
               </div>
             </div>
           </div>
-          <div className="modal-lowercontent">
-            <div className="row">
-              <div className="col">
+          <div className={"modal-lowercontent"}>
+            <div className={"row"}>
+              <div className={"col"}>
                 <button
-                  className="md-btn"
+                  className={"md-btn"}
                   style={{ width: "100%" }}
                   onClick={() => resetGain()}>
                   {$root.getLz("term.reset")}
                 </button>
               </div>
-              <div className="col">
+              <div className={"col"}>
                 <button
-                  className="md-btn"
+                  className={"md-btn"}
                   style={{ width: "100%" }}
                   onClick={() => presetOptions($event)}>
                   {$root.getLz("term.menu")}

@@ -13,33 +13,33 @@ const AirplayModal = () => {
 
   return (
     <div
-      className="spatialproperties-panel castmenu modal-fullscreen airplay-modal"
+      className={"spatialproperties-panel castmenu modal-fullscreen airplay-modal"}
       clickself={close}
       contextmenuself={close}>
-      <div className="modal-window airplay-modal">
-        <div className="modal-header">
-          <div className="modal-title">Enter password</div>
+      <div className={"modal-window airplay-modal"}>
+        <div className={"modal-header"}>
+          <div className={"modal-title"}>Enter password</div>
           <button
-            className="close-btn"
+            className={"close-btn"}
             onClick={close}
             aria-label={this.$root.getLz("action.close")}
           />
         </div>
         <div
-          className="modal-content"
+          className={"modal-content"}
           style={{ overflowY: "overlay", padding: "3%" }}>
           <input
-            type="text"
+            type={"text"}
             onChange={(e) => setPasscode(e.target.value)}
           />
         </div>
-        <div className="md-footer">
-          <div className="row">
-            <div className="col">
+        <div className={"md-footer"}>
+          <div className={"row"}>
+            <div className={"col"}>
               <button
                 style={{ width: "100%" }}
                 onClick={enterPassword}
-                className="md-btn md-btn-block md-btn-primary">
+                className={"md-btn md-btn-block md-btn-primary"}>
                 OK
               </button>
             </div>

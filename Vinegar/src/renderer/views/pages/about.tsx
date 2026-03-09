@@ -109,17 +109,18 @@ const About = () => {
   ];
   return (
     <>
-      <div id="about-page">
-        <div className="content-inner about-page">
-          <div className="row">
-            <div className="col">
+      <div id={"about-page"}>
+        <div className={"content-inner about-page"}>
+          <div className={"row"}>
+            <div className={"col"}>
               <img
-                src="assets/banner.png"
-                alt="Cider Logo"
-                style={{ display: "block", margin: "0 auto", width: "500px" }}></img>
+                src={"assets/banner.png"}
+                alt={"Cider Logo"}
+                style={{ display: "block", margin: "0 auto", width: "500px" }}
+              />
               <p
                 style={{ textAlign: "center" }}
-                id="version">
+                id={"version"}>
                 {$root.getLz("term.version")} {$root.version}
               </p>
               <p style={{ textAlign: "center" }}> {$root.getLz().about.thanks()} </p>
@@ -127,99 +128,100 @@ const About = () => {
               <p style={{ textAlign: "center" }}>
                 "{$root.getLz("term.appleMusic")}" - {$root.getLz("term.copyright")} © 2022{" "}
                 <a
-                  href="https://www.apple.com/"
-                  className="dt-footer__link"
-                  target="_blank"
-                  rel="noopener"
-                  data-dt-link-to-exclude="">
+                  href={"https://www.apple.com/"}
+                  className={"dt-footer__link"}
+                  target={"_blank"}
+                  rel={"noopener noreferrer"}
+                  data-dt-link-to-exclude={""}>
                   {$root.getLz("term.appleInc")}
                 </a>
                 {$root.getLz("term.rightsReserved")}
               </p>
-              <hr></hr>
+              <hr />
               <h3>{$root.getLz("term.sponsor")}</h3>
               <button
                 onClick={window.open("https://github.com/sponsors/ciderapp")}
-                className="md-btn sponsorBtn githubBtn">
-                <img src="./assets/github.svg"></img>
+                className={"md-btn sponsorBtn githubBtn"}>
+                <img src={"./assets/github.svg"} />
                 GitHub Sponsors
               </button>
               <button
                 onClick={window.open("https://ko-fi.com/cryptofyre")}
-                className="md-btn sponsorBtn kofiBtn">
-                <img src="./assets/ko_fi.svg"></img>
+                className={"md-btn sponsorBtn kofiBtn"}>
+                <img src={"./assets/ko_fi.svg"} />
                 Ko-fi
               </button>
               <button
                 onClick={window.open("https://opencollective.com/ciderapp")}
-                className="md-btn sponsorBtn opencollectiveBtn">
-                <img src="./assets/open_collective.svg"></img>
+                className={"md-btn sponsorBtn opencollectiveBtn"}>
+                <img src={"./assets/open_collective.svg"} />
                 Open Collective
               </button>
               <h3>{$root.getLz("term.socials")}</h3>
               <button
                 onClick={window.open("https://github.com/ciderapp/Cider")}
-                className="md-btn sponsorBtn githubBtn">
-                <img src="./assets/github.svg"></img>
+                className={"md-btn sponsorBtn githubBtn"}>
+                <img src={"./assets/github.svg"} />
                 {$root.getLz("term.github")}
               </button>
               <button
                 onClick={window.open("https://discord.gg/applemusic")}
-                className="md-btn sponsorBtn discordBtn">
+                className={"md-btn sponsorBtn discordBtn"}>
                 <img
                   style={{ height: "26px" }}
-                  src="./assets/discord.svg"></img>
+                  src={"./assets/discord.svg"}
+                />
                 {$root.getLz("term.discord")}
               </button>
               <button
                 onClick={window.open("https://twitter.com/UseCider")}
-                className="md-btn sponsorBtn twitterBtn">
-                <img src="./assets/twitter.svg"></img>
+                className={"md-btn sponsorBtn twitterBtn"}>
+                <img src={"./assets/twitter.svg"} />
                 Twitter
               </button>
               <button
                 onClick={window.open("https://jq.qq.com/?_wv=1027&k=2VP4cdyo")}
-                className="md-btn sponsorBtn qqBtn">
-                <img src="./assets/qq.svg"></img>
+                className={"md-btn sponsorBtn qqBtn"}>
+                <img src={"./assets/qq.svg"} />
                 QQ
               </button>
             </div>
-            <div className="col">
-              <div className="row">
-                <div className="col">
+            <div className={"col"}>
+              <div className={"row"}>
+                <div className={"col"}>
                   <h3>{$root.getLz("term.ciderTeam")}</h3>
                   {team.map((member) => (
                     <div
-                      className="md-btn teamBtn"
+                      className={"md-btn teamBtn"}
                       onClick={() => window.open(member.link)}>
-                      <img src={member.avatar}></img>
+                      <img src={member.avatar} />
                       <div
-                        className="row"
+                        className={"row"}
                         style={{ width: "100%" }}>
                         <div
-                          className="col"
+                          className={"col"}
                           style={{ textAlign: "left" }}>
                           {member.name}
                         </div>
                         <div
-                          className="col"
+                          className={"col"}
                           style={{ textAlign: "right" }}>
                           {member.twitter && (
                             <button
                               clickstop={window.open(member.twitter)}
-                              className="social-btn">
+                              className={"social-btn"}>
                               <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="white">
-                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                                xmlns={"http://www.w3.org/2000/svg"}
+                                width={"24"}
+                                height={"24"}
+                                viewBox={"0 0 24 24"}
+                                fill={"white"}>
+                                <path d={"M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"} />
                               </svg>
                             </button>
                           )}
                         </div>
-                        <div className="col-auto">
+                        <div className={"col-auto"}>
                           <b>{member.role}</b>
                         </div>
                       </div>
@@ -228,15 +230,16 @@ const About = () => {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col">
+            <div className={"row"}>
+              <div className={"col"}>
                 <h3></h3>
                 <h3>{$root.getLz("term.contributors")}</h3>
                 <img
-                  className="md-contributors"
+                  className={"md-contributors"}
                   style={{ cursor: pointer, width: "100%" }}
                   onClick={window.open("https://github.com/ciderapp/Cider/graphs/contributors")}
-                  src="https://contrib.rocks/image?repo=ciderapp/Cider&columns=25"></img>
+                  src={"https://contrib.rocks/image?repo=ciderapp/Cider&columns=25"}
+                />
               </div>
             </div>
           </div>

@@ -21,79 +21,85 @@ const App = () => {
   return (
     <div>
       {isLoading ? (
-        <div id="LOADER">
+        <div id={"LOADER"}>
           <svg>{include("../assets/cider-round.svg")}</svg>
         </div>
       ) : (
         <div
-          className="notransparency"
+          className={"notransparency"}
           onContextMenu={() => false}
-          loading="1"
+          loading={"1"}
           os-release={parseInt(process.env.osRelease)}
           platform={process.env.platform}>
           <script
-            type="module"
-            src="./main/app.js"></script>
-          {appVisible && (<div
-            id="app"
-            className={getAppClasses()}
-            window-state={chrome.windowState}
-            style={getAppStyle()}
-            library-visible={chrome.sidebarCollapsed ? 0 : 1}
-            window-style={cfg.visual.directives.windowLayout}>
-            <AnimatePresence>
-              <motion.div name="fsModeSwitch">
-                <div
-                  id="app-main"
-                  v-show="appMode == 'player'">
-                  <ChromeTop />
-                  <AppNavigation />
-                  <ChromeBottom />
-                </div>
-              </motion.div>
+            type={"module"}
+            src={"./main/app.js"}
+          />
+          {appVisible && (
+            <div
+              id={"app"}
+              className={getAppClasses()}
+              window-state={chrome.windowState}
+              style={getAppStyle()}
+              library-visible={chrome.sidebarCollapsed ? 0 : 1}
+              window-style={cfg.visual.directives.windowLayout}>
+              <AnimatePresence>
+                <motion.div name={"fsModeSwitch"}>
+                  <div
+                    id={"app-main"}
+                    v-show={"appMode == 'player'"}>
+                    <ChromeTop />
+                    <AppNavigation />
+                    <ChromeBottom />
+                  </div>
+                </motion.div>
 
-              <motion.div name="fsModeSwitch">
-                {appMode == "fullscreen" && <div
-                  className="fullscreen-view-container">
-                  <FullscreenView
-                    ref="fsView"
-                    image={currentArtUrlRaw}
-                    time={mk.currentPlaybackTime - lyricOffset}
-                    lyrics={lyrics}
-                    richlyrics={richlyrics}
-                  />
-                </div>}
-              </motion.div>
+                <motion.div name={"fsModeSwitch"}>
+                  {appMode == "fullscreen" && (
+                    <div className={"fullscreen-view-container"}>
+                      <FullscreenView
+                        ref={"fsView"}
+                        image={currentArtUrlRaw}
+                        time={mk.currentPlaybackTime - lyricOffset}
+                        lyrics={lyrics}
+                        richlyrics={richlyrics}
+                      />
+                    </div>
+                  )}
+                </motion.div>
 
-              <motion.div name="fsModeSwitch">
-                {appMode == "mini" && <div
-                  className="fullscreen-view-container">
-                  <MiniView
-                    image={currentArtUrlRaw}
-                    time={mk.currentPlaybackTime - lyricOffset}
-                    lyrics={lyrics}
-                    richlyrics={richlyrics}
-                  />
-                </div>}
-              </motion.div>
+                <motion.div name={"fsModeSwitch"}>
+                  {appMode == "mini" && (
+                    <div className={"fullscreen-view-container"}>
+                      <MiniView
+                        image={currentArtUrlRaw}
+                        time={mk.currentPlaybackTime - lyricOffset}
+                        lyrics={lyrics}
+                        richlyrics={richlyrics}
+                      />
+                    </div>
+                  )}
+                </motion.div>
 
-              <motion.div name="fsModeSwitch">
-                {appMode == "oobe" && <div
-                  className="fullscreen-view-container oobe">
-                  <OOBE />
-                </div>}
-              </motion.div>
-            </AnimatePresence>
-            <Panels />
-            {chrome.showCursor && <div className="cursor"></div>}
-          </div>)}
+                <motion.div name={"fsModeSwitch"}>
+                  {appMode == "oobe" && (
+                    <div className={"fullscreen-view-container oobe"}>
+                      <OOBE />
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <Panels />
+              {chrome.showCursor && <div className={"cursor"} />}
+            </div>
+          )}
 
           {Object.keys(process.env.components).map((component) => {
             include(component);
             return (
               <script
-                type="text/x-template"
-                id="am-musiccovershelf">
+                type={"text/x-template"}
+                id={"am-musiccovershelf"}>
                 <h1>{component.attributes.title.stringForDisplay}</h1>
               </script>
             );

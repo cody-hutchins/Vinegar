@@ -3,14 +3,14 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemListItem from "./mediaitem-list-item.jsx";
 
 const Queue = () => {
-  let drag = false;
+  const drag = false;
   let queuePosition = 0;
   let queueItems = [];
   let selected = -1;
   let selectedItems = [];
-  let history = [];
+  const history = [];
   let page = "queue";
-  let app = this.$root;
+  const app = this.$root;
 
   const displayQueueItems = useMemo(() => {
     const displayLimit = 50;
@@ -125,75 +125,77 @@ const Queue = () => {
 
   return (
     <>
-      <div id="cider-queue">
-        <div className="queue-panel">
-          <div className="row">
-            <div className="col">
-              {page === "queue" && <h3 className="queue-header-text">{app.getLz("term.queue")}</h3>}
-              {page === "history" && <h3 className="queue-header-text">{app.getLz("term.history")}</h3>}
+      <div id={"cider-queue"}>
+        <div className={"queue-panel"}>
+          <div className={"row"}>
+            <div className={"col"}>
+              {page === "queue" && <h3 className={"queue-header-text"}>{app.getLz("term.queue")}</h3>}
+              {page === "history" && <h3 className={"queue-header-text"}>{app.getLz("term.history")}</h3>}
             </div>
-            <div className="col-auto cider-flex-center">
+            <div className={"col-auto cider-flex-center"}>
               <button
-                className="autoplay"
+                className={"autoplay"}
                 style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
                 onClick={() => {
                   app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
                 }}
                 title={app.getLz("term.autoplay")}
                 v-b-tooltiphover>
-                <img className="infinity"></img>
+                <img className={"infinity"} />
               </button>
             </div>
           </div>
           {page === "history" && (
-            <div className="queue-body">
+            <div className={"queue-body"}>
               {history.map((item) => (
                 <MediaItemListItem
-                  show-library-status="false"
+                  show-library-status={"false"}
                   v-bind:key={item.id}
-                  item={item}></MediaItemListItem>
+                  item={item}
+                />
               ))}
             </div>
           )}
           {page === "queue" && (
-            <div className="queue-body">
+            <div className={"queue-body"}>
               <draggable
                 v-model={queueItems}
-                start="drag=true"
-                end="drag=false;move()">
+                start={"drag=true"}
+                end={"drag=false;move()"}>
                 {displayQueueItems.map((queueItem, position) => (
                   <template>
                     {position === 0 ? (
-                      <div key={queueItem.item.id}></div>
+                      <div key={queueItem.item.id} />
                     ) : (
                       <div
-                        className="cd-queue-item"
-                        className="{selected: selectedItems.includes(queueItem.item.id)}"
+                        className={"cd-queue-item"}
+                        className={"{selected: selectedItems.includes(queueItem.item.id)}"}
                         onClick={(e) => select(e, queueItem.item.id)}
                         onDoubleClick={() => playQueueItem(queueItem.item.id)}
                         key={queueItem.item.id}
                         onContextMenu={(e) => queueContext(e, queueItem.item)}>
-                        <div className="row">
-                          <div className="col-auto cider-flex-center">
-                            <div className="artwork">
+                        <div className={"row"}>
+                          <div className={"col-auto cider-flex-center"}>
+                            <div className={"artwork"}>
                               <MediaItemArtwork
                                 url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ""}
-                                size="32"></MediaItemArtwork>
+                                size={"32"}
+                              />
                             </div>
                           </div>
-                          <div className="col queue-info">
-                            <div className="queue-title text-overflow-elipsis">{queueItem.item.attributes.name}</div>
-                            <div className="queue-subtitle text-overflow-elipsis">
+                          <div className={"col queue-info"}>
+                            <div className={"queue-title text-overflow-elipsis"}>{queueItem.item.attributes.name}</div>
+                            <div className={"queue-subtitle text-overflow-elipsis"}>
                               {queueItem.item.attributes.artistName} — {queueItem.item.attributes.albumName}
                             </div>
                           </div>
                           {queueItem.item.attributes.contentRating === "explicit" && (
-                            <div className="queue-explicit-icon cider-flex-center">
-                              <div className="explicit-icon"></div>
+                            <div className={"queue-explicit-icon cider-flex-center"}>
+                              <div className={"explicit-icon"} />
                             </div>
                           )}
-                          <div className="col queue-duration-info">
-                            <div className="queue-duration cider-flex-center">{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
+                          <div className={"col queue-duration-info"}>
+                            <div className={"queue-duration cider-flex-center"}>{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
                           </div>
                         </div>
                       </div>
@@ -203,21 +205,21 @@ const Queue = () => {
               </draggable>
             </div>
           )}
-          <div className="queue-footer">
+          <div className={"queue-footer"}>
             <div
-              className="btn-group"
+              className={"btn-group"}
               style={{ width: "100%" }}>
               <button
-                className="md-btn md-btn-small"
-                className="{'md-btn-primary': (page === 'queue')}"
+                className={"md-btn md-btn-small"}
+                className={"{'md-btn-primary': (page === 'queue')}"}
                 onClick={() => {
                   page = "queue";
                 }}>
                 {app.getLz("term.queue")}
               </button>
               <button
-                className="md-btn md-btn-small"
-                className="{'md-btn-primary': (page === 'history')}"
+                className={"md-btn md-btn-small"}
+                className={"{'md-btn-primary': (page === 'history')}"}
                 onClick={() => {
                   geory();
                   page = "history";
@@ -227,7 +229,7 @@ const Queue = () => {
             </div>
             {queueItems.length > 1 && (
               <button
-                className="md-btn md-btn-small"
+                className={"md-btn md-btn-small"}
                 style={{ width: "100%", marginTop: "6px" }}
                 onClick={() => {
                   app.mk.clearQueue();

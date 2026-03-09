@@ -4,21 +4,21 @@ const AppContentArea = () => {
   const scrollPos = 0;
   return (
     <>
-      <div id="app-content-area">
+      <div id={"app-content-area"}>
         <div
-          id="app-content"
+          id={"app-content"}
           scrollpos={$root.chrome.contentScrollPosY}
-          scrollaxis="y"
+          scrollaxis={"y"}
           style={{ overflow: $root.chrome.contentAreaScrolling ? "" : "hidden" }}>
           {$root.getThemeDirective("appNavigation") === "seperate" && (
-            <div id="navigation-bar">
+            <div id={"navigation-bar"}>
               <button
-                className="nav-item"
+                className={"nav-item"}
                 onClick={() => $root.navigateBack()}>
                 {import("../svg/chevron-left.svg")}
               </button>
               <button
-                className="nav-item"
+                className={"nav-item"}
                 onClick={() => $root.navigateForward()}>
                 {import("../svg/chevron-right.svg")}
               </button>

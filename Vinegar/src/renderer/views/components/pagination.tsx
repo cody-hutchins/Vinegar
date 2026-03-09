@@ -121,20 +121,20 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
 
   return (
     <>
-      <div id="pagination">
+      <div id={"pagination"}>
         {!isInfinite && (
-          <div className="pagination-container">
+          <div className={"pagination-container"}>
             <button
-              className="md-btn page-btn"
+              className={"md-btn page-btn"}
               disabled={effectivePage === 1}
               onClick={() => goToPage(1)}>
-              <img className="md-ico-first"></img>
+              <img className={"md-ico-first"} />
             </button>
             <button
-              className="md-btn page-btn prev"
+              className={"md-btn page-btn prev"}
               disabled={effectivePage === 1}
               onClick={() => goToPrevious()}>
-              <img className="md-ico-prev"></img>
+              <img className={"md-ico-prev"} />
             </button>
             {pagesToShow.map((page) => (
               <button
@@ -144,24 +144,25 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
               </button>
             ))}
             <button
-              className="md-btn page-btn next"
+              className={"md-btn page-btn next"}
               disabled={effectivePage === numPages}
               onClick={() => goToNext()}>
-              <img className="md-ico-next"></img>
+              <img className={"md-ico-next"} />
             </button>
             <button
-              className="md-btn page-btn last"
+              className={"md-btn page-btn last"}
               disabled={effectivePage === numPages}
               onClick={() => goToEnd()}>
-              <img className="md-ico-last"></img>
+              <img className={"md-ico-last"} />
             </button>
-            <div className="page-btn md-input-number">
+            <div className={"page-btn md-input-number"}>
               <input
-                type="number"
+                type={"number"}
                 min={1}
                 max={numPages}
                 value={effectivePage}
-                onChange={changePage}></input>
+                onChange={changePage}
+              />
               <span>/ {numPages}</span>
             </div>
           </div>

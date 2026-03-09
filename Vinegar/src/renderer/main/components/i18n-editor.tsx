@@ -56,7 +56,7 @@ export const i18nEditor = () => {
                   <input type="text" v-model="$root.lz[key][vkey]" />
                 </div>)}
               </template> :
-              <textarea type="text" v-model="$root.lz[key]"></textarea>
+              <textarea type="text" v-model="$root.lz[key]"/>
                 }
             </div>
           </div>:
@@ -65,7 +65,7 @@ export const i18nEditor = () => {
               <b>{ key }</b>
             </div>
             <div className="md-option-segment">
-              <textarea type="text" v-model="$root.lz[key]" placeholder="val"></textarea>
+              <textarea type="text" v-model="$root.lz[key]" placeholder="val"/>
             </div>
           </div>
         </template>)}

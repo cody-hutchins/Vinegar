@@ -18,7 +18,7 @@ const CiderAudio = {
   mediaRecorder: null,
   init: function (cb = function () {}) {
     //AudioOutputs.fInit = true;
-    let searchInt = setInterval(function () {
+    const searchInt = setInterval(function () {
       if (document.getElementById("apple-music-player")) {
         //AudioOutputs.eqReady = true;
         document.getElementById("apple-music-player").crossOrigin = "anonymous";
@@ -255,7 +255,7 @@ const CiderAudio = {
       spatialProfile = CiderAudio.spatialProfiles[0];
     }
     fetch(spatialProfile.file).then(async (impulseData) => {
-      let bufferedImpulse = await impulseData.arrayBuffer();
+      const bufferedImpulse = await impulseData.arrayBuffer();
       CiderAudio.audioNodes.spatialNode.buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
     });
 
@@ -307,22 +307,22 @@ const CiderAudio = {
     }
 
     filters.shift();
-    let steps = Math.ceil(96000 / precisionHz);
+    const steps = Math.ceil(96000 / precisionHz);
     // Generate input array for getFrequencyResponse method
-    let frequencies = new Float32Array(steps);
+    const frequencies = new Float32Array(steps);
     for (let i = 0; i < steps; i++) {
       frequencies[i] = (i + 1) * precisionHz;
     }
     // Here we will store combined amplitude response
-    let totalAmplitudeResp = new Float32Array(steps);
+    const totalAmplitudeResp = new Float32Array(steps);
     for (let i = 0; i < steps; i++) {
       totalAmplitudeResp[i] = 1;
     }
     // Temporary container for every filter response
-    let amplitudeResp = new Float32Array(steps),
+    const amplitudeResp = new Float32Array(steps),
       phaseResp = new Float32Array(steps);
     for (let i = filters.length - 1; i >= 0; i--) {
-      let filter = filters[i];
+      const filter = filters[i];
       // Get filter response and convolve it with existing response
       filter.getFrequencyResponse(frequencies, amplitudeResp, phaseResp);
       for (let j = 0; j < steps; j++) {
@@ -332,7 +332,7 @@ const CiderAudio = {
     // Find max gain
     let maxGain = -120;
     for (let i = 0; i < steps; i++) {
-      let gain = totalAmplitudeResp[i];
+      const gain = totalAmplitudeResp[i];
       if (gain > maxGain) maxGain = gain;
     }
 
@@ -362,7 +362,7 @@ const CiderAudio = {
   sendAudio: function () {
     if (!CiderAudio.ccON) {
       CiderAudio.ccON = true;
-      let searchInt = setInterval(async function () {
+      const searchInt = setInterval(async function () {
         if (CiderAudio.context != null && CiderAudio.audioNodes.intelliGainComp != null) {
           // var options = {
           //     mimeType: 'audio/webm; codecs=opus'
@@ -478,7 +478,7 @@ const CiderAudio = {
                       }
 
                       registerProcessor('recorder-worklet', RecorderWorkletProcessor);`;
-          let blob = new Blob([worklet], { type: "application/javascript" });
+          const blob = new Blob([worklet], { type: "application/javascript" });
           await CiderAudio.context.audioWorklet.addModule(URL.createObjectURL(blob)).then(() => {
             const channels = 2;
             CiderAudio.audioNodes.recorderNode = new window.AudioWorkletNode(CiderAudio.context, "recorder-worklet", {
@@ -531,7 +531,7 @@ const CiderAudio = {
         atmosphereRealizerProfile = CiderAudio.atmosphereRealizerProfiles[0];
       }
       fetch(atmosphereRealizerProfile.file).then(async (impulseData) => {
-        let bufferedImpulse = await impulseData.arrayBuffer();
+        const bufferedImpulse = await impulseData.arrayBuffer();
         CiderAudio.audioNodes.atmosphereRealizer2.buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
       });
 
@@ -599,7 +599,7 @@ const CiderAudio = {
         atmosphereRealizerProfile = CiderAudio.atmosphereRealizerProfiles[0];
       }
       fetch(atmosphereRealizerProfile.file).then(async (impulseData) => {
-        let bufferedImpulse = await impulseData.arrayBuffer();
+        const bufferedImpulse = await impulseData.arrayBuffer();
         CiderAudio.audioNodes.atmosphereRealizer1.buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
       });
 
@@ -667,7 +667,7 @@ const CiderAudio = {
         opportunisticCorrectionProfile = CiderAudio.opportunisticCorrectionProfiles[0];
       }
       fetch(opportunisticCorrectionProfile.file).then(async (impulseData) => {
-        let bufferedImpulse = await impulseData.arrayBuffer();
+        const bufferedImpulse = await impulseData.arrayBuffer();
         CiderAudio.audioNodes.opportunisticCorrection.buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
       });
 
@@ -725,12 +725,12 @@ const CiderAudio = {
   },
   llpw_n1: function (status, destination) {
     if (status === true) {
-      let c_LLPW_Q = [1.25, 0.131, 10, 2.5, 2.293, 0.11, 14.14, 1.552, 28.28, 7.071, 2.847, 5, 0.625, 7.071, 3.856, 3.856, 20, 28.28, 20, 14.14, 2.102, 6.698, 3.536, 10];
-      let c_LLPW_GAIN = [-0.11, 0.27, -0.8, 0.57, 1.84, -0.38, 0.47, -1.56, 0.83, 1.58, -1.79, -0.45, 0.48, 1.22, -1.58, -1.59, -2.03, 2.56, -2.2, -2.48, 4.75, 10.5, 1.43, 3.76];
-      let c_LLPW_FREQUENCIES = [400.83, 5812.8, 8360, 10413, 10658, 12079, 12899, 13205, 14848, 15591, 15778, 15783, 16716, 16891, 17255, 17496, 18555, 18622, 19219, 19448, 19664, 21341, 21353, 22595];
-      let LLPW_Q = [5, 1, 3.536, 1.25, 8.409, 1.25, 14.14, 7.071, 5, 0.625, 16.82, 20, 20, 20, 28.28, 28.28, 28.28, 20, 33.64, 33.64, 10, 28.28, 7.071, 3.856];
-      let LLPW_GAIN = [0.38, -1.81, -0.23, -0.51, 0.4, 0.84, 0.36, -0.34, 0.27, -1.2, -0.42, -0.67, 0.81, 1.31, -0.71, 0.68, -1.04, 0.79, -0.73, -1.33, 1.17, 0.57, 0.35, 6.33];
-      let LLPW_FREQUENCIES = [16.452, 24.636, 37.134, 74.483, 159.54, 308.18, 670.21, 915.81, 1200.7, 2766.4, 2930.6, 4050.6, 4409.1, 5395.2, 5901.6, 6455.5, 7164.1, 7724.1, 8449, 10573, 12368, 14198, 17910, 18916];
+      const c_LLPW_Q = [1.25, 0.131, 10, 2.5, 2.293, 0.11, 14.14, 1.552, 28.28, 7.071, 2.847, 5, 0.625, 7.071, 3.856, 3.856, 20, 28.28, 20, 14.14, 2.102, 6.698, 3.536, 10];
+      const c_LLPW_GAIN = [-0.11, 0.27, -0.8, 0.57, 1.84, -0.38, 0.47, -1.56, 0.83, 1.58, -1.79, -0.45, 0.48, 1.22, -1.58, -1.59, -2.03, 2.56, -2.2, -2.48, 4.75, 10.5, 1.43, 3.76];
+      const c_LLPW_FREQUENCIES = [400.83, 5812.8, 8360, 10413, 10658, 12079, 12899, 13205, 14848, 15591, 15778, 15783, 16716, 16891, 17255, 17496, 18555, 18622, 19219, 19448, 19664, 21341, 21353, 22595];
+      const LLPW_Q = [5, 1, 3.536, 1.25, 8.409, 1.25, 14.14, 7.071, 5, 0.625, 16.82, 20, 20, 20, 28.28, 28.28, 28.28, 20, 33.64, 33.64, 10, 28.28, 7.071, 3.856];
+      const LLPW_GAIN = [0.38, -1.81, -0.23, -0.51, 0.4, 0.84, 0.36, -0.34, 0.27, -1.2, -0.42, -0.67, 0.81, 1.31, -0.71, 0.68, -1.04, 0.79, -0.73, -1.33, 1.17, 0.57, 0.35, 6.33];
+      const LLPW_FREQUENCIES = [16.452, 24.636, 37.134, 74.483, 159.54, 308.18, 670.21, 915.81, 1200.7, 2766.4, 2930.6, 4050.6, 4409.1, 5395.2, 5901.6, 6455.5, 7164.1, 7724.1, 8449, 10573, 12368, 14198, 17910, 18916];
       CiderAudio.audioNodes.llpw = [];
 
       switch (app.cfg.audio.maikiwiAudio.ciderPPE_value) {
@@ -741,7 +741,7 @@ const CiderAudio = {
                 CiderAudio.audioNodes.llpw[0] = CiderAudio.context.createConvolver();
                 CiderAudio.audioNodes.llpw[0].normalize = false;
                 fetch("./cideraudio/impulses/CAP_64.wav").then(async (impulseData) => {
-                  let bufferedImpulse = await impulseData.arrayBuffer();
+                  const bufferedImpulse = await impulseData.arrayBuffer();
                   CiderAudio.audioNodes.llpw[0].buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
                 });
                 console.debug("[Cider][Audio] CAP Adaptive - 64kbps");
@@ -754,7 +754,7 @@ const CiderAudio = {
                 CiderAudio.audioNodes.llpw[1].gain.value = 2.37; // Post Gain Compensation
                 CiderAudio.audioNodes.llpw[0].connect(CiderAudio.audioNodes.llpw[1]);
                 fetch("./cideraudio/impulses/CAP_256_FINAL_48k.wav").then(async (impulseData) => {
-                  let bufferedImpulse = await impulseData.arrayBuffer();
+                  const bufferedImpulse = await impulseData.arrayBuffer();
                   CiderAudio.audioNodes.llpw[0].buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
                 });
                 console.debug("[Cider][Audio] CAP Adaptive - 256kbps");
@@ -774,7 +774,7 @@ const CiderAudio = {
             CiderAudio.audioNodes.llpw[1].gain.value = 2.37;
             CiderAudio.audioNodes.llpw[0].connect(CiderAudio.audioNodes.llpw[1]);
             fetch("./cideraudio/impulses/CAP_256_FINAL_48k.wav").then(async (impulseData) => {
-              let bufferedImpulse = await impulseData.arrayBuffer();
+              const bufferedImpulse = await impulseData.arrayBuffer();
               CiderAudio.audioNodes.llpw[0].buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
             });
             console.debug("[Cider][Audio] CAP Adaptive - (Error Fallback) 256kbps");
@@ -785,7 +785,7 @@ const CiderAudio = {
           CiderAudio.audioNodes.llpw[0] = CiderAudio.context.createConvolver();
           CiderAudio.audioNodes.llpw[0].normalize = false;
           fetch("./cideraudio/impulses/CAP_Maikiwi.wav").then(async (impulseData) => {
-            let bufferedImpulse = await impulseData.arrayBuffer();
+            const bufferedImpulse = await impulseData.arrayBuffer();
             CiderAudio.audioNodes.llpw[0].buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
           });
           console.debug("[Cider][Audio] CAP - Maikiwi Signature Mode");
@@ -794,7 +794,7 @@ const CiderAudio = {
           CiderAudio.audioNodes.llpw[0] = CiderAudio.context.createConvolver();
           CiderAudio.audioNodes.llpw[0].normalize = false;
           fetch("./cideraudio/impulses/CAP_Natural.wav").then(async (impulseData) => {
-            let bufferedImpulse = await impulseData.arrayBuffer();
+            const bufferedImpulse = await impulseData.arrayBuffer();
             CiderAudio.audioNodes.llpw[0].buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
           });
 
@@ -823,7 +823,7 @@ const CiderAudio = {
           CiderAudio.audioNodes.llpw[1].gain.value = 2.57;
           CiderAudio.audioNodes.llpw[0].connect(CiderAudio.audioNodes.llpw[1]);
           fetch("./cideraudio/impulses/CAP_256_FINAL_48k.wav").then(async (impulseData) => {
-            let bufferedImpulse = await impulseData.arrayBuffer();
+            const bufferedImpulse = await impulseData.arrayBuffer();
             CiderAudio.audioNodes.llpw[0].buffer = await CiderAudio.context.decodeAudioData(bufferedImpulse);
           });
           app.cfg.audio.maikiwiAudio.ciderPPE_value = "MAIKIWI";
@@ -886,9 +886,9 @@ const CiderAudio = {
   },
   vibrantbass_n4: function (status, destination) {
     if (status === true) {
-      let VIBRANTBASSBANDS = app.cfg.audio.maikiwiAudio.vibrantBass.frequencies;
-      let VIBRANTBASSGAIN = app.cfg.audio.maikiwiAudio.vibrantBass.gain;
-      let VIBRANTBASSQ = app.cfg.audio.maikiwiAudio.vibrantBass.Q;
+      const VIBRANTBASSBANDS = app.cfg.audio.maikiwiAudio.vibrantBass.frequencies;
+      const VIBRANTBASSGAIN = app.cfg.audio.maikiwiAudio.vibrantBass.gain;
+      const VIBRANTBASSQ = app.cfg.audio.maikiwiAudio.vibrantBass.Q;
       CiderAudio.audioNodes.vibrantbassNode = [];
 
       for (let i = 0; i < VIBRANTBASSBANDS.length; i++) {
@@ -1011,7 +1011,7 @@ const CiderAudio = {
     let lastNode = "n0";
     let index = 0;
     let firstNode = "n0";
-    for (let [tier, value] of configMap.entries()) {
+    for (const [tier, value] of configMap.entries()) {
       if (value === true) {
         if (index === 0) {
           firstNode = tier;
@@ -1103,9 +1103,9 @@ const CiderAudio = {
   equalizer: function (status, destination) {
     // n3_1
     if (status === true) {
-      let BANDS = app.cfg.audio.equalizer.frequencies;
-      let GAIN = app.cfg.audio.equalizer.gain;
-      let Q = app.cfg.audio.equalizer.Q;
+      const BANDS = app.cfg.audio.equalizer.frequencies;
+      const GAIN = app.cfg.audio.equalizer.gain;
+      const Q = app.cfg.audio.equalizer.Q;
 
       CiderAudio.audioNodes.audioBands = [];
       for (let i = 0; i < BANDS.length; i++) {

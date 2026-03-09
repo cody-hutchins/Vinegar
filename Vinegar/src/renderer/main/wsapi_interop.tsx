@@ -2,11 +2,11 @@ const wsapi = {
   cache: { playParams: { id: 0 }, status: null, remainingTime: 0 },
   playbackCache: { status: null, time: Date.now() },
   async v3(encoded = "") {
-    let decoded = atob(encoded);
-    let json = JSON.parse(decoded);
+    const decoded = atob(encoded);
+    const json = JSON.parse(decoded);
     console.log(json);
-    let response = await await MusicKit.getInstance().api.v3.music(json.route, json.body, json.options);
-    let ret = response.data;
+    const response = await await MusicKit.getInstance().api.v3.music(json.route, json.body, json.options);
+    const ret = response.data;
     return JSON.stringify(ret);
   },
   search(term, limit) {
@@ -90,12 +90,12 @@ const wsapi = {
     ipcRenderer.send("wsapi-returnQueue", JSON.stringify(MusicKit.getInstance().queue));
   },
   playNext(type, id) {
-    var request = {};
+    const request = {};
     request[type] = id;
     MusicKit.getInstance().playNext(request);
   },
   playLater(type, id) {
-    var request = {};
+    const request = {};
     request[type] = id;
     MusicKit.getInstance().playLater(request);
   },
@@ -137,7 +137,7 @@ const wsapi = {
   getLibraryStatus(kind, id) {
     if (kind === undefined || id === "no-id-found") return;
 
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     app.mk.api.v3
       .music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${id}`, {
         relate: "library",
@@ -155,7 +155,7 @@ const wsapi = {
   rate(kind, id, rating) {
     if (kind === undefined || id === "no-id-found") return;
 
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
     if (rating === 0) {
       app.mk.api.v3
@@ -202,7 +202,7 @@ const wsapi = {
       app.addToLibrary(id);
       ipcRenderer.send("wsapi-change-library", kind, id, shouldAdd);
     } else {
-      let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+      const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
       app.mk.api.v3
         .music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${id}`, {

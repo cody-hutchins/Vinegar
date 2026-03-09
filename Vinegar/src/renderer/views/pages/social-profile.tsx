@@ -3,7 +3,7 @@ import MediaItemSquare from "../components/mediaitem-square.jsx";
 
 const SocialProfile = ({ data }: { data: object }) => {
   const app = this.$root;
-  let topSongsExpanded = false;
+  const topSongsExpanded = false;
   function getArtistPalette(artist) {
     if (artist?.attributes?.artwork !== null) {
       return {
@@ -26,38 +26,39 @@ const SocialProfile = ({ data }: { data: object }) => {
   }
   return (
     <>
-      <div id="cider-socialprofile">
-        <div className="content-inner artist-page profile-page">
+      <div id={"cider-socialprofile"}>
+        <div className={"content-inner artist-page profile-page"}>
           <div
-            className="artist-header"
+            className={"artist-header"}
             style={getArtistPalette(data)}>
-            <div className="row">
+            <div className={"row"}>
               <div
-                className="col-sm"
+                className={"col-sm"}
                 style={{ width: "auto" }}>
-                <div className="artist-image">
+                <div className={"artist-image"}>
                   <MediaItemArtwork
-                    shadow="large"
+                    shadow={"large"}
                     url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                    size="220"
-                    type="artists"></MediaItemArtwork>
+                    size={"220"}
+                    type={"artists"}
+                  />
                 </div>
               </div>
-              <div className="col cider-flex-center">
+              <div className={"col cider-flex-center"}>
                 <h1>{data.attributes.name}</h1>
               </div>
             </div>
           </div>
-          <div className="artist-body">
+          <div className={"artist-body"}>
             {data.relationships && data.relationships["shared-playlists"] && (
               <template>
-                <div className="row">
-                  <div className="col">
+                <div className={"row"}>
+                  <div className={"col"}>
                     <h3>{"Shared Playlists" ?? ""}</h3>
                   </div>
                 </div>
                 {data.relationships["shared-playlists"].data.limit(10).map((item) => (
-                  <MediaItemSquare item={item}></MediaItemSquare>
+                  <MediaItemSquare item={item} />
                 ))}
               </template>
             )}

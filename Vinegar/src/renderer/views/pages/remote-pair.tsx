@@ -13,11 +13,11 @@ const RemotePair = () => {
     mounted().then();
   }, []);
   return (
-    <div id="remote-pair">
+    <div id={"remote-pair"}>
       <div style={{ display: "flex", width: "100%", height: "100%", paddingTop: "var(--navigationBarHeight)", position: "absolute", top: 0, left: 0 }}>
         <webview
-          id="foo"
-          src="https://cider.sh"
+          id={"foo"}
+          src={"https://cider.sh"}
           style={{ display: "inline-flex", width: "100%" }}
         />
       </div>

@@ -70,7 +70,7 @@ const helpers = {
     });
   },
   getAppStyle() {
-    let finalStyle = {};
+    const finalStyle = {};
     if (this.cfg.visual.window_background_style === "color") {
       finalStyle["background-color"] = this.cfg.visual.windowColor;
     }
@@ -91,14 +91,14 @@ const helpers = {
       className: "notyf-info",
       message: app.getLz("term.song.link.generate"),
     });
-    let self = this;
-    let httpRequest = new XMLHttpRequest();
+    const self = this;
+    const httpRequest = new XMLHttpRequest();
     httpRequest.open("GET", `https://api.song.link/v1-alpha.1/links?url=${amUrl}&userCountry=US`, true);
     httpRequest.send();
     httpRequest.onreadystatechange = function () {
       if (httpRequest.readyState === 4) {
         if (httpRequest.status === 200) {
-          let response = JSON.parse(httpRequest.responseText);
+          const response = JSON.parse(httpRequest.responseText);
           console.debug(response);
           self.copyToClipboard(response.pageUrl);
         } else {
@@ -109,7 +109,7 @@ const helpers = {
     };
   },
   formatVolumeTooltip() {
-    let advancedTooltip = this.cfg.audio.dBSPL ? (Number(this.cfg.audio.dBSPLcalibration) + Math.log10(this.mk.volume) * 20).toFixed(2) + " dB SPL" : (Math.log10(this.mk.volume) * 20).toFixed(2) + " dBFS";
+    const advancedTooltip = this.cfg.audio.dBSPL ? (Number(this.cfg.audio.dBSPLcalibration) + Math.log10(this.mk.volume) * 20).toFixed(2) + " dB SPL" : (Math.log10(this.mk.volume) * 20).toFixed(2) + " dBFS";
     return this.cfg.audio.advanced ? advancedTooltip : (this.mk.volume * 100).toFixed(0) + "%";
   },
   mainMenuVisibility(val) {
@@ -126,7 +126,7 @@ const helpers = {
   },
   stringTemplateParser(expression, valueObj) {
     const templateMatcher = /{{\s?([^{}\s]*)\s?}}/g;
-    let text = expression.replace(templateMatcher, (substring, value, index) => {
+    const text = expression.replace(templateMatcher, (substring, value, index) => {
       value = valueObj[value];
       return value;
     });
@@ -156,7 +156,7 @@ const helpers = {
     if (this.lz[message]) {
       if (options["count"]) {
         if (typeof this.lz[message] === "object") {
-          let type = window.fastPluralRules.getPluralFormNameForCardinalByLocale(this.cfg.general.language.replace("_", "-"), options["count"]);
+          const type = window.fastPluralRules.getPluralFormNameForCardinalByLocale(this.cfg.general.language.replace("_", "-"), options["count"]);
           return this.lz[message][type] ?? this.lz[message][Object.keys(this.lz[message])[0]] ?? this.lz[message];
         } else {
           // fallback English plural forms ( old i18n )
@@ -250,7 +250,7 @@ const helpers = {
     };
   },
   async showSocialListeningTo() {
-    let contentIds = Object.keys(app.socialBadges.badgeMap);
+    const contentIds = Object.keys(app.socialBadges.badgeMap);
     app.showCollection({ data: this.socialBadges.mediaItems }, "Friends Listening To", "albums");
     if (this.socialBadges.mediaItemDLState == 1 || this.socialBadges.mediaItemDLState == 2) {
       return;
@@ -265,7 +265,7 @@ const helpers = {
         if (item.includes("ra.")) {
           type = "stations";
         }
-        let found = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/${type}/${item}`);
+        const found = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/${type}/${item}`);
         this.socialBadges.mediaItems.push(found.data.data[0]);
       } catch (e) {}
     });
@@ -274,8 +274,8 @@ const helpers = {
     ipcRenderer.invoke("quit-app");
   },
   async openAppleMusicURL(url) {
-    let properties = MusicKit.formattedMediaURL(url);
-    let item = {
+    const properties = MusicKit.formattedMediaURL(url);
+    const item = {
       id: properties.contentId,
       attributes: {
         playParams: {
@@ -289,7 +289,7 @@ const helpers = {
     app.routeView(item);
   },
   saveFile(fileName, urlFile) {
-    let a = document.createElement("a");
+    const a = document.createElement("a");
     a.style = "display: none";
     document.body.appendChild(a);
     a.href = urlFile;
@@ -308,12 +308,12 @@ const helpers = {
     }
   },
   async getSvgIcon(url) {
-    let response = await fetch(url);
-    let data = await response.text();
+    const response = await fetch(url);
+    const data = await response.text();
     return data;
   },
   getSocialBadges(cb = () => {}) {
-    let self = this;
+    const self = this;
     try {
       app.mk.api.v3.music("/v1/social/badging-map").then((data) => {
         self.socialBadges.badgeMap = data.data.results.badgingMap;
@@ -361,14 +361,14 @@ const helpers = {
         const params = new Proxy(new URLSearchParams(new URL(url).search), {
           get: (searchParams, prop) => searchParams.get(prop),
         });
-        let id = params.fcId;
+        const id = params.fcId;
         app
           .getTypeFromID("room", id, false, {
             platform: "web",
             extend: "editorialArtwork,uber,lockupStyle",
           })
           .then(() => {
-            let kind = "multiroom";
+            const kind = "multiroom";
             window.location.hash = `${kind}/${id}`;
             document.querySelector("#app-content").scrollTop = 0;
           });
@@ -384,7 +384,7 @@ const helpers = {
     this.menuPanel.visible = false;
     app.selectedMediaItems = [];
     this.chrome.contentAreaScrolling = true;
-    for (let key in app.modals) {
+    for (const key in app.modals) {
       app.modals[key] = false;
     }
   },
@@ -399,7 +399,7 @@ const helpers = {
     app.modals.addToPlaylist = true;
   },
   async addSelectedToNewPlaylist() {
-    let self = this;
+    const self = this;
     let pl_items = [];
     for (let i = 0; i < self.selectedMediaItems.length; i++) {
       if (self.selectedMediaItems[i].kind == "song" || self.selectedMediaItems[i].kind == "songs") {
@@ -410,8 +410,8 @@ const helpers = {
         });
       } else if ((self.selectedMediaItems[i].kind == "album" || self.selectedMediaItems[i].kind == "albums") && self.selectedMediaItems[i].isLibrary != true) {
         self.selectedMediaItems[i].kind = "albums";
-        let res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
-        let ids = res.data.data.map(function (i) {
+        const res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
+        const ids = res.data.data.map(function (i) {
           return { id: i.id, type: i.type };
         });
         pl_items = pl_items.concat(ids);
@@ -423,8 +423,8 @@ const helpers = {
         });
       } else if (self.selectedMediaItems[i].kind == "library-album" || self.selectedMediaItems[i].kind == "library-albums" || (self.selectedMediaItems[i].kind == "album" && self.selectedMediaItems[i].isLibrary == true)) {
         self.selectedMediaItems[i].kind = "library-albums";
-        let res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
-        let ids = res.data.data.map(function (i) {
+        const res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
+        const ids = res.data.data.map(function (i) {
           return { id: i.id, type: i.type };
         });
         pl_items = pl_items.concat(ids);
@@ -475,7 +475,7 @@ const helpers = {
       });
   },
   async addSelectedToPlaylist(playlist_id) {
-    let self = this;
+    const self = this;
     let pl_items = [];
     const song_ids = [];
     for (let i = 0; i < self.selectedMediaItems.length; i++) {
@@ -488,8 +488,8 @@ const helpers = {
         song_ids.push(self.selectedMediaItems[i].id);
       } else if ((self.selectedMediaItems[i].kind == "album" || self.selectedMediaItems[i].kind == "albums") && self.selectedMediaItems[i].isLibrary != true) {
         self.selectedMediaItems[i].kind = "albums";
-        let res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
-        let ids = res.data.data.map(function (i) {
+        const res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
+        const ids = res.data.data.map(function (i) {
           return { id: i.id, type: i.type };
         });
         pl_items = pl_items.concat(ids);
@@ -503,8 +503,8 @@ const helpers = {
         song_ids.push(self.selectedMediaItems[i].id);
       } else if (self.selectedMediaItems[i].kind == "library-album" || self.selectedMediaItems[i].kind == "library-albums" || (self.selectedMediaItems[i].kind == "album" && self.selectedMediaItems[i].isLibrary == true)) {
         self.selectedMediaItems[i].kind = "library-albums";
-        let res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
-        let ids = res.data.data.map(function (i) {
+        const res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
+        const ids = res.data.data.map(function (i) {
           return { id: i.id, type: i.type };
         });
         pl_items = pl_items.concat(ids);
@@ -530,7 +530,7 @@ const helpers = {
     }
   },
   async init() {
-    let self = this;
+    const self = this;
     if (!localStorage.getItem("seenOOBE")) {
       localStorage.setItem("seenOOBE", 1);
     }
@@ -550,7 +550,7 @@ const helpers = {
     this.setLzManual();
     clearTimeout(this.hangtimer);
     this.mk = MusicKit.getInstance();
-    let needsReload = typeof localStorage["music.ampwebplay.media-user-token"] == "undefined";
+    const needsReload = typeof localStorage["music.ampwebplay.media-user-token"] === "undefined";
     if (needsReload) {
       ipcRenderer.send("auth-window");
       this.mkIsReady = true;
@@ -620,8 +620,8 @@ const helpers = {
     // Restore mk
 
     // load cached library
-    let librarySongs = await CiderCache.getCache("library-songs");
-    let libraryAlbums = await CiderCache.getCache("library-albums");
+    const librarySongs = await CiderCache.getCache("library-songs");
+    const libraryAlbums = await CiderCache.getCache("library-albums");
     if (librarySongs) {
       this.library.songs.listing = librarySongs;
       this.library.songs.displayListing = this.library.songs.listing;
@@ -644,13 +644,13 @@ const helpers = {
         // load last played track
         try {
           let lastItem = window.localStorage.getItem("currentTrack");
-          let time = window.localStorage.getItem("currentTime");
+          const time = window.localStorage.getItem("currentTime");
           let queue = window.localStorage.getItem("currentQueue");
           app.mk.queue.position = 0; // Reset queue position.
           if (lastItem != null) {
             lastItem = JSON.parse(lastItem);
-            let kind = lastItem.attributes.playParams.kind;
-            let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+            const kind = lastItem.attributes.playParams.kind;
+            const truekind = !kind.endsWith("s") ? kind + "s" : kind;
             app.mk.setQueue({
               [truekind]: [lastItem.attributes.playParams.id],
               parameters: { l: app.mklang },
@@ -666,10 +666,10 @@ const helpers = {
                   if (queue != null) {
                     queue = JSON.parse(queue);
                     if (queue && queue.length > 0) {
-                      let ids = queue.map((e) => (e.playParams ? e.playParams.id : e.item.attributes.playParams ? e.item.attributes.playParams.id : ""));
+                      const ids = queue.map((e) => (e.playParams ? e.playParams.id : e.item.attributes.playParams ? e.item.attributes.playParams.id : ""));
                       let i = 0;
                       if (ids.length > 0) {
-                        for (let id of ids) {
+                        for (const id of ids) {
                           if (!(i == 0 && ids[0] == lastItem.attributes.playParams.id)) {
                             try {
                               app.mk.playLater({ songs: [id] });
@@ -689,11 +689,11 @@ const helpers = {
         }
         break;
       case "history":
-        let history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: app.mklang });
+        const history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: app.mklang });
         if (history.data.data.length > 0) {
-          let lastItem = history.data.data[0];
-          let kind = lastItem.attributes.playParams.kind;
-          let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+          const lastItem = history.data.data[0];
+          const kind = lastItem.attributes.playParams.kind;
+          const truekind = !kind.endsWith("s") ? kind + "s" : kind;
           app.mk.setQueue({
             [truekind]: [lastItem.attributes.playParams.id],
             parameters: { l: app.mklang },
@@ -757,14 +757,14 @@ const helpers = {
         if (app.mk.nowPlayingItem.type !== "song") {
           CiderAudio.audioNodes.gainNode.gain.value = 0.70794578438;
         } else {
-          let soundcheck = tag.split(" ");
-          let numbers = [];
-          for (let item of soundcheck) {
+          const soundcheck = tag.split(" ");
+          const numbers = [];
+          for (const item of soundcheck) {
             numbers.push(parseInt(item, 16));
           }
           numbers.shift();
-          let peak = Math.max(numbers[6], numbers[7]) / 32768.0;
-          let gain = Math.pow(10, (-1.7 - Math.log10(peak) * 20) / 20); // EBU R 128 Compliant
+          const peak = Math.max(numbers[6], numbers[7]) / 32768.0;
+          const gain = Math.pow(10, (-1.7 - Math.log10(peak) * 20) / 20); // EBU R 128 Compliant
           console.debug(`[Cider][MaikiwiSoundCheck] Peak Gain: '${(Math.log10(peak) * 20).toFixed(2)}' dB | Adjusting '${(Math.log10(gain) * 20).toFixed(2)}' dB`);
           try {
             //CiderAudio.audioNodes.gainNode.gain.value = (Math.min(Math.pow(10, (replaygain.gain / 20)), (1 / replaygain.peak)))
@@ -945,7 +945,7 @@ const helpers = {
       try {
         a = a.item.attributes;
       } catch (_) {}
-      let type = self.mk.nowPlayingItem != null ? self.mk.nowPlayingItem["type"] ?? "" : "";
+      const type = self.mk.nowPlayingItem != null ? (self.mk.nowPlayingItem["type"] ?? "") : "";
 
       if (type.includes("musicVideo") || type.includes("uploadedVideo") || type.includes("music-movie") || (self.mk.nowPlayingItem?.type == "radioStation") & (self.mk.nowPlayingItem?.attributes?.mediaKind == "video")) {
         document.getElementById("apple-music-video-container").style.display = "block";
@@ -969,7 +969,7 @@ const helpers = {
       app.loadLyrics();
 
       setTimeout(() => {
-        let i = document.querySelector("#apple-music-player")?.src ?? "";
+        const i = document.querySelector("#apple-music-player")?.src ?? "";
         if (i.endsWith(".m3u8") || i.endsWith(".m3u")) {
           this._playRadioStream(i);
         }
@@ -1017,7 +1017,7 @@ const helpers = {
   },
   setWindowScaleFactor() {
     let scale = (((window.devicePixelRatio * window.innerWidth) / 1280) * window.innerHeight) / 720;
-    let desiredScale = clamp(parseFloat(app.cfg.visual.maxElementScale == -1 ? 1.5 : app.cfg.visual.maxElementScale), 1, 1.5);
+    const desiredScale = clamp(parseFloat(app.cfg.visual.maxElementScale == -1 ? 1.5 : app.cfg.visual.maxElementScale), 1, 1.5);
     app.$store.state.windowRelativeScale = scale;
     if (scale <= 1) {
       scale = 1;
@@ -1044,7 +1044,7 @@ const helpers = {
     this.chrome.contentScrollPosY = scroll.target.scrollTop;
   },
   async checkForThemeUpdates() {
-    let self = this;
+    const self = this;
     const themes = ipcRenderer.sendSync("get-themes");
     await asyncForEach(themes, async (theme) => {
       if (theme.commit != "") {
@@ -1104,14 +1104,14 @@ const helpers = {
 
     this.chrome.appliedTheme.info = {};
     await asyncForEach(styles, async (style) => {
-      let styleEl = document.createElement("link");
+      const styleEl = document.createElement("link");
       styleEl.id = `less-${style.replace(".less", "")}`;
       styleEl.rel = "stylesheet/less";
       styleEl.href = `themes/${style}`;
       styleEl.type = "text/css";
       document.head.appendChild(styleEl);
       try {
-        let infoResponse = await fetch("themes/" + style.replace("index.less", "theme.json"));
+        const infoResponse = await fetch("themes/" + style.replace("index.less", "theme.json"));
         this.chrome.appliedTheme.info = Object.assign(this.chrome.appliedTheme.info, await infoResponse.json());
       } catch (e) {
         e = null;
@@ -1131,7 +1131,7 @@ const helpers = {
   },
   getThemeDirective(directive = "") {
     let directives = {};
-    if (typeof this.chrome.appliedTheme.info.directives == "object") {
+    if (typeof this.chrome.appliedTheme.info.directives === "object") {
       directives = this.chrome.appliedTheme.info.directives;
     }
     directives = Object.assign(directives, this.chrome.forceDirectives);
@@ -1152,7 +1152,7 @@ const helpers = {
     });
   },
   getAppClasses() {
-    let classes = {};
+    const classes = {};
     switch (this.getThemeDirective("forceUI") ?? "none") {
       case "compact":
         classes.compact = true;
@@ -1225,7 +1225,7 @@ const helpers = {
       });
   },
   select_hasMediaItem(id) {
-    let found = this.selectedMediaItems.find((item) => item.guid == id);
+    const found = this.selectedMediaItems.find((item) => item.guid == id);
     if (found) {
       return true;
     } else {
@@ -1263,7 +1263,7 @@ const helpers = {
         "fields[artists]": ["inFavorites"],
       },
     });
-    let favs = [];
+    const favs = [];
     // for each result
     results.forEach((result) => {
       try {
@@ -1320,10 +1320,10 @@ const helpers = {
     }
   },
   async refreshPlaylists(localOnly = false, useCachedPlaylists = true) {
-    let self = this;
-    let trackMap = this.cfg.advanced.playlistTrackMapping;
-    let newListing = [];
-    let trackMapping = {};
+    const self = this;
+    const trackMap = this.cfg.advanced.playlistTrackMapping;
+    const newListing = [];
+    const trackMapping = {};
 
     if (useCachedPlaylists) {
       const cachedPlaylist = await CiderCache.getCache("library-playlists");
@@ -1358,14 +1358,14 @@ const helpers = {
       console.log(playlistData);
       await asyncForEach(playlistData, async (playlist) => {
         playlist.parent = parent;
-        if (playlist.type != "library-playlist-folders" && typeof playlist.attributes.playParams["versionHash"] != "undefined") {
+        if (playlist.type != "library-playlist-folders" && typeof playlist.attributes.playParams["versionHash"] !== "undefined") {
           playlist.parent = "p.applemusic";
         }
         playlist.children = [];
         playlist.tracks = [];
         try {
           if (trackMap) {
-            let tracks = await app.mk.api.v3.music(playlist.href + "/tracks").catch((e) => {
+            const tracks = await app.mk.api.v3.music(playlist.href + "/tracks").catch((e) => {
               // no tracks
               e = null;
             });
@@ -1375,7 +1375,7 @@ const helpers = {
               }
               trackMapping[track.id].push(playlist.id);
 
-              if (typeof track.attributes.playParams.catalogId == "string") {
+              if (typeof track.attributes.playParams.catalogId === "string") {
                 if (!trackMapping[track.attributes.playParams.catalogId]) {
                   trackMapping[track.attributes.playParams.catalogId] = [];
                 }
@@ -1416,7 +1416,7 @@ const helpers = {
     });
   },
   playlistHeaderContextMenu(event) {
-    let menu = {
+    const menu = {
       items: [
         {
           name: app.getLz("term.createNewPlaylist"),
@@ -1441,7 +1441,7 @@ const helpers = {
     this.showMenuPanel(menu, event);
   },
   async editPlaylistFolder(id, name = app.getLz("term.newPlaylist")) {
-    let self = this;
+    const self = this;
     this.mk.api.v3
       .music(
         `/v1/me/library/playlist-folders/${id}`,
@@ -1460,7 +1460,7 @@ const helpers = {
       });
   },
   async editPlaylist(id, name = app.getLz("term.newPlaylist")) {
-    let self = this;
+    const self = this;
     this.mk.api.v3
       .music(
         `/v1/me/library/playlists/${id}`,
@@ -1479,7 +1479,7 @@ const helpers = {
       });
   },
   async editPlaylistDescription(id, name = app.getLz("term.newPlaylist")) {
-    let self = this;
+    const self = this;
     this.mk.api.v3
       .music(
         `/v1/me/library/playlists/${id}`,
@@ -1506,8 +1506,8 @@ const helpers = {
     // }
   },
   newPlaylist(name = app.getLz("term.newPlaylist"), tracks = []) {
-    let self = this;
-    let request = {
+    const self = this;
+    const request = {
       name: name,
     };
     if (tracks.length > 0) {
@@ -1549,7 +1549,7 @@ const helpers = {
       });
   },
   deletePlaylist(id) {
-    let self = this;
+    const self = this;
     this.confirm(app.getLz("term.deletePlaylist"), (ok) => {
       if (ok) {
         app.mk.api.v3
@@ -1564,7 +1564,7 @@ const helpers = {
           )
           .then((res) => {
             // remove this playlist from playlists.listing if it exists
-            let found = self.playlists.listing.find((item) => item.id == id);
+            const found = self.playlists.listing.find((item) => item.id == id);
             if (found) {
               self.playlists.listing.splice(self.playlists.listing.indexOf(found), 1);
             }
@@ -1580,13 +1580,13 @@ const helpers = {
    * @memberof app
    */
   async showRoom(url) {
-    let self = this;
+    const self = this;
     const response = await this.mk.api.v3.music(url);
-    let room = response.data.data[0];
+    const room = response.data.data[0];
     this.showCollection(room.relationships.contents, room.attributes.title);
   },
   async showCollection(response, title, type, requestBody = {}) {
-    let self = this;
+    const self = this;
     console.debug(response);
     this.collectionList.requestBody = {};
     this.collectionList.response = response;
@@ -1596,16 +1596,16 @@ const helpers = {
     app.appRoute("collection-list");
   },
   async showArtistView(artist, title, view) {
-    let response = (await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artist}/view/${view}?l=${this.mklang}`, {}, { includeResponseMeta: !0 })).data;
+    const response = (await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artist}/view/${view}?l=${this.mklang}`, {}, { includeResponseMeta: !0 })).data;
     console.debug(response);
     await this.showCollection(response, title, "artists");
   },
   async showRecordLabelView(label, title, view) {
-    let response = (await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/record-labels/${label}/view/${view}?l=${this.mklang}`)).data;
+    const response = (await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/record-labels/${label}/view/${view}?l=${this.mklang}`)).data;
     await this.showCollection(response, title, "record-labels");
   },
   async showSearchView(term, group, title) {
-    let requestBody = {
+    const requestBody = {
       platform: "web",
       groups: group,
       types: "activities,albums,apple-curators,artists,curators,editorial-items,music-movies,music-videos,playlists,songs,stations,tv-episodes,uploaded-videos,record-labels",
@@ -1632,12 +1632,12 @@ const helpers = {
       },
       l: this.mklang,
     };
-    let response = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/search?term=${term}`, requestBody, {
+    const response = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/search?term=${term}`, requestBody, {
       includeResponseMeta: !0,
     });
 
     console.debug("searchres", response);
-    let responseFormat = {
+    const responseFormat = {
       data: response.data.results[group].data,
       next: response.data.results[group].next,
       groups: group,
@@ -1646,8 +1646,8 @@ const helpers = {
   },
   async getPlaylistContinuous(response, transient = false) {
     response = response.data.data[0];
-    let self = this;
-    let playlistId = response.id;
+    const self = this;
+    const playlistId = response.id;
     this.playlists.loadingState = !transient ? 0 : 1;
     this.showingPlaylist = response;
     if (!response.relationships?.tracks?.next) {
@@ -1672,7 +1672,7 @@ const helpers = {
     getPlaylistTracks(response.relationships.tracks.next);
   },
   async getPlaylistFromID(id, transient = false) {
-    let self = this;
+    const self = this;
     const params = {
       include: "tracks",
       platform: "web",
@@ -1729,9 +1729,9 @@ const helpers = {
     if (this.playerLCD.desiredDuration > 0) {
       val = this.playerLCD.desiredDuration;
     }
-    let min = 0;
-    let max = this.mk.currentPlaybackDuration;
-    let value = ((val - min) / (max - min)) * 100;
+    const min = 0;
+    const max = this.mk.currentPlaybackDuration;
+    const value = ((val - min) / (max - min)) * 100;
     return {
       background: "linear-gradient(to right, var(--songProgressColor) 0%, var(--songProgressColor) " + value + "%, var(--songProgressBackground) " + value + "%, var(--songProgressBackground) 100%)",
     };
@@ -1750,7 +1750,7 @@ const helpers = {
     return executeRequest();
   },
   async getRecursive2(response, sendTo) {
-    let returnData = {
+    const returnData = {
       data: [],
       meta: {},
     };
@@ -1772,7 +1772,7 @@ const helpers = {
       this.search.showSearchView = false;
       return;
     }
-    let hints = await (
+    const hints = await (
       await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/search/suggestions?term=${encodeURIComponent(this.search.term)}`, {
         "fields[albums]": "artwork,name,playParams,url,artistName,id",
         "fields[artists]": "url,name,artwork,id",
@@ -1786,8 +1786,8 @@ const helpers = {
         types: "activities,albums,artists,editorial-items,music-movies,playlists,record-labels,songs,stations",
       })
     ).data.results;
-    let shints = hints ? hints.suggestions : [];
-    for (let item in shints) {
+    const shints = hints ? hints.suggestions : [];
+    for (const item in shints) {
       if ((shints[item]?.displayTerm ?? "").includes("?fields[")) {
         shints[item].displayTerm = shints[item].searchTerm = shints[item].displayTerm.split("?fields[")[0];
       }
@@ -1845,7 +1845,7 @@ const helpers = {
     return hash;
   },
   getPagePos(href = "") {
-    let state = this.$store.state.pageState.scrollPos.pos.find((page) => {
+    const state = this.$store.state.pageState.scrollPos.pos.find((page) => {
       return page.href === href;
     });
     return (
@@ -1878,10 +1878,10 @@ const helpers = {
       // }
       return;
     }
-    let hash = route.split("/");
-    let page = hash[0];
-    let id = hash[1];
-    let isLibrary = hash[2] ?? false;
+    const hash = route.split("/");
+    const page = hash[0];
+    const id = hash[1];
+    const isLibrary = hash[2] ?? false;
     if (page == "plugin") {
       this.pluginPages.page = "plugin." + id;
       this.page = "plugin-renderer";
@@ -1914,9 +1914,9 @@ const helpers = {
   },
   routeView(item) {
     this.setPagePos();
-    let kind = item.attributes?.playParams ? item.attributes?.playParams?.kind ?? item.type ?? "" : item.type ?? "";
-    let id = item.attributes?.playParams ? item.attributes?.playParams?.id ?? item.id ?? "" : item.id ?? "";
-    let isLibrary = item.attributes?.playParams ? item.attributes?.playParams?.isLibrary ?? false : false;
+    let kind = item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "");
+    let id = item.attributes?.playParams ? (item.attributes?.playParams?.id ?? item.id ?? "") : (item.id ?? "");
+    const isLibrary = item.attributes?.playParams ? (item.attributes?.playParams?.isLibrary ?? false) : false;
     if (kind.includes("playlist") || kind.includes("album")) {
       app.showingPlaylist = [];
     }
@@ -1966,7 +1966,7 @@ const helpers = {
           });
           id = params.id;
           app.mk.api.v3.music(`/v1/editorial/${app.mk.storefrontId}/multiplex/${id}?art%5Burl%5D=f&format%5Bresources%5D=map&platform=web`).then((data) => {
-            let item = data.data.results?.target ?? [];
+            const item = data.data.results?.target ?? [];
             app.routeView(item);
           });
         } else {
@@ -1975,7 +1975,7 @@ const helpers = {
       }
     } else if (kind == "multiplex") {
       app.mk.api.v3.music(`/v1/editorial/${app.mk.storefrontId}/multiplex/${id}?art%5Burl%5D=f&format%5Bresources%5D=map&platform=web`).then((data) => {
-        let item = data.data.results?.target ?? [];
+        const item = data.data.results?.target ?? [];
         app.routeView(item);
       });
     }
@@ -2028,7 +2028,7 @@ const helpers = {
       //     views: 'top-releases,latest-releases,top-artists'
       // });
     } else if (!kind.toString().includes("radioStation") && !kind.toString().includes("song") && !kind.toString().includes("musicVideo") && !kind.toString().includes("uploadedVideo") && !kind.toString().includes("music-movie")) {
-      let params = {
+      const params = {
         extend: "offers,editorialVideo",
         views: "appears-on,more-by-artist,related-videos,other-versions,you-might-also-like,video-extras,audio-extras",
       };
@@ -2099,7 +2099,7 @@ const helpers = {
   },
 
   async getNowPlayingItemDetailed(target) {
-    let nowPlayingItem = JSON.parse(JSON.stringify(this.mk.nowPlayingItem));
+    const nowPlayingItem = JSON.parse(JSON.stringify(this.mk.nowPlayingItem));
     if (nowPlayingItem.type === "radioStation" && app.mk.nowPlayingItem.id !== -1) {
       nowPlayingItem.playParams = { kind: "songs" };
       nowPlayingItem.attributes.playParams.catalogId = app.mk.nowPlayingItem.id;
@@ -2107,14 +2107,14 @@ const helpers = {
       nowPlayingItem.id = app.mk.nowPlayingItem.id;
     }
     try {
-      let u = await app.mkapi(nowPlayingItem.playParams.kind, nowPlayingItem.songId == -1, nowPlayingItem.songId != -1 ? nowPlayingItem.songId : nowPlayingItem["id"], { "include[songs]": "albums,artists", l: app.mklang });
+      const u = await app.mkapi(nowPlayingItem.playParams.kind, nowPlayingItem.songId == -1, nowPlayingItem.songId != -1 ? nowPlayingItem.songId : nowPlayingItem["id"], { "include[songs]": "albums,artists", l: app.mklang });
       app.searchAndNavigate(u.data.data[0], target);
     } catch (e) {
       app.searchAndNavigate(nowPlayingItem, target);
     }
   },
   async searchAndNavigate(item, target) {
-    let self = this;
+    const self = this;
     app.tmpVar = item;
     switch (target) {
       case "artist":
@@ -2140,7 +2140,7 @@ const helpers = {
         } catch (_) {}
 
         if (artistId == "") {
-          let artistQuery = (
+          const artistQuery = (
             await app.mk.api.v3.music(`v1/catalog/${app.mk.storefrontId}/search?term=${item.attributes.artistName}`, {
               limit: 1,
               types: "artists",
@@ -2177,7 +2177,7 @@ const helpers = {
 
         if (albumId == "") {
           try {
-            let albumQuery = (
+            const albumQuery = (
               await app.mk.api.v3.music(`v1/catalog/${app.mk.storefrontId}/search?term=${(item.attributes.albumName ?? item.attributes.name ?? "") + " " + (item.attributes.artistName ?? "")}`, {
                 limit: 1,
                 types: "albums",
@@ -2201,7 +2201,7 @@ const helpers = {
 
         if (labelId == "") {
           try {
-            let labelQuery = (
+            const labelQuery = (
               await app.mk.api.v3.music(`v1/catalog/${app.mk.storefrontId}/search?term=${item.attributes.recordLabel}`, {
                 limit: 1,
                 types: "record-labels",
@@ -2237,10 +2237,10 @@ const helpers = {
     return this.cfg.home.followedArtists.includes(id);
   },
   playMediaItem(item) {
-    let kind = item.attributes.playParams ? item.attributes.playParams.kind ?? item.type ?? "" : item.type ?? "";
-    let id = item.attributes.playParams ? item.attributes.playParams.id ?? item.id ?? "" : item.id ?? "";
-    let isLibrary = item.attributes.playParams ? item.attributes.playParams.isLibrary ?? false : false;
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const kind = item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "");
+    const id = item.attributes.playParams ? (item.attributes.playParams.id ?? item.id ?? "") : (item.id ?? "");
+    const isLibrary = item.attributes.playParams ? (item.attributes.playParams.isLibrary ?? false) : false;
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     // console.log(kind, id, isLibrary)
     app.mk.stop().then(() => {
       if (kind.includes("artist")) {
@@ -2287,8 +2287,8 @@ const helpers = {
     }
   },
   searchLibrarySongs() {
-    let self = this;
-    let prefs = this.cfg.libraryPrefs.songs;
+    const self = this;
+    const prefs = this.cfg.libraryPrefs.songs;
 
     function sortSongs() {
       // sort this.library.songs.displayListing by song.attributes[self.library.songs.sorting] in descending or ascending order based on alphabetical order and numeric order
@@ -2379,7 +2379,7 @@ const helpers = {
   },
   // make a copy of searchLibrarySongs except use Albums instead of Songs
   searchLibraryAlbums(index) {
-    let self = this;
+    const self = this;
 
     function sortAlbums() {
       // sort this.library.albums.displayListing by album.attributes[self.library.albums.sorting[index]] in descending or ascending order based on alphabetical order and numeric order
@@ -2447,7 +2447,7 @@ const helpers = {
   },
   // make a copy of searchLibrarySongs except use Albums instead of Songs
   searchLibraryArtists(index) {
-    let self = this;
+    const self = this;
 
     function sortArtists() {
       // sort this.library.albums.displayListing by album.attributes[self.library.albums.sorting[index]] in descending or ascending order based on alphabetical order and numeric order
@@ -2488,8 +2488,8 @@ const helpers = {
       this.library.artists.displayListing = this.library.artists.listing.filter((item) => {
         let itemName = item.attributes.name.toLowerCase();
         let searchTerm = this.library.artists.search.toLowerCase();
-        let artistName = "";
-        let albumName = "";
+        const artistName = "";
+        const albumName = "";
         // if (item.attributes.artistName != null) {
         //     artistName = item.attributes.artistName.toLowerCase()
         // }
@@ -2532,7 +2532,7 @@ const helpers = {
     if (attempts > 3) {
       return;
     }
-    let truemethod = !method.endsWith("s") ? method + "s" : method;
+    const truemethod = !method.endsWith("s") ? method + "s" : method;
     try {
       if (method.includes(`room`)) {
         return await this.mk.api.v3.music(`v1/editorial/${app.mk.storefrontId}/${truemethod}/${term.toString()}`, params, params2);
@@ -2559,10 +2559,10 @@ const helpers = {
     return genres;
   },
   async getLibrarySongsFull(force = false) {
-    let self = this;
+    const self = this;
     let library = [];
-    let cacheId = "library-songs";
-    let downloaded = null;
+    const cacheId = "library-songs";
+    const downloaded = null;
     this.$store.commit("resetRecentlyAdded");
     if (this.library.songs.downloadState == 2 && !force) {
       return;
@@ -2570,7 +2570,7 @@ const helpers = {
     if (this.library.songs.downloadState == 1) {
       return;
     }
-    let librarySongs = await CiderCache.getCache(cacheId);
+    const librarySongs = await CiderCache.getCache(cacheId);
     if (librarySongs) {
       this.library.songs.listing.data = librarySongs;
       this.searchLibrarySongs();
@@ -2615,14 +2615,14 @@ const helpers = {
   },
   // copy the getLibrarySongsFull function except change Songs to Albums
   async getLibraryAlbumsFull(force = false, index) {
-    let self = this;
+    const self = this;
     let library = [];
-    let cacheId = "library-albums";
+    const cacheId = "library-albums";
     let downloaded = null;
     if ((this.library.albums.downloadState == 2 || this.library.albums.downloadState == 1) && !force) {
       return;
     }
-    let libraryAlbums = await CiderCache.getCache(cacheId);
+    const libraryAlbums = await CiderCache.getCache(cacheId);
     if (libraryAlbums) {
       this.library.albums.listing = libraryAlbums;
       this.searchLibraryAlbums(index);
@@ -2712,7 +2712,7 @@ const helpers = {
         self.library.albums.downloadState = 3;
         return;
       }
-      if (typeof downloaded.next == "undefined") {
+      if (typeof downloaded.next === "undefined") {
         console.debug("downloaded.next is undefined");
         self.library.albums.listing = library;
         self.library.albums.downloadState = 2;
@@ -2720,7 +2720,7 @@ const helpers = {
         CiderCache.putCache(cacheId, library);
         self.searchLibraryAlbums(index);
       }
-      if (downloaded.meta.total > library.length || typeof downloaded.meta.next != "undefined") {
+      if (downloaded.meta.total > library.length || typeof downloaded.meta.next !== "undefined") {
         console.debug(`downloading next chunk - ${library.length} albums so far`);
         downloadChunk();
       } else {
@@ -2737,14 +2737,14 @@ const helpers = {
   },
   // copy the getLibrarySongsFull function except change Songs to Albums
   async getLibraryArtistsFull(force = false, index) {
-    let self = this;
+    const self = this;
     let library = [];
-    let cacheId = "library-artists";
+    const cacheId = "library-artists";
     let downloaded = null;
     if ((this.library.artists.downloadState == 2 || this.library.artists.downloadState == 1) && !force) {
       return;
     }
-    let libraryArtists = await CiderCache.getCache(cacheId);
+    const libraryArtists = await CiderCache.getCache(cacheId);
     if (libraryArtists) {
       this.library.artists.listing = libraryArtists;
       this.searchLibraryArtists(index);
@@ -2830,7 +2830,7 @@ const helpers = {
         self.library.albums.downloadState = 3;
         return;
       }
-      if (typeof downloaded.next == "undefined") {
+      if (typeof downloaded.next === "undefined") {
         console.log("downloaded.next is undefined");
         self.library.artists.listing = library;
         self.library.artists.downloadState = 2;
@@ -2838,7 +2838,7 @@ const helpers = {
         CiderCache.putCache(cacheId, library);
         self.searchLibraryArtists(index);
       }
-      if (downloaded.meta.total > library.length || typeof downloaded.meta.next != "undefined") {
+      if (downloaded.meta.total > library.length || typeof downloaded.meta.next !== "undefined") {
         console.log(`downloading next chunk - ${library.length} artists so far`);
         downloadChunk();
       } else {
@@ -2871,12 +2871,12 @@ const helpers = {
     }
   },
   async getLibrarySongs() {
-    let response = await this.mkapi("songs", true, "", { limit: 100, l: this.mklang }, { includeResponseMeta: !0 });
+    const response = await this.mkapi("songs", true, "", { limit: 100, l: this.mklang }, { includeResponseMeta: !0 });
     this.library.songs.listing = response.data.data;
     this.library.songs.meta = response.data.meta;
   },
   async getLibraryAlbums() {
-    let response = await this.mkapi("albums", true, "", { limit: 100, l: this.mklang }, { includeResponseMeta: !0 });
+    const response = await this.mkapi("albums", true, "", { limit: 100, l: this.mklang }, { includeResponseMeta: !0 });
     this.library.albums.listing = response.data.data;
     this.library.albums.meta = response.data.meta;
   },
@@ -2970,7 +2970,7 @@ const helpers = {
       return;
     }
     try {
-      let browse = await app.mk.api.v3.music(`/v1/editorial/${app.mk.storefrontId}/groupings`, {
+      const browse = await app.mk.api.v3.music(`/v1/editorial/${app.mk.storefrontId}/groupings`, {
         platform: "web",
         name: "music",
         "omit[resource:artists]": "relationships",
@@ -2995,7 +2995,7 @@ const helpers = {
       return;
     }
     try {
-      let mfu = await app.mk.api.v3.music("/v1/me/library/playlists?platform=web&extend=editorialVideo&fields%5Bplaylists%5D=lastModifiedDate&filter%5Bfeatured%5D=made-for-you&include%5Blibrary-playlists%5D=catalog&fields%5Blibrary-playlists%5D=artwork%2Cname%2CplayParams%2CdateAdded");
+      const mfu = await app.mk.api.v3.music("/v1/me/library/playlists?platform=web&extend=editorialVideo&fields%5Bplaylists%5D=lastModifiedDate&filter%5Bfeatured%5D=made-for-you&include%5Blibrary-playlists%5D=catalog&fields%5Blibrary-playlists%5D=artwork%2Cname%2CplayParams%2CdateAdded");
       this.madeforyou = mfu.data;
     } catch (e) {
       console.log(e);
@@ -3003,7 +3003,7 @@ const helpers = {
     }
   },
   newPlaylistFolder(name = app.getLz("term.newPlaylistFolder")) {
-    let self = this;
+    const self = this;
     this.mk.api.v3
       .music(
         "/v1/me/library/playlist-folders/",
@@ -3018,7 +3018,7 @@ const helpers = {
         },
       )
       .then((res) => {
-        let playlist = res.data.data[0];
+        const playlist = res.data.data[0];
         self.playlists.listing.push({
           id: playlist.id,
           attributes: {
@@ -3037,7 +3037,7 @@ const helpers = {
     this.page = "search";
   },
   loadLyrics() {
-    const musicType = MusicKit.getInstance().nowPlayingItem != null ? MusicKit.getInstance().nowPlayingItem["type"] ?? "" : "";
+    const musicType = MusicKit.getInstance().nowPlayingItem != null ? (MusicKit.getInstance().nowPlayingItem["type"] ?? "") : "";
     // console.log("mt", musicType)
     if (musicType === "musicVideo") {
       this.loadYTLyrics();
@@ -3051,11 +3051,11 @@ const helpers = {
     }
   },
   async loadAMLyrics() {
-    const songID = this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem["_songId"] ?? this.mk.nowPlayingItem["songId"] ?? -1 : -1;
+    const songID = this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem["_songId"] ?? this.mk.nowPlayingItem["songId"] ?? -1) : -1;
     // this.getMXM( trackName, artistName, 'en', duration);
     if (songID != -1) {
       try {
-        let response = await this.mk.api.v3.music(`v1/catalog/${this.mk.storefrontId}/songs/${songID}/lyrics`);
+        const response = await this.mk.api.v3.music(`v1/catalog/${this.mk.storefrontId}/songs/${songID}/lyrics`);
         this.lyricsMediaItem = response.data?.data[0]?.attributes["ttml"];
         this.parseTTML();
       } catch (_) {
@@ -3074,15 +3074,15 @@ const helpers = {
     }
   },
   addToLibrary(id) {
-    let self = this;
+    const self = this;
     this.mk.addToLibrary(id).then((data) => {
       self.getLibrarySongsFull(true);
     });
     notyf.success(app.getLz("action.addToLibrary.success"));
   },
   removeFromLibrary(kind, id) {
-    let self = this;
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const self = this;
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     app.mk.api.v3
       .music(
         `v1/me/library/${truekind}/${id.toString()}`,
@@ -3099,12 +3099,12 @@ const helpers = {
     notyf.success(app.getLz("action.removeFromLibrary.success"));
   },
   async loadYTLyrics() {
-    const track = this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.title ?? "" : "";
-    const artist = this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.artistName ?? "" : "";
-    const time = this.mk.nowPlayingItem != null ? Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1 : -1;
+    const track = this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "";
+    const artist = this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "";
+    const time = this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1;
     ipcRenderer.invoke("getYTLyrics", track, artist).then((result) => {
       if (result.length > 0) {
-        let ytid = result[0]["id"]["videoId"];
+        const ytid = result[0]["id"]["videoId"];
         if (app.cfg.lyrics.enable_yt) {
           loadYT(ytid, app.cfg.lyrics.mxm_language ?? "en");
         } else {
@@ -3115,22 +3115,22 @@ const helpers = {
       }
 
       function loadYT(id, lang) {
-        let req = new XMLHttpRequest();
-        let url = `https://www.youtube.com/watch?&v=${id}`;
+        const req = new XMLHttpRequest();
+        const url = `https://www.youtube.com/watch?&v=${id}`;
         req.open("GET", url, true);
         req.onerror = function (e) {
           this.loadMXM();
         };
         req.onload = function () {
           // console.log(this.responseText);
-          let res = this.responseText;
-          let captionurl1 = res.substring(res.indexOf(`{"playerCaptionsRenderer":{"baseUrl":"`) + `{"playerCaptionsRenderer":{"baseUrl":"`.length);
-          let captionurl = captionurl1.substring(0, captionurl1.indexOf(`"`));
+          const res = this.responseText;
+          const captionurl1 = res.substring(res.indexOf(`{"playerCaptionsRenderer":{"baseUrl":"`) + `{"playerCaptionsRenderer":{"baseUrl":"`.length);
+          const captionurl = captionurl1.substring(0, captionurl1.indexOf(`"`));
           if (captionurl.includes("timedtext")) {
-            let json = JSON.parse(`{"url": "${captionurl}"}`);
-            let newurl = json.url + `&lang=${lang}&format=ttml`;
+            const json = JSON.parse(`{"url": "${captionurl}"}`);
+            const newurl = json.url + `&lang=${lang}&format=ttml`;
 
-            let req2 = new XMLHttpRequest();
+            const req2 = new XMLHttpRequest();
 
             req2.open("GET", newurl, true);
             req2.onerror = function (e) {
@@ -3158,10 +3158,10 @@ const helpers = {
   },
   loadMXM() {
     let attempt = 0;
-    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.title ?? "" : "");
-    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.artistName ?? "" : "");
-    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1 : -1);
-    const id = encodeURIComponent(this.mk.nowPlayingItem != null ? app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem["songId"] ?? "" : "");
+    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "");
+    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
+    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
+    const id = encodeURIComponent(this.mk.nowPlayingItem != null ? (app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem["songId"] ?? "") : "");
     let lrcfile = "";
     let richsync = [];
     const lang = app.cfg.lyrics.mxm_language; //  translation language
@@ -3179,17 +3179,17 @@ const helpers = {
         // app.loadAMLyrics();
       } else {
         attempt = attempt + 1;
-        let url = "https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0&t=" + revisedRandId();
-        let req = new XMLHttpRequest();
+        const url = "https://apic-desktop.musixmatch.com/ws/1.1/token.get?app_id=web-desktop-app-v1.0&t=" + revisedRandId();
+        const req = new XMLHttpRequest();
         req.overrideMimeType("application/json");
         req.open("GET", url, true);
         req.setRequestHeader("authority", "apic-desktop.musixmatch.com");
         req.onload = function () {
           try {
-            let jsonResponse = JSON.parse(this.responseText);
-            let status2 = jsonResponse["message"]["header"]["status_code"];
+            const jsonResponse = JSON.parse(this.responseText);
+            const status2 = jsonResponse["message"]["header"]["status_code"];
             if (status2 == 200) {
-              let token = jsonResponse["message"]["body"]["user_token"] ?? "";
+              const token = jsonResponse["message"]["body"]["user_token"] ?? "";
               if (token != "" && token != "UpgradeOnlyUpgradeOnlyUpgradeOnlyUpgradeOnly") {
                 console.debug("200 token", mode);
                 // token good
@@ -3224,20 +3224,20 @@ const helpers = {
     }
 
     function getMXMSubs(track, artist, token, lang, time, id) {
-      let usertoken = encodeURIComponent(token);
-      let richsyncQuery = app.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
-      let timecustom = !time || (time && time < 0) ? "" : `&f_subtitle_length=${time}&q_duration=${time}&f_subtitle_length_max_deviation=40`;
-      let itunesid = id && id != "" ? `&track_itunes_id=${id}` : "";
-      let url = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched" + richsyncQuery + "&subtitle_format=lrc&q_artist=" + artist + "&q_track=" + track + itunesid + "&usertoken=" + usertoken + timecustom + "&app_id=web-desktop-app-v1.0&t=" + revisedRandId();
-      let req = new XMLHttpRequest();
+      const usertoken = encodeURIComponent(token);
+      const richsyncQuery = app.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
+      const timecustom = !time || (time && time < 0) ? "" : `&f_subtitle_length=${time}&q_duration=${time}&f_subtitle_length_max_deviation=40`;
+      const itunesid = id && id != "" ? `&track_itunes_id=${id}` : "";
+      const url = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched" + richsyncQuery + "&subtitle_format=lrc&q_artist=" + artist + "&q_track=" + track + itunesid + "&usertoken=" + usertoken + timecustom + "&app_id=web-desktop-app-v1.0&t=" + revisedRandId();
+      const req = new XMLHttpRequest();
       req.overrideMimeType("application/json");
       req.open("GET", url, true);
       req.setRequestHeader("authority", "apic-desktop.musixmatch.com");
       req.onload = function () {
         try {
-          let jsonResponse = JSON.parse(this.responseText);
+          const jsonResponse = JSON.parse(this.responseText);
           console.debug(jsonResponse);
-          let status1 = jsonResponse["message"]["header"]["status_code"];
+          const status1 = jsonResponse["message"]["header"]["status_code"];
 
           if (status1 == 200) {
             let id = "";
@@ -3247,7 +3247,7 @@ const helpers = {
                 lrcfile = jsonResponse["message"]["body"]["macro_calls"]["track.subtitles.get"]["message"]["body"]["subtitle_list"][0]["subtitle"]["subtitle_body"];
 
                 try {
-                  let lrcrich = jsonResponse["message"]["body"]["macro_calls"]["track.richsync.get"]["message"]["body"]["richsync"]["richsync_body"];
+                  const lrcrich = jsonResponse["message"]["body"]["macro_calls"]["track.richsync.get"]["message"]["body"]["richsync"]["richsync_body"];
                   richsync = JSON.parse(lrcrich);
                   app.richlyrics = richsync;
                 } catch (_) {}
@@ -3261,11 +3261,11 @@ const helpers = {
                   console.log("ok");
                   // process lrcfile to json here
                   app.lyricsMediaItem = lrcfile;
-                  let u = app.lyricsMediaItem.split(/[\r\n]/);
-                  let preLrc = [];
-                  for (var i = u.length - 1; i >= 0; i--) {
-                    let xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
-                    let end = preLrc.length > 0 ? preLrc[preLrc.length - 1].startTime ?? 99999 : 99999;
+                  const u = app.lyricsMediaItem.split(/[\r\n]/);
+                  const preLrc = [];
+                  for (let i = u.length - 1; i >= 0; i--) {
+                    const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
+                    const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                     preLrc.push({
                       startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
                       endTime: end,
@@ -3282,7 +3282,7 @@ const helpers = {
                     });
                   app.lyrics = preLrc.reverse();
                 } else {
-                  let preLrc = richsync.map(function (item) {
+                  const preLrc = richsync.map(function (item) {
                     return {
                       startTime: item.ts,
                       endTime: item.te,
@@ -3332,26 +3332,26 @@ const helpers = {
 
     function getMXMTrans(id, lang, token) {
       if (lang != "disabled" && id != "") {
-        let usertoken = encodeURIComponent(token);
-        let url2 = "https://apic-desktop.musixmatch.com/ws/1.1/crowd.track.translations.get?translation_fields_set=minimal&selected_language=" + lang + "&track_id=" + id + "&comment_format=text&part=user&format=json&usertoken=" + usertoken + "&app_id=web-desktop-app-v1.0&t=" + revisedRandId();
-        let req2 = new XMLHttpRequest();
+        const usertoken = encodeURIComponent(token);
+        const url2 = "https://apic-desktop.musixmatch.com/ws/1.1/crowd.track.translations.get?translation_fields_set=minimal&selected_language=" + lang + "&track_id=" + id + "&comment_format=text&part=user&format=json&usertoken=" + usertoken + "&app_id=web-desktop-app-v1.0&t=" + revisedRandId();
+        const req2 = new XMLHttpRequest();
         req2.overrideMimeType("application/json");
         req2.open("GET", url2, true);
         req2.setRequestHeader("authority", "apic-desktop.musixmatch.com");
         req2.onload = function () {
           try {
-            let jsonResponse2 = JSON.parse(this.responseText);
+            const jsonResponse2 = JSON.parse(this.responseText);
             console.log(jsonResponse2);
-            let status2 = jsonResponse2["message"]["header"]["status_code"];
+            const status2 = jsonResponse2["message"]["header"]["status_code"];
             if (status2 == 200) {
               try {
-                let preTrans = [];
-                let u = app.lyrics;
-                let translation_list = jsonResponse2["message"]["body"]["translations_list"];
+                const preTrans = [];
+                const u = app.lyrics;
+                const translation_list = jsonResponse2["message"]["body"]["translations_list"];
                 if (translation_list.length > 0) {
-                  for (var i = 0; i < u.length - 1; i++) {
+                  for (let i = 0; i < u.length - 1; i++) {
                     preTrans[i] = "";
-                    for (var trans_line of translation_list) {
+                    for (const trans_line of translation_list) {
                       if (u[i].line == " " + trans_line["translation"]["matched_line"] || u[i].line == trans_line["translation"]["matched_line"]) {
                         u[i].translation = trans_line["translation"]["description"];
                         break;
@@ -3382,32 +3382,32 @@ const helpers = {
     }
   },
   loadNeteaseLyrics() {
-    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.title ?? "" : "");
-    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.artistName ?? "" : "");
-    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1 : -1);
-    var url = `http://music.163.com/api/search/get/?csrf_token=hlpretag=&hlposttag=&s=${track + " " + artist}&type=1&offset=0&total=true&limit=6`;
-    var req = new XMLHttpRequest();
+    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "");
+    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
+    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
+    const url = `http://music.163.com/api/search/get/?csrf_token=hlpretag=&hlposttag=&s=${track + " " + artist}&type=1&offset=0&total=true&limit=6`;
+    const req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open("GET", url, true);
     req.onload = function () {
       try {
-        var jsonResponse = JSON.parse(req.responseText);
-        var id = jsonResponse["result"]["songs"][0]["id"];
-        var url2 = "https://music.163.com/api/song/lyric?os=pc&id=" + id + "&lv=-1&kv=-1&tv=-1";
-        var req2 = new XMLHttpRequest();
+        const jsonResponse = JSON.parse(req.responseText);
+        const id = jsonResponse["result"]["songs"][0]["id"];
+        const url2 = "https://music.163.com/api/song/lyric?os=pc&id=" + id + "&lv=-1&kv=-1&tv=-1";
+        const req2 = new XMLHttpRequest();
         req2.overrideMimeType("application/json");
         req2.open("GET", url2, true);
         req2.onload = function () {
           try {
-            var jsonResponse2 = JSON.parse(req2.responseText);
-            var lrcfile = jsonResponse2["lrc"]["lyric"];
+            const jsonResponse2 = JSON.parse(req2.responseText);
+            const lrcfile = jsonResponse2["lrc"]["lyric"];
             app.lyricsMediaItem = lrcfile;
-            let u = app.lyricsMediaItem.split(/[\n]/);
-            let preLrc = [];
-            for (var i = u.length - 1; i >= 0; i--) {
-              let xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
+            const u = app.lyricsMediaItem.split(/[\n]/);
+            const preLrc = [];
+            for (let i = u.length - 1; i >= 0; i--) {
+              const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
               if (xline != null) {
-                let end = preLrc.length > 0 ? preLrc[preLrc.length - 1].startTime ?? 99999 : 99999;
+                const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                 preLrc.push({
                   startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
                   endTime: end,
@@ -3439,22 +3439,22 @@ const helpers = {
   },
   loadQQLyrics() {
     if (!app.cfg.lyrics.enable_qq) return;
-    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.title ?? "" : "");
-    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? this.mk.nowPlayingItem.artistName ?? "" : "");
-    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1 : -1);
-    var url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=${track + " " + artist}&t=0&n=1&page=1&cr=1&new_json=1&format=json&platform=yqq.json`;
+    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "");
+    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
+    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
+    const url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=${track + " " + artist}&t=0&n=1&page=1&cr=1&new_json=1&format=json&platform=yqq.json`;
 
-    var req = new XMLHttpRequest();
+    const req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
     req.open("GET", url, true);
     req.onload = function () {
       try {
-        var jsonResponse = JSON.parse(req.responseText);
-        let id = jsonResponse?.data?.song?.list[0]?.mid;
+        const jsonResponse = JSON.parse(req.responseText);
+        const id = jsonResponse?.data?.song?.list[0]?.mid;
         console.log(jsonResponse);
-        let usz = new Date().getTime();
-        var url2 = `https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&songmid=${id}&pcachetime=${usz}&g_tk=5381&loginUin=3003436226&hostUin=0&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`;
-        var req2 = new XMLHttpRequest();
+        const usz = new Date().getTime();
+        const url2 = `https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?-=MusicJsonCallback_lrc&songmid=${id}&pcachetime=${usz}&g_tk=5381&loginUin=3003436226&hostUin=0&inCharset=utf-8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`;
+        const req2 = new XMLHttpRequest();
         req2.overrideMimeType("application/json");
         req2.open("GET", url2, true);
         req2.onload = function () {
@@ -3467,16 +3467,16 @@ const helpers = {
               const doc = new DOMParser().parseFromString(input, "text/html");
               return doc.documentElement.textContent;
             };
-            var jsonResponse2 = JSON.parse(req2.responseText.replace("MusicJsonCallback(", "").replace("})", "}"));
-            var lrcfile = htmlDecode(b64_to_utf8(jsonResponse2["lyric"]));
+            const jsonResponse2 = JSON.parse(req2.responseText.replace("MusicJsonCallback(", "").replace("})", "}"));
+            const lrcfile = htmlDecode(b64_to_utf8(jsonResponse2["lyric"]));
             app.lyricsMediaItem = lrcfile;
-            let u = app.lyricsMediaItem.split(/[\n]/);
+            const u = app.lyricsMediaItem.split(/[\n]/);
 
-            let preLrc = [];
-            for (var i = u.length - 1; i >= 0; i--) {
-              let xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
+            const preLrc = [];
+            for (let i = u.length - 1; i >= 0; i--) {
+              const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
               if (xline != null) {
-                let end = preLrc.length > 0 ? preLrc[preLrc.length - 1].startTime ?? 99999 : 99999;
+                const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                 preLrc.push({
                   startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
                   endTime: end,
@@ -3518,28 +3518,28 @@ const helpers = {
     req.send();
   },
   toMS(str) {
-    let rawTime = str.match(/(\d+:)?(\d+:)?(\d+)(\.\d+)?/);
-    let hours = rawTime[2] != null ? rawTime[1].replace(":", "") : 0;
-    let minutes = rawTime[2] != null ? hours * 60 + rawTime[2].replace(":", "") * 1 : rawTime[1] != null ? rawTime[1].replace(":", "") : 0;
-    let seconds = rawTime[3] != null ? rawTime[3] : 0;
-    let milliseconds = rawTime[4] != null ? rawTime[4].replace(".", "") : 0;
+    const rawTime = str.match(/(\d+:)?(\d+:)?(\d+)(\.\d+)?/);
+    const hours = rawTime[2] != null ? rawTime[1].replace(":", "") : 0;
+    const minutes = rawTime[2] != null ? hours * 60 + rawTime[2].replace(":", "") * 1 : rawTime[1] != null ? rawTime[1].replace(":", "") : 0;
+    const seconds = rawTime[3] != null ? rawTime[3] : 0;
+    const milliseconds = rawTime[4] != null ? rawTime[4].replace(".", "") : 0;
     return parseFloat(`${minutes * 60 + seconds * 1}.${milliseconds * 1}`);
   },
   parseTTML() {
     this.lyrics = [];
-    let preLrc = [];
-    let xml = this.stringToXml(this.lyricsMediaItem);
-    let lyricsLines = xml.getElementsByTagName("p");
+    const preLrc = [];
+    const xml = this.stringToXml(this.lyricsMediaItem);
+    const lyricsLines = xml.getElementsByTagName("p");
     let synced = true;
-    let endTimes = [];
+    const endTimes = [];
     if (xml.getElementsByTagName("tt")[0].getAttribute("itunes:timing") === "None") {
       synced = false;
     }
     endTimes.push(0);
     if (synced) {
-      for (let element of lyricsLines) {
-        let start = this.toMS(element.getAttribute("begin"));
-        let end = this.toMS(element.getAttribute("end"));
+      for (const element of lyricsLines) {
+        const start = this.toMS(element.getAttribute("begin"));
+        const end = this.toMS(element.getAttribute("end"));
         if (start - endTimes[endTimes.length - 1] > 5 && endTimes[endTimes.length - 1] != 0) {
           preLrc.push({
             startTime: endTimes[endTimes.length - 1],
@@ -3562,7 +3562,7 @@ const helpers = {
           line: "lrcInstrumental",
         });
     } else {
-      for (let element of lyricsLines) {
+      for (const element of lyricsLines) {
         preLrc.push({
           startTime: 9999999,
           endTime: 9999999,
@@ -3573,13 +3573,13 @@ const helpers = {
     this.lyrics = preLrc;
   },
   parseLyrics() {
-    let xml = this.stringToXml(this.lyricsMediaItem);
-    let json = xmlToJson(xml);
+    const xml = this.stringToXml(this.lyricsMediaItem);
+    const json = xmlToJson(xml);
     this.lyrics = json;
   },
   stringToXml(st) {
     // string to xml
-    let xml = new DOMParser().parseFromString(st, "text/xml");
+    const xml = new DOMParser().parseFromString(st, "text/xml");
     return xml;
   },
   getCurrentTime() {
@@ -3589,13 +3589,13 @@ const helpers = {
     this.mk.seekToTime(time);
   },
   parseTime(value) {
-    let minutes = Math.floor(value / 60000);
-    let seconds = ((value % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(value / 60000);
+    const seconds = ((value % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   },
   parseTimeDecimal(value) {
-    let minutes = Math.floor(value / 60000);
-    let seconds = ((value % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(value / 60000);
+    const seconds = ((value % 60000) / 1000).toFixed(0);
     return minutes + "." + (seconds < 10 ? "0" : "") + seconds;
   },
   hmsToSecondsOnly(str) {
@@ -3611,10 +3611,10 @@ const helpers = {
     return s;
   },
   getLyricBGStyle(start, end) {
-    let currentTime = this.getCurrentTime();
+    const currentTime = this.getCurrentTime();
     // let duration = this.mk.nowPlayingItem.attributes.durationInMillis
-    let start2 = this.hmsToSecondsOnly(start);
-    let end2 = this.hmsToSecondsOnly(end);
+    const start2 = this.hmsToSecondsOnly(start);
+    const end2 = this.hmsToSecondsOnly(end);
     // let currentProgress = ((100 * (currentTime)) / (end2))
     // check if currenttime is between start and end
     this.player.lyricsDebug.start = start2;
@@ -3629,7 +3629,7 @@ const helpers = {
     }
   },
   playMediaItemById(id, kind, isLibrary, raurl = "") {
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     console.debug(id, truekind, isLibrary);
     try {
       if (truekind.includes("artist")) {
@@ -3658,26 +3658,26 @@ const helpers = {
   queueParentandplayChild(parent, childIndex, item) {
     /* Randomize array in-place using Durstenfeld shuffle algorithm */
     function shuffleArray(array) {
-      for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
         array[i] = array[j];
         array[j] = temp;
       }
     }
 
-    let kind = parent.substring(0, parent.indexOf(":"));
-    let id = parent.substring(parent.indexOf(":") + 1, parent.length);
-    let truekind = !kind.endsWith("s") ? kind + "s" : kind;
+    const kind = parent.substring(0, parent.indexOf(":"));
+    const id = parent.substring(parent.indexOf(":") + 1, parent.length);
+    const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     console.log(truekind, id);
 
     try {
       if (parent == "playlist:ciderlocal") {
-        let u = app.library.localsongs.map((i) => {
+        const u = app.library.localsongs.map((i) => {
           return i.id;
         });
         app.mk.setQueue({ episodes: u }).then(() => {
-          let id = app.mk.queue._itemIDs.findIndex((element) => element == item.id);
+          const id = app.mk.queue._itemIDs.findIndex((element) => element == item.id);
           app.mk.changeToMediaAtIndex(id);
         });
       } else if (app.library.songs.displayListing.length > childIndex && parent == "librarysongs") {
@@ -3686,7 +3686,7 @@ const helpers = {
           childIndex = app.library.songs.displayListing.indexOf(item);
         }
 
-        let query = app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
+        const query = app.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
 
         app.mk.stop().then(() => {
           if (item) {
@@ -3732,9 +3732,9 @@ const helpers = {
               })
               .then(function () {
                 app.mk.play().then(() => {
-                  let data = JSON.parse(parent.split("listitem-hr")[1] ?? "[]");
-                  let itemsToPlay = {};
-                  let u = data.map((x) => x.id);
+                  const data = JSON.parse(parent.split("listitem-hr")[1] ?? "[]");
+                  const itemsToPlay = {};
+                  const u = data.map((x) => x.id);
                   try {
                     data.splice(u.indexOf(item.attributes.playParams.id ?? item.id), 1);
                   } catch (e) {}
@@ -3748,8 +3748,8 @@ const helpers = {
                     itemsToPlay[item.kind].push(item.id);
                   });
                   // loop through itemsToPlay
-                  for (let kind in itemsToPlay) {
-                    let ids = itemsToPlay[kind];
+                  for (const kind in itemsToPlay) {
+                    const ids = itemsToPlay[kind];
                     if (ids.length > 0) {
                       app.mk.playLater({ [kind + "s"]: itemsToPlay[kind] });
                     }
@@ -3757,8 +3757,8 @@ const helpers = {
                 });
               });
           } else {
-            let data = JSON.parse(parent.split("listitem-hr")[1] ?? "[]");
-            let itemsToPlay = {};
+            const data = JSON.parse(parent.split("listitem-hr")[1] ?? "[]");
+            const itemsToPlay = {};
             data.forEach((item) => {
               if (!itemsToPlay[item.kind]) {
                 itemsToPlay[item.kind] = [];
@@ -3768,8 +3768,8 @@ const helpers = {
             // loop through itemsToPlay
             app.mk.queue.splice(0, app.mk.queue._itemIDs.length);
             let ind = 0;
-            for (let kind in itemsToPlay) {
-              let ids = itemsToPlay[kind];
+            for (const kind in itemsToPlay) {
+              const ids = itemsToPlay[kind];
               if (ids.length > 0) {
                 if (app.mk.queue._itemIDs.length > 0) {
                   app.mk.playLater({ [kind + "s"]: itemsToPlay[kind] }).then(function () {
@@ -3803,8 +3803,8 @@ const helpers = {
               .then(function () {
                 app.mk.changeToMediaAtIndex(app.mk.queue._itemIDs.indexOf(item.id) ?? 1).then(function () {
                   if (app.showingPlaylist && app.showingPlaylist.id == id) {
-                    let query = app.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
-                    let u = query;
+                    const query = app.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+                    const u = query;
                     if (app.mk.shuffleMode == 1) {
                       shuffleArray(u);
                     } else {
@@ -3818,8 +3818,8 @@ const helpers = {
                     app.mk.queue.append(u);
                   } else {
                     app.getPlaylistFromID(id, true).then(function () {
-                      let query = app.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
-                      let u = query;
+                      const query = app.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+                      const u = query;
                       if (app.mk.shuffleMode == 1) {
                         shuffleArray(u);
                       } else {
@@ -3934,17 +3934,17 @@ const helpers = {
     if (e.keyCode == "40") {
       if (this.search.hints.length - 1 < this.search.cursor + 1) return;
       this.search.cursor++;
-      let item = this.search.hints[this.search.cursor];
-      this.search.term = item.content ? item.content?.attributes?.name ?? "" : item.displayTerm;
+      const item = this.search.hints[this.search.cursor];
+      this.search.term = item.content ? (item.content?.attributes?.name ?? "") : item.displayTerm;
     } else if (e.keyCode == "38") {
       if (this.search.cursor == 0) return;
       this.search.cursor--;
-      let item = this.search.hints[this.search.cursor];
-      this.search.term = item.content ? item.content?.attributes?.name ?? "" : item.displayTerm;
+      const item = this.search.hints[this.search.cursor];
+      this.search.term = item.content ? (item.content?.attributes?.name ?? "") : item.displayTerm;
     }
   },
   async searchQuery(term = this.search.term) {
-    let self = this;
+    const self = this;
     if (typeof term === "object") {
       this.routeView(term);
       this.search.term = "";
@@ -4002,17 +4002,17 @@ const helpers = {
     });
   },
   async inLibrary(items = []) {
-    let types = [];
+    const types = [];
 
-    for (let item of items) {
+    for (const item of items) {
       let type = item.type;
       if (type.slice(-1) != "s") {
         type += "s";
       }
       type = type.replace("library-", "");
-      let id = item.attributes.playParams?.catalogId ?? item.attributes.playParams.id ?? item.id;
+      const id = item.attributes.playParams?.catalogId ?? item.attributes.playParams.id ?? item.id;
 
-      let index = types.findIndex(function (type) {
+      const index = types.findIndex(function (type) {
         return type.type == this;
       }, type);
       if (index == -1) {
@@ -4027,7 +4027,7 @@ const helpers = {
       };
     });
     types2 = types2.reduce(function (result, item) {
-      var key = Object.keys(item)[0]; //first property: a, b, c
+      const key = Object.keys(item)[0]; //first property: a, b, c
       result[key] = item[key];
       return result;
     }, {});
@@ -4043,10 +4043,10 @@ const helpers = {
     ).data.data;
   },
   isInLibrary(playParams) {
-    let self = this;
+    const self = this;
     let id = "";
     // ugly code to check if current playback item is in library
-    if (typeof playParams == "undefined") {
+    if (typeof playParams === "undefined") {
       return true;
     }
     if (playParams["isLibrary"]) {
@@ -4056,7 +4056,7 @@ const helpers = {
     } else if (playParams["id"]) {
       id = playParams["id"];
     }
-    let found = this.library.songs.listing.filter((item) => {
+    const found = this.library.songs.listing.filter((item) => {
       if (item["attributes"]) {
         if (item["attributes"]["playParams"] && item["attributes"]["playParams"]["catalogId"] == id) {
           return item;
@@ -4078,7 +4078,7 @@ const helpers = {
   },
   getMediaItemArtwork(url, height = 64, width) {
     try {
-      if (typeof url == "undefined" || url == "") {
+      if (typeof url === "undefined" || url == "") {
         return "./assets/MissingArtwork.svg";
       }
       height = parseInt(height * window.devicePixelRatio);
@@ -4105,9 +4105,9 @@ const helpers = {
     return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
   },
   getNowPlayingArtworkBG(size = 32, force = false) {
-    let self = this;
+    const self = this;
     if (typeof this.mk.nowPlayingItem === "undefined") return;
-    let bginterval = setInterval(() => {
+    const bginterval = setInterval(() => {
       if (!this.mkReady()) {
         return "";
       }
@@ -4187,7 +4187,7 @@ const helpers = {
     } catch (e) {}
   },
   quickPlay(query) {
-    let self = this;
+    const self = this;
     MusicKit.getInstance()
       .api.search(query, { limit: 2, types: "songs" })
       .then(function (data) {
@@ -4206,16 +4206,16 @@ const helpers = {
   },
   async getRating(item) {
     let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
-    let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : item.attributes?.playParams?.id ?? item.id;
+    let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
     if (item.id != null && item.id.toString().startsWith("i.")) {
       if (!type.startsWith("library-")) {
         type = "library-" + type;
       }
       id = item.id;
     }
-    let response = await this.mk.api.v3.music(`/v1/me/ratings/${type}?platform=web&ids=${type.includes("library") ? item.id : id}`);
+    const response = await this.mk.api.v3.music(`/v1/me/ratings/${type}?platform=web&ids=${type.includes("library") ? item.id : id}`);
     if (response.data.data.length != 0) {
-      let value = response.data.data[0].attributes.value;
+      const value = response.data.data[0].attributes.value;
       return value;
     } else {
       return 0;
@@ -4223,7 +4223,7 @@ const helpers = {
   },
   love(item) {
     let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
-    let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : item.attributes?.playParams?.id ?? item.id;
+    let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
     if (item.id != null && item.id.toString().startsWith("i.")) {
       if (!type.startsWith("library-")) {
         type = "library-" + type;
@@ -4248,7 +4248,7 @@ const helpers = {
   },
   dislike(item) {
     let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
-    let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : item.attributes?.playParams?.id ?? item.id;
+    let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
     if (item.id != null && item.id.toString().startsWith("i.")) {
       if (!type.startsWith("library-")) {
         type = "library-" + type;
@@ -4386,7 +4386,7 @@ const helpers = {
       notyf.success("Device paired successfully!");
     }
     console.log("delete idx-pre", identifier);
-    let idx = this.airplayTrys.findIndex((a) => {
+    const idx = this.airplayTrys.findIndex((a) => {
       return a.id == identifier;
     });
     console.log("delete idx", idx);
@@ -4399,7 +4399,7 @@ const helpers = {
   airplayDisconnect(dropped, array = [], identifier = "") {
     console.log("airplay dropped", dropped, array, identifier);
     if (dropped) {
-      let [ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv] = array;
+      const [ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv] = array;
       console.log(ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv);
       let idx = this.airplayTrys.findIndex((a) => {
         return a.id == ipv4 + ":" + ipport + "ap";
@@ -4452,11 +4452,11 @@ const helpers = {
     }
   },
   async nowPlayingContextMenu(event) {
-    let self = this;
-    let data_type = this.mk.nowPlayingItem.playParams.kind;
-    let item_id = this.mk.nowPlayingItem.attributes.playParams.id ?? this.mk.nowPlayingItem.id;
-    let isLibrary = this.mk.nowPlayingItem.attributes.playParams.isLibrary ?? false;
-    let params = {
+    const self = this;
+    const data_type = this.mk.nowPlayingItem.playParams.kind;
+    const item_id = this.mk.nowPlayingItem.attributes.playParams.id ?? this.mk.nowPlayingItem.id;
+    const isLibrary = this.mk.nowPlayingItem.attributes.playParams.isLibrary ?? false;
+    const params = {
       "fields[songs]": "inLibrary",
       "fields[albums]": "inLibrary",
       relate: "library",
@@ -4464,8 +4464,8 @@ const helpers = {
     };
     app.selectedMediaItems = [];
     app.select_selectMediaItem(item_id, data_type, 0, "12344", isLibrary);
-    let useMenu = "normal";
-    let menus = {
+    const useMenu = "normal";
+    const menus = {
       multiple: {
         items: [],
       },
@@ -4644,7 +4644,7 @@ const helpers = {
         nowPlayingItem.attributes.playParams.id = app.mk.nowPlayingItem.id;
         nowPlayingItem.id = app.mk.nowPlayingItem.id;
       }
-      let result = await this.inLibrary([nowPlayingItem]);
+      const result = await this.inLibrary([nowPlayingItem]);
       if (result[0].attributes.inLibrary) {
         menus.normal.items.find((x) => x.id == "addToLibrary").hidden = true;
         menus.normal.items.find((x) => x.id == "removeFromLibrary").hidden = false;
@@ -4656,7 +4656,7 @@ const helpers = {
     }
 
     try {
-      let rating = await app.getRating(app.mk.nowPlayingItem);
+      const rating = await app.getRating(app.mk.nowPlayingItem);
       if (rating == 0) {
         menus.normal.headerItems.find((x) => x.id == "love").disabled = false;
         menus.normal.headerItems.find((x) => x.id == "dislike").disabled = false;
@@ -4772,7 +4772,7 @@ const helpers = {
     }
   },
   formatTimezoneOffset: (e = new Date()) => {
-    let leadingZeros = (e, s = 2) => {
+    const leadingZeros = (e, s = 2) => {
       let n = "" + e;
       for (; n.length < s; ) n = "0" + n;
       return n;
@@ -4782,7 +4782,7 @@ const helpers = {
       n = Math.floor(Math.abs(s) / 60),
       d = Math.round(Math.abs(s) % 60);
     let h = "+";
-    return 0 !== s && (h = s > 0 ? "-" : "+"), `${h}${leadingZeros(n, 2)}:${leadingZeros(d, 2)}`;
+    return (0 !== s && (h = s > 0 ? "-" : "+"), `${h}${leadingZeros(n, 2)}:${leadingZeros(d, 2)}`);
   },
   toggleHideUserInfo() {
     if (this.chrome.hideUserInfo) {
@@ -4795,8 +4795,8 @@ const helpers = {
   },
   isElementOverflowing(selector) {
     try {
-      let element = document.querySelector(selector);
-      var overflowX = element.offsetWidth < element.scrollWidth,
+      const element = document.querySelector(selector);
+      const overflowX = element.offsetWidth < element.scrollWidth,
         overflowY = element.offsetHeight < element.scrollHeight;
       element.setAttribute("data-value", "\xa0\xa0\xa0\xa0" + element.textContent);
 
@@ -4827,7 +4827,7 @@ const helpers = {
     ipcRenderer.send("share-menu", url);
   },
   arrayToChunk(arr, chunkSize) {
-    let R = [];
+    const R = [];
     for (let i = 0, len = arr.length; i < len; i += chunkSize) {
       R.push(arr.slice(i, i + chunkSize));
     }
@@ -4835,7 +4835,7 @@ const helpers = {
   },
   SpacePause() {
     const elems = document.querySelectorAll("input");
-    for (let elem of elems) {
+    for (const elem of elems) {
       if (elem === document.activeElement) {
         return;
       }
@@ -4846,10 +4846,10 @@ const helpers = {
     }
   },
   async MKJSLang() {
-    let u = this.cfg.general.language;
+    const u = this.cfg.general.language;
     // use MusicKit.getInstance or crash
     try {
-      let item = await MusicKit.getInstance().api.v3.music(`v1/storefronts/${app.mk.storefrontId}`);
+      const item = await MusicKit.getInstance().api.v3.music(`v1/storefronts/${app.mk.storefrontId}`);
       let langcodes = item.data.data[0].attributes.supportedLanguageTags;
       if (langcodes)
         langcodes = langcodes.map(function (u) {
@@ -4872,7 +4872,7 @@ const helpers = {
       return await sellang;
     } catch (err) {
       console.log("locale err", err);
-      let langcodes = [
+      const langcodes = [
         "af",
         "sq",
         "ar",
@@ -4995,30 +4995,30 @@ const helpers = {
     ipcRenderer.send("cc-auth");
   },
   _playRadioStream(e) {
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = process;
     xhr.open("GET", e, true);
     xhr.send();
-    let self = this;
+    const self = this;
 
     function process() {
       if (xhr.readyState == 4) {
-        let sources = xhr.responseText.match(/^(?!#)(?!\s).*$/gm).filter(function (element) {
+        const sources = xhr.responseText.match(/^(?!#)(?!\s).*$/gm).filter(function (element) {
           return element;
         });
         // Load first source
-        let src = sources[0];
+        const src = sources[0];
         if (src.includes("http")) {
           app.mk._services.mediaItemPlayback._currentPlayer._playAssetURL(src, false);
         } else {
           if (Hls.isSupported()) {
-            let d = "WIDEVINE_SOFTWARE";
-            let h = {
+            const d = "WIDEVINE_SOFTWARE";
+            const h = {
               initDataTypes: ["cenc", "keyids"],
               distinctiveIdentifier: "optional",
               persistentState: "required",
             };
-            let p = {
+            const p = {
               platformInfo: { requiresCDMAttachOnStart: !0, maxSecurityLevel: d, keySystemConfig: h },
               appData: { serviceName: "Apple Music" },
             };

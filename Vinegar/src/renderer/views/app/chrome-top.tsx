@@ -11,197 +11,210 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
   return (
     <>
       <div
-        className="app-chrome"
+        className={"app-chrome"}
         style={{ display: chrome.topChromeVisible ? "" : "none" }}>
-        <div className="app-chrome--left">
+        <div className={"app-chrome--left"}>
           {chrome.windowControlPosition === "left" && !chrome.nativeControls ? (
-            <div className="app-chrome-item full-height">
-              <div className="window-controls-macos">
+            <div className={"app-chrome-item full-height"}>
+              <div className={"window-controls-macos"}>
                 <div
-                  className="close"
-                  onClick={() => ipcRenderer.send("close")}></div>
+                  className={"close"}
+                  onClick={() => ipcRenderer.send("close")}
+                />
                 <div
-                  className="minimize"
-                  onClick={() => ipcRenderer.send("minimize")}></div>
+                  className={"minimize"}
+                  onClick={() => ipcRenderer.send("minimize")}
+                />
                 {chrome.maximized ? (
                   <div
-                    className="minmax restore"
-                    onClick={() => ipcRenderer.send("maximize")}></div>
+                    className={"minmax restore"}
+                    onClick={() => ipcRenderer.send("maximize")}
+                  />
                 ) : (
                   <div
-                    className="minmax"
-                    onClick={() => ipcRenderer.send("maximize")}></div>
+                    className={"minmax"}
+                    onClick={() => ipcRenderer.send("maximize")}
+                  />
                 )}
               </div>
             </div>
           ) : (
-            <div className="app-chrome-item full-height">
+            <div className={"app-chrome-item full-height"}>
               <button
-                className="app-mainmenu"
+                className={"app-mainmenu"}
                 blur={mainMenuVisibility(false)}
                 onClick={() => mainMenuVisibility(true)}
-                contextmenu={mainMenuVisibility(true)}
-                className="{active: chrome.menuOpened}"
-                aria-label={$root.getLz("term.quickNav")}></button>
+                contextMenu={mainMenuVisibility(true)}
+                className={"{active: chrome.menuOpened}"}
+                aria-label={$root.getLz("term.quickNav")}
+              />
             </div>
           )}
           {getThemeDirective("appNavigation") !== "seperate" ? (
             <template>
-              {getThemeDirective("windowLayout") === "twopanel" && <div className="vdiv"></div>}
-              <div className="app-chrome-item">
+              {getThemeDirective("windowLayout") === "twopanel" && <div className={"vdiv"} />}
+              <div className={"app-chrome-item"}>
                 <button
-                  className="playback-button navigation"
+                  className={"playback-button navigation"}
                   onClick={() => navigateBack()}
                   title={$root.getLz("term.navigateBack")}
                   v-b-tooltiphover>
-                  <SVGIcon url="./views/svg/chevron-left.svg"></SVGIcon>
+                  <SVGIcon url={"./views/svg/chevron-left.svg"} />
                 </button>
               </div>
-              <div className="app-chrome-item">
+              <div className={"app-chrome-item"}>
                 <button
-                  className="playback-button navigation"
+                  className={"playback-button navigation"}
                   onClick={() => navigateForward()}
                   title={$root.getLz("term.navigateForward")}
                   v-b-tooltiphover>
-                  <SVGIcon url="./views/svg/chevron-right.svg"></SVGIcon>
+                  <SVGIcon url={"./views/svg/chevron-right.svg"} />
                 </button>
               </div>
               {getThemeDirective("windowLayout") === "twopanel" && (
-                <div className="app-chrome-item">
+                <div className={"app-chrome-item"}>
                   <button
-                    className="playback-button collapseLibrary"
+                    className={"playback-button collapseLibrary"}
                     v-b-tooltiphover
                     title={chrome.sidebarCollapsed ? getLz("action.showLibrary") : getLz("action.hideLibrary")}
                     onClick={() => {
                       chrome.sidebarCollapsed = !chrome.sidebarCollapsed;
                     }}>
                     <AnimatePresence>
-                      <motion.div name="fade">{chrome.sidebarCollapsed && <span></span>}</motion.div>
-                      <motion.div name="fade">{!chrome.sidebarCollapsed && <span></span>}</motion.div>
+                      <motion.div name={"fade"}>{chrome.sidebarCollapsed && <span></span>}</motion.div>
+                      <motion.div name={"fade"}>{!chrome.sidebarCollapsed && <span></span>}</motion.div>
                     </AnimatePresence>
                   </button>
                 </div>
               )}
-              {getThemeDirective("windowLayout") !== "twopanel" && <div className="vdiv display--large"></div>}
+              {getThemeDirective("windowLayout") !== "twopanel" && <div className={"vdiv display--large"} />}
             </template>
           ) : getThemeDirective("windowLayout") !== "twopanel" ? (
             <template>
-              <div className="app-chrome-item playback-control-buttons">
-                <div className="app-chrome-item display--large">
+              <div className={"app-chrome-item playback-control-buttons"}>
+                <div className={"app-chrome-item display--large"}>
                   {mk.shuffleMode === 0 ? (
                     <button
-                      className="playback-button--small shuffle"
+                      className={"playback-button--small shuffle"}
                       className={isDisabled() && "disabled"}
                       onClick={() => {
                         mk.shuffleMode = 1;
                       }}
                       title={$root.getLz("term.enableShuffle")}
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   ) : (
                     <button
-                      className="playback-button--small shuffle active"
+                      className={"playback-button--small shuffle active"}
                       className={isDisabled() && "disabled"}
                       onClick={() => {
                         mk.shuffleMode = 0;
                       }}
                       title={$root.getLz("term.disableShuffle")}
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   )}
                 </div>
-                <div className="app-chrome-item display--large">
+                <div className={"app-chrome-item display--large"}>
                   <button
-                    className="playback-button previous"
+                    className={"playback-button previous"}
                     onClick={() => prevButton()}
                     className={isPrevDisabled() && "disabled"}
                     title={$root.getLz("term.previous")}
-                    v-b-tooltiphover></button>
+                    v-b-tooltiphover
+                  />
                 </div>
-                <div className="app-chrome-item display--large">
+                <div className={"app-chrome-item display--large"}>
                   {mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
                     <button
-                      className="playback-button stop"
+                      className={"playback-button stop"}
                       onClick={() => mk.stop()}
                       title={$root.getLz("term.stop")}
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   ) : (
                     <button
-                      className="playback-button play"
+                      className={"playback-button play"}
                       onClick={() => mk.play()}
                       title={$root.getLz("term.play")}
-                      v-b-tooltiphover></button>
+                      v-b-tooltiphover
+                    />
                   )}
                 </div>
-                <div className="app-chrome-item display--large">
+                <div className={"app-chrome-item display--large"}>
                   <button
-                    className="playback-button next"
+                    className={"playback-button next"}
                     onClick={() => skipToNextItem()}
                     className={isNextDisabled() && "disabled"}
                     title={$root.getLz("term.next")}
-                    v-b-tooltiphover></button>
+                    v-b-tooltiphover
+                  />
                 </div>
-                <div className="app-chrome-item display--large">
+                <div className={"app-chrome-item display--large"}>
                   <button
-                    className="playback-button--small repeat"
+                    className={"playback-button--small repeat"}
                     className={mk.repeatMode === 1 ? "repeatOne" : mk.repeatMode === 2 ? "active" : ""}
                     className={isDisabled() && "disabled"}
                     onClick={() => repeatIncrement()}
                     title={$root.lz.repeat[mk.repeatMode]}
-                    v-b-tooltiphover></button>
+                    v-b-tooltiphover
+                  />
                 </div>
               </div>
             </template>
           ) : null}
         </div>
-        <div className="app-chrome--center">
+        <div className={"app-chrome--center"}>
           {getThemeDirective("windowLayout") !== "twopanel" ? (
-            <div className="app-chrome-item playback-controls">
+            <div className={"app-chrome-item playback-controls"}>
               {mkReady() ? (
                 <template>
                   <div
-                    className="app-playback-controls"
+                    className={"app-playback-controls"}
                     onMouseOver={() => {
                       chrome.progresshover = true;
                     }}
                     onMouseLeave={() => {
                       chrome.progresshover = false;
                     }}
-                    contextmenu="nowPlayingContextMenu">
+                    contextMenu={"nowPlayingContextMenu"}>
                     <div
-                      className="artwork"
-                      id="artworkLCD">
-                      <MediaItemArtwork url="currentArtUrl"></MediaItemArtwork>
+                      className={"artwork"}
+                      id={"artworkLCD"}>
+                      <MediaItemArtwork url={"currentArtUrl"} />
                     </div>
                     <b-popover
-                      custom-className="mediainfo-popover"
-                      target="artworkLCD"
-                      triggers="hover"
-                      placement="bottom">
-                      <div className="content">
-                        <div className="shadow-artwork">
-                          <MediaItemArtwork url="currentArtUrl"></MediaItemArtwork>
+                      custom-className={"mediainfo-popover"}
+                      target={"artworkLCD"}
+                      triggers={"hover"}
+                      placement={"bottom"}>
+                      <div className={"content"}>
+                        <div className={"shadow-artwork"}>
+                          <MediaItemArtwork url={"currentArtUrl"} />
                         </div>
-                        <div className="popover-artwork">
+                        <div className={"popover-artwork"}>
                           <MediaItemArtwork
-                            size="210"
-                            url="currentArtUrl"></MediaItemArtwork>
+                            size={"210"}
+                            url={"currentArtUrl"}
+                          />
                         </div>
-                        <div className="song-name">{mk.nowPlayingItem["attributes"]["name"]}</div>
+                        <div className={"song-name"}>{mk.nowPlayingItem["attributes"]["name"]}</div>
                         <div
-                          className="song-artist"
+                          className={"song-artist"}
                           onClick={() => getNowPlayingItemDetailed(`artist`)}>
                           {mk.nowPlayingItem["attributes"]["artistName"]}
                         </div>
                         <div
-                          className="song-album"
+                          className={"song-album"}
                           onClick={() => getNowPlayingItemDetailed(`album`)}>
                           {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
                         </div>
                         <hr />
                         <div
-                          className="btn-group"
+                          className={"btn-group"}
                           style={{ width: "100%" }}>
                           <button
-                            className="md-btn md-btn-small"
+                            className={"md-btn md-btn-small"}
                             style={{ width: "100%" }}
                             onClick={() => {
                               drawer.open = false;
@@ -210,7 +223,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                             {$root.getLz("term.miniplayer")}
                           </button>
                           <button
-                            className="md-btn md-btn-small"
+                            className={"md-btn md-btn-small"}
                             style={{ width: "100%" }}
                             onClick={() => {
                               drawer.open = false;
@@ -221,85 +234,91 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                         </div>
                       </div>
                     </b-popover>
-                    <div className="playback-info">
-                      <div className="chrome-icon-container">
+                    <div className={"playback-info"}>
+                      <div className={"chrome-icon-container"}>
                         {cfg.general.privateEnabled === true && (
                           <div
-                            className="audio-type private-icon"
+                            className={"audio-type private-icon"}
                             title={$root.getLz("term.privateSession")}
-                            v-b-tooltiphover></div>
+                            v-b-tooltiphover
+                          />
                         )}
                         {cfg.audio.maikiwiAudio.spatial === true && (
                           <div
-                            className="audio-type spatial-icon"
+                            className={"audio-type spatial-icon"}
                             title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}
-                            v-b-tooltiphover></div>
+                            v-b-tooltiphover
+                          />
                         )}
                         {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true && (
                           <div
-                            className="audio-type lossless-icon"
+                            className={"audio-type lossless-icon"}
                             title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}
-                            v-b-tooltiphover></div>
+                            v-b-tooltiphover
+                          />
                         )}
                         {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE === true && (
                           <div
-                            className="audio-type ppe-icon"
+                            className={"audio-type ppe-icon"}
                             title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
-                            v-b-tooltiphover></div>
+                            v-b-tooltiphover
+                          />
                         )}
                         {mk.nowPlayingItem?.attributes?.isLive === true && (
                           <svg
-                            className="audio-type live-icon"
+                            className={"audio-type live-icon"}
                             title={$root.getLz("term.live")}
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="var(--keyColor)"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            xmlns={"http://www.w3.org/2000/svg"}
+                            width={"24"}
+                            height={"24"}
+                            viewBox={"0 0 24 24"}
+                            fill={"none"}
+                            stroke={"var(--keyColor)"}
+                            strokeWidth={"2"}
+                            strokeLinecap={"round"}
+                            strokeLinejoin={"round"}
                             v-b-tooltiphover>
-                            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                            <path d={"M5 12.55a11 11 0 0 1 14.08 0"} />
+                            <path d={"M1.42 9a16 16 0 0 1 21.16 0"} />
+                            <path d={"M8.53 16.11a6 6 0 0 1 6.95 0"} />
                             <line
-                              x1="12"
-                              y1="20"
+                              x1={"12"}
+                              y1={"20"}
                               x2={12.01}
-                              y2="20"></line>
+                              y2={"20"}
+                            />
                           </svg>
                         )}
                       </div>
-                      <div className="info-rect">
+                      <div className={"info-rect"}>
                         <div className={`song-name ${[isElementOverflowing("#app-main >div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""]}`}>
                           {mk.nowPlayingItem["attributes"]["name"]}
                           {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
                             <div
-                              className="explicit-icon"
-                              style={{ display: "inline-block" }}></div>
+                              className={"explicit-icon"}
+                              style={{ display: "inline-block" }}
+                            />
                           )}
                         </div>
-                        <div className="song-artist-album">
+                        <div className={"song-artist-album"}>
                           <div
                             className={"song-artist-album-content " + [isElementOverflowing("#app-main >.app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content") ? "marquee" : ""]}
                             style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap" }}>
                             <div
-                              className="item-navigate song-artist"
+                              className={"item-navigate song-artist"}
                               style={{ display: "inline-block" }}
                               onClick={() => getNowPlayingItemDetailed(`artist`)}>
                               {mk.nowPlayingItem["attributes"]["artistName"]}
                             </div>
                             {mk.nowPlayingItem["attributes"]["albumName"] !== "" && (
                               <div
-                                className="song-artist item-navigate"
+                                className={"song-artist item-navigate"}
                                 style={{ display: "inline-block" }}
                                 onClick={() => getNowPlayingItemDetailed("album")}>
                                 <div
-                                  className="separator"
+                                  className={"separator"}
                                   style={{ display: "inline-block" }}>
-                                  {"—"}
+                                  —
                                 </div>
                                 {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
                               </div>
@@ -308,18 +327,18 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                         </div>
                       </div>
                       {mk.nowPlayingItem?.attributes?.isLive !== true && (
-                        <div className="song-progress">
+                        <div className={"song-progress"}>
                           <div
-                            className="song-duration"
+                            className={"song-duration"}
                             style={{ justifyContent: "space-between", height: "1px", display: hrome.progresshover ? "flex" : "none" }}>
                             <p style={{ width: "auto" }}>{convertTime(getSongProgress())}</p>
                             <p style={{ width: "auto" }}>{convertTime(mk.currentPlaybackDuration)}</p>
                           </div>
 
                           <input
-                            type="range"
+                            type={"range"}
                             step={0.01}
-                            min="0"
+                            min={"0"}
                             style={progressBarStyle()}
                             onInput={() => {
                               playerLCD.desiredDuration = $event.target.value;
@@ -347,13 +366,13 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                     </div>
                     {mk.nowPlayingItem["attributes"]["playParams"] && (
                       <template>
-                        <div className="actions">
+                        <div className={"actions"}>
                           <button
-                            className="lcdMenu"
+                            className={"lcdMenu"}
                             onClick={nowPlayingContextMenu}
                             title={$root.getLz("term.more")}
                             v-b-tooltiphover>
-                            <div className="svg-icon"></div>
+                            <div className={"svg-icon"} />
                           </button>
                         </div>
                       </template>
@@ -362,63 +381,68 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                 </template>
               ) : (
                 <template>
-                  <div className="app-playback-controls">
+                  <div className={"app-playback-controls"}>
                     <div
-                      className="artwork"
-                      id="artworkLCD"
+                      className={"artwork"}
+                      id={"artworkLCD"}
                       style={{ pointerEvents: "none" }}>
-                      <MediaItemArtwork url="currentArtUrl"></MediaItemArtwork>
+                      <MediaItemArtwork url={"currentArtUrl"} />
                     </div>
-                    <div className="playback-info">
-                      <div className="info-rect"></div>
+                    <div className={"playback-info"}>
+                      <div className={"info-rect"} />
                     </div>
                   </div>
                 </template>
               )}
             </div>
           ) : (
-            <div className="app-chrome-item">
-              <div className="top-nav-group">
+            <div className={"app-chrome-item"}>
+              <div className={"top-nav-group"}>
                 <SidebarLibraryItem
                   name={$root.getLz("home.title")}
-                  svg-icon="./assets/feather/home.svg"
-                  svg-icon-name="home"
-                  page="home"></SidebarLibraryItem>
+                  svg-icon={"./assets/feather/home.svg"}
+                  svg-icon-name={"home"}
+                  page={"home"}
+                />
                 <SidebarLibraryItem
                   name={$root.getLz("term.listenNow")}
-                  svg-icon="./assets/feather/play-circle.svg"
-                  svg-icon-name="listenNow"
-                  page="listen_now"></SidebarLibraryItem>
+                  svg-icon={"./assets/feather/play-circle.svg"}
+                  svg-icon-name={"listenNow"}
+                  page={"listen_now"}
+                />
                 <SidebarLibraryItem
                   name={$root.getLz("term.browse")}
-                  svg-icon="./assets/feather/globe.svg"
-                  svg-icon-name="browse"
-                  page="browse"></SidebarLibraryItem>
+                  svg-icon={"./assets/feather/globe.svg"}
+                  svg-icon-name={"browse"}
+                  page={"browse"}
+                />
                 <SidebarLibraryItem
                   name={$root.getLz("term.radio")}
-                  svg-icon="./assets/feather/radio.svg"
-                  svg-icon-name="radio"
-                  page="radio"></SidebarLibraryItem>
+                  svg-icon={"./assets/feather/radio.svg"}
+                  svg-icon-name={"radio"}
+                  page={"radio"}
+                />
               </div>
             </div>
           )}
         </div>
-        <div className="app-chrome--right">
+        <div className={"app-chrome--right"}>
           {getThemeDirective("windowLayout") !== "twopanel" ? (
             <template>
-              <div className="app-chrome-item volume display--large">
+              <div className={"app-chrome-item volume display--large"}>
                 <button
-                  className="volume-button--small volume"
+                  className={"volume-button--small volume"}
                   onClick={() => muteButtonPressed()}
-                  className="{'active': cfg.audio.volume === 0}"
+                  className={"{'active': cfg.audio.volume === 0}"}
                   title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
-                  v-b-tooltiphover></button>
+                  v-b-tooltiphover
+                />
                 {typeof mk.volume !== "undefined" && (
                   <input
-                    type="range"
+                    type={"range"}
                     onWheel={volumeWheel}
                     step={cfg.audio.volumeStep}
-                    min="0"
+                    min={"0"}
                     max={cfg.audio.maxVolume}
                     v-model={mk.volume}
                     onChange={() => checkMuteChange()}
@@ -427,50 +451,54 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   />
                 )}
               </div>
-              <div className="app-chrome-item generic">
+              <div className={"app-chrome-item generic"}>
                 <button
-                  className="playback-button--small cast"
+                  className={"playback-button--small cast"}
                   title={$root.getLz("term.cast")}
                   onClick={() => {
                     modals.castMenu = true;
                   }}
-                  v-b-tooltiphover></button>
+                  v-b-tooltiphover
+                />
               </div>
-              <div className="app-chrome-item generic">
+              <div className={"app-chrome-item generic"}>
                 <button
-                  className="playback-button--small queue"
+                  className={"playback-button--small queue"}
                   title={$root.getLz("term.queue")}
                   v-b-tooltiphover
-                  className="{'active': drawer.panel === 'queue'}"
-                  onClick={() => invokeDrawer("queue")}></button>
+                  className={"{'active': drawer.panel === 'queue'}"}
+                  onClick={() => invokeDrawer("queue")}
+                />
               </div>
-              <div className="app-chrome-item generic">
+              <div className={"app-chrome-item generic"}>
                 {lyrics && lyrics !== [] && lyrics.length > 0 ? (
                   <template>
                     <button
-                      className="playback-button--small lyrics"
+                      className={"playback-button--small lyrics"}
                       title={$root.getLz("term.lyrics")}
                       v-b-tooltiphover
-                      className="{'active': drawer.panel === 'lyrics'}"
-                      onClick={() => invokeDrawer("lyrics")}></button>
+                      className={"{'active': drawer.panel === 'lyrics'}"}
+                      onClick={() => invokeDrawer("lyrics")}
+                    />
                   </template>
                 ) : (
                   <template>
                     <button
-                      className="playback-button--small lyrics"
-                      style={{ opacity: 0.3, pointerEvents: "none" }}></button>
+                      className={"playback-button--small lyrics"}
+                      style={{ opacity: 0.3, pointerEvents: "none" }}
+                    />
                   </template>
                 )}
               </div>
             </template>
           ) : (
             <template>
-              <div className="app-chrome-item search">
-                <div className="search-input-container">
-                  <div className="search-input--icon"></div>
+              <div className={"app-chrome-item search"}>
+                <div className={"search-input-container"}>
+                  <div className={"search-input--icon"} />
                   <input
-                    type="search"
-                    spellCheck="false"
+                    type={"search"}
+                    spellCheck={"false"}
                     onClick={() => {
                       $root.appRoute("search");
                       search.showHints = true;
@@ -483,28 +511,28 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                         }
                       }, 300)
                     }
-                    v-on:keyupenter="searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);search.showHints = false;search.showSearchView = true;search.cursor = -1"
+                    v-on:keyupenter={"searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);search.showHints = false;search.showSearchView = true;search.cursor = -1"}
                     onChange={() => $root.appRoute("search")}
-                    v-on:keyup="searchCursor"
+                    v-on:keyup={"searchCursor"}
                     onInput={() => getSearchHints()}
                     placeholder={$root.getLz("term.search") + "..."}
                     v-model={search.term}
-                    ref="searchInput"
-                    className="search-input"
+                    ref={"searchInput"}
+                    className={"search-input"}
                   />
                   {search.showHints && search.hints.length !== 0 && (
                     <div
-                      className="search-hints-container"
+                      className={"search-hints-container"}
                       style={{ right: "-13px", left: "unset", paddingTop: 0 }}>
-                      <div className="search-hints">
+                      <div className={"search-hints"}>
                         {search.hints
                           .filter((a) => {
                             return a.content === null;
                           })
                           .map((hint, index) => (
                             <button
-                              className="search-hint text-overflow-elipsis"
-                              className="{active: (search.cursor === index)}"
+                              className={"search-hint text-overflow-elipsis"}
+                              className={"{active: (search.cursor === index)}"}
                               onClick={() => {
                                 search.term = hint.searchTerm;
                                 search.showHints = false;
@@ -522,7 +550,8 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                             <template>
                               <MediaItemSmarthints
                                 item={item.content}
-                                position={position}></MediaItemSmarthints>
+                                position={position}
+                              />
                             </template>
                           ))}
                       </div>
@@ -534,24 +563,28 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
           )}
           {chrome.windowControlPosition === "right" && !chrome.nativeControls ? (
             <div
-              className="app-chrome-item full-height"
-              id="window-controls-container">
-              <div className="window-controls">
+              className={"app-chrome-item full-height"}
+              id={"window-controls-container"}>
+              <div className={"window-controls"}>
                 <div
-                  className="minimize"
-                  onClick={() => ipcRenderer.send("minimize")}></div>
+                  className={"minimize"}
+                  onClick={() => ipcRenderer.send("minimize")}
+                />
                 {chrome.maximized ? (
                   <div
-                    className="minmax restore"
-                    onClick={() => ipcRenderer.send("maximize")}></div>
+                    className={"minmax restore"}
+                    onClick={() => ipcRenderer.send("maximize")}
+                  />
                 ) : (
                   <div
-                    className="minmax"
-                    onClick={() => ipcRenderer.send("maximize")}></div>
+                    className={"minmax"}
+                    onClick={() => ipcRenderer.send("maximize")}
+                  />
                 )}
                 <div
-                  className="close"
-                  onClick={() => ipcRenderer.send("close")}></div>
+                  className={"close"}
+                  onClick={() => ipcRenderer.send("close")}
+                />
               </div>
             </div>
           ) : null}

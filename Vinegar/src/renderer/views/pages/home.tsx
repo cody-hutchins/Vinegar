@@ -4,20 +4,20 @@ import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
 const Component = () => {
   const app = this.$root;
-  let followedArtists = this.$root.cfg.home.followedArtists;
-  let favoriteItems = this.$root.cfg.home.favoriteItems;
-  let madeForYou = [];
+  const followedArtists = this.$root.cfg.home.followedArtists;
+  const favoriteItems = this.$root.cfg.home.favoriteItems;
+  const madeForYou = [];
   let recentlyPlayed = [];
-  let friendsListeningTo = [];
-  let replayPlaylists = [];
-  let favorites = [];
-  let profile = {};
-  let modify = 0;
+  const friendsListeningTo = [];
+  const replayPlaylists = [];
+  const favorites = [];
+  const profile = {};
+  const modify = 0;
   let artistFeed = [];
-  let showingArtistFeed = false;
-  let page = "main";
-  let sectionsReady = [];
-  let year = new Date().getFullYear();
+  const showingArtistFeed = false;
+  const page = "main";
+  const sectionsReady = [];
+  const year = new Date().getFullYear();
   let seenReplay = localStorage.getItem("seenReplay");
   let syncingFavs = false;
 
@@ -42,7 +42,7 @@ const Component = () => {
     syncingFavs = false;
   }
   async function seeAllRecentlyPlayed() {
-    let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+    const hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
       l: this.$root.mklang,
       include: "tracks",
       "include[albums]": "catalog,tracks,artists",
@@ -51,7 +51,7 @@ const Component = () => {
     app.showCollection(hist.data, app.getLz("home.recentlyPlayed"));
   }
   async function seeAllHistory() {
-    let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+    const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
       l: this.$root.mklang,
     });
     app.showCollection(hist.data, app.getLz("term.history"));
@@ -63,7 +63,7 @@ const Component = () => {
     return {
       name: "Remove from Favorites",
       action: function (item) {
-        let index = self.favoriteItems.findIndex((x) => x.id === item.id);
+        const index = self.favoriteItems.findIndex((x) => x.id === item.id);
         if (index > -1) {
           self.favoriteItems.splice(index, 1);
           self.app.cfg.home.favoriteItems = self.favoriteItems;
@@ -72,9 +72,9 @@ const Component = () => {
     };
   }
   async function getFavorites() {
-    let libraryPlaylists = [];
-    let playlists = [];
-    for (let item of favoriteItems) {
+    const libraryPlaylists = [];
+    const playlists = [];
+    for (const item of favoriteItems) {
       if (item.type === "library-playlists") {
         libraryPlaylists.push(item.id);
       } else if (item.type === "playlists") {
@@ -101,9 +101,9 @@ const Component = () => {
     }
   }
   async function getArtistFeed() {
-    let artists = followedArtists;
+    const artists = followedArtists;
     artistFeed = [];
-    let chunks = [];
+    const chunks = [];
     for (let artistIdx = 0; artistIdx < artists.length; artistIdx += 50) {
       chunks.push(artists.slice(artistIdx, artistIdx + 50));
     }
@@ -118,14 +118,14 @@ const Component = () => {
       );
       // sort artistFeed by attributes.releaseDate descending, date is formatted as "YYYY-MM-DD"
       artistFeed.sort((a, b) => {
-        let dateA = new Date(a.attributes.releaseDate);
-        let dateB = new Date(b.attributes.releaseDate);
+        const dateA = new Date(a.attributes.releaseDate);
+        const dateB = new Date(b.attributes.releaseDate);
         return dateB - dateA;
       });
     } catch (error) {}
   }
   async function getRecentlyPlayed() {
-    let hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+    const hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
       l: this.$root.mklang,
       include: "tracks",
       "include[albums]": "catalog,tracks,artists",
@@ -167,78 +167,81 @@ const Component = () => {
 
   return (
     <>
-      <div id="cider-home">
-        <div className="content-inner home-page">
+      <div id={"cider-home"}>
+        <div className={"content-inner home-page"}>
           {page === "main" && (
             <div>
-              <div className="row">
-                <div className="col">
-                  <div className="row">
-                    <div className="col nopadding">
+              <div className={"row"}>
+                <div className={"col"}>
+                  <div className={"row"}>
+                    <div className={"col nopadding"}>
                       <h3>{app.getLz("home.recentlyPlayed")}</h3>
                     </div>
-                    <div className="col-auto nopadding cider-flex-center">
+                    <div className={"col-auto nopadding cider-flex-center"}>
                       <button
-                        className="cd-btn-seeall"
+                        className={"cd-btn-seeall"}
                         onClick={() => seeAllHistory()}>
                         {app.getLz("term.history")}
                       </button>
                       <button
-                        className="cd-btn-seeall"
+                        className={"cd-btn-seeall"}
                         onClick={() => seeAllRecentlyPlayed()}>
                         {app.getLz("term.seeAll")}
                       </button>
                     </div>
                   </div>
-                  <div className="well artistfeed-well">
+                  <div className={"well artistfeed-well"}>
                     {isSectionReady("recentlyPlayed") ? (
                       recentlyPlayed.limit(6).map((item) => (
                         <MediaItemListItem
                           item={item}
-                          v-bind:key={item.id}></MediaItemListItem>
+                          v-bind:key={item.id}
+                        />
                       ))
                     ) : (
-                      <div className="spinner"></div>
+                      <div className={"spinner"} />
                     )}
                   </div>
                 </div>
-                <div className="col">
-                  <div className="row">
-                    <div className="col nopadding">
+                <div className={"col"}>
+                  <div className={"row"}>
+                    <div className={"col nopadding"}>
                       <h3>{app.getLz("home.artistsFeed")}</h3>
                     </div>
-                    <div className="col-auto nopadding cider-flex-center">
+                    <div className={"col-auto nopadding cider-flex-center"}>
                       {!syncingFavs ? (
                         <button
-                          className="cd-btn-seeall"
+                          className={"cd-btn-seeall"}
                           onClick={() => syncFavorites()}>
                           {app.getLz("home.syncFavorites")}
                         </button>
                       ) : (
                         <div
-                          className="spinner"
-                          style={{ height: "26px" }}></div>
+                          className={"spinner"}
+                          style={{ height: "26px" }}
+                        />
                       )}
                       <button
-                        className="cd-btn-seeall"
+                        className={"cd-btn-seeall"}
                         onClick={() => app.appRoute("artist-feed")}>
                         {app.getLz("term.seeAll")}
                       </button>
                     </div>
                   </div>
                   <div
-                    className="well artistfeed-well"
+                    className={"well artistfeed-well"}
                     style={{ marginTop: 0 }}>
                     {artistFeed.length > 0 ? (
                       artistFeed.limit(6).map((item) => (
                         <MediaItemListItem
                           item={item}
-                          v-bind:key={item.id}></MediaItemListItem>
+                          v-bind:key={item.id}
+                        />
                       ))
                     ) : followedArtists.length > 0 ? (
-                      <div className="spinner"></div>
+                      <div className={"spinner"} />
                     ) : (
-                      <div className="no-artist"> {app.getLz("home.artistsFeed.noArtist")}</div>
+                      <div className={"no-artist"}> {app.getLz("home.artistsFeed.noArtist")}</div>
                     )}
                   </div>
                 </div>
@@ -251,56 +254,56 @@ const Component = () => {
               {/*                            appear here. */}
               {/*                        </div>}*/}
               {/*<MediaItemScrollerHorizontal kind="small" items="favorites" */}
-              {/*                                                       item={item} ></MediaItemScrollerHorizontal>*/}
+              {/*                                                       item={item} />*/}
               {/*</div> */}
               {/*                </div> */}
               {/*            </div>}*/}
               {!seenReplay && (
-                <div className="row">
-                  <div className="col">
+                <div className={"row"}>
+                  <div className={"col"}>
                     <button
-                      className="md-btn md-btn-block md-btn-replay--hero"
+                      className={"md-btn md-btn-block md-btn-replay--hero"}
                       onClick={() => $root.appRoute("replay")}>
                       {$root.getLz("term.replay")} {year}
                     </button>
                   </div>
                 </div>
               )}
-              <div className="row">
-                <div className="col">
-                  <div className="row">
-                    <div className="col nopadding">
+              <div className={"row"}>
+                <div className={"col"}>
+                  <div className={"row"}>
+                    <div className={"col nopadding"}>
                       <h3>{app.getLz("home.madeForYou")}</h3>
                     </div>
-                    <div className="col-auto nopadding cider-flex-center">
+                    <div className={"col-auto nopadding cider-flex-center"}>
                       {seenReplay && (
                         <button
-                          className="md-btn md-btn-replay"
+                          className={"md-btn md-btn-replay"}
                           onClick={() => $root.appRoute("replay")}>
                           {$root.getLz("term.replay")} {year}
                         </button>
                       )}
                     </div>
                   </div>
-                  <div className="well">{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items="madeForYou"></MediaItemScrollerHorizontal> : <div className="spinner"></div>}</div>
+                  <div className={"well"}>{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={"madeForYou"} /> : <div className={"spinner"} />}</div>
                 </div>
               </div>
               {friendsListeningTo && friendsListeningTo.length > 0 && (
-                <div className="row">
-                  <div className="col">
-                    <div className="row">
-                      <div className="col nopadding">
+                <div className={"row"}>
+                  <div className={"col"}>
+                    <div className={"row"}>
+                      <div className={"col nopadding"}>
                         <h3>{app.getLz("home.friendsListeningTo")}</h3>
                       </div>
-                      <div className="col-auto nopadding cider-flex-center">
+                      <div className={"col-auto nopadding cider-flex-center"}>
                         <button
-                          className="cd-btn-seeall"
+                          className={"cd-btn-seeall"}
                           onClick={() => app.showSocialListeningTo()}>
                           {app.getLz("term.seeAll")}
                         </button>
                       </div>
                     </div>
-                    <div className="well">{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items="friendsListeningTo"></MediaItemScrollerHorizontal> : <div className="spinner"></div>}</div>
+                    <div className={"well"}>{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items={"friendsListeningTo"} /> : <div className={"spinner"} />}</div>
                   </div>
                 </div>
               )}

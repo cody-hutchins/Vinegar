@@ -12,25 +12,25 @@ const MoreInfoModal = ({ data }: { data: object }) => {
     }, 1000);
   }, []);
   return (
-    <div id="moreinfo-modal">
+    <div id={"moreinfo-modal"}>
       <div
-        className="modal-fullscreen spatialproperties-panel moreinfo-modal"
+        className={"modal-fullscreen spatialproperties-panel moreinfo-modal"}
         clickself={() => {
           if (timedelay) close();
         }}>
-        <div className="modal-window">
-          <div className="modal-header">
-            <div className="modal-title">{data.title}</div>
-            <div className="modal-subtitle modal-title">{data.subtitle ?? ""}</div>
+        <div className={"modal-window"}>
+          <div className={"modal-header"}>
+            <div className={"modal-title"}>{data.title}</div>
+            <div className={"modal-subtitle modal-title"}>{data.subtitle ?? ""}</div>
             <button
-              className="close-btn"
+              className={"close-btn"}
               onClick={() => close()}
               aria-label={app.getLz("action.close")}
             />
           </div>
-          <div className="modal-content">
+          <div className={"modal-content"}>
             <div
-              className="content"
+              className={"content"}
               v-html={data.content}
             />
           </div>

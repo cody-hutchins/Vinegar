@@ -36,49 +36,49 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
     }
   };
   return (
-    <div id="add-to-playlist">
+    <div id={"add-to-playlist"}>
       <template>
         <div
-          className="modal-fullscreen modal-generic"
+          className={"modal-fullscreen modal-generic"}
           clickself={app.resetState()}
           contextmenuself={app.resetState()}>
-          <div className="modal-window">
-            <div className="modal-header">
-              <div className="modal-title">{app.getLz("action.addToLibrary")}</div>
+          <div className={"modal-window"}>
+            <div className={"modal-header"}>
+              <div className={"modal-title"}>{app.getLz("action.addToLibrary")}</div>
               <button
-                className="close-btn"
+                className={"close-btn"}
                 onClick={() => app.resetState()}
                 aria-label={app.getLz("action.close")}
               />
             </div>
-            <div className="modal-content">
+            <div className={"modal-content"}>
               {playlist.attributes.canEdit &&
                 playlist.type !== "library-playlist-folders" &&
                 playlistSorted.map((playlist) => (
                   <button
-                    className="playlist-item"
-                    className="{ focused: playlist.id === focused }"
+                    className={"playlist-item"}
+                    className={"{ focused: playlist.id === focused }"}
                     onClick={() => addToPlaylist(playlist.id)}
                     style={{ width: "100%" }}>
-                    <div className="icon">{import("../svg/playlist.svg")}</div>
-                    <div className="name">{playlist.attributes.name}</div>
+                    <div className={"icon"}>{import("../svg/playlist.svg")}</div>
+                    <div className={"name"}>{playlist.attributes.name}</div>
                   </button>
                 ))}
             </div>
-            <div className="modal-search">
+            <div className={"modal-search"}>
               <div
-                className="search-input-container"
+                className={"search-input-container"}
                 style={{ width: "100%", margin: "16px 0" }}>
-                <div className="search-input--icon" />
+                <div className={"search-input--icon"} />
                 <input
-                  type="search"
-                  ref="searchInput"
+                  type={"search"}
+                  ref={"searchInput"}
                   style={{ width: "100%" }}
-                  spellCheck="false"
+                  spellCheck={"false"}
                   placeholder={app.getLz("term.search") + "..."}
                   v-model={searchQuery}
                   input={search()}
-                  className="search-input"
+                  className={"search-input"}
                 />
               </div>
             </div>

@@ -43,15 +43,15 @@ const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object
   };
 
   return (
-    <div id="listitem-horizontal">
-      <div className="listitem-horizontal">
+    <div id={"listitem-horizontal"}>
+      <div className={"listitem-horizontal"}>
         <vue-horizontal>
           {itemPages.map((items) =>
             items.map((song) => (
               <MediaItemListItem
                 show-library-status={showLibraryStatus}
                 v-bind:key={song.id}
-                parent="'listitem-hr' + simplifiedParent"
+                parent={"'listitem-hr' + simplifiedParent"}
                 index={song.index}
                 item={song}
               />

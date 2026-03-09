@@ -5,25 +5,26 @@ const PluginMenu = () => {
   }
   return (
     <>
-      <div id="plugin-menu">
+      <div id={"plugin-menu"}>
         <div
-          className="modal-fullscreen addtoplaylist-panel"
+          className={"modal-fullscreen addtoplaylist-panel"}
           clickself={app.resetState()}
           contextmenuself={app.resetState()}>
-          <div className="modal-window">
-            <div className="modal-header">
-              <div className="modal-title">{$root.getLz("term.pluginMenu")}</div>
+          <div className={"modal-window"}>
+            <div className={"modal-header"}>
+              <div className={"modal-title"}>{$root.getLz("term.pluginMenu")}</div>
               <button
-                className="close-btn"
+                className={"close-btn"}
                 onClick={() => app.resetState()}
-                aria-label={app.getLz("action.close")}></button>
+                aria-label={app.getLz("action.close")}
+              />
             </div>
-            <div className="modal-content">
+            <div className={"modal-content"}>
               {!app.pluginInstalled && (
-                <span className="playlist-item">
-                  <span className="icon">{import("../svg/x.svg")}</span>
+                <span className={"playlist-item"}>
+                  <span className={"icon"}>{import("../svg/x.svg")}</span>
                   <span
-                    className="name"
+                    className={"name"}
                     style={{ top: "0.5px" }}>
                     {$root.getLz("term.pluginMenu.none")}
                   </span>
@@ -31,14 +32,14 @@ const PluginMenu = () => {
               )}
               {app.pluginMenuEntries.map((entry) => (
                 <button
-                  className="playlist-item"
+                  className={"playlist-item"}
                   onClick={() => {
                     entry.onClick();
                     closeMenu();
                   }}>
-                  <span className="icon">{import("../svg/grid.svg")}</span>
+                  <span className={"icon"}>{import("../svg/grid.svg")}</span>
                   <span
-                    className="name"
+                    className={"name"}
                     style={{ top: "0.5px" }}>
                     {entry.name}
                   </span>

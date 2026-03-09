@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
-const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: Object; required: false } }) => {
+const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
   const isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
@@ -78,7 +78,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   async function getBadges() {
     const id = ((item.attributes?.playParams ?? false) ? item.attributes?.playParams.id : null) || item.id;
     if (id && badges[id]) {
-      let friends = badges[id];
+      const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
           self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
@@ -96,12 +96,12 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   }
   async function isInLibrary() {
     if (item.type && !item.type.includes("library")) {
-      let params = {
+      const params = {
         relate: "library",
         fields: "inLibrary",
         extend: revisedRandId(),
       };
-      let kind = item.type ?? item.attributes.playParams.kind;
+      const kind = item.type ?? item.attributes.playParams.kind;
       let truekind = !kind.endsWith("s") ? kind + "s" : kind;
       if (truekind === "musicVideos") {
         truekind = "music-videos";
@@ -114,12 +114,12 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     }
   }
   async function removeFromLibrary(id) {
-    let params = {
+    const params = {
       relate: "library",
       fields: "inLibrary",
       extend: revisedRandId(),
     };
-    let kind = item.type ?? item.attributes.playParams.kind;
+    const kind = item.type ?? item.attributes.playParams.kind;
     let truekind = !kind.endsWith("s") ? kind + "s" : kind;
     if (truekind === "musicVideos") {
       truekind = "music-videos";
@@ -166,7 +166,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   }
   function getClasses() {
     let type = [];
-    let classes = [];
+    const classes = [];
     if (noScale) {
       classes.push("noscale");
     }
@@ -220,14 +220,14 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     } else {
       useMenu = "multiple";
     }
-    let menus = {
+    const menus = {
       multiple: {
         items: [
           {
             name: app.getLz("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-up.svg",
             action: () => {
-              let itemsToPlay = {};
+              const itemsToPlay = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -235,8 +235,8 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
                 itemsToPlay[item.kind].push(item.id);
               });
               // loop through itemsToPlay
-              for (let kind in itemsToPlay) {
-                let ids = itemsToPlay[kind];
+              for (const kind in itemsToPlay) {
+                const ids = itemsToPlay[kind];
                 if (ids.length > 0) {
                   app.mk.playNext({ [kind + "s"]: itemsToPlay[kind] });
                 }
@@ -249,7 +249,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             name: app.getLz("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-down.svg",
             action: () => {
-              let itemsToPlay = {};
+              const itemsToPlay = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -257,8 +257,8 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
                 itemsToPlay[item.kind].push(item.id);
               });
               // loop through itemsToPlay
-              for (let kind in itemsToPlay) {
-                let ids = itemsToPlay[kind];
+              for (const kind in itemsToPlay) {
+                const ids = itemsToPlay[kind];
                 if (ids.length > 0) {
                   app.mk.playLater({ [kind + "s"]: itemsToPlay[kind] });
                 }
@@ -327,8 +327,8 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             hidden: false,
             disabled: true,
             action: function () {
-              let item_id = self.item.attributes.playParams.id ?? self.item.id;
-              let data_type = self.item.attributes.playParams.kind ?? self.item.type;
+              const item_id = self.item.attributes.playParams.id ?? self.item.id;
+              const data_type = self.item.attributes.playParams.kind ?? self.item.type;
               app.addToLibrary(item_id);
               self.addedToLibrary = true;
             },
@@ -340,8 +340,8 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             hidden: true,
             action: async function () {
               console.log("remove");
-              let item_id = self.item.attributes.playParams.id ?? self.item.id;
-              let data_type = self.item.attributes.playParams.kind ?? self.item.type;
+              const item_id = self.item.attributes.playParams.id ?? self.item.id;
+              const data_type = self.item.attributes.playParams.kind ?? self.item.type;
               await self.removeFromLibrary(item_id);
               self.addedToLibrary = false;
             },
@@ -416,7 +416,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
       });
     } catch (e) {}
     try {
-      let rating = await app.getRating(self.item);
+      const rating = await app.getRating(self.item);
       if (rating === 0) {
         menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
         menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
@@ -441,7 +441,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   const artistMenu = async (event) => {
     console.debug(item);
     let followAction = "follow";
-    let followActions = {
+    const followActions = {
       follow: {
         icon: "./assets/star.svg",
         name: app.getLz("action.favorite"),
@@ -503,44 +503,45 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   }, []);
   return (
     <>
-      <div id="mediaitem-square">
+      <div id={"mediaitem-square"}>
         <div
-          tabindex="0"
-          className="cd-mediaitem-square-container"
+          tabIndex={"0"}
+          className={"cd-mediaitem-square-container"}
           clickself={app.routeView(item)}
           controller-click={app.routeView(item)}
-          contextmenuself="getContextMenu"
-          v-observe-visibility="{callback: visibilityChanged}">
-          {reasonShown && <div className="reasonSP ">{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
+          contextmenuself={"getContextMenu"}
+          v-observe-visibility={"{callback: visibilityChanged}"}>
+          {reasonShown && <div className={"reasonSP "}>{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
           <div
             style={{ "--spcolor": getBgColor() }}
-            className="cd-mediaitem-square"
+            className={"cd-mediaitem-square"}
             className={getClasses()}
-            contextmenu="getContextMenu">
+            contextMenu={"getContextMenu"}>
             <div
-              className="artwork-container"
+              className={"artwork-container"}
               v-show={isVisible}>
               {unavailable && (
-                <div className="unavailable-overlay">
-                  <div className="codicon codicon-circle-slash"></div>
+                <div className={"unavailable-overlay"}>
+                  <div className={"codicon codicon-circle-slash"} />
                 </div>
               )}
               <div
-                className="artwork"
+                className={"artwork"}
                 onClick={() => app.routeView(item)}>
                 <MediaItemArtwork
                   url={getArtworkUrl()}
                   video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                  size="size"
-                  upscaling="true"
-                  shadow="subtle"
+                  size={"size"}
+                  upscaling={"true"}
+                  shadow={"subtle"}
                   bgcolor={getBgColor()}
                   video-priority={forceVideo}
-                  type={item.type}></MediaItemArtwork>
+                  type={item.type}
+                />
               </div>
               {!nomenu.includes(item.type) && (
                 <button
-                  className="menu-btn"
+                  className={"menu-btn"}
                   onClick={() => getContextMenu}
                   aria-label={$root.getLz("term.more")}>
                   {import("../svg/more.svg")}
@@ -548,7 +549,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               )}
               {!noplay.includes(item.type) && (
                 <button
-                  className="play-btn"
+                  className={"play-btn"}
                   onClick={() => app.playMediaItem(item)}
                   aria-label={$root.getLz("term.play")}>
                   {import("../svg/play.svg")}
@@ -557,41 +558,43 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               {itemBadges.length !== 0 &&
                 itemBadges.limit(1).map((badge) => (
                   <div
-                    className="socialBadge"
+                    className={"socialBadge"}
                     v-bind:key={badge.id}>
                     <MediaItemArtwork
                       url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
-                      size="32"></MediaItemArtwork>
+                      size={"32"}
+                    />
                   </div>
                 ))}
             </div>
             <div
-              className="info-rect"
-              className="{'info-rect-card': kind === 'card'}"
+              className={"info-rect"}
+              className={"{'info-rect-card': kind === 'card'}"}
               v-show={isVisible}
               style={{ "--bgartwork": getArtworkUrl(size, true) }}>
               {(item.attributes.artistNames === null || kind !== "card") && (
                 <div
-                  className="title"
+                  className={"title"}
                   title={item.attributes?.name ?? item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? ""}
                   onClick={() => app.routeView(item)}>
-                  <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
+                  <div className={"item-navigate text-overflow-elipsis"}>{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
                   {item.attributes && item.attributes.contentRating === "explicit" && (
                     <div
-                      className="explicit-icon"
-                      style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}></div>
+                      className={"explicit-icon"}
+                      style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
+                    />
                   )}
                 </div>
               )}
               {getSubtitle() !== "" && (
                 <div
                   title={getSubtitle()}
-                  className="subtitle item-navigate text-overflow-elipsis"
+                  className={"subtitle item-navigate text-overflow-elipsis"}
                   onClick={() => getSubtitleNavigation()}>
                   {getSubtitle()}
                 </div>
               )}
-              {getSubtitle() === "" && kind !== "card" && <div className="subtitle">&nbsp;</div>}
+              {getSubtitle() === "" && kind !== "card" && <div className={"subtitle"}>&nbsp;</div>}
             </div>
           </div>
         </div>

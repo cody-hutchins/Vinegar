@@ -27,7 +27,7 @@ const PluginsGithub = () => {
   }
   function showRepo(repo) {
     const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-    let requestOptions = {
+    const requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -49,7 +49,7 @@ const PluginsGithub = () => {
     return marked.parse(text);
   }
   function installThemeRepo(repo) {
-    let msg = app.stringTemplateParser(app.getLz("settings.option.visual.plugin.github.install.confirm"), {
+    const msg = app.stringTemplateParser(app.getLz("settings.option.visual.plugin.github.install.confirm"), {
       repo: repo.full_name,
     });
     app.confirm(msg, (res) => {
@@ -96,7 +96,7 @@ const PluginsGithub = () => {
     });
   }
   function getRepos() {
-    let requestOptions = {
+    const requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -111,34 +111,34 @@ const PluginsGithub = () => {
   }
   return (
     <>
-      <div id="plugins-github">
-        <div className="github-themes-page">
-          <div className="gh-header">
-            <div className="row">
-              <div className="col nopadding">
-                <h1 className="header-text">{$root.getLz("settings.header.visual.plugin.github.page")}</h1>
+      <div id={"plugins-github"}>
+        <div className={"github-themes-page"}>
+          <div className={"gh-header"}>
+            <div className={"row"}>
+              <div className={"col nopadding"}>
+                <h1 className={"header-text"}>{$root.getLz("settings.header.visual.plugin.github.page")}</h1>
               </div>
-              <div className="col-auto nopadding cider-flex-center">
+              <div className={"col-auto nopadding cider-flex-center"}>
                 <button
-                  className="md-btn md-btn-small md-btn-block"
+                  className={"md-btn md-btn-small md-btn-block"}
                   onClick={() => installThemeURL()}>
                   {$root.getLz("settings.option.visual.plugin.github.download")}
                 </button>
               </div>
             </div>
           </div>
-          <div className="gh-content">
-            <div className="repos-list">
-              <ul className="list-group list-group-flush">
+          <div className={"gh-content"}>
+            <div className={"repos-list"}>
+              <ul className={"list-group list-group-flush"}>
                 {repos.map((repo) => (
                   <li
                     onClick={() => showRepo(repo)}
-                    className="list-group-item list-group-item-dark"
+                    className={"list-group-item list-group-item-dark"}
                     style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "", borderRadius: "5px" }}>
-                    <div className="row">
-                      <div className="col cider-flex-center">
+                    <div className={"row"}>
+                      <div className={"col cider-flex-center"}>
                         <div>
-                          <h4 className="repo-name">{repo.description !== null ? repo.description : repo.full_name}</h4>
+                          <h4 className={"repo-name"}>{repo.description !== null ? repo.description : repo.full_name}</h4>
                           <div>⭐ {repo.stargazers_count}</div>
                         </div>
                       </div>
@@ -148,42 +148,45 @@ const PluginsGithub = () => {
               </ul>
             </div>
             {openRepo.full_name ? (
-              <div className="github-preview">
-                <div className="gh-preview-header">
-                  <div className="row nopadding">
-                    <div className="col nopadding cider-flex-center">
+              <div className={"github-preview"}>
+                <div className={"gh-preview-header"}>
+                  <div className={"row nopadding"}>
+                    <div className={"col nopadding cider-flex-center"}>
                       <div>
-                        <h3 className="repo-preview-name">{openRepo.description}</h3>
+                        <h3 className={"repo-preview-name"}>{openRepo.description}</h3>
                         <div>
                           <div
-                            className="svg-icon inline"
-                            style={{ "--url": "url('./assets/github.svg')" }}></div>
+                            className={"svg-icon inline"}
+                            style={{ "--url": "url('./assets/github.svg')" }}
+                          />
                           <a
-                            className="repo-url"
-                            target="_blank"
-                            href={openRepo.html_url}>
+                            className={"repo-url"}
+                            target={"_blank"}
+                            href={openRepo.html_url}
+                            rel={"noreferrer"}>
                             {openRepo.full_name}
                           </a>
                         </div>
                         <div>⭐ {openRepo.stargazers_count}</div>
                       </div>
                     </div>
-                    <div className="col-auto nopadding cider-flex-center">
+                    <div className={"col-auto nopadding cider-flex-center"}>
                       <button
-                        className="md-btn md-btn-primary"
+                        className={"md-btn md-btn-primary"}
                         onClick={() => installThemeRepo(openRepo)}>
                         {!themesInstalled.includes(openRepo.full_name) ? <span>{$root.getLz("action.install")}</span> : <span>{$root.getLz("action.update")}</span>}
                       </button>
                     </div>
                   </div>
                 </div>
-                <hr></hr>
+                <hr />
                 <div
                   v-html={openRepo.readme}
-                  className="github-content"></div>
+                  className={"github-content"}
+                />
               </div>
             ) : (
-              <div className="github-preview"></div>
+              <div className={"github-preview"} />
             )}
           </div>
         </div>

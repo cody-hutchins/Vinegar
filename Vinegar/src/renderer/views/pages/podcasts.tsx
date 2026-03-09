@@ -4,18 +4,18 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   function msToMinSec(ms: number) {
-    let minutes = Math.floor(ms / 60000);
-    let seconds = ((ms % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
   return (
     <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
       <div
-        className="info-rect"
+        className={"info-rect"}
         style={{ paddingLeft: "16px" }}>
-        <div className="title text-overflow-elipsis">{item.attributes.name}</div>
-        <div className="subtitle text-overflow-elipsis">{item.attributes.description.standard}</div>
-        <div className="subtitle text-overflow-elipsis">
+        <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
+        <div className={"subtitle text-overflow-elipsis"}>{item.attributes.description.standard}</div>
+        <div className={"subtitle text-overflow-elipsis"}>
           {msToMinSec(item.attributes.durationInMilliseconds)} • {new Date(item.attributes.releaseDateTime).toLocaleString()}
         </div>
       </div>
@@ -26,24 +26,25 @@ export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected:
 export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   return (
     <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
-      <div className="artwork">
+      <div className={"artwork"}>
         <MediaItemArtwork
           url={item.attributes.artwork.url}
-          size="50"
-          type="podcast"></MediaItemArtwork>
+          size={"50"}
+          type={"podcast"}
+        />
       </div>
-      <div className="info-rect">
-        <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+      <div className={"info-rect"}>
+        <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
       </div>
     </div>
   );
 };
 
 export const Podcasts = () => {
-  let ciderPodcasts = [];
+  const ciderPodcasts = [];
   let podcasts = [];
   let episodes = [];
-  let search = {
+  const search = {
     term: "",
     loading: false,
     results: [],
@@ -57,7 +58,7 @@ export const Podcasts = () => {
     id: -1,
   };
   async function mounted() {
-    let podcastShow = await app.mk.api.v3.podcasts(`/v1/me/library/podcasts?include=episodes`);
+    const podcastShow = await app.mk.api.v3.podcasts(`/v1/me/library/podcasts?include=episodes`);
     podcasts = podcastShow.data.data;
     if (podcastShow.data.next) {
       await getNext(podcastShow.data.next);
@@ -102,8 +103,8 @@ export const Podcasts = () => {
   }
 
   function msToMinSec(ms) {
-    let minutes = Math.floor(ms / 60000);
-    let seconds = ((ms % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
 
@@ -124,7 +125,7 @@ export const Podcasts = () => {
 
   async function getEpisodes(podcast) {
     episodes = [];
-    let eps = await app.mk.api.v3.podcasts(`/v1/catalog/${app.mk.storefrontId}/podcasts/${podcast.id}?include=episodes`);
+    const eps = await app.mk.api.v3.podcasts(`/v1/catalog/${app.mk.storefrontId}/podcasts/${podcast.id}?include=episodes`);
 
     eps.data.data[0].relationships.episodes.data.forEach((ep) => {
       episodes.push(ep);
@@ -135,7 +136,7 @@ export const Podcasts = () => {
   }
 
   async function getNextEpisodes(next, podcastId) {
-    let podcastShow = await app.mk.api.v3.podcasts(next);
+    const podcastShow = await app.mk.api.v3.podcasts(next);
     if (podcastId !== podcastSelected.id) {
       return;
     }
@@ -148,7 +149,7 @@ export const Podcasts = () => {
   }
 
   async function getNext(next) {
-    let podcastShow = await app.mk.api.v3.podcasts(next);
+    const podcastShow = await app.mk.api.v3.podcasts(next);
     podcasts = podcasts.concat(podcastShow.data.data);
     if (podcastShow.data.next) {
       await getNext(podcastShow.data.next);
@@ -157,83 +158,88 @@ export const Podcasts = () => {
 
   return (
     <div>
-      <div id="apple-podcasts">
-        <div className="content-inner podcasts-page">
-          <div className="podcasts-list">
-            <div className="podcasts-search">
+      <div id={"apple-podcasts"}>
+        <div className={"content-inner podcasts-page"}>
+          <div className={"podcasts-list"}>
+            <div className={"podcasts-search"}>
               <div
-                className="search-input-container"
+                className={"search-input-container"}
                 style={{ width: "100%" }}>
-                <div className="search-input--icon"></div>
+                <div className={"search-input--icon"} />
                 <input
-                  type="search"
+                  type={"search"}
                   style={{ width: "100%" }}
-                  spellCheck="false"
+                  spellCheck={"false"}
                   placeholder={$root.getLz("term.search") + "..."}
                   onChange={() => {
                     searchPodcasts();
                     librarySearch();
                   }}
                   v-model={search.term}
-                  className="search-input"></input>
+                  className={"search-input"}
+                />
               </div>
             </div>
             {search.term === "" ? (
               <div>
-                {ciderPodcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("podcast.followedOnCider")}</div>}
-                {podcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("podcast.subscribedOnItunes")}</div>}
+                {ciderPodcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.followedOnCider")}</div>}
+                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.subscribedOnItunes")}</div>}
                 {podcasts.map((podcast) => (
                   <PodcastTab
                     isSelected={podcastSelected.id === podcast.id}
                     clicknative={selectPodcast(podcast)}
-                    item={podcast}></PodcastTab>
+                    item={podcast}
+                  />
                 ))}
               </div>
             ) : (
               <div>
-                {podcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("term.library")}</div>}
+                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("term.library")}</div>}
                 {search.resultsLibrary.map((podcast) => (
                   <PodcastTab
                     isSelected={podcastSelected.id === podcast.id}
                     clicknative={selectPodcast(podcast)}
-                    item={podcast}></PodcastTab>
+                    item={podcast}
+                  />
                 ))}
-                {podcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("podcast.itunesStore")}</div>}
+                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.itunesStore")}</div>}
                 {search.results.map((podcast) => (
                   <PodcastTab
                     isSelected={podcastSelected.id === podcast.id}
                     clicknative={selectPodcast(podcast)}
-                    item={podcast}></PodcastTab>
+                    item={podcast}
+                  />
                 ))}
               </div>
             )}
           </div>
-          <div className="episodes-list">
+          <div className={"episodes-list"}>
             {podcastSelected.id !== -1 && (
-              <div className="episodes-inline-info">
-                <div className="row">
-                  <div className="col-auto cider-flex-center">
-                    <div className="podcast-artwork">
+              <div className={"episodes-inline-info"}>
+                <div className={"row"}>
+                  <div className={"col-auto cider-flex-center"}>
+                    <div className={"podcast-artwork"}>
                       <MediaItemArtwork
-                        shadow="large"
+                        shadow={"large"}
                         url={podcastSelected.attributes.artwork.url}
-                        size="300"></MediaItemArtwork>
+                        size={"300"}
+                      />
                     </div>
                   </div>
-                  <div className="col podcast-show-info">
+                  <div className={"col podcast-show-info"}>
                     <h1>{podcastSelected.attributes.name}</h1>
                     <small>{podcastSelected.attributes.releaseFrequency}</small>
                     <small>Created: {new Date(podcastSelected.attributes.createdDate).toLocaleDateString()}</small>
                   </div>
                 </div>
-                <div className="well podcast-show-description">{podcastSelected.attributes.description.standard}</div>
+                <div className={"well podcast-show-description"}>{podcastSelected.attributes.description.standard}</div>
                 {!isSubscribed(podcastSelected.id) && (
-                  <div className="row">
-                    <div className="col">
-                      <button className="md-btn md-btn-block">{$root.getLz("podcast.followOnCider")}</button>
+                  <div className={"row"}>
+                    <div className={"col"}>
+                      <button className={"md-btn md-btn-block"}>{$root.getLz("podcast.followOnCider")}</button>
                     </div>
-                    <div className="col">
-                      <button className="md-btn md-btn-block">{$root.getLz("podcast.subscribeOnItunes")}</button>
+                    <div className={"col"}>
+                      <button className={"md-btn md-btn-block"}>{$root.getLz("podcast.subscribeOnItunes")}</button>
                     </div>
                   </div>
                 )}
@@ -241,7 +247,7 @@ export const Podcasts = () => {
               </div>
             )}
             {search.results.length === 0 && podcastSelected.id === -1 && (
-              <div className="podcast-no-search-results">
+              <div className={"podcast-no-search-results"}>
                 <h3>{$root.getLz("error.noResults")}</h3>
                 <p>{$root.getLz("error.noResults.description")}</p>
               </div>
@@ -251,47 +257,50 @@ export const Podcasts = () => {
                 isSelected={selected.id === episode.id}
                 dblclicknative={() => playEpisode(episode)}
                 clicknative={() => selectEpisode(episode)}
-                item={episode}></PodcastEpisode>
+                item={episode}
+              />
             ))}
           </div>
           <AnimatePresence>
-            <motion.div name="wpfade">
+            <motion.div name={"wpfade"}>
               {selected.id !== -1 && (
-                <div className="podcasts-details">
-                  <div className="podcasts-details-header">
+                <div className={"podcasts-details"}>
+                  <div className={"podcasts-details-header"}>
                     <button
-                      className="close-btn"
+                      className={"close-btn"}
                       onClick={() => (selected.id = -1)}
-                      aria-label={$root.getLz("action.close")}></button>
+                      aria-label={$root.getLz("action.close")}
+                    />
                   </div>
-                  <div className="podcast-artwork">
+                  <div className={"podcast-artwork"}>
                     <MediaItemArtwork
-                      shadow="large"
+                      shadow={"large"}
                       url={selected.attributes.artwork.url}
-                      size="300"></MediaItemArtwork>
+                      size={"300"}
+                    />
                   </div>
-                  <h3 className="podcast-header">{selected.attributes.name}</h3>
+                  <h3 className={"podcast-header"}>{selected.attributes.name}</h3>
                   <button
                     onClick={() => playEpisode(selected)}
-                    className="md-btn podcast-play-btn">
+                    className={"md-btn podcast-play-btn"}>
                     {$root.getLz("podcast.playEpisode")}
                   </button>
-                  <div className="podcast-genre">{selected.attributes.genreNames[0]}</div>
-                  <div className="podcast-metainfo">
+                  <div className={"podcast-genre"}>{selected.attributes.genreNames[0]}</div>
+                  <div className={"podcast-metainfo"}>
                     {msToMinSec(selected.attributes.durationInMilliseconds)} • {new Date(selected.attributes.releaseDateTime).toLocaleString()}
                   </div>
-                  {selected.attributes.description.standard && <div className="well podcast-description">{selected.attributes.description.standard}</div>}
-                  <div className="row">
-                    <div className="col">
+                  {selected.attributes.description.standard && <div className={"well podcast-description"}>{selected.attributes.description.standard}</div>}
+                  <div className={"row"}>
+                    <div className={"col"}>
                       <button
-                        className="md-btn md-btn-block meta-btn"
+                        className={"md-btn md-btn-block meta-btn"}
                         onClick={() => openUrl(selected.attributes.websiteUrl)}>
                         {$root.getLz("podcast.website")}
                       </button>
                     </div>
-                    <div className="col">
+                    <div className={"col"}>
                       <button
-                        className="md-btn md-btn-block meta-btn"
+                        className={"md-btn md-btn-block meta-btn"}
                         onClick={() => $root.share(selected.attributes.websiteUrl)}>
                         {$root.getLz("action.share")}
                       </button>
@@ -303,27 +312,28 @@ export const Podcasts = () => {
           </AnimatePresence>
         </div>
       </div>
-      <div id="podcast-tab">
+      <div id={"podcast-tab"}>
         <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
-          <div className="artwork">
+          <div className={"artwork"}>
             <MediaItemArtwork
               url={item.attributes.artwork.url}
-              size="50"
-              type="podcast"></MediaItemArtwork>
+              size={"50"}
+              type={"podcast"}
+            />
           </div>
-          <div className="info-rect">
-            <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+          <div className={"info-rect"}>
+            <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
           </div>
         </div>
       </div>
-      <div id="podcast-episode">
+      <div id={"podcast-episode"}>
         <div className={`cd-mediaitem-list-item list-flat ${isSelected ? "mediaitem-selected" : ""}`}>
           <div
-            className="info-rect"
+            className={"info-rect"}
             style={{ paddingLeft: "16px" }}>
-            <div className="title text-overflow-elipsis">{item.attributes.name}</div>
-            <div className="subtitle text-overflow-elipsis">{item.attributes.description.standard}</div>
-            <div className="subtitle text-overflow-elipsis">
+            <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
+            <div className={"subtitle text-overflow-elipsis"}>{item.attributes.description.standard}</div>
+            <div className={"subtitle text-overflow-elipsis"}>
               {msToMinSec(item.attributes.durationInMilliseconds)} • {new Date(item.attributes.releaseDateTime).toLocaleString()}
             </div>
           </div>

@@ -8,12 +8,12 @@ const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size
     src = app.getMediaItemArtwork(url, size);
   }, []);
   return (
-    <div id="artwork-material">
-      <div className="artworkMaterial">
+    <div id={"artwork-material"}>
+      <div className={"artworkMaterial"}>
         {images.map((image) => (
           <MediaItemArtwork
             url={src}
-            size="500"
+            size={"500"}
           />
         ))}
       </div>

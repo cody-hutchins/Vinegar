@@ -1,13 +1,13 @@
 function simulateGamepad() {
   const app = window.app;
   app.chrome.showCursor = true;
-  let cursorPos = [0, 0];
-  let intTabIndex = 0;
+  const cursorPos = [0, 0];
+  const intTabIndex = 0;
   const cursorSpeedPvt = 8;
   const cursorSize = 16;
-  let scrollSpeed = 8;
-  let buttonPressDelay = 500;
-  let stickDeadZone = 0.2;
+  const scrollSpeed = 8;
+  const buttonPressDelay = 500;
+  const stickDeadZone = 0.2;
   let scrollGroup = null;
   let scrollGroupY = null;
   let elementFocusEnabled = true;
@@ -15,9 +15,9 @@ function simulateGamepad() {
 
   let cursorSpeed = cursorSpeedPvt;
 
-  let lastButtonPress = {};
+  const lastButtonPress = {};
 
-  var sounds = {
+  const sounds = {
     Confirm: new Audio("./sounds/confirm.ogg"),
     Menu: new Audio("./sounds/btn1.ogg"),
     Hover: new Audio("./sounds/hover.ogg"),
@@ -27,12 +27,12 @@ function simulateGamepad() {
   let elementType = 0;
 
   function appLoop() {
-    var gamepads = navigator.getGamepads ? navigator.getGamepads() : navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : [];
+    const gamepads = navigator.getGamepads ? navigator.getGamepads() : navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : [];
     if (!gamepads) {
       return;
     }
 
-    var gp = gamepads[0];
+    const gp = gamepads[0];
 
     //  LEFT STICK
     if (gp.axes[0] > stickDeadZone) {
@@ -120,7 +120,7 @@ function simulateGamepad() {
           document.activeElement.dispatchEvent(new Event("contextmenu"));
           setTimeout(() => {
             if ($(".menu-option").length > 0) {
-              let bounds = $(".menu-option")[0].getBoundingClientRect();
+              const bounds = $(".menu-option")[0].getBoundingClientRect();
               cursorPos[0] = bounds.left + bounds.width / 2;
               cursorPos[1] = bounds.top + bounds.height / 2;
             }
@@ -159,16 +159,16 @@ function simulateGamepad() {
     }
 
     if (element) {
-      let closest = element.closest("[tabindex], input, button, a");
+      const closest = element.closest("[tabindex], input, button, a");
 
       // VERT SCROLL
-      let scrollGroupCloY = element.closest(`[scrollaxis="y"]`);
+      const scrollGroupCloY = element.closest(`[scrollaxis="y"]`);
       if (scrollGroupCloY) {
         scrollGroupY = scrollGroupCloY;
       }
 
       //  HOZ SCROLL
-      let scrollGroupClo = element.closest(".v-hl-container");
+      const scrollGroupClo = element.closest(".v-hl-container");
 
       if (scrollGroupClo) {
         if (scrollGroupClo.classList.contains("v-hl-container")) {
@@ -218,7 +218,7 @@ function simulateGamepad() {
     sounds.Confirm.currentTime = 0;
     sounds.Menu.currentTime = 0;
     sounds.Hover.currentTime = 0;
-    let tabbable = $("[tabindex]");
+    const tabbable = $("[tabindex]");
     console.log(e.key);
     switch (e.key) {
       default:
@@ -297,7 +297,7 @@ function simulateGamepad() {
     element = document.elementFromPoint(cursorPos[0], cursorPos[1]);
 
     if (element) {
-      let closest = element.closest("[tabindex], input, button, a");
+      const closest = element.closest("[tabindex], input, button, a");
       if (closest) {
         elementType = 0;
         closest.focus();

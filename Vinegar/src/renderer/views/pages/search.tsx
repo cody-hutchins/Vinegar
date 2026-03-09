@@ -21,7 +21,7 @@ const Component = ({ search }: { search: object }) => {
   }
 
   async function seeAllHistory() {
-    let hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+    const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
       l: this.$root.mklang,
     });
     recentlyPlayed = hist.data.data;
@@ -33,7 +33,7 @@ const Component = ({ search }: { search: object }) => {
       return await true;
     } else {
       await seeAllHistory();
-      let response = await app.mk.api.v3.music(`/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
+      const response = await app.mk.api.v3.music(`/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
       categoriesView = response.data.data;
       console.log(categoriesView);
       categoriesReady = true;
@@ -42,7 +42,7 @@ const Component = ({ search }: { search: object }) => {
   }
 
   function getFlattenedCategories() {
-    let flattened = [];
+    const flattened = [];
     for (let i = 0; i < categoriesView.length; i++) {
       if (categoriesView[i].relationships && categoriesView[i].relationships.contents && categoriesView[i].relationships.contents.data) {
         for (let j = 0; j < categoriesView[i].relationships.contents.data.length; j++) {
@@ -54,14 +54,14 @@ const Component = ({ search }: { search: object }) => {
   }
 
   return (
-    <div id="cider-search">
-      <div className="content-inner search-page">
+    <div id={"cider-search"}>
+      <div className={"content-inner search-page"}>
         {$root.appMode === "fullscreen" ? (
-          <div className="search-input-container fs-search">
-            <div className="search-input--icon"></div>
+          <div className={"search-input-container fs-search"}>
+            <div className={"search-input--icon"} />
             <input
-              type="search"
-              spellCheck="false"
+              type={"search"}
+              spellCheck={"false"}
               onFocus={() => {
                 $root.search.showHints = true;
               }}
@@ -80,16 +80,17 @@ const Component = ({ search }: { search: object }) => {
               onInput={() => $root.getSearchHints()}
               placeholder={$root.getLz("term.search") + "..."}
               v-model={$root.search.term}
-              className="search-input"></input>
+              className={"search-input"}
+            />
             {$root.search.showHints && $root.search.hints.length !== 0 && (
-              <div className="search-hints-container">
-                <div className="search-hints">
+              <div className={"search-hints-container"}>
+                <div className={"search-hints"}>
                   {$root.search.hints
                     .filter((a) => a.content === null)
                     .map((hint, index) => (
                       <button
-                        className="search-hint text-overflow-elipsis"
-                        className="{active: ($root.search.cursor === index)}"
+                        className={"search-hint text-overflow-elipsis"}
+                        className={"{active: ($root.search.cursor === index)}"}
                         onClick={() => {
                           $root.search.term = hint.searchTerm;
                           $root.search.showHints = false;
@@ -114,21 +115,21 @@ const Component = ({ search }: { search: object }) => {
             )}
           </div>
         ) : null}
-        <div className="btn-group searchToggle">
+        <div className={"btn-group searchToggle"}>
           <button
             onClick={() => {
               searchType = "catalog";
             }}
-            className="md-btn md-btn-small"
-            className="{'md-btn-primary': searchType === 'catalog'}">
+            className={"md-btn md-btn-small"}
+            className={"{'md-btn-primary': searchType === 'catalog'}"}>
             {$root.getLz("term.appleMusic")}
           </button>
           <button
             onClick={() => {
               searchType = "library";
             }}
-            className="md-btn md-btn-small"
-            className="{'md-btn-primary': searchType === 'library'}">
+            className={"md-btn md-btn-small"}
+            className={"{'md-btn-primary': searchType === 'library'}"}>
             {$root.getLz("term.library")}
           </button>
         </div>
@@ -137,17 +138,17 @@ const Component = ({ search }: { search: object }) => {
             {searchType === "catalog" ? (
               <template>
                 <h3>{app.getLz("term.topResult")}</h3>
-                <MediaitemScrollerHorizontal items="search?.results[search?.results?.meta?.results?.order[0]]?.data"></MediaitemScrollerHorizontal>
-                <div className="row">
+                <MediaitemScrollerHorizontal items={"search?.results[search?.results?.meta?.results?.order[0]]?.data"} />
+                <div className={"row"}>
                   {search.results.song ? (
-                    <div className="col">
-                      <div className="row">
-                        <div className="col">
+                    <div className={"col"}>
+                      <div className={"row"}>
+                        <div className={"col"}>
                           <h3>{app.getLz("term.songs")}</h3>
                         </div>
                       </div>
-                      <div className="mediaitem-list-item__grid">
-                        <ListitemHorizontal items={search.results.song.data.limit(12)}></ListitemHorizontal>
+                      <div className={"mediaitem-list-item__grid"}>
+                        <ListitemHorizontal items={search.results.song.data.limit(12)} />
                       </div>
                     </div>
                   ) : (
@@ -164,18 +165,18 @@ const Component = ({ search }: { search: object }) => {
                         section !== "song" &&
                         section !== "top" && (
                           <template>
-                            <div className="row">
-                              <div className="col">
+                            <div className={"row"}>
+                              <div className={"col"}>
                                 <h3>{app.friendlyTypes(section)}</h3>
                               </div>
                             </div>
                             {!app.friendlyTypes(section).includes("Video") ? (
                               <template>
-                                <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                                <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
                               </template>
                             ) : (
                               <template>
-                                <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)}></MediaItemScrollerHorizontalMVView>
+                                <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
                               </template>
                             )}
                           </template>
@@ -185,22 +186,22 @@ const Component = ({ search }: { search: object }) => {
                 )}
                 {search.resultsSocial.playlist && (
                   <template>
-                    <div className="row">
-                      <div className="col">
+                    <div className={"row"}>
+                      <div className={"col"}>
                         <h3>{app.getLz("term.sharedPlaylists")}</h3>
                       </div>
                     </div>
-                    <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                    <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)} />
                   </template>
                 )}
                 {search.resultsSocial.profile && (
                   <template>
-                    <div className="row">
-                      <div className="col">
+                    <div className={"row"}>
+                      <div className={"col"}>
                         <h3>{app.getLz("term.people")}</h3>
                       </div>
                     </div>
-                    <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                    <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)} />
                   </template>
                 )}
               </template>
@@ -211,12 +212,12 @@ const Component = ({ search }: { search: object }) => {
                   <div>
                     <h3>{app.friendlyTypes(key)}</h3>
                     {key.includes("songs") ? (
-                      <div className="mediaitem-list-item__grid">
-                        <ListitemHorizontal items={section.data}></ListitemHorizontal>
+                      <div className={"mediaitem-list-item__grid"}>
+                        <ListitemHorizontal items={section.data} />
                       </div>
                     ) : (
-                      <div className="well">
-                        <MediaItemScrollerHorizontalLarge items={section.data}></MediaItemScrollerHorizontalLarge>
+                      <div className={"well"}>
+                        <MediaItemScrollerHorizontalLarge items={section.data} />
                       </div>
                     )}
                   </div>
@@ -230,25 +231,26 @@ const Component = ({ search }: { search: object }) => {
               <div>
                 <div>
                   {categoriesView !== null && categoriesView !== [] && categoriesView[0]?.attributes !== null && categoriesView[0]?.attributes.title !== null && (
-                    <div className="col">
+                    <div className={"col"}>
                       <h3>{$root.getLz("home.recentlyPlayed")}</h3>
-                      <div className="mediaitem-list-item__grid">
-                        <ListitemHorizontal items={recentlyPlayed.limit(10)}></ListitemHorizontal>
+                      <div className={"mediaitem-list-item__grid"}>
+                        <ListitemHorizontal items={recentlyPlayed.limit(10)} />
                       </div>
-                      {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="'385'" size="600" item="item" imagesize"800" ></MediaItemSquare>)} */}
+                      {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="'385'" size="600" item="item" imagesize"800" />)} */}
                       <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
                     </div>
                   )}
                 </div>
-                <div className="categories">
+                <div className={"categories"}>
                   {getFlattenedCategories().map((item) => (
                     <MediaItemSquare
-                      kind="'385'"
-                      imageformat="'bb'"
-                      size="600"
-                      removeamtext="true"
+                      kind={"'385'"}
+                      imageformat={"'bb'"}
+                      size={"600"}
+                      removeamtext={"true"}
                       item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
-                      imagesize="800"></MediaItemSquare>
+                      imagesize={"800"}
+                    />
                   ))}
                 </div>
               </div>

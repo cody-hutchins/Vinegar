@@ -9,23 +9,23 @@ const AppleCurator = ({ data }: { data: object }) => {
   }, []);
   return (
     <>
-      <div id="cider-applecurator">
-        <div className="content-inner">
-          <h1 className="header-text">{data.attributes?.shortName ?? data.attributes.name}</h1>
+      <div id={"cider-applecurator"}>
+        <div className={"content-inner"}>
+          <h1 className={"header-text"}>{data.attributes?.shortName ?? data.attributes.name}</h1>
           {data.relationships && data.relationships.grouping && (
             <template>
               {data.relationships.grouping.data[0].relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
                 <div>
-                  <div className="row">
+                  <div className={"row"}>
                     {recom.attributes.name !== "Chart Set" && (
-                      <div className="col">
+                      <div className={"col"}>
                         <h3>{recom.attributes.name ?? ""}</h3>
                       </div>
                     )}
                     {index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
-                      <div className="col-auto cider-flex-center">
+                      <div className={"col-auto cider-flex-center"}>
                         <button
-                          className="cd-btn-seeall"
+                          className={"cd-btn-seeall"}
                           onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
                           {app.getLz("term.seeAll")}
                         </button>
@@ -36,13 +36,14 @@ const AppleCurator = ({ data }: { data: object }) => {
                     <div>
                       {(recom.attributes.name && recom.attributes.name.includes("ideo")) || index === 0 ? (
                         <MediaItemScrollerHorizontalMVView
-                          imagesize="800"
-                          browsesp="index === 0"
-                          items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}></MediaItemScrollerHorizontalMVView>
+                          imagesize={"800"}
+                          browsesp={"index === 0"}
+                          items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
+                        />
                       ) : recom.attributes.name === "Chart Set" ? (
-                        <div></div>
+                        <div />
                       ) : (
-                        <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                        <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
                       )}
                     </div>
                   )}

@@ -79,8 +79,8 @@ const Keybinds = () => {
   };
 
   const getLanguages = () => {
-    let langs = this.$root.lzListing;
-    let categories = {
+    const langs = this.$root.lzListing;
+    const categories = {
       main: [],
       fun: [],
       unsorted: [],
@@ -99,88 +99,88 @@ const Keybinds = () => {
 
   return (
     <>
-      <div id="keybinds-settings">
-        <div className="keybinds-page">
-          <div className="md-option-header">
+      <div id={"keybinds-settings"}>
+        <div className={"keybinds-page"}>
+          <div className={"md-option-header"}>
             <span>{$root.getLz("settings.option.general.keybindings")}</span>
           </div>
         </div>
-        <div className="md-option-header-sub">
+        <div className={"md-option-header-sub"}>
           <span>{$root.getLz("settings.option.general.keybindings.library")}</span>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.search")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.search")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.listnow")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.listnow")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.browse")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.browse")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.recentAdd")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.recentAdd")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.songs")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.songs")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.albums")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.albums")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.artists")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.artists")}</div>
         </div>
-        <div className="md-option-header-sub">
+        <div className={"md-option-header-sub"}>
           <span>{$root.getLz("settings.option.general.keybindings.session")}</span>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.private")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.private")}</div>
         </div>
-        <div className="md-option-header-sub">
+        <div className={"md-option-header-sub"}>
           <span>{$root.getLz("settings.option.general.keybindings.control")}</span>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.remote")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.remote")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.audio")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.audio")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.plugins")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.plugins")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.cast")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.cast")}</div>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.settings")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.settings")}</div>
         </div>
         {app.platform !== "darwin" && (
-          <div className="md-option-header-sub">
+          <div className={"md-option-header-sub"}>
             <span>{$root.getLz("settings.option.general.keybindings.interface")}</span>
           </div>
         )}
         {app.platform !== "darwin" && (
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("term.zoomin")}</div>
+          <div className={"md-option-line"}>
+            <div className={"md-option-segment"}>{$root.getLz("term.zoomin")}</div>
           </div>
         )}
         {app.platform !== "darwin" && (
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("term.zoomout")}</div>
+          <div className={"md-option-line"}>
+            <div className={"md-option-segment"}>{$root.getLz("term.zoomout")}</div>
           </div>
         )}
         {app.platform !== "darwin" && (
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("term.zoomreset")}</div>
+          <div className={"md-option-line"}>
+            <div className={"md-option-segment"}>{$root.getLz("term.zoomreset")}</div>
           </div>
         )}
-        <div className="md-option-header-sub">
+        <div className={"md-option-header-sub"}>
           <span>{$root.getLz("settings.option.general.keybindings.advanced")}</span>
         </div>
-        <div className="md-option-line">
-          <div className="md-option-segment">{$root.getLz("settings.description.developer")}</div>
+        <div className={"md-option-line"}>
+          <div className={"md-option-segment"}>{$root.getLz("settings.description.developer")}</div>
         </div>
         <button
-          className="md-btn md-btn-large md-btn-block"
+          className={"md-btn md-btn-large md-btn-block"}
           onClick={() => keyBindReset()}>
           {$root.getLz("term.reset")}
         </button>

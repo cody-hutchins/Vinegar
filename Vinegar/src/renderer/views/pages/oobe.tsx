@@ -14,8 +14,8 @@ const OOBE = () => {
     return this.$root.getLz.apply(this.$root, arguments);
   }
   function getLanguages() {
-    let langs = this.$root.lzListing;
-    let categories = {
+    const langs = this.$root.lzListing;
+    const categories = {
       main: [],
       fun: [],
       unsorted: [],
@@ -33,22 +33,22 @@ const OOBE = () => {
   }
   return (
     <>
-      <div id="cider-oobe">
-        <div className="content-inner oobe">
+      <div id={"cider-oobe"}>
+        <div className={"content-inner oobe"}>
           {/* before_we_start */}
           {/*<transition name="">*/}
           {screen === "before_we_start" && (
-            <div className="oobe-view">
-              <div className="oobe-header">{getLz("oobe.amupsell.title")}</div>
-              <div className="oobe-body text">
+            <div className={"oobe-view"}>
+              <div className={"oobe-header"}>{getLz("oobe.amupsell.title")}</div>
+              <div className={"oobe-body text"}>
                 {getLz("oobe.amupsell.text")}
 
-                <div className="md-option-line">
-                  <div className="md-option-segment">{$root.getLz("term.language")}</div>
-                  <div className="md-option-segment md-option-segment_auto">
+                <div className={"md-option-line"}>
+                  <div className={"md-option-segment"}>{$root.getLz("term.language")}</div>
+                  <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <select
-                        className="md-select"
+                        className={"md-select"}
                         onChange={() => {
                           $root.setLz("");
                           $root.setLzManual();
@@ -68,10 +68,10 @@ const OOBE = () => {
                   </div>
                 </div>
               </div>
-              <div className="oobe-footer">
-                <div className="btn-group">
+              <div className={"oobe-footer"}>
+                <div className={"btn-group"}>
                   <div
-                    className="md-btn md-btn-primary"
+                    className={"md-btn md-btn-primary"}
                     onClick={() => (screen = "welcome")}>
                     {getLz("oobe.next")}
                   </div>
@@ -84,18 +84,18 @@ const OOBE = () => {
           {/*     Welcome    */}
           {/*<transition name="">*/}
           {screen === "welcome" && (
-            <div className="oobe-view">
-              <div className="oobe-header">{getLz("oobe.intro.title")}</div>
-              <div className="oobe-body text">{getLz("oobe.intro.text")}</div>
-              <div className="oobe-footer">
-                <div className="btn-group">
+            <div className={"oobe-view"}>
+              <div className={"oobe-header"}>{getLz("oobe.intro.title")}</div>
+              <div className={"oobe-body text"}>{getLz("oobe.intro.text")}</div>
+              <div className={"oobe-footer"}>
+                <div className={"btn-group"}>
                   <div
-                    className="md-btn"
+                    className={"md-btn"}
                     onClick={() => (screen = "before_we_start")}>
                     {getLz("oobe.previous")}
                   </div>
                   <div
-                    className="md-btn md-btn-primary"
+                    className={"md-btn md-btn-primary"}
                     onClick={() => (screen = "visual")}>
                     {getLz("oobe.next")}
                   </div>
@@ -108,18 +108,18 @@ const OOBE = () => {
           {/*     General    */}
           {/*<transition name="">*/}
           {screen === "general" && (
-            <div className="oobe-view">
-              <div className="oobe-header">{getLz("oobe.general.title")}</div>
-              <div className="oobe-body text"></div>
-              <div className="oobe-footer">
-                <div className="btn-group">
+            <div className={"oobe-view"}>
+              <div className={"oobe-header"}>{getLz("oobe.general.title")}</div>
+              <div className={"oobe-body text"} />
+              <div className={"oobe-footer"}>
+                <div className={"btn-group"}>
                   <div
-                    className="md-btn"
+                    className={"md-btn"}
                     onClick={() => (screen = "welcome")}>
                     {getLz("oobe.previous")}
                   </div>
                   <div
-                    className="md-btn md-btn-primary"
+                    className={"md-btn md-btn-primary"}
                     onClick={() => (screen = "visual")}>
                     {getLz("oobe.next")}
                   </div>
@@ -132,50 +132,52 @@ const OOBE = () => {
           {/*     Visual    */}
           {/*<transition name="">*/}
           {screen === "visual" && (
-            <div className="oobe-view">
-              <div className="oobe-header">{getLz("oobe.visual.title")}</div>
-              <div className="oobe-body visual">
+            <div className={"oobe-view"}>
+              <div className={"oobe-header"}>{getLz("oobe.visual.title")}</div>
+              <div className={"oobe-body visual"}>
                 <b-row>
                   <b-col>
                     <div
-                      className="card bg-dark text-white stylePicker"
+                      className={"card bg-dark text-white stylePicker"}
                       onClick={() => (cfg.visual.directives.windowLayout = "twopanel")}
-                      className="{'style-active': (cfg.visual.directives.windowLayout === 'twopanel')}">
-                      <div className="card-body">
+                      className={"{'style-active': (cfg.visual.directives.windowLayout === 'twopanel')}"}>
+                      <div className={"card-body"}>
                         <img
-                          className="visualPreview"
-                          src="./assets/oobe/mojave.png"
-                          alt="TEMP"></img>
+                          className={"visualPreview"}
+                          src={"./assets/oobe/mojave.png"}
+                          alt={"TEMP"}
+                        />
                       </div>
-                      <div className="card-footer">Mojave</div>
+                      <div className={"card-footer"}>Mojave</div>
                     </div>
                   </b-col>
                   <b-col>
                     <div
-                      className="card bg-dark text-white stylePicker"
+                      className={"card bg-dark text-white stylePicker"}
                       onClick={() => (cfg.visual.directives.windowLayout = "default")}
-                      className="{'style-active': (cfg.visual.directives.windowLayout === 'default')}">
-                      <div className="card-body">
+                      className={"{'style-active': (cfg.visual.directives.windowLayout === 'default')}"}>
+                      <div className={"card-body"}>
                         <img
-                          className="visualPreview"
-                          src="./assets/oobe/maverick.png"
-                          alt="TEMP"></img>
+                          className={"visualPreview"}
+                          src={"./assets/oobe/maverick.png"}
+                          alt={"TEMP"}
+                        />
                       </div>
-                      <div className="card-footer">Maverick</div>
+                      <div className={"card-footer"}>Maverick</div>
                     </div>
                   </b-col>
                 </b-row>
-                <div className="blurb">{getLz("oobe.visual.layout.text")}</div>
+                <div className={"blurb"}>{getLz("oobe.visual.layout.text")}</div>
               </div>
-              <div className="oobe-footer">
-                <div className="btn-group">
+              <div className={"oobe-footer"}>
+                <div className={"btn-group"}>
                   <div
-                    className="md-btn"
+                    className={"md-btn"}
                     onClick={() => (screen = "welcome")}>
                     {getLz("oobe.previous")}
                   </div>
                   <div
-                    className="md-btn md-btn-primary"
+                    className={"md-btn md-btn-primary"}
                     onClick={() => (screen = "audio")}>
                     {getLz("oobe.next")}
                   </div>
@@ -188,36 +190,37 @@ const OOBE = () => {
           {/*     Audio    */}
           {/*<transition name="">*/}
           {screen === "audio" && (
-            <div className="oobe-view">
-              <div className="oobe-header">{getLz("oobe.audio.title")}</div>
-              <div className="oobe-body">
-                <div className="blurb">{getLz("oobe.audio.text")}</div>
-                <div className="md-option-container">
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
+            <div className={"oobe-view"}>
+              <div className={"oobe-header"}>{getLz("oobe.audio.title")}</div>
+              <div className={"oobe-body"}>
+                <div className={"blurb"}>{getLz("oobe.audio.text")}</div>
+                <div className={"md-option-container"}>
+                  <div className={"settings-option-body"}>
+                    <div className={"md-option-line"}>
+                      <div className={"md-option-segment"}>
                         {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
-                        <br></br>
+                        <br />
                         <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE.description")}</small>
                       </div>
-                      <div className="md-option-segment md-option-segment_auto">
+                      <div className={"md-option-segment md-option-segment_auto"}>
                         <input
-                          type="checkbox"
-                          v-model={cfg.audio.maikiwiAudio.ciderPPE}></input>
+                          type={"checkbox"}
+                          v-model={cfg.audio.maikiwiAudio.ciderPPE}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="oobe-footer">
-                <div className="btn-group">
+              <div className={"oobe-footer"}>
+                <div className={"btn-group"}>
                   <div
-                    className="md-btn"
+                    className={"md-btn"}
                     onClick={() => (screen = "visual")}>
                     {getLz("oobe.previous")}
                   </div>
                   <div
-                    className="md-btn md-btn-primary"
+                    className={"md-btn md-btn-primary"}
                     onClick={() => signIn()}>
                     {getLz("oobe.next")}
                   </div>
@@ -227,15 +230,15 @@ const OOBE = () => {
           )}
           {/*</transition>*/}
           {screen === "signin" && (
-            <div className="oobe-view">
-              <div className="oobe-header">Sign in with Apple Music</div>
-              <div className="oobe-body">
-                <div className="blurb"></div>
+            <div className={"oobe-view"}>
+              <div className={"oobe-header"}>Sign in with Apple Music</div>
+              <div className={"oobe-body"}>
+                <div className={"blurb"} />
               </div>
-              <div className="oobe-footer">
-                <div className="btn-group">
+              <div className={"oobe-footer"}>
+                <div className={"btn-group"}>
                   <div
-                    className="md-btn"
+                    className={"md-btn"}
                     onClick={() => (app.appMode = "player")}>
                     {getLz("oobe.done")}
                   </div>
@@ -243,15 +246,17 @@ const OOBE = () => {
               </div>
             </div>
           )}
-          <div className="oobe-titlebar">
+          <div className={"oobe-titlebar"}>
             {$root.platform !== "darwin" && (
-              <div className="button-group">
+              <div className={"button-group"}>
                 <button
-                  className="min"
-                  onClick={() => $root.ipcRenderer.send("minimize")}></button>
+                  className={"min"}
+                  onClick={() => $root.ipcRenderer.send("minimize")}
+                />
                 <button
-                  className="close"
-                  onClick={() => $root.ipcRenderer.send("close")}></button>
+                  className={"close"}
+                  onClick={() => $root.ipcRenderer.send("close")}
+                />
               </div>
             )}
           </div>

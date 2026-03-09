@@ -8,7 +8,7 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 const Component = ({ data }: { data: object }) => {
   const app = this.$root;
   let editorialNotesExpanded = false;
-  let drag = false;
+  const drag = false;
   let nameEditing = false;
   let inLibrary = null;
   let confirm = false;
@@ -44,15 +44,15 @@ const Component = ({ data }: { data: object }) => {
     nestedPlaylist = [];
     if (data?.type?.includes("album")) {
       console.log(data.relationships.tracks.data);
-      let songlists = data.relationships.tracks.data;
-      let discs = songlists
+      const songlists = data.relationships.tracks.data;
+      const discs = songlists
         .map((x) => {
           return x.attributes.discNumber;
         })
         .filter((item, i, ar) => ar.indexOf(item) === i);
       if (discs && discs.length > 1) {
         for (disc of discs) {
-          let songs = songlists.filter((x) => x.attributes.discNumber === disc);
+          const songs = songlists.filter((x) => x.attributes.discNumber === disc);
           nestedPlaylist.push({ disc: disc, tracks: songs });
         }
       }
@@ -76,7 +76,7 @@ const Component = ({ data }: { data: object }) => {
       id = data.id;
     }
     this.$root.getSocialBadges((badges) => {
-      let friends = badges[id];
+      const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
           self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
@@ -107,7 +107,7 @@ const Component = ({ data }: { data: object }) => {
   }
   function getAlbumGenre() {
     if (data.type.includes("albums")) {
-      let date = data.attributes.releaseDate;
+      const date = data.attributes.releaseDate;
       if (date === null || date === "") return "";
       return `${data.relationships.tracks.data[0].attributes.genreNames[0]} · ${new Date(date).getFullYear()}`;
     }
@@ -148,7 +148,7 @@ const Component = ({ data }: { data: object }) => {
     if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
       id = res.data.data[0].relationships.library.data[0].id;
     }
-    let kind = data.attributes.playParams.kind ?? data.type ?? "";
+    const kind = data.attributes.playParams.kind ?? data.type ?? "";
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
     app.mk.api.v3.music(
       `v1/me/library/${truekind}/${id.toString()}`,
@@ -219,8 +219,8 @@ const Component = ({ data }: { data: object }) => {
     }
     // for each app.selectedMediaItems splice the items from the playlist
     for (let i = 0; i < app.selectedMediaItems.length; i++) {
-      let item = app.selectedMediaItems[i];
-      let index = data.relationships.tracks.data.findIndex((x) => x.id === item.id);
+      const item = app.selectedMediaItems[i];
+      const index = data.relationships.tracks.data.findIndex((x) => x.id === item.id);
       if (index > -1) {
         data.relationships.tracks.data.splice(index, 1);
       }
@@ -228,7 +228,7 @@ const Component = ({ data }: { data: object }) => {
     await put();
   }
   function convert() {
-    let pl_tracks = [];
+    const pl_tracks = [];
     for (let i = 0; i < data.relationships.tracks.data.length; i++) {
       pl_tracks.push({
         id: data.relationships.tracks.data[i].id,
@@ -255,7 +255,7 @@ const Component = ({ data }: { data: object }) => {
       }
     }
 
-    let menuItems = {
+    const menuItems = {
       items: {
         share: {
           name: app.getLz("term.share"),
@@ -325,7 +325,7 @@ const Component = ({ data }: { data: object }) => {
     return `${kind}:${id}`;
   }
   function getFormattedDate() {
-    let date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
+    const date = data.attributes.releaseDate ?? data.attributes.lastModifiedDate ?? data.attributes.dateAdded ?? "";
     let prefix = "";
     if (date === null || date === "") return "";
     switch (date) {
@@ -372,8 +372,8 @@ const Component = ({ data }: { data: object }) => {
   function play() {
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        let temp = array[i];
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
         array[i] = array[j];
         array[j] = temp;
       }
@@ -385,12 +385,12 @@ const Component = ({ data }: { data: object }) => {
     //console.log("1")
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
-    let query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+    const query = (data ?? app.showingPlaylist).relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
     app.mk.stop().then(function () {
       app.mk.setQueue({ [truekind]: [id], parameters: { l: app.mklang } }).then(function () {
         app.mk.play().then(function () {
           if (query.length > 100) {
-            let u = query.slice(100);
+            const u = query.slice(100);
             if (app.mk.shuffleMode === 1) {
               shuffleArray(u);
             }
@@ -402,85 +402,88 @@ const Component = ({ data }: { data: object }) => {
   }
   return (
     <>
-      <div id="playlist-inline">
+      <div id={"playlist-inline"}>
         <div
-          className="content-inner playlist-page inline-playlist"
+          className={"content-inner playlist-page inline-playlist"}
           clickself={$root.resetState()}>
           {data !== [] && data.attributes !== null ? (
-            <div className="playlist-inner">
+            <div className={"playlist-inner"}>
               <div
-                className="close-btn"
-                title="Close"
+                className={"close-btn"}
+                title={"Close"}
                 onClick={() => $root.resetState()}>
                 <svg
-                  fill="white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="21"
-                  height="21"
-                  viewBox="0 0 21 21"
-                  aria-role="presentation"
-                  focusable="false">
+                  fill={"white"}
+                  xmlns={"http://www.w3.org/2000/svg"}
+                  width={"21"}
+                  height={"21"}
+                  viewBox={"0 0 21 21"}
+                  aria-role={"presentation"}
+                  focusable={"false"}>
                   <path
-                    d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
-                    fill-rule="nonzero"></path>
+                    d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
+                    fillRule={"nonzero"}
+                  />
                 </svg>
               </div>
               {app.playlists.loadingState === 0 && (
                 <template>
-                  <div className="content-inner centered">
-                    <div className="spinner"></div>
+                  <div className={"content-inner centered"}>
+                    <div className={"spinner"} />
                   </div>
                 </template>
               )}
               {app.playlists.loadingState === 1 && (
                 <template>
                   <div
-                    className="playlist-display"
+                    className={"playlist-display"}
                     style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null ? "#" + data.attributes.artwork.textColor1 : "" }}>
-                    <div className="playlistInfo">
-                      <div className="row">
-                        <div className="col-auto cider-flex-center">
+                    <div className={"playlistInfo"}>
+                      <div className={"row"}>
+                        <div className={"col-auto cider-flex-center"}>
                           <div style={{ width: "260px", height: "260px" }}>
                             <MediaItemArtwork
-                              shadow="large"
-                              video-priority="true"
+                              shadow={"large"}
+                              video-priority={"true"}
                               url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
                               video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                              size="260"></MediaItemArtwork>
+                              size={"260"}
+                            />
                           </div>
                         </div>
-                        <div className="col playlist-info">
+                        <div className={"col playlist-info"}>
                           {!editorialNotesExpanded && (
                             <template>
                               <div>
                                 <div
-                                  className="playlist-name"
+                                  className={"playlist-name"}
                                   onClick={() => editPlaylistName()}
                                   v-show={!nameEditing}>
                                   {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                                 </div>
                                 <div
-                                  className="playlist-name"
+                                  className={"playlist-name"}
                                   v-show={nameEditing}>
                                   <input
-                                    type="text"
-                                    spellCheck="false"
-                                    className="nameEdit"
+                                    type={"text"}
+                                    spellCheck={"false"}
+                                    className={"nameEdit"}
                                     v-model={data.attributes.name}
                                     onBlur={editPlaylist}
                                     onChange={editPlaylist}
                                     onKeyDown={(e) => {
                                       if (e.key === "enter") editPlaylist();
-                                    }}></input>
+                                    }}
+                                  />
                                 </div>
                                 <div
-                                  className="playlist-time genre"
+                                  className={"playlist-time genre"}
                                   style={{ margin: "0px" }}>
                                   {getAlbumGenre()}
                                 </div>
                                 {getArtistName(data) !== "" && !useArtistChip && (
                                   <div
-                                    className="playlist-artist item-navigate"
+                                    className={"playlist-artist item-navigate"}
                                     onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
                                     {getArtistName(data)}
                                   </div>
@@ -488,17 +491,18 @@ const Component = ({ data }: { data: object }) => {
                                 {useArtistChip && (
                                   <template>
                                     {data.relationships.artists?.data.map((artist) => (
-                                      <ArtistChip item={artist}></ArtistChip>
+                                      <ArtistChip item={artist} />
                                     ))}
                                   </template>
                                 )}
                                 {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
-                                  <div className="playlist-desc">
+                                  <div className={"playlist-desc"}>
                                     {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                       <div
-                                        className="content"
+                                        className={"content"}
                                         v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
-                                        onClick={() => openInfoModal()}></div>
+                                        onClick={() => openInfoModal()}
+                                      />
                                     ) : (
                                       <>
                                         {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
@@ -514,12 +518,13 @@ const Component = ({ data }: { data: object }) => {
                           )}
                           {editorialNotesExpanded && (
                             <template>
-                              <div className="playlist-desc-expanded">
+                              <div className={"playlist-desc-expanded"}>
                                 <div
-                                  className="content"
-                                  v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}></div>
+                                  className={"content"}
+                                  v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
+                                />
                                 <button
-                                  className="more-btn"
+                                  className={"more-btn"}
                                   onClick={() => {
                                     editorialNotesExpanded = !editorialNotesExpanded;
                                   }}>
@@ -529,139 +534,140 @@ const Component = ({ data }: { data: object }) => {
                             </template>
                           )}
                           <div
-                            className="playlist-controls"
-                            v-observe-visibility="{callback: isHeaderVisible}">
+                            className={"playlist-controls"}
+                            v-observe-visibility={"{callback: isHeaderVisible}"}>
                             <button
-                              className="md-btn md-btn-primary md-btn-icon"
+                              className={"md-btn md-btn-primary md-btn-icon"}
                               style={{ minWidth: "100px" }}
                               onClick={() => {
                                 app.mk.shuffleMode = 0;
                                 play();
                               }}>
-                              <img className="md-ico-play"></img>
+                              <img className={"md-ico-play"} />
                               {app.getLz("term.play")}
                             </button>
                             <button
-                              className="md-btn md-btn-primary md-btn-icon"
+                              className={"md-btn md-btn-primary md-btn-icon"}
                               style={{ minWidth: "100px" }}
                               onClick={() => {
                                 app.mk.shuffleMode = 1;
                                 play();
                               }}>
-                              <img className="md-ico-shuffle"></img>
+                              <img className={"md-ico-shuffle"} />
                               {app.getLz("term.shuffle")}
                             </button>
                             {inLibrary !== null && confirm !== true && (
                               <button
-                                className="md-btn md-btn-icon"
+                                className={"md-btn md-btn-icon"}
                                 style={{ minWidth: "180px" }}
                                 onClick={() => confirmButton()}>
-                                <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                                <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                                 {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                               </button>
                             )}
                             {confirm === true && (
                               <button
-                                className="md-btn md-btn-icon"
+                                className={"md-btn md-btn-icon"}
                                 style={{ minWidth: "180px" }}
                                 onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                                <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                                <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                                 {app.getLz("term.confirm")}
                               </button>
                             )}
                             <button
-                              className="more-btn-round"
+                              className={"more-btn-round"}
                               style={{ float: "right" }}
                               onClick={() => menu}
                               aria-label={app.getLz("term.more")}>
-                              <div className="svg-icon"></div>
+                              <div className={"svg-icon"} />
                             </button>
                           </div>
                         </div>
                       </div>
                     </div>
                     {data.attributes.artwork !== null && (
-                      <div className="artworkContainer">
+                      <div className={"artworkContainer"}>
                         <ArtworkMaterial
                           url={data.attributes.artwork.url}
-                          size="260"
-                          images="1"></ArtworkMaterial>
+                          size={"260"}
+                          images={"1"}
+                        />
                       </div>
                     )}
                   </div>
                   <div
-                    className="floating-header"
+                    className={"floating-header"}
                     style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
-                    <div className="row">
-                      <div className="col">
+                    <div className={"row"}>
+                      <div className={"col"}>
                         <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
                       </div>
-                      <div className="col-auto cider-flex-center">
+                      <div className={"col-auto cider-flex-center"}>
                         <div>
                           <button
-                            className="md-btn md-btn-primary  md-btn-icon"
+                            className={"md-btn md-btn-primary  md-btn-icon"}
                             style={{ minWidth: "100px" }}
                             onClick={() => {
                               app.mk.shuffleMode = 0;
                               play();
                             }}>
-                            <img className="md-ico-play"></img>
+                            <img className={"md-ico-play"} />
                             {app.getLz("term.play")}
                           </button>
                           <button
-                            className="md-btn md-btn-primary  md-btn-icon"
+                            className={"md-btn md-btn-primary  md-btn-icon"}
                             style={{ minWidth: "100px" }}
                             onClick={() => {
                               app.mk.shuffleMode = 1;
                               play();
                             }}>
-                            <img className="md-ico-shuffle"></img>
+                            <img className={"md-ico-shuffle"} />
                             {app.getLz("term.shuffle")}
                           </button>
                           {inLibrary !== null && confirm !== true && (
                             <button
-                              className="md-btn md-btn-icon"
+                              className={"md-btn md-btn-icon"}
                               style={{ minWidth: "180px" }}
                               onClick={() => confirmButton()}>
-                              <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                              <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                               {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                             </button>
                           )}
                           {confirm === true && (
                             <button
-                              className="md-btn md-btn-icon"
+                              className={"md-btn md-btn-icon"}
                               style={{ minWidth: "180px" }}
                               onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                              <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                              <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                               {app.getLz("term.confirm")}
                             </button>
                           )}
                         </div>
                       </div>
-                      <div className="col-auto cider-flex-center">
+                      <div className={"col-auto cider-flex-center"}>
                         <button
-                          className="more-btn-round"
+                          className={"more-btn-round"}
                           style={{ float: "right" }}
                           onClick={() => menu}
                           aria-label={term.more}>
-                          <div className="svg-icon"></div>
+                          <div className={"svg-icon"} />
                         </button>
                       </div>
                     </div>
                   </div>
-                  <div className="playlist-body scrollbody">
+                  <div className={"playlist-body scrollbody"}>
                     <b-tabs
                       pills
-                      align="center"
-                      content-className="mt-3">
-                      <b-tab title="Tracks">
-                        <div className="">
+                      align={"center"}
+                      content-className={"mt-3"}>
+                      <b-tab title={"Tracks"}>
+                        <div className={""}>
                           <div style={{ width: "100%" }}>
                             <draggable
                               sort={data.attributes.canEdit && data.type === "library-playlists"}
                               v-model={data.relationships.tracks.data}
-                              start="drag=true"
-                              end="drag=false;put()">
+                              start={"drag=true"}
+                              end={"drag=false;put()"}>
                               {nestedPlaylist === [] || nestedPlaylist.length <= 1 ? (
                                 <template>
                                   {data.relationships.tracks.data.map((item, index) => (
@@ -672,7 +678,8 @@ const Component = ({ data }: { data: object }) => {
                                       showIndex={true}
                                       showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
                                       context-ext={buildContextMenu()}
-                                      v-bind:key={item.id}></MediaItemListItem>
+                                      v-bind:key={item.id}
+                                    />
                                   ))}
                                 </template>
                               ) : (
@@ -680,7 +687,7 @@ const Component = ({ data }: { data: object }) => {
                                   {nestedPlaylist.map((disc) =>
                                     disc.tracks.map((item, index) => (
                                       <div>
-                                        <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                        <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                         <MediaItemListItem
                                           item={item}
                                           parent={getItemParent(data)}
@@ -688,7 +695,8 @@ const Component = ({ data }: { data: object }) => {
                                           showIndex={true}
                                           showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
                                           context-ext={buildContextMenu()}
-                                          v-bind:key={item.id}></MediaItemListItem>
+                                          v-bind:key={item.id}
+                                        />
                                       </div>
                                     )),
                                   )}
@@ -698,27 +706,28 @@ const Component = ({ data }: { data: object }) => {
                           </div>
                         </div>
                         {itemBadges.length !== 0 && (
-                          <div className="friends-info">
-                            <div className="well">
-                              <div className="badge-container">
+                          <div className={"friends-info"}>
+                            <div className={"well"}>
+                              <div className={"badge-container"}>
                                 {itemBadges.map((badge) => (
                                   <div
-                                    className="socialBadge"
-                                    title="`${badge.attributes.name} - ${badge.attributes.handle}`"
+                                    className={"socialBadge"}
+                                    title={"`${badge.attributes.name} - ${badge.attributes.handle}`"}
                                     v-bind:key={badge.id}>
                                     <MediaItemArtwork
                                       url={badge.attributes.artwork.url}
-                                      size="60"></MediaItemArtwork>
+                                      size={"60"}
+                                    />
                                   </div>
                                 ))}
                               </div>
                             </div>
                           </div>
                         )}
-                        <div className="playlist-time">{getFormattedDate()}</div>
-                        <div className="playlist-time total">{app.getTotalTime()}</div>
+                        <div className={"playlist-time"}>{getFormattedDate()}</div>
+                        <div className={"playlist-time total"}>{app.getTotalTime()}</div>
                         <div
-                          className="playlist-time item-navigate"
+                          className={"playlist-time item-navigate"}
                           onClick={() => app.searchAndNavigate(data, "recordLabel")}
                           style={{ width: "50%" }}>
                           {data.attributes.copyright}
@@ -726,14 +735,14 @@ const Component = ({ data }: { data: object }) => {
                         {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
                           <template>
                             <div
-                              className="playlist-time showExtended item-navigate"
+                              className={"playlist-time showExtended item-navigate"}
                               style={{ color: "#fa586a", fontWeight: "bold" }}
                               onClick={() => app.routeView(data.relationships.catalog.data[0])}>
                               {$root.getLz("action.showAlbum")}
                             </div>
                           </template>
                         )}
-                        <hr></hr>
+                        <hr />
                       </b-tab>
                       {typeof data.views !== "undefined" && (
                         <template>
@@ -744,14 +753,14 @@ const Component = ({ data }: { data: object }) => {
                                   lazy
                                   title={data.views[view].attributes.title}>
                                   <div>
-                                    <div className="row">
-                                      <div className="col">
+                                    <div className={"row"}>
+                                      <div className={"col"}>
                                         <h3>{data.views[view].attributes.title}</h3>
                                       </div>
                                     </div>
-                                    <div className="row">
-                                      <div className="col">
-                                        <MediaItemScrollerHorizontal items={data.views[view].data}></MediaItemScrollerHorizontal>
+                                    <div className={"row"}>
+                                      <div className={"col"}>
+                                        <MediaItemScrollerHorizontal items={data.views[view].data} />
                                       </div>
                                     </div>
                                   </div>
@@ -766,28 +775,29 @@ const Component = ({ data }: { data: object }) => {
               )}
             </div>
           ) : (
-            <div className="playlist-inner">
+            <div className={"playlist-inner"}>
               <div
-                className="close-btn"
-                title="Close"
+                className={"close-btn"}
+                title={"Close"}
                 onClick={() => $root.resetState()}>
                 <svg
-                  fill="white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="21"
-                  height="21"
-                  viewBox="0 0 21 21"
-                  aria-role="presentation"
-                  focusable="false">
+                  fill={"white"}
+                  xmlns={"http://www.w3.org/2000/svg"}
+                  width={"21"}
+                  height={"21"}
+                  viewBox={"0 0 21 21"}
+                  aria-role={"presentation"}
+                  focusable={"false"}>
                   <path
-                    d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
-                    fill-rule="nonzero"></path>
+                    d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
+                    fillRule={"nonzero"}
+                  />
                 </svg>
               </div>
               {app.playlists.loadingState === 0 && (
                 <template>
-                  <div className="content-inner centered">
-                    <div className="spinner"></div>
+                  <div className={"content-inner centered"}>
+                    <div className={"spinner"} />
                   </div>
                 </template>
               )}

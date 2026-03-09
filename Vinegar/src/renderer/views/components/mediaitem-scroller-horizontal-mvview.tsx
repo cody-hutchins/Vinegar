@@ -4,7 +4,7 @@ import MediaItemSquare from "./mediaitem-square.jsx";
 const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp = false, kind = "" }: { items: object[]; imagesize?: number; browsesp?: boolean; kind?: string }) => {
   const app = this.$root;
   return (
-    <div id="mediaitem-scroller-horizontal-mvview">
+    <div id={"mediaitem-scroller-horizontal-mvview"}>
       <vue-horizontal>
         {items.map((item) =>
           browsesp ? (
@@ -17,7 +17,7 @@ const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp = false,
           ) : (
             <MediaItemSquare
               kind={kind}
-              size="600"
+              size={"600"}
               key={item?.id ?? ""}
               item={item ? (item.attributes?.kind !== null || item.type === "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
               imagesize={imagesize}

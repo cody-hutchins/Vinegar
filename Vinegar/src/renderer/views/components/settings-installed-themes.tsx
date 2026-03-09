@@ -1,6 +1,6 @@
 export const StylestackEditor = ({ themes }: { themes: object[] }) => {
-  let selected = null;
-  let newTheme = null;
+  const selected = null;
+  const newTheme = null;
   let themeList = [];
 
   function mounted() {
@@ -64,24 +64,25 @@ export const StylestackEditor = ({ themes }: { themes: object[] }) => {
 
   return (
     <>
-      <div className="stylestack-editor">
+      <div className={"stylestack-editor"}>
         <draggable
-          className="list-group"
+          className={"list-group"}
           v-model={$root.cfg.visual.styles}
           end={$root.reloadStyles()}>
           {$root.cfg.visual.styles.map((theme) => (
             <b-list-group-item
-              variant="dark"
-              key="theme">
+              variant={"dark"}
+              key={theme}>
               <b-row>
-                <b-col sm="auto">
-                  <div className="handle codicon codicon-grabber"></div>
+                <b-col sm={"auto"}>
+                  <div className={"handle codicon codicon-grabber"} />
                 </b-col>
-                <b-col className="themeLabel">{getThemeName(theme)}</b-col>
-                <b-col sm="auto">
+                <b-col className={"themeLabel"}>{getThemeName(theme)}</b-col>
+                <b-col sm={"auto"}>
                   <button
-                    className="removeItem codicon codicon-close"
-                    onClick={() => remove(theme)}></button>
+                    className={"removeItem codicon codicon-close"}
+                    onClick={() => remove(theme)}
+                  />
                 </b-col>
               </b-row>
             </b-list-group-item>
@@ -105,7 +106,7 @@ export const InstalledThemes = () => {
     },
     readme: "",
   };
-  let themesInstalled = [];
+  const themesInstalled = [];
   let themes = [];
   function mounted() {
     getThemesList();
@@ -135,7 +136,7 @@ export const InstalledThemes = () => {
     themes = themes;
   }
   const contextMenu = (event, theme) => {
-    let menu = {
+    const menu = {
       items: {
         uninstall: {
           name: app.getLz("settings.option.visual.theme.uninstall"),
@@ -187,7 +188,7 @@ export const InstalledThemes = () => {
   }
   function showRepo(repo) {
     const readmeUrl = `https://raw.githubusercontent.com/${repo.full_name}/main/README.md`;
-    let requestOptions = {
+    const requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -209,7 +210,7 @@ export const InstalledThemes = () => {
     return marked.parse(text);
   }
   function installThemeRepo(repo) {
-    let msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
+    const msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
       repo: repo.full_name,
     });
     app.confirm(msg, (res) => {
@@ -243,7 +244,7 @@ export const InstalledThemes = () => {
     });
   }
   function getRepos() {
-    let requestOptions = {
+    const requestOptions = {
       method: "GET",
       redirect: "follow",
     };
@@ -251,80 +252,81 @@ export const InstalledThemes = () => {
     fetch("https://api.github.com/search/repositories?q=topic:cidermusictheme fork:true", requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        let items = JSON.parse(result).items;
+        const items = JSON.parse(result).items;
         repos = items;
       })
       .catch((error) => console.log("error", error));
   }
   return (
     <>
-      <div id="installed-themes">
-        <div className="installed-themes-page">
-          <div className="gh-header">
-            <div className="row">
-              <div className="col nopadding">
-                <h1 className="header-text">{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
+      <div id={"installed-themes"}>
+        <div className={"installed-themes-page"}>
+          <div className={"gh-header"}>
+            <div className={"row"}>
+              <div className={"col nopadding"}>
+                <h1 className={"header-text"}>{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
               </div>
-              <div className="col-auto nopadding cider-flex-center">
+              <div className={"col-auto nopadding cider-flex-center"}>
                 <button
-                  className="md-btn md-btn-small md-btn-block"
+                  className={"md-btn md-btn-small md-btn-block"}
                   onClick={() => $root.openSettingsPage("github-themes")}>
                   {$root.getLz("settings.option.visual.theme.github.explore")}
                 </button>
               </div>
-              <div className="col-auto  cider-flex-center">
+              <div className={"col-auto  cider-flex-center"}>
                 <button
-                  className="md-btn md-btn-small md-btn-block"
+                  className={"md-btn md-btn-small md-btn-block"}
                   onClick={() => $root.checkForThemeUpdates()}>
                   {$root.getLz("settings.option.visual.theme.checkForUpdates")}
                 </button>
               </div>
-              <div className="col-auto nopadding cider-flex-center">
+              <div className={"col-auto nopadding cider-flex-center"}>
                 <button
-                  className="md-btn md-btn-small md-btn-block"
+                  className={"md-btn md-btn-small md-btn-block"}
                   onClick={() => openThemesFolder()}>
                   {$root.getLz("settings.option.visual.theme.github.openfolder")}
                 </button>
               </div>
             </div>
           </div>
-          <div className="gh-content">
-            <div className="repos-list">
-              <div className="repo-header">
+          <div className={"gh-content"}>
+            <div className={"repos-list"}>
+              <div className={"repo-header"}>
                 <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
               </div>
-              <ul className="list-group list-group-flush">
+              <ul className={"list-group list-group-flush"}>
                 {themes.map((theme) => (
                   <div>
                     <li
                       onClick={() => addStyle(theme.file)}
-                      contextmenu="contextMenu($event, theme)"
-                      className="list-group-item list-group-item-dark"
-                      className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
+                      contextMenu={"contextMenu($event, theme)"}
+                      className={"list-group-item list-group-item-dark"}
+                      className={"{'applied': $root.cfg.visual.styles.includes(theme.file)}"}>
                       <b-row>
-                        <b-col className="themeLabel">{theme.name}</b-col>
+                        <b-col className={"themeLabel"}>{theme.name}</b-col>
                         {$root.cfg.visual.styles.includes(theme.file) ? (
                           <template>
                             {theme.pack && (
-                              <b-col sm="auto">
-                                <button className="themeContextMenu codicon codicon-package"></button>
+                              <b-col sm={"auto"}>
+                                <button className={"themeContextMenu codicon codicon-package"} />
                               </b-col>
                             )}
-                            <b-col sm="auto">
-                              <button className="themeContextMenu codicon codicon-check"></button>
+                            <b-col sm={"auto"}>
+                              <button className={"themeContextMenu codicon codicon-check"} />
                             </b-col>
                           </template>
                         ) : (
                           <template>
                             {theme.pack && (
-                              <b-col sm="auto">
-                                <button className="themeContextMenu codicon codicon-package"></button>
+                              <b-col sm={"auto"}>
+                                <button className={"themeContextMenu codicon codicon-package"} />
                               </b-col>
                             )}
-                            <b-col sm="auto">
+                            <b-col sm={"auto"}>
                               <button
-                                clickstop="contextMenu($event, theme)"
-                                className="themeContextMenu codicon codicon-list-unordered"></button>
+                                clickstop={"contextMenu($event, theme)"}
+                                className={"themeContextMenu codicon codicon-list-unordered"}
+                              />
                             </b-col>
                           </template>
                         )}
@@ -334,21 +336,21 @@ export const InstalledThemes = () => {
                       theme.pack.amp((packEntry) => (
                         <li
                           onClick={() => addStyle(packEntry.file)}
-                          contextmenu="contextMenu($event, theme)"
-                          className="list-group-item list-group-item-dark addon"
-                          className="{'applied': $root.cfg.visual.styles.includes(packEntry.file)}">
+                          contextMenu={"contextMenu($event, theme)"}
+                          className={"list-group-item list-group-item-dark addon"}
+                          className={"{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"}>
                           <b-row>
-                            <b-col className="themeLabel">{packEntry.name}</b-col>
+                            <b-col className={"themeLabel"}>{packEntry.name}</b-col>
                             {$root.cfg.visual.styles.includes(packEntry.file) ? (
                               <template>
-                                <b-col sm="auto">
-                                  <button className="themeContextMenu codicon codicon-check"></button>
+                                <b-col sm={"auto"}>
+                                  <button className={"themeContextMenu codicon codicon-check"} />
                                 </b-col>
                               </template>
                             ) : (
                               <template>
-                                <b-col sm="auto">
-                                  <button className="themeContextMenu codicon codicon-diff-added"></button>
+                                <b-col sm={"auto"}>
+                                  <button className={"themeContextMenu codicon codicon-diff-added"} />
                                 </b-col>
                               </template>
                             )}
@@ -360,14 +362,15 @@ export const InstalledThemes = () => {
               </ul>
             </div>
 
-            <div className="style-editor-container">
-              <div className="repo-header">
+            <div className={"style-editor-container"}>
+              <div className={"repo-header"}>
                 <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
               </div>
               {themes.length !== 0 && (
                 <StylestackEditor
-                  ref="stackEditor"
-                  themes={themes}></StylestackEditor>
+                  ref={"stackEditor"}
+                  themes={themes}
+                />
               )}
             </div>
           </div>
