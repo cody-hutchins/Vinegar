@@ -47,115 +47,129 @@ const Charts = () => {
   }
 
   return (
-    <div id="cider-charts">
-      <div className="content-inner">
-        <h1 className="header-text">{$root.getLz("term.charts")}</h1>
-        <template v-if={songs !== []}>
-          <div className="row">
-            <div className="col">
-              <h3>{songs.name ?? ""}</h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={songs.data.length > 12}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => app.showCollection(songs ?? [], songs.name ?? "", "default")}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <div className="mediaitem-list-item__grid">
-            <ListItemHorizontal items={(songs?.data ?? []).limit(12)} />
-          </div>
-        </template>
-        <template v-if={albums !== []}>
-          <div className="row">
-            <div className="col">
-              <h3>{albums.name ?? ""}</h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={songs.data.length > 12}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => app.showCollection(albums ?? [], albums.name ?? "", "default")}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <MediaItemScrollerHorizontalLarge items={(albums?.data ?? []).limit(10)} />
-        </template>
-        <template v-if={playlists !== []}>
-          <div className="row">
-            <div className="col">
-              <h3>{playlists.name ?? ""}</h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={playlists.data.length > 12}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => app.showCollection(playlists ?? [], playlists.name ?? "", "default")}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <MediaItemScrollerHorizontalLarge items={(playlists?.data ?? []).limit(10)} />
-        </template>
-        <template v-if={musicvideos !== []}>
-          <div className="row">
-            <div className="col">
-              <h3>{musicvideos.name ?? ""}</h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={musicvideos.data.length > 12}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => app.showCollection(musicvideos ?? [], musicvideos.name ?? "", "default")}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <MediaItemScrollerHorizontalLarge items={(musicvideos?.data ?? []).limit(10)} />
-        </template>
-        <template v-if={globalcharts !== []}>
-          <div className="row">
-            <div className="col">
-              <h3>{globalcharts.name ?? ""}</h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={globalcharts.data.length > 12}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => app.showCollection(globalcharts ?? [], globalcharts.name ?? "", "default")}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <MediaItemScrollerHorizontalLarge items={(globalcharts?.data ?? []).limit(10)} />
-        </template>
-        <template v-if={citycharts !== []}>
-          <div className="row">
-            <div className="col">
-              <h3>{citycharts.name ?? ""}</h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={citycharts.data.length > 12}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => app.showCollection(citycharts ?? [], citycharts.name ?? "", "default")}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <MediaItemScrollerHorizontalLarge items={(citycharts?.data ?? []).limit(10)} />
-        </template>
+    <>
+      <div id="cider-charts">
+        <div className="content-inner">
+          <h1 className="header-text">{$root.getLz("term.charts")}</h1>
+          {songs !== [] && (
+            <template>
+              <div className="row">
+                <div className="col">
+                  <h3>{songs.name ?? ""}</h3>
+                </div>
+                {songs.data.length > 12 && (
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="cd-btn-seeall"
+                      onClick={() => app.showCollection(songs ?? [], songs.name ?? "", "default")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="mediaitem-list-item__grid">
+                <ListItemHorizontal items={(songs?.data ?? []).limit(12)}></ListItemHorizontal>
+              </div>
+            </template>
+          )}
+          {albums !== [] && (
+            <template>
+              <div className="row">
+                <div className="col">
+                  <h3>{albums.name ?? ""}</h3>
+                </div>
+                {songs.data.length > 12 && (
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="cd-btn-seeall"
+                      onClick={() => app.showCollection(albums ?? [], albums.name ?? "", "default")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <MediaItemScrollerHorizontalLarge items={(albums?.data ?? []).limit(10)}></MediaItemScrollerHorizontalLarge>
+            </template>
+          )}
+          {playlists !== [] && (
+            <template>
+              <div className="row">
+                <div className="col">
+                  <h3>{playlists.name ?? ""}</h3>
+                </div>
+                {playlists.data.length > 12 && (
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="cd-btn-seeall"
+                      onClick={() => app.showCollection(playlists ?? [], playlists.name ?? "", "default")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <MediaItemScrollerHorizontalLarge items={(playlists?.data ?? []).limit(10)}></MediaItemScrollerHorizontalLarge>
+            </template>
+          )}
+          {musicvideos !== [] && (
+            <template>
+              <div className="row">
+                <div className="col">
+                  <h3>{musicvideos.name ?? ""}</h3>
+                </div>
+                {musicvideos.data.length > 12 && (
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="cd-btn-seeall"
+                      onClick={() => app.showCollection(musicvideos ?? [], musicvideos.name ?? "", "default")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <MediaItemScrollerHorizontalLarge items={(musicvideos?.data ?? []).limit(10)}></MediaItemScrollerHorizontalLarge>
+            </template>
+          )}
+          {globalcharts !== [] && (
+            <template>
+              <div className="row">
+                <div className="col">
+                  <h3>{globalcharts.name ?? ""}</h3>
+                </div>
+                {globalcharts.data.length > 12 && (
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="cd-btn-seeall"
+                      onClick={() => app.showCollection(globalcharts ?? [], globalcharts.name ?? "", "default")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <MediaItemScrollerHorizontalLarge items={(globalcharts?.data ?? []).limit(10)}></MediaItemScrollerHorizontalLarge>
+            </template>
+          )}
+          {citycharts !== [] && (
+            <template>
+              <div className="row">
+                <div className="col">
+                  <h3>{citycharts.name ?? ""}</h3>
+                </div>
+                {citycharts.data.length > 12 && (
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="cd-btn-seeall"
+                      onClick={() => app.showCollection(citycharts ?? [], citycharts.name ?? "", "default")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <MediaItemScrollerHorizontalLarge items={(citycharts?.data ?? []).limit(10)}></MediaItemScrollerHorizontalLarge>
+            </template>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

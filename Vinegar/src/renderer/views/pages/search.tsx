@@ -56,66 +56,64 @@ const Component = ({ search }: { search: object }) => {
   return (
     <div id="cider-search">
       <div className="content-inner search-page">
-        <div
-          className="search-input-container fs-search"
-          v-if={$root.appMode === "fullscreen"}>
-          <div className="search-input--icon" />
-          <input
-            type="search"
-            spellCheck="false"
-            onFocus={() => {
-              $root.search.showHints = true;
-            }}
-            onBlur={() =>
-              $root.setTimeout(() => {
-                if ($root.hintscontext !== true) {
-                  $root.search.showHints = false;
-                }
-              }, 300)
-            }
-            v-on:keyupenter={() => {
-              $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
-              $root.search.showHints = false;
-              $root.search.showSearchView = true;
-            }}
-            onInput={() => $root.getSearchHints()}
-            placeholder={$root.getLz("term.search") + "..."}
-            v-model={$root.search.term}
-            className="search-input"
-          />
-
-          <div
-            className="search-hints-container"
-            v-if={$root.search.showHints && $root.search.hints.length !== 0}>
-            <div className="search-hints">
-              {$root.search.hints
-                .filter((a) => a.content === null)
-                .map((hint, index) => (
-                  <button
-                    className="search-hint text-overflow-elipsis"
-                    className="{active: ($root.search.cursor === index)}"
-                    onClick={() => {
-                      $root.search.term = hint.searchTerm;
-                      $root.search.showHints = false;
-                      $root.searchQuery(hint.searchTerm);
-                    }}>
-                    {hint.displayTerm}
-                  </button>
-                ))}
-              {$root.search.hints
-                .filter((a) => a.content !== null)
-                .map((item, position) => (
-                  <template>
-                    <MediaitemSmarthints
-                      item={item.content}
-                      position={position}>
-                      {" "}
-                    </MediaitemSmarthints>
-                  </template>
-                ))}
-            </div>
+        {$root.appMode === "fullscreen" ? (
+          <div className="search-input-container fs-search">
+            <div className="search-input--icon"></div>
+            <input
+              type="search"
+              spellCheck="false"
+              onFocus={() => {
+                $root.search.showHints = true;
+              }}
+              onBlur={() =>
+                $root.setTimeout(() => {
+                  if ($root.hintscontext !== true) {
+                    $root.search.showHints = false;
+                  }
+                }, 300)
+              }
+              v-on:keyupenter={() => {
+                $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+                $root.search.showHints = false;
+                $root.search.showSearchView = true;
+              }}
+              onInput={() => $root.getSearchHints()}
+              placeholder={$root.getLz("term.search") + "..."}
+              v-model={$root.search.term}
+              className="search-input"></input>
+            {$root.search.showHints && $root.search.hints.length !== 0 && (
+              <div className="search-hints-container">
+                <div className="search-hints">
+                  {$root.search.hints
+                    .filter((a) => a.content === null)
+                    .map((hint, index) => (
+                      <button
+                        className="search-hint text-overflow-elipsis"
+                        className="{active: ($root.search.cursor === index)}"
+                        onClick={() => {
+                          $root.search.term = hint.searchTerm;
+                          $root.search.showHints = false;
+                          $root.searchQuery(hint.searchTerm);
+                        }}>
+                        {hint.displayTerm}
+                      </button>
+                    ))}
+                  {$root.search.hints
+                    .filter((a) => a.content !== null)
+                    .map((item, position) => (
+                      <template>
+                        <MediaitemSmarthints
+                          item={item.content}
+                          position={position}>
+                          {" "}
+                        </MediaitemSmarthints>
+                      </template>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        ) : null}
         <div className="btn-group searchToggle">
           <button
             onClick={() => {
@@ -134,145 +132,129 @@ const Component = ({ search }: { search: object }) => {
             {$root.getLz("term.library")}
           </button>
         </div>
-        <div v-if={search !== null && search !== [] && search.term !== "" && $root.search.showSearchView}>
-          <template v-if={searchType === "catalog"}>
-            <h3>{app.getLz("term.topResult")}</h3>
-            <MediaitemScrollerHorizontal items="search?.results[search?.results?.meta?.results?.order[0]]?.data" />
-            <div className="row">
-              <div
-                className="col"
-                v-if={search.results.song}>
+        {search !== null && search !== [] && search.term !== "" && $root.search.showSearchView ? (
+          <div>
+            {searchType === "catalog" ? (
+              <template>
+                <h3>{app.getLz("term.topResult")}</h3>
+                <MediaitemScrollerHorizontal items="search?.results[search?.results?.meta?.results?.order[0]]?.data"></MediaitemScrollerHorizontal>
                 <div className="row">
-                  <div className="col">
-                    <h3>{app.getLz("term.songs")}</h3>
-                  </div>
-                  <div
-                    className="col-auto cider-flex-center"
-                    onClick={() => app.showSearchView(app.search.term, "song", app.friendlyTypes("song"))}
-                    v-if={search.results.song.data.length >= 12}>
-                    <button className="cd-btn-seeall">{app.getLz("term.seeAll")}</button>
-                  </div>
-                </div>
-                <div className="mediaitem-list-item__grid">
-                  <ListitemHorizontal items={search.results.song.data.limit(12)} />
-                </div>
-              </div>
-              <div
-                v-else
-                style={{ textAlign: "center" }}>
-                <h3>{app.getLz("error.noResults")}</h3>
-                <p>{app.getLz("error.noResults.description")}</p>
-              </div>
-            </div>
-
-            <template v-if={search.results["meta"] !== null}>
-              {search.results.meta.results.order.map((section) => (
-                <template v-if={section !== "song" && section !== "top"}>
-                  <div className="row">
+                  {search.results.song ? (
                     <div className="col">
-                      <h3>{app.friendlyTypes(section)}</h3>
+                      <div className="row">
+                        <div className="col">
+                          <h3>{app.getLz("term.songs")}</h3>
+                        </div>
+                      </div>
+                      <div className="mediaitem-list-item__grid">
+                        <ListitemHorizontal items={search.results.song.data.limit(12)}></ListitemHorizontal>
+                      </div>
                     </div>
-                    <div
-                      className="col-auto cider-flex-center"
-                      v-if={search.results[section].data.length >= 10}>
-                      <button
-                        className="cd-btn-seeall"
-                        onClick={() => app.showSearchView(app.search.term, section, app.friendlyTypes(section))}>
-                        {app.getLz("term.seeAll")}
-                      </button>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>
+                      <h3>{app.getLz("error.noResults")}</h3>
+                      <p>{app.getLz("error.noResults.description")}</p>
                     </div>
+                  )}
+                </div>
+                {search.results["meta"] !== null && (
+                  <template>
+                    {search.results.meta.results.order.map(
+                      (section) =>
+                        section !== "song" &&
+                        section !== "top" && (
+                          <template>
+                            <div className="row">
+                              <div className="col">
+                                <h3>{app.friendlyTypes(section)}</h3>
+                              </div>
+                            </div>
+                            {!app.friendlyTypes(section).includes("Video") ? (
+                              <template>
+                                <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                              </template>
+                            ) : (
+                              <template>
+                                <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)}></MediaItemScrollerHorizontalMVView>
+                              </template>
+                            )}
+                          </template>
+                        ),
+                    )}
+                  </template>
+                )}
+                {search.resultsSocial.playlist && (
+                  <template>
+                    <div className="row">
+                      <div className="col">
+                        <h3>{app.getLz("term.sharedPlaylists")}</h3>
+                      </div>
+                    </div>
+                    <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                  </template>
+                )}
+                {search.resultsSocial.profile && (
+                  <template>
+                    <div className="row">
+                      <div className="col">
+                        <h3>{app.getLz("term.people")}</h3>
+                      </div>
+                    </div>
+                    <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                  </template>
+                )}
+              </template>
+            ) : (
+              <template>
+                <h1>{$root.getLz("term.library")}</h1>
+                {$root.search.resultsLibrary.map((section, key) => (
+                  <div>
+                    <h3>{app.friendlyTypes(key)}</h3>
+                    {key.includes("songs") ? (
+                      <div className="mediaitem-list-item__grid">
+                        <ListitemHorizontal items={section.data}></ListitemHorizontal>
+                      </div>
+                    ) : (
+                      <div className="well">
+                        <MediaItemScrollerHorizontalLarge items={section.data}></MediaItemScrollerHorizontalLarge>
+                      </div>
+                    )}
                   </div>
-                  <template v-if={!app.friendlyTypes(section).includes("Video")}>
-                    <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
-                  </template>
-                  <template v-else>
-                    <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
-                  </template>
-                </template>
-              ))}
-            </template>
-            <template v-if={search.resultsSocial.playlist}>
-              <div className="row">
-                <div className="col">
-                  <h3>{app.getLz("term.sharedPlaylists")}</h3>
-                </div>
-                <div
-                  className="col-auto cider-flex-center"
-                  v-if={search.resultsSocial.playlist.data.length >= 10}>
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => app.showCollection(search.resultsSocial.playlist, "Shared Playlists", "default")}>
-                    {app.getLz("term.seeAll")}
-                  </button>
-                </div>
-              </div>
-              <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)} />
-            </template>
-            <template v-if={search.resultsSocial.profile}>
-              <div className="row">
-                <div className="col">
-                  <h3>{app.getLz("term.people")}</h3>
-                </div>
-                <div
-                  className="col-auto cider-flex-center"
-                  v-if={search.resultsSocial.profile.data.length >= 10}>
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => app.showCollection(search.resultsSocial.profile, "People", "default")}>
-                    {app.getLz("term.seeAll")}
-                  </button>
-                </div>
-              </div>
-              <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)} />
-            </template>
-          </template>
-          <template v-else>
-            <h1>{$root.getLz("term.library")}</h1>
-            {$root.search.resultsLibrary.map((section, key) => (
-              <div>
-                <h3>{app.friendlyTypes(key)}</h3>
-                <div
-                  className="mediaitem-list-item__grid"
-                  v-if={key.includes("songs")}>
-                  <ListitemHorizontal items={section.data} />
-                </div>
-                <div
-                  className="well"
-                  v-else>
-                  <MediaItemScrollerHorizontalLarge items={section.data} />
-                </div>
-              </div>
-            ))}
-          </template>
-        </div>
-        <div v-else>
-          <div v-if={categoriesReady || getCategories()}>
-            <div>
-              <div
-                className="col"
-                v-if={categoriesView !== null && categoriesView !== [] && categoriesView[0]?.attributes !== null && categoriesView[0]?.attributes.title !== null}>
-                <h3>{$root.getLz("home.recentlyPlayed")}</h3>
-                <div className="mediaitem-list-item__grid">
-                  <ListitemHorizontal items={recentlyPlayed.limit(10)} />
-                </div>
-                {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="'385'" size="600" item="item" imagesize"800" />)} */}
-                <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
-              </div>
-            </div>
-            <div className="categories">
-              {getFlattenedCategories().map((item) => (
-                <MediaItemSquare
-                  kind="'385'"
-                  imageformat="'bb'"
-                  size="600"
-                  removeamtext="true"
-                  item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
-                  imagesize="800"
-                />
-              ))}
-            </div>
+                ))}
+              </template>
+            )}
           </div>
-        </div>
+        ) : (
+          <div>
+            {(categoriesReady || getCategories()) && (
+              <div>
+                <div>
+                  {categoriesView !== null && categoriesView !== [] && categoriesView[0]?.attributes !== null && categoriesView[0]?.attributes.title !== null && (
+                    <div className="col">
+                      <h3>{$root.getLz("home.recentlyPlayed")}</h3>
+                      <div className="mediaitem-list-item__grid">
+                        <ListitemHorizontal items={recentlyPlayed.limit(10)}></ListitemHorizontal>
+                      </div>
+                      {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="'385'" size="600" item="item" imagesize"800" ></MediaItemSquare>)} */}
+                      <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
+                    </div>
+                  )}
+                </div>
+                <div className="categories">
+                  {getFlattenedCategories().map((item) => (
+                    <MediaItemSquare
+                      kind="'385'"
+                      imageformat="'bb'"
+                      size="600"
+                      removeamtext="true"
+                      item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
+                      imagesize="800"></MediaItemSquare>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

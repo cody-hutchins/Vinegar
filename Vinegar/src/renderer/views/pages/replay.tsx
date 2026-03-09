@@ -76,137 +76,135 @@ const Replay = () => {
   }
 
   return (
-    <div id="replay-page">
-      <div className="content-inner replay-page">
-        <vue-horizontal style={{ height: "300px" }}>
-          {years.map((year) => (
-            <div
-              className="replay-period"
-              onClick={() => getReplayYear(year.attributes.year)}>
-              <div className="artwork-container">
-                <MediaItemArtwork
-                  size="200"
-                  url={year.relationships.playlist.data[0].attributes.artwork.url}
-                />
+    <>
+      <div id="replay-page">
+        <div className="content-inner replay-page">
+          <vue-horizontal style={{ height: "300px" }}>
+            {years.map((year) => (
+              <div
+                className="replay-period"
+                onClick={() => getReplayYear(year.attributes.year)}>
+                <div className="artwork-container">
+                  <MediaItemArtwork
+                    size="200"
+                    url={year.relationships.playlist.data[0].attributes.artwork.url}></MediaItemArtwork>
+                </div>
+                {year.attributes.year}
               </div>
-              {year.attributes.year}
-            </div>
-          ))}
-        </vue-horizontal>
-        <hr />
-        <AnimatePresence>
-        <motion.div name="replaycard">
-          <div
-            className="replay-viewport"
-            v-if={loaded.id !== -1}>
-            {/* Stats  */}
-            <div
-              className="replay-video"
-              v-if={false}>
-              <MediaItemArtwork
-                url={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.previewFrame.url}
-                video={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.video}
-                video-priority="true"
-              />
-            </div>
-            <h1 className="replay-header">
-              {loaded.attributes.year} {$root.getLz("term.replay")}
-            </h1>
-            <hr />
-            <div className="row">
-              <div className="col">
-                <h4 onClick={() => (hourshow = !hourshow)}>
-                  {convertToHours(loaded.attributes.listenTimeInMinutes)}
-                  {$root.getLz("term.time.hours")}
-                  {hourshow ? "" : loaded.attributes.listenTimeInMinutes % 60}
-                  {hourshow ? "" : $root.getLz("term.time.minutes")}
-                </h4>
-                <h4>
-                  {loaded.attributes.uniqueAlbumCount} {$root.getLz("term.uniqueAlbums")}
-                </h4>
-                <h4>
-                  {loaded.attributes.uniqueArtistCount} {$root.getLz("term.uniqueArtists")}
-                </h4>
-                <h4>
-                  {loaded.attributes.uniqueSongCount} {$root.getLz("term.uniqueSongs")}
-                </h4>
-              </div>
-              <div className="col-auto replay-playlist-container">
-                <MediaItemSquare
-                  kind="card"
-                  no-scale="true"
-                  force-video="true"
-                  item={loaded.playlist}
-                />
-              </div>
-            </div>
-            {/*            Top Artists */}
-            <h3>{$root.getLz("term.topArtists")}</h3>
-            <div className="well">
-              <MediaItemScrollerHorizontal>
-                {loaded.views["top-artists"].data.map((artistData) => (
-                  <div className="card replay-card">
-                    <div className="card-body">
-                      <MediaItemSquare item={artistData.relationships.artist.data[0]} />
+            ))}
+          </vue-horizontal>
+          <hr></hr>
+          <AnimatePresence>
+            <motion.div name="replaycard">
+              {loaded.id !== -1 && (
+                <div className="replay-viewport">
+                  {/* Stats  */}
+                  {false && (
+                    <div className="replay-video">
+                      <MediaItemArtwork
+                        url={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.previewFrame.url}
+                        video={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.video}
+                        video-priority="true"></MediaItemArtwork>
                     </div>
-                    <div className="card-footer">
-                      {convertToHours(artistData.attributes.listenTimeInMinutes)}
-                      {$root.getLz("term.time.hours", { count: convertToHours(artistData.attributes.listenTimeInMinutes) })}
-                      <br />
-                      {$root.getLz("term.listenedTo")} {artistData.attributes.playCount}
-                      {$root.getLz("term.times")}
+                  )}
+                  <h1 className="replay-header">
+                    {loaded.attributes.year} {$root.getLz("term.replay")}
+                  </h1>
+                  <hr></hr>
+                  <div className="row">
+                    <div className="col">
+                      <h4 onClick={() => (hourshow = !hourshow)}>
+                        {convertToHours(loaded.attributes.listenTimeInMinutes)}
+                        {$root.getLz("term.time.hours")}
+                        {hourshow ? "" : loaded.attributes.listenTimeInMinutes % 60}
+                        {hourshow ? "" : $root.getLz("term.time.minutes")}
+                      </h4>
+                      <h4>
+                        {loaded.attributes.uniqueAlbumCount} {$root.getLz("term.uniqueAlbums")}
+                      </h4>
+                      <h4>
+                        {loaded.attributes.uniqueArtistCount} {$root.getLz("term.uniqueArtists")}
+                      </h4>
+                      <h4>
+                        {loaded.attributes.uniqueSongCount} {$root.getLz("term.uniqueSongs")}
+                      </h4>
+                    </div>
+                    <div className="col-auto replay-playlist-container">
+                      <MediaItemSquare
+                        kind="card"
+                        no-scale="true"
+                        force-video="true"
+                        item={loaded.playlist}></MediaItemSquare>
                     </div>
                   </div>
-                ))}
-              </MediaItemScrollerHorizontal>
-            </div>
-            {/*            Top Albums */}
-            <h3>{$root.getLz("term.topAlbums")}</h3>
-            <div className="well">
-              <MediaItemScrollerHorizontal>
-                {loaded.views["top-albums"].data.map((albumData) => (
-                  <div className="card replay-card">
-                    <div className="card-body">
-                      <MediaItemSquare item={albumData.relationships.album.data[0]} />
-                    </div>
-                    <div className="card-footer">
-                      {convertToHours(albumData.attributes.listenTimeInMinutes)}
-                      {$root.getLz("term.time.hours", { count: convertToHours(albumData.attributes.listenTimeInMinutes) })}
-                      <br />
-                      {albumData.attributes.playCount} {$root.getLz("term.plays")}
-                    </div>
+                  {/*            Top Artists */}
+                  <h3>{$root.getLz("term.topArtists")}</h3>
+                  <div className="well">
+                    <MediaItemScrollerHorizontal>
+                      {loaded.views["top-artists"].data.map((artistData) => (
+                        <div className="card replay-card">
+                          <div className="card-body">
+                            <MediaItemSquare item={artistData.relationships.artist.data[0]}></MediaItemSquare>
+                          </div>
+                          <div className="card-footer">
+                            {convertToHours(artistData.attributes.listenTimeInMinutes)}
+                            {$root.getLz("term.time.hours", { count: convertToHours(artistData.attributes.listenTimeInMinutes) })}
+                            <br></br>
+                            {$root.getLz("term.listenedTo")} {artistData.attributes.playCount}
+                            {$root.getLz("term.times")}
+                          </div>
+                        </div>
+                      ))}
+                    </MediaItemScrollerHorizontal>
                   </div>
-                ))}
-              </MediaItemScrollerHorizontal>
-            </div>
-            {/*            Top Songs */}
-            <h3>{$root.getLz("term.topSongs")}</h3>
-            <div className="well">
-              <ListitemHorizontal
-                show-library-status="false"
-                items={songsToArray(loaded.views["top-songs"].data)}
-              />
-            </div>
-            <h3>{$root.getLz("term.topGenres")}</h3>
-            <div className="top-genres-container">
-              {loaded.topGenres.map((genre) => (
-                <div className="replay-genre-display">
-                  <div className="genre-name">{genre.genre}</div>
-                  <div className="genre-count">
-                    <div
-                      className="genre-count-bar"
-                      style={{ width: genre.count + "%" }}>
-                      {genre.count}%
-                    </div>
+                  {/*            Top Albums */}
+                  <h3>{$root.getLz("term.topAlbums")}</h3>
+                  <div className="well">
+                    <MediaItemScrollerHorizontal>
+                      {loaded.views["top-albums"].data.map((albumData) => (
+                        <div className="card replay-card">
+                          <div className="card-body">
+                            <MediaItemSquare item={albumData.relationships.album.data[0]}></MediaItemSquare>
+                          </div>
+                          <div className="card-footer">
+                            {convertToHours(albumData.attributes.listenTimeInMinutes)}
+                            {$root.getLz("term.time.hours", { count: convertToHours(albumData.attributes.listenTimeInMinutes) })}
+                            <br></br>
+                            {albumData.attributes.playCount} {$root.getLz("term.plays")}
+                          </div>
+                        </div>
+                      ))}
+                    </MediaItemScrollerHorizontal>
+                  </div>
+                  {/*            Top Songs */}
+                  <h3>{$root.getLz("term.topSongs")}</h3>
+                  <div className="well">
+                    <ListitemHorizontal
+                      show-library-status="false"
+                      items={songsToArray(loaded.views["top-songs"].data)}></ListitemHorizontal>
+                  </div>
+                  <h3>{$root.getLz("term.topGenres")}</h3>
+                  <div className="top-genres-container">
+                    {loaded.topGenres.map((genre) => (
+                      <div className="replay-genre-display">
+                        <div className="genre-name">{genre.genre}</div>
+                        <div className="genre-count">
+                          <div
+                            className="genre-count-bar"
+                            style={{ width: genre.count + "%" }}>
+                            {genre.count}%
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-        </AnimatePresence>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

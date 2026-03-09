@@ -236,61 +236,58 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     folderOpened = !folderOpened;
   }
   return (
-    <div id="sidebar-playlist">
-      <div
-        className="sidebar-playlist"
-        key={item.id}>
-        <button
-          key={item.id}
-          className="app-sidebar-item app-sidebar-item-playlist"
-          className={item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected]}
-          onContextMenu={(e) => playlistContextMenu(e, item.id)}
-          onDragStart={(e) => startDrag(e, item)}
-          onDragOver={dragOver}
-          onDrop={onDrop}
-          href={item.href}
-          onClick={() => clickEvent()}>
-          <template v-if={!renaming}>
-            <SVGIcon
-              url="icon"
-              name="sidebar-playlist"
-            />
-            {item.attributes.name}
-            <small
-              className="presentNotice"
-              v-if={hasRelatedMediaItems}>
-              (Track present)
-            </small>
-          </template>
-          <input
-            type="text"
-            v-model={item.attributes.name}
-            className="pl-rename-field"
-            onBlur={() => rename()}
-            onKeyDown={(e) => {
-              if (e.key === "enter") rename();
-            }}
-            v-else
-          />
-        </button>
-        {item.type === "library-playlist-folders" && folderOpened && (
-          <div className="folder-body">
-            {children.length !== 0 ? (
-              children.map((item) => (
-                <SidebarPlaylist
-                  relate-media-items={relateMediaItems}
-                  playlist-select={playlistSelect}
-                  item={item}
-                  v-bind:key={item.id}
-                />
-              ))
+    <>
+      <div id="sidebar-playlist">
+        <div
+          className="sidebar-playlist"
+          key={item.id}>
+          <button
+            key={item.id}
+            className="app-sidebar-item app-sidebar-item-playlist"
+            className={item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected]}
+            onContextMenu={(e) => playlistContextMenu(e, item.id)}
+            onDragStart={(e) => startDrag(e, item)}
+            onDragOver={dragOver}
+            onDrop={onDrop}
+            href={item.href}
+            onClick={() => clickEvent()}>
+            {!renaming ? (
+              <template>
+                <SVGIcon
+                  url="icon"
+                  name="sidebar-playlist"></SVGIcon>
+                {item.attributes.name}
+                {hasRelatedMediaItems && <small className="presentNotice">(Track present)</small>}
+              </template>
             ) : (
-              <div className="spinner" />
+              <input
+                type="text"
+                v-model={item.attributes.name}
+                className="pl-rename-field"
+                onBlur={() => rename()}
+                onKeyDown={(e) => {
+                  if (e.key === "enter") rename();
+                }}></input>
             )}
-          </div>
-        )}
+          </button>
+          {item.type === "library-playlist-folders" && folderOpened && (
+            <div className="folder-body">
+              {children.length !== 0 ? (
+                children.map((item) => (
+                  <SidebarPlaylist
+                    relate-media-items={relateMediaItems}
+                    playlist-select={playlistSelect}
+                    item={item}
+                    v-bind:key={item.id}></SidebarPlaylist>
+                ))
+              ) : (
+                <div className="spinner"></div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

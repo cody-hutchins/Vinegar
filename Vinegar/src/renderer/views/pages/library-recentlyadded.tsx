@@ -52,43 +52,43 @@ const Component = () => {
   }
 
   return (
-    <div id="cider-recentlyadded">
-      <div className="content-inner">
-        <h1 className="header-text">{$root.getLz("term.recentlyAdded")}</h1>
-        <div
-          className="well itemContainer collection-list-square"
-          v-if={itemSize === "normal"}>
-          {items.map((item) => (
-            <MediaItemSquare
-              item={item}
-              v-bind:key={item.id}
-            />
-          ))}
+    <>
+      <div id="cider-recentlyadded">
+        <div className="content-inner">
+          <h1 className="header-text">{$root.getLz("term.recentlyAdded")}</h1>
+          {itemSize === "normal" ? (
+            <div className="well itemContainer collection-list-square">
+              {items.map((item) => (
+                <MediaItemSquare
+                  item={item}
+                  v-bind:key={item.id}></MediaItemSquare>
+              ))}
+            </div>
+          ) : itemSize === "compact" ? (
+            <div className="well itemContainer collection-list-square">
+              {items.map((ite) => (
+                <MediaItemListItem
+                  show-meta-data="true"
+                  show-library-status="false"
+                  item={item}
+                  v-bind:key={item.id}></MediaItemListItem>
+              ))}
+            </div>
+          ) : null}
+          <div
+            className="well itemContainer collection-list-square"
+            v-show={loading}>
+            <div className="spinner"></div>
+          </div>
+          {nextUrl && !loading ? (
+            <button
+              style={{ opacity: 0, height: "32px" }}
+              v-observe-visibility="{callback: visibilityChanged}">
+              {$root.getLz("term.showMore")}
+            </button>
+          ) : null}
         </div>
-        <div
-          className="well itemContainer collection-list-square"
-          v-else={itemSize === "compact"}>
-          {items.map((ite) => (
-            <MediaItemListItem
-              show-meta-data="true"
-              show-library-status="false"
-              item={item}
-              v-bind:key={item.id}
-            />
-          ))}
-        </div>
-        <div
-          className="well itemContainer collection-list-square"
-          v-show={loading}>
-          <div className="spinner" />
-        </div>
-        <button
-          v-if={nextUrl && !loading}
-          style={{ opacity: 0, height: "32px" }}
-          v-observe-visibility="{callback: visibilityChanged}">
-          {$root.getLz("term.showMore")}
-        </button>
       </div>
-    </div>
+    </>
   );
 };

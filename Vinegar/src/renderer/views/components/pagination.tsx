@@ -120,53 +120,54 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
   };
 
   return (
-    <div id="pagination">
-      <div
-        className="pagination-container"
-        v-if={!isInfinite}>
-        <button
-          className="md-btn page-btn"
-          disabled={effectivePage === 1}
-          onClick={() => goToPage(1)}>
-          <img className="md-ico-first" />
-        </button>
-        <button
-          className="md-btn page-btn prev"
-          disabled={effectivePage === 1}
-          onClick={() => goToPrevious()}>
-          <img className="md-ico-prev" />
-        </button>
-        {pagesToShow.map((page) => (
-          <button
-            className={`md-btn page-btn ${isCurrentPage(page) ? " md-btn-primary" : ""}`}
-            onClick={() => goToPage(page)}>
-            {page}
-          </button>
-        ))}
-        <button
-          className="md-btn page-btn next"
-          disabled={effectivePage === numPages}
-          onClick={() => goToNext()}>
-          <img className="md-ico-next" />
-        </button>
-        <button
-          className="md-btn page-btn last"
-          disabled={effectivePage === numPages}
-          onClick={() => goToEnd()}>
-          <img className="md-ico-last" />
-        </button>
-        <div className="page-btn md-input-number">
-          <input
-            type="number"
-            min={1}
-            max={numPages}
-            value={effectivePage}
-            onChange={changePage}
-          />
-          <span>/ {numPages}</span>
-        </div>
+    <>
+      <div id="pagination">
+        {!isInfinite && (
+          <div className="pagination-container">
+            <button
+              className="md-btn page-btn"
+              disabled={effectivePage === 1}
+              onClick={() => goToPage(1)}>
+              <img className="md-ico-first"></img>
+            </button>
+            <button
+              className="md-btn page-btn prev"
+              disabled={effectivePage === 1}
+              onClick={() => goToPrevious()}>
+              <img className="md-ico-prev"></img>
+            </button>
+            {pagesToShow.map((page) => (
+              <button
+                className={`md-btn page-btn ${isCurrentPage(page) ? " md-btn-primary" : ""}`}
+                onClick={() => goToPage(page)}>
+                {page}
+              </button>
+            ))}
+            <button
+              className="md-btn page-btn next"
+              disabled={effectivePage === numPages}
+              onClick={() => goToNext()}>
+              <img className="md-ico-next"></img>
+            </button>
+            <button
+              className="md-btn page-btn last"
+              disabled={effectivePage === numPages}
+              onClick={() => goToEnd()}>
+              <img className="md-ico-last"></img>
+            </button>
+            <div className="page-btn md-input-number">
+              <input
+                type="number"
+                min={1}
+                max={numPages}
+                value={effectivePage}
+                onChange={changePage}></input>
+              <span>/ {numPages}</span>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

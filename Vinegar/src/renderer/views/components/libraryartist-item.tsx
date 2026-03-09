@@ -148,31 +148,33 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     }
   };
   return (
-    <div id="libraryartist-item">
-      <div
-        v-observe-visibility="{callback: visibilityChanged}"
-        onClick={() => select}
-        className="cd-mediaitem-list-item"
-        className="{'mediaitem-selected': app.select_hasMediaItem(guid)}"
-        contextmenu="contextMenu">
+    <>
+      <div id="libraryartist-item">
         <div
-          className="artwork"
-          v-show={isVisible}
-          v-if={showArtwork === true}>
-          <MediaItemArtwork
-            url={getArtwork()}
-            size="50"
-            type={item.type}
-          />
-        </div>
-        <div
-          className="info-rect"
-          style={{ paddingLeft: showArtwork ? "" : "16px" }}
-          dblclick={app.routeView(item)}>
-          <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+          v-observe-visibility="{callback: visibilityChanged}"
+          onClick={() => select}
+          className="cd-mediaitem-list-item"
+          className="{'mediaitem-selected': app.select_hasMediaItem(guid)}"
+          contextmenu="contextMenu">
+          {showArtwork === true && (
+            <div
+              className="artwork"
+              v-show={isVisible}>
+              <MediaItemArtwork
+                url={getArtwork()}
+                size="50"
+                type={item.type}></MediaItemArtwork>
+            </div>
+          )}
+          <div
+            className="info-rect"
+            style={{ paddingLeft: showArtwork ? "" : "16px" }}
+            dblclick={app.routeView(item)}>
+            <div className="title text-overflow-elipsis">{item.attributes.name}</div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

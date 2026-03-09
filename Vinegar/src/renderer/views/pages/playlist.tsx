@@ -710,453 +710,454 @@ const Playlist = ({ data }: { data: object }) => {
 
   return (
     <div id="cider-playlist">
-      <div
-        className="content-inner playlist-page"
-        className={classes}
-        is-album={isAlbum()}
-        v-if={data !== [] && data.attributes !== null}
-        style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
-        <template v-if={app.playlists.loadingState === 0}>
-          <div className="content-inner centered">
-            <div className="spinner" />
-          </div>
-        </template>
-        <template v-if={app.playlists.loadingState === 1}>
-          <div
-            className="playlist-display"
-            style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-            mouseoverself={minClass(false)}>
-            <div className="playlistInfo">
-              <div
-                className="playlist-hero"
-                v-if={hasHero()}>
-                <MediaItemArtwork
-                  shadow="none"
-                  url={hasHero()}
-                  size="2160"
-                />
-                <div
-                  className="hero-tint"
-                  style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-                />
+      {data !== [] && data.attributes !== null && (
+        <div
+          className="content-inner playlist-page"
+          className={classes}
+          is-album={isAlbum()}
+          style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
+          {app.playlists.loadingState === 0 && (
+            <template>
+              <div className="content-inner centered">
+                <div className="spinner"></div>
               </div>
-              <div className="row">
-                <div
-                  className="col-auto cider-flex-center"
-                  onMouseOver={() => minClass(false)}>
-                  <div className="mediaContainer">
-                    <MediaItemArtwork
-                      shadow="large"
-                      video-priority="true"
-                      url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
-                      video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                      size="500"
-                    />
-                  </div>
-                </div>
-                <div className="col playlist-info">
-                  <template v-if={!editorialNotesExpanded}>
-                    <div>
+            </template>
+          )}
+          {app.playlists.loadingState === 1 && (
+            <template>
+              <div
+                className="playlist-display"
+                style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                mouseoverself={minClass(false)}>
+                <div className="playlistInfo">
+                  {hasHero() && (
+                    <div className="playlist-hero">
+                      <MediaItemArtwork
+                        shadow="none"
+                        url={hasHero()}
+                        size="2160"></MediaItemArtwork>
                       <div
-                        className="playlist-name"
-                        onMouseOver={() => minClass(false)}
-                        onClick={() => editPlaylistName()}
-                        v-show={!nameEditing}
-                        style={{ color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
-                        {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
+                        className="hero-tint"
+                        style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}></div>
+                    </div>
+                  )}
+                  <div className="row">
+                    <div
+                      className="col-auto cider-flex-center"
+                      onMouseOver={() => minClass(false)}>
+                      <div className="mediaContainer">
+                        <MediaItemArtwork
+                          shadow="large"
+                          video-priority="true"
+                          url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
+                          video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                          size="500"></MediaItemArtwork>
                       </div>
-                      <div
-                        className="playlist-name"
-                        onMouseOver={() => minClass(false)}
-                        v-show={nameEditing}>
-                        <input
-                          type="text"
-                          spellCheck="false"
-                          className="nameEdit"
-                          v-model={data.attributes.name}
-                          onBlur={editPlaylist}
-                          onChange={editPlaylist}
-                          onKeyDown={(e) => {
-                            if (e.key === "enter") editPlaylist();
-                          }}
-                        />
-                      </div>
-                      <div
-                        className="playlist-time genre"
-                        style={{ margin: "0px", color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
-                        {getAlbumGenre()}
-                      </div>
-                      <div
-                        className="playlist-artist item-navigate"
-                        v-if={getArtistName(data) !== "" && !useArtistChip}
-                        onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
-                        {getArtistName(data)}
-                      </div>
-                      <template v-if={useArtistChip}>
-                        {data.relationships.artists?.data.map((artist) => (
-                          <ArtistChip
-                            style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                            item={artist}
-                          />
-                        ))}
-                      </template>
-                      <div
-                        className="playlist-desc"
-                        style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
-                        v-if={(data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))}>
-                        <div
-                          v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null}
-                          className="content"
-                          v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
-                          onClick={() => openInfoModal()}
-                        />
-                        <div
-                          v-else-if={(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null && descriptionEditing === false}
-                          onMouseOver={() => minClass(false)}
-                          onClick={() => editPlaylistDescription()}
-                          v-html={(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard ?? "").substring(0, 255) + "..."}
-                        />
-                        <div
-                          v-else-if={(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null && descriptionEditing}
-                          onMouseOver={() => minClass(false)}>
-                          <input
-                            type="text"
-                            spellCheck="false"
-                            className="descriptionEdit"
-                            v-model={data.attributes.description.standard}
-                            onBlur={editPlaylist}
-                            onChange={editPlaylist}
-                            onKeyDown={(e) => {
-                              if (e.key === "enter") editPlaylist();
-                            }}
-                          />
-                        </div>
-                        {/* <button v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null} className="more-btn"}
+                    </div>
+                    <div className="col playlist-info">
+                      {!editorialNotesExpanded && (
+                        <template>
+                          <div>
+                            <div
+                              className="playlist-name"
+                              onMouseOver={() => minClass(false)}
+                              onClick={() => editPlaylistName()}
+                              v-show={!nameEditing}
+                              style={{ color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
+                              {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
+                            </div>
+                            <div
+                              className="playlist-name"
+                              onMouseOver={() => minClass(false)}
+                              v-show={nameEditing}>
+                              <input
+                                type="text"
+                                spellCheck="false"
+                                className="nameEdit"
+                                v-model={data.attributes.name}
+                                onBlur={editPlaylist}
+                                onChange={editPlaylist}
+                                onKeyDown={(e) => {
+                                  if (e.key === "enter") editPlaylist();
+                                }}></input>
+                            </div>
+                            <div
+                              className="playlist-time genre"
+                              style={{ margin: "0px", color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
+                              {getAlbumGenre()}
+                            </div>
+                            {getArtistName(data) !== "" && !useArtistChip && (
+                              <div
+                                className="playlist-artist item-navigate"
+                                onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
+                                {getArtistName(data)}
+                              </div>
+                            )}
+                            {useArtistChip && (
+                              <template>
+                                {data.relationships.artists?.data.map((artist) => (
+                                  <ArtistChip
+                                    style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
+                                    item={artist}></ArtistChip>
+                                ))}
+                              </template>
+                            )}
+                            {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
+                              <div
+                                className="playlist-desc"
+                                style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}>
+                                {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
+                                  <div
+                                    className="content"
+                                    v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
+                                    onClick={() => openInfoModal()}></div>
+                                ) : (
+                                  <>
+                                    {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
                                                 onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
                                             {app.getLz('term.showMore')}
-                                        </button>  */}
-                      </div>
-                    </div>
-                  </template>
-                  <template v-if={editorialNotesExpanded}>
-                    <div className="playlist-desc-expanded">
+                                        </button> : */}
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </template>
+                      )}
+                      {editorialNotesExpanded && (
+                        <template>
+                          <div className="playlist-desc-expanded">
+                            <div
+                              className="content"
+                              v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}></div>
+                            <button
+                              className="more-btn"
+                              onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
+                              {app.getLz("term.showLess")}
+                            </button>
+                          </div>
+                        </template>
+                      )}
                       <div
-                        className="content"
-                        v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
-                      />
-                      <button
-                        className="more-btn"
-                        onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
-                        {app.getLz("term.showLess")}
-                      </button>
-                    </div>
-                  </template>
-                  <div
-                    className="playlist-controls"
-                    v-observe-visibility="{callback: isHeaderVisible}"
-                    style={{ zIndex: 20 }}>
-                    <button
-                      className="md-btn md-btn-primary md-btn-icon"
-                      style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
-                      onClick={() => {
-                        app.mk.shuffleMode = 0;
-                        play();
-                      }}>
-                      <img className="md-ico-play" />
-                      {app.getLz("term.play")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-primary md-btn-icon"
-                      style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
-                      onClick={() => {
-                        app.mk.shuffleMode = 1;
-                        play();
-                      }}>
-                      <img className="md-ico-shuffle" />
-                      {app.getLz("term.shuffle")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-icon"
-                      style={{ minWidth: "180px" }}
-                      v-if={inLibrary !== null && confirm !== true}
-                      onClick={() => confirmButton()}>
-                      <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                      {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-icon"
-                      style={{ minWidth: "180px" }}
-                      v-if={confirm === true}
-                      onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                      <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                      {app.getLz("term.confirm")}
-                    </button>
-                    <select
-                      v-if={shouldPaginate}
-                      className="md-select"
-                      v-model={prefs.scroll}>
-                      <optgroup label={app.getLz("term.scroll")}>
-                        <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
-                        <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
-                      </optgroup>
-                    </select>
-                    <div style={{ display: "flex", float: "right" }}>
-                      <button
-                        style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
-                        className="['search-btn', showSearch ? 'active' : '']"
-                        onClick={() => toggleSearch()}
-                        aria-label="showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')">
-                        <SVGIcon
-                          style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-                          url="showSearch ? './assets/search-alt.svg' : './assets/search.svg'"
-                        />
-                      </button>
-                      <button
-                        style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
-                        className="more-btn-round"
-                        onClick={() => menu}
-                        aria-label={app.getLz("term.more")}>
-                        <div
-                          style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
-                          className="svg-icon"
-                        />
-                      </button>
+                        className="playlist-controls"
+                        v-observe-visibility="{callback: isHeaderVisible}"
+                        style={{ zIndex: 20 }}>
+                        <button
+                          className="md-btn md-btn-primary md-btn-icon"
+                          style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
+                          onClick={() => {
+                            app.mk.shuffleMode = 0;
+                            play();
+                          }}>
+                          <img className="md-ico-play"></img>
+                          {app.getLz("term.play")}
+                        </button>
+                        <button
+                          className="md-btn md-btn-primary md-btn-icon"
+                          style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
+                          onClick={() => {
+                            app.mk.shuffleMode = 1;
+                            play();
+                          }}>
+                          <img className="md-ico-shuffle"></img>
+                          {app.getLz("term.shuffle")}
+                        </button>
+                        {inLibrary !== null && confirm !== true && (
+                          <button
+                            className="md-btn md-btn-icon"
+                            style={{ minWidth: "180px" }}
+                            onClick={() => confirmButton()}>
+                            <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                            {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                          </button>
+                        )}
+                        {confirm === true && (
+                          <button
+                            className="md-btn md-btn-icon"
+                            style={{ minWidth: "180px" }}
+                            onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                            <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                            {app.getLz("term.confirm")}
+                          </button>
+                        )}
+                        {shouldPaginate && (
+                          <select
+                            className="md-select"
+                            v-model={prefs.scroll}>
+                            <optgroup label={app.getLz("term.scroll")}>
+                              <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
+                              <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                            </optgroup>
+                          </select>
+                        )}
+                        <div style={{ display: "flex", float: "right" }}>
+                          <button
+                            style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
+                            className="['search-btn', showSearch ? 'active' : '']"
+                            onClick={() => toggleSearch()}
+                            aria-label="showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')">
+                            <SVGIcon
+                              style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                              url="showSearch ? './assets/search-alt.svg' : './assets/search.svg'"></SVGIcon>
+                          </button>
+                          <button
+                            style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
+                            className="more-btn-round"
+                            onClick={() => menu}
+                            aria-label={app.getLz("term.more")}>
+                            <div
+                              style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
+                              className="svg-icon"></div>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div
-              className="artworkContainer"
-              v-if={data.attributes.artwork !== null && !hasHero()}>
-              <ArtworkMaterial
-                url={data.attributes.artwork.url}
-                size="500"
-                images="1"
-              />
-            </div>
-            <button
-              className="md-btn md-btn-small editTracksBtn"
-              v-if={data.attributes.canEdit && data.type === "library-playlists"}
-              onClick={() => {
-                editing = !editing;
-              }}>
-              <span v-if={!editing}>
-                <div class="codicon codicon-edit" /> {$root.getLz("action.editTracklist")}
-              </span>
-              <span v-else>
-                <div class="codicon codicon-check" /> {$root.getLz("action.done")}
-              </span>
-            </button>
-          </div>
-          <div
-            className="floating-header"
-            style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
-            <div className="row">
-              <div className="col">
-                <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
-              </div>
-              <div className="col-auto cider-flex-center">
-                <div>
+                {data.attributes.artwork !== null && !hasHero() && (
+                  <div className="artworkContainer">
+                    <ArtworkMaterial
+                      url={data.attributes.artwork.url}
+                      size="500"
+                      images="1"></ArtworkMaterial>
+                  </div>
+                )}
+                {data.attributes.canEdit && data.type === "library-playlists" && (
                   <button
-                    className="md-btn md-btn-primary  md-btn-icon"
-                    style={{ minWidth: "100px" }}
+                    className="md-btn md-btn-small editTracksBtn"
                     onClick={() => {
-                      app.mk.shuffleMode = 0;
-                      play();
+                      editing = !editing;
                     }}>
-                    <img className="md-ico-play" />
-                    {app.getLz("term.play")}
+                    {!editing ? (
+                      <span>
+                        <div class="codicon codicon-edit"></div> {$root.getLz("action.editTracklist")}
+                      </span>
+                    ) : (
+                      <span>
+                        <div class="codicon codicon-check"></div> {$root.getLz("action.done")}
+                      </span>
+                    )}
                   </button>
-                  <button
-                    className="md-btn md-btn-primary  md-btn-icon"
-                    style={{ minWidth: "100px" }}
-                    onClick={() => {
-                      app.mk.shuffleMode = 1;
-                      play();
-                    }}>
-                    <img className="md-ico-shuffle" />
-                    {app.getLz("term.shuffle")}
-                  </button>
-                  <button
-                    className="md-btn md-btn-icon"
-                    style={{ minWidth: "180px" }}
-                    v-if={inLibrary !== null && confirm !== true}
-                    onClick={() => confirmButton()}>
-                    <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                    {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
-                  </button>
-                  <button
-                    className="md-btn md-btn-icon"
-                    style={{ minWidth: "180px" }}
-                    v-if={confirm === true}
-                    onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                    <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                    {app.getLz("term.confirm")}
-                  </button>
-                  <select
-                    v-if={shouldPaginate}
-                    className="md-select"
-                    v-model={prefs.scroll}>
-                    <optgroup label={app.getLz("term.scroll")}>
-                      <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
-                      <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
-                    </optgroup>
-                  </select>
+                )}
+              </div>
+              <div
+                className="floating-header"
+                style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
+                <div className="row">
+                  <div className="col">
+                    <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
+                  </div>
+                  <div className="col-auto cider-flex-center">
+                    <div>
+                      <button
+                        className="md-btn md-btn-primary  md-btn-icon"
+                        style={{ minWidth: "100px" }}
+                        onClick={() => {
+                          app.mk.shuffleMode = 0;
+                          play();
+                        }}>
+                        <img className="md-ico-play"></img>
+                        {app.getLz("term.play")}
+                      </button>
+                      <button
+                        className="md-btn md-btn-primary  md-btn-icon"
+                        style={{ minWidth: "100px" }}
+                        onClick={() => {
+                          app.mk.shuffleMode = 1;
+                          play();
+                        }}>
+                        <img className="md-ico-shuffle"></img>
+                        {app.getLz("term.shuffle")}
+                      </button>
+                      {inLibrary !== null && confirm !== true && (
+                        <button
+                          className="md-btn md-btn-icon"
+                          style={{ minWidth: "180px" }}
+                          onClick={() => confirmButton()}>
+                          <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                          {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                        </button>
+                      )}
+                      {confirm === true && (
+                        <button
+                          className="md-btn md-btn-icon"
+                          style={{ minWidth: "180px" }}
+                          onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                          <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                          {app.getLz("term.confirm")}
+                        </button>
+                      )}
+                      {shouldPaginate && (
+                        <select
+                          className="md-select"
+                          v-model={prefs.scroll}>
+                          <optgroup label={app.getLz("term.scroll")}>
+                            <option value="infinite">{app.getLz("term.scroll.infinite")}</option>
+                            <option value="paged">{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                          </optgroup>
+                        </select>
+                      )}
+                    </div>
+                  </div>
+                  <div className="col-auto cider-flex-center">
+                    <button
+                      className="more-btn-round"
+                      style={{ float: right }}
+                      onClick={() => menu}
+                      aria-label={app.getLz("term.more")}>
+                      <div className="svg-icon"></div>
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="col-auto cider-flex-center">
-                <button
-                  className="more-btn-round"
-                  style={{ float: right }}
-                  onClick={() => menu}
-                  aria-label={app.getLz("term.more")}>
-                  <div className="svg-icon" />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="playlist-body scrollbody">
-            <b-tabs
-              pills
-              className="track-pills pilldim fancy-pills"
-              align="center"
-              content-className="mt-3"
-              nav-wrapper-className={navClass(data)}>
-              <b-tab
-                title={$root.getLz("term.tracks")}
-                id="songList"
-                active>
-                <div
-                  onWheel={() => minClass(true)}
-                  onScroll={() => minClass(true)}>
-                  <div className="">
+              <div className="playlist-body scrollbody">
+                <b-tabs
+                  pills
+                  className="track-pills pilldim fancy-pills"
+                  align="center"
+                  content-className="mt-3"
+                  nav-wrapper-className={navClass(data)}>
+                  <b-tab
+                    title={$root.getLz("term.tracks")}
+                    id="songList"
+                    active>
                     <div
-                      style={{ width: "100%" }}
-                      onClick={() => minClass(true)}>
-                      <div
-                        v-if={showSearch}
-                        className="search-input-container">
-                        <div className="search-input--icon" />
-                        <input
-                          type="search"
-                          spellCheck="false"
-                          placeholder={$root.getLz("term.search") + "..."}
-                          onInput={() => search()}
-                          v-model={searchQuery}
-                          className="search-input"
-                          ref="search-bar"
-                        />
+                      onWheel={() => minClass(true)}
+                      onScroll={() => minClass(true)}>
+                      <div className="">
+                        <div
+                          style={{ width: "100%" }}
+                          onClick={() => minClass(true)}>
+                          {showSearch && (
+                            <div className="search-input-container">
+                              <div className="search-input--icon"></div>
+                              <input
+                                type="search"
+                                spellCheck="false"
+                                placeholder={$root.getLz("term.search") + "..."}
+                                onInput={() => search()}
+                                v-model={searchQuery}
+                                className="search-input"
+                                ref="search-bar"></input>
+                            </div>
+                          )}
+                          {shouldPaginate && (
+                            <Pagination
+                              style={{ marginTop: "10px" }}
+                              length={hasNestedPlaylist ? nestedDisplayLength : displayListing.length}
+                              pageSize={pageSize}
+                              scroll={prefs.scroll}
+                              scrollSelector="#songList"
+                              onRangeChange="onRangeChange"></Pagination>
+                          )}
+                          <draggable
+                            options="{disabled: !editing}"
+                            v-model={data.relationships.tracks.data}
+                            start="drag=true"
+                            end="drag=false;put()">
+                            {!hasNestedPlaylist ? (
+                              <template>
+                                {currentSlice.map((item, index) => (
+                                  <MediaItemListItem
+                                    item={item}
+                                    parent={getItemParent(data)}
+                                    index={index + start}
+                                    showIndex={true}
+                                    showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
+                                    context-ext={buildContextMenu()}
+                                    v-bind:key={item.id}></MediaItemListItem>
+                                ))}
+                              </template>
+                            ) : (
+                              <template>
+                                {nestedSlices.map((disc) => (
+                                  <div>
+                                    <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                    {disc.tracks.map((item, index) => (
+                                      <MediaItemListItem
+                                        item={item}
+                                        parent={getItemParent(data)}
+                                        index={index}
+                                        showIndex={true}
+                                        showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
+                                        context-ext={buildContextMenu()}
+                                        v-bind:key={item.id}></MediaItemListItem>
+                                    ))}
+                                  </div>
+                                ))}
+                              </template>
+                            )}
+                          </draggable>
+                        </div>
                       </div>
-                      <Pagination
-                        v-if={shouldPaginate}
-                        style={{ marginTop: "10px" }}
-                        length={hasNestedPlaylist ? nestedDisplayLength : displayListing.length}
-                        pageSize={pageSize}
-                        scroll={prefs.scroll}
-                        scrollSelector="#songList"
-                        onRangeChange="onRangeChange"
-                      />
-                      <draggable
-                        options="{disabled: !editing}"
-                        v-model={data.relationships.tracks.data}
-                        start="drag=true"
-                        end="drag=false;put()">
-                        <template v-if={!hasNestedPlaylist}>
-                          {currentSlice.map((item, index) => (
-                            <MediaItemListItem
-                              item={item}
-                              parent={getItemParent(data)}
-                              index={index + start}
-                              showIndex={true}
-                              showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
-                              context-ext={buildContextMenu()}
-                              v-bind:key={item.id}
-                            />
-                          ))}
-                        </template>
-                        <template v-else>
-                          {nestedSlices.map((disc) => (
-                            <div>
-                              <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
-                              {disc.tracks.map((item, index) => (
-                                <MediaItemListItem
-                                  item={item}
-                                  parent={getItemParent(data)}
-                                  index={index}
-                                  showIndex={true}
-                                  showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
-                                  context-ext={buildContextMenu()}
-                                  v-bind:key={item.id}
-                                />
+                      {itemBadges.length !== 0 && (
+                        <div className="friends-info">
+                          <div className="well">
+                            <div className="badge-container">
+                              {itemBadges.map((badge) => (
+                                <div
+                                  className="socialBadge"
+                                  title={`${badge.attributes.name} - ${badge.attributes.handle}`}>
+                                  <MediaItemArtwork
+                                    url={badge.attributes.artwork.url}
+                                    size="60"></MediaItemArtwork>
+                                </div>
                               ))}
                             </div>
-                          ))}
-                        </template>
-                      </draggable>
-                    </div>
-                  </div>
-                  <div
-                    className="friends-info"
-                    v-if={itemBadges.length !== 0}>
-                    <div className="well">
-                      <div className="badge-container">
-                        {itemBadges.map((badge) => (
-                          <div
-                            className="socialBadge"
-                            title={`${badge.attributes.name} - ${badge.attributes.handle}`}>
-                            <MediaItemArtwork
-                              url={badge.attributes.artwork.url}
-                              size="60"
-                            />
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="playlist-time">{getFormattedDate()}</div>
-                  <div className="playlist-time total">{app.getTotalTime()}</div>
-                  <div
-                    className="playlist-time item-navigate"
-                    onClick={() => app.searchAndNavigate(data, "recordLabel")}
-                    style={{ width: "50%" }}>
-                    {data.attributes.copyright}
-                  </div>
-                  <template v-if={(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0}>
-                    <div
-                      className="playlist-time showExtended item-navigate"
-                      style={{ color: "#fa586a", fontWeight: "bold" }}
-                      onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                      {$root.getLz("action.showAlbum")}
-                    </div>
-                  </template>
-                </div>
-              </b-tab>
-              <template v-if={typeof data.views !== "undefined"}>
-                {data.meta.views.order.map((view) => (
-                  <b-tab
-                    lazy
-                    title={data.views[view].attributes.title}
-                    v-if={data.views[view].data.length !== 0}>
-                    <div>
-                      <div className="row">
-                        <div className="col">
-                          <h3>{data.views[view].attributes.title}</h3>
                         </div>
+                      )}
+                      <div className="playlist-time">{getFormattedDate()}</div>
+                      <div className="playlist-time total">{app.getTotalTime()}</div>
+                      <div
+                        className="playlist-time item-navigate"
+                        onClick={() => app.searchAndNavigate(data, "recordLabel")}
+                        style={{ width: "50%" }}>
+                        {data.attributes.copyright}
                       </div>
-                      <div className="row">
-                        <div className="col">
-                          <MediaitemScrollerHorizontal items={data.views[view].data} />
-                        </div>
-                      </div>
+                      {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
+                        <template>
+                          <div
+                            className="playlist-time showExtended item-navigate"
+                            style={{ color: "#fa586a", fontWeight: "bold" }}
+                            onClick={() => app.routeView(data.relationships.catalog.data[0])}>
+                            {$root.getLz("action.showAlbum")}
+                          </div>
+                        </template>
+                      )}
                     </div>
                   </b-tab>
-                ))}
-              </template>
-            </b-tabs>
-          </div>
-        </template>
-      </div>
+                  {typeof data.views !== "undefined" && (
+                    <template>
+                      {data.meta.views.order.map(
+                        (view) =>
+                          data.views[view].data.length !== 0 && (
+                            <b-tab
+                              lazy
+                              title={data.views[view].attributes.title}>
+                              <div>
+                                <div className="row">
+                                  <div className="col">
+                                    <h3>{data.views[view].attributes.title}</h3>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col">
+                                    <MediaitemScrollerHorizontal items={data.views[view].data}></MediaitemScrollerHorizontal>
+                                  </div>
+                                </div>
+                              </div>
+                            </b-tab>
+                          ),
+                      )}
+                    </template>
+                  )}
+                </b-tabs>
+              </div>
+            </template>
+          )}
+        </div>
+      )}
     </div>
   );
 };

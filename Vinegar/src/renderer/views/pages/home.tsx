@@ -166,163 +166,148 @@ const Component = () => {
   }
 
   return (
-    <div id="cider-home">
-      <div className="content-inner home-page">
-        <div v-if={page === "main"}>
-          <div className="row">
-            <div className="col">
+    <>
+      <div id="cider-home">
+        <div className="content-inner home-page">
+          {page === "main" && (
+            <div>
               <div className="row">
-                <div className="col nopadding">
-                  <h3>{app.getLz("home.recentlyPlayed")}</h3>
+                <div className="col">
+                  <div className="row">
+                    <div className="col nopadding">
+                      <h3>{app.getLz("home.recentlyPlayed")}</h3>
+                    </div>
+                    <div className="col-auto nopadding cider-flex-center">
+                      <button
+                        className="cd-btn-seeall"
+                        onClick={() => seeAllHistory()}>
+                        {app.getLz("term.history")}
+                      </button>
+                      <button
+                        className="cd-btn-seeall"
+                        onClick={() => seeAllRecentlyPlayed()}>
+                        {app.getLz("term.seeAll")}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="well artistfeed-well">
+                    {isSectionReady("recentlyPlayed") ? (
+                      recentlyPlayed.limit(6).map((item) => (
+                        <MediaItemListItem
+                          item={item}
+                          v-bind:key={item.id}></MediaItemListItem>
+                      ))
+                    ) : (
+                      <div className="spinner"></div>
+                    )}
+                  </div>
                 </div>
-                <div className="col-auto nopadding cider-flex-center">
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => seeAllHistory()}>
-                    {app.getLz("term.history")}
-                  </button>
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => seeAllRecentlyPlayed()}>
-                    {app.getLz("term.seeAll")}
-                  </button>
-                </div>
-              </div>
-              <div className="well artistfeed-well">
-                {isSectionReady("recentlyPlayed") ? (
-                  recentlyPlayed.limit(6).map((item) => (
-                    <MediaItemListItem
-                      item={item}
-                      v-bind:key={item.id}
-                    />
-                  ))
-                ) : (
-                  <div className="spinner" />
-                )}
-              </div>
-            </div>
-            <div className="col">
-              <div className="row">
-                <div className="col nopadding">
-                  <h3>{app.getLz("home.artistsFeed")}</h3>
-                </div>
-                <div className="col-auto nopadding cider-flex-center">
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => syncFavorites()}
-                    v-if={!syncingFavs}>
-                    {app.getLz("home.syncFavorites")}
-                  </button>
+                <div className="col">
+                  <div className="row">
+                    <div className="col nopadding">
+                      <h3>{app.getLz("home.artistsFeed")}</h3>
+                    </div>
+                    <div className="col-auto nopadding cider-flex-center">
+                      {!syncingFavs ? (
+                        <button
+                          className="cd-btn-seeall"
+                          onClick={() => syncFavorites()}>
+                          {app.getLz("home.syncFavorites")}
+                        </button>
+                      ) : (
+                        <div
+                          className="spinner"
+                          style={{ height: "26px" }}></div>
+                      )}
+                      <button
+                        className="cd-btn-seeall"
+                        onClick={() => app.appRoute("artist-feed")}>
+                        {app.getLz("term.seeAll")}
+                      </button>
+                    </div>
+                  </div>
                   <div
-                    className="spinner"
-                    style={{ height: "26px" }}
-                    v-else
-                  />
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => app.appRoute("artist-feed")}>
-                    {app.getLz("term.seeAll")}
-                  </button>
+                    className="well artistfeed-well"
+                    style={{ marginTop: 0 }}>
+                    {artistFeed.length > 0 ? (
+                      artistFeed.limit(6).map((item) => (
+                        <MediaItemListItem
+                          item={item}
+                          v-bind:key={item.id}></MediaItemListItem>
+                      ))
+                    ) : followedArtists.length > 0 ? (
+                      <div className="spinner"></div>
+                    ) : (
+                      <div className="no-artist"> {app.getLz("home.artistsFeed.noArtist")}</div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div
-                className="well artistfeed-well"
-                style={{ marginTop: 0 }}>
-                {artistFeed.length > 0 ? (
-                  artistFeed.limit(6).map((item) => (
-                    <MediaItemListItem
-                      item={item}
-                      v-bind:key={item.id}
-                    />
-                  ))
-                ) : followedArtists.length > 0 ? (
-                  <div className="spinner" />
-                ) : (
-                  <div className="no-artist"> {app.getLz("home.artistsFeed.noArtist")}</div>
-                )}
-              </div>
-            </div>
-          </div>
-          {/*            <div className="row" v-if={app.isDev}> */}
-          {/*                <div className="col"> */}
-          {/*                    <h3>Your Favorites</h3> */}
-          {/*                    <div className="well"> */}
-          {/*                        <div className="hint-text" v-if={favorites.length === 0}>Items you have added to your favorites will */}
-          {/*                            appear here. */}
-          {/*                        </div> */}
-          {/*                        <MediaItemScrollerHorizontal kind="small" items="favorites" */}
-          {/*                                                       item={item} /> */}
-          {/*                    </div> */}
-          {/*                </div> */}
-          {/*            </div> */}
-          <div
-            className="row"
-            v-if={!seenReplay}>
-            <div className="col">
-              <button
-                className="md-btn md-btn-block md-btn-replay--hero"
-                onClick={() => $root.appRoute("replay")}>
-                {$root.getLz("term.replay")} {year}
-              </button>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
+              {/*{(app.isDev) && <div className="row" > */}
+              {/*                <div className="col"> */}
+              {/*                    <h3>Your Favorites</h3> */}
+              {/*                    <div className="well">*/}
+              {/*{(favorites.length === 0) && <div className="hint-text" >Items you have added to your favorites will */}
+              {/*                            appear here. */}
+              {/*                        </div>}*/}
+              {/*<MediaItemScrollerHorizontal kind="small" items="favorites" */}
+              {/*                                                       item={item} ></MediaItemScrollerHorizontal>*/}
+              {/*</div> */}
+              {/*                </div> */}
+              {/*            </div>}*/}
+              {!seenReplay && (
+                <div className="row">
+                  <div className="col">
+                    <button
+                      className="md-btn md-btn-block md-btn-replay--hero"
+                      onClick={() => $root.appRoute("replay")}>
+                      {$root.getLz("term.replay")} {year}
+                    </button>
+                  </div>
+                </div>
+              )}
               <div className="row">
-                <div className="col nopadding">
-                  <h3>{app.getLz("home.madeForYou")}</h3>
-                </div>
-                <div className="col-auto nopadding cider-flex-center">
-                  <button
-                    className="md-btn md-btn-replay"
-                    v-if={seenReplay}
-                    onClick={() => $root.appRoute("replay")}>
-                    {$root.getLz("term.replay")} {year}
-                  </button>
+                <div className="col">
+                  <div className="row">
+                    <div className="col nopadding">
+                      <h3>{app.getLz("home.madeForYou")}</h3>
+                    </div>
+                    <div className="col-auto nopadding cider-flex-center">
+                      {seenReplay && (
+                        <button
+                          className="md-btn md-btn-replay"
+                          onClick={() => $root.appRoute("replay")}>
+                          {$root.getLz("term.replay")} {year}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="well">{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items="madeForYou"></MediaItemScrollerHorizontal> : <div className="spinner"></div>}</div>
                 </div>
               </div>
-              <div className="well">
-                <MediaItemScrollerHorizontal
-                  items="madeForYou"
-                  v-if={isSectionReady("madeForYou")}
-                />
-                <div
-                  className="spinner"
-                  v-else
-                />
-              </div>
+              {friendsListeningTo && friendsListeningTo.length > 0 && (
+                <div className="row">
+                  <div className="col">
+                    <div className="row">
+                      <div className="col nopadding">
+                        <h3>{app.getLz("home.friendsListeningTo")}</h3>
+                      </div>
+                      <div className="col-auto nopadding cider-flex-center">
+                        <button
+                          className="cd-btn-seeall"
+                          onClick={() => app.showSocialListeningTo()}>
+                          {app.getLz("term.seeAll")}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="well">{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items="friendsListeningTo"></MediaItemScrollerHorizontal> : <div className="spinner"></div>}</div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-          <div
-            className="row"
-            v-if={friendsListeningTo && friendsListeningTo.length > 0}>
-            <div className="col">
-              <div className="row">
-                <div className="col nopadding">
-                  <h3>{app.getLz("home.friendsListeningTo")}</h3>
-                </div>
-                <div className="col-auto nopadding cider-flex-center">
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => app.showSocialListeningTo()}>
-                    {app.getLz("term.seeAll")}
-                  </button>
-                </div>
-              </div>
-              <div className="well">
-                <MediaItemScrollerHorizontal
-                  items="friendsListeningTo"
-                  v-if={isSectionReady("friendsListeningTo")}
-                />
-                <div
-                  className="spinner"
-                  v-else
-                />
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };

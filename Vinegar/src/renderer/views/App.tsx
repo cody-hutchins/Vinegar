@@ -6,7 +6,7 @@ import MiniView from "./components/mini-view.jsx";
 import FullscreenView from "./components/fullscreen-view.jsx";
 import OOBE from "./pages/oobe.jsx";
 import { useEffect, useState } from "react";
-import {AnimatePresence, motion} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,10 +34,9 @@ const App = () => {
           <script
             type="module"
             src="./main/app.js"></script>
-          <div
+          {appVisible && (<div
             id="app"
             className={getAppClasses()}
-            v-if="appVisible"
             window-state={chrome.windowState}
             style={getAppStyle()}
             library-visible={chrome.sidebarCollapsed ? 0 : 1}
@@ -54,9 +53,8 @@ const App = () => {
               </motion.div>
 
               <motion.div name="fsModeSwitch">
-                <div
-                  className="fullscreen-view-container"
-                  v-if="appMode == 'fullscreen'">
+                {appMode == "fullscreen" && <div
+                  className="fullscreen-view-container">
                   <FullscreenView
                     ref="fsView"
                     image={currentArtUrlRaw}
@@ -64,33 +62,31 @@ const App = () => {
                     lyrics={lyrics}
                     richlyrics={richlyrics}
                   />
-                </div>
+                </div>}
               </motion.div>
 
               <motion.div name="fsModeSwitch">
-                <div
-                  className="fullscreen-view-container"
-                  v-if="appMode == 'mini'">
+                {appMode == "mini" && <div
+                  className="fullscreen-view-container">
                   <MiniView
                     image={currentArtUrlRaw}
                     time={mk.currentPlaybackTime - lyricOffset}
                     lyrics={lyrics}
                     richlyrics={richlyrics}
                   />
-                </div>
+                </div>}
               </motion.div>
 
               <motion.div name="fsModeSwitch">
-                <div
-                  className="fullscreen-view-container oobe"
-                  v-if="appMode == 'oobe'">
+                {appMode == "oobe" && <div
+                  className="fullscreen-view-container oobe">
                   <OOBE />
-                </div>
+                </div>}
               </motion.div>
             </AnimatePresence>
             <Panels />
             {chrome.showCursor && <div className="cursor"></div>}
-          </div>
+          </div>)}
 
           {Object.keys(process.env.components).map((component) => {
             include(component);

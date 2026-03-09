@@ -63,31 +63,32 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
     this.$root.reloadStyles();
   }
   return (
-    <div className="stylestack-editor">
-      <draggable
-        className="list-group"
-        v-model={$root.cfg.visual.styles}
-        end={$root.reloadStyles()}>
-        {$root.cfg.visual.styles.map((theme) => (
-          <b-list-group-item
-            variant="dark"
-            key="theme">
-            <b-row>
-              <b-col sm="auto">
-                <div className="handle codicon codicon-grabber" />
-              </b-col>
-              <b-col className="themeLabel">{getThemeName(theme)}</b-col>
-              <b-col sm="auto">
-                <button
-                  className="removeItem codicon codicon-close"
-                  onClick={() => remove(theme)}
-                />
-              </b-col>
-            </b-row>
-          </b-list-group-item>
-        ))}
-      </draggable>
-    </div>
+    <>
+      <div className="stylestack-editor">
+        <draggable
+          className="list-group"
+          v-model={$root.cfg.visual.styles}
+          end={$root.reloadStyles()}>
+          {$root.cfg.visual.styles.map((theme) => (
+            <b-list-group-item
+              variant="dark"
+              key="theme">
+              <b-row>
+                <b-col sm="auto">
+                  <div className="handle codicon codicon-grabber"></div>
+                </b-col>
+                <b-col className="themeLabel">{getThemeName(theme)}</b-col>
+                <b-col sm="auto">
+                  <button
+                    className="removeItem codicon codicon-close"
+                    onClick={() => remove(theme)}></button>
+                </b-col>
+              </b-row>
+            </b-list-group-item>
+          ))}
+        </draggable>
+      </div>
+    </>
   );
 };
 export const InstalledThemes = () => {
@@ -257,115 +258,124 @@ export const InstalledThemes = () => {
   }
 
   return (
-    <div id="installed-themes">
-      <div className="installed-themes-page">
-        <div className="gh-header">
-          <div className="row">
-            <div className="col nopadding">
-              <h1 className="header-text">{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
-            </div>
-            <div className="col-auto nopadding flex-center">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => $root.appRoute("themes-github")}>
-                {$root.getLz("settings.option.visual.theme.github.explore")}
-              </button>
-            </div>
-            <div className="col-auto  flex-center">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => $root.checkForThemeUpdates()}>
-                {$root.getLz("settings.option.visual.theme.checkForUpdates")}
-              </button>
-            </div>
-            <div className="col-auto nopadding flex-center">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => openThemesFolder()}>
-                {$root.getLz("settings.option.visual.theme.github.openfolder")}
-              </button>
+    <>
+      <div id="installed-themes">
+        <div className="installed-themes-page">
+          <div className="gh-header">
+            <div className="row">
+              <div className="col nopadding">
+                <h1 className="header-text">{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
+              </div>
+              <div className="col-auto nopadding flex-center">
+                <button
+                  className="md-btn md-btn-small md-btn-block"
+                  onClick={() => $root.appRoute("themes-github")}>
+                  {$root.getLz("settings.option.visual.theme.github.explore")}
+                </button>
+              </div>
+              <div className="col-auto  flex-center">
+                <button
+                  className="md-btn md-btn-small md-btn-block"
+                  onClick={() => $root.checkForThemeUpdates()}>
+                  {$root.getLz("settings.option.visual.theme.checkForUpdates")}
+                </button>
+              </div>
+              <div className="col-auto nopadding flex-center">
+                <button
+                  className="md-btn md-btn-small md-btn-block"
+                  onClick={() => openThemesFolder()}>
+                  {$root.getLz("settings.option.visual.theme.github.openfolder")}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="gh-content">
-          <div className="repos-list">
-            <div className="repo-header">
-              <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
-            </div>
-            <ul className="list-group list-group-flush">
-              {themes.map((theme) => (
-                <template>
-                  <li
-                    onClick={() => addStyle(theme.file)}
-                    onContextMenu={() => contextMenu($event, theme)}
-                    className="list-group-item list-group-item-dark"
-                    className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
-                    <b-row>
-                      <b-col className="themeLabel">{theme.name}</b-col>
-                      <template v-if={$root.cfg.visual.styles.includes(theme.file)}>
-                        <b-col
-                          sm="auto"
-                          v-if={theme.pack}>
-                          <button className="themeContextMenu codicon codicon-package" />
-                        </b-col>
-                        <b-col sm="auto">
-                          <button className="themeContextMenu codicon codicon-check" />
-                        </b-col>
-                      </template>
-                      <template v-else>
-                        <b-col
-                          sm="auto"
-                          v-if={theme.pack}>
-                          <button className="themeContextMenu codicon codicon-package" />
-                        </b-col>
-                        <b-col sm="auto">
-                          <button
-                            clickstop={contextMenu($event, theme)}
-                            className="themeContextMenu codicon codicon-list-unordered"
-                          />
-                        </b-col>
-                      </template>
-                    </b-row>
-                  </li>
-                  {theme.pack.map((packEntry) => (
+          <div className="gh-content">
+            <div className="repos-list">
+              <div className="repo-header">
+                <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
+              </div>
+              <ul className="list-group list-group-flush">
+                {themes.map((theme) => (
+                  <template>
                     <li
-                      onClick={() => addStyle(packEntry.file)}
+                      onClick={() => addStyle(theme.file)}
                       onContextMenu={() => contextMenu($event, theme)}
-                      className="list-group-item list-group-item-dark addon"
-                      className="{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"
-                      v-if={theme.pack}>
+                      className="list-group-item list-group-item-dark"
+                      className="{'applied': $root.cfg.visual.styles.includes(theme.file)}">
                       <b-row>
-                        <b-col className="themeLabel">{packEntry.name}</b-col>
-                        <template v-if={$root.cfg.visual.styles.includes(packEntry.file)}>
-                          <b-col sm="auto">
-                            <button className="themeContextMenu codicon codicon-check" />
-                          </b-col>
-                        </template>
-                        <template v-else>
-                          <b-col sm="auto">
-                            <button className="themeContextMenu codicon codicon-diff-added" />
-                          </b-col>
-                        </template>
+                        <b-col className="themeLabel">{theme.name}</b-col>
+                        {$root.cfg.visual.styles.includes(theme.file) ? (
+                          <template>
+                            {theme.pack && (
+                              <b-col sm="auto">
+                                <button className="themeContextMenu codicon codicon-package"></button>
+                              </b-col>
+                            )}
+                            <b-col sm="auto">
+                              <button className="themeContextMenu codicon codicon-check"></button>
+                            </b-col>
+                          </template>
+                        ) : (
+                          <template>
+                            {theme.pack && (
+                              <b-col sm="auto">
+                                <button className="themeContextMenu codicon codicon-package"></button>
+                              </b-col>
+                            )}
+                            <b-col sm="auto">
+                              <button
+                                clickstop={contextMenu($event, theme)}
+                                className="themeContextMenu codicon codicon-list-unordered"></button>
+                            </b-col>
+                          </template>
+                        )}
                       </b-row>
                     </li>
-                  ))}
-                </template>
-              ))}
-            </ul>
-          </div>
-
-          <div className="style-editor-container">
-            <div className="repo-header">
-              <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
+                    {theme.pack.map(
+                      (packEntry) =>
+                        theme.pack && (
+                          <li
+                            onClick={() => addStyle(packEntry.file)}
+                            onContextMenu={() => contextMenu($event, theme)}
+                            className="list-group-item list-group-item-dark addon"
+                            className="{'applied': $root.cfg.visual.styles.includes(packEntry.file)}">
+                            <b-row>
+                              <b-col className="themeLabel">{packEntry.name}</b-col>
+                              {$root.cfg.visual.styles.includes(packEntry.file) ? (
+                                <template>
+                                  <b-col sm="auto">
+                                    <button className="themeContextMenu codicon codicon-check"></button>
+                                  </b-col>
+                                </template>
+                              ) : (
+                                <template>
+                                  <b-col sm="auto">
+                                    <button className="themeContextMenu codicon codicon-diff-added"></button>
+                                  </b-col>
+                                </template>
+                              )}
+                            </b-row>
+                          </li>
+                        ),
+                    )}
+                  </template>
+                ))}
+              </ul>
             </div>
-            <StylestackEditor
-              ref="stackEditor"
-              v-if={themes.length !== 0}
-              themes="themes"
-            />
+
+            <div className="style-editor-container">
+              <div className="repo-header">
+                <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
+              </div>
+              {themes.length !== 0 && (
+                <StylestackEditor
+                  ref="stackEditor"
+                  themes="themes"></StylestackEditor>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

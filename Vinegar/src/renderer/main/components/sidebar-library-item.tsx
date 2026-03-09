@@ -24,7 +24,7 @@ const SidebarLibraryItem = ({
   }, []);
   return (
     <button class="app-sidebar-item" class="$root.getSidebarItemClass(page)" click="$root.setWindowHash(page)">
-      <SVGIcon url="svgIconData" name="'sidebar-' + svgIconName" v-if="svgIconData != ''" />
+      {svgIconData != '' && <SVGIcon url="svgIconData" name="'sidebar-' + svgIconName" />}
       <span class="sidebar-item-text">{name}</span>
     </button>
   );

@@ -43,69 +43,64 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
     }
   };
   return (
-    <div id="listennow-child">
-      <div v-observe-visibility="{callback: visibilityChanged}">
-        <template v-if={isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf"}>
-          <div className="row">
-            <div
-              className="col"
-              v-if={recom?.relationships["primary-content"]?.data?.length > 0}
-              style={{ display: "flex", marginBlock: "1rem" }}>
-              <div
-                onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                className="listennow-chip"
-                style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
-                className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }">
-                <MediaItemArtwork
-                  v-if={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null}
-                  url="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork?.url"
-                  size="100"
-                />
+    <>
+      <div id="listennow-child">
+        <div v-observe-visibility="{callback: visibilityChanged}">
+          {isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf" ? (
+            <template>
+              <div className="row">
+                {recom?.relationships["primary-content"]?.data?.length > 0 ? (
+                  <div
+                    className="col"
+                    style={{ display: "flex", marginBlock: "1rem" }}>
+                    <div
+                      onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                      className="listennow-chip"
+                      style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
+                      className="{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }">
+                      {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
+                        <MediaItemArtwork
+                          url="recom?.relationships['primary-content']?.data[0]?.attributes?.artwork?.url"
+                          size="100"></MediaItemArtwork>
+                      )}
+                    </div>
+                    <div
+                      onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                      style={{ width: "fit-content" }}
+                      className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
+                      <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
+                      <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    className="col"
+                    style={{ display: "flex", marginBlock: "1rem" }}>
+                    <h3
+                      onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                      style={{ width: "fit-content", marginBlock: 0 }}
+                      className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
+                      {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
+                    </h3>
+                  </div>
+                )}
               </div>
-              <div
-                onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                style={{ width: "fit-content" }}
-                className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
-                <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
-                <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
-              </div>
-            </div>
-            <div
-              className="col"
-              v-else
-              style={{ display: "flex", marginBlock: "1rem" }}>
-              <h3
-                onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                style={{ width: "fit-content", marginBlock: 0 }}
-                className="{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}">
-                {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
-              </h3>
-            </div>
-            <div
-              className="col-auto cider-flex-center"
-              v-if={recom.relationships.contents.data.length >= 10}>
-              <button
-                className="cd-btn-seeall"
-                onClick={() => showCollection(recom)}>
-                {app.getLz("term.seeAll")}
-              </button>
-            </div>
-          </div>
-          <template v-if={recom.attributes.display.kind === "MusicCoverShelf" || recom.attributes.display.kind === "MusicCircleCoverShelf"}>
-            <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)} />
-          </template>
-          <template v-else>
-            <MediaItemScrollerHorizontalSP
-              withReason="index==0"
-              items={recom.relationships.contents.data.limit(10)}
-            />
-          </template>
-        </template>
-        <template v-else-if={recom.attributes.display.kind !== "MusicSuperHeroShelf"}>
-          <div style={{ height: "330px" }} />
-        </template>
+              {recom.attributes.display.kind === "MusicCoverShelf" || recom.attributes.display.kind === "MusicCircleCoverShelf" ? (
+                <template>
+                  <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)}></MediaItemScrollerHorizontalLarge>
+                </template>
+              ) : (
+                <template>
+                  <MediaItemScrollerHorizontalSP
+                    withReason="index==0"
+                    items={recom.relationships.contents.data.limit(10)}></MediaItemScrollerHorizontalSP>
+                </template>
+              )}
+            </template>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

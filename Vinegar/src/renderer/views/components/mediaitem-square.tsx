@@ -502,105 +502,101 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     return beforeDestroy;
   }, []);
   return (
-    <div id="mediaitem-square">
-      <div
-        tabindex="0"
-        className="cd-mediaitem-square-container"
-        clickself={app.routeView(item)}
-        controller-click={app.routeView(item)}
-        contextmenuself="getContextMenu"
-        v-observe-visibility="{callback: visibilityChanged}">
+    <>
+      <div id="mediaitem-square">
         <div
-          v-if={reasonShown}
-          className="reasonSP ">
-          {item?.meta?.reason?.stringForDisplay ?? ""}
-        </div>
-        <div
-          style={{ "--spcolor": getBgColor() }}
-          className="cd-mediaitem-square"
-          className={getClasses()}
-          contextmenu="getContextMenu">
+          tabindex="0"
+          className="cd-mediaitem-square-container"
+          clickself={app.routeView(item)}
+          controller-click={app.routeView(item)}
+          contextmenuself="getContextMenu"
+          v-observe-visibility="{callback: visibilityChanged}">
+          {reasonShown && <div className="reasonSP ">{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
           <div
-            className="artwork-container"
-            v-show={isVisible}>
+            style={{ "--spcolor": getBgColor() }}
+            className="cd-mediaitem-square"
+            className={getClasses()}
+            contextmenu="getContextMenu">
             <div
-              className="unavailable-overlay"
-              v-if={unavailable}>
-              <div className="codicon codicon-circle-slash" />
-            </div>
-            <div
-              className="artwork"
-              onClick={() => app.routeView(item)}>
-              <MediaItemArtwork
-                url={getArtworkUrl()}
-                video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                size="size"
-                upscaling="true"
-                shadow="subtle"
-                bgcolor={getBgColor()}
-                video-priority={forceVideo}
-                type={item.type}
-              />
-            </div>
-            <button
-              className="menu-btn"
-              v-if={!nomenu.includes(item.type)}
-              onClick={() => getContextMenu}
-              aria-label={$root.getLz("term.more")}>
-              {import("../svg/more.svg")}
-            </button>
-            <button
-              className="play-btn"
-              v-if={!noplay.includes(item.type)}
-              onClick={() => app.playMediaItem(item)}
-              aria-label={$root.getLz("term.play")}>
-              {import("../svg/play.svg")}
-            </button>
-            {itemBadges.length !== 0 &&
-              itemBadges.limit(1).map((badge) => (
-                <div
-                  className="socialBadge"
-                  v-bind:key={badge.id}>
-                  <MediaItemArtwork
-                    url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
-                    size="32"
-                  />
+              className="artwork-container"
+              v-show={isVisible}>
+              {unavailable && (
+                <div className="unavailable-overlay">
+                  <div className="codicon codicon-circle-slash"></div>
                 </div>
-              ))}
-          </div>
-          <div
-            className="info-rect"
-            className="{'info-rect-card': kind === 'card'}"
-            v-show={isVisible}
-            style={{ "--bgartwork": getArtworkUrl(size, true) }}>
-            <div
-              className="title"
-              title={item.attributes?.name ?? item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? ""}
-              v-if={item.attributes.artistNames === null || kind !== "card"}
-              onClick={() => app.routeView(item)}>
-              <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
+              )}
               <div
-                className="explicit-icon"
-                v-if={item.attributes && item.attributes.contentRating === "explicit"}
-                style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
-              />
+                className="artwork"
+                onClick={() => app.routeView(item)}>
+                <MediaItemArtwork
+                  url={getArtworkUrl()}
+                  video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                  size="size"
+                  upscaling="true"
+                  shadow="subtle"
+                  bgcolor={getBgColor()}
+                  video-priority={forceVideo}
+                  type={item.type}></MediaItemArtwork>
+              </div>
+              {!nomenu.includes(item.type) && (
+                <button
+                  className="menu-btn"
+                  onClick={() => getContextMenu}
+                  aria-label={$root.getLz("term.more")}>
+                  {import("../svg/more.svg")}
+                </button>
+              )}
+              {!noplay.includes(item.type) && (
+                <button
+                  className="play-btn"
+                  onClick={() => app.playMediaItem(item)}
+                  aria-label={$root.getLz("term.play")}>
+                  {import("../svg/play.svg")}
+                </button>
+              )}
+              {itemBadges.length !== 0 &&
+                itemBadges.limit(1).map((badge) => (
+                  <div
+                    className="socialBadge"
+                    v-bind:key={badge.id}>
+                    <MediaItemArtwork
+                      url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
+                      size="32"></MediaItemArtwork>
+                  </div>
+                ))}
             </div>
             <div
-              title={getSubtitle()}
-              className="subtitle item-navigate text-overflow-elipsis"
-              onClick={() => getSubtitleNavigation()}
-              v-if={getSubtitle() !== ""}>
-              {getSubtitle()}
-            </div>
-            <div
-              className="subtitle"
-              v-if={getSubtitle() === "" && kind !== "card"}>
-              &nbsp;
+              className="info-rect"
+              className="{'info-rect-card': kind === 'card'}"
+              v-show={isVisible}
+              style={{ "--bgartwork": getArtworkUrl(size, true) }}>
+              {(item.attributes.artistNames === null || kind !== "card") && (
+                <div
+                  className="title"
+                  title={item.attributes?.name ?? item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? ""}
+                  onClick={() => app.routeView(item)}>
+                  <div className="item-navigate text-overflow-elipsis">{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
+                  {item.attributes && item.attributes.contentRating === "explicit" && (
+                    <div
+                      className="explicit-icon"
+                      style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}></div>
+                  )}
+                </div>
+              )}
+              {getSubtitle() !== "" && (
+                <div
+                  title={getSubtitle()}
+                  className="subtitle item-navigate text-overflow-elipsis"
+                  onClick={() => getSubtitleNavigation()}>
+                  {getSubtitle()}
+                </div>
+              )}
+              {getSubtitle() === "" && kind !== "card" && <div className="subtitle">&nbsp;</div>}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

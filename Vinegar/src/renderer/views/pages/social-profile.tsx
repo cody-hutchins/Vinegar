@@ -25,52 +25,46 @@ const SocialProfile = ({ data }: { data: object }) => {
     }
   }
   return (
-    <div id="cider-socialprofile">
-      <div className="content-inner artist-page profile-page">
-        <div
-          className="artist-header"
-          style={getArtistPalette(data)}>
-          <div className="row">
-            <div
-              className="col-sm"
-              style={{ width: "auto" }}>
-              <div className="artist-image">
-                <MediaItemArtwork
-                  shadow="large"
-                  url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                  size="220"
-                  type="artists"
-                />
+    <>
+      <div id="cider-socialprofile">
+        <div className="content-inner artist-page profile-page">
+          <div
+            className="artist-header"
+            style={getArtistPalette(data)}>
+            <div className="row">
+              <div
+                className="col-sm"
+                style={{ width: "auto" }}>
+                <div className="artist-image">
+                  <MediaItemArtwork
+                    shadow="large"
+                    url={data.attributes.artwork ? data.attributes.artwork.url : ""}
+                    size="220"
+                    type="artists"></MediaItemArtwork>
+                </div>
               </div>
-            </div>
-            <div className="col cider-flex-center">
-              <h1>{data.attributes.name}</h1>
+              <div className="col cider-flex-center">
+                <h1>{data.attributes.name}</h1>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="artist-body">
-          <template v-if={data.relationships && data.relationships["shared-playlists"]}>
-            <div className="row">
-              <div className="col">
-                <h3>{"Shared Playlists" ?? ""}</h3>
-              </div>
-              <div
-                className="col-auto cider-flex-center"
-                v-if={data.relationships["shared-playlists"].data.length >= 10}>
-                <button
-                  className="cd-btn-seeall"
-                  onClick={() => app.showCollection(data.relationships["shared-playlists"], "Shared Playlists" ?? "", "default")}>
-                  {app.getLz("term.seeAll")}
-                </button>
-              </div>
-            </div>
-            {data.relationships["shared-playlists"].data.limit(10).map((item) => (
-              <MediaItemSquare item={item} />
-            ))}
-          </template>
+          <div className="artist-body">
+            {data.relationships && data.relationships["shared-playlists"] && (
+              <template>
+                <div className="row">
+                  <div className="col">
+                    <h3>{"Shared Playlists" ?? ""}</h3>
+                  </div>
+                </div>
+                {data.relationships["shared-playlists"].data.limit(10).map((item) => (
+                  <MediaItemSquare item={item}></MediaItemSquare>
+                ))}
+              </template>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

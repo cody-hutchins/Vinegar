@@ -30,8 +30,7 @@ export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boo
         <MediaItemArtwork
           url={item.attributes.artwork.url}
           size="50"
-          type="podcast"
-        />
+          type="podcast"></MediaItemArtwork>
       </div>
       <div className="info-rect">
         <div className="title text-overflow-elipsis">{item.attributes.name}</div>
@@ -165,7 +164,7 @@ export const Podcasts = () => {
               <div
                 className="search-input-container"
                 style={{ width: "100%" }}>
-                <div className="search-input--icon" />
+                <div className="search-input--icon"></div>
                 <input
                   type="search"
                   style={{ width: "100%" }}
@@ -176,157 +175,131 @@ export const Podcasts = () => {
                     librarySearch();
                   }}
                   v-model={search.term}
-                  className="search-input"
-                />
+                  className="search-input"></input>
               </div>
             </div>
-            <div v-if={search.term === ""}>
-              <div
-                className="podcast-list-header"
-                v-if={ciderPodcasts.length !== 0}>
-                {$root.getLz("podcast.followedOnCider")}
+            {search.term === "" ? (
+              <div>
+                {ciderPodcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("podcast.followedOnCider")}</div>}
+                {podcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("podcast.subscribedOnItunes")}</div>}
+                {podcasts.map((podcast) => (
+                  <PodcastTab
+                    isSelected={podcastSelected.id === podcast.id}
+                    clicknative={selectPodcast(podcast)}
+                    item={podcast}></PodcastTab>
+                ))}
               </div>
-              <div
-                className="podcast-list-header"
-                v-if={podcasts.length !== 0}>
-                {$root.getLz("podcast.subscribedOnItunes")}
+            ) : (
+              <div>
+                {podcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("term.library")}</div>}
+                {search.resultsLibrary.map((podcast) => (
+                  <PodcastTab
+                    isSelected={podcastSelected.id === podcast.id}
+                    clicknative={selectPodcast(podcast)}
+                    item={podcast}></PodcastTab>
+                ))}
+                {podcasts.length !== 0 && <div className="podcast-list-header">{$root.getLz("podcast.itunesStore")}</div>}
+                {search.results.map((podcast) => (
+                  <PodcastTab
+                    isSelected={podcastSelected.id === podcast.id}
+                    clicknative={selectPodcast(podcast)}
+                    item={podcast}></PodcastTab>
+                ))}
               </div>
-              {podcasts.map((podcast) => (
-                <PodcastTab
-                  isSelected={podcastSelected.id === podcast.id}
-                  clicknative={selectPodcast(podcast)}
-                  item={podcast}
-                />
-              ))}
-            </div>
-            <div v-else>
-              <div
-                className="podcast-list-header"
-                v-if={podcasts.length !== 0}>
-                {$root.getLz("term.library")}
-              </div>
-              {search.resultsLibrary.map((podcast) => (
-                <PodcastTab
-                  isSelected={podcastSelected.id === podcast.id}
-                  clicknative={selectPodcast(podcast)}
-                  item={podcast}
-                />
-              ))}
-              <div
-                className="podcast-list-header"
-                v-if={podcasts.length !== 0}>
-                {$root.getLz("podcast.itunesStore")}
-              </div>
-              {search.results.map((podcast) => (
-                <PodcastTab
-                  isSelected={podcastSelected.id === podcast.id}
-                  clicknative={selectPodcast(podcast)}
-                  item={podcast}
-                />
-              ))}
-            </div>
+            )}
           </div>
           <div className="episodes-list">
-            <div
-              v-if={podcastSelected.id !== -1}
-              className="episodes-inline-info">
-              <div className="row">
-                <div className="col-auto cider-flex-center">
-                  <div className="podcast-artwork">
-                    <MediaItemArtwork
-                      shadow="large"
-                      url={podcastSelected.attributes.artwork.url}
-                      size="300"
-                    />
+            {podcastSelected.id !== -1 && (
+              <div className="episodes-inline-info">
+                <div className="row">
+                  <div className="col-auto cider-flex-center">
+                    <div className="podcast-artwork">
+                      <MediaItemArtwork
+                        shadow="large"
+                        url={podcastSelected.attributes.artwork.url}
+                        size="300"></MediaItemArtwork>
+                    </div>
+                  </div>
+                  <div className="col podcast-show-info">
+                    <h1>{podcastSelected.attributes.name}</h1>
+                    <small>{podcastSelected.attributes.releaseFrequency}</small>
+                    <small>Created: {new Date(podcastSelected.attributes.createdDate).toLocaleDateString()}</small>
                   </div>
                 </div>
-                <div className="col podcast-show-info">
-                  <h1>{podcastSelected.attributes.name}</h1>
-                  <small>{podcastSelected.attributes.releaseFrequency}</small>
-                  <small>Created: {new Date(podcastSelected.attributes.createdDate).toLocaleDateString()}</small>
-                </div>
+                <div className="well podcast-show-description">{podcastSelected.attributes.description.standard}</div>
+                {!isSubscribed(podcastSelected.id) && (
+                  <div className="row">
+                    <div className="col">
+                      <button className="md-btn md-btn-block">{$root.getLz("podcast.followOnCider")}</button>
+                    </div>
+                    <div className="col">
+                      <button className="md-btn md-btn-block">{$root.getLz("podcast.subscribeOnItunes")}</button>
+                    </div>
+                  </div>
+                )}
+                <h3>{$root.getLz("podcast.episodes")}</h3>
               </div>
-
-              <div className="well podcast-show-description">{podcastSelected.attributes.description.standard}</div>
-              <div
-                className="row"
-                v-if={!isSubscribed(podcastSelected.id)}>
-                <div className="col">
-                  <button className="md-btn md-btn-block">{$root.getLz("podcast.followOnCider")}</button>
-                </div>
-                <div className="col">
-                  <button className="md-btn md-btn-block">{$root.getLz("podcast.subscribeOnItunes")}</button>
-                </div>
+            )}
+            {search.results.length === 0 && podcastSelected.id === -1 && (
+              <div className="podcast-no-search-results">
+                <h3>{$root.getLz("error.noResults")}</h3>
+                <p>{$root.getLz("error.noResults.description")}</p>
               </div>
-              <h3>{$root.getLz("podcast.episodes")}</h3>
-            </div>
-            <div
-              v-if={search.results.length === 0 && podcastSelected.id === -1}
-              className="podcast-no-search-results">
-              <h3>{$root.getLz("error.noResults")}</h3>
-              <p>{$root.getLz("error.noResults.description")}</p>
-            </div>
+            )}
             {episodes.map((episode) => (
               <PodcastEpisode
                 isSelected={selected.id === episode.id}
                 dblclicknative={() => playEpisode(episode)}
                 clicknative={() => selectEpisode(episode)}
-                item={episode}
-              />
+                item={episode}></PodcastEpisode>
             ))}
           </div>
           <AnimatePresence>
-          <motion.div name="wpfade">
-            <div
-              className="podcasts-details"
-              v-if={selected.id !== -1}>
-              <div className="podcasts-details-header">
-                <button
-                  className="close-btn"
-                  onClick={() => (selected.id = -1)}
-                  aria-label={$root.getLz("action.close")}
-                />
-              </div>
-              <div className="podcast-artwork">
-                <MediaItemArtwork
-                  shadow="large"
-                  url={selected.attributes.artwork.url}
-                  size="300"
-                />
-              </div>
-              <h3 className="podcast-header">{selected.attributes.name}</h3>
-              <button
-                onClick={() => playEpisode(selected)}
-                className="md-btn podcast-play-btn">
-                {$root.getLz("podcast.playEpisode")}
-              </button>
-              <div className="podcast-genre">{selected.attributes.genreNames[0]}</div>
-              <div className="podcast-metainfo">
-                {msToMinSec(selected.attributes.durationInMilliseconds)} • {new Date(selected.attributes.releaseDateTime).toLocaleString()}
-              </div>
-              <div
-                className="well podcast-description"
-                v-if={selected.attributes.description.standard}>
-                {selected.attributes.description.standard}
-              </div>
-              <div className="row">
-                <div className="col">
+            <motion.div name="wpfade">
+              {selected.id !== -1 && (
+                <div className="podcasts-details">
+                  <div className="podcasts-details-header">
+                    <button
+                      className="close-btn"
+                      onClick={() => (selected.id = -1)}
+                      aria-label={$root.getLz("action.close")}></button>
+                  </div>
+                  <div className="podcast-artwork">
+                    <MediaItemArtwork
+                      shadow="large"
+                      url={selected.attributes.artwork.url}
+                      size="300"></MediaItemArtwork>
+                  </div>
+                  <h3 className="podcast-header">{selected.attributes.name}</h3>
                   <button
-                    className="md-btn md-btn-block meta-btn"
-                    onClick={() => openUrl(selected.attributes.websiteUrl)}>
-                    {$root.getLz("podcast.website")}
+                    onClick={() => playEpisode(selected)}
+                    className="md-btn podcast-play-btn">
+                    {$root.getLz("podcast.playEpisode")}
                   </button>
+                  <div className="podcast-genre">{selected.attributes.genreNames[0]}</div>
+                  <div className="podcast-metainfo">
+                    {msToMinSec(selected.attributes.durationInMilliseconds)} • {new Date(selected.attributes.releaseDateTime).toLocaleString()}
+                  </div>
+                  {selected.attributes.description.standard && <div className="well podcast-description">{selected.attributes.description.standard}</div>}
+                  <div className="row">
+                    <div className="col">
+                      <button
+                        className="md-btn md-btn-block meta-btn"
+                        onClick={() => openUrl(selected.attributes.websiteUrl)}>
+                        {$root.getLz("podcast.website")}
+                      </button>
+                    </div>
+                    <div className="col">
+                      <button
+                        className="md-btn md-btn-block meta-btn"
+                        onClick={() => $root.share(selected.attributes.websiteUrl)}>
+                        {$root.getLz("action.share")}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="col">
-                  <button
-                    className="md-btn md-btn-block meta-btn"
-                    onClick={() => $root.share(selected.attributes.websiteUrl)}>
-                    {$root.getLz("action.share")}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+              )}
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>
@@ -336,8 +309,7 @@ export const Podcasts = () => {
             <MediaItemArtwork
               url={item.attributes.artwork.url}
               size="50"
-              type="podcast"
-            />
+              type="podcast"></MediaItemArtwork>
           </div>
           <div className="info-rect">
             <div className="title text-overflow-elipsis">{item.attributes.name}</div>

@@ -401,384 +401,400 @@ const Component = ({ data }: { data: object }) => {
     });
   }
   return (
-    <div id="playlist-inline">
-      <div
-        className="content-inner playlist-page inline-playlist"
-        clickself={$root.resetState()}>
+    <>
+      <div id="playlist-inline">
         <div
-          className="playlist-inner"
-          v-if={data !== [] && data.attributes !== null}>
-          <div
-            className="close-btn"
-            title="Close"
-            onClick={() => $root.resetState()}>
-            <svg
-              fill="white"
-              xmlns="http://www.w3.org/2000/svg"
-              width="21"
-              height="21"
-              viewBox="0 0 21 21"
-              aria-role="presentation"
-              focusable="false">
-              <path
-                d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
-                fill-rule="nonzero"
-              />
-            </svg>
-          </div>
-          <template v-if={app.playlists.loadingState === 0}>
-            <div className="content-inner centered">
-              <div className="spinner" />
-            </div>
-          </template>
-          <template v-if={app.playlists.loadingState === 1}>
-            <div
-              className="playlist-display"
-              style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null ? "#" + data.attributes.artwork.textColor1 : "" }}>
-              <div className="playlistInfo">
-                <div className="row">
-                  <div className="col-auto cider-flex-center">
-                    <div style={{ width: "260px", height: "260px" }}>
-                      <MediaItemArtwork
-                        shadow="large"
-                        video-priority="true"
-                        url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
-                        video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                        size="260"
-                      />
-                    </div>
+          className="content-inner playlist-page inline-playlist"
+          clickself={$root.resetState()}>
+          {data !== [] && data.attributes !== null ? (
+            <div className="playlist-inner">
+              <div
+                className="close-btn"
+                title="Close"
+                onClick={() => $root.resetState()}>
+                <svg
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="21"
+                  height="21"
+                  viewBox="0 0 21 21"
+                  aria-role="presentation"
+                  focusable="false">
+                  <path
+                    d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
+                    fill-rule="nonzero"></path>
+                </svg>
+              </div>
+              {app.playlists.loadingState === 0 && (
+                <template>
+                  <div className="content-inner centered">
+                    <div className="spinner"></div>
                   </div>
-                  <div className="col playlist-info">
-                    <template v-if={!editorialNotesExpanded}>
-                      <div>
-                        <div
-                          className="playlist-name"
-                          onClick={() => editPlaylistName()}
-                          v-show={!nameEditing}>
-                          {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
+                </template>
+              )}
+              {app.playlists.loadingState === 1 && (
+                <template>
+                  <div
+                    className="playlist-display"
+                    style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null ? "#" + data.attributes.artwork.textColor1 : "" }}>
+                    <div className="playlistInfo">
+                      <div className="row">
+                        <div className="col-auto cider-flex-center">
+                          <div style={{ width: "260px", height: "260px" }}>
+                            <MediaItemArtwork
+                              shadow="large"
+                              video-priority="true"
+                              url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
+                              video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                              size="260"></MediaItemArtwork>
+                          </div>
                         </div>
-                        <div
-                          className="playlist-name"
-                          v-show={nameEditing}>
-                          <input
-                            type="text"
-                            spellCheck="false"
-                            className="nameEdit"
-                            v-model={data.attributes.name}
-                            onBlur={editPlaylist}
-                            onChange={editPlaylist}
-                            onKeyDown={(e) => {
-                              if (e.key === "enter") editPlaylist();
-                            }}
-                          />
-                        </div>
-                        <div
-                          className="playlist-time genre"
-                          style={{ margin: "0px" }}>
-                          {getAlbumGenre()}
-                        </div>
-                        <div
-                          className="playlist-artist item-navigate"
-                          v-if={getArtistName(data) !== "" && !useArtistChip}
-                          onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
-                          {getArtistName(data)}
-                        </div>
-                        <template v-if={useArtistChip}>
-                          {data.relationships.artists?.data.map((artist) => (
-                            <ArtistChip item={artist} />
-                          ))}
-                        </template>
-                        <div
-                          className="playlist-desc"
-                          v-if={(data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))}>
-                          <div
-                            v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null}
-                            className="content"
-                            v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
-                            onClick={() => openInfoModal()}
-                          />
-                          <div
-                            v-else-if={(data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard) !== null}
-                            className={content}
-                            v-html={data.attributes.description?.standard ?? data.attributes.editorialNotes?.standard}
-                          />
-                          {/* <button v-if={(data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null} className="more-btn"}
+                        <div className="col playlist-info">
+                          {!editorialNotesExpanded && (
+                            <template>
+                              <div>
+                                <div
+                                  className="playlist-name"
+                                  onClick={() => editPlaylistName()}
+                                  v-show={!nameEditing}>
+                                  {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
+                                </div>
+                                <div
+                                  className="playlist-name"
+                                  v-show={nameEditing}>
+                                  <input
+                                    type="text"
+                                    spellCheck="false"
+                                    className="nameEdit"
+                                    v-model={data.attributes.name}
+                                    onBlur={editPlaylist}
+                                    onChange={editPlaylist}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "enter") editPlaylist();
+                                    }}></input>
+                                </div>
+                                <div
+                                  className="playlist-time genre"
+                                  style={{ margin: "0px" }}>
+                                  {getAlbumGenre()}
+                                </div>
+                                {getArtistName(data) !== "" && !useArtistChip && (
+                                  <div
+                                    className="playlist-artist item-navigate"
+                                    onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
+                                    {getArtistName(data)}
+                                  </div>
+                                )}
+                                {useArtistChip && (
+                                  <template>
+                                    {data.relationships.artists?.data.map((artist) => (
+                                      <ArtistChip item={artist}></ArtistChip>
+                                    ))}
+                                  </template>
+                                )}
+                                {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
+                                  <div className="playlist-desc">
+                                    {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
+                                      <div
+                                        className="content"
+                                        v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
+                                        onClick={() => openInfoModal()}></div>
+                                    ) : (
+                                      <>
+                                        {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
                                                     onClick={() =>openInfoModal()}>
                                                 {app.getLz('term.showMore')}
-                                            </button>  */}
+                                            </button> : */}
+                                      </>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </template>
+                          )}
+                          {editorialNotesExpanded && (
+                            <template>
+                              <div className="playlist-desc-expanded">
+                                <div
+                                  className="content"
+                                  v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}></div>
+                                <button
+                                  className="more-btn"
+                                  onClick={() => {
+                                    editorialNotesExpanded = !editorialNotesExpanded;
+                                  }}>
+                                  {app.getLz("term.showLess")}
+                                </button>
+                              </div>
+                            </template>
+                          )}
+                          <div
+                            className="playlist-controls"
+                            v-observe-visibility="{callback: isHeaderVisible}">
+                            <button
+                              className="md-btn md-btn-primary md-btn-icon"
+                              style={{ minWidth: "100px" }}
+                              onClick={() => {
+                                app.mk.shuffleMode = 0;
+                                play();
+                              }}>
+                              <img className="md-ico-play"></img>
+                              {app.getLz("term.play")}
+                            </button>
+                            <button
+                              className="md-btn md-btn-primary md-btn-icon"
+                              style={{ minWidth: "100px" }}
+                              onClick={() => {
+                                app.mk.shuffleMode = 1;
+                                play();
+                              }}>
+                              <img className="md-ico-shuffle"></img>
+                              {app.getLz("term.shuffle")}
+                            </button>
+                            {inLibrary !== null && confirm !== true && (
+                              <button
+                                className="md-btn md-btn-icon"
+                                style={{ minWidth: "180px" }}
+                                onClick={() => confirmButton()}>
+                                <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                                {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                              </button>
+                            )}
+                            {confirm === true && (
+                              <button
+                                className="md-btn md-btn-icon"
+                                style={{ minWidth: "180px" }}
+                                onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                                <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                                {app.getLz("term.confirm")}
+                              </button>
+                            )}
+                            <button
+                              className="more-btn-round"
+                              style={{ float: "right" }}
+                              onClick={() => menu}
+                              aria-label={app.getLz("term.more")}>
+                              <div className="svg-icon"></div>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </template>
-                    <template v-if={editorialNotesExpanded}>
-                      <div className="playlist-desc-expanded">
-                        <div
-                          className="content"
-                          v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
-                        />
+                    </div>
+                    {data.attributes.artwork !== null && (
+                      <div className="artworkContainer">
+                        <ArtworkMaterial
+                          url={data.attributes.artwork.url}
+                          size="260"
+                          images="1"></ArtworkMaterial>
+                      </div>
+                    )}
+                  </div>
+                  <div
+                    className="floating-header"
+                    style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
+                    <div className="row">
+                      <div className="col">
+                        <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
+                      </div>
+                      <div className="col-auto cider-flex-center">
+                        <div>
+                          <button
+                            className="md-btn md-btn-primary  md-btn-icon"
+                            style={{ minWidth: "100px" }}
+                            onClick={() => {
+                              app.mk.shuffleMode = 0;
+                              play();
+                            }}>
+                            <img className="md-ico-play"></img>
+                            {app.getLz("term.play")}
+                          </button>
+                          <button
+                            className="md-btn md-btn-primary  md-btn-icon"
+                            style={{ minWidth: "100px" }}
+                            onClick={() => {
+                              app.mk.shuffleMode = 1;
+                              play();
+                            }}>
+                            <img className="md-ico-shuffle"></img>
+                            {app.getLz("term.shuffle")}
+                          </button>
+                          {inLibrary !== null && confirm !== true && (
+                            <button
+                              className="md-btn md-btn-icon"
+                              style={{ minWidth: "180px" }}
+                              onClick={() => confirmButton()}>
+                              <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                              {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                            </button>
+                          )}
+                          {confirm === true && (
+                            <button
+                              className="md-btn md-btn-icon"
+                              style={{ minWidth: "180px" }}
+                              onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                              <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"}></img>
+                              {app.getLz("term.confirm")}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-auto cider-flex-center">
                         <button
-                          className="more-btn"
-                          onClick={() => {
-                            editorialNotesExpanded = !editorialNotesExpanded;
-                          }}>
-                          {app.getLz("term.showLess")}
+                          className="more-btn-round"
+                          style={{ float: "right" }}
+                          onClick={() => menu}
+                          aria-label={term.more}>
+                          <div className="svg-icon"></div>
                         </button>
                       </div>
-                    </template>
-                    <div
-                      className="playlist-controls"
-                      v-observe-visibility="{callback: isHeaderVisible}">
-                      <button
-                        className="md-btn md-btn-primary md-btn-icon"
-                        style={{ minWidth: "100px" }}
-                        onClick={() => {
-                          app.mk.shuffleMode = 0;
-                          play();
-                        }}>
-                        <img className="md-ico-play" />
-                        {app.getLz("term.play")}
-                      </button>
-                      <button
-                        className="md-btn md-btn-primary md-btn-icon"
-                        style={{ minWidth: "100px" }}
-                        onClick={() => {
-                          app.mk.shuffleMode = 1;
-                          play();
-                        }}>
-                        <img className="md-ico-shuffle" />
-                        {app.getLz("term.shuffle")}
-                      </button>
-                      <button
-                        className="md-btn md-btn-icon"
-                        style={{ minWidth: "180px" }}
-                        v-if={inLibrary !== null && confirm !== true}
-                        onClick={() => confirmButton()}>
-                        <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                        {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
-                      </button>
-                      <button
-                        className="md-btn md-btn-icon"
-                        style={{ minWidth: "180px" }}
-                        v-if={confirm === true}
-                        onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                        <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                        {app.getLz("term.confirm")}
-                      </button>
-                      <button
-                        className="more-btn-round"
-                        style={{ float: "right" }}
-                        onClick={() => menu}
-                        aria-label={app.getLz("term.more")}>
-                        <div className="svg-icon" />
-                      </button>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className="artworkContainer"
-                v-if={data.attributes.artwork !== null}>
-                <ArtworkMaterial
-                  url={data.attributes.artwork.url}
-                  size="260"
-                  images="1"
-                />
-              </div>
-            </div>
-            <div
-              className="floating-header"
-              style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
-              <div className="row">
-                <div className="col">
-                  <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
-                </div>
-                <div className="col-auto cider-flex-center">
-                  <div>
-                    <button
-                      className="md-btn md-btn-primary  md-btn-icon"
-                      style={{ minWidth: "100px" }}
-                      onClick={() => {
-                        app.mk.shuffleMode = 0;
-                        play();
-                      }}>
-                      <img className="md-ico-play" />
-                      {app.getLz("term.play")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-primary  md-btn-icon"
-                      style={{ minWidth: "100px" }}
-                      onClick={() => {
-                        app.mk.shuffleMode = 1;
-                        play();
-                      }}>
-                      <img className="md-ico-shuffle" />
-                      {app.getLz("term.shuffle")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-icon"
-                      style={{ minWidth: "180px" }}
-                      v-if={inLibrary !== null && confirm !== true}
-                      onClick={() => confirmButton()}>
-                      <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                      {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-icon"
-                      style={{ minWidth: "180px" }}
-                      v-if={confirm === true}
-                      onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
-                      <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                      {app.getLz("term.confirm")}
-                    </button>
-                  </div>
-                </div>
-                <div className="col-auto cider-flex-center">
-                  <button
-                    className="more-btn-round"
-                    style={{ float: "right" }}
-                    onClick={() => menu}
-                    aria-label={term.more}>
-                    <div className="svg-icon" />
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="playlist-body scrollbody">
-              <b-tabs
-                pills
-                align="center"
-                content-className="mt-3">
-                <b-tab title="Tracks">
-                  <div className="">
-                    <div style={{ width: "100%" }}>
-                      <draggable
-                        sort={data.attributes.canEdit && data.type === "library-playlists"}
-                        v-model={data.relationships.tracks.data}
-                        start="drag=true"
-                        end="drag=false;put()">
-                        <template v-if={nestedPlaylist === [] || nestedPlaylist.length <= 1}>
-                          {data.relationships.tracks.data.map((item, index) => (
-                            <MediaItemListItem
-                              item={item}
-                              parent={getItemParent(data)}
-                              index={index}
-                              showIndex={true}
-                              showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
-                              context-ext={buildContextMenu()}
-                              v-bind:key={item.id}
-                            />
-                          ))}
-                        </template>
-                        <template v-else>
-                          {nestedPlaylist.map((disc) =>
-                            disc.tracks.map((item, index) => (
-                              <div>
-                                <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
-                                <MediaItemListItem
-                                  item={item}
-                                  parent={getItemParent(data)}
-                                  index={index}
-                                  showIndex={true}
-                                  showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
-                                  context-ext={buildContextMenu()}
-                                  v-bind:key={item.id}
-                                />
+                  <div className="playlist-body scrollbody">
+                    <b-tabs
+                      pills
+                      align="center"
+                      content-className="mt-3">
+                      <b-tab title="Tracks">
+                        <div className="">
+                          <div style={{ width: "100%" }}>
+                            <draggable
+                              sort={data.attributes.canEdit && data.type === "library-playlists"}
+                              v-model={data.relationships.tracks.data}
+                              start="drag=true"
+                              end="drag=false;put()">
+                              {nestedPlaylist === [] || nestedPlaylist.length <= 1 ? (
+                                <template>
+                                  {data.relationships.tracks.data.map((item, index) => (
+                                    <MediaItemListItem
+                                      item={item}
+                                      parent={getItemParent(data)}
+                                      index={index}
+                                      showIndex={true}
+                                      showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
+                                      context-ext={buildContextMenu()}
+                                      v-bind:key={item.id}></MediaItemListItem>
+                                  ))}
+                                </template>
+                              ) : (
+                                <template>
+                                  {nestedPlaylist.map((disc) =>
+                                    disc.tracks.map((item, index) => (
+                                      <div>
+                                        <div className="playlist-time">{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                        <MediaItemListItem
+                                          item={item}
+                                          parent={getItemParent(data)}
+                                          index={index}
+                                          showIndex={true}
+                                          showIndexPlaylist={(data.attributes.playParams.kind ?? data.type ?? "").includes("playlist")}
+                                          context-ext={buildContextMenu()}
+                                          v-bind:key={item.id}></MediaItemListItem>
+                                      </div>
+                                    )),
+                                  )}
+                                </template>
+                              )}
+                            </draggable>
+                          </div>
+                        </div>
+                        {itemBadges.length !== 0 && (
+                          <div className="friends-info">
+                            <div className="well">
+                              <div className="badge-container">
+                                {itemBadges.map((badge) => (
+                                  <div
+                                    className="socialBadge"
+                                    title="`${badge.attributes.name} - ${badge.attributes.handle}`"
+                                    v-bind:key={badge.id}>
+                                    <MediaItemArtwork
+                                      url={badge.attributes.artwork.url}
+                                      size="60"></MediaItemArtwork>
+                                  </div>
+                                ))}
                               </div>
-                            )),
+                            </div>
+                          </div>
+                        )}
+                        <div className="playlist-time">{getFormattedDate()}</div>
+                        <div className="playlist-time total">{app.getTotalTime()}</div>
+                        <div
+                          className="playlist-time item-navigate"
+                          onClick={() => app.searchAndNavigate(data, "recordLabel")}
+                          style={{ width: "50%" }}>
+                          {data.attributes.copyright}
+                        </div>
+                        {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
+                          <template>
+                            <div
+                              className="playlist-time showExtended item-navigate"
+                              style={{ color: "#fa586a", fontWeight: "bold" }}
+                              onClick={() => app.routeView(data.relationships.catalog.data[0])}>
+                              {$root.getLz("action.showAlbum")}
+                            </div>
+                          </template>
+                        )}
+                        <hr></hr>
+                      </b-tab>
+                      {typeof data.views !== "undefined" && (
+                        <template>
+                          {data.meta.views.order.map(
+                            (view) =>
+                              data.views[view].data.length !== 0 && (
+                                <b-tab
+                                  lazy
+                                  title={data.views[view].attributes.title}>
+                                  <div>
+                                    <div className="row">
+                                      <div className="col">
+                                        <h3>{data.views[view].attributes.title}</h3>
+                                      </div>
+                                    </div>
+                                    <div className="row">
+                                      <div className="col">
+                                        <MediaItemScrollerHorizontal items={data.views[view].data}></MediaItemScrollerHorizontal>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </b-tab>
+                              ),
                           )}
                         </template>
-                      </draggable>
-                    </div>
+                      )}
+                    </b-tabs>
                   </div>
-                  <div
-                    className="friends-info"
-                    v-if={itemBadges.length !== 0}>
-                    <div className="well">
-                      <div className="badge-container">
-                        {itemBadges.map((badge) => (
-                          <div
-                            className="socialBadge"
-                            title="`${badge.attributes.name} - ${badge.attributes.handle}`"
-                            v-bind:key={badge.id}>
-                            <MediaItemArtwork
-                              url={badge.attributes.artwork.url}
-                              size="60"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="playlist-time">{getFormattedDate()}</div>
-                  <div className="playlist-time total">{app.getTotalTime()}</div>
-                  <div
-                    className="playlist-time item-navigate"
-                    onClick={() => app.searchAndNavigate(data, "recordLabel")}
-                    style={{ width: "50%" }}>
-                    {data.attributes.copyright}
-                  </div>
-                  <template v-if={(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0}>
-                    <div
-                      className="playlist-time showExtended item-navigate"
-                      style={{ color: "#fa586a", fontWeight: "bold" }}
-                      onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                      {$root.getLz("action.showAlbum")}
-                    </div>
-                  </template>
-                  <hr />
-                </b-tab>
-                <template v-if={typeof data.views !== "undefined"}>
-                  {data.meta.views.order.map((view) => (
-                    <b-tab
-                      lazy
-                      title={data.views[view].attributes.title}
-                      v-if={data.views[view].data.length !== 0}>
-                      <div>
-                        <div className="row">
-                          <div className="col">
-                            <h3>{data.views[view].attributes.title}</h3>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col">
-                            <MediaItemScrollerHorizontal items={data.views[view].data} />
-                          </div>
-                        </div>
-                      </div>
-                    </b-tab>
-                  ))}
                 </template>
-              </b-tabs>
+              )}
             </div>
-          </template>
-        </div>
-        <div
-          className="playlist-inner"
-          v-else>
-          <div
-            className="close-btn"
-            title="Close"
-            onClick={() => $root.resetState()}>
-            <svg
-              fill="white"
-              xmlns="http://www.w3.org/2000/svg"
-              width="21"
-              height="21"
-              viewBox="0 0 21 21"
-              aria-role="presentation"
-              focusable="false">
-              <path
-                d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
-                fill-rule="nonzero"
-              />
-            </svg>
-          </div>
-          <template v-if={app.playlists.loadingState === 0}>
-            <div className="content-inner centered">
-              <div className="spinner" />
+          ) : (
+            <div className="playlist-inner">
+              <div
+                className="close-btn"
+                title="Close"
+                onClick={() => $root.resetState()}>
+                <svg
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="21"
+                  height="21"
+                  viewBox="0 0 21 21"
+                  aria-role="presentation"
+                  focusable="false">
+                  <path
+                    d="M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
+                    fill-rule="nonzero"></path>
+                </svg>
+              </div>
+              {app.playlists.loadingState === 0 && (
+                <template>
+                  <div className="content-inner centered">
+                    <div className="spinner"></div>
+                  </div>
+                </template>
+              )}
             </div>
-          </template>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };

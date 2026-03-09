@@ -554,155 +554,146 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     }
   }
   return (
-    <div id="mediaitem-list-item">
-      <div
-        v-observe-visibility="{callback: visibilityChanged, throttle: 100}"
-        onContextMenu={contextMenu}
-        onClick={() => select}
-        data-id={itemId}
-        data-type={getDataType()}
-        data-index={index}
-        data-guid={guid}
-        data-islibrary={isLibrary}
-        key={itemId}
-        className="cd-mediaitem-list-item"
-        onMouseEnter={checkLibrary}
-        onMouseOver={() => {
-          showInLibrary = true;
-        }}
-        onMouseLeave={() => {
-          showInLibrary = false;
-        }}
-        onDoubleClick={route}
-        controller-click={route()}
-        tabIndex={0}
-        className="[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]">
+    <>
+      <div id="mediaitem-list-item">
         <div
-          v-show={isVisible}
-          className="listitem-content">
+          v-observe-visibility="{callback: visibilityChanged, throttle: 100}"
+          onContextMenu={contextMenu}
+          onClick={() => select}
+          data-id={itemId}
+          data-type={getDataType()}
+          data-index={index}
+          data-guid={guid}
+          data-islibrary={isLibrary}
+          key={itemId}
+          className="cd-mediaitem-list-item"
+          onMouseEnter={checkLibrary}
+          onMouseOver={() => {
+            showInLibrary = true;
+          }}
+          onMouseLeave={() => {
+            showInLibrary = false;
+          }}
+          onDoubleClick={route}
+          controller-click={route()}
+          tabIndex={0}
+          className="[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]">
           <div
-            className="popular"
-            v-if={!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7}
-          />
-          <div
-            className="isLibrary"
-            v-if={showLibraryStatus === true}>
+            v-show={isVisible}
+            className="listitem-content">
+            {!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7 && <div className="popular"></div>}
+            {showLibraryStatus === true && (
+              <div className="isLibrary">
+                {showInLibrary && (
+                  <div style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
+                    {!addedToLibrary && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) ? (
+                      <button
+                        onClick={() => addToLibrary()}
+                        aria-label={$root.getLz("action.addToLibrary")}>
+                        <div
+                          className="svg-icon addIcon"
+                          style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}></div>
+                      </button>
+                    ) : null}
+                  </div>
+                )}
+                {!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex && (
+                  <div style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
+                    <div>
+                      <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
+                    </div>
+                  </div>
+                )}
+                {app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id) && (
+                  <div style={{ display: showInLibrary ? "none" : "block" }}>
+                    <div className="loadbar-sound"></div>
+                  </div>
+                )}
+              </div>
+            )}
+            {showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) && (
+              <div className="artwork">
+                <MediaItemArtwork
+                  url={item.attributes.artwork ? item.attributes.artwork.url : ""}
+                  size="48"
+                  bgcolor={getBgColor()}
+                  type={item.type}></MediaItemArtwork>
+                <button
+                  className="overlay-play"
+                  onClick={() => playTrack()}
+                  aria-label={$root.getLz("term.play")}>
+                  {import("../svg/play.svg")}
+                </button>
+              </div>
+            )}
             <div
-              v-if={showInLibrary}
-              style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
-              <button
-                onClick={() => addToLibrary()}
-                v-if={!addedToLibrary && (showIndex === false || (showIndex === true && showIndexPlaylist !== false))}
-                aria-label={$root.getLz("action.addToLibrary")}>
-                <div
-                  className="svg-icon addIcon"
-                  style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}
-                />
-              </button>
-              <button
-                v-else-if="!(showArtwork === true && (showIndex === false ||(showIndex === true && showIndexPlaylist !== false)))"
-                onClick={() => playTrack()}
-                aria-label={$root.getLz("term.play")}>
-                <div
-                  className="svg-icon playIcon"
-                  style={{ color: "var(--keyColor)" }}>
-                  {import("./assets/feather/play.svg")}
-                </div>
-              </button>
-            </div>
-            <div
-              v-if={!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex}
-              style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
-              <div>
-                <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
+              className="info-rect"
+              style={{ paddingLeft: showArtwork ? "" : "16px" }}
+              onDoubleClick={route}>
+              <div
+                className="title text-overflow-elipsis"
+                title={item.attributes.name}>
+                {item.attributes.name}
+              </div>
+              <div
+                className="subtitle text-overflow-elipsis"
+                style={{ "-webkit-box-orient": "horizontal" }}>
+                {item.attributes.artistName && (
+                  <template>
+                    <div
+                      className="artist item-navigate text-overflow-elipsis"
+                      title={item.attributes.artistName}
+                      onClick={() => app.searchAndNavigate(item, "artist")}>
+                      {item.attributes.artistName}
+                    </div>
+                    {item.attributes.albumName && <template>&nbsp;—&nbsp;</template>}
+                    {item.attributes.albumName && (
+                      <template>
+                        <div
+                          className="artist item-navigate text-overflow-elipsis"
+                          title={item.attributes.albumName}
+                          onClick={() => app.searchAndNavigate(item, "album")}>
+                          {item.attributes.albumName}
+                        </div>
+                      </template>
+                    )}
+                  </template>
+                )}
               </div>
             </div>
-            <div
-              v-if={app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)}
-              style={{ display: showInLibrary ? "none" : "block" }}>
-              <div className="loadbar-sound" />
-            </div>
-          </div>
-          <div
-            className="artwork"
-            v-if={showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false))}>
-            <MediaItemArtwork
-              url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-              size="48"
-              bgcolor={getBgColor()}
-              type={item.type}
-            />
-            <button
-              className="overlay-play"
-              onClick={() => playTrack()}
-              aria-label={$root.getLz("term.play")}>
-              {import("../svg/play.svg")}
-            </button>
-          </div>
-          <div
-            className="info-rect"
-            style={{ paddingLeft: showArtwork ? "" : "16px" }}
-            onDoubleClick={route}>
-            <div
-              className="title text-overflow-elipsis"
-              title={item.attributes.name}>
-              {item.attributes.name}
-            </div>
-            <div
-              className="subtitle text-overflow-elipsis"
-              style={{ "-webkit-box-orient": "horizontal" }}>
-              <template v-if={item.attributes.artistName}>
+            <div className="heart-icon">
+              {/*{(isLoved === false) && <div className="heart-unfilled"  style={{'--url': 'url(./assets/feather/heart.svg)'}} ></div>}*/}
+              {isLoved === true && (
                 <div
-                  className="artist item-navigate text-overflow-elipsis"
-                  title={item.attributes.artistName}
-                  onClick={() => app.searchAndNavigate(item, "artist")}>
-                  {item.attributes.artistName}
-                </div>
-                <template v-if={item.attributes.albumName}>&nbsp;—&nbsp;</template>
-                <template v-if={item.attributes.albumName}>
-                  <div
-                    className="artist item-navigate text-overflow-elipsis"
-                    title={item.attributes.albumName}
-                    onClick={() => app.searchAndNavigate(item, "album")}>
-                    {item.attributes.albumName}
-                  </div>
-                </template>
-              </template>
+                  className="heart-filled"
+                  style={{ url: "url(./assets/feather/heart-fill.svg)" }}></div>
+              )}
             </div>
-          </div>
-          <div className="heart-icon">
-            {/* <div className="heart-unfilled" v-if={isLoved === false} style={{'--url': 'url(./assets/feather/heart.svg)'}} />  */}
-            <div
-              className="heart-filled"
-              v-if={isLoved === true}
-              style={{ url: "url(./assets/feather/heart-fill.svg)" }}
-            />
-          </div>
-          <div
-            className="explicit-icon"
-            v-if={item.attributes && item.attributes.contentRating === "explicit"}
-          />
-          <template
-            v-if={showMetaData === true}
-            onDoubleClick={route}>
-            <div className="metainfo">{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
-            <div className="metainfo">{item.attributes.genreNames[0] ?? ""}</div>
-          </template>
-          <div
-            className="duration"
-            v-if={displayDuration}
-            onDoubleClick={route}>
-            {msToMinSec(item.attributes.durationInMillis ?? 0)}
-          </div>
-          <div
-            className="duration"
-            v-if={item.attributes.playCount}
-            onDoubleClick={route}>
-            {item.attributes.playCount}
+            {item.attributes && item.attributes.contentRating === "explicit" && <div className="explicit-icon"></div>}
+            {showMetaData === true && (
+              <template onDoubleClick={route}>
+                <div className="metainfo">{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
+                <div className="metainfo">{item.attributes.genreNames[0] ?? ""}</div>
+              </template>
+            )}
+            {displayDuration && (
+              <div
+                className="duration"
+                onDoubleClick={route}>
+                {msToMinSec(item.attributes.durationInMillis ?? 0)}
+              </div>
+            )}
+            {item.attributes.playCount && (
+              <div
+                className="duration"
+                onDoubleClick={route}>
+                {item.attributes.playCount}
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -115,83 +115,88 @@ const MenuPanel = () => {
   }
 
   return (
-    <div id="cider-menu-panel">
-      <div
-        className="menu-panel"
-        clickself={() => {
-          menuPanel.visible = false;
-          if ($root.hintscontext) {
-            $root.hintscontext = false;
-            focusOther();
-          }
-        }}
-        contextmenuself={() => {
-          menuPanel.visible = false;
-          if ($root.hintscontext) {
-            $root.hintscontext = false;
-            focusOther();
-          }
-        }}>
+    <>
+      <div id="cider-menu-panel">
         <div
-          className="menu-panel-body"
-          ref="menubody"
-          style={elStyle}
-          className={getBodyClasses()}>
+          className="menu-panel"
+          clickself={() => {
+            menuPanel.visible = false;
+            if ($root.hintscontext) {
+              $root.hintscontext = false;
+              focusOther();
+            }
+          }}
+          contextmenuself={() => {
+            menuPanel.visible = false;
+            if ($root.hintscontext) {
+              $root.hintscontext = false;
+              focusOther();
+            }
+          }}>
           <div
-            className="menu-header-text"
-            v-if={content.name !== ""}>
-            <div className="row">
-              <div className="col">
-                <h3 className="queue-header-text">{content.name}</h3>
+            className="menu-panel-body"
+            ref="menubody"
+            style={elStyle}
+            className={getBodyClasses()}>
+            {content.name !== "" && (
+              <div className="menu-header-text">
+                <div className="row">
+                  <div className="col">
+                    <h3 className="queue-header-text">{content.name}</h3>
+                  </div>
+                </div>
               </div>
+            )}
+            {Object.keys(content.headerItems).length !== 0 && (
+              <div className="menu-header-body">
+                {content.headerItems.map(
+                  (item) =>
+                    canDisplay(item) && (
+                      <button
+                        className="menu-option-header"
+                        className={getClasses(item)}
+                        v-b-tooltiphover
+                        title={item.name}
+                        style={getItemStyle(item)}
+                        onClick={() => action(item)}>
+                        {item.icon && (
+                          <div
+                            className="sidebar-icon"
+                            style={{ margin: 0 }}>
+                            <div
+                              className="svg-icon"
+                              style={{ "--url": "url(" + item.icon + ")" }}></div>
+                          </div>
+                        )}
+                      </button>
+                    ),
+                )}
+              </div>
+            )}
+            <div className="menu-body">
+              {content.items.map(
+                (item) =>
+                  canDisplay(item) && (
+                    <button
+                      className="menu-option"
+                      style={getItemStyle(item)}
+                      onClick={() => action(item)}>
+                      {item.icon && (
+                        <div className="sidebar-icon">
+                          <div
+                            className="svg-icon"
+                            style={{ "--url": "url(" + item.icon + ")" }}></div>
+                        </div>
+                      )}
+                      {item.name}
+                    </button>
+                  ),
+              )}
             </div>
-          </div>
-          <div
-            className="menu-header-body"
-            v-if={Object.keys(content.headerItems).length !== 0}>
-            {content.headerItems.map((item) => (
-              <button
-                className="menu-option-header"
-                className={getClasses(item)}
-                v-b-tooltiphover
-                title={item.name}
-                v-if={canDisplay(item)}
-                style={getItemStyle(item)}
-                onClick={() => action(item)}>
-                <div
-                  className="sidebar-icon"
-                  style={{ margin: 0 }}
-                  v-if={item.icon}>
-                  <div
-                    className="svg-icon"
-                    style={{ "--url": "url(" + item.icon + ")" }}
-                  />
-                </div>
-              </button>
-            ))}
-          </div>
-          <div className="menu-body">
-            {content.items.map((item) => (
-              <button
-                className="menu-option"
-                v-if={canDisplay(item)}
-                style={getItemStyle(item)}
-                onClick={() => action(item)}>
-                <div
-                  className="sidebar-icon"
-                  v-if={item.icon}>
-                  <div
-                    className="svg-icon"
-                    style={{ "--url": "url(" + item.icon + ")" }}
-                  />
-                </div>
-                {item.name}
-              </button>
-            ))}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

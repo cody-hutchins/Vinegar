@@ -75,59 +75,61 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
     }
   };
   return (
-    <div id="inline-collection-list">
-      <div className="collection-page">
-        <h3
-          className="header-text"
-          v-observe-visibility="{callback: headerVisibility}">
-          {title}
-        </h3>
-        <div
-          v-if={data["data"] !== "null"}
-          className="well itemContainer">
-          {data.data.map((item) =>
-            item.type === "artists" ? (
-              <MediaItemSquare item={item} />
-            ) : (
-              <>
-                <MediaItemListItem
-                  v-if={getKind(item) === "song"}
-                  index={key}
-                  item={item}
-                />
-                <MediaItemSquare
-                  v-else
-                  item={item}
-                  type={getKind(item)}
-                />
-              </>
-            ),
+    <>
+      <div id="inline-collection-list">
+        <div className="collection-page">
+          <h3
+            className="header-text"
+            v-observe-visibility="{callback: headerVisibility}">
+            {title}
+          </h3>
+          {data["data"] !== "null" && (
+            <div className="well itemContainer">
+              {data.data.map((item) =>
+                item.type === "artists" ? (
+                  <MediaItemSquare item={item}></MediaItemSquare>
+                ) : (
+                  <>
+                    {getKind(item) === "song" ? (
+                      <MediaItemListItem
+                        index={key}
+                        item={item}></MediaItemListItem>
+                    ) : (
+                      <MediaItemSquare
+                        item={item}
+                        type={getKind(item)}></MediaItemSquare>
+                    )}
+                  </>
+                ),
+              )}
+              {triggerEnabled ? (
+                <button
+                  style={{ opacity: 0, height: "32px" }}
+                  v-observe-visibility="{callback: visibilityChanged}">
+                  {app.getLz("term.showMore")}
+                </button>
+              ) : null}
+            </div>
           )}
-          <button
-            v-if={triggerEnabled}
-            style={{ opacity: 0, height: "32px" }}
-            v-observe-visibility="{callback: visibilityChanged}">
-            {app.getLz("term.showMore")}
-          </button>
-        </div>
-        <AnimatePresence>
-          <motion.div name="fabfade">
-            <button
-              className="top-fab"
-              v-show={showFab}
-              onClick={() => scrollToTop()}
-              aria-label={app.getLz("action.scrollToTop")}>
-              {import("../svg/arrow-up.svg")}
-            </button>
-          </motion.div>
-        </AnimatePresence>
-        <div
-          className="well itemContainer"
-          v-show={loading}>
-          <div className="spinner" />
+          <AnimatePresence>
+            <motion.div name="fabfade">
+              <button
+                className="top-fab"
+                v-show={showFab}
+                onClick={() => scrollToTop()}
+                aria-label={app.getLz("action.scrollToTop")}>
+                {import("../svg/arrow-up.svg")}
+              </button>
+            </motion.div>
+          </AnimatePresence>
+          <div
+            className="well itemContainer"
+            v-show={loading}>
+            <div className="spinner"></div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

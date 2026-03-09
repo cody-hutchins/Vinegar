@@ -131,37 +131,53 @@ const Artist = ({ data }: { data: object }) => {
     }
   }
   return (
-    <div id="cider-artist">
-      <div
-        className="content-inner artist-page"
-        className="[(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9) || hasHero()) ? 'animated' : '']">
+    <>
+      <div id="cider-artist">
         <div
-          className="['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"
-          key={data.id}
-          v-observe-visibility="{callback: isHeaderVisible}">
-          <AnimatedArtworkView
-            priority="true"
-            v-if={hasAnimated()}
-            video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? ""}
-          />
+          className="content-inner artist-page"
+          className="[(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9) || hasHero()) ? 'animated' : '']">
           <div
-            className="header-content"
-            style={{ pointerEvents: all }}>
-            <div className="row">
-              <div
-                className="col-auto"
-                style={{ width: auto }}>
+            className="['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"
+            key={data.id}
+            v-observe-visibility="{callback: isHeaderVisible}">
+            {hasAnimated() && (
+              <AnimatedArtworkView
+                priority="true"
+                video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? ""}></AnimatedArtworkView>
+            )}
+            <div
+              className="header-content"
+              style={{ pointerEvents: all }}>
+              <div className="row">
                 <div
-                  className="artist-image"
-                  v-if={!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()}>
-                  <MediaItemArtwork
-                    shadow="large"
-                    url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                    size="190"
-                    type="artists"
-                  />
+                  className="col-auto"
+                  style={{ width: auto }}>
+                  {!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero() && (
+                    <div className="artist-image">
+                      <MediaItemArtwork
+                        shadow="large"
+                        url={data.attributes.artwork ? data.attributes.artwork.url : ""}
+                        size="190"
+                        type="artists"></MediaItemArtwork>
+                      <button
+                        className="overlay-play"
+                        onClick={() =>
+                          app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
+                            app.mk.play();
+                          })
+                        }
+                        aria-label={app.getLz("term.play")}>
+                        {import("../svg/play.svg")}
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div
+                  className="col cider-flex-center artist-title"
+                  className="{'artist-animation-on': (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() }"
+                  style={{ color: "#" + hasHeroObject()?.textColor1 ?? "" }}>
                   <button
-                    className="overlay-play"
+                    className="artist-play"
                     onClick={() =>
                       app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
                         app.mk.play();
@@ -170,14 +186,49 @@ const Artist = ({ data }: { data: object }) => {
                     aria-label={app.getLz("term.play")}>
                     {import("../svg/play.svg")}
                   </button>
+                  <h1>{data.attributes.name}</h1>
                 </div>
               </div>
-              <div
-                className="col cider-flex-center artist-title"
-                className="{'artist-animation-on': (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() }"
-                style={{ color: "#" + hasHeroObject()?.textColor1 ?? "" }}>
+              <button
+                className="more-btn-round favorite"
+                onClick={() => artistMenu}
+                style={{ pointerEvents: all }}
+                aria-label={app.getLz("term.more")}>
+                <div className="svg-icon"></div>
+              </button>
+              <button
+                className="more-btn-round menu"
+                onClick={() => artistMenu}
+                style={{ pointerEvents: all }}
+                aria-label={app.getLz("term.more")}>
+                <div className="svg-icon"></div>
+              </button>
+            </div>
+            {!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero() && (
+              <div className="artworkContainer">
+                <ArtworkMaterial
+                  url={data.attributes.artwork.url}
+                  size="190"
+                  images="1"></ArtworkMaterial>
+              </div>
+            )}
+            {hasHero() && !hasAnimated() && (
+              <div className="artist-hero">
+                <MediaItemArtwork
+                  shadow="none"
+                  url={hasHero()}
+                  size="2048"></MediaItemArtwork>
+              </div>
+            )}
+          </div>
+          <div
+            className="floating-header"
+            style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
+            <div className="row">
+              <div className="col-auto cider-flex-center">
                 <button
                   className="artist-play"
+                  style={{ display: "block" }}
                   onClick={() =>
                     app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
                       app.mk.play();
@@ -186,181 +237,109 @@ const Artist = ({ data }: { data: object }) => {
                   aria-label={app.getLz("term.play")}>
                   {import("../svg/play.svg")}
                 </button>
-                <h1>{data.attributes.name}</h1>
+              </div>
+              <div className="col">
+                <h3>{data.attributes.name}</h3>
+              </div>
+              <div className="col-auto cider-flex-center">
+                <button
+                  className="more-btn-round menu"
+                  onClick={() => artistMenu}
+                  aria-label={app.getLz("term.more")}>
+                  <div className="svg-icon"></div>
+                </button>
               </div>
             </div>
-            <button
-              className="more-btn-round favorite"
-              onClick={() => artistMenu}
-              style={{ pointerEvents: all }}
-              aria-label={app.getLz("term.more")}>
-              <div className="svg-icon" />
-            </button>
-            <button
-              className="more-btn-round menu"
-              onClick={() => artistMenu}
-              style={{ pointerEvents: all }}
-              aria-label={app.getLz("term.more")}>
-              <div className="svg-icon" />
-            </button>
           </div>
-          <div
-            className="artworkContainer"
-            v-if={!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero()}>
-            <ArtworkMaterial
-              url={data.attributes.artwork.url}
-              size="190"
-              images="1"
-            />
-          </div>
-          <div
-            className="artist-hero"
-            v-if={hasHero() && !hasAnimated()}>
-            <MediaItemArtwork
-              shadow="none"
-              url={hasHero()}
-              size="2048"
-            />
-          </div>
-        </div>
-        <div
-          className="floating-header"
-          style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
-          <div className="row">
-            <div className="col-auto cider-flex-center">
-              <button
-                className="artist-play"
-                style={{ display: "block" }}
-                onClick={() =>
-                  app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
-                    app.mk.play();
-                  })
-                }
-                aria-label={app.getLz("term.play")}>
-                {import("../svg/play.svg")}
-              </button>
-            </div>
-            <div className="col">
-              <h3>{data.attributes.name}</h3>
-            </div>
-            <div className="col-auto cider-flex-center">
-              <button
-                className="more-btn-round menu"
-                onClick={() => artistMenu}
-                aria-label={app.getLz("term.more")}>
-                <div className="svg-icon" />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="artist-body">
-          <div
-            className="arow well"
-            className="{arowb: data.views['latest-release'].data.length === 0}">
+          <div className="artist-body">
             <div
-              className="latestRelease"
-              v-if={data.views["latest-release"].data.length !== 0}>
-              <h3>{app.getLz("term.latestReleases")}</h3>
-              <div style={{ width: "auto", margin: "0 auto" }}>
-                {data.views["latest-release"].data.map((song) => (
-                  <MediaItemSquare
-                    kind="card"
-                    no-scale="true"
-                    item={song}
-                  />
-                ))}
-              </div>
-            </div>
-            <div
-              className="topSongs"
-              v-if={data.views["top-songs"]}>
-              <div className="row">
-                <div
-                  className="col"
-                  style={{ padding: 0 }}>
-                  <h3>{app.getLz("term.topSongs")}</h3>
-                </div>
-                <div
-                  className="col-auto cider-flex-center"
-                  v-if={data.views["top-songs"].data.length >= 20}
-                  style={{ padding: 0 }}>
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => app.showArtistView(data.id, data.attributes.name + " - Top Songs", "top-songs")}>
-                    {app.getLz("term.seeAll")}
-                  </button>
-                </div>
-              </div>
-              <div className="row">
-                <div
-                  className="col cider-flex-center"
-                  style={{ padding: 0 }}>
-                  <div className="mediaitem-list-item__grid">
-                    <ListitemHorizontal items={data.views["top-songs"].data.limit(20)} />
+              className="arow well"
+              className="{arowb: data.views['latest-release'].data.length === 0}">
+              {data.views["latest-release"].data.length !== 0 && (
+                <div className="latestRelease">
+                  <h3>{app.getLz("term.latestReleases")}</h3>
+                  <div style={{ width: "auto", margin: "0 auto" }}>
+                    {data.views["latest-release"].data.map((song) => (
+                      <MediaItemSquare
+                        kind="card"
+                        no-scale="true"
+                        item={song}></MediaItemSquare>
+                    ))}
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="row well">
-            <div className="col">
-              {data.meta.views.order.map(
-                (view) =>
-                  data.views[view].data.length !== 0 &&
-                  view !== "latest-release" &&
-                  view !== "top-songs" && (
-                    <>
-                      <div className="row">
-                        <div className="col">
-                          <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
-                        </div>
-                        <div
-                          className="col-auto cider-flex-center"
-                          v-if={data.views[view].data.length >= 10}>
-                          <button
-                            className="cd-btn-seeall"
-                            onClick={() => app.showArtistView(data.id, data.attributes.name + " - " + data.views[view].attributes.title, view)}>
-                            {app.getLz("term.seeAll")}
-                          </button>
-                        </div>
-                      </div>
-                      {!((data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") || (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See")) ? <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)} /> : <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)} />}
-                    </>
-                  ),
               )}
-              <div className="row">
-                <div
-                  className="col"
-                  v-if={data.attributes.artistBio}>
-                  <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
-                  <p v-html={data.attributes.artistBio} />
+              {data.views["top-songs"] && (
+                <div className="topSongs">
+                  <div className="row">
+                    <div
+                      className="col"
+                      style={{ padding: 0 }}>
+                      <h3>{app.getLz("term.topSongs")}</h3>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div
+                      className="col cider-flex-center"
+                      style={{ padding: 0 }}>
+                      <div className="mediaitem-list-item__grid">
+                        <ListitemHorizontal items={data.views["top-songs"].data.limit(20)}></ListitemHorizontal>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="col">
-                  {data.attributes.origin && (
-                    <div>
-                      <h3>{data.attributes.isGroup ? "Origin" : "Hometown"}</h3>
-                      {data.attributes.origin}
+              )}
+            </div>
+            <div className="row well">
+              <div className="col">
+                {data.meta.views.order.map(
+                  (view) =>
+                    data.views[view].data.length !== 0 &&
+                    view !== "latest-release" &&
+                    view !== "top-songs" && (
+                      <>
+                        <div className="row">
+                          <div className="col">
+                            <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
+                          </div>
+                        </div>
+                        {!((data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") || (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See")) ? <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)}></MediaItemScrollerHorizontalLarge> : <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)}></MediaItemScrollerHorizontalMVView>}
+                      </>
+                    ),
+                )}
+                <div className="row">
+                  {data.attributes.artistBio && (
+                    <div className="col">
+                      <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
+                      <p v-html={data.attributes.artistBio}></p>
                     </div>
                   )}
-                  {data.attributes.bornOrFormed && (
-                    <div>
-                      <h3>{data.attributes.isGroup ? "Formed" : "Born"}</h3>
-                      {data.attributes.bornOrFormed}
-                    </div>
-                  )}
-                  {data.attributes.genreNames && (
-                    <div>
-                      <h3>{app.getLz("term.sortBy.genre")}</h3>
-                      {data.attributes.genreNames.join(", ")}
-                    </div>
-                  )}
+                  <div className="col">
+                    {data.attributes.origin && (
+                      <div>
+                        <h3>{data.attributes.isGroup ? "Origin" : "Hometown"}</h3>
+                        {data.attributes.origin}
+                      </div>
+                    )}
+                    {data.attributes.bornOrFormed && (
+                      <div>
+                        <h3>{data.attributes.isGroup ? "Formed" : "Born"}</h3>
+                        {data.attributes.bornOrFormed}
+                      </div>
+                    )}
+                    {data.attributes.genreNames && (
+                      <div>
+                        <h3>{app.getLz("term.sortBy.genre")}</h3>
+                        {data.attributes.genreNames.join(", ")}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

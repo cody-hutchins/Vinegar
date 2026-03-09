@@ -9,588 +9,555 @@ import { AnimatePresence } from "framer-motion";
 const ChromeTop = ({ search = {} }: { search?: object }) => {
   const chrome = useChromeStore((state) => state.chrome);
   return (
-    <div
-      className="app-chrome"
-      style={{ display: chrome.topChromeVisible ? "" : "none" }}>
-      <div className="app-chrome--left">
-        <div
-          className="app-chrome-item full-height"
-          v-if={chrome.windowControlPosition === "left" && !chrome.nativeControls}>
-          <div className="window-controls-macos">
-            <div
-              className="close"
-              onClick={() => ipcRenderer.send("close")}
-            />
-            <div
-              className="minimize"
-              onClick={() => ipcRenderer.send("minimize")}
-            />
-            <div
-              className="minmax restore"
-              v-if={chrome.maximized}
-              onClick={() => ipcRenderer.send("maximize")}
-            />
-            <div
-              className="minmax"
-              v-else
-              onClick={() => ipcRenderer.send("maximize")}
-            />
-          </div>
-        </div>
-        <div
-          className="app-chrome-item full-height"
-          v-else>
-          <button
-            className="app-mainmenu"
-            blur={mainMenuVisibility(false)}
-            onClick={() => mainMenuVisibility(true)}
-            contextmenu={mainMenuVisibility(true)}
-            className="{active: chrome.menuOpened}"
-            aria-label={$root.getLz("term.quickNav")}
-          />
-        </div>
-        <template v-if={getThemeDirective("appNavigation") !== "seperate"}>
-          <div
-            className="vdiv"
-            v-if={getThemeDirective("windowLayout") === "twopanel"}
-          />
-          <div className="app-chrome-item">
-            <button
-              className="playback-button navigation"
-              onClick={() => navigateBack()}
-              title={$root.getLz("term.navigateBack")}
-              v-b-tooltiphover>
-              <SVGIcon url="./views/svg/chevron-left.svg" />
-            </button>
-          </div>
-          <div className="app-chrome-item">
-            <button
-              className="playback-button navigation"
-              onClick={() => navigateForward()}
-              title={$root.getLz("term.navigateForward")}
-              v-b-tooltiphover>
-              <SVGIcon url="./views/svg/chevron-right.svg" />
-            </button>
-          </div>
-          <div
-            className="app-chrome-item"
-            v-if={getThemeDirective("windowLayout") === "twopanel"}>
-            <button
-              className="playback-button collapseLibrary"
-              v-b-tooltiphover
-              title={chrome.sidebarCollapsed ? getLz("action.showLibrary") : getLz("action.hideLibrary")}
-              onClick={() => {
-                chrome.sidebarCollapsed = !chrome.sidebarCollapsed;
-              }}>
-              <AnimatePresence>
-                <motion.div name="fade">
-                  <span v-if={chrome.sidebarCollapsed}></span>
-                </motion.div>
-                <motion.div name="fade">
-                  <span v-if={!chrome.sidebarCollapsed}></span>
-                </motion.div>
-              </AnimatePresence>
-            </button>
-          </div>
-          <div
-            className="vdiv display--large"
-            v-if={getThemeDirective("windowLayout") !== "twopanel"}
-          />
-        </template>
-        <template v-if={getThemeDirective("windowLayout") !== "twopanel"}>
-          <div className="app-chrome-item playback-control-buttons">
-            <div className="app-chrome-item display--large">
-              <button
-                className="playback-button--small shuffle"
-                v-if={mk.shuffleMode === 0}
-                className={isDisabled() && "disabled"}
-                onClick={() => {
-                  mk.shuffleMode = 1;
-                }}
-                title={$root.getLz("term.enableShuffle")}
-                v-b-tooltiphover
-              />
-              <button
-                className="playback-button--small shuffle active"
-                v-else
-                className={isDisabled() && "disabled"}
-                onClick={() => {
-                  mk.shuffleMode = 0;
-                }}
-                title={$root.getLz("term.disableShuffle")}
-                v-b-tooltiphover
-              />
-            </div>
-            <div className="app-chrome-item display--large">
-              <button
-                className="playback-button previous"
-                onClick={() => prevButton()}
-                className={isPrevDisabled() && "disabled"}
-                title={$root.getLz("term.previous")}
-                v-b-tooltiphover
-              />
-            </div>
-            <div className="app-chrome-item display--large">
-              <button
-                className="playback-button stop"
-                onClick={() => mk.stop()}
-                v-if={mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation"}
-                title={$root.getLz("term.stop")}
-                v-b-tooltiphover
-              />
-              <button
-                className="playback-button pause"
-                onClick={() => mk.pause()}
-                v-else-if={mk.isPlaying}
-                title={$root.getLz("term.pause")}
-                v-b-tooltiphover
-              />
-              <button
-                className="playback-button play"
-                onClick={() => mk.play()}
-                v-else
-                title={$root.getLz("term.play")}
-                v-b-tooltiphover
-              />
-            </div>
-            <div className="app-chrome-item display--large">
-              <button
-                className="playback-button next"
-                onClick={() => skipToNextItem()}
-                className={isNextDisabled() && "disabled"}
-                title={$root.getLz("term.next")}
-                v-b-tooltiphover
-              />
-            </div>
-            <div className="app-chrome-item display--large">
-              <button
-                className="playback-button--small repeat"
-                className={mk.repeatMode === 1 ? "repeatOne" : mk.repeatMode === 2 ? "active" : ""}
-                className={isDisabled() && "disabled"}
-                onClick={() => repeatIncrement()}
-                title={$root.lz.repeat[mk.repeatMode]}
-                v-b-tooltiphover
-              />
-            </div>
-          </div>
-        </template>
-      </div>
-      <div className="app-chrome--center">
-        <div
-          className="app-chrome-item playback-controls"
-          v-if={getThemeDirective("windowLayout") !== "twopanel"}>
-          <template v-if={mkReady()}>
-            <div
-              className="app-playback-controls"
-              onMouseOver={() => {
-                chrome.progresshover = true;
-              }}
-              onMouseLeave={() => {
-                chrome.progresshover = false;
-              }}
-              contextmenu="nowPlayingContextMenu">
-              <div
-                className="artwork"
-                id="artworkLCD">
-                <MediaItemArtwork url="currentArtUrl" />
-              </div>
-              <b-popover
-                custom-className="mediainfo-popover"
-                target="artworkLCD"
-                triggers="hover"
-                placement="bottom">
-                <div className="content">
-                  <div className="shadow-artwork">
-                    <MediaItemArtwork url="currentArtUrl" />
-                  </div>
-                  <div className="popover-artwork">
-                    <MediaItemArtwork
-                      size="210"
-                      url="currentArtUrl"
-                    />
-                  </div>
-                  <div className="song-name">{mk.nowPlayingItem["attributes"]["name"]}</div>
-                  <div
-                    className="song-artist"
-                    onClick={() => getNowPlayingItemDetailed(`artist`)}>
-                    {mk.nowPlayingItem["attributes"]["artistName"]}
-                  </div>
-                  <div
-                    className="song-album"
-                    onClick={() => getNowPlayingItemDetailed(`album`)}>
-                    {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
-                  </div>
-                  <hr />
-                  <div
-                    className="btn-group"
-                    style={{ width: "100%" }}>
-                    <button
-                      className="md-btn md-btn-small"
-                      style={{ width: "100%" }}
-                      onClick={() => {
-                        drawer.open = false;
-                        miniPlayer(true);
-                      }}>
-                      {$root.getLz("term.miniplayer")}
-                    </button>
-                    <button
-                      className="md-btn md-btn-small"
-                      style={{ width: "100%" }}
-                      onClick={() => {
-                        drawer.open = false;
-                        fullscreen(true);
-                      }}>
-                      {$root.getLz("term.fullscreenView")}
-                    </button>
-                  </div>
-                </div>
-              </b-popover>
-              <div className="playback-info">
-                <div className="chrome-icon-container">
-                  <div
-                    className="audio-type private-icon"
-                    v-if={cfg.general.privateEnabled === true}
-                    title={$root.getLz("term.privateSession")}
-                    v-b-tooltiphover
-                  />
-                  <div
-                    className="audio-type spatial-icon"
-                    v-if={cfg.audio.maikiwiAudio.spatial === true}
-                    title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}
-                    v-b-tooltiphover
-                  />
-                  <div
-                    className="audio-type lossless-icon"
-                    v-if={(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true}
-                    title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}
-                    v-b-tooltiphover
-                  />
-                  <div
-                    className="audio-type ppe-icon"
-                    v-if={mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE === true}
-                    title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
-                    v-b-tooltiphover
-                  />
-                  <svg
-                    className="audio-type live-icon"
-                    v-if={mk.nowPlayingItem?.attributes?.isLive === true}
-                    title={$root.getLz("term.live")}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="var(--keyColor)"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    v-b-tooltiphover>
-                    <path d="M5 12.55a11 11 0 0 1 14.08 0" />
-                    <path d="M1.42 9a16 16 0 0 1 21.16 0" />
-                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-                    <line
-                      x1="12"
-                      y1="20"
-                      x2={12.01}
-                      y2="20"
-                    />
-                  </svg>
-                </div>
-                <div className="info-rect">
-                  <div className={`song-name ${[isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""]}`}>
-                    {mk.nowPlayingItem["attributes"]["name"]}
-                    <div
-                      className="explicit-icon"
-                      v-if={mk.nowPlayingItem["attributes"]["contentRating"] === "explicit"}
-                      style={{ display: "inline-block" }}
-                    />
-                  </div>
-                  <div className="song-artist-album">
-                    <div
-                      className={"song-artist-album-content " + [isElementOverflowing("#app-main > .app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content") ? "marquee" : ""]}
-                      style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap" }}>
-                      <div
-                        className="item-navigate song-artist"
-                        style={{ display: "inline-block" }}
-                        onClick={() => getNowPlayingItemDetailed(`artist`)}>
-                        {mk.nowPlayingItem["attributes"]["artistName"]}
-                      </div>
-                      <div
-                        className="song-artist item-navigate"
-                        style={{ display: "inline-block" }}
-                        onClick={() => getNowPlayingItemDetailed("album")}
-                        v-if={mk.nowPlayingItem["attributes"]["albumName"] !== ""}>
-                        <div
-                          className="separator"
-                          style={{ display: "inline-block" }}>
-                          {"—"}
-                        </div>
-                        {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+    <>
+      <div
+        className="app-chrome"
+        style={{ display: chrome.topChromeVisible ? "" : "none" }}>
+        <div className="app-chrome--left">
+          {chrome.windowControlPosition === "left" && !chrome.nativeControls ? (
+            <div className="app-chrome-item full-height">
+              <div className="window-controls-macos">
                 <div
-                  className="song-progress"
-                  v-if={mk.nowPlayingItem?.attributes?.isLive !== true}>
+                  className="close"
+                  onClick={() => ipcRenderer.send("close")}></div>
+                <div
+                  className="minimize"
+                  onClick={() => ipcRenderer.send("minimize")}></div>
+                {chrome.maximized ? (
                   <div
-                    className="song-duration"
-                    style={{ justifyContent: "space-between", height: "1px", display: hrome.progresshover ? "flex" : "none" }}>
-                    <p style={{ width: "auto" }}>{convertTime(getSongProgress())}</p>
-                    <p style={{ width: "auto" }}>{convertTime(mk.currentPlaybackDuration)}</p>
-                  </div>
-
-                  <input
-                    type="range"
-                    step={0.01}
-                    min="0"
-                    style={progressBarStyle()}
-                    onInput={() => {
-                      playerLCD.desiredDuration = $event.target.value;
-                      playerLCD.userInteraction = true;
-                    }}
-                    onMouseUp={() => {
-                      mk.seekToTime($event.target.value);
-                      setTimeout(() => {
-                        playerLCD.desiredDuration = 0;
-                        playerLCD.userInteraction = false;
-                      }, 1000);
-                    }}
-                    onTouchEnd={() => {
-                      mk.seekToTime($event.target.value);
-                      setTimeout(() => {
-                        playerLCD.desiredDuration = 0;
-                        playerLCD.userInteraction = false;
-                      }, 1000);
-                    }}
-                    max={mk.currentPlaybackDuration}
-                    value={getSongProgress()}
-                  />
-                </div>
+                    className="minmax restore"
+                    onClick={() => ipcRenderer.send("maximize")}></div>
+                ) : (
+                  <div
+                    className="minmax"
+                    onClick={() => ipcRenderer.send("maximize")}></div>
+                )}
               </div>
-              <template v-if={mk.nowPlayingItem["attributes"]["playParams"]}>
-                <div className="actions">
+            </div>
+          ) : (
+            <div className="app-chrome-item full-height">
+              <button
+                className="app-mainmenu"
+                blur={mainMenuVisibility(false)}
+                onClick={() => mainMenuVisibility(true)}
+                contextmenu={mainMenuVisibility(true)}
+                className="{active: chrome.menuOpened}"
+                aria-label={$root.getLz("term.quickNav")}></button>
+            </div>
+          )}
+          {getThemeDirective("appNavigation") !== "seperate" ? (
+            <template>
+              {getThemeDirective("windowLayout") === "twopanel" && <div className="vdiv"></div>}
+              <div className="app-chrome-item">
+                <button
+                  className="playback-button navigation"
+                  onClick={() => navigateBack()}
+                  title={$root.getLz("term.navigateBack")}
+                  v-b-tooltiphover>
+                  <SVGIcon url="./views/svg/chevron-left.svg"></SVGIcon>
+                </button>
+              </div>
+              <div className="app-chrome-item">
+                <button
+                  className="playback-button navigation"
+                  onClick={() => navigateForward()}
+                  title={$root.getLz("term.navigateForward")}
+                  v-b-tooltiphover>
+                  <SVGIcon url="./views/svg/chevron-right.svg"></SVGIcon>
+                </button>
+              </div>
+              {getThemeDirective("windowLayout") === "twopanel" && (
+                <div className="app-chrome-item">
                   <button
-                    className="lcdMenu"
-                    onClick={nowPlayingContextMenu}
-                    title={$root.getLz("term.more")}
-                    v-b-tooltiphover>
-                    <div className="svg-icon" />
+                    className="playback-button collapseLibrary"
+                    v-b-tooltiphover
+                    title={chrome.sidebarCollapsed ? getLz("action.showLibrary") : getLz("action.hideLibrary")}
+                    onClick={() => {
+                      chrome.sidebarCollapsed = !chrome.sidebarCollapsed;
+                    }}>
+                    <AnimatePresence>
+                      <motion.div name="fade">{chrome.sidebarCollapsed && <span></span>}</motion.div>
+                      <motion.div name="fade">{!chrome.sidebarCollapsed && <span></span>}</motion.div>
+                    </AnimatePresence>
                   </button>
                 </div>
-              </template>
-            </div>
-          </template>
-          <template v-else>
-            <div className="app-playback-controls">
-              <div
-                className="artwork"
-                id="artworkLCD"
-                style={{ pointerEvents: "none" }}>
-                <MediaItemArtwork url="currentArtUrl" />
-              </div>
-              <div className="playback-info">
-                <div className="info-rect" />
-              </div>
-            </div>
-          </template>
-        </div>
-        <div
-          className="app-chrome-item"
-          v-else>
-          <div className="top-nav-group">
-            <SidebarLibraryItem
-              name={$root.getLz("home.title")}
-              svg-icon="./assets/feather/home.svg"
-              svg-icon-name="home"
-              page="home"
-            />
-            <SidebarLibraryItem
-              name={$root.getLz("term.listenNow")}
-              svg-icon="./assets/feather/play-circle.svg"
-              svg-icon-name="listenNow"
-              page="listen_now"
-            />
-            <SidebarLibraryItem
-              name={$root.getLz("term.browse")}
-              svg-icon="./assets/feather/globe.svg"
-              svg-icon-name="browse"
-              page="browse"
-            />
-            <SidebarLibraryItem
-              name={$root.getLz("term.radio")}
-              svg-icon="./assets/feather/radio.svg"
-              svg-icon-name="radio"
-              page="radio"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="app-chrome--right">
-        <template v-if={getThemeDirective("windowLayout") !== "twopanel"}>
-          <div className="app-chrome-item volume display--large">
-            <button
-              className="volume-button--small volume"
-              onClick={() => muteButtonPressed()}
-              className="{'active': cfg.audio.volume === 0}"
-              title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
-              v-b-tooltiphover
-            />
-            <input
-              type="range"
-              onWheel={volumeWheel}
-              step={cfg.audio.volumeStep}
-              min="0"
-              max={cfg.audio.maxVolume}
-              v-model={mk.volume}
-              v-if={typeof mk.volume !== "undefined"}
-              onChange={() => checkMuteChange()}
-              v-b-tooltiphover
-              title={formatVolumeTooltip()}
-            />
-          </div>
-          <div className="app-chrome-item generic">
-            <button
-              className="playback-button--small cast"
-              title={$root.getLz("term.cast")}
-              onClick={() => {
-                modals.castMenu = true;
-              }}
-              v-b-tooltiphover
-            />
-          </div>
-          <div className="app-chrome-item generic">
-            <button
-              className="playback-button--small queue"
-              title={$root.getLz("term.queue")}
-              v-b-tooltiphover
-              className="{'active': drawer.panel === 'queue'}"
-              onClick={() => invokeDrawer("queue")}
-            />
-          </div>
-          <div className="app-chrome-item generic">
-            <template v-if={lyrics && lyrics !== [] && lyrics.length > 0}>
-              <button
-                className="playback-button--small lyrics"
-                title={$root.getLz("term.lyrics")}
-                v-b-tooltiphover
-                className="{'active': drawer.panel === 'lyrics'}"
-                onClick={() => invokeDrawer("lyrics")}
-              />
+              )}
+              {getThemeDirective("windowLayout") !== "twopanel" && <div className="vdiv display--large"></div>}
             </template>
-            <template v-else>
-              <button
-                className="playback-button--small lyrics"
-                style={{ opacity: 0.3, pointerEvents: "none" }}
-              />
-            </template>
-          </div>
-        </template>
-        <template v-else>
-          <div className="app-chrome-item search">
-            <div className="search-input-container">
-              <div className="search-input--icon" />
-              <input
-                type="search"
-                spellCheck="false"
-                onClick={() => {
-                  $root.appRoute("search");
-                  search.showHints = true;
-                }}
-                onFocus={() => (search.showHints = true)}
-                onBlur={() =>
-                  setTimeout(() => {
-                    if (hintscontext !== true) {
-                      search.showHints = false;
-                    }
-                  }, 300)
-                }
-                v-on:keyupenter="searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);search.showHints = false;search.showSearchView = true;search.cursor = -1"
-                onChange={() => $root.appRoute("search")}
-                v-on:keyup="searchCursor"
-                onInput={() => getSearchHints()}
-                placeholder={$root.getLz("term.search") + "..."}
-                v-model={search.term}
-                ref="searchInput"
-                className="search-input"
-              />
-              <div
-                className="search-hints-container"
-                v-if={search.showHints && search.hints.length !== 0}
-                style={{ right: "-13px", left: "unset", paddingTop: 0 }}>
-                <div className="search-hints">
-                  {search.hints
-                    .filter((a) => {
-                      return a.content === null;
-                    })
-                    .map((hint, index) => (
-                      <button
-                        className="search-hint text-overflow-elipsis"
-                        className="{active: (search.cursor === index)}"
-                        onClick={() => {
-                          search.term = hint.searchTerm;
-                          search.showHints = false;
-                          searchQuery(hint.searchTerm);
-                          search.cursor = -1;
-                        }}>
-                        {hint.displayTerm}
-                      </button>
-                    ))}
-                  {search.hints
-                    .filter((a) => {
-                      return a.content !== null;
-                    })
-                    .map((item, position) => (
-                      <template>
-                        <MediaItemSmarthints
-                          item={item.content}
-                          position={position}
-                        />
-                      </template>
-                    ))}
+          ) : getThemeDirective("windowLayout") !== "twopanel" ? (
+            <template>
+              <div className="app-chrome-item playback-control-buttons">
+                <div className="app-chrome-item display--large">
+                  {mk.shuffleMode === 0 ? (
+                    <button
+                      className="playback-button--small shuffle"
+                      className={isDisabled() && "disabled"}
+                      onClick={() => {
+                        mk.shuffleMode = 1;
+                      }}
+                      title={$root.getLz("term.enableShuffle")}
+                      v-b-tooltiphover></button>
+                  ) : (
+                    <button
+                      className="playback-button--small shuffle active"
+                      className={isDisabled() && "disabled"}
+                      onClick={() => {
+                        mk.shuffleMode = 0;
+                      }}
+                      title={$root.getLz("term.disableShuffle")}
+                      v-b-tooltiphover></button>
+                  )}
+                </div>
+                <div className="app-chrome-item display--large">
+                  <button
+                    className="playback-button previous"
+                    onClick={() => prevButton()}
+                    className={isPrevDisabled() && "disabled"}
+                    title={$root.getLz("term.previous")}
+                    v-b-tooltiphover></button>
+                </div>
+                <div className="app-chrome-item display--large">
+                  {mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
+                    <button
+                      className="playback-button stop"
+                      onClick={() => mk.stop()}
+                      title={$root.getLz("term.stop")}
+                      v-b-tooltiphover></button>
+                  ) : (
+                    <button
+                      className="playback-button play"
+                      onClick={() => mk.play()}
+                      title={$root.getLz("term.play")}
+                      v-b-tooltiphover></button>
+                  )}
+                </div>
+                <div className="app-chrome-item display--large">
+                  <button
+                    className="playback-button next"
+                    onClick={() => skipToNextItem()}
+                    className={isNextDisabled() && "disabled"}
+                    title={$root.getLz("term.next")}
+                    v-b-tooltiphover></button>
+                </div>
+                <div className="app-chrome-item display--large">
+                  <button
+                    className="playback-button--small repeat"
+                    className={mk.repeatMode === 1 ? "repeatOne" : mk.repeatMode === 2 ? "active" : ""}
+                    className={isDisabled() && "disabled"}
+                    onClick={() => repeatIncrement()}
+                    title={$root.lz.repeat[mk.repeatMode]}
+                    v-b-tooltiphover></button>
                 </div>
               </div>
-            </div>
-          </div>
-        </template>
-        <div
-          className="app-chrome-item full-height"
-          id="window-controls-container"
-          v-if={chrome.windowControlPosition === "right" && !chrome.nativeControls}>
-          <div className="window-controls">
-            <div
-              className="minimize"
-              onClick={() => ipcRenderer.send("minimize")}
-            />
-            <div
-              className="minmax restore"
-              v-if={chrome.maximized}
-              onClick={() => ipcRenderer.send("maximize")}
-            />
-            <div
-              className="minmax"
-              v-else
-              onClick={() => ipcRenderer.send("maximize")}
-            />
-            <div
-              className="close"
-              onClick={() => ipcRenderer.send("close")}
-            />
-          </div>
+            </template>
+          ) : null}
         </div>
-        <div
-          className="app-chrome-item full-height"
-          v-else-if="platform !== 'darwin' && !chrome.nativeControls">
-          <button
-            className="app-mainmenu"
-            blur={mainMenuVisibility(false)}
-            onClick={() => mainMenuVisibility(true)}
-            contextmenu={mainMenuVisibility(true)}
-            className="{active: chrome.menuOpened}"
-          />
+        <div className="app-chrome--center">
+          {getThemeDirective("windowLayout") !== "twopanel" ? (
+            <div className="app-chrome-item playback-controls">
+              {mkReady() ? (
+                <template>
+                  <div
+                    className="app-playback-controls"
+                    onMouseOver={() => {
+                      chrome.progresshover = true;
+                    }}
+                    onMouseLeave={() => {
+                      chrome.progresshover = false;
+                    }}
+                    contextmenu="nowPlayingContextMenu">
+                    <div
+                      className="artwork"
+                      id="artworkLCD">
+                      <MediaItemArtwork url="currentArtUrl"></MediaItemArtwork>
+                    </div>
+                    <b-popover
+                      custom-className="mediainfo-popover"
+                      target="artworkLCD"
+                      triggers="hover"
+                      placement="bottom">
+                      <div className="content">
+                        <div className="shadow-artwork">
+                          <MediaItemArtwork url="currentArtUrl"></MediaItemArtwork>
+                        </div>
+                        <div className="popover-artwork">
+                          <MediaItemArtwork
+                            size="210"
+                            url="currentArtUrl"></MediaItemArtwork>
+                        </div>
+                        <div className="song-name">{mk.nowPlayingItem["attributes"]["name"]}</div>
+                        <div
+                          className="song-artist"
+                          onClick={() => getNowPlayingItemDetailed(`artist`)}>
+                          {mk.nowPlayingItem["attributes"]["artistName"]}
+                        </div>
+                        <div
+                          className="song-album"
+                          onClick={() => getNowPlayingItemDetailed(`album`)}>
+                          {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
+                        </div>
+                        <hr />
+                        <div
+                          className="btn-group"
+                          style={{ width: "100%" }}>
+                          <button
+                            className="md-btn md-btn-small"
+                            style={{ width: "100%" }}
+                            onClick={() => {
+                              drawer.open = false;
+                              miniPlayer(true);
+                            }}>
+                            {$root.getLz("term.miniplayer")}
+                          </button>
+                          <button
+                            className="md-btn md-btn-small"
+                            style={{ width: "100%" }}
+                            onClick={() => {
+                              drawer.open = false;
+                              fullscreen(true);
+                            }}>
+                            {$root.getLz("term.fullscreenView")}
+                          </button>
+                        </div>
+                      </div>
+                    </b-popover>
+                    <div className="playback-info">
+                      <div className="chrome-icon-container">
+                        {cfg.general.privateEnabled === true && (
+                          <div
+                            className="audio-type private-icon"
+                            title={$root.getLz("term.privateSession")}
+                            v-b-tooltiphover></div>
+                        )}
+                        {cfg.audio.maikiwiAudio.spatial === true && (
+                          <div
+                            className="audio-type spatial-icon"
+                            title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}
+                            v-b-tooltiphover></div>
+                        )}
+                        {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true && (
+                          <div
+                            className="audio-type lossless-icon"
+                            title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}
+                            v-b-tooltiphover></div>
+                        )}
+                        {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE === true && (
+                          <div
+                            className="audio-type ppe-icon"
+                            title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
+                            v-b-tooltiphover></div>
+                        )}
+                        {mk.nowPlayingItem?.attributes?.isLive === true && (
+                          <svg
+                            className="audio-type live-icon"
+                            title={$root.getLz("term.live")}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="var(--keyColor)"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            v-b-tooltiphover>
+                            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                            <line
+                              x1="12"
+                              y1="20"
+                              x2={12.01}
+                              y2="20"></line>
+                          </svg>
+                        )}
+                      </div>
+                      <div className="info-rect">
+                        <div className={`song-name ${[isElementOverflowing("#app-main >div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""]}`}>
+                          {mk.nowPlayingItem["attributes"]["name"]}
+                          {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
+                            <div
+                              className="explicit-icon"
+                              style={{ display: "inline-block" }}></div>
+                          )}
+                        </div>
+                        <div className="song-artist-album">
+                          <div
+                            className={"song-artist-album-content " + [isElementOverflowing("#app-main >.app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content") ? "marquee" : ""]}
+                            style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap" }}>
+                            <div
+                              className="item-navigate song-artist"
+                              style={{ display: "inline-block" }}
+                              onClick={() => getNowPlayingItemDetailed(`artist`)}>
+                              {mk.nowPlayingItem["attributes"]["artistName"]}
+                            </div>
+                            {mk.nowPlayingItem["attributes"]["albumName"] !== "" && (
+                              <div
+                                className="song-artist item-navigate"
+                                style={{ display: "inline-block" }}
+                                onClick={() => getNowPlayingItemDetailed("album")}>
+                                <div
+                                  className="separator"
+                                  style={{ display: "inline-block" }}>
+                                  {"—"}
+                                </div>
+                                {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      {mk.nowPlayingItem?.attributes?.isLive !== true && (
+                        <div className="song-progress">
+                          <div
+                            className="song-duration"
+                            style={{ justifyContent: "space-between", height: "1px", display: hrome.progresshover ? "flex" : "none" }}>
+                            <p style={{ width: "auto" }}>{convertTime(getSongProgress())}</p>
+                            <p style={{ width: "auto" }}>{convertTime(mk.currentPlaybackDuration)}</p>
+                          </div>
+
+                          <input
+                            type="range"
+                            step={0.01}
+                            min="0"
+                            style={progressBarStyle()}
+                            onInput={() => {
+                              playerLCD.desiredDuration = $event.target.value;
+                              playerLCD.userInteraction = true;
+                            }}
+                            onMouseUp={() => {
+                              mk.seekToTime($event.target.value);
+                              setTimeout(() => {
+                                playerLCD.desiredDuration = 0;
+                                playerLCD.userInteraction = false;
+                              }, 1000);
+                            }}
+                            onTouchEnd={() => {
+                              mk.seekToTime($event.target.value);
+                              setTimeout(() => {
+                                playerLCD.desiredDuration = 0;
+                                playerLCD.userInteraction = false;
+                              }, 1000);
+                            }}
+                            max={mk.currentPlaybackDuration}
+                            value={getSongProgress()}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    {mk.nowPlayingItem["attributes"]["playParams"] && (
+                      <template>
+                        <div className="actions">
+                          <button
+                            className="lcdMenu"
+                            onClick={nowPlayingContextMenu}
+                            title={$root.getLz("term.more")}
+                            v-b-tooltiphover>
+                            <div className="svg-icon"></div>
+                          </button>
+                        </div>
+                      </template>
+                    )}
+                  </div>
+                </template>
+              ) : (
+                <template>
+                  <div className="app-playback-controls">
+                    <div
+                      className="artwork"
+                      id="artworkLCD"
+                      style={{ pointerEvents: "none" }}>
+                      <MediaItemArtwork url="currentArtUrl"></MediaItemArtwork>
+                    </div>
+                    <div className="playback-info">
+                      <div className="info-rect"></div>
+                    </div>
+                  </div>
+                </template>
+              )}
+            </div>
+          ) : (
+            <div className="app-chrome-item">
+              <div className="top-nav-group">
+                <SidebarLibraryItem
+                  name={$root.getLz("home.title")}
+                  svg-icon="./assets/feather/home.svg"
+                  svg-icon-name="home"
+                  page="home"></SidebarLibraryItem>
+                <SidebarLibraryItem
+                  name={$root.getLz("term.listenNow")}
+                  svg-icon="./assets/feather/play-circle.svg"
+                  svg-icon-name="listenNow"
+                  page="listen_now"></SidebarLibraryItem>
+                <SidebarLibraryItem
+                  name={$root.getLz("term.browse")}
+                  svg-icon="./assets/feather/globe.svg"
+                  svg-icon-name="browse"
+                  page="browse"></SidebarLibraryItem>
+                <SidebarLibraryItem
+                  name={$root.getLz("term.radio")}
+                  svg-icon="./assets/feather/radio.svg"
+                  svg-icon-name="radio"
+                  page="radio"></SidebarLibraryItem>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="app-chrome--right">
+          {getThemeDirective("windowLayout") !== "twopanel" ? (
+            <template>
+              <div className="app-chrome-item volume display--large">
+                <button
+                  className="volume-button--small volume"
+                  onClick={() => muteButtonPressed()}
+                  className="{'active': cfg.audio.volume === 0}"
+                  title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
+                  v-b-tooltiphover></button>
+                {typeof mk.volume !== "undefined" && (
+                  <input
+                    type="range"
+                    onWheel={volumeWheel}
+                    step={cfg.audio.volumeStep}
+                    min="0"
+                    max={cfg.audio.maxVolume}
+                    v-model={mk.volume}
+                    onChange={() => checkMuteChange()}
+                    v-b-tooltiphover
+                    title={formatVolumeTooltip()}
+                  />
+                )}
+              </div>
+              <div className="app-chrome-item generic">
+                <button
+                  className="playback-button--small cast"
+                  title={$root.getLz("term.cast")}
+                  onClick={() => {
+                    modals.castMenu = true;
+                  }}
+                  v-b-tooltiphover></button>
+              </div>
+              <div className="app-chrome-item generic">
+                <button
+                  className="playback-button--small queue"
+                  title={$root.getLz("term.queue")}
+                  v-b-tooltiphover
+                  className="{'active': drawer.panel === 'queue'}"
+                  onClick={() => invokeDrawer("queue")}></button>
+              </div>
+              <div className="app-chrome-item generic">
+                {lyrics && lyrics !== [] && lyrics.length > 0 ? (
+                  <template>
+                    <button
+                      className="playback-button--small lyrics"
+                      title={$root.getLz("term.lyrics")}
+                      v-b-tooltiphover
+                      className="{'active': drawer.panel === 'lyrics'}"
+                      onClick={() => invokeDrawer("lyrics")}></button>
+                  </template>
+                ) : (
+                  <template>
+                    <button
+                      className="playback-button--small lyrics"
+                      style={{ opacity: 0.3, pointerEvents: "none" }}></button>
+                  </template>
+                )}
+              </div>
+            </template>
+          ) : (
+            <template>
+              <div className="app-chrome-item search">
+                <div className="search-input-container">
+                  <div className="search-input--icon"></div>
+                  <input
+                    type="search"
+                    spellCheck="false"
+                    onClick={() => {
+                      $root.appRoute("search");
+                      search.showHints = true;
+                    }}
+                    onFocus={() => (search.showHints = true)}
+                    onBlur={() =>
+                      setTimeout(() => {
+                        if (hintscontext !== true) {
+                          search.showHints = false;
+                        }
+                      }, 300)
+                    }
+                    v-on:keyupenter="searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);search.showHints = false;search.showSearchView = true;search.cursor = -1"
+                    onChange={() => $root.appRoute("search")}
+                    v-on:keyup="searchCursor"
+                    onInput={() => getSearchHints()}
+                    placeholder={$root.getLz("term.search") + "..."}
+                    v-model={search.term}
+                    ref="searchInput"
+                    className="search-input"
+                  />
+                  {search.showHints && search.hints.length !== 0 && (
+                    <div
+                      className="search-hints-container"
+                      style={{ right: "-13px", left: "unset", paddingTop: 0 }}>
+                      <div className="search-hints">
+                        {search.hints
+                          .filter((a) => {
+                            return a.content === null;
+                          })
+                          .map((hint, index) => (
+                            <button
+                              className="search-hint text-overflow-elipsis"
+                              className="{active: (search.cursor === index)}"
+                              onClick={() => {
+                                search.term = hint.searchTerm;
+                                search.showHints = false;
+                                searchQuery(hint.searchTerm);
+                                search.cursor = -1;
+                              }}>
+                              {hint.displayTerm}
+                            </button>
+                          ))}
+                        {search.hints
+                          .filter((a) => {
+                            return a.content !== null;
+                          })
+                          .map((item, position) => (
+                            <template>
+                              <MediaItemSmarthints
+                                item={item.content}
+                                position={position}></MediaItemSmarthints>
+                            </template>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </template>
+          )}
+          {chrome.windowControlPosition === "right" && !chrome.nativeControls ? (
+            <div
+              className="app-chrome-item full-height"
+              id="window-controls-container">
+              <div className="window-controls">
+                <div
+                  className="minimize"
+                  onClick={() => ipcRenderer.send("minimize")}></div>
+                {chrome.maximized ? (
+                  <div
+                    className="minmax restore"
+                    onClick={() => ipcRenderer.send("maximize")}></div>
+                ) : (
+                  <div
+                    className="minmax"
+                    onClick={() => ipcRenderer.send("maximize")}></div>
+                )}
+                <div
+                  className="close"
+                  onClick={() => ipcRenderer.send("close")}></div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default ChromeTop;

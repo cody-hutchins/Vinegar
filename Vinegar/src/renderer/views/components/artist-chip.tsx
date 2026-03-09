@@ -27,42 +27,42 @@ export const ArtistChip = ({ item }: { item: object }) => {
   }
 
   return (
-    <div id="artist-chip">
-      <div
-        className="artist-chip"
-        clickself="route"
-        tabindex="0">
+    <>
+      <div id="artist-chip">
         <div
-          className="artist-chip__image"
-          v-if={image}
-          style={{ backgroundColor: "#" + (artist.attributes.artwork?.bgColor ?? "000") }}>
-          <MediaItemArtwork
-            v-if={artist.id !== null}
-            url={artist.attributes.artwork.url}
-            size="80"
-          />
+          className="artist-chip"
+          clickself="route"
+          tabindex="0">
+          {image ? (
+            <div
+              className="artist-chip__image"
+              style={{ backgroundColor: "#" + (artist.attributes.artwork?.bgColor ?? "000") }}>
+              {artist.id !== null && (
+                <MediaItemArtwork
+                  url={artist.attributes.artwork.url}
+                  size="80"></MediaItemArtwork>
+              )}
+            </div>
+          ) : (
+            <div className="artist-chip__image"></div>
+          )}
+          <div className="artist-chip__name">
+            <span>{item.attributes.name}</span>
+          </div>
+          {!$root.followingArtist(artist.id) ? (
+            <button
+              onClick={() => $root.setArtistFavorite(artist.id, true)}
+              title="Follow"
+              className="artist-chip__follow codicon codicon-add"></button>
+          ) : (
+            <button
+              onClick={() => $root.setArtistFavorite(artist.id, false)}
+              title="Following"
+              className="artist-chip__follow codicon codicon-check"></button>
+          )}
         </div>
-        <div
-          className="artist-chip__image"
-          v-else
-        />
-        <div className="artist-chip__name">
-          <span>{item.attributes.name}</span>
-        </div>
-        <button
-          onClick={() => $root.setArtistFavorite(artist.id, true)}
-          title="Follow"
-          v-if={!$root.followingArtist(artist.id)}
-          className="artist-chip__follow codicon codicon-add"
-        />
-        <button
-          onClick={() => $root.setArtistFavorite(artist.id, false)}
-          title="Following"
-          v-else
-          className="artist-chip__follow codicon codicon-check"
-        />
       </div>
-    </div>
+    </>
   );
 };
 

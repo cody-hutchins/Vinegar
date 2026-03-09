@@ -36,7 +36,7 @@ export const i18nEditor = () => {
           <h1>i18n Editor</h1>
         </div>
         <div className="col-auto nopadding selectCol">
-          <select className="md-select" change="$root.setLz('');$root.setLzManual()" v-model="$root.cfg.general.language">
+          <select className="md-select" onChange={() => {$root.setLz('');$root.setLzManual()}} v-model="$root.cfg.general.language">
             {getLanguages().map((categories, index) => <optgroup label="index">
               {categories.map((lang) => <option value={lang.code}>{lang.nameNative} ({lang.nameEnglish})</option>)}
             </optgroup>)}
@@ -47,19 +47,20 @@ export const i18nEditor = () => {
       <hr />
       <div className="md-option-container">
         {baseLz.map((val, key) => <template>
-          <div className="md-option-line" v-if="$root.lz[key]">
+          {$root.lz[key] ? <div className="md-option-line">
             <div className="md-option-segment">{key }</div>
             <div className="md-option-segment">
-              <template v-if='typeof $root.lz[key] == "object"'>
+              {typeof $root.lz[key] == "object" ? <template>
                 {$root.lz[key].map((variant, vkey) => <div>
                   {variant}
                   <input type="text" v-model="$root.lz[key][vkey]" />
                 </div>)}
-              </template>
-              <textarea type="text" v-model="$root.lz[key]" v-else></textarea>
+              </template> :
+              <textarea type="text" v-model="$root.lz[key]"></textarea>
+                }
             </div>
-          </div>
-          <div className="md-option-line" v-else>
+          </div>:
+          <div className="md-option-line">
             <div className="md-option-segment">
               <b>{ key }</b>
             </div>

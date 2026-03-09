@@ -101,32 +101,29 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
   };
 
   return (
-    <div id="mediaitem-artwork">
-      <div
-        className="mediaitem-artwork"
-        style={awStyle}
-        contextmenu="contextMenu"
-        className="[{'rounded': (type === 'artists')}, classes]"
-        key="url">
-        <img
-          src="imgSrc"
-          ref="image"
-          decoding="async"
-          loading="lazy"
-          style={imgStyle}
-          load={imgLoaded()}
-          className="mediaitem-artwork--img"
-        />
+    <>
+      <div id="mediaitem-artwork">
         <div
-          v-if={video && getVideoPriority()}
-          className="animatedartwork-view-box"
-        />
-        <AnimatedartworkView
-          priority={getVideoPriority()}
-          video="video"
-        />
+          className="mediaitem-artwork"
+          style={awStyle}
+          contextmenu="contextMenu"
+          className="[{'rounded': (type === 'artists')}, classes]"
+          key="url">
+          <img
+            src="imgSrc"
+            ref="image"
+            decoding="async"
+            loading="lazy"
+            style={imgStyle}
+            load={imgLoaded()}
+            className="mediaitem-artwork--img"></img>
+          {video && getVideoPriority() && <div className="animatedartwork-view-box"></div>}
+          <AnimatedartworkView
+            priority={getVideoPriority()}
+            video="video"></AnimatedartworkView>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

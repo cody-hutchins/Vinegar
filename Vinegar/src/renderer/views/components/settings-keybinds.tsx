@@ -98,213 +98,94 @@ const Keybinds = () => {
   };
 
   return (
-    <div id="keybinds-settings">
-      <div className="keybinds-page">
-        <div className="md-option-header">
-          <span>{$root.getLz("settings.option.general.keybindings")}</span>
+    <>
+      <div id="keybinds-settings">
+        <div className="keybinds-page">
+          <div className="md-option-header">
+            <span>{$root.getLz("settings.option.general.keybindings")}</span>
+          </div>
         </div>
-        <div className="settings-option-body">
+        <div className="md-option-header-sub">
+          <span>{$root.getLz("settings.option.general.keybindings.library")}</span>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.search")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.listnow")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.browse")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.recentAdd")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.songs")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.albums")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.artists")}</div>
+        </div>
+        <div className="md-option-header-sub">
+          <span>{$root.getLz("settings.option.general.keybindings.session")}</span>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.private")}</div>
+        </div>
+        <div className="md-option-header-sub">
+          <span>{$root.getLz("settings.option.general.keybindings.control")}</span>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.remote")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.audio")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.plugins")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.cast")}</div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.settings")}</div>
+        </div>
+        {app.platform !== "darwin" && (
           <div className="md-option-header-sub">
-            <span>{$root.getLz("settings.option.general.keybindings.library")}</span>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.search")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("search")}>
-                {app.cfg.general.keybindings.search.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.listnow")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("listnow")}>
-                {app.cfg.general.keybindings.listnow.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.browse")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("browse")}>
-                {app.cfg.general.keybindings.browse.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.recentAdd")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("recentAdd")}>
-                {app.cfg.general.keybindings.recentAdd.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.songs")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("songs")}>
-                {app.cfg.general.keybindings.songs.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.albums")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("albums")}>
-                {app.cfg.general.keybindings.albums.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.artists")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("artists")}>
-                {app.cfg.general.keybindings.artists.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-header-sub">
-            <span>{$root.getLz("settings.option.general.keybindings.session")}</span>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.private")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("togglePrivateSession")}>
-                {app.cfg.general.keybindings.togglePrivateSession.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-header-sub">
-            <span>{$root.getLz("settings.option.general.keybindings.control")}</span>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.remote")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("webRemote")}>
-                {app.cfg.general.keybindings.webRemote.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.audio")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("audioSettings")}>
-                {app.cfg.general.keybindings.audioSettings.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.plugins")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("pluginMenu")}>
-                {app.cfg.general.keybindings.pluginMenu.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.cast")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("castToDevices")}>
-                {app.cfg.general.keybindings.castToDevices.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.settings")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("settings")}>
-                {app.cfg.general.keybindings.settings.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div
-            className="md-option-header-sub"
-            v-if={app.platform !== "darwin"}>
             <span>{$root.getLz("settings.option.general.keybindings.interface")}</span>
           </div>
-          <div
-            className="md-option-line"
-            v-if={app.platform !== "darwin"}>
-            <div className="md-option-segment">{$root.getLz("term.zoomin")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("zoomn")}>
-                {app.cfg.general.keybindings.zoomn.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div
-            className="md-option-line"
-            v-if={app.platform !== "darwin"}>
-            <div className="md-option-segment">{$root.getLz("term.zoomout")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("zoomt")}>
-                {app.cfg.general.keybindings.zoomt.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div
-            className="md-option-line"
-            v-if={app.platform !== "darwin"}>
-            <div className="md-option-segment">{$root.getLz("term.zoomreset")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("zoomrst")}>
-                {app.cfg.general.keybindings.zoomrst.join(" + ")}
-              </button>
-            </div>
-          </div>
-          <div className="md-option-header-sub">
-            <span>{$root.getLz("settings.option.general.keybindings.advanced")}</span>
-          </div>
+        )}
+        {app.platform !== "darwin" && (
           <div className="md-option-line">
-            <div className="md-option-segment">{$root.getLz("settings.description.developer")}</div>
-            <div className="md-option-segment md-option-segment_auto">
-              <button
-                className="md-btn md-btn-small md-btn-block"
-                onClick={() => keyBindUpdate("openDeveloperTools")}>
-                {app.cfg.general.keybindings.openDeveloperTools.join(" + ")}
-              </button>
-            </div>
+            <div className="md-option-segment">{$root.getLz("term.zoomin")}</div>
           </div>
-          <button
-            className="md-btn md-btn-large md-btn-block"
-            onClick={() => keyBindReset()}>
-            {$root.getLz("term.reset")}
-          </button>
+        )}
+        {app.platform !== "darwin" && (
+          <div className="md-option-line">
+            <div className="md-option-segment">{$root.getLz("term.zoomout")}</div>
+          </div>
+        )}
+        {app.platform !== "darwin" && (
+          <div className="md-option-line">
+            <div className="md-option-segment">{$root.getLz("term.zoomreset")}</div>
+          </div>
+        )}
+        <div className="md-option-header-sub">
+          <span>{$root.getLz("settings.option.general.keybindings.advanced")}</span>
         </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.description.developer")}</div>
+        </div>
+        <button
+          className="md-btn md-btn-large md-btn-block"
+          onClick={() => keyBindReset()}>
+          {$root.getLz("term.reset")}
+        </button>
       </div>
-    </div>
+    </>
   );
 };
 

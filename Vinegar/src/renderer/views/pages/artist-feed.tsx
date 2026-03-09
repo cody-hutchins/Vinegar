@@ -77,82 +77,81 @@ const ArtistFeed = () => {
   }
 
   return (
-    <div id="cider-artist-feed">
-      <div className="content-inner">
-        <div>
-          <div className="row">
-            <div className="col">
-              <div className="row nopadding">
-                <div className="col nopadding">
-                  <h3>{app.getLz("home.followedArtists")}</h3>
-                </div>
-                <div className="col-auto nopadding cider-flex-center">
-                  <button
-                    className="cd-btn-seeall"
-                    onClick={() => syncFavorites()}
-                    v-if={!syncingFavs}>
-                    {app.getLz("home.syncFavorites")}
-                  </button>
-                  <div
-                    className="spinner"
-                    style={{ height: "26px" }}
-                    v-else
-                  />
-                </div>
-              </div>
-              <vue-horizontal>
-                {artists.map((artist) => (
-                  <div style={{ margin: "6px" }}>
-                    <MediaItemSquare
-                      item={artist}
-                      kind="small"
-                    />
-                    <button
-                      onClick={() => unfollow(artist.id)}
-                      className="md-btn md-btn-glyph"
-                      style={{ display: flex }}>
-                      <div className="sidebar-icon">
-                        <div
-                          className="svg-icon"
-                          style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
-                        />
-                      </div>
-                      {app.getLz("action.removeFavorite")}
-                    </button>
+    <>
+      <div id="cider-artist-feed">
+        <div className="content-inner">
+          <div>
+            <div className="row">
+              <div className="col">
+                <div className="row nopadding">
+                  <div className="col nopadding">
+                    <h3>{app.getLz("home.followedArtists")}</h3>
                   </div>
-                ))}
-              </vue-horizontal>
+                  <div className="col-auto nopadding cider-flex-center">
+                    {!syncingFavs ? (
+                      <button
+                        className="cd-btn-seeall"
+                        onClick={() => syncFavorites()}>
+                        {app.getLz("home.syncFavorites")}
+                      </button>
+                    ) : (
+                      <div
+                        className="spinner"
+                        style={{ height: "26px" }}></div>
+                    )}
+                  </div>
+                </div>
+                <vue-horizontal>
+                  {artists.map((artist) => (
+                    <div style={{ margin: "6px" }}>
+                      <MediaItemSquare
+                        item={artist}
+                        kind="small"></MediaItemSquare>
+                      <button
+                        onClick={() => unfollow(artist.id)}
+                        className="md-btn md-btn-glyph"
+                        style={{ display: flex }}>
+                        <div className="sidebar-icon">
+                          <div
+                            className="svg-icon"
+                            style={{ "--url": "url(./assets/feather/x-circle.svg)" }}></div>
+                        </div>
+                        {app.getLz("action.removeFavorite")}
+                      </button>
+                    </div>
+                  ))}
+                </vue-horizontal>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <div className="row">
-            <div className="col">
-              <div className="row nopadding">
-                <div className="col nopadding">
-                  <h3>{app.getLz("home.artistsFeed")}</h3>
+          <div>
+            <div className="row">
+              <div className="col">
+                <div className="row nopadding">
+                  <div className="col nopadding">
+                    <h3>{app.getLz("home.artistsFeed")}</h3>
+                  </div>
                 </div>
-              </div>
-              <div
-                className="well"
-                style={{ marginTop: 0 }}>
-                {artistFeed.length > 0 ? (
-                  artistFeed.map((item) => (
-                    <MediaItemListItem
-                      v-bind:key={item.id}
-                      item={item}
-                    />
-                  ))
-                ) : (
-                  <div className="spinner" />
-                )}
+                <div
+                  className="well"
+                  style={{ marginTop: 0 }}>
+                  {artistFeed.length > 0 ? (
+                    artistFeed.map((item) => (
+                      <MediaItemListItem
+                        v-bind:key={item.id}
+                        item={item}></MediaItemListItem>
+                    ))
+                  ) : (
+                    <div className="spinner"></div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default ArtistFeed;

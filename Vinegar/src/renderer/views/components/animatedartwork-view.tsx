@@ -84,19 +84,21 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
   }, []);
 
   return (
-    <div id="animatedartwork-view">
-      <div
-        className="animated"
-        v-bind:vid={app.hashCode(video).toString()}
-        v-if={video}>
-        <video
-          ref="video"
-          className="animated-artwork-video"
-          loop
-          id="animated-artwork"
-        />
+    <>
+      <div id="animatedartwork-view">
+        {video && (
+          <div
+            className="animated"
+            v-bind:vid={app.hashCode(video).toString()}>
+            <video
+              ref="video"
+              className="animated-artwork-video"
+              loop
+              id="animated-artwork"></video>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 export default AnimatedArtworkView;

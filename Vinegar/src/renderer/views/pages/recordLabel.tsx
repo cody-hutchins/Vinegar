@@ -23,98 +23,80 @@ const RecordLabel = ({ data }: { data: string }) => {
     }
   }
   return (
-    <div id="cider-recordlabel">
-      <div className="content-inner artist-page">
-        <div
-          className="artist-header"
-          style={getArtistPalette(data)}>
-          <div className="row">
-            <div
-              className="col-sm"
-              style={{ width: "auto" }}>
-              <div className="artist-image">
-                <MediaItemArtwork
-                  shadow="large"
-                  url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                  size="220"
-                  type="artists"
-                />
+    <>
+      <div id="cider-recordlabel">
+        <div className="content-inner artist-page">
+          <div
+            className="artist-header"
+            style={getArtistPalette(data)}>
+            <div className="row">
+              <div
+                className="col-sm"
+                style={{ width: "auto" }}>
+                <div className="artist-image">
+                  <MediaItemArtwork
+                    shadow="large"
+                    url={data.attributes.artwork ? data.attributes.artwork.url : ""}
+                    size="220"
+                    type="artists"></MediaItemArtwork>
+                </div>
               </div>
-            </div>
-            <div className="col cider-flex-center">
-              <h1>{data.attributes.name}</h1>
+              <div className="col cider-flex-center">
+                <h1>{data.attributes.name}</h1>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="artist-body">
-          <div v-if={$root.showingPlaylist.attributes.description}>
-            <div className="row">
-              <h3>{$root.getLz("term.about")}</h3>
-            </div>
-            <div className="row">
-              <div>{$root.showingPlaylist.attributes.description.standard}</div>
-            </div>
+          <div className="artist-body">
+            {$root.showingPlaylist.attributes.description && (
+              <div>
+                <div className="row">
+                  <h3>{$root.getLz("term.about")}</h3>
+                </div>
+                <div className="row">
+                  <div>{$root.showingPlaylist.attributes.description.standard}</div>
+                </div>
+              </div>
+            )}
+            {data.views && data.views["latest-releases"] && (
+              <template>
+                <div className="row">
+                  <div className="col">
+                    <h3>{data.views["latest-releases"].attributes.title ?? ""}</h3>
+                  </div>
+                </div>
+                {data.views["latest-releases"].data.map((item) => (
+                  <MediaItemSquare item={item}></MediaItemSquare>
+                ))}
+              </template>
+            )}
+            {data.views && data.views["top-releases"] && (
+              <template>
+                <div className="row">
+                  <div className="col">
+                    <h3>{data.views["top-releases"].attributes.title ?? ""}</h3>
+                  </div>
+                </div>
+                {data.views["top-releases"].data.map((item) => (
+                  <MediaItemSquare item={item}></MediaItemSquare>
+                ))}
+              </template>
+            )}
+            {data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0 && (
+              <template>
+                <div className="row">
+                  <div className="col">
+                    <h3>{$root.getLz("term.playlists")}</h3>
+                  </div>
+                </div>
+                {data.relationships.playlists.data.limit(5).map((item) => (
+                  <MediaItemSquare item={item}></MediaItemSquare>
+                ))}
+              </template>
+            )}
           </div>
-          <template v-if={data.views && data.views["latest-releases"]}>
-            <div className="row">
-              <div className="col">
-                <h3>{data.views["latest-releases"].attributes.title ?? ""}</h3>
-              </div>
-              <div
-                className="col-auto cider-flex-center"
-                v-if={data.views["latest-releases"].data.length >= 10}>
-                <button
-                  className="cd-btn-seeall"
-                  onClick={() => $root.showRecordLabelView(data.id, data.attributes.name + " -  Latest Releases", "latest-releases")}>
-                  {$root.getLz("term.seeAll")}
-                </button>
-              </div>
-            </div>
-            {data.views["latest-releases"].data.map((item) => (
-              <MediaItemSquare item={item} />
-            ))}
-          </template>
-          <template v-if={data.views && data.views["top-releases"]}>
-            <div className="row">
-              <div className="col">
-                <h3>{data.views["top-releases"].attributes.title ?? ""}</h3>
-              </div>
-              <div
-                className="col-auto cider-flex-center"
-                v-if={data.views["top-releases"].data.length >= 10}>
-                <button
-                  className="cd-btn-seeall"
-                  onClick={() => $root.showRecordLabelView(data.id, data.attributes.name + " -  Top Releases", "top-releases")}>
-                  {$root.getLz("term.seeAll")}
-                </button>
-              </div>
-            </div>
-            {data.views["top-releases"].data.map((item) => (
-              <MediaItemSquare item={item} />
-            ))}
-          </template>
-          <template v-if={data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0}>
-            <div className="row">
-              <div className="col">
-                <h3>{$root.getLz("term.playlists")}</h3>
-              </div>
-              <div
-                className="col-auto cider-flex-center"
-                v-if={data.relationships.playlists.data.length >= 5}>
-                <button
-                  className="cd-btn-seeall"
-                  onClick={() => $root.showCollection(data.relationships.playlists, data.attributes.name + " -  Playlists", "curator")}>
-                  {$root.getLz("term.seeAll")}
-                </button>
-              </div>
-            </div>
-            {data.relationships.playlists.data.limit(5).map((item) => (
-              <MediaItemSquare item={item} />
-            ))}
-          </template>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default RecordLabel;

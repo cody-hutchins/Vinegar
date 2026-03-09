@@ -166,296 +166,274 @@ const SettingsWindow = () => {
     app.modals.pathMenu = true;
   }
   return (
-    <div id="settings-window">
-      <div
-        className="settings-panel"
-        clickself={close()}>
+    <>
+      <div id="settings-window">
         <div
-          className="settings-window"
-          className="{'maxed': $store.state.pageState['settings'].fullscreen, 'no-sidebar': sidebarVis()}">
-          <button
-            className="close-btn minmax-btn"
-            onClick={() => {
-              $store.state.pageState["settings"].fullscreen = !$store.state.pageState["settings"].fullscreen;
-            }}
-            className="{'min': $store.state.pageState['settings'].fullscreen}"
-          />
-          <button
-            className="close-btn"
-            onClick={() => close()}
-          />
-          <b-tabs
-            className="no-style"
-            pills
-            vertical
-            content-className="mt-3"
-            v-model={$store.state.pageState["settings"].currentTabIndex}>
-            <b-tab>
-              <template title>
-                <div>
-                  <SVGIcon
-                    url="./assets/settings.svg"
-                    classes="svg-md"
-                    name="settings-general"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.general")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <div className="md-option-container">
-                  {/* General Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.general")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("term.language")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            onChange={() => {
-                              $root.setLz("");
-                              $root.setLzManual();
-                            }}
-                            v-model={app.cfg.general.language}>
-                            {getLanguages().map((categories, index) => (
-                              <optgroup label="index">
-                                {categories.map((lang) => (
-                                  <option value={lang.code}>
-                                    {lang.nameNative}({lang.nameEnglish})
-                                  </option>
-                                ))}
-                              </optgroup>
+          className="settings-panel"
+          clickself={close()}></div>
+        <button
+          className="close-btn minmax-btn"
+          onClick={() => {
+            $store.state.pageState["settings"].fullscreen = !$store.state.pageState["settings"].fullscreen;
+          }}
+          className="{'min': $store.state.pageState['settings'].fullscreen}"></button>
+        <button
+          className="close-btn"
+          onClick={() => close()}></button>
+        <b-tab>
+          <template title>
+            <div>
+              <SVGIcon
+                url="./assets/settings.svg"
+                classes="svg-md"
+                name="settings-general"></SVGIcon>
+            </div>
+            <div>{$root.getLz("settings.header.general")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <div className="md-option-container">
+              {/* General Settings  */}
+              <div className="md-option-header">
+                <span>{$root.getLz("settings.header.general")}</span>
+              </div>
+              <div className="settings-option-body">
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("term.language")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <select
+                        className="md-select"
+                        onChange={() => {
+                          $root.setLz("");
+                          $root.setLzManual();
+                        }}
+                        v-model={app.cfg.general.language}>
+                        {getLanguages().map((categories, index) => (
+                          <optgroup label="index">
+                            {categories.map((lang) => (
+                              <option value={lang.code}>
+                                {lang.nameNative}({lang.nameEnglish})
+                              </option>
                             ))}
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("term.accountSettings")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => app.appRoute("apple-account-settings")}>
-                          {$root.getLz("term.accountSettings")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("term.privateSession")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={$root.cfg.general.privateEnabled}
-                            v-on:change={($root.mk.privateEnabled = $root.cfg.general.privateEnabled)}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.platform !== "linux"}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.general.onStartup.enabled}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.general.onStartup.enabled}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup.hidden")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.general.onStartup.hidden}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.general.resumebehavior")}
-                        <br />
-                        <small>
-                          {$root.getLz("settings.option.general.resumebehavior.description")}
-                          <br />
-                          <b>{$root.getLz("settings.option.general.resumebehavior.locally")}: </b>
-                          {$root.getLz("settings.option.general.resumebehavior.locally.description")}
-                          <br />
-                          <b>{$root.getLz("settings.option.general.resumebehavior.history")}: </b>
-                          {$root.getLz("settings.option.general.resumebehavior.history.description")}
-                        </small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            style={{ width: "180px" }}
-                            v-model={$root.cfg.general.resumeOnStartupBehavior}>
-                            <option value="disabled">{$root.getLz("term.disabled")}</option>
-                            <option value="local">{$root.getLz("settings.option.general.resumebehavior.locally")}</option>
-                            <option value="history">{$root.getLz("settings.option.general.resumebehavior.history")}</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.general.resumetabs")}
-                        <br />
-                        <small>
-                          {$root.getLz("settings.option.general.resumetabs.description")}
-                          <br />
-                          <b>{$root.getLz("settings.option.general.resumetabs.dynamic")}: </b>
-                          {$root.getLz("settings.option.general.resumetabs.dynamic.description")}
-                        </small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            style={{ width: "180px" }}
-                            v-model={$root.cfg.general.resumeTabs.tab}>
-                            <option value="dynamic">{$root.getLz("settings.option.general.resumetabs.dynamic")}</option>
-                            <option value="home">{$root.getLz("home.title")}</option>
-                            <option value="listen_now">{$root.getLz("term.listenNow")}</option>
-                            <option value="browse">{$root.getLz("term.browse")}</option>
-                            <option value="radio">{$root.getLz("term.radio")}</option>
-                            <option value="library-recentlyadded">{$root.getLz("term.recentlyAdded")}</option>
-                            <option value="library-songs">{$root.getLz("term.songs")}</option>
-                            <option value="library-albums">{$root.getLz("term.albums")}</option>
-                            <option value="library-artists">{$root.getLz("term.artists")}</option>
-                            <option value="library-videos">{$root.getLz("term.videos")}</option>
-                            <option value="podcasts">{$root.getLz("term.podcasts")}</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.general.customizeSidebar")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          v-b-modalmodal-1>
-                          {$root.getLz("settings.option.general.customizeSidebar.customize")}
-                        </button>
-                      </div>
-                      <b-modal
-                        id="modal-1"
-                        centered
-                        size="lg"
-                        title={$root.getLz("settings.option.general.customizeSidebar")}>
-                        <div className="settings-option-body">
-                          <div className="md-option-line">
-                            <div className="md-option-segment">{$root.getLz("term.recentlyAdded")}</div>
-                            <div className="md-option-segment md-option-segment_auto">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  v-model={app.cfg.general.sidebarItems.recentlyAdded}
-                                />
-                              </label>
-                            </div>
-                          </div>
-                          <div className="md-option-line">
-                            <div className="md-option-segment">{$root.getLz("term.songs")}</div>
-                            <div className="md-option-segment md-option-segment_auto">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  v-model={app.cfg.general.sidebarItems.songs}
-                                />
-                              </label>
-                            </div>
-                          </div>
-                          <div className="md-option-line">
-                            <div className="md-option-segment">{$root.getLz("term.albums")}</div>
-                            <div className="md-option-segment md-option-segment_auto">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  v-model={app.cfg.general.sidebarItems.albums}
-                                />
-                              </label>
-                            </div>
-                          </div>
-                          <div className="md-option-line">
-                            <div className="md-option-segment">{$root.getLz("term.artists")}</div>
-                            <div className="md-option-segment md-option-segment_auto">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  v-model={app.cfg.general.sidebarItems.artists}
-                                />
-                              </label>
-                            </div>
-                          </div>
-                          <div className="md-option-line">
-                            <div className="md-option-segment">{$root.getLz("term.videos")}</div>
-                            <div className="md-option-segment md-option-segment_auto">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  v-model={app.cfg.general.sidebarItems.videos}
-                                />
-                              </label>
-                            </div>
-                          </div>
-                          <div className="md-option-line">
-                            <div className="md-option-segment">{$root.getLz("term.podcasts")}</div>
-                            <div className="md-option-segment md-option-segment_auto">
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  v-model={app.cfg.general.sidebarItems.podcasts}
-                                />
-                              </label>
-                            </div>
-                          </div>
+                          </optgroup>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("term.accountSettings")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      onClick={() => app.appRoute("apple-account-settings")}>
+                      {$root.getLz("term.accountSettings")}
+                    </button>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("term.privateSession")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={$root.cfg.general.privateEnabled}
+                        v-on:change={($root.mk.privateEnabled = $root.cfg.general.privateEnabled)}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.platform !== "linux"}>
+                  <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.general.onStartup.enabled}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.general.onStartup.enabled}>
+                  <div className="md-option-segment">{$root.getLz("settings.option.window.openOnStartup.hidden")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.general.onStartup.hidden}></input>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.general.resumebehavior")}
+                    <br></br>
+                    <small>
+                      {$root.getLz("settings.option.general.resumebehavior.description")}
+                      <br></br>
+                      <b>{$root.getLz("settings.option.general.resumebehavior.locally")}: </b>
+                      {$root.getLz("settings.option.general.resumebehavior.locally.description")}
+                      <br></br>
+                      <b>{$root.getLz("settings.option.general.resumebehavior.history")}: </b>
+                      {$root.getLz("settings.option.general.resumebehavior.history.description")}
+                    </small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <select
+                        className="md-select"
+                        style={{ width: "180px" }}
+                        v-model={$root.cfg.general.resumeOnStartupBehavior}>
+                        <option value="disabled">{$root.getLz("term.disabled")}</option>
+                        <option value="local">{$root.getLz("settings.option.general.resumebehavior.locally")}</option>
+                        <option value="history">{$root.getLz("settings.option.general.resumebehavior.history")}</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.general.resumetabs")}
+                    <br></br>
+                    <small>
+                      {$root.getLz("settings.option.general.resumetabs.description")}
+                      <br></br>
+                      <b>{$root.getLz("settings.option.general.resumetabs.dynamic")}: </b>
+                      {$root.getLz("settings.option.general.resumetabs.dynamic.description")}
+                    </small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <select
+                        className="md-select"
+                        style={{ width: "180px" }}
+                        v-model={$root.cfg.general.resumeTabs.tab}>
+                        <option value="dynamic">{$root.getLz("settings.option.general.resumetabs.dynamic")}</option>
+                        <option value="home">{$root.getLz("home.title")}</option>
+                        <option value="listen_now">{$root.getLz("term.listenNow")}</option>
+                        <option value="browse">{$root.getLz("term.browse")}</option>
+                        <option value="radio">{$root.getLz("term.radio")}</option>
+                        <option value="library-recentlyadded">{$root.getLz("term.recentlyAdded")}</option>
+                        <option value="library-songs">{$root.getLz("term.songs")}</option>
+                        <option value="library-albums">{$root.getLz("term.albums")}</option>
+                        <option value="library-artists">{$root.getLz("term.artists")}</option>
+                        <option value="library-videos">{$root.getLz("term.videos")}</option>
+                        <option value="podcasts">{$root.getLz("term.podcasts")}</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.general.customizeSidebar")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      v-b-modalmodal-1>
+                      {$root.getLz("settings.option.general.customizeSidebar.customize")}
+                    </button>
+                  </div>
+                  <b-modal
+                    id="modal-1"
+                    centered
+                    size="lg"
+                    title={$root.getLz("settings.option.general.customizeSidebar")}>
+                    <div className="settings-option-body">
+                      <div className="md-option-line">
+                        <div className="md-option-segment">{$root.getLz("term.recentlyAdded")}</div>
+                        <div className="md-option-segment md-option-segment_auto">
+                          <label>
+                            <input
+                              type="checkbox"
+                              v-model={app.cfg.general.sidebarItems.recentlyAdded}></input>
+                          </label>
                         </div>
-                      </b-modal>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.general.keybindings")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => $root.openSettingsPage("keybindings")}>
-                          {$root.getLz("action.open")}
-                        </button>
+                      </div>
+                      <div className="md-option-line">
+                        <div className="md-option-segment">{$root.getLz("term.songs")}</div>
+                        <div className="md-option-segment md-option-segment_auto">
+                          <label>
+                            <input
+                              type="checkbox"
+                              v-model={app.cfg.general.sidebarItems.songs}></input>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="md-option-line">
+                        <div className="md-option-segment">{$root.getLz("term.albums")}</div>
+                        <div className="md-option-segment md-option-segment_auto">
+                          <label>
+                            <input
+                              type="checkbox"
+                              v-model={app.cfg.general.sidebarItems.albums}></input>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="md-option-line">
+                        <div className="md-option-segment">{$root.getLz("term.artists")}</div>
+                        <div className="md-option-segment md-option-segment_auto">
+                          <label>
+                            <input
+                              type="checkbox"
+                              v-model={app.cfg.general.sidebarItems.artists}></input>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="md-option-line">
+                        <div className="md-option-segment">{$root.getLz("term.videos")}</div>
+                        <div className="md-option-segment md-option-segment_auto">
+                          <label>
+                            <input
+                              type="checkbox"
+                              v-model={app.cfg.general.sidebarItems.videos}></input>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="md-option-line">
+                        <div className="md-option-segment">{$root.getLz("term.podcasts")}</div>
+                        <div className="md-option-segment md-option-segment_auto">
+                          <label>
+                            <input
+                              type="checkbox"
+                              v-model={app.cfg.general.sidebarItems.podcasts}></input>
+                          </label>
+                        </div>
                       </div>
                     </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.general.themeUpdateNotification")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.general.themeUpdateNotification}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.general.showLovedTracksInline")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.general.showLovedTracksInline}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    {/* <div className="md-option-line">
+                  </b-modal>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.general.keybindings")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      onClick={() => $root.openSettingsPage("keybindings")}>
+                      {$root.getLz("action.open")}
+                    </button>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.general.themeUpdateNotification")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.general.themeUpdateNotification}></input>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.general.showLovedTracksInline")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.general.showLovedTracksInline}></input>
+                    </label>
+                  </div>
+                </div>
+                {/* <div className="md-option-line">
                                     <div className="md-option-segment">
                                         {'Local files path'}
                                     </div>
@@ -465,196 +443,186 @@ const SettingsWindow = () => {
                                         </button>
                                     </div>
                                 </div>  */}
+              </div>
+            </div>
+          </div>
+        </b-tab>
+        <b-tab>
+          <template title="#">
+            <div>
+              <SVGIcon
+                url="./assets/feather/headphones.svg"
+                classes="svg-md"
+                name="settings-audio"></SVGIcon>
+            </div>
+            <div>{$root.getLz("settings.header.audio")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <div className="md-option-container">
+              {/* Audio Settings  */}
+              <div className="md-option-header">
+                <span>{$root.getLz("settings.header.audio")}</span>
+              </div>
+              <div className="settings-option-body">
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.audio.quality")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <select
+                        className="md-select"
+                        style={{ width: "180px" }}
+                        v-model={app.cfg.audio.quality}
+                        v-on:change="changeAudioQuality">
+                        {/* // <option value="">{$root.getLz('settings.header.audio.quality.hireslossless')}</option>  */}
+                        {/* <option value="">{$root.getLz('settings.header.audio.quality.lossless')}</option>  */}
+                        <option value="HIGH">
+                          {$root.getLz("settings.header.audio.quality.high")}({$root.getLz("settings.header.audio.quality.high.description")})
+                        </option>
+                        <option value="STANDARD">
+                          {$root.getLz("settings.header.audio.quality.standard")}({$root.getLz("settings.header.audio.quality.standard.description")})
+                        </option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("term.audioControls")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      onClick={() => (app.modals.audioControls = true)}>
+                      {$root.getLz("term.audioControls")}
+                    </button>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.audio.changePlaybackRate")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      onClick={() => (app.modals.audioPlaybackRate = true)}>
+                      {$root.getLz("settings.option.audio.playbackRate.change")}
+                    </button>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.audio.seamlessTransition")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.audio.seamless_audio}
+                        v-on:change={(app.mk._bag.features["seamless-audio-transitions"] = app.cfg.audio.seamless_audio)}></input>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("term.equalizer")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      onClick={() => (app.modals.equalizer = true)}>
+                      {$root.getLz("term.equalizer")}
+                    </button>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div
+                    className="md-option-segment"
+                    style={{ whiteSpace: "pre-line" }}>
+                    {$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
+                    <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.audio.normalization}
+                        v-on:change="toggleNormalization"
+                        disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.audio.normalization && app.cfg.audio.advanced}>
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.audio.dbspl.display")}
+                    <br></br>
+                    <small>{$root.getLz("settings.option.audio.dbspl.description")}</small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.audio.dBSPL}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.audio.dBSPL}>
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.audio.dbfs.calibration")}
+                    <br></br>
+                    <small>{$root.getLz("settings.option.audio.dbfs.description")}</small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="number"
+                        v-model={app.cfg.audio.dBSPLcalibration}></input>
+                    </label>
                   </div>
                 </div>
               </div>
-            </b-tab>
-            <b-tab>
-              <template title="#">
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/headphones.svg"
-                    classes="svg-md"
-                    name="settings-audio"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.audio")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <div className="md-option-container">
-                  {/* Audio Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.audio")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.audio.quality")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            style={{ width: "180px" }}
-                            v-model={app.cfg.audio.quality}
-                            v-on:change="changeAudioQuality">
-                            {/* // <option value="">{$root.getLz('settings.header.audio.quality.hireslossless')}</option>  */}
-                            {/* <option value="">{$root.getLz('settings.header.audio.quality.lossless')}</option>  */}
-                            <option value="HIGH">
-                              {$root.getLz("settings.header.audio.quality.high")}({$root.getLz("settings.header.audio.quality.high.description")})
-                            </option>
-                            <option value="STANDARD">
-                              {$root.getLz("settings.header.audio.quality.standard")}({$root.getLz("settings.header.audio.quality.standard.description")})
-                            </option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("term.audioControls")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => (app.modals.audioControls = true)}>
-                          {$root.getLz("term.audioControls")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.audio.changePlaybackRate")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => (app.modals.audioPlaybackRate = true)}>
-                          {$root.getLz("settings.option.audio.playbackRate.change")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.audio.seamlessTransition")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.audio.seamless_audio}
-                            v-on:change={(app.mk._bag.features["seamless-audio-transitions"] = app.cfg.audio.seamless_audio)}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("term.equalizer")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => (app.modals.equalizer = true)}>
-                          {$root.getLz("term.equalizer")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div
-                        className="md-option-segment"
-                        style={{ whiteSpace: "pre-line" }}>
-                        {$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
-                        <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.audio.normalization}
-                            v-on:change="toggleNormalization"
-                            disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.audio.normalization && app.cfg.audio.advanced}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.audio.dbspl.display")}
-                        <br />
-                        <small>{$root.getLz("settings.option.audio.dbspl.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.audio.dBSPL}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.audio.dBSPL}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.audio.dbfs.calibration")}
-                        <br />
-                        <small>{$root.getLz("settings.option.audio.dbfs.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="number"
-                            v-model={app.cfg.audio.dBSPLcalibration}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/zap.svg"
-                    classes="svg-md"
-                    name="settings-audiolabs"
-                  />
-                </div>
-                <div>{$root.getLz("settings.option.audio.audioLab")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <Audiolabs />
-              </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/style.svg"
-                    classes="svg-md"
-                    name="settings-styles"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.visual.styles")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <InstalledThemes />
-              </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/pen-tool.svg"
-                    classes="svg-md"
-                    name="settings-visual"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.visual")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <div className="md-option-container">
-                  {/* Visual Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.visual")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    {/*<div className="md-option-line">
+            </div>
+          </div>
+        </b-tab>
+        <b-tab>
+          <template>
+            <div>
+              <SVGIcon
+                url="./assets/feather/zap.svg"
+                classes="svg-md"
+                name="settings-audiolabs"></SVGIcon>
+            </div>
+            <div>{$root.getLz("settings.option.audio.audioLab")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <Audiolabs></Audiolabs>
+          </div>
+        </b-tab>
+        <b-tab>
+          <template>
+            <div>
+              <SVGIcon
+                url="./assets/feather/style.svg"
+                classes="svg-md"
+                name="settings-styles"></SVGIcon>
+            </div>
+            <div>{$root.getLz("settings.header.visual.styles")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <InstalledThemes></InstalledThemes>
+          </div>
+        </b-tab>
+        <template>
+          <div>
+            <SVGIcon
+              url="./assets/feather/pen-tool.svg"
+              classes="svg-md"
+              name="settings-visual"></SVGIcon>
+          </div>
+          <div>{$root.getLz("settings.header.visual")}</div>
+        </template>
+        <div className="md-option-container">
+          {/* Visual Settings  */}
+          <div className="md-option-header">
+            <span>{$root.getLz("settings.header.visual")}</span>
+          </div>
+          <div className="settings-option-body">
+            {/*<div className="md-option-line">
                                         <div className="md-option-segment">
                                             {$root.getLz('settings.header.visual.theme')}
                                         </div>
@@ -663,989 +631,935 @@ const SettingsWindow = () => {
                                                 {$root.getLz('settings.option.visual.theme.manageStyles')}
                                             </button>
                                         </div>
-                                    </div> */}
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.windowStyle")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            v-model={$root.cfg.visual.directives.windowLayout}>
-                            <option value="default">Maverick</option>
-                            <option value="twopanel">Mojave</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{"Display Style"}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            v-model={$root.cfg.visual.overrideDisplayTheme}
-                            onChange={changeDisplayTheme}>
-                            <option value="system">System</option>
-                            <option value="dark">Dark</option>
-                            <option value="light">Light</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.windowBackgroundStyle")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            onChange={windowBgStyleChange}
-                            v-model={app.cfg.visual.window_background_style}>
-                            <option value="none">{$root.getLz("settings.header.visual.windowBackgroundStyle.none")}</option>
-                            <option value="artwork">{$root.getLz("settings.header.visual.windowBackgroundStyle.artwork")}</option>
-                            <option value="image">{$root.getLz("settings.header.visual.windowBackgroundStyle.image")}</option>
-                            <option value="color">{$root.getLz("settings.header.visual.windowBackgroundStyle.color")}</option>
-                            <option
-                              v-if={$root.platform === "win32"}
-                              value="mica">
-                              Mica (Beta)
-                            </option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line child"
-                      v-if={app.cfg.visual.window_background_style === "color"}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.windowColor")}</div>
-                      <div className="md-option-segment_auto">
-                        <input
-                          type="color"
-                          v-model={app.cfg.visual.windowColor}
-                        />
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.customAccentColor")}</div>
-                      <div className="md-option-segment_auto">
+                                    </div>*/}
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.windowStyle")}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <select
+                    className="md-select"
+                    v-model={$root.cfg.visual.directives.windowLayout}>
+                    <option value="default">Maverick</option>
+                    <option value="twopanel">Mojave</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">{"Display Style"}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <select
+                    className="md-select"
+                    v-model={$root.cfg.visual.overrideDisplayTheme}
+                    onChange={changeDisplayTheme}>
+                    <option value="system">System</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.windowBackgroundStyle")}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <select
+                    className="md-select"
+                    onChange={windowBgStyleChange}
+                    v-model={app.cfg.visual.window_background_style}>
+                    <option value="none">{$root.getLz("settings.header.visual.windowBackgroundStyle.none")}</option>
+                    <option value="artwork">{$root.getLz("settings.header.visual.windowBackgroundStyle.artwork")}</option>
+                    <option value="image">{$root.getLz("settings.header.visual.windowBackgroundStyle.image")}</option>
+                    <option value="color">{$root.getLz("settings.header.visual.windowBackgroundStyle.color")}</option>
+                    {$root.platform === "win32" && <option value="mica">Mica (Beta)</option>}
+                  </select>
+                </label>
+              </div>
+            </div>
+            {app.cfg.visual.window_background_style === "color" && (
+              <div className="md-option-line child">
+                <div className="md-option-segment">{$root.getLz("settings.option.visual.windowColor")}</div>
+                <div className="md-option-segment_auto">
+                  <input
+                    type="color"
+                    v-model={app.cfg.visual.windowColor}></input>
+                </div>
+              </div>
+            )}
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.customAccentColor")}</div>
+              <div className="md-option-segment_auto">
+                <input
+                  type="checkbox"
+                  v-model={app.cfg.visual.customAccentColor}
+                  disabled={app.cfg.visual.purplePodcastPlaybackBar}></input>
+              </div>
+            </div>
+            {app.cfg.visual.customAccentColor && (
+              <div className="md-option-line child">
+                <div className="md-option-segment">{$root.getLz("settings.option.visual.accentColor")}</div>
+                <div className="md-option-segment_auto">
+                  <input
+                    type="color"
+                    v-model={app.cfg.visual.accentColor}></input>
+                </div>
+              </div>
+            )}
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.purplePodcastPlaybackBar")}</div>
+              <div className="md-option-segment_auto">
+                <input
+                  type="checkbox"
+                  v-model={app.cfg.visual.purplePodcastPlaybackBar}
+                  disabled={app.cfg.visual.customAccentColor}></input>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.compactArtistHeader")}</div>
+              <div className="md-option-segment_auto">
+                <input
+                  type="checkbox"
+                  v-model={app.cfg.visual.compactArtistHeader}></input>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">
+                {$root.getLz("settings.option.visual.hardwareAcceleration")}
+                <br></br>
+                <small>({$root.getLz("settings.option.visual.hardwareAcceleration.description")})</small>
+              </div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <select
+                    className="md-select"
+                    style={{ width: " 180px" }}
+                    v-model={app.cfg.visual.hw_acceleration}
+                    onChange={() => promptForRelaunch()}>
+                    <option value="default">{$root.getLz("settings.header.visual.hardwareAcceleration.default")}</option>
+                    <option value="webgpu">{$root.getLz("settings.header.visual.hardwareAcceleration.webGPU")}</option>
+                    <option value="disabled">{$root.getLz("term.disabled")}</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.showPersonalInfo")}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <input
+                    type="checkbox"
+                    v-model={app.cfg.visual.showuserinfo}
+                    v-on:change="toggleUserInfo"></input>
+                </label>
+              </div>
+            </div>
+          </div>
+          {/* Window Settings  */}
+          <div className="md-option-header">
+            <span>{$root.getLz("settings.header.window")}</span>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.option.window.maxElementScale")}</div>
+        </div>
+        <option value="-1">Default (1.5x)</option>
+        <option value="1">1.0x</option>
+        <option value={1.2}>1.2x</option>
+        <option value={1.4}>1.4x</option>
+        <div
+          className="md-option-line"
+          v-show={app.platform !== "darwin"}>
+          <div className="md-option-segment">{$root.getLz("settings.option.window.close_button_hide")}</div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.general.close_button_hide}></input>
+            </label>
+          </div>
+        </div>
+        <div
+          className="md-option-line"
+          v-show={app.platform !== "darwin"}>
+          <div className="md-option-segment">
+            {$root.getLz("settings.option.window.useNativeTitleBar")}
+            <br></br>
+            <small>({$root.getLz("settings.option.visual.hardwareAcceleration.description")})</small>
+          </div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.visual.nativeTitleBar}
+                onChange={() => promptForRelaunch()}></input>
+            </label>
+          </div>
+        </div>
+        <div
+          className="md-option-line"
+          v-show={app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar}>
+          <div className="md-option-segment">{$root.getLz("settings.option.window.windowControlStyle")}</div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <select
+                className="md-select"
+                v-model={app.cfg.visual.windowControlPosition}>
+                <option value="0">{$root.getLz("settings.option.window.windowControlStyle.right")}</option>
+                <option value="1">{$root.getLz("settings.option.window.windowControlStyle.left")}</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        {/* Advanced Visual  */}
+        <div className="md-option-header">
+          <span>{$root.getLz("settings.header.advanced")}</span>
+        </div>
+        <div className="settings-option-body">
+          <div className="md-option-line">
+            <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedArtwork")}</div>
+            <div className="md-option-segment md-option-segment_auto">
+              <label>
+                <select
+                  className="md-select"
+                  v-model={app.cfg.visual.animated_artwork}>
+                  <option value="always">{$root.getLz("settings.header.visual.animatedArtwork.always")}</option>
+                  <option value="limited">{$root.getLz("settings.header.visual.animatedArtwork.limited")}</option>
+                  <option value="disabled">{$root.getLz("settings.header.visual.animatedArtwork.disable")}</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          {(app.cfg.visual.animated_artwork === "always" || app.cfg.visual.animated_artwork === "limited") && (
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedArtworkQuality")}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <select
+                    className="md-select"
+                    v-model={app.cfg.visual.animated_artwork_qualityLevel}>
+                    <option value="0">{$root.getLz("settings.header.visual.animatedArtworkQuality.low")}</option>
+                    <option value="1">{$root.getLz("settings.header.visual.animatedArtworkQuality.medium")}</option>
+                    <option value="2">{$root.getLz("settings.header.visual.animatedArtworkQuality.high")}</option>
+                    <option value="3">{$root.getLz("settings.header.visual.animatedArtworkQuality.veryHigh")}</option>
+                    <option value="4">{$root.getLz("settings.header.visual.animatedArtworkQuality.extreme")}</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          )}
+          <div className="md-option-line">
+            <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedWindowBackground")}</div>
+            <div className="md-option-segment md-option-segment_auto">
+              <label>
+                <input
+                  type="checkbox"
+                  v-model={app.cfg.visual.bg_artwork_rotation}></input>
+              </label>
+            </div>
+          </div>
+        </div>
+        <b-tab>
+          <template>
+            <div>
+              <SVGIcon
+                url="./assets/feather/plugins.svg"
+                classes="svg-md"
+                name="settings-plugins"></SVGIcon>
+            </div>
+            <div>{$root.getLz("term.plugins")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <PluginsGithub></PluginsGithub>
+          </div>
+        </b-tab>
+        <b-tab>
+          <template>
+            <div>
+              <SVGIcon
+                url="./assets/feather/mic.svg"
+                classes="svg-md"
+                name="settings-lyrics"></SVGIcon>
+            </div>
+            <div>{$root.getLz("settings.header.lyrics")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <div className="md-option-container">
+              {/* Lyric Settings  */}
+              <div className="md-option-header">
+                <span>{$root.getLz("settings.header.lyrics")}</span>
+              </div>
+              <div className="settings-option-body">
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableMusixmatch")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.lyrics.enable_mxm}></input>
+                    </label>
+                  </div>
+                </div>
+                {app.cfg.lyrics.enable_mxm && (
+                  <div className="md-option-line">
+                    <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableMusixmatchKaraoke")}</div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
                         <input
                           type="checkbox"
-                          v-model={app.cfg.visual.customAccentColor}
-                          disabled={app.cfg.visual.purplePodcastPlaybackBar}
-                        />
-                      </div>
+                          v-model={app.cfg.lyrics.mxm_karaoke}></input>
+                      </label>
                     </div>
-                    <div
-                      className="md-option-line child"
-                      v-if={app.cfg.visual.customAccentColor}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.accentColor")}</div>
-                      <div className="md-option-segment_auto">
-                        <input
-                          type="color"
-                          v-model={app.cfg.visual.accentColor}
-                        />
-                      </div>
+                  </div>
+                )}
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.lyrics.musixmatchPreferredLanguage")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <select
+                        className="md-select"
+                        v-model={app.cfg.lyrics.mxm_language}>
+                        <option value="disabled">Disabled</option>
+                        <option value="ab">Abkhazian</option>
+                        <option value="aa">Afar</option>
+                        <option value="af">Afrikaans</option>
+                        <option value="ak">Akan</option>
+                        <option value="sq">Albanian</option>
+                        <option value="am">Amharic</option>
+                        <option value="ar">Arabic</option>
+                        <option value="an">Aragonese</option>
+                        <option value="hy">Armenian</option>
+                        <option value="as">Assamese</option>
+                        <option value="a5">Assamese-romaji</option>
+                        <option value="a3">Asturian</option>
+                        <option value="av">Avaric</option>
+                        <option value="ae">Avestan</option>
+                        <option value="ay">Aymara</option>
+                        <option value="az">Azerbaijani</option>
+                        <option value="bm">Bambara</option>
+                        <option value="ba">Bashkir</option>
+                        <option value="eu">Basque</option>
+                        <option value="b1">Bavarian</option>
+                        <option value="be">Belarusian</option>
+                        <option value="bn">Bengali</option>
+                        <option value="b5">Bengali-romaji</option>
+                        <option value="bh">Bihari languages</option>
+                        <option value="b3">Bishnupriya</option>
+                        <option value="bi">Bislama</option>
+                        <option value="bs">Bosnian</option>
+                        <option value="br">Breton</option>
+                        <option value="bg">Bulgarian</option>
+                        <option value="my">Burmese</option>
+                        <option value="ca">Catalan</option>
+                        <option value="c2">Cebuano</option>
+                        <option value="b2">Central bikol</option>
+                        <option value="c3">Central kurdish</option>
+                        <option value="ch">Chamorro</option>
+                        <option value="c1">Chavacano</option>
+                        <option value="ce">Chechen</option>
+                        <option value="ny">Chichewa</option>
+                        <option value="zh">Chinese (simplified)</option>
+                        <option value="z1">Chinese (traditional)</option>
+                        <option value="rz">Chinese-romaji</option>
+                        <option value="cu">Church slavic</option>
+                        <option value="cv">Chuvash</option>
+                        <option value="kw">Cornish</option>
+                        <option value="co">Corsican</option>
+                        <option value="cr">Cree</option>
+                        <option value="c4">Creoles and pidgins</option>
+                        <option value="c5">Creoles and pidgins, english based</option>
+                        <option value="c6">Creoles and pidgins, french-based</option>
+                        <option value="c7">Creoles and pidgins, portuguese-based</option>
+                        <option value="hr">Croatian</option>
+                        <option value="cs">Czech</option>
+                        <option value="da">Danish</option>
+                        <option value="d1">Dimli (individual language)</option>
+                        <option value="dv">Divehi</option>
+                        <option value="d3">Dotyali</option>
+                        <option value="nl">Dutch</option>
+                        <option value="dz">Dzongkha</option>
+                        <option value="m2">Eastern mari</option>
+                        <option value="a2">Egyptian arabic</option>
+                        <option value="e1">Emilian-romagnol</option>
+                        <option value="en">English</option>
+                        <option value="m6">Erzya</option>
+                        <option value="eo">Esperanto</option>
+                        <option value="et">Estonian</option>
+                        <option value="ee">Ewe</option>
+                        <option value="fo">Faroese</option>
+                        <option value="h1">Fiji hindi</option>
+                        <option value="fj">Fijian</option>
+                        <option value="f1">Filipino</option>
+                        <option value="fi">Finnish</option>
+                        <option value="fr">French</option>
+                        <option value="f2">Frisian, northern</option>
+                        <option value="fy">Frisian, western</option>
+                        <option value="ff">Fulah</option>
+                        <option value="gl">Galician</option>
+                        <option value="lg">Ganda</option>
+                        <option value="ka">Georgian</option>
+                        <option value="de">German</option>
+                        <option value="n2">German, low</option>
+                        <option value="g1">Goan konkani</option>
+                        <option value="el">Greek</option>
+                        <option value="e2">Greek-romaji</option>
+                        <option value="kl">Greenlandic</option>
+                        <option value="gn">Guarani</option>
+                        <option value="gu">Gujarati</option>
+                        <option value="g2">Gujarati-romaji</option>
+                        <option value="ht">Haitian creole</option>
+                        <option value="ha">Hausa</option>
+                        <option value="he">Hebrew</option>
+                        <option value="hz">Herero</option>
+                        <option value="hi">Hindi</option>
+                        <option value="h3">Hindi-romaji</option>
+                        <option value="ho">Hiri motu</option>
+                        <option value="hu">Hungarian</option>
+                        <option value="is">Icelandic</option>
+                        <option value="io">Ido</option>
+                        <option value="ig">Igbo</option>
+                        <option value="i1">Iloko</option>
+                        <option value="id">Indonesian</option>
+                        <option value="ia">Interlingua</option>
+                        <option value="ie">Interlingue</option>
+                        <option value="iu">Inuktitut</option>
+                        <option value="ik">Inupiaq</option>
+                        <option value="ga">Irish</option>
+                        <option value="it">Italian</option>
+                        <option value="ja">Japanese</option>
+                        <option value="rj">Japanese-romaji</option>
+                        <option value="jv">Javanese</option>
+                        <option value="x1">Kalmyk</option>
+                        <option value="kn">Kannada</option>
+                        <option value="k2">Kannada-romaji</option>
+                        <option value="kr">Kanuri</option>
+                        <option value="k1">Karachay-balkar</option>
+                        <option value="ks">Kashmiri</option>
+                        <option value="kk">Kazakh</option>
+                        <option value="km">Khmer, central</option>
+                        <option value="ki">Kikuyu</option>
+                        <option value="rw">Kinyarwanda</option>
+                        <option value="ky">Kirghiz</option>
+                        <option value="kv">Komi</option>
+                        <option value="kg">Kongo</option>
+                        <option value="ko">Korean</option>
+                        <option value="rk">Korean-romaji</option>
+                        <option value="kj">Kuanyama</option>
+                        <option value="ku">Kurdish</option>
+                        <option value="lo">Lao</option>
+                        <option value="la">Latin</option>
+                        <option value="lv">Latvian</option>
+                        <option value="l1">Lezghian</option>
+                        <option value="li">Limburgish</option>
+                        <option value="ln">Lingala</option>
+                        <option value="lt">Lithuanian</option>
+                        <option value="j1">Lojban</option>
+                        <option value="l2">Lombard</option>
+                        <option value="lu">Luba-katanga</option>
+                        <option value="lb">Luxembourgish</option>
+                        <option value="mk">Macedonian</option>
+                        <option value="m1">Maithili</option>
+                        <option value="mg">Malagasy</option>
+                        <option value="ms">Malay</option>
+                        <option value="ml">Malayalam</option>
+                        <option value="m8">Malayalam-romaji</option>
+                        <option value="mt">Maltese</option>
+                        <option value="gv">Manx</option>
+                        <option value="mi">Maori</option>
+                        <option value="mr">Marathi</option>
+                        <option value="m9">Marathi-romaji</option>
+                        <option value="mh">Marshallese</option>
+                        <option value="m7">Mazanderani</option>
+                        <option value="m3">Minangkabau</option>
+                        <option value="x2">Mingrelian</option>
+                        <option value="m5">Mirandese</option>
+                        <option value="mo">Moldavian</option>
+                        <option value="mn">Mongolian</option>
+                        <option value="n4">Nahuatl</option>
+                        <option value="na">Nauru</option>
+                        <option value="nv">Navajo</option>
+                        <option value="nd">Ndebele, north</option>
+                        <option value="nr">Ndebele, south</option>
+                        <option value="ng">Ndonga</option>
+                        <option value="n1">Neapolitan</option>
+                        <option value="n3">Nepal bhasa</option>
+                        <option value="ne">Nepali</option>
+                        <option value="n5">Nepali-romaji</option>
+                        <option value="l3">Northern luri</option>
+                        <option value="no">Norwegian</option>
+                        <option value="nb">Norwegian bokmål</option>
+                        <option value="nn">Norwegian nynorsk</option>
+                        <option value="oc">Occitan</option>
+                        <option value="oj">Ojibwa</option>
+                        <option value="or">Oriya</option>
+                        <option value="o1">Oriya-romaji</option>
+                        <option value="om">Oromo</option>
+                        <option value="os">Ossetian</option>
+                        <option value="pi">Pali</option>
+                        <option value="p1">Pampanga</option>
+                        <option value="pa">Panjabi</option>
+                        <option value="p5">Panjabi-romaji</option>
+                        <option value="fa">Persian</option>
+                        <option value="p2">Pfaelzisch</option>
+                        <option value="p3">Piemontese</option>
+                        <option value="pl">Polish</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ps">Pushto</option>
+                        <option value="qu">Quechua</option>
+                        <option value="ro">Romanian</option>
+                        <option value="rm">Romansh</option>
+                        <option value="rn">Rundi</option>
+                        <option value="b4">Russia buriat</option>
+                        <option value="ru">Russian</option>
+                        <option value="r2">Russian-romaji</option>
+                        <option value="r1">Rusyn</option>
+                        <option value="se">Sami, northern</option>
+                        <option value="sm">Samoan</option>
+                        <option value="sg">Sango</option>
+                        <option value="sa">Sanskrit</option>
+                        <option value="s4">Sanskrit-romaji</option>
+                        <option value="sc">Sardinian</option>
+                        <option value="s3">Scots</option>
+                        <option value="gd">Scottish gaelic</option>
+                        <option value="sr">Serbian</option>
+                        <option value="sh">Serbo-croatian</option>
+                        <option value="sn">Shona</option>
+                        <option value="ii">Sichuan yi</option>
+                        <option value="s2">Sicilian</option>
+                        <option value="sd">Sindhi</option>
+                        <option value="si">Sinhala</option>
+                        <option value="sk">Slovak</option>
+                        <option value="sl">Slovenian</option>
+                        <option value="so">Somali</option>
+                        <option value="d2">Sorbian, lower</option>
+                        <option value="h2">Sorbian, upper</option>
+                        <option value="st">Sotho, southern</option>
+                        <option value="a4">South azerbaijani</option>
+                        <option value="es">Spanish</option>
+                        <option value="su">Sundanese</option>
+                        <option value="sw">Swahili</option>
+                        <option value="ss">Swati</option>
+                        <option value="sv">Swedish</option>
+                        <option value="tl">Tagalog</option>
+                        <option value="ty">Tahitian</option>
+                        <option value="tg">Tajik</option>
+                        <option value="ta">Tamil</option>
+                        <option value="t2">Tamil-romaji</option>
+                        <option value="tt">Tatar</option>
+                        <option value="te">Telugu</option>
+                        <option value="t3">Telugu-romaji</option>
+                        <option value="th">Thai</option>
+                        <option value="t4">Thai-romaji</option>
+                        <option value="bo">Tibetan</option>
+                        <option value="ti">Tigrinya</option>
+                        <option value="to">Tonga (tonga islands)</option>
+                        <option value="a1">Tosk albanian</option>
+                        <option value="ts">Tsonga</option>
+                        <option value="tn">Tswana</option>
+                        <option value="tr">Turkish</option>
+                        <option value="tk">Turkmen</option>
+                        <option value="t1">Tuvinian</option>
+                        <option value="tw">Twi</option>
+                        <option value="ug">Uighur</option>
+                        <option value="uk">Ukrainian</option>
+                        <option value="ur">Urdu</option>
+                        <option value="u1">Urdu-romaji</option>
+                        <option value="uz">Uzbek</option>
+                        <option value="ve">Venda</option>
+                        <option value="v1">Venetian</option>
+                        <option value="v2">Veps</option>
+                        <option value="vi">Vietnamese</option>
+                        <option value="v3">Vlaams</option>
+                        <option value="vo">Volapük</option>
+                        <option value="wa">Walloon</option>
+                        <option value="w1">Waray</option>
+                        <option value="cy">Welsh</option>
+                        <option value="m4">Western mari</option>
+                        <option value="p4">Western panjabi</option>
+                        <option value="wo">Wolof</option>
+                        <option value="w2">Wu chinese</option>
+                        <option value="xh">Xhosa</option>
+                        <option value="s1">Yakut</option>
+                        <option value="yi">Yiddish</option>
+                        <option value="yo">Yoruba</option>
+                        <option value="y1">Yue chinese</option>
+                        <option value="za">Zhuang</option>
+                        <option value="zu">Zulu</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableYoutubeLyrics")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.lyrics.enable_yt}></input>
+                    </label>
+                  </div>
+                </div>
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableQQLyrics")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.lyrics.enable_qq}></input>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </b-tab>
+        <b-tab>
+          <template>
+            <div>
+              <SVGIcon
+                url="./assets/feather/radio.svg"
+                classes="svg-md"
+                name="settings-connectivity"></SVGIcon>
+            </div>
+            <div>{$root.getLz("settings.header.connectivity")}</div>
+          </template>
+          <div className="settings-tab-content">
+            <div className="md-option-container">
+              {/* Connectivity Settings  */}
+              <div className="md-option-header">
+                <span>{$root.getLz("settings.header.connectivity")}</span>
+              </div>
+              <div className="settings-option-body">
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.connectivity.playbackNotifications")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.general.playbackNotifications}></input>
+                    </label>
+                  </div>
+                </div>
+
+                {/* DiscordRPC  */}
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.connectivity.discord_rpc.enabled}></input>
+                    </label>
+                  </div>
+                </div>
+
+                <div v-show={app.cfg.connectivity.discord_rpc.enabled !== false}>
+                  <div className="md-option-line">
+                    <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.reload")}</div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <button
+                        className="md-btn"
+                        onClick={() => reloadDiscordRPC()}>
+                        {$root.getLz("menubar.options.reload")}
+                      </button>
                     </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.purplePodcastPlaybackBar")}</div>
-                      <div className="md-option-segment_auto">
+                  </div>
+
+                  <div className="md-option-line">
+                    <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.clientName")}</div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
+                        <select
+                          className="md-select"
+                          v-model={app.cfg.connectivity.discord_rpc.client}>
+                          <option value="Cider">{$root.getLz("app.name")}</option>
+                          <option value="AppleMusic">{$root.getLz("term.appleMusic")}</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md-option-line">
+                    <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.clearOnPause")}</div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
                         <input
                           type="checkbox"
-                          v-model={app.cfg.visual.purplePodcastPlaybackBar}
-                          disabled={app.cfg.visual.customAccentColor}
-                        />
-                      </div>
+                          v-model={app.cfg.connectivity.discord_rpc.clear_on_pause}></input>
+                      </label>
                     </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.compactArtistHeader")}</div>
-                      <div className="md-option-segment_auto">
+                  </div>
+
+                  <div className="md-option-line">
+                    <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.hideTimestamp")}</div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
                         <input
                           type="checkbox"
-                          v-model={app.cfg.visual.compactArtistHeader}
-                        />
-                      </div>
+                          v-model={app.cfg.connectivity.discord_rpc.activity.hide_timestamp}></input>
+                      </label>
                     </div>
+                  </div>
+
+                  <div className="md-option-line">
+                    <div className="md-option-segment">
+                      {$root.getLz("settings.option.connectivity.discordRPC.detailsFormat")}
+                      <br></br>
+                      <small>
+                        {$root.getLz("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
+                      </small>
+                    </div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
+                        <input
+                          type="text"
+                          v-model={app.cfg.connectivity.discord_rpc.activity.details_format}></input>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md-option-line">
+                    <div className="md-option-segment">
+                      {$root.getLz("settings.option.connectivity.discordRPC.stateFormat")}
+                      <small>
+                        {$root.getLz("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
+                      </small>
+                    </div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
+                        <input
+                          type="text"
+                          v-model={app.cfg.connectivity.discord_rpc.activity.state_format}></input>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md-option-line">
+                    <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.showActivityButtons")}</div>
+                    <div className="md-option-segment md-option-segment_auto">
+                      <label>
+                        <input
+                          type="checkbox"
+                          v-model={app.cfg.connectivity.discord_rpc.activity.buttons.enabled}></input>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div v-show={app.cfg.connectivity.discord_rpc.activity.buttons.enabled === true}>
                     <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.visual.hardwareAcceleration")}
-                        <br />
-                        <small>({$root.getLz("settings.option.visual.hardwareAcceleration.description")})</small>
-                      </div>
+                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.firstButton")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <select
                             className="md-select"
-                            style={{ width: " 180px" }}
-                            v-model={app.cfg.visual.hw_acceleration}
-                            onChange={() => promptForRelaunch()}>
-                            <option value="default">{$root.getLz("settings.header.visual.hardwareAcceleration.default")}</option>
-                            <option value="webgpu">{$root.getLz("settings.header.visual.hardwareAcceleration.webGPU")}</option>
+                            v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
+                            onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
+                            {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
+                              <option
+                                v-bind:value="option"
+                                v-show={app.cfg.connectivity.discord_rpc.activity.buttons.second !== option}>
+                                {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
+                              </option>
+                            ))}
                             <option value="disabled">{$root.getLz("term.disabled")}</option>
                           </select>
                         </label>
                       </div>
                     </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.showPersonalInfo")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.visual.showuserinfo}
-                            v-on:change="toggleUserInfo"
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Window Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.window")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.window.maxElementScale")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            onChange={() => $root.setWindowScaleFactor()}
-                            className="md-select"
-                            v-model={app.cfg.visual.maxElementScale}>
-                            <option value="-1">Default (1.5x)</option>
-                            <option value="1">1.0x</option>
-                            <option value={1.1}>1.1x</option>
-                            <option value={1.2}>1.2x</option>
-                            <option value={1.3}>1.3x</option>
-                            <option value={1.4}>1.4x</option>
-                            <option value={1.5}>1.5x</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
+
                     <div
                       className="md-option-line"
-                      v-show={app.platform !== "darwin"}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.window.close_button_hide")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.general.close_button_hide}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.platform !== "darwin"}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.window.useNativeTitleBar")}
-                        <br />
-                        <small>({$root.getLz("settings.option.visual.hardwareAcceleration.description")})</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.visual.nativeTitleBar}
-                            onChange={() => promptForRelaunch()}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.window.windowControlStyle")}</div>
+                      v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled"}>
+                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.secondButton")}</div>
                       <div className="md-option-segment md-option-segment_auto">
                         <label>
                           <select
                             className="md-select"
-                            v-model={app.cfg.visual.windowControlPosition}>
-                            <option value="0">{$root.getLz("settings.option.window.windowControlStyle.right")}</option>
-                            <option value="1">{$root.getLz("settings.option.window.windowControlStyle.left")}</option>
+                            v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
+                            {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
+                              <option
+                                v-bind:value="option"
+                                v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== option}>
+                                {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
+                              </option>
+                            ))}
+                            <option value="disabled">{$root.getLz("term.disabled")}</option>
                           </select>
                         </label>
                       </div>
                     </div>
                   </div>
-                  {/* Advanced Visual  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.advanced")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedArtwork")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            v-model={app.cfg.visual.animated_artwork}>
-                            <option value="always">{$root.getLz("settings.header.visual.animatedArtwork.always")}</option>
-                            <option value="limited">{$root.getLz("settings.header.visual.animatedArtwork.limited")}</option>
-                            <option value="disabled">{$root.getLz("settings.header.visual.animatedArtwork.disable")}</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-if={app.cfg.visual.animated_artwork === "always" || app.cfg.visual.animated_artwork === "limited"}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedArtworkQuality")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            v-model={app.cfg.visual.animated_artwork_qualityLevel}>
-                            <option value="0">{$root.getLz("settings.header.visual.animatedArtworkQuality.low")}</option>
-                            <option value="1">{$root.getLz("settings.header.visual.animatedArtworkQuality.medium")}</option>
-                            <option value="2">{$root.getLz("settings.header.visual.animatedArtworkQuality.high")}</option>
-                            <option value="3">{$root.getLz("settings.header.visual.animatedArtworkQuality.veryHigh")}</option>
-                            <option value="4">{$root.getLz("settings.header.visual.animatedArtworkQuality.extreme")}</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.visual.animatedWindowBackground")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.visual.bg_artwork_rotation}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/plugins.svg"
-                    classes="svg-md"
-                    name="settings-plugins"
-                  />
-                </div>
-                <div>{$root.getLz("term.plugins")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <PluginsGithub />
-              </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/mic.svg"
-                    classes="svg-md"
-                    name="settings-lyrics"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.lyrics")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <div className="md-option-container">
-                  {/* Lyric Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.lyrics")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableMusixmatch")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.lyrics.enable_mxm}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-if={app.cfg.lyrics.enable_mxm}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableMusixmatchKaraoke")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.lyrics.mxm_karaoke}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.lyrics.musixmatchPreferredLanguage")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            v-model={app.cfg.lyrics.mxm_language}>
-                            <option value="disabled">Disabled</option>
-                            <option value="ab">Abkhazian</option>
-                            <option value="aa">Afar</option>
-                            <option value="af">Afrikaans</option>
-                            <option value="ak">Akan</option>
-                            <option value="sq">Albanian</option>
-                            <option value="am">Amharic</option>
-                            <option value="ar">Arabic</option>
-                            <option value="an">Aragonese</option>
-                            <option value="hy">Armenian</option>
-                            <option value="as">Assamese</option>
-                            <option value="a5">Assamese-romaji</option>
-                            <option value="a3">Asturian</option>
-                            <option value="av">Avaric</option>
-                            <option value="ae">Avestan</option>
-                            <option value="ay">Aymara</option>
-                            <option value="az">Azerbaijani</option>
-                            <option value="bm">Bambara</option>
-                            <option value="ba">Bashkir</option>
-                            <option value="eu">Basque</option>
-                            <option value="b1">Bavarian</option>
-                            <option value="be">Belarusian</option>
-                            <option value="bn">Bengali</option>
-                            <option value="b5">Bengali-romaji</option>
-                            <option value="bh">Bihari languages</option>
-                            <option value="b3">Bishnupriya</option>
-                            <option value="bi">Bislama</option>
-                            <option value="bs">Bosnian</option>
-                            <option value="br">Breton</option>
-                            <option value="bg">Bulgarian</option>
-                            <option value="my">Burmese</option>
-                            <option value="ca">Catalan</option>
-                            <option value="c2">Cebuano</option>
-                            <option value="b2">Central bikol</option>
-                            <option value="c3">Central kurdish</option>
-                            <option value="ch">Chamorro</option>
-                            <option value="c1">Chavacano</option>
-                            <option value="ce">Chechen</option>
-                            <option value="ny">Chichewa</option>
-                            <option value="zh">Chinese (simplified)</option>
-                            <option value="z1">Chinese (traditional)</option>
-                            <option value="rz">Chinese-romaji</option>
-                            <option value="cu">Church slavic</option>
-                            <option value="cv">Chuvash</option>
-                            <option value="kw">Cornish</option>
-                            <option value="co">Corsican</option>
-                            <option value="cr">Cree</option>
-                            <option value="c4">Creoles and pidgins</option>
-                            <option value="c5">Creoles and pidgins, english based</option>
-                            <option value="c6">Creoles and pidgins, french-based</option>
-                            <option value="c7">Creoles and pidgins, portuguese-based</option>
-                            <option value="hr">Croatian</option>
-                            <option value="cs">Czech</option>
-                            <option value="da">Danish</option>
-                            <option value="d1">Dimli (individual language)</option>
-                            <option value="dv">Divehi</option>
-                            <option value="d3">Dotyali</option>
-                            <option value="nl">Dutch</option>
-                            <option value="dz">Dzongkha</option>
-                            <option value="m2">Eastern mari</option>
-                            <option value="a2">Egyptian arabic</option>
-                            <option value="e1">Emilian-romagnol</option>
-                            <option value="en">English</option>
-                            <option value="m6">Erzya</option>
-                            <option value="eo">Esperanto</option>
-                            <option value="et">Estonian</option>
-                            <option value="ee">Ewe</option>
-                            <option value="fo">Faroese</option>
-                            <option value="h1">Fiji hindi</option>
-                            <option value="fj">Fijian</option>
-                            <option value="f1">Filipino</option>
-                            <option value="fi">Finnish</option>
-                            <option value="fr">French</option>
-                            <option value="f2">Frisian, northern</option>
-                            <option value="fy">Frisian, western</option>
-                            <option value="ff">Fulah</option>
-                            <option value="gl">Galician</option>
-                            <option value="lg">Ganda</option>
-                            <option value="ka">Georgian</option>
-                            <option value="de">German</option>
-                            <option value="n2">German, low</option>
-                            <option value="g1">Goan konkani</option>
-                            <option value="el">Greek</option>
-                            <option value="e2">Greek-romaji</option>
-                            <option value="kl">Greenlandic</option>
-                            <option value="gn">Guarani</option>
-                            <option value="gu">Gujarati</option>
-                            <option value="g2">Gujarati-romaji</option>
-                            <option value="ht">Haitian creole</option>
-                            <option value="ha">Hausa</option>
-                            <option value="he">Hebrew</option>
-                            <option value="hz">Herero</option>
-                            <option value="hi">Hindi</option>
-                            <option value="h3">Hindi-romaji</option>
-                            <option value="ho">Hiri motu</option>
-                            <option value="hu">Hungarian</option>
-                            <option value="is">Icelandic</option>
-                            <option value="io">Ido</option>
-                            <option value="ig">Igbo</option>
-                            <option value="i1">Iloko</option>
-                            <option value="id">Indonesian</option>
-                            <option value="ia">Interlingua</option>
-                            <option value="ie">Interlingue</option>
-                            <option value="iu">Inuktitut</option>
-                            <option value="ik">Inupiaq</option>
-                            <option value="ga">Irish</option>
-                            <option value="it">Italian</option>
-                            <option value="ja">Japanese</option>
-                            <option value="rj">Japanese-romaji</option>
-                            <option value="jv">Javanese</option>
-                            <option value="x1">Kalmyk</option>
-                            <option value="kn">Kannada</option>
-                            <option value="k2">Kannada-romaji</option>
-                            <option value="kr">Kanuri</option>
-                            <option value="k1">Karachay-balkar</option>
-                            <option value="ks">Kashmiri</option>
-                            <option value="kk">Kazakh</option>
-                            <option value="km">Khmer, central</option>
-                            <option value="ki">Kikuyu</option>
-                            <option value="rw">Kinyarwanda</option>
-                            <option value="ky">Kirghiz</option>
-                            <option value="kv">Komi</option>
-                            <option value="kg">Kongo</option>
-                            <option value="ko">Korean</option>
-                            <option value="rk">Korean-romaji</option>
-                            <option value="kj">Kuanyama</option>
-                            <option value="ku">Kurdish</option>
-                            <option value="lo">Lao</option>
-                            <option value="la">Latin</option>
-                            <option value="lv">Latvian</option>
-                            <option value="l1">Lezghian</option>
-                            <option value="li">Limburgish</option>
-                            <option value="ln">Lingala</option>
-                            <option value="lt">Lithuanian</option>
-                            <option value="j1">Lojban</option>
-                            <option value="l2">Lombard</option>
-                            <option value="lu">Luba-katanga</option>
-                            <option value="lb">Luxembourgish</option>
-                            <option value="mk">Macedonian</option>
-                            <option value="m1">Maithili</option>
-                            <option value="mg">Malagasy</option>
-                            <option value="ms">Malay</option>
-                            <option value="ml">Malayalam</option>
-                            <option value="m8">Malayalam-romaji</option>
-                            <option value="mt">Maltese</option>
-                            <option value="gv">Manx</option>
-                            <option value="mi">Maori</option>
-                            <option value="mr">Marathi</option>
-                            <option value="m9">Marathi-romaji</option>
-                            <option value="mh">Marshallese</option>
-                            <option value="m7">Mazanderani</option>
-                            <option value="m3">Minangkabau</option>
-                            <option value="x2">Mingrelian</option>
-                            <option value="m5">Mirandese</option>
-                            <option value="mo">Moldavian</option>
-                            <option value="mn">Mongolian</option>
-                            <option value="n4">Nahuatl</option>
-                            <option value="na">Nauru</option>
-                            <option value="nv">Navajo</option>
-                            <option value="nd">Ndebele, north</option>
-                            <option value="nr">Ndebele, south</option>
-                            <option value="ng">Ndonga</option>
-                            <option value="n1">Neapolitan</option>
-                            <option value="n3">Nepal bhasa</option>
-                            <option value="ne">Nepali</option>
-                            <option value="n5">Nepali-romaji</option>
-                            <option value="l3">Northern luri</option>
-                            <option value="no">Norwegian</option>
-                            <option value="nb">Norwegian bokmål</option>
-                            <option value="nn">Norwegian nynorsk</option>
-                            <option value="oc">Occitan</option>
-                            <option value="oj">Ojibwa</option>
-                            <option value="or">Oriya</option>
-                            <option value="o1">Oriya-romaji</option>
-                            <option value="om">Oromo</option>
-                            <option value="os">Ossetian</option>
-                            <option value="pi">Pali</option>
-                            <option value="p1">Pampanga</option>
-                            <option value="pa">Panjabi</option>
-                            <option value="p5">Panjabi-romaji</option>
-                            <option value="fa">Persian</option>
-                            <option value="p2">Pfaelzisch</option>
-                            <option value="p3">Piemontese</option>
-                            <option value="pl">Polish</option>
-                            <option value="pt">Portuguese</option>
-                            <option value="ps">Pushto</option>
-                            <option value="qu">Quechua</option>
-                            <option value="ro">Romanian</option>
-                            <option value="rm">Romansh</option>
-                            <option value="rn">Rundi</option>
-                            <option value="b4">Russia buriat</option>
-                            <option value="ru">Russian</option>
-                            <option value="r2">Russian-romaji</option>
-                            <option value="r1">Rusyn</option>
-                            <option value="se">Sami, northern</option>
-                            <option value="sm">Samoan</option>
-                            <option value="sg">Sango</option>
-                            <option value="sa">Sanskrit</option>
-                            <option value="s4">Sanskrit-romaji</option>
-                            <option value="sc">Sardinian</option>
-                            <option value="s3">Scots</option>
-                            <option value="gd">Scottish gaelic</option>
-                            <option value="sr">Serbian</option>
-                            <option value="sh">Serbo-croatian</option>
-                            <option value="sn">Shona</option>
-                            <option value="ii">Sichuan yi</option>
-                            <option value="s2">Sicilian</option>
-                            <option value="sd">Sindhi</option>
-                            <option value="si">Sinhala</option>
-                            <option value="sk">Slovak</option>
-                            <option value="sl">Slovenian</option>
-                            <option value="so">Somali</option>
-                            <option value="d2">Sorbian, lower</option>
-                            <option value="h2">Sorbian, upper</option>
-                            <option value="st">Sotho, southern</option>
-                            <option value="a4">South azerbaijani</option>
-                            <option value="es">Spanish</option>
-                            <option value="su">Sundanese</option>
-                            <option value="sw">Swahili</option>
-                            <option value="ss">Swati</option>
-                            <option value="sv">Swedish</option>
-                            <option value="tl">Tagalog</option>
-                            <option value="ty">Tahitian</option>
-                            <option value="tg">Tajik</option>
-                            <option value="ta">Tamil</option>
-                            <option value="t2">Tamil-romaji</option>
-                            <option value="tt">Tatar</option>
-                            <option value="te">Telugu</option>
-                            <option value="t3">Telugu-romaji</option>
-                            <option value="th">Thai</option>
-                            <option value="t4">Thai-romaji</option>
-                            <option value="bo">Tibetan</option>
-                            <option value="ti">Tigrinya</option>
-                            <option value="to">Tonga (tonga islands)</option>
-                            <option value="a1">Tosk albanian</option>
-                            <option value="ts">Tsonga</option>
-                            <option value="tn">Tswana</option>
-                            <option value="tr">Turkish</option>
-                            <option value="tk">Turkmen</option>
-                            <option value="t1">Tuvinian</option>
-                            <option value="tw">Twi</option>
-                            <option value="ug">Uighur</option>
-                            <option value="uk">Ukrainian</option>
-                            <option value="ur">Urdu</option>
-                            <option value="u1">Urdu-romaji</option>
-                            <option value="uz">Uzbek</option>
-                            <option value="ve">Venda</option>
-                            <option value="v1">Venetian</option>
-                            <option value="v2">Veps</option>
-                            <option value="vi">Vietnamese</option>
-                            <option value="v3">Vlaams</option>
-                            <option value="vo">Volapük</option>
-                            <option value="wa">Walloon</option>
-                            <option value="w1">Waray</option>
-                            <option value="cy">Welsh</option>
-                            <option value="m4">Western mari</option>
-                            <option value="p4">Western panjabi</option>
-                            <option value="wo">Wolof</option>
-                            <option value="w2">Wu chinese</option>
-                            <option value="xh">Xhosa</option>
-                            <option value="s1">Yakut</option>
-                            <option value="yi">Yiddish</option>
-                            <option value="yo">Yoruba</option>
-                            <option value="y1">Yue chinese</option>
-                            <option value="za">Zhuang</option>
-                            <option value="zu">Zulu</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableYoutubeLyrics")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.lyrics.enable_yt}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.lyrics.enableQQLyrics")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.lyrics.enable_qq}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/radio.svg"
-                    classes="svg-md"
-                    name="settings-connectivity"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.connectivity")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <div className="md-option-container">
-                  {/* Connectivity Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.connectivity")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.playbackNotifications")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.general.playbackNotifications}
-                          />
-                        </label>
-                      </div>
-                    </div>
 
-                    {/* DiscordRPC  */}
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.connectivity.discord_rpc.enabled}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div v-show={app.cfg.connectivity.discord_rpc.enabled !== false}>
-                      <div className="md-option-line">
-                        <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.reload")}</div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <button
-                            className="md-btn"
-                            onClick={() => reloadDiscordRPC()}>
-                            {$root.getLz("menubar.options.reload")}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="md-option-line">
-                        <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.clientName")}</div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <label>
-                            <select
-                              className="md-select"
-                              v-model={app.cfg.connectivity.discord_rpc.client}>
-                              <option value="Cider">{$root.getLz("app.name")}</option>
-                              <option value="AppleMusic">{$root.getLz("term.appleMusic")}</option>
-                            </select>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="md-option-line">
-                        <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.clearOnPause")}</div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <label>
-                            <input
-                              type="checkbox"
-                              v-model={app.cfg.connectivity.discord_rpc.clear_on_pause}
-                            />
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="md-option-line">
-                        <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.hideTimestamp")}</div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <label>
-                            <input
-                              type="checkbox"
-                              v-model={app.cfg.connectivity.discord_rpc.activity.hide_timestamp}
-                            />
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="md-option-line">
-                        <div className="md-option-segment">
-                          {$root.getLz("settings.option.connectivity.discordRPC.detailsFormat")}
-                          <br />
-                          <small>
-                            {$root.getLz("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
-                          </small>
-                        </div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <label>
-                            <input
-                              type="text"
-                              v-model={app.cfg.connectivity.discord_rpc.activity.details_format}
-                            />
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="md-option-line">
-                        <div className="md-option-segment">
-                          {$root.getLz("settings.option.connectivity.discordRPC.stateFormat")}
-                          <small>
-                            {$root.getLz("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
-                          </small>
-                        </div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <label>
-                            <input
-                              type="text"
-                              v-model={app.cfg.connectivity.discord_rpc.activity.state_format}
-                            />
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="md-option-line">
-                        <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.showActivityButtons")}</div>
-                        <div className="md-option-segment md-option-segment_auto">
-                          <label>
-                            <input
-                              type="checkbox"
-                              v-model={app.cfg.connectivity.discord_rpc.activity.buttons.enabled}
-                            />
-                          </label>
-                        </div>
-                      </div>
-
-                      <div v-show={app.cfg.connectivity.discord_rpc.activity.buttons.enabled === true}>
-                        <div className="md-option-line">
-                          <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.firstButton")}</div>
-                          <div className="md-option-segment md-option-segment_auto">
-                            <label>
-                              <select
-                                className="md-select"
-                                v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
-                                onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
-                                {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
-                                  <option
-                                    v-bind:value="option"
-                                    v-show={app.cfg.connectivity.discord_rpc.activity.buttons.second !== option}>
-                                    {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
-                                  </option>
-                                ))}
-                                <option value="disabled">{$root.getLz("term.disabled")}</option>
-                              </select>
-                            </label>
-                          </div>
-                        </div>
-
-                        <div
-                          className="md-option-line"
-                          v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled"}>
-                          <div className="md-option-segment">{$root.getLz("settings.option.connectivity.discordRPC.secondButton")}</div>
-                          <div className="md-option-segment md-option-segment_auto">
-                            <label>
-                              <select
-                                className="md-select"
-                                v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
-                                {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
-                                  <option
-                                    v-bind:value="option"
-                                    v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== option}>
-                                    {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
-                                  </option>
-                                ))}
-                                <option value="disabled">{$root.getLz("term.disabled")}</option>
-                              </select>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* LastFM  */}
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          id="lfmConnect"
-                          onClick={() => (app.cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize())}>
-                          {$root.getLz(`term.${$root.cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
-                          <br />
-                          <small>
-                            {app.cfg.connectivity.lastfm.enabled
-                              ? `${$root.getLz("term.authed")}:
+                {/* LastFM  */}
+                <div className="md-option-line">
+                  <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <button
+                      className="md-btn"
+                      id="lfmConnect"
+                      onClick={() => (app.cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize())}>
+                      {$root.getLz(`term.${$root.cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
+                      <br></br>
+                      <small>
+                        {app.cfg.connectivity.lastfm.enabled
+                          ? `${$root.getLz("term.authed")}:
                                                 ${$root.cfg.connectivity.lastfm.secrets.username}`
-                              : ""}
-                          </small>
-                        </button>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={lastfmConnecting}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken")}
-                        <small>
-                          <a
-                            href="https://www.last.fm/api/auth?api_key=f9986d12aab5a0fe66193c559435ede3"
-                            target="_blank">
-                            {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken.link")}
-                          </a>
-                        </small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <form submitprevent="submitToken">
-                            <input
-                              type="text"
-                              autofocus
-                              id="lfmToken"
-                            />
-                            <input
-                              type="submit"
-                              className="md-btn"
-                              value={$root.getLz("action.submit")}
-                            />
-                          </form>
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.connectivity.lastfm.enabled}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble.delay")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="number"
-                            min="50"
-                            max="100"
-                            v-model={app.cfg.connectivity.lastfm.scrobble_after}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.connectivity.lastfm.enabled}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop")}
-                        <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.connectivity.lastfm.filter_loop}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.connectivity.lastfm.enabled}>
-                      <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.connectivity.lastfm.remove_featured}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="md-option-line"
-                      v-show={app.cfg.connectivity.lastfm.enabled}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes")}
-                        <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.connectivity.lastfm.filter_types["song"]}
-                          />
-                          {$root.getLz("term.songs")}
-                          <br />
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.connectivity.lastfm.filter_types["musicVideo"]}
-                          />
-                          {$root.getLz("term.musicVideos")}
-                        </label>
-                      </div>
-                    </div>
+                          : ""}
+                      </small>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={lastfmConnecting}>
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken")}
+                    <small>
+                      <a
+                        href="https://www.last.fm/api/auth?api_key=f9986d12aab5a0fe66193c559435ede3"
+                        target="_blank">
+                        {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken.link")}
+                      </a>
+                    </small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <form submitprevent="submitToken">
+                        <input
+                          type="text"
+                          autofocus
+                          id="lfmToken"></input>
+                        <input
+                          type="submit"
+                          className="md-btn"
+                          value={$root.getLz("action.submit")}></input>
+                      </form>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble.delay")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="number"
+                        min="50"
+                        max="100"
+                        v-model={app.cfg.connectivity.lastfm.scrobble_after}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop")}
+                    <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.connectivity.lastfm.filter_loop}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  <div className="md-option-segment">{$root.getLz("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.connectivity.lastfm.remove_featured}></input>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  className="md-option-line"
+                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  <div className="md-option-segment">
+                    {$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes")}
+                    <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>
+                  </div>
+                  <div className="md-option-segment md-option-segment_auto">
+                    <label>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.connectivity.lastfm.filter_types["song"]}></input>
+                      {$root.getLz("term.songs")}
+                      <br></br>
+                      <input
+                        type="checkbox"
+                        v-model={app.cfg.connectivity.lastfm.filter_types["musicVideo"]}></input>
+                      {$root.getLz("term.musicVideos")}
+                    </label>
                   </div>
                 </div>
               </div>
-            </b-tab>
-            <b-tab>
-              <template>
-                <div>
-                  <SVGIcon
-                    url="./assets/feather/hard-drive.svg"
-                    classes="svg-md"
-                    name="settings-advanced"
-                  />
-                </div>
-                <div>{$root.getLz("settings.header.advanced")}</div>
-              </template>
-              <div className="settings-tab-content">
-                <div className="md-option-container">
-                  {/* Debug Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.debug")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.debug.copy_log")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => copyLogs}>
-                          {$root.getLz("action.copy")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.debug.openAppData")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => openAppData}>
-                          {$root.getLz("action.open")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        Performant Logging
-                        <small>Disables debug logging, resulting in a slightly faster Cider. (Requires relaunch)</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.advanced.disableLogging}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+            </div>
+          </div>
+        </b-tab>
+        <template>
+          <div>
+            <SVGIcon
+              url="./assets/feather/hard-drive.svg"
+              classes="svg-md"
+              name="settings-advanced"></SVGIcon>
+          </div>
+          <div>{$root.getLz("settings.header.advanced")}</div>
+        </template>
+        <div className="md-option-container">
+          {/* Debug Settings  */}
+          <div className="md-option-header">
+            <span>{$root.getLz("settings.header.debug")}</span>
+          </div>
+          <div className="settings-option-body">
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.debug.copy_log")}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <button
+                  className="md-btn"
+                  onClick={() => copyLogs}>
+                  {$root.getLz("action.copy")}
+                </button>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">{$root.getLz("settings.option.debug.openAppData")}</div>
+              <div className="md-option-segment md-option-segment_auto">
+                <button
+                  className="md-btn"
+                  onClick={() => openAppData}>
+                  {$root.getLz("action.open")}
+                </button>
+              </div>
+            </div>
+            <div className="md-option-line">
+              <div className="md-option-segment">
+                Performant Logging
+                <small>Disables debug logging, resulting in a slightly faster Cider. (Requires relaunch)</small>
+              </div>
+              <div className="md-option-segment md-option-segment_auto">
+                <label>
+                  <input
+                    type="checkbox"
+                    v-model={app.cfg.advanced.disableLogging}></input>
+                </label>
+              </div>
+            </div>
+          </div>
 
-                  {/* Experimental Settings  */}
-                  <div className="md-option-header">
-                    <span>{$root.getLz("settings.header.experimental")}</span>
-                  </div>
-                  <div className="settings-option-body">
-                    {/*<div className="md-option-line">
+          {/* Experimental Settings  */}
+          <div className="md-option-header">
+            <span>{$root.getLz("settings.header.experimental")}</span>
+          </div>
+        </div>
+        {/*<div className="md-option-line">
                                     <div className="md-option-segment">
                                         {$root.getLz('settings.option.visual.plugin.github.explore')}
                                     </div>
@@ -1654,187 +1568,153 @@ const SettingsWindow = () => {
                                             $root.getLz("settings.option.visual.plugin.github.explore") }
                                         </button>
                                     </div>
-                                </div>  */}
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.experimental.reinstallwidevine")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <button
-                          className="md-btn"
-                          onClick={() => reinstallWidevineCDM}>
-                          {$root.getLz("settings.option.experimental.reinstallwidevine")}
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">Immersive Fullscreen Test</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes("immersive-preview")}
-                            onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.experimental.unknownPlugin")}
-                        <br />
-                        <small>{$root.getLz("settings.option.experimental.unknownPlugin.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes("unknown-sources")}
-                            onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        Theme & Plugin Mirror to Cider
-                        <small>Only works in region where GitHub is blacklisted. Requires relaunch.</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes("cider_mirror")}
-                            onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.advanced.playlistTrackMapping")}
-                        <br />
-                        <small>{$root.getLz("settings.option.advanced.playlistTrackMapping.description")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.advanced.playlistTrackMapping}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.experimental.compactUI")}
-                        <small v-if={!!app.getThemeDirective("forceUI")}>{$root.getLz("term.themeManaged")}</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.advanced.experiments.includes("compactui")}
-                            onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
-                            disabled={!!app.getThemeDirective("forceUI")}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">{$root.getLz("settings.option.experimental.inline_playlists")}</div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            disabled
-                            v-model={app.cfg.advanced.experiments.includes("inline-playlists")}
-                            onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div
-                      className="md-option-line update-check"
-                      v-if={app.platform === "win32" || app.platform === "linux"}>
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.visual.transparent")}
-                        <br />
-                        <small>({$root.getLz("settings.option.visual.transparent.description")})</small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <input
-                            type="checkbox"
-                            v-model={app.cfg.visual.transparent}
-                            onChange={() => promptForRelaunch()}
-                          />
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="md-option-line">
-                      <div className="md-option-segment">
-                        {$root.getLz("settings.option.general.pagination")}
-                        <br />
-                        <small>
-                          {$root.getLz("settings.options.general.pagination.description")}
-                          <br />
-                        </small>
-                      </div>
-                      <div className="md-option-segment md-option-segment_auto">
-                        <label>
-                          <select
-                            className="md-select"
-                            style={{ width: "180px" }}
-                            v-modelnumber={$root.cfg.libraryPrefs.pageSize}
-                            type="number">
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="250">250</option>
-                            <option value="500">500</option>
-                            <option value="1000">1000</option>
-                          </select>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </b-tab>
-            {/*keybinds Settings  */}
-            <b-tab id="hid">
-              <template>
-                <Keybinds />
-              </template>
-            </b-tab>
-            {/*keybinds-settings  */}
-            {/*Github-theme-settings  */}
-            <b-tab id="hid">
-              <template>
-                <ThemesGithub />
-              </template>
-            </b-tab>
-            {/*Github-theme-settings  */}
-            {/* Connect Settings  */}
-            {/* Not Prod Ready
-            <b-tab title={$root.getLz('settings.header.connect')}>
+                                </div>*/}
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.option.experimental.reinstallwidevine")}</div>
+          <div className="md-option-segment md-option-segment_auto">
+            <button
+              className="md-btn"
+              onClick={() => reinstallWidevineCDM}>
+              {$root.getLz("settings.option.experimental.reinstallwidevine")}
+            </button>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">Immersive Fullscreen Test</div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.advanced.experiments.includes("immersive-preview")}
+                onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}></input>
+            </label>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">
+            {$root.getLz("settings.option.experimental.unknownPlugin")}
+            <br></br>
+            <small>{$root.getLz("settings.option.experimental.unknownPlugin.description")}</small>
+          </div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.advanced.experiments.includes("unknown-sources")}
+                onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}></input>
+            </label>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">
+            Theme & Plugin Mirror to Cider
+            <small>Only works in region where GitHub is blacklisted. Requires relaunch.</small>
+          </div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.advanced.experiments.includes("cider_mirror")}
+                onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}></input>
+            </label>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">
+            {$root.getLz("settings.option.advanced.playlistTrackMapping")}
+            <br></br>
+            <small>{$root.getLz("settings.option.advanced.playlistTrackMapping.description")}</small>
+          </div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.advanced.playlistTrackMapping}></input>
+            </label>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">
+            {$root.getLz("settings.option.experimental.compactUI")}
+            {!!app.getThemeDirective("forceUI") && <small>{$root.getLz("term.themeManaged")}</small>}
+          </div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                v-model={app.cfg.advanced.experiments.includes("compactui")}
+                onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
+                disabled={!!app.getThemeDirective("forceUI")}></input>
+            </label>
+          </div>
+        </div>
+        <div className="md-option-line">
+          <div className="md-option-segment">{$root.getLz("settings.option.experimental.inline_playlists")}</div>
+          <div className="md-option-segment md-option-segment_auto">
+            <label>
+              <input
+                type="checkbox"
+                disabled
+                v-model={app.cfg.advanced.experiments.includes("inline-playlists")}
+                onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}></input>
+            </label>
+          </div>
+        </div>
+        {(app.platform === "win32" || app.platform === "linux") && (
+          <div className="md-option-line update-check">
+            <div className="md-option-segment">
+              {$root.getLz("settings.option.visual.transparent")}
+              <br></br>
+              <small>({$root.getLz("settings.option.visual.transparent.description")})</small>
+            </div>
+            <div className="md-option-segment md-option-segment_auto">
+              <label>
+                <input
+                  type="checkbox"
+                  v-model={app.cfg.visual.transparent}
+                  onChange={() => promptForRelaunch()}></input>
+              </label>
+            </div>
+          </div>
+        )}
+        <div className="md-option-line">
+          <div className="md-option-segment">
+            {$root.getLz("settings.option.general.pagination")}
+            <br></br>
+            <small>
+              {$root.getLz("settings.options.general.pagination.description")}
+              <br></br>
+            </small>
+          </div>
+        </div>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        {/*keybinds Settings  */}
+        <b-tab id="hid">
+          <template>
+            <Keybinds></Keybinds>
+          </template>
+        </b-tab>
+        {/*keybinds-settings  */}
+        {/*Github-theme-settings  */}
+        <b-tab id="hid">
+          <template>
+            <ThemesGithub></ThemesGithub>
+          </template>
+        </b-tab>
+        {/*Github-theme-settings  */}
+        {/* Connect Settings  */}
+        {/* Not Prod Ready<b-tab title={$root.getLz('settings.header.connect')}>
                 <div className="md-option-container">
                     <!!!!!-- Cider Connect / Linking Settings -!->
                     <div className="md-option-header">
                         <span>{$root.getLz('settings.header.connect')}</span>
                     </div>
-                    <div className="settings-option-body">
-                        <div className="md-option-line update-check" v-if={app.cfg.connectUser.auth === null}>
+                    <div className="settings-option-body">{(app.cfg.connectUser.auth === null) && <div className="md-option-line update-check" >
                             <div className="md-option-segment">
                                 {$root.getLz('settings.option.connect.link_account')}
                                 <small>{$root.getLz('settings.option.connect.link_account.description')}</small>
-                                <br />
+                                <br></br>
                                 <small>Debug Status: { app.cfg.connectUser }</small>
                             </div>
                             <div className="md-option-segment md-option-segment_auto">
@@ -1842,13 +1722,12 @@ const SettingsWindow = () => {
                                     {$root.getLz('term.connect')}
                                 </button>
                             </div>
-                        </div>
-                        <div v-if={app.cfg.connectUser.auth !== null}>
+                        </div>}{(app.cfg.connectUser.auth !== null) && <div>
                             <div className="md-option-line">
                                 <div className="md-option-segment">
                                     {$root.getLz('settings.option.connect.link_account')}
                                     <small>{$root.getLz('settings.option.connect.link_account.description')}</small>
-                                    <br />
+                                    <br></br>
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <button className="md-btn" id='settings.option.general.updateCider.check'
@@ -1861,7 +1740,7 @@ const SettingsWindow = () => {
                             <div className="md-option-header" style={{marginLeft: -0.55em}}>
                                 <span>{app.cfg.connectUser.username}</span>
                                 <img src="'https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32'"
-                                     alt="Discord Avatar" />
+                                     alt="Discord Avatar" ></img>
                             </div>
 
                             <div className="md-option-line">
@@ -1872,7 +1751,7 @@ const SettingsWindow = () => {
                                     <label>
                                         <input type="checkbox" a-v-model={app.cfg.connectUser.sync.settings}
                                                onClick={() =>app.cfg.connectUser.sync.settings = !app.cfg.connectUser.sync.settings}
-                                               switch/>
+                                               switch></input>
                                     </label>
                                 </div>
                             </div>
@@ -1885,7 +1764,7 @@ const SettingsWindow = () => {
                                     <label>
                                         <input type="checkbox" disabled a-v-model={app.cfg.connectUser.sync.themes}
                                                onClick={() =>app.cfg.connectUser.sync.themes = !app.cfg.connectUser.sync.themes}
-                                               switch/>
+                                               switch></input>
                                     </label>
                                 </div>
                             </div>
@@ -1898,20 +1777,16 @@ const SettingsWindow = () => {
                                     <label>
                                         <input type="checkbox" disabled a-v-model={app.cfg.connectUser.sync.plugins}
                                                onClick={() =>app.cfg.connectUser.sync.plugins = !app.cfg.connectUser.sync.plugins}
-                                               switch/>
+                                               switch></input>
                                     </label>
                                 </div>
                             </div>
 
-                        </div>
-                    </div>
+                        </div>}</div>
                 </div>
-            </b-tab>
-             */}
-          </b-tabs>
-        </div>
+            </b-tab>*/}
       </div>
-    </div>
+    </>
   );
 };
 export default SettingsWindow;
