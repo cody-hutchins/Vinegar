@@ -25,47 +25,48 @@ const SocialProfile = ({ data }: { data: object }) => {
     }
   }
   return (
-    <>
-      <div id={"cider-socialprofile"}>
-        <div className={"content-inner artist-page profile-page"}>
-          <div
-            className={"artist-header"}
-            style={getArtistPalette(data)}>
-            <div className={"row"}>
-              <div
-                className={"col-sm"}
-                style={{ width: "auto" }}>
-                <div className={"artist-image"}>
-                  <MediaItemArtwork
-                    shadow={"large"}
-                    url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                    size={"220"}
-                    type={"artists"}
-                  />
-                </div>
-              </div>
-              <div className={"col cider-flex-center"}>
-                <h1>{data.attributes.name}</h1>
+    <div id={"cider-socialprofile"}>
+      <div className={"content-inner artist-page profile-page"}>
+        <div
+          className={"artist-header"}
+          style={getArtistPalette(data)}>
+          <div className={"row"}>
+            <div
+              className={"col-sm"}
+              style={{ width: "auto" }}>
+              <div className={"artist-image"}>
+                <MediaItemArtwork
+                  shadow={"large"}
+                  url={data.attributes.artwork ? data.attributes.artwork.url : ""}
+                  size={"220"}
+                  type={"artists"}
+                />
               </div>
             </div>
-          </div>
-          <div className={"artist-body"}>
-            {data.relationships && data.relationships["shared-playlists"] && (
-              <template>
-                <div className={"row"}>
-                  <div className={"col"}>
-                    <h3>{"Shared Playlists" ?? ""}</h3>
-                  </div>
-                </div>
-                {data.relationships["shared-playlists"].data.limit(10).map((item) => (
-                  <MediaItemSquare item={item} />
-                ))}
-              </template>
-            )}
+            <div className={"col cider-flex-center"}>
+              <h1>{data.attributes.name}</h1>
+            </div>
           </div>
         </div>
+        <div className={"artist-body"}>
+          {data.relationships && data.relationships["shared-playlists"] && (
+            <template>
+              <div className={"row"}>
+                <div className={"col"}>
+                  <h3>{"Shared Playlists" ?? ""}</h3>
+                </div>
+              </div>
+              {data.relationships["shared-playlists"].data.limit(10).map((item) => (
+                <MediaItemSquare
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </template>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

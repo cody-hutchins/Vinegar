@@ -326,8 +326,16 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     <div id={"eq-view"}>
       <div
         className={"modal-fullscreen equalizer-panel"}
-        clickself={close()}
-        contextmenuself={close()}>
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            close();
+          }
+        }}
+        onContextMenu={(e) => {
+          if (e.target === e.currentTarget) {
+            close();
+          }
+        }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
             <div className={"modal-title"}>{$root.getLz("term.equalizer")}</div>
@@ -344,12 +352,20 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                 onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
                 <optgroup label={$root.getLz("term.userPresets")}>
                   {$root.cfg.audio.equalizer.presets.map((preset) => (
-                    <option value={preset.preset}>{preset.name}</option>
+                    <option
+                      key={preset.id}
+                      value={preset.preset}>
+                      {preset.name}
+                    </option>
                   ))}
                 </optgroup>
                 <optgroup label={$root.getLz("term.defaultPresets")}>
                   {defaultPresets.map((preset) => (
-                    <option value={preset.preset}>{preset.name}</option>
+                    <option
+                      key={preset.id}
+                      value={preset.preset}>
+                      {preset.name}
+                    </option>
                   ))}
                 </optgroup>
               </select>
@@ -361,7 +377,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               <div className={"input-container mini"}>
                 {$root.cfg.audio.equalizer.vibrantBass}
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider mini"}
                   orient={"vertical"}
@@ -376,7 +392,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               <div className={"input-container mini"}>
                 {$root.cfg.audio.equalizer.mix}
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider mini"}
                   orient={"vertical"}
@@ -403,7 +419,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -414,7 +430,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(0)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -447,7 +463,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -458,7 +474,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(1)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -491,7 +507,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -502,7 +518,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(2)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -535,7 +551,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -546,7 +562,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(3)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -579,7 +595,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -590,7 +606,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(4)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -623,7 +639,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -634,7 +650,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(5)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -667,7 +683,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -678,7 +694,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(6)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -711,7 +727,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -722,7 +738,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(7)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -755,7 +771,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -766,7 +782,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(8)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -799,7 +815,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               </div>
               <div className={"input-container"}>
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"number"}
                   className={"eq-freq"}
                   orient={"vertical"}
@@ -810,7 +826,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   onChange={() => changeGain(9)}
                 />
                 <input
-                  tabIndex={"0"}
+                  tabIndex={0}
                   type={"range"}
                   className={"eq-slider"}
                   orient={"vertical"}
@@ -857,7 +873,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                 <button
                   className={"md-btn"}
                   style={{ width: "100%" }}
-                  onClick={() => presetOptions($event)}>
+                  onClick={presetOptions}>
                   {$root.getLz("term.menu")}
                 </button>
               </div>

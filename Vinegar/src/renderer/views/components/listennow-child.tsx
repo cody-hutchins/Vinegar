@@ -1,3 +1,4 @@
+import MediaItemArtwork from "./mediaitem-artwork.js";
 import MediaItemScrollerHorizontalLarge from "./mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalSP from "./mediaitem-scroller-horizontal-sp.jsx";
 
@@ -60,7 +61,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                       className={"{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }"}>
                       {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
                         <MediaItemArtwork
-                          url={"recom?.relationships['primary-content']?.data[0]?.attributes?.artwork?.url"}
+                          url={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork?.url}
                           size={"100"}
                         />
                       )}
@@ -87,16 +88,12 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                 )}
               </div>
               {recom.attributes.display.kind === "MusicCoverShelf" || recom.attributes.display.kind === "MusicCircleCoverShelf" ? (
-                <template>
-                  <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)} />
-                </template>
+                <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)} />
               ) : (
-                <template>
-                  <MediaItemScrollerHorizontalSP
-                    withReason={"index==0"}
-                    items={recom.relationships.contents.data.limit(10)}
-                  />
-                </template>
+                <MediaItemScrollerHorizontalSP
+                  withReason={index === 0}
+                  items={recom.relationships.contents.data.limit(10)}
+                />
               )}
             </template>
           ) : null}

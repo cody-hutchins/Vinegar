@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import SVGIcon from "./svg-icon";
 
 const SidebarLibraryItem = ({ name, page, svgIcon = "", svgIconName, cdClick }: { name: string; page: string; svgIcon?: string; svgIconName?: string; cdClick?: () => void }) => {
   const app = app;
@@ -16,11 +17,11 @@ const SidebarLibraryItem = ({ name, page, svgIcon = "", svgIconName, cdClick }: 
     <button
       className={"app-sidebar-item"}
       className={"$root.getSidebarItemClass(page)"}
-      click={"$root.setWindowHash(page)"}>
-      {svgIconData != "" && (
+      onClick={() => $root.setWindowHash(page)}>
+      {svgIconData !== "" && (
         <SVGIcon
-          url={"svgIconData"}
-          name={"'sidebar-' + svgIconName"}
+          url={svgIconData}
+          name={"sidebar-" + svgIconName}
         />
       )}
       <span className={"sidebar-item-text"}>{name}</span>

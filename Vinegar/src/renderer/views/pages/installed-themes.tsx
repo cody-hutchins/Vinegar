@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Col, ListGroupItem, Row } from "react-bootstrap";
 
 //Not used for Now
 export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
@@ -70,7 +71,7 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
           v-model={$root.cfg.visual.styles}
           end={$root.reloadStyles()}>
           {$root.cfg.visual.styles.map((theme) => (
-            <List-group-item
+            <ListGroupItem
               variant={"dark"}
               key={theme}>
               <Row>
@@ -85,7 +86,7 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
                   />
                 </Col>
               </Row>
-            </List-group-item>
+            </ListGroupItem>
           ))}
         </draggable>
       </div>
@@ -151,7 +152,7 @@ export const InstalledThemes = () => {
                   console.debug(theme);
                   ipcRenderer.once("theme-uninstalled", (event, args) => {
                     console.debug(event, args);
-                    self.getThemesList();
+                    getThemesList();
                   });
                   ipcRenderer.invoke("uninstall-theme", theme.path);
                 }
@@ -179,7 +180,7 @@ export const InstalledThemes = () => {
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
       if (theme.github_repo !== "" && typeof theme.commit !== "") {
-        self.themesInstalled.push(theme.github_repo.toLowerCase());
+        themesInstalled.push(theme.github_repo.toLowerCase());
       }
     });
   }
@@ -196,12 +197,12 @@ export const InstalledThemes = () => {
     fetch(readmeUrl, requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        self.openRepo = repo;
-        self.openRepo.readme = self.convertReadMe(result);
+        openRepo = repo;
+        openRepo.readme = convertReadMe(result);
       })
       .catch((error) => {
-        self.openRepo = repo;
-        self.openRepo.readme = `repository doesn't have a README.md file.`;
+        openRepo = repo;
+        openRepo.readme = `repository doesn't have a README.md file.`;
         console.log("error", error);
       });
   }
@@ -216,8 +217,8 @@ export const InstalledThemes = () => {
       if (res) {
         ipcRenderer.once("theme-installed", (event, arg) => {
           if (arg.success) {
-            self.themes = ipcRenderer.sendSync("get-themes");
-            self.getInstalledThemes();
+            themes = ipcRenderer.sendSync("get-themes");
+            getInstalledThemes();
             notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
           } else {
             notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
@@ -232,7 +233,7 @@ export const InstalledThemes = () => {
       if (result) {
         ipcRenderer.once("theme-installed", (event, arg) => {
           if (arg.success) {
-            self.themes = ipcRenderer.sendSync("get-themes");
+            themes = ipcRenderer.sendSync("get-themes");
             notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
           } else {
             notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
@@ -253,7 +254,7 @@ export const InstalledThemes = () => {
       .then((response) => response.text())
       .then((result) => {
         const items = JSON.parse(result).items;
-        self.repos = items;
+        repos = items;
       })
       .catch((error) => console.log("error", error));
   }
@@ -297,7 +298,7 @@ export const InstalledThemes = () => {
               </div>
               <ul className={"list-group list-group-flush"}>
                 {themes.map((theme) => (
-                  <template>
+                  <div key={theme.id}>
                     <li
                       onClick={() => addStyle(theme.file)}
                       onContextMenu={() => contextMenu($event, theme)}
@@ -341,6 +342,7 @@ export const InstalledThemes = () => {
                       (packEntry) =>
                         theme.pack && (
                           <li
+                            key={packEntry.id}
                             onClick={() => addStyle(packEntry.file)}
                             onContextMenu={() => contextMenu($event, theme)}
                             className={"list-group-item list-group-item-dark addon"}
@@ -364,7 +366,7 @@ export const InstalledThemes = () => {
                           </li>
                         ),
                     )}
-                  </template>
+                  </div>
                 ))}
               </ul>
             </div>
@@ -376,7 +378,7 @@ export const InstalledThemes = () => {
               {themes.length !== 0 && (
                 <StylestackEditor
                   ref={"stackEditor"}
-                  themes={"themes"}
+                  themes={themes}
                 />
               )}
             </div>

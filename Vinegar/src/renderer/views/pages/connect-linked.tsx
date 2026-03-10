@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const Component = () => {
+const ConnectLinked = () => {
   useEffect(() => {
     ipcRenderer.send("get-connected-url");
     ipcRenderer.on("send-connected-url", (event, url) => {
@@ -21,3 +21,5 @@ const Component = () => {
     </div>
   );
 };
+
+export default ConnectLinked;

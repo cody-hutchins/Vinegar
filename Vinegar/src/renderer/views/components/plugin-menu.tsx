@@ -8,8 +8,16 @@ const PluginMenu = () => {
       <div id={"plugin-menu"}>
         <div
           className={"modal-fullscreen addtoplaylist-panel"}
-          clickself={app.resetState()}
-          contextmenuself={app.resetState()}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              app.resetState();
+            }
+          }}
+          onContextMenu={(e) => {
+            if (e.target === e.currentTarget) {
+              app.resetState();
+            }
+          }}>
           <div className={"modal-window"}>
             <div className={"modal-header"}>
               <div className={"modal-title"}>{$root.getLz("term.pluginMenu")}</div>
@@ -32,6 +40,7 @@ const PluginMenu = () => {
               )}
               {app.pluginMenuEntries.map((entry) => (
                 <button
+                  key={entry.id}
                   className={"playlist-item"}
                   onClick={() => {
                     entry.onClick();

@@ -1,5 +1,5 @@
 const About = () => {
-  const window = window;
+  // const window = window;
   const version = app.version;
   const team = [
     {
@@ -120,7 +120,7 @@ const About = () => {
               />
               <p
                 style={{ textAlign: "center" }}
-                id={"version"}>
+                id={version}>
                 {$root.getLz("term.version")} {$root.version}
               </p>
               <p style={{ textAlign: "center" }}> {$root.getLz().about.thanks()} </p>
@@ -140,32 +140,32 @@ const About = () => {
               <hr />
               <h3>{$root.getLz("term.sponsor")}</h3>
               <button
-                onClick={window.open("https://github.com/sponsors/ciderapp")}
+                onClick={() => window.open("https://github.com/sponsors/ciderapp")}
                 className={"md-btn sponsorBtn githubBtn"}>
                 <img src={"./assets/github.svg"} />
                 GitHub Sponsors
               </button>
               <button
-                onClick={window.open("https://ko-fi.com/cryptofyre")}
+                onClick={() => window.open("https://ko-fi.com/cryptofyre")}
                 className={"md-btn sponsorBtn kofiBtn"}>
                 <img src={"./assets/ko_fi.svg"} />
                 Ko-fi
               </button>
               <button
-                onClick={window.open("https://opencollective.com/ciderapp")}
+                onClick={() => window.open("https://opencollective.com/ciderapp")}
                 className={"md-btn sponsorBtn opencollectiveBtn"}>
                 <img src={"./assets/open_collective.svg"} />
                 Open Collective
               </button>
               <h3>{$root.getLz("term.socials")}</h3>
               <button
-                onClick={window.open("https://github.com/ciderapp/Cider")}
+                onClick={() => window.open("https://github.com/ciderapp/Cider")}
                 className={"md-btn sponsorBtn githubBtn"}>
                 <img src={"./assets/github.svg"} />
                 {$root.getLz("term.github")}
               </button>
               <button
-                onClick={window.open("https://discord.gg/applemusic")}
+                onClick={() => window.open("https://discord.gg/applemusic")}
                 className={"md-btn sponsorBtn discordBtn"}>
                 <img
                   style={{ height: "26px" }}
@@ -174,13 +174,13 @@ const About = () => {
                 {$root.getLz("term.discord")}
               </button>
               <button
-                onClick={window.open("https://twitter.com/UseCider")}
+                onClick={() => window.open("https://twitter.com/UseCider")}
                 className={"md-btn sponsorBtn twitterBtn"}>
                 <img src={"./assets/twitter.svg"} />
                 Twitter
               </button>
               <button
-                onClick={window.open("https://jq.qq.com/?_wv=1027&k=2VP4cdyo")}
+                onClick={() => window.open("https://jq.qq.com/?_wv=1027&k=2VP4cdyo")}
                 className={"md-btn sponsorBtn qqBtn"}>
                 <img src={"./assets/qq.svg"} />
                 QQ
@@ -192,6 +192,7 @@ const About = () => {
                   <h3>{$root.getLz("term.ciderTeam")}</h3>
                   {team.map((member) => (
                     <div
+                      key={member.name}
                       className={"md-btn teamBtn"}
                       onClick={() => window.open(member.link)}>
                       <img src={member.avatar} />
@@ -240,8 +241,8 @@ const About = () => {
                 <h3>{$root.getLz("term.contributors")}</h3>
                 <img
                   className={"md-contributors"}
-                  style={{ cursor: pointer, width: "100%" }}
-                  onClick={window.open("https://github.com/ciderapp/Cider/graphs/contributors")}
+                  style={{ cursor: "pointer", width: "100%" }}
+                  onClick={() => window.open("https://github.com/ciderapp/Cider/graphs/contributors")}
                   src={"https://contrib.rocks/image?repo=ciderapp/Cider&columns=25"}
                 />
               </div>

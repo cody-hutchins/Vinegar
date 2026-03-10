@@ -8,7 +8,11 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
         <template>
           <div style={{ position: "relative", display: "inline-flex" }}>
             <div
-              clickself={app.routeView(item)}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  app.routeView(item);
+                }
+              }}
               className={"cd-mediaitem-mvview"}>
               <div className={"artwork"}>
                 <MediaItemArtwork
@@ -19,7 +23,11 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
               </div>
               <div
                 className={"cd-mediaitem-mvview-overlay"}
-                clickself={app.routeView(item)}>
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) {
+                    app.routeView(item);
+                  }
+                }}>
                 <div
                   className={"button"}
                   style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
@@ -45,8 +53,12 @@ const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number 
             </div>
             <div
               className={"cd-mediaitem-mvview-overlay"}
-              clickself={app.routeView(item)}
-              tabIndex={"0"}>
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  app.routeView(item);
+                }
+              }}
+              tabIndex={0}>
               <div
                 className={"button"}
                 style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}

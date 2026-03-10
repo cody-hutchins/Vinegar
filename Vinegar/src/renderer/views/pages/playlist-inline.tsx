@@ -4,13 +4,14 @@ import ArtistChip from "../components/artist-chip.jsx";
 import ArtworkMaterial from "../components/artwork-material.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import { Tab, Tabs } from "react-bootstrap";
 
-const Component = ({ data }: { data: object }) => {
+const PlaylistInline = ({ data }: { data: object }) => {
   const app = this.$root;
   let editorialNotesExpanded = false;
   const drag = false;
   let nameEditing = false;
-  let inLibrary = null;
+  let inLibrary: () => void;
   let confirm = false;
   let itemBadges = [];
   let badgesRequested = false;
@@ -22,14 +23,12 @@ const Component = ({ data }: { data: object }) => {
     setTimeout(isInLibrary);
   }, []);
 
-  const watch = {
-    data: function () {
-      nestedPlaylist = [];
-      isInLibrary();
-      getBadges();
-      generateNestedPlaylist();
-    },
-  };
+  useEffect(() => {
+    nestedPlaylist = [];
+    isInLibrary();
+    getBadges();
+    generateNestedPlaylist();
+  }, [data]);
 
   function openInfoModal() {
     app.moreinfodata = [];
@@ -79,8 +78,8 @@ const Component = ({ data }: { data: object }) => {
       const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
-          self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
-            self.itemBadges.push(data.data.data[0]);
+          app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+            itemBadges.push(data.data.data[0]);
           });
         });
       }
@@ -180,7 +179,7 @@ const Component = ({ data }: { data: object }) => {
           icon: "./assets/feather/x-circle.svg",
           name: app.getLz("action.removeFromPlaylist"),
           action: () => {
-            self.remove();
+            remove();
           },
         },
       ],
@@ -189,7 +188,7 @@ const Component = ({ data }: { data: object }) => {
           icon: "./assets/feather/x-circle.svg",
           name: app.getLz("action.removeFromPlaylist"),
           action: () => {
-            self.remove();
+            remove();
           },
         },
       ],
@@ -339,7 +338,7 @@ const Component = ({ data }: { data: object }) => {
         prefix = app.getLz("term.time.added") + " ";
         break;
     }
-    let month, year;
+    // let month, year;
     try {
       const releaseDate = new Date(date);
       // month = new Intl.DateTimeFormat(app.cfg.general.language.replace('_','-'), {month: 'long'}).format(releaseDate);
@@ -405,7 +404,11 @@ const Component = ({ data }: { data: object }) => {
       <div id={"playlist-inline"}>
         <div
           className={"content-inner playlist-page inline-playlist"}
-          clickself={$root.resetState()}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              $root.resetState();
+            }
+          }}>
           {data !== [] && data.attributes !== null ? (
             <div className={"playlist-inner"}>
               <div
@@ -686,7 +689,7 @@ const Component = ({ data }: { data: object }) => {
                                 <template>
                                   {nestedPlaylist.map((disc) =>
                                     disc.tracks.map((item, index) => (
-                                      <div>
+                                      <div key={index}>
                                         <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                         <MediaItemListItem
                                           item={item}
@@ -750,6 +753,7 @@ const Component = ({ data }: { data: object }) => {
                             (view) =>
                               data.views[view].data.length !== 0 && (
                                 <Tab
+                                  key={view.id}
                                   lazy
                                   title={data.views[view].attributes.title}>
                                   <div>
@@ -808,3 +812,4 @@ const Component = ({ data }: { data: object }) => {
     </>
   );
 };
+export default PlaylistInline;

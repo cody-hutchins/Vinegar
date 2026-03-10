@@ -77,7 +77,7 @@ const helpers = {
     if (this.cfg.visual.customAccentColor) {
       finalStyle["--keyColor"] = this.cfg.visual.accentColor;
       finalStyle["--songProgressColor"] = this.cfg.visual.accentColor;
-    } else if (this.cfg.visual.purplePodcastPlaybackBar && MusicKit.getInstance().nowPlayingItem?.type == "podcast-episodes") {
+    } else if (this.cfg.visual.purplePodcastPlaybackBar && MusicKit.getInstance().nowPlayingItem?.type === "podcast-episodes") {
       finalStyle["--songProgressColor"] = "#6929D0";
     }
     return finalStyle;
@@ -134,7 +134,7 @@ const helpers = {
     // stringTemplateParser('my name is {{name}} and age is {{age}}', {name: 'Tom', age:100})
   },
   async setLz(lang) {
-    if (lang == "") {
+    if (lang === "") {
       lang = this.cfg.general.language;
     }
     this.lz = ipcRenderer.sendSync("get-i18n", lang);
@@ -252,7 +252,7 @@ const helpers = {
   async showSocialListeningTo() {
     const contentIds = Object.keys(app.socialBadges.badgeMap);
     app.showCollection({ data: this.socialBadges.mediaItems }, "Friends Listening To", "albums");
-    if (this.socialBadges.mediaItemDLState == 1 || this.socialBadges.mediaItemDLState == 2) {
+    if (this.socialBadges.mediaItemDLState === 1 || this.socialBadges.mediaItemDLState === 2) {
       return;
     }
     this.socialBadges.mediaItemDLState = 2;
@@ -355,7 +355,7 @@ const helpers = {
       window.location.hash = `#charts/top`;
     } else {
       const id = url.split("id=")[1];
-      if (id != null) {
+      if (id !== null) {
         window.location.hash = `#groupings/${id}`;
       } else {
         const params = new Proxy(new URLSearchParams(new URL(url).search), {
@@ -389,7 +389,7 @@ const helpers = {
     }
   },
   resumeTabs() {
-    if (app.cfg.general.resumeTabs.tab == "dynamic") {
+    if (app.cfg.general.resumeTabs.tab === "dynamic") {
       this.appRoute(app.cfg.general.resumeTabs.dynamicData);
     } else {
       this.appRoute(app.cfg.general.resumeTabs.tab);
@@ -402,26 +402,26 @@ const helpers = {
     const self = this;
     let pl_items = [];
     for (let i = 0; i < self.selectedMediaItems.length; i++) {
-      if (self.selectedMediaItems[i].kind == "song" || self.selectedMediaItems[i].kind == "songs") {
+      if (self.selectedMediaItems[i].kind === "song" || self.selectedMediaItems[i].kind === "songs") {
         self.selectedMediaItems[i].kind = "songs";
         pl_items.push({
           id: self.selectedMediaItems[i].id,
           type: self.selectedMediaItems[i].kind,
         });
-      } else if ((self.selectedMediaItems[i].kind == "album" || self.selectedMediaItems[i].kind == "albums") && self.selectedMediaItems[i].isLibrary != true) {
+      } else if ((self.selectedMediaItems[i].kind === "album" || self.selectedMediaItems[i].kind === "albums") && self.selectedMediaItems[i].isLibrary !== true) {
         self.selectedMediaItems[i].kind = "albums";
         const res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
           return { id: i.id, type: i.type };
         });
         pl_items = pl_items.concat(ids);
-      } else if (self.selectedMediaItems[i].kind == "library-song" || self.selectedMediaItems[i].kind == "library-songs") {
+      } else if (self.selectedMediaItems[i].kind === "library-song" || self.selectedMediaItems[i].kind === "library-songs") {
         self.selectedMediaItems[i].kind = "library-songs";
         pl_items.push({
           id: self.selectedMediaItems[i].id,
           type: self.selectedMediaItems[i].kind,
         });
-      } else if (self.selectedMediaItems[i].kind == "library-album" || self.selectedMediaItems[i].kind == "library-albums" || (self.selectedMediaItems[i].kind == "album" && self.selectedMediaItems[i].isLibrary == true)) {
+      } else if (self.selectedMediaItems[i].kind === "library-album" || self.selectedMediaItems[i].kind === "library-albums" || (self.selectedMediaItems[i].kind === "album" && self.selectedMediaItems[i].isLibrary === true)) {
         self.selectedMediaItems[i].kind = "library-albums";
         const res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -479,14 +479,14 @@ const helpers = {
     let pl_items = [];
     const song_ids = [];
     for (let i = 0; i < self.selectedMediaItems.length; i++) {
-      if (self.selectedMediaItems[i].kind == "song" || self.selectedMediaItems[i].kind == "songs") {
+      if (self.selectedMediaItems[i].kind === "song" || self.selectedMediaItems[i].kind === "songs") {
         self.selectedMediaItems[i].kind = "songs";
         pl_items.push({
           id: self.selectedMediaItems[i].id,
           type: self.selectedMediaItems[i].kind,
         });
         song_ids.push(self.selectedMediaItems[i].id);
-      } else if ((self.selectedMediaItems[i].kind == "album" || self.selectedMediaItems[i].kind == "albums") && self.selectedMediaItems[i].isLibrary != true) {
+      } else if ((self.selectedMediaItems[i].kind === "album" || self.selectedMediaItems[i].kind === "albums") && self.selectedMediaItems[i].isLibrary !== true) {
         self.selectedMediaItems[i].kind = "albums";
         const res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -494,14 +494,14 @@ const helpers = {
         });
         pl_items = pl_items.concat(ids);
         song_ids.push(...ids.map((id) => id.id));
-      } else if (self.selectedMediaItems[i].kind == "library-song" || self.selectedMediaItems[i].kind == "library-songs") {
+      } else if (self.selectedMediaItems[i].kind === "library-song" || self.selectedMediaItems[i].kind === "library-songs") {
         self.selectedMediaItems[i].kind = "library-songs";
         pl_items.push({
           id: self.selectedMediaItems[i].id,
           type: self.selectedMediaItems[i].kind,
         });
         song_ids.push(self.selectedMediaItems[i].id);
-      } else if (self.selectedMediaItems[i].kind == "library-album" || self.selectedMediaItems[i].kind == "library-albums" || (self.selectedMediaItems[i].kind == "album" && self.selectedMediaItems[i].isLibrary == true)) {
+      } else if (self.selectedMediaItems[i].kind === "library-album" || self.selectedMediaItems[i].kind === "library-albums" || (self.selectedMediaItems[i].kind === "album" && self.selectedMediaItems[i].isLibrary === true)) {
         self.selectedMediaItems[i].kind = "library-albums";
         const res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -534,11 +534,11 @@ const helpers = {
     if (!localStorage.getItem("seenOOBE")) {
       localStorage.setItem("seenOOBE", 1);
     }
-    if (this.cfg.visual.styles.length != 0) {
+    if (this.cfg.visual.styles.length !== 0) {
       await this.reloadStyles();
     }
 
-    if (this.platform == "darwin") {
+    if (this.platform === "darwin") {
       this.chrome.windowControlPosition = "left";
     }
 
@@ -570,7 +570,7 @@ const helpers = {
       this.chrome.hideUserInfo = !this.cfg.visual.showuserinfo;
       this.mk.privateEnabled = this.cfg.general.privateEnabled;
     }
-    if (this.cfg.visual.hw_acceleration == "disabled") {
+    if (this.cfg.visual.hw_acceleration === "disabled") {
       document.body.classList.add("no-gpu");
     }
     this.mk._services.timing.mode = 0;
@@ -647,7 +647,7 @@ const helpers = {
           const time = window.localStorage.getItem("currentTime");
           let queue = window.localStorage.getItem("currentQueue");
           app.mk.queue.position = 0; // Reset queue position.
-          if (lastItem != null) {
+          if (lastItem !== null) {
             lastItem = JSON.parse(lastItem);
             const kind = lastItem.attributes.playParams.kind;
             const truekind = !kind.endsWith("s") ? kind + "s" : kind;
@@ -659,18 +659,18 @@ const helpers = {
             setTimeout(() => {
               app.mk.play().then(() => {
                 app.mk.pause().then(() => {
-                  if (time != null) {
+                  if (time !== null) {
                     app.mk.seekToTime(time);
                   }
                   app.mk.unmute();
-                  if (queue != null) {
+                  if (queue !== null) {
                     queue = JSON.parse(queue);
                     if (queue && queue.length > 0) {
                       const ids = queue.map((e) => (e.playParams ? e.playParams.id : e.item.attributes.playParams ? e.item.attributes.playParams.id : ""));
                       let i = 0;
                       if (ids.length > 0) {
                         for (const id of ids) {
-                          if (!(i == 0 && ids[0] == lastItem.attributes.playParams.id)) {
+                          if (!(i === 0 && ids[0] === lastItem.attributes.playParams.id)) {
                             try {
                               app.mk.playLater({ songs: [id] });
                             } catch (err) {}
@@ -722,7 +722,7 @@ const helpers = {
     ipcRenderer.on("theme-update", async (event, arg) => {
       await less.refresh(true, true, true);
       self.setTheme(self.cfg.visual.theme, true);
-      if (app.cfg.visual.styles.length != 0) {
+      if (app.cfg.visual.styles.length !== 0) {
         app.reloadStyles();
       }
     });
@@ -797,7 +797,7 @@ const helpers = {
 
     this.mk.addEventListener(MusicKit.Events.playbackStateDidChange, (event) => {
       ipcRenderer.send("wsapi-updatePlaybackState", wsapi.getAttributes());
-      document.body.setAttribute("playback-state", event.state == 2 ? "playing" : "paused");
+      document.body.setAttribute("playback-state", event.state === 2 ? "playing" : "paused");
     });
 
     this.mk.addEventListener(MusicKit.Events.playbackTimeDidChange, (a) => {
@@ -903,7 +903,7 @@ const helpers = {
               }
             }
           }
-          if (previewURL == null && (app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id) != -1) {
+          if (previewURL === null && (app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id) !== -1) {
             app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id}`).then((response) => {
               try {
                 previewURL = response.data.data[0].attributes.previews[0].url;
@@ -945,9 +945,9 @@ const helpers = {
       try {
         a = a.item.attributes;
       } catch (_) {}
-      const type = self.mk.nowPlayingItem != null ? (self.mk.nowPlayingItem["type"] ?? "") : "";
+      const type = self.mk.nowPlayingItem !== null ? (self.mk.nowPlayingItem["type"] ?? "") : "";
 
-      if (type.includes("musicVideo") || type.includes("uploadedVideo") || type.includes("music-movie") || (self.mk.nowPlayingItem?.type == "radioStation") & (self.mk.nowPlayingItem?.attributes?.mediaKind == "video")) {
+      if (type.includes("musicVideo") || type.includes("uploadedVideo") || type.includes("music-movie") || (self.mk.nowPlayingItem?.type === "radioStation") & (self.mk.nowPlayingItem?.attributes?.mediaKind === "video")) {
         document.getElementById("apple-music-video-container").style.display = "block";
         document.body.setAttribute("video-playing", "true");
         // app.chrome.topChromeVisible = false
@@ -983,11 +983,11 @@ const helpers = {
 
     this.refreshPlaylists(this.isDev);
     document.body.removeAttribute("loading");
-    if (window.location.hash != "") {
+    if (window.location.hash !== "") {
       this.appRoute(window.location.hash);
     }
 
-    if (this.page != "home") {
+    if (this.page !== "home") {
       this.resumeTabs();
     }
     this.mediaKeyFixes();
@@ -1017,7 +1017,7 @@ const helpers = {
   },
   setWindowScaleFactor() {
     let scale = (((window.devicePixelRatio * window.innerWidth) / 1280) * window.innerHeight) / 720;
-    const desiredScale = clamp(parseFloat(app.cfg.visual.maxElementScale == -1 ? 1.5 : app.cfg.visual.maxElementScale), 1, 1.5);
+    const desiredScale = clamp(parseFloat(app.cfg.visual.maxElementScale === -1 ? 1.5 : app.cfg.visual.maxElementScale), 1, 1.5);
     app.$store.state.windowRelativeScale = scale;
     if (scale <= 1) {
       scale = 1;
@@ -1031,7 +1031,7 @@ const helpers = {
   },
   showFoo(querySelector, time) {
     clearTimeout(this.idleTimer);
-    if (this.idleState == true) {
+    if (this.idleState === true) {
       document.querySelector(querySelector).classList.remove("inactive");
     }
     this.idleState = false;
@@ -1047,10 +1047,10 @@ const helpers = {
     const self = this;
     const themes = ipcRenderer.sendSync("get-themes");
     await asyncForEach(themes, async (theme) => {
-      if (theme.commit != "") {
-        if (theme.commit != "") {
+      if (theme.commit !== "") {
+        if (theme.commit !== "") {
           app._fetch(`https://api.github.com/repos/${theme.github_repo}/commits`).then((res) => res.json());
-          if (res[0].sha != theme.commit) {
+          if (res[0].sha !== theme.commit) {
             const notify = notyf.open({
               className: "notyf-info",
               type: "info",
@@ -1067,10 +1067,10 @@ const helpers = {
   },
   async setTheme(theme = "", onlyPrefs = false) {
     console.debug(theme);
-    if (this.cfg.visual.theme == "") {
+    if (this.cfg.visual.theme === "") {
       this.cfg.visual.theme = "default.less";
     }
-    if (theme == "") {
+    if (theme === "") {
       theme = this.cfg.visual.theme;
     } else {
       this.cfg.visual.theme = "";
@@ -1097,7 +1097,7 @@ const helpers = {
   async reloadStyles() {
     const styles = this.cfg.visual.styles;
     document.querySelectorAll(`[id*='less']`).forEach((el) => {
-      if (el.id != "less:style") {
+      if (el.id !== "less:style") {
         el.remove();
       }
     });
@@ -1167,7 +1167,7 @@ const helpers = {
         break;
     }
 
-    if (this.cfg.visual.window_background_style == "none") {
+    if (this.cfg.visual.window_background_style === "none") {
       classes.simplebg = true;
     }
 
@@ -1189,26 +1189,26 @@ const helpers = {
       }
     }
 
-    if (this.getThemeDirective("windowLayout") == "twopanel") {
+    if (this.getThemeDirective("windowLayout") === "twopanel") {
       classes.twopanel = true;
     }
-    if (this.getThemeDirective("appNavigation") == "seperate") {
+    if (this.getThemeDirective("appNavigation") === "seperate") {
       classes.navbar = true;
     }
-    if (this.getThemeDirective("macosemu") == true) {
+    if (this.getThemeDirective("macosemu") === true) {
       classes.macosemu = true;
     }
     return classes;
   },
   invokeDrawer(panel) {
-    if (this.drawer.panel == panel && this.drawer.open) {
-      if (panel == "lyrics") {
+    if (this.drawer.panel === panel && this.drawer.open) {
+      if (panel === "lyrics") {
         this.lyricon = false;
       }
       this.drawer.panel = "";
       this.drawer.open = false;
     } else {
-      if (panel == "lyrics") {
+      if (panel === "lyrics") {
         this.lyricon = true;
       } else {
         this.lyricon = false;
@@ -1219,13 +1219,13 @@ const helpers = {
   },
   select_removeMediaItem(id) {
     this.selectedMediaItems
-      .filter((item) => item.guid == id)
+      .filter((item) => item.guid === id)
       .forEach((item) => {
         this.selectedMediaItems.splice(this.selectedMediaItems.indexOf(item), 1);
       });
   },
   select_hasMediaItem(id) {
-    const found = this.selectedMediaItems.find((item) => item.guid == id);
+    const found = this.selectedMediaItems.find((item) => item.guid === id);
     if (found) {
       return true;
     } else {
@@ -1245,7 +1245,7 @@ const helpers = {
   },
   getPlaylistFolderChildren(id) {
     return this.playlists.listing.filter((playlist) => {
-      if (playlist.parent == id) {
+      if (playlist.parent === id) {
         return playlist;
       }
     });
@@ -1358,7 +1358,7 @@ const helpers = {
       console.log(playlistData);
       await asyncForEach(playlistData, async (playlist) => {
         playlist.parent = parent;
-        if (playlist.type != "library-playlist-folders" && typeof playlist.attributes.playParams["versionHash"] !== "undefined") {
+        if (playlist.type !== "library-playlist-folders" && typeof playlist.attributes.playParams["versionHash"] !== "undefined") {
           playlist.parent = "p.applemusic";
         }
         playlist.children = [];
@@ -1384,7 +1384,7 @@ const helpers = {
             });
           }
         } catch (e) {}
-        if (playlist.type == "library-playlist-folders") {
+        if (playlist.type === "library-playlist-folders") {
           try {
             await deepScan(playlist.id).catch((e) => {});
           } catch (e) {}
@@ -1498,7 +1498,7 @@ const helpers = {
       });
   },
   copyToClipboard(str) {
-    // if (navigator.userAgent.includes('Darwin') || navigator.appVersion.indexOf("Mac") != -1) {
+    // if (navigator.userAgent.includes('Darwin') || navigator.appVersion.indexOf("Mac") !== -1) {
     // this.darwinShare(str)
     // } else {
     notyf.success(app.getLz("term.share.success"));
@@ -1564,7 +1564,7 @@ const helpers = {
           )
           .then((res) => {
             // remove this playlist from playlists.listing if it exists
-            const found = self.playlists.listing.find((item) => item.id == id);
+            const found = self.playlists.listing.find((item) => item.id === id);
             if (found) {
               self.playlists.listing.splice(self.playlists.listing.indexOf(found), 1);
             }
@@ -1657,7 +1657,7 @@ const helpers = {
 
     function getPlaylistTracks(next) {
       app.apiCall(app.musicBaseUrl + next, (res) => {
-        if (self.showingPlaylist.id != playlistId) {
+        if (self.showingPlaylist.id !== playlistId) {
           return;
         }
         self.showingPlaylist.relationships.tracks.data = self.showingPlaylist.relationships.tracks.data.concat(res.data);
@@ -1766,7 +1766,7 @@ const helpers = {
     }
   },
   async getSearchHints() {
-    if (this.search.term == "") {
+    if (this.search.term === "") {
       this.search.hints = [];
       this.search.showHints = true;
       this.search.showSearchView = false;
@@ -1856,12 +1856,12 @@ const helpers = {
     );
   },
   appRoute(route) {
-    if (route == "" || route == "#" || route == "/") {
+    if (route === "" || route === "#" || route === "/") {
       return;
     }
     route = route.replace(/#/g, "");
-    if (app.cfg.general.resumeTabs.tab == "dynamic") {
-      if (route == "home" || route == "listen_now" || route == "browse" || route == "radio" || route == "library-songs" || route == "library-albums" || route == "library-artists" || route == "library-videos" || route == "podcasts") {
+    if (app.cfg.general.resumeTabs.tab === "dynamic") {
+      if (route === "home" || route === "listen_now" || route === "browse" || route === "radio" || route === "library-songs" || route === "library-albums" || route === "library-artists" || route === "library-videos" || route === "podcasts") {
         app.cfg.general.resumeTabs.dynamicData = route;
       } else {
         app.cfg.general.resumeTabs.dynamicData = "home";
@@ -1869,11 +1869,11 @@ const helpers = {
     }
 
     // if the route contains does not include a / then route to the page directly
-    if (route.indexOf("/") == -1) {
+    if (route.indexOf("/") === -1) {
       this.page = route;
       window.location.hash = this.page;
       this.resumePagePos();
-      // if (this.page == "settings") {
+      // if (this.page === "settings") {
       //     this.version
       // }
       return;
@@ -1882,7 +1882,7 @@ const helpers = {
     const page = hash[0];
     const id = hash[1];
     const isLibrary = hash[2] ?? false;
-    if (page == "plugin") {
+    if (page === "plugin") {
       this.pluginPages.page = "plugin." + id;
       this.page = "plugin-renderer";
       return;
@@ -1933,11 +1933,11 @@ const helpers = {
           kind = "appleCurator";
           window.location.hash = `${kind}/${id}`;
         });
-    } else if (kind == "editorial-elements" || kind == "editorial-items") {
+    } else if (kind === "editorial-elements" || kind === "editorial-items") {
       console.debug(item);
-      if (item.relationships?.contents?.data != null && item.relationships?.contents?.data.length > 0) {
+      if (item.relationships?.contents?.data !== null && item.relationships?.contents?.data.length > 0) {
         this.routeView(item.relationships.contents.data[0]);
-      } else if (item.attributes?.link?.url != null) {
+      } else if (item.attributes?.link?.url !== null) {
         if (item.attributes.link.url.includes("viewMultiRoom") || item.attributes.link.url.includes("/collection/")) {
           const params = new Proxy(new URLSearchParams(new URL(item.attributes.link.url).search), {
             get: (searchParams, prop) => searchParams.get(prop),
@@ -1973,13 +1973,13 @@ const helpers = {
           window.open(item.attributes.link.url);
         }
       }
-    } else if (kind == "multiplex") {
+    } else if (kind === "multiplex") {
       app.mk.api.v3.music(`/v1/editorial/${app.mk.storefrontId}/multiplex/${id}?art%5Burl%5D=f&format%5Bresources%5D=map&platform=web`).then((data) => {
         const item = data.data.results?.target ?? [];
         app.routeView(item);
       });
     }
-    if (kind == "multirooms") {
+    if (kind === "multirooms") {
       app
         .getTypeFromID("multiroom", id, false, {
           platform: "web",
@@ -2107,7 +2107,7 @@ const helpers = {
       nowPlayingItem.id = app.mk.nowPlayingItem.id;
     }
     try {
-      const u = await app.mkapi(nowPlayingItem.playParams.kind, nowPlayingItem.songId == -1, nowPlayingItem.songId != -1 ? nowPlayingItem.songId : nowPlayingItem["id"], { "include[songs]": "albums,artists", l: app.mklang });
+      const u = await app.mkapi(nowPlayingItem.playParams.kind, nowPlayingItem.songId === -1, nowPlayingItem.songId !== -1 ? nowPlayingItem.songId : nowPlayingItem["id"], { "include[songs]": "albums,artists", l: app.mklang });
       app.searchAndNavigate(u.data.data[0], target);
     } catch (e) {
       app.searchAndNavigate(nowPlayingItem, target);
@@ -2130,7 +2130,7 @@ const helpers = {
               artistId = item.relationships.albums.data[0].attributes.artistUrl.split("/").pop();
             }
           }
-          if (artistId == "") {
+          if (artistId === "") {
             const url = item.relationships.catalog.data[0].attributes.artistUrl;
             artistId = url.substring(url.lastIndexOf("/") + 1);
             if (artistId.includes("viewCollaboration")) {
@@ -2139,7 +2139,7 @@ const helpers = {
           }
         } catch (_) {}
 
-        if (artistId == "") {
+        if (artistId === "") {
           const artistQuery = (
             await app.mk.api.v3.music(`v1/catalog/${app.mk.storefrontId}/search?term=${item.attributes.artistName}`, {
               limit: 1,
@@ -2154,19 +2154,19 @@ const helpers = {
           } catch (e) {}
         }
         console.debug(artistId);
-        if (artistId != "") self.appRoute(`artist/${artistId}`);
+        if (artistId !== "") self.appRoute(`artist/${artistId}`);
         break;
       case "album":
         let albumId = "";
         try {
-          if ((item.type ?? item.playParams?.kind ?? "") == "albums") {
+          if ((item.type ?? item.playParams?.kind ?? "") === "albums") {
             albumId = item.id ?? "";
           } else if (item.relationships.albums && item.relationships.albums.data.length > 0 && !item.relationships.albums.data[0].type.includes("library")) {
             if (item.relationships.albums.data[0].type === "album" || item.relationships.albums.data[0].type === "albums") {
               albumId = item.relationships.albums.data[0].id;
             }
           }
-          if (albumId == "") {
+          if (albumId === "") {
             const url = item.relationships.catalog.data[0].attributes.url;
             albumId = url.substring(url.lastIndexOf("/") + 1);
             if (albumId.includes("?i=")) {
@@ -2175,7 +2175,7 @@ const helpers = {
           }
         } catch (_) {}
 
-        if (albumId == "") {
+        if (albumId === "") {
           try {
             const albumQuery = (
               await app.mk.api.v3.music(`v1/catalog/${app.mk.storefrontId}/search?term=${(item.attributes.albumName ?? item.attributes.name ?? "") + " " + (item.attributes.artistName ?? "")}`, {
@@ -2189,7 +2189,7 @@ const helpers = {
             }
           } catch (e) {}
         }
-        if (albumId != "") {
+        if (albumId !== "") {
           self.appRoute(`album/${albumId}`);
         }
         break;
@@ -2199,7 +2199,7 @@ const helpers = {
           labelId = item.relationships["record-labels"].data[0].id;
         } catch (_) {}
 
-        if (labelId == "") {
+        if (labelId === "") {
           try {
             const labelQuery = (
               await app.mk.api.v3.music(`v1/catalog/${app.mk.storefrontId}/search?term=${item.attributes.recordLabel}`, {
@@ -2213,7 +2213,7 @@ const helpers = {
             }
           } catch (e) {}
         }
-        if (labelId != "") {
+        if (labelId !== "") {
           app.showingPlaylist = [];
           await app.getTypeFromID("recordLabel", labelId, false, {
             views: "top-releases,latest-releases,top-artists",
@@ -2254,7 +2254,7 @@ const helpers = {
   },
   async getTypeFromID(kind, id, isLibrary = false, params = {}, params2 = {}) {
     let a;
-    if ((kind == "album") | (kind == "albums")) {
+    if ((kind === "album") | (kind === "albums")) {
       params["include"] = "tracks,artists,record-labels,catalog";
     }
     params["l"] = this.mklang;
@@ -2268,18 +2268,18 @@ const helpers = {
         console.log(err);
         a = [];
       } finally {
-        if (kind == "appleCurator") {
+        if (kind === "appleCurator") {
           app.appleCurator = a.data.data[0];
-        } else if (kind == "multiroom" || kind == "room") {
+        } else if (kind === "multiroom" || kind === "room") {
           app.multiroom = a.data.data[0];
         } else {
           this.getPlaylistContinuous(a, true);
         }
       }
     } finally {
-      if (kind == "appleCurator") {
+      if (kind === "appleCurator") {
         app.appleCurator = a.data.data[0];
-      } else if (kind == "multiroom" || kind == "room") {
+      } else if (kind === "multiroom" || kind === "room") {
         app.multiroom = a.data.data[0];
       } else {
         this.getPlaylistContinuous(a, true);
@@ -2322,10 +2322,10 @@ const helpers = {
             bb = b.attributes.trackNumber;
           }
         }
-        if (aa == null) {
+        if (aa === null) {
           aa = "";
         }
-        if (bb == null) {
+        if (bb === null) {
           bb = "";
         }
         if (prefs.sortOrder === "asc") {
@@ -2344,7 +2344,7 @@ const helpers = {
       });
     }
 
-    if (this.library.songs.search == "") {
+    if (this.library.songs.search === "") {
       this.library.songs.displayListing = this.library.songs.listing;
       sortSongs();
     } else {
@@ -2353,10 +2353,10 @@ const helpers = {
         let searchTerm = this.library.songs.search.toLowerCase();
         let artistName = "";
         let albumName = "";
-        if (item.attributes.artistName != null) {
+        if (item.attributes.artistName !== null) {
           artistName = item.attributes.artistName.toLowerCase();
         }
-        if (item.attributes.albumName != null) {
+        if (item.attributes.albumName !== null) {
           albumName = item.attributes.albumName.toLowerCase();
         }
 
@@ -2387,26 +2387,26 @@ const helpers = {
       self.library.albums.displayListing.sort((a, b) => {
         let aa = a.attributes[self.library.albums.sorting[index]];
         let bb = b.attributes[self.library.albums.sorting[index]];
-        if (self.library.albums.sorting[index] == "genre") {
+        if (self.library.albums.sorting[index] === "genre") {
           aa = a.attributes.genreNames[0];
           bb = b.attributes.genreNames[0];
         } else if (self.library.albums.sorting[index] === "dateAdded") {
           aa = a.attributes?.dateAdded;
           bb = b.attributes?.dateAdded;
         }
-        if (aa == null) {
+        if (aa === null) {
           aa = "";
         }
-        if (bb == null) {
+        if (bb === null) {
           bb = "";
         }
-        if (self.library.albums.sortOrder[index] == "asc") {
+        if (self.library.albums.sortOrder[index] === "asc") {
           if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
             return aa - bb;
           } else {
             return aa.toString().toLowerCase().localeCompare(bb.toString().toLowerCase());
           }
-        } else if (self.library.albums.sortOrder[index] == "desc") {
+        } else if (self.library.albums.sortOrder[index] === "desc") {
           if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
             return bb - aa;
           } else {
@@ -2416,7 +2416,7 @@ const helpers = {
       });
     }
 
-    if (this.library.albums.search == "") {
+    if (this.library.albums.search === "") {
       this.library.albums.displayListing = this.library.albums.listing;
       sortAlbums();
     } else {
@@ -2425,10 +2425,10 @@ const helpers = {
         let searchTerm = this.library.albums.search.toLowerCase();
         let artistName = "";
         let albumName = "";
-        if (item.attributes.artistName != null) {
+        if (item.attributes.artistName !== null) {
           artistName = item.attributes.artistName.toLowerCase();
         }
-        if (item.attributes.albumName != null) {
+        if (item.attributes.albumName !== null) {
           albumName = item.attributes.albumName.toLowerCase();
         }
 
@@ -2455,23 +2455,23 @@ const helpers = {
       self.library.artists.displayListing.sort((a, b) => {
         let aa = a.attributes[self.library.artists.sorting[index]];
         let bb = b.attributes[self.library.artists.sorting[index]];
-        if (self.library.artists.sorting[index] == "genre") {
+        if (self.library.artists.sorting[index] === "genre") {
           aa = a.attributes.genreNames[0];
           bb = b.attributes.genreNames[0];
         }
-        if (aa == null) {
+        if (aa === null) {
           aa = "";
         }
-        if (bb == null) {
+        if (bb === null) {
           bb = "";
         }
-        if (self.library.artists.sortOrder[index] == "asc") {
+        if (self.library.artists.sortOrder[index] === "asc") {
           if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
             return aa - bb;
           } else {
             return aa.toString().toLowerCase().localeCompare(bb.toString().toLowerCase());
           }
-        } else if (self.library.artists.sortOrder[index] == "desc") {
+        } else if (self.library.artists.sortOrder[index] === "desc") {
           if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
             return bb - aa;
           } else {
@@ -2481,7 +2481,7 @@ const helpers = {
       });
     }
 
-    if (this.library.artists.search == "") {
+    if (this.library.artists.search === "") {
       this.library.artists.displayListing = this.library.artists.listing;
       sortArtists();
     } else {
@@ -2490,10 +2490,10 @@ const helpers = {
         let searchTerm = this.library.artists.search.toLowerCase();
         const artistName = "";
         const albumName = "";
-        // if (item.attributes.artistName != null) {
+        // if (item.attributes.artistName !== null) {
         //     artistName = item.attributes.artistName.toLowerCase()
         // }
-        // if (item.attributes.albumName != null) {
+        // if (item.attributes.albumName !== null) {
         //     albumName = item.attributes.albumName.toLowerCase()
         // }
 
@@ -2516,7 +2516,7 @@ const helpers = {
     }
   },
   getSidebarItemClass(page) {
-    if (this.page == page) {
+    if (this.page === page) {
       return ["active"];
     } else {
       return [];
@@ -2564,10 +2564,10 @@ const helpers = {
     const cacheId = "library-songs";
     const downloaded = null;
     this.$store.commit("resetRecentlyAdded");
-    if (this.library.songs.downloadState == 2 && !force) {
+    if (this.library.songs.downloadState === 2 && !force) {
       return;
     }
-    if (this.library.songs.downloadState == 1) {
+    if (this.library.songs.downloadState === 1) {
       return;
     }
     const librarySongs = await CiderCache.getCache(cacheId);
@@ -2619,7 +2619,7 @@ const helpers = {
     let library = [];
     const cacheId = "library-albums";
     let downloaded = null;
-    if ((this.library.albums.downloadState == 2 || this.library.albums.downloadState == 1) && !force) {
+    if ((this.library.albums.downloadState === 2 || this.library.albums.downloadState === 1) && !force) {
       return;
     }
     const libraryAlbums = await CiderCache.getCache(cacheId);
@@ -2656,7 +2656,7 @@ const helpers = {
         "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
         includeOnly: "catalog,artists",
       };
-      if (downloaded == null) {
+      if (downloaded === null) {
         app.mk.api.v3
           .music(`/v1/me/library/albums/`, params)
           .then((response) => {
@@ -2676,7 +2676,7 @@ const helpers = {
               });
           });
       } else {
-        if (downloaded.next != null) {
+        if (downloaded.next !== null) {
           app.mk.api.v3
             .music(downloaded.next, params)
             .then((response) => {
@@ -2708,7 +2708,7 @@ const helpers = {
       self.library.backgroundNotification.message = app.getLz("notification.updatingLibraryAlbums");
       self.library.backgroundNotification.total = downloaded.meta.total;
       self.library.backgroundNotification.progress = library.length;
-      if (downloaded.meta.total == 0) {
+      if (downloaded.meta.total === 0) {
         self.library.albums.downloadState = 3;
         return;
       }
@@ -2741,7 +2741,7 @@ const helpers = {
     let library = [];
     const cacheId = "library-artists";
     let downloaded = null;
-    if ((this.library.artists.downloadState == 2 || this.library.artists.downloadState == 1) && !force) {
+    if ((this.library.artists.downloadState === 2 || this.library.artists.downloadState === 1) && !force) {
       return;
     }
     const libraryArtists = await CiderCache.getCache(cacheId);
@@ -2774,7 +2774,7 @@ const helpers = {
         platform: "web",
         limit: 50,
       };
-      if (downloaded == null) {
+      if (downloaded === null) {
         app.mk.api.v3
           .music(`/v1/me/library/artists/`, params)
           .then((response) => {
@@ -2794,7 +2794,7 @@ const helpers = {
               });
           });
       } else {
-        if (downloaded.next != null) {
+        if (downloaded.next !== null) {
           app.mk.api.v3
             .music(downloaded.next, params)
             .then((response) => {
@@ -2826,7 +2826,7 @@ const helpers = {
       self.library.backgroundNotification.message = app.getLz("notification.updatingLibraryArtists");
       self.library.backgroundNotification.total = downloaded.meta.total;
       self.library.backgroundNotification.progress = library.length;
-      if (downloaded.meta.total == 0) {
+      if (downloaded.meta.total === 0) {
         self.library.albums.downloadState = 3;
         return;
       }
@@ -3037,7 +3037,7 @@ const helpers = {
     this.page = "search";
   },
   loadLyrics() {
-    const musicType = MusicKit.getInstance().nowPlayingItem != null ? (MusicKit.getInstance().nowPlayingItem["type"] ?? "") : "";
+    const musicType = MusicKit.getInstance().nowPlayingItem !== null ? (MusicKit.getInstance().nowPlayingItem["type"] ?? "") : "";
     // console.log("mt", musicType)
     if (musicType === "musicVideo") {
       this.loadYTLyrics();
@@ -3051,9 +3051,9 @@ const helpers = {
     }
   },
   async loadAMLyrics() {
-    const songID = this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem["_songId"] ?? this.mk.nowPlayingItem["songId"] ?? -1) : -1;
+    const songID = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem["_songId"] ?? this.mk.nowPlayingItem["songId"] ?? -1) : -1;
     // this.getMXM( trackName, artistName, 'en', duration);
-    if (songID != -1) {
+    if (songID !== -1) {
       try {
         const response = await this.mk.api.v3.music(`v1/catalog/${this.mk.storefrontId}/songs/${songID}/lyrics`);
         this.lyricsMediaItem = response.data?.data[0]?.attributes["ttml"];
@@ -3099,9 +3099,9 @@ const helpers = {
     notyf.success(app.getLz("action.removeFromLibrary.success"));
   },
   async loadYTLyrics() {
-    const track = this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "";
-    const artist = this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "";
-    const time = this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1;
+    const track = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.title ?? "") : "";
+    const artist = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.artistName ?? "") : "";
+    const time = this.mk.nowPlayingItem !== null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1;
     ipcRenderer.invoke("getYTLyrics", track, artist).then((result) => {
       if (result.length > 0) {
         const ytid = result[0]["id"]["videoId"];
@@ -3158,10 +3158,10 @@ const helpers = {
   },
   loadMXM() {
     let attempt = 0;
-    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "");
-    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
-    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
-    const id = encodeURIComponent(this.mk.nowPlayingItem != null ? (app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem["songId"] ?? "") : "");
+    const track = encodeURIComponent(this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.title ?? "") : "");
+    const artist = encodeURIComponent(this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
+    const time = encodeURIComponent(this.mk.nowPlayingItem !== null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
+    const id = encodeURIComponent(this.mk.nowPlayingItem !== null ? (app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem["songId"] ?? "") : "");
     let lrcfile = "";
     let richsync = [];
     const lang = app.cfg.lyrics.mxm_language; //  translation language
@@ -3188,14 +3188,14 @@ const helpers = {
           try {
             const jsonResponse = JSON.parse(this.responseText);
             const status2 = jsonResponse["message"]["header"]["status_code"];
-            if (status2 == 200) {
+            if (status2 === 200) {
               const token = jsonResponse["message"]["body"]["user_token"] ?? "";
-              if (token != "" && token != "UpgradeOnlyUpgradeOnlyUpgradeOnlyUpgradeOnly") {
+              if (token !== "" && token !== "UpgradeOnlyUpgradeOnlyUpgradeOnlyUpgradeOnly") {
                 console.debug("200 token", mode);
                 // token good
                 app.mxmtoken = token;
 
-                if (mode == 1) {
+                if (mode === 1) {
                   getMXMSubs(track, artist, app.mxmtoken, lang, time, id);
                 } else {
                   getMXMTrans(songid, lang, app.mxmtoken);
@@ -3227,7 +3227,7 @@ const helpers = {
       const usertoken = encodeURIComponent(token);
       const richsyncQuery = app.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
       const timecustom = !time || (time && time < 0) ? "" : `&f_subtitle_length=${time}&q_duration=${time}&f_subtitle_length_max_deviation=40`;
-      const itunesid = id && id != "" ? `&track_itunes_id=${id}` : "";
+      const itunesid = id && id !== "" ? `&track_itunes_id=${id}` : "";
       const url = "https://apic-desktop.musixmatch.com/ws/1.1/macro.subtitles.get?format=json&namespace=lyrics_richsynched" + richsyncQuery + "&subtitle_format=lrc&q_artist=" + artist + "&q_track=" + track + itunesid + "&usertoken=" + usertoken + timecustom + "&app_id=web-desktop-app-v1.0&t=" + revisedRandId();
       const req = new XMLHttpRequest();
       req.overrideMimeType("application/json");
@@ -3239,10 +3239,10 @@ const helpers = {
           console.debug(jsonResponse);
           const status1 = jsonResponse["message"]["header"]["status_code"];
 
-          if (status1 == 200) {
+          if (status1 === 200) {
             let id = "";
             try {
-              if (jsonResponse["message"]["body"]["macro_calls"]["matcher.track.get"]["message"]["header"]["status_code"] == 200 && jsonResponse["message"]["body"]["macro_calls"]["track.subtitles.get"]["message"]["header"]["status_code"] == 200) {
+              if (jsonResponse["message"]["body"]["macro_calls"]["matcher.track.get"]["message"]["header"]["status_code"] === 200 && jsonResponse["message"]["body"]["macro_calls"]["track.subtitles.get"]["message"]["header"]["status_code"] === 200) {
                 id = jsonResponse["message"]["body"]["macro_calls"]["matcher.track.get"]["message"]["body"]["track"]["track_id"] ?? "";
                 lrcfile = jsonResponse["message"]["body"]["macro_calls"]["track.subtitles.get"]["message"]["body"]["subtitle_list"][0]["subtitle"]["subtitle_body"];
 
@@ -3253,11 +3253,11 @@ const helpers = {
                 } catch (_) {}
               }
 
-              if (lrcfile == "") {
+              if (lrcfile === "") {
                 app.loadQQLyrics();
                 // app.loadAMLyrics()
               } else {
-                if (richsync == [] || richsync.length == 0) {
+                if (richsync === [] || richsync.length === 0) {
                   console.log("ok");
                   // process lrcfile to json here
                   app.lyricsMediaItem = lrcfile;
@@ -3299,7 +3299,7 @@ const helpers = {
                     });
                   app.lyrics = preLrc;
                 }
-                if (lrcfile != null && lrcfile != "") {
+                if (lrcfile !== null && lrcfile !== "") {
                   // load translation
                   getMXMTrans(id, lang, token);
                 } else {
@@ -3331,7 +3331,7 @@ const helpers = {
     }
 
     function getMXMTrans(id, lang, token) {
-      if (lang != "disabled" && id != "") {
+      if (lang !== "disabled" && id !== "") {
         const usertoken = encodeURIComponent(token);
         const url2 = "https://apic-desktop.musixmatch.com/ws/1.1/crowd.track.translations.get?translation_fields_set=minimal&selected_language=" + lang + "&track_id=" + id + "&comment_format=text&part=user&format=json&usertoken=" + usertoken + "&app_id=web-desktop-app-v1.0&t=" + revisedRandId();
         const req2 = new XMLHttpRequest();
@@ -3343,7 +3343,7 @@ const helpers = {
             const jsonResponse2 = JSON.parse(this.responseText);
             console.log(jsonResponse2);
             const status2 = jsonResponse2["message"]["header"]["status_code"];
-            if (status2 == 200) {
+            if (status2 === 200) {
               try {
                 const preTrans = [];
                 const u = app.lyrics;
@@ -3352,7 +3352,7 @@ const helpers = {
                   for (let i = 0; i < u.length - 1; i++) {
                     preTrans[i] = "";
                     for (const trans_line of translation_list) {
-                      if (u[i].line == " " + trans_line["translation"]["matched_line"] || u[i].line == trans_line["translation"]["matched_line"]) {
+                      if (u[i].line === " " + trans_line["translation"]["matched_line"] || u[i].line === trans_line["translation"]["matched_line"]) {
                         u[i].translation = trans_line["translation"]["description"];
                         break;
                       }
@@ -3373,8 +3373,8 @@ const helpers = {
       }
     }
 
-    if ((track != "") & (track != "No Title Found")) {
-      if (app.mxmtoken != null && app.mxmtoken != "") {
+    if ((track !== "") & (track !== "No Title Found")) {
+      if (app.mxmtoken !== null && app.mxmtoken !== "") {
         getMXMSubs(track, artist, app.mxmtoken, lang, time, id);
       } else {
         getToken(1, track, artist, "", lang, time);
@@ -3382,9 +3382,9 @@ const helpers = {
     }
   },
   loadNeteaseLyrics() {
-    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "");
-    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
-    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
+    const track = encodeURIComponent(this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.title ?? "") : "");
+    const artist = encodeURIComponent(this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
+    const time = encodeURIComponent(this.mk.nowPlayingItem !== null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
     const url = `http://music.163.com/api/search/get/?csrf_token=hlpretag=&hlposttag=&s=${track + " " + artist}&type=1&offset=0&total=true&limit=6`;
     const req = new XMLHttpRequest();
     req.overrideMimeType("application/json");
@@ -3406,7 +3406,7 @@ const helpers = {
             const preLrc = [];
             for (let i = u.length - 1; i >= 0; i--) {
               const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
-              if (xline != null) {
+              if (xline !== null) {
                 const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                 preLrc.push({
                   startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
@@ -3439,9 +3439,9 @@ const helpers = {
   },
   loadQQLyrics() {
     if (!app.cfg.lyrics.enable_qq) return;
-    const track = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.title ?? "") : "");
-    const artist = encodeURIComponent(this.mk.nowPlayingItem != null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
-    const time = encodeURIComponent(this.mk.nowPlayingItem != null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
+    const track = encodeURIComponent(this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.title ?? "") : "");
+    const artist = encodeURIComponent(this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.artistName ?? "") : "");
+    const time = encodeURIComponent(this.mk.nowPlayingItem !== null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1);
     const url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=${track + " " + artist}&t=0&n=1&page=1&cr=1&new_json=1&format=json&platform=yqq.json`;
 
     const req = new XMLHttpRequest();
@@ -3475,7 +3475,7 @@ const helpers = {
             const preLrc = [];
             for (let i = u.length - 1; i >= 0; i--) {
               const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
-              if (xline != null) {
+              if (xline !== null) {
                 const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                 preLrc.push({
                   startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
@@ -3493,7 +3493,7 @@ const helpers = {
                 translation: "",
               });
             app.lyrics = preLrc.reverse();
-            if (app.lyrics[5].line == "") {
+            if (app.lyrics[5].line === "") {
               app.loadNeteaseLyrics();
             } // Detect incomplete QQ lyrics.
           } catch (e) {
@@ -3519,10 +3519,10 @@ const helpers = {
   },
   toMS(str) {
     const rawTime = str.match(/(\d+:)?(\d+:)?(\d+)(\.\d+)?/);
-    const hours = rawTime[2] != null ? rawTime[1].replace(":", "") : 0;
-    const minutes = rawTime[2] != null ? hours * 60 + rawTime[2].replace(":", "") * 1 : rawTime[1] != null ? rawTime[1].replace(":", "") : 0;
-    const seconds = rawTime[3] != null ? rawTime[3] : 0;
-    const milliseconds = rawTime[4] != null ? rawTime[4].replace(".", "") : 0;
+    const hours = rawTime[2] !== null ? rawTime[1].replace(":", "") : 0;
+    const minutes = rawTime[2] !== null ? hours * 60 + rawTime[2].replace(":", "") * 1 : rawTime[1] !== null ? rawTime[1].replace(":", "") : 0;
+    const seconds = rawTime[3] !== null ? rawTime[3] : 0;
+    const milliseconds = rawTime[4] !== null ? rawTime[4].replace(".", "") : 0;
     return parseFloat(`${minutes * 60 + seconds * 1}.${milliseconds * 1}`);
   },
   parseTTML() {
@@ -3540,7 +3540,7 @@ const helpers = {
       for (const element of lyricsLines) {
         const start = this.toMS(element.getAttribute("begin"));
         const end = this.toMS(element.getAttribute("end"));
-        if (start - endTimes[endTimes.length - 1] > 5 && endTimes[endTimes.length - 1] != 0) {
+        if (start - endTimes[endTimes.length - 1] > 5 && endTimes[endTimes.length - 1] !== 0) {
           preLrc.push({
             startTime: endTimes[endTimes.length - 1],
             endTime: start,
@@ -3636,7 +3636,7 @@ const helpers = {
         app.mk.setStationQueue({ artist: "a-" + id }).then(() => {
           app.mk.play();
         });
-      } else if (truekind == "radioStations") {
+      } else if (truekind === "radioStations") {
         this.mk.setStationQueue({ url: raurl }).then(function (queue) {
           MusicKit.getInstance().play();
         });
@@ -3672,17 +3672,17 @@ const helpers = {
     console.log(truekind, id);
 
     try {
-      if (parent == "playlist:ciderlocal") {
+      if (parent === "playlist:ciderlocal") {
         const u = app.library.localsongs.map((i) => {
           return i.id;
         });
         app.mk.setQueue({ episodes: u }).then(() => {
-          const id = app.mk.queue._itemIDs.findIndex((element) => element == item.id);
+          const id = app.mk.queue._itemIDs.findIndex((element) => element === item.id);
           app.mk.changeToMediaAtIndex(id);
         });
-      } else if (app.library.songs.displayListing.length > childIndex && parent == "librarysongs") {
+      } else if (app.library.songs.displayListing.length > childIndex && parent === "librarysongs") {
         console.log(item);
-        if (item && app.library.songs.displayListing[childIndex].id != item.id) {
+        if (item && app.library.songs.displayListing[childIndex].id !== item.id) {
           childIndex = app.library.songs.displayListing.indexOf(item);
         }
 
@@ -3697,11 +3697,11 @@ const helpers = {
               })
               .then(function () {
                 app.mk.play().then(() => {
-                  if (app.mk.shuffleMode == 1) {
+                  if (app.mk.shuffleMode === 1) {
                     shuffleArray(query);
                   } else {
                     for (let i = 0; i < query.length; i++) {
-                      if (query[i].id == item.id) {
+                      if (query[i].id === item.id) {
                         query.splice(0, i + 1);
                         break;
                       }
@@ -3712,11 +3712,11 @@ const helpers = {
               });
           } else {
             app.mk.queue.splice(0, app.mk.queue._itemIDs.length);
-            if (app.mk.shuffleMode == 1) {
+            if (app.mk.shuffleMode === 1) {
               shuffleArray(query);
             }
             app.mk.queue.append(query);
-            if (childIndex != -1) {
+            if (childIndex !== -1) {
               app.mk.changeToMediaAtIndex(childIndex);
             } else {
               app.mk.play();
@@ -3725,7 +3725,7 @@ const helpers = {
         });
       } else if (parent.startsWith("listitem-hr")) {
         app.mk.stop().then(() => {
-          if (app.mk.shuffleMode == 1) {
+          if (app.mk.shuffleMode === 1) {
             app.mk
               .setQueue({
                 [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id,
@@ -3738,7 +3738,7 @@ const helpers = {
                   try {
                     data.splice(u.indexOf(item.attributes.playParams.id ?? item.id), 1);
                   } catch (e) {}
-                  if (app.mk.shuffleMode == 1) {
+                  if (app.mk.shuffleMode === 1) {
                     shuffleArray(data);
                   }
                   data.forEach((item) => {
@@ -3794,7 +3794,7 @@ const helpers = {
         });
       } else {
         app.mk.stop().then(() => {
-          if (truekind == "playlists" && (id.startsWith("p.") || id.startsWith("pl.u"))) {
+          if (truekind === "playlists" && (id.startsWith("p.") || id.startsWith("pl.u"))) {
             app.mk
               .setQueue({
                 [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id,
@@ -3802,14 +3802,14 @@ const helpers = {
               })
               .then(function () {
                 app.mk.changeToMediaAtIndex(app.mk.queue._itemIDs.indexOf(item.id) ?? 1).then(function () {
-                  if (app.showingPlaylist && app.showingPlaylist.id == id) {
+                  if (app.showingPlaylist && app.showingPlaylist.id === id) {
                     const query = app.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
                     const u = query;
-                    if (app.mk.shuffleMode == 1) {
+                    if (app.mk.shuffleMode === 1) {
                       shuffleArray(u);
                     } else {
                       for (let i = 0; i < app.showingPlaylist.relationships.tracks.data.length; i++) {
-                        if (app.showingPlaylist.relationships.tracks.data[i].id == item.id) {
+                        if (app.showingPlaylist.relationships.tracks.data[i].id === item.id) {
                           u.splice(0, i + 1);
                           break;
                         }
@@ -3820,11 +3820,11 @@ const helpers = {
                     app.getPlaylistFromID(id, true).then(function () {
                       const query = app.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
                       const u = query;
-                      if (app.mk.shuffleMode == 1) {
+                      if (app.mk.shuffleMode === 1) {
                         shuffleArray(u);
                       } else {
                         for (let i = 0; i < app.showingPlaylist.relationships.tracks.data.length; i++) {
-                          if (app.showingPlaylist.relationships.tracks.data[i].id == item.id) {
+                          if (app.showingPlaylist.relationships.tracks.data[i].id === item.id) {
                             u.splice(0, i + 1);
                             break;
                           }
@@ -3842,10 +3842,10 @@ const helpers = {
                 parameters: { l: this.mklang },
               })
               .then(function (queue) {
-                if (item && queue._itemIDs[childIndex] != item.id) {
+                if (item && queue._itemIDs[childIndex] !== item.id) {
                   childIndex = queue._itemIDs.indexOf(item.id);
                 }
-                if (childIndex != -1) {
+                if (childIndex !== -1) {
                   app.mk.changeToMediaAtIndex(childIndex);
                 } else if (item) {
                   app.mk
@@ -3931,13 +3931,13 @@ const helpers = {
     }
   },
   searchCursor(e) {
-    if (e.keyCode == "40") {
+    if (e.keyCode === "40") {
       if (this.search.hints.length - 1 < this.search.cursor + 1) return;
       this.search.cursor++;
       const item = this.search.hints[this.search.cursor];
       this.search.term = item.content ? (item.content?.attributes?.name ?? "") : item.displayTerm;
-    } else if (e.keyCode == "38") {
-      if (this.search.cursor == 0) return;
+    } else if (e.keyCode === "38") {
+      if (this.search.cursor === 0) return;
       this.search.cursor--;
       const item = this.search.hints[this.search.cursor];
       this.search.term = item.content ? (item.content?.attributes?.name ?? "") : item.displayTerm;
@@ -3950,7 +3950,7 @@ const helpers = {
       this.search.term = "";
       return;
     }
-    if (term == "") {
+    if (term === "") {
       return;
     }
     //this.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/search?term=${this.search.term}`
@@ -4006,16 +4006,16 @@ const helpers = {
 
     for (const item of items) {
       let type = item.type;
-      if (type.slice(-1) != "s") {
+      if (type.slice(-1) !== "s") {
         type += "s";
       }
       type = type.replace("library-", "");
       const id = item.attributes.playParams?.catalogId ?? item.attributes.playParams.id ?? item.id;
 
       const index = types.findIndex(function (type) {
-        return type.type == this;
+        return type.type === this;
       }, type);
-      if (index == -1) {
+      if (index === -1) {
         types.push({ type: type, id: [id] });
       } else {
         types[index].id.push(id);
@@ -4058,12 +4058,12 @@ const helpers = {
     }
     const found = this.library.songs.listing.filter((item) => {
       if (item["attributes"]) {
-        if (item["attributes"]["playParams"] && item["attributes"]["playParams"]["catalogId"] == id) {
+        if (item["attributes"]["playParams"] && item["attributes"]["playParams"]["catalogId"] === id) {
           return item;
         }
       }
     });
-    if (found.length != 0) {
+    if (found.length !== 0) {
       return true;
     } else {
       return false;
@@ -4078,7 +4078,7 @@ const helpers = {
   },
   getMediaItemArtwork(url, height = 64, width) {
     try {
-      if (typeof url === "undefined" || url == "") {
+      if (typeof url === "undefined" || url === "") {
         return "./assets/MissingArtwork.svg";
       }
       height = parseInt(height * window.devicePixelRatio);
@@ -4113,7 +4113,7 @@ const helpers = {
       }
 
       try {
-        if ((this.mk.nowPlayingItem && this.mk.nowPlayingItem["id"] != this.currentTrackID && document.querySelector(".bg-artwork")) || force) {
+        if ((this.mk.nowPlayingItem && this.mk.nowPlayingItem["id"] !== this.currentTrackID && document.querySelector(".bg-artwork")) || force) {
           if (document.querySelector(".bg-artwork")) {
             clearInterval(bginterval);
           }
@@ -4132,7 +4132,7 @@ const helpers = {
           } else {
             this.setLibraryArtBG();
           }
-        } else if (this.mk.nowPlayingItem["id"] == this.currentTrackID) {
+        } else if (this.mk.nowPlayingItem["id"] === this.currentTrackID) {
           try {
             clearInterval(bginterval);
           } catch (err) {}
@@ -4163,7 +4163,7 @@ const helpers = {
       let data = await this.mk.api.v3.music(`/v1/me/library/songs/${this.mk.nowPlayingItem.id}`);
       data = data.data.data[0];
 
-      if (data != null && data !== "") {
+      if (data !== null && data !== "") {
         document.querySelector(".app-playback-controls .artwork").style.setProperty("--artwork", 'url("' + data["attributes"]["artwork"]["url"].toString() + '")');
       } else {
         document.querySelector(".app-playback-controls .artwork").style.setProperty("--artwork", `url("")`);
@@ -4176,7 +4176,7 @@ const helpers = {
       let data = await this.mk.api.v3.music(`/v1/me/library/songs/${this.mk.nowPlayingItem.id}`);
       data = data.data.data[0];
 
-      if (data != null && data !== "") {
+      if (data !== null && data !== "") {
         getBase64FromUrl(data["attributes"]["artwork"]["url"].toString()).then((img) => {
           document.querySelector(".bg-artwork").forEach((artwork) => {
             artwork.src = img;
@@ -4207,14 +4207,14 @@ const helpers = {
   async getRating(item) {
     let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
     let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
-    if (item.id != null && item.id.toString().startsWith("i.")) {
+    if (item.id !== null && item.id.toString().startsWith("i.")) {
       if (!type.startsWith("library-")) {
         type = "library-" + type;
       }
       id = item.id;
     }
     const response = await this.mk.api.v3.music(`/v1/me/ratings/${type}?platform=web&ids=${type.includes("library") ? item.id : id}`);
-    if (response.data.data.length != 0) {
+    if (response.data.data.length !== 0) {
       const value = response.data.data[0].attributes.value;
       return value;
     } else {
@@ -4224,7 +4224,7 @@ const helpers = {
   love(item) {
     let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
     let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
-    if (item.id != null && item.id.toString().startsWith("i.")) {
+    if (item.id !== null && item.id.toString().startsWith("i.")) {
       if (!type.startsWith("library-")) {
         type = "library-" + type;
       }
@@ -4249,7 +4249,7 @@ const helpers = {
   dislike(item) {
     let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
     let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
-    if (item.id != null && item.id.toString().startsWith("i.")) {
+    if (item.id !== null && item.id.toString().startsWith("i.")) {
       if (!type.startsWith("library-")) {
         type = "library-" + type;
       }
@@ -4387,10 +4387,10 @@ const helpers = {
     }
     console.log("delete idx-pre", identifier);
     const idx = this.airplayTrys.findIndex((a) => {
-      return a.id == identifier;
+      return a.id === identifier;
     });
     console.log("delete idx", idx);
-    if (idx != -1) delete this.airplayTrys[idx];
+    if (idx !== -1) delete this.airplayTrys[idx];
     this.airplayTrys = this.airplayTrys.filter((n) => n);
   },
   sendAirPlayFailed() {
@@ -4402,16 +4402,16 @@ const helpers = {
       const [ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv] = array;
       console.log(ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv);
       let idx = this.airplayTrys.findIndex((a) => {
-        return a.id == ipv4 + ":" + ipport + "ap";
+        return a.id === ipv4 + ":" + ipport + "ap";
       });
-      if (idx == -1) {
+      if (idx === -1) {
         this.airplayTrys.push({
           id: ipv4 + ":" + ipport + "ap",
           attempts: 1,
         });
       }
       idx = this.airplayTrys.findIndex((a) => {
-        return a.id == ipv4 + ":" + ipport + "ap";
+        return a.id === ipv4 + ":" + ipport + "ap";
       });
       if (this.airplayTrys[idx].attempts > 3) {
         delete this.airplayTrys[idx];
@@ -4425,7 +4425,7 @@ const helpers = {
         }, 1000);
       }
     } else {
-      if (identifier == "") {
+      if (identifier === "") {
         app.activeCasts = [];
         notyf.error("Devices disconnected!");
       } else {
@@ -4629,8 +4629,8 @@ const helpers = {
     }
 
     const nowPlayingContainer = app.mk.nowPlayingItem._container;
-    if (nowPlayingContainer && nowPlayingContainer["attributes"] && nowPlayingContainer.name != "station") {
-      menus.normal.items.find((x) => x.id == "showInMusic").hidden = false;
+    if (nowPlayingContainer && nowPlayingContainer["attributes"] && nowPlayingContainer.name !== "station") {
+      menus.normal.items.find((x) => x.id === "showInMusic").hidden = false;
     }
 
     this.showMenuPanel(menus[useMenu], event);
@@ -4638,7 +4638,7 @@ const helpers = {
     try {
       // if its a radio station, then change the attributes to match a song
       const nowPlayingItem = JSON.parse(JSON.stringify(this.mk.nowPlayingItem));
-      if (nowPlayingItem.type == "radioStation" && app.mk.nowPlayingItem.id != -1) {
+      if (nowPlayingItem.type === "radioStation" && app.mk.nowPlayingItem.id !== -1) {
         nowPlayingItem.type = "song";
         nowPlayingItem.attributes.playParams.catalogId = app.mk.nowPlayingItem.id;
         nowPlayingItem.attributes.playParams.id = app.mk.nowPlayingItem.id;
@@ -4646,10 +4646,10 @@ const helpers = {
       }
       const result = await this.inLibrary([nowPlayingItem]);
       if (result[0].attributes.inLibrary) {
-        menus.normal.items.find((x) => x.id == "addToLibrary").hidden = true;
-        menus.normal.items.find((x) => x.id == "removeFromLibrary").hidden = false;
+        menus.normal.items.find((x) => x.id === "addToLibrary").hidden = true;
+        menus.normal.items.find((x) => x.id === "removeFromLibrary").hidden = false;
       } else {
-        menus.normal.items.find((x) => x.id == "addToLibrary").disabled = false;
+        menus.normal.items.find((x) => x.id === "addToLibrary").disabled = false;
       }
     } catch (e) {
       e = null;
@@ -4657,15 +4657,15 @@ const helpers = {
 
     try {
       const rating = await app.getRating(app.mk.nowPlayingItem);
-      if (rating == 0) {
-        menus.normal.headerItems.find((x) => x.id == "love").disabled = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").disabled = false;
-      } else if (rating == 1) {
-        menus.normal.headerItems.find((x) => x.id == "unlove").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "love").hidden = true;
-      } else if (rating == -1) {
-        menus.normal.headerItems.find((x) => x.id == "undo_dislike").hidden = false;
-        menus.normal.headerItems.find((x) => x.id == "dislike").hidden = true;
+      if (rating === 0) {
+        menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
+      } else if (rating === 1) {
+        menus.normal.headerItems.find((x) => x.id === "unlove").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "love").hidden = true;
+      } else if (rating === -1) {
+        menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
     } catch (err) {}
   },
@@ -4734,7 +4734,7 @@ const helpers = {
     // //         console.log("[PIP] Resized")
     // //     }, false);
     // //   })
-    this.mvViewMode = this.mvViewMode == "mini" ? "full" : "mini";
+    this.mvViewMode = this.mvViewMode === "mini" ? "full" : "mini";
   },
   miniPlayer(flag) {
     if (flag) {
@@ -4811,11 +4811,11 @@ const helpers = {
     //this.modals.qrcode = true;
   },
   checkMarquee() {
-    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-artist") == true) {
+    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-artist") === true) {
       document.getElementsByClassName("song-artist")[0].classList.add("marquee");
       document.getElementsByClassName("song-artist")[1].classList.add("marquee-after");
     }
-    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") == true) {
+    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") === true) {
       document.getElementsByClassName("song-name")[0].classList.add("marquee");
       document.getElementsByClassName("song-name")[1].classList.add("marquee-after");
     }
@@ -4862,10 +4862,10 @@ const helpers = {
       } else if (u && u.includes("_") && langcodes.includes(u.toLowerCase().replace("_", "-").split("-")[0])) {
         sellang = u.toLowerCase().replace("_", "-").split("-")[0];
       }
-      if (sellang == "") sellang = item.data.data[0].attributes.defaultLanguageTag.toLowerCase();
+      if (sellang === "") sellang = item.data.data[0].attributes.defaultLanguageTag.toLowerCase();
 
       // Fix weird locales:
-      if (sellang == "iw") sellang = "iw-il";
+      if (sellang === "iw") sellang = "iw-il";
       sellang = sellang.replace(/-Han[s|t]/i, "").toLowerCase();
 
       console.log(sellang);
@@ -4972,15 +4972,15 @@ const helpers = {
       } else if (u && u.includes("_") && langcodes.includes(u.toLowerCase().replace("_", "-").split("-")[0])) {
         sellang = u.toLowerCase().replace("_", "-").split("-")[0];
       }
-      if (sellang.startsWith("en") && this.mk.storefrontId != "us") sellang = "en-gb";
+      if (sellang.startsWith("en") && this.mk.storefrontId !== "us") sellang = "en-gb";
       return await sellang;
     }
   },
   skipToNextItem() {
-    if (this.mk.queue.nextPlayableItemIndex !== -1 && this.mk.queue.nextPlayableItemIndex != null) this.mk.changeToMediaAtIndex(this.mk.queue.nextPlayableItemIndex);
+    if (this.mk.queue.nextPlayableItemIndex !== -1 && this.mk.queue.nextPlayableItemIndex !== null) this.mk.changeToMediaAtIndex(this.mk.queue.nextPlayableItemIndex);
   },
   skipToPreviousItem() {
-    if (this.mk.queue.previousPlayableItemIndex !== -1 && this.mk.queue.previousPlayableItemIndex != null) this.mk.changeToMediaAtIndex(this.mk.queue.previousPlayableItemIndex);
+    if (this.mk.queue.previousPlayableItemIndex !== -1 && this.mk.queue.previousPlayableItemIndex !== null) this.mk.changeToMediaAtIndex(this.mk.queue.previousPlayableItemIndex);
   },
   mediaKeyFixes() {
     MusicKitInterop.initMediaSession();
@@ -5002,7 +5002,7 @@ const helpers = {
     const self = this;
 
     function process() {
-      if (xhr.readyState == 4) {
+      if (xhr.readyState === 4) {
         const sources = xhr.responseText.match(/^(?!#)(?!\s).*$/gm).filter(function (element) {
           return element;
         });
@@ -5022,7 +5022,7 @@ const helpers = {
               platformInfo: { requiresCDMAttachOnStart: !0, maxSecurityLevel: d, keySystemConfig: h },
               appData: { serviceName: "Apple Music" },
             };
-            if (app.radiohls != null && app.radiohls.destroy != null) {
+            if (app.radiohls !== null && app.radiohls.destroy !== null) {
               app.radiohls.destroy();
               app.radiohls = null;
               app.radiohls = new CiderHls();

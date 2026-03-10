@@ -3,15 +3,15 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
   const showInLibrary = false;
-  const isVisible = false;
-  const addedToLibrary = false;
+  let isVisible = false;
+  let addedToLibrary = false;
   const guid = uuidv4();
   const app = this.$root;
-  const displayDuration = true;
-  const addClasses = {};
-  const itemId = 0;
-  const isLibrary = false;
-  const isLoved = null;
+  let displayDuration = true;
+  const addClasses: Record<string, any> = {};
+  let itemId = 0;
+  let isLibrary = false;
+  let isLoved = null;
 
   function mounted() {
     if (item.attributes.playParams) {
@@ -84,7 +84,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
   function getDataType() {
-    let type = "";
+    let type;
     if (typeof item.attributes.playParams !== "undefined") {
       if (item.attributes.playParams?.isLibrary) {
         type = item.type;
@@ -174,7 +174,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             name: app.getLz("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-up.svg",
             action: () => {
-              const itemsToPlay = {};
+              const itemsToPlay: Record<string, any[]> = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -196,7 +196,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             name: app.getLz("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-down.svg",
             action: () => {
-              const itemsToPlay = {};
+              const itemsToPlay: Record<string, any[]> = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -421,8 +421,8 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       console.log(err);
     }
   }
-  const visibilityChanged = (isVisible, entry) => {
-    isVisible = isVisible;
+  const visibilityChanged = (_isVisible, entry) => {
+    isVisible = _isVisible;
   };
   async function getHeartStatus() {
     try {
@@ -673,7 +673,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               )}
             </div>
             {item.attributes && item.attributes.contentRating === "explicit" && <div className={"explicit-icon"} />}
-            {showMetaData === true && (
+            {showMetadata === true && (
               <template onDoubleClick={route}>
                 <div className={"metainfo"}>{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
                 <div className={"metainfo"}>{item.attributes.genreNames[0] ?? ""}</div>

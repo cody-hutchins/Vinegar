@@ -12,8 +12,9 @@ const ListenNow = ({ data }: { data: object }) => {
         <h1 className={"header-text"}>{app.getLz("term.listenNow")}</h1>
         {data.data.map((recom, index) => (
           <ListenNowChild
-            recom={"recom"}
-            index={"index"}
+            key={index}
+            recom={recom}
+            index={index}
           />
         ))}
       </div>

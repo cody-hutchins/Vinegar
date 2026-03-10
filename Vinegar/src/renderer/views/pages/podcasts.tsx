@@ -94,7 +94,7 @@ export const Podcasts = () => {
       })
       .then((response) => {
         console.log(response);
-        self.search.results = response.data.results.podcasts.data;
+        search.results = response.data.results.podcasts.data;
       });
   }
 
@@ -254,6 +254,7 @@ export const Podcasts = () => {
             )}
             {episodes.map((episode) => (
               <PodcastEpisode
+                key={episode.id}
                 isSelected={selected.id === episode.id}
                 dblclicknative={() => playEpisode(episode)}
                 clicknative={() => selectEpisode(episode)}

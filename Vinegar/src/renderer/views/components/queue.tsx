@@ -44,11 +44,11 @@ const Queue = () => {
           {
             name: app.getLz("action.removeFromQueue"),
             action: function () {
-              self.queueItems.splice(
-                self.queueItems.findIndex((queueItem) => queueItem.item.id === item.id),
+              queueItems.splice(
+                queueItems.findIndex((queueItem) => queueItem.item.id === item.id),
                 1,
               );
-              app.mk.queue._queueItems = self.queueItems;
+              app.mk.queue._queueItems = queueItems;
               app.mk.queue._reindex();
             },
           },
@@ -81,19 +81,19 @@ const Queue = () => {
       multiple: {
         items: [
           {
-            name: app.getLz("action.removeTracks").replace("${self.selectedItems.length}", self.selectedItems.length.toString()),
+            name: app.getLz("action.removeTracks").replace("${selectedItems.length}", selectedItems.length.toString()),
             action: function () {
               // add property to items to be removed
-              self.selectedItems.forEach(function (item) {
-                self.queueItems.find((x) => x.item.id === item).remove = true;
+              selectedItems.forEach(function (item) {
+                queueItems.find((x) => x.item.id === item).remove = true;
               });
               // remove items
-              self.queueItems = self.queueItems.filter(function (item) {
+              queueItems = queueItems.filter(function (item) {
                 return !item.remove;
               });
-              app.mk.queue._queueItems = self.queueItems;
+              app.mk.queue._queueItems = queueItems;
               app.mk.queue._reindex();
-              self.selectedItems = [];
+              selectedItems = [];
             },
           },
         ],
@@ -149,7 +149,7 @@ const Queue = () => {
             <div className={"queue-body"}>
               {history.map((item) => (
                 <MediaItemListItem
-                  show-library-status={"false"}
+                  showLibraryStatus={"false"}
                   key={item.id}
                   item={item}
                 />

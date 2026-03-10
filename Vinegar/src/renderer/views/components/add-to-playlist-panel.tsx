@@ -41,8 +41,16 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
   return (
     <div
       className={"modal-fullscreen addtoplaylist-panel"}
-      onClick={app.resetState()}
-      contextmenuSelf={app.resetState()}>
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          app.resetState();
+        }
+      }}
+      onContextMenu={(e) => {
+        if (e.target === e.currentTarget) {
+          app.resetState();
+        }
+      }}>
       <div className={"modal-window"}>
         <div className={"modal-header"}>
           <div className={"modal-title"}>{app.getLz("action.addToPlaylist")}</div>
@@ -81,7 +89,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
               spellCheck={"false"}
               placeholder={app.getLz("term.search") + "..."}
               v-model={searchQuery}
-              input={search()}
+              onInput={() => search()}
               className={"search-input"}
             />
           </div>

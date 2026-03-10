@@ -28,6 +28,7 @@ const AppContentArea = () => {
           <AnimatePresence>
             {Object.keys(process.env.appRoutes).map((appRoute) => (
               <motion.div
+                key={appRoute}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     appRoute.onEnter();

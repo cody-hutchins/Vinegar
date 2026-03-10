@@ -2,16 +2,16 @@ import { useEffect } from "react";
 import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
-const Component = () => {
+const Home = () => {
   const app = this.$root;
   const followedArtists = this.$root.cfg.home.followedArtists;
   const favoriteItems = this.$root.cfg.home.favoriteItems;
-  const madeForYou = [];
+  let madeForYou = [];
   let recentlyPlayed = [];
-  const friendsListeningTo = [];
+  let friendsListeningTo = [];
   const replayPlaylists = [];
   const favorites = [];
-  const profile = {};
+  let profile = {};
   const modify = 0;
   let artistFeed = [];
   const showingArtistFeed = false;
@@ -63,15 +63,15 @@ const Component = () => {
     return {
       name: "Remove from Favorites",
       action: function (item) {
-        const index = self.favoriteItems.findIndex((x) => x.id === item.id);
+        const index = favoriteItems.findIndex((x) => x.id === item.id);
         if (index > -1) {
-          self.favoriteItems.splice(index, 1);
-          self.app.cfg.home.favoriteItems = self.favoriteItems;
+          favoriteItems.splice(index, 1);
+          app.cfg.home.favoriteItems = favoriteItems;
         }
       },
     };
   }
-  async function getFavorites() {
+  function getFavorites() {
     const libraryPlaylists = [];
     const playlists = [];
     for (const item of favoriteItems) {
@@ -87,7 +87,7 @@ const Component = () => {
           l: this.$root.mklang,
         })
         .then((playlistsData) => {
-          self.favorites.push(...playlistsData.data);
+          favorites.push(...playlistsData.data);
         });
     }
     if (libraryPlaylists.length !== 0) {
@@ -96,7 +96,7 @@ const Component = () => {
           l: this.$root.mklang,
         })
         .then((playlistsData) => {
-          self.favorites.push(...playlistsData.data);
+          favorites.push(...playlistsData.data);
         });
     }
   }
@@ -112,7 +112,7 @@ const Component = () => {
       chunkArtistData.forEach((chunkResult) =>
         chunkResult.data.data.forEach((item) => {
           if (item.views["latest-release"].data.length !== 0) {
-            self.artistFeed.push(item.views["latest-release"].data[0]);
+            artistFeed.push(item.views["latest-release"].data[0]);
           }
         }),
       );
@@ -133,7 +133,7 @@ const Component = () => {
     });
     recentlyPlayed = hist.data.data;
   }
-  async function getListenNowData() {
+  function getListenNowData() {
     app.mk.api.v3
       .music(
         `/v1/me/recommendations?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=listen-now&with=friendsMix,library,social&art[social-profiles:url]=c&art[url]=c,f&omit[resource]=autos&relate[editorial-items]=contents&extend=editorialCard,editorialVideo&extend[albums]=artistUrl&extend[library-albums]=artistUrl,editorialVideo&extend[playlists]=artistNames,editorialArtwork,editorialVideo&extend[library-playlists]=artistNames,editorialArtwork,editorialVideo&extend[social-profiles]=topGenreNames&include[albums]=artists&include[songs]=artists&include[music-videos]=artists&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url&fields[artists]=name,url&extend[stations]=airDate,supportsAirTimeUpdates&meta[stations]=inflectionPoints&types=artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells&platform=web&l=${this.$root.mklang}`,
@@ -141,27 +141,27 @@ const Component = () => {
       .then((data) => {
         console.log(data.data.data[1]);
         try {
-          self.madeForYou = data.data.data.filter((section) => {
+          madeForYou = data.data.data.filter((section) => {
             if (section.meta.metrics.moduleType === "6") {
               return section;
             }
           })[0].relationships.contents.data;
         } catch (err) {}
-        self.sectionsReady.push("madeForYou");
+        sectionsReady.push("madeForYou");
 
         try {
-          self.friendsListeningTo = data.data.data.filter((section) => {
+          friendsListeningTo = data.data.data.filter((section) => {
             if (section.meta.metrics.moduleType === "11") {
               return section;
             }
           })[0].relationships.contents.data;
         } catch (err) {}
-        self.sectionsReady.push("recentlyPlayed");
-        self.sectionsReady.push("friendsListeningTo");
+        sectionsReady.push("recentlyPlayed");
+        sectionsReady.push("friendsListeningTo");
       });
 
     app.mk.api.v3.music("/v1/me/social/profile/").then((response) => {
-      self.profile = response.data.data[0];
+      profile = response.data.data[0];
     });
   }
 
@@ -285,7 +285,7 @@ const Component = () => {
                       )}
                     </div>
                   </div>
-                  <div className={"well"}>{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={"madeForYou"} /> : <div className={"spinner"} />}</div>
+                  <div className={"well"}>{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={madeForYou} /> : <div className={"spinner"} />}</div>
                 </div>
               </div>
               {friendsListeningTo && friendsListeningTo.length > 0 && (
@@ -303,7 +303,7 @@ const Component = () => {
                         </button>
                       </div>
                     </div>
-                    <div className={"well"}>{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items={"friendsListeningTo"} /> : <div className={"spinner"} />}</div>
+                    <div className={"well"}>{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items={friendsListeningTo} /> : <div className={"spinner"} />}</div>
                   </div>
                 </div>
               )}
@@ -314,3 +314,5 @@ const Component = () => {
     </>
   );
 };
+
+export default Home;

@@ -1,4 +1,4 @@
-const Component = () => {
+const AudioSettings = () => {
   const app = this.$root;
   const openEqualizer = () => {
     app.modals.equalizer = true;
@@ -17,8 +17,16 @@ const Component = () => {
       <template>
         <div
           className={"modal-fullscreen addtoplaylist-panel"}
-          clickself={(app.modals.audioSettings = false)}
-          contextmenuself={(app.modals.audioSettings = false)}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              app.modals.audioSettings = false;
+            }
+          }}
+          onContextMenu={(e) => {
+            if (e.target === e.currentTarget) {
+              app.modals.audioSettings = false;
+            }
+          }}>
           <div className={"modal-window"}>
             <div className={"modal-header"}>
               <div className={"modal-title"}>{app.getLz("term.audioSettings")}</div>
@@ -66,3 +74,4 @@ const Component = () => {
     </div>
   );
 };
+export default AudioSettings;

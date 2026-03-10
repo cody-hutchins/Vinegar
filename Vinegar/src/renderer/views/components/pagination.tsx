@@ -1,6 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: number; pageSize: number; scroll: string; scrollSelector: string }) => {
-  let currentPage = 1;
+  const [currentPage, setCurrentPage] = useState(1);
   function mounted() {
     document.querySelector(scrollSelector).addEventListener("scroll", handleScroll);
   }
@@ -11,29 +12,29 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
     mounted();
     return destroyed;
   });
-  const watch = {
-    length: function () {
-      if (isInfinite) {
-        // If a search reduces the number of things to show, we want to limit
-        // the number of songs shown as well. is to prevent you scrolling
-        // to load your entire library, searching for one song, and then having
-        // th re-render the entire library
-        if (currentPage > numPages) {
-          currentPage = numPages;
-          this.$emit("onRangeChange", currentRange);
-        }
-      } else {
+
+  useEffect(() => {
+    if (isInfinite) {
+      // If a search reduces the number of things to show, we want to limit
+      // the number of songs shown as well. is to prevent you scrolling
+      // to load your entire library, searching for one song, and then having
+      // th re-render the entire library
+      if (currentPage > numPages) {
+        setCurrentPage(numPages);
         this.$emit("onRangeChange", currentRange);
       }
-    },
-    scroll: function () {
-      // When changing modes, set the page to 1. is primarily to
-      // prevent going to a high page (e.g., 50) and then switching to infinite
-      // and showing 12.5k songs
-      currentPage = 1;
+    } else {
       this.$emit("onRangeChange", currentRange);
-    },
-  };
+    }
+  }, [length]);
+
+  useEffect(() => {
+    // When changing modes, set the page to 1. is primarily to
+    // prevent going to a high page (e.g., 50) and then switching to infinite
+    // and showing 12.5k songs
+    setCurrentPage(1);
+    this.$emit("onRangeChange", currentRange);
+  }, [scroll]);
 
   const isInfinite = useMemo(() => {
     return scroll === "infinite";
@@ -82,40 +83,46 @@ const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: numb
   // Infinite Scrolling
   const handleScroll = (event) => {
     if (isInfinite && currentPage < numPages && event.target.scrollTop >= event.target.scrollHeight - event.target.clientHeight) {
-      currentPage += 1;
+      setCurrentPage(currentPage + 1);
       this.$emit("onRangeChange", currentRange);
     }
   };
+
   // Pagination
   const isCurrentPage = (idx) => {
     return idx === currentPage || (idx === numPages && currentPage > numPages);
   };
+
   const changePage = (event) => {
     const value = event.target.valueAsNumber;
 
     if (!isNaN(value) && value >= 1 && value <= numPages) {
-      currentPage = value;
+      setCurrentPage(value);
       this.$emit("onRangeChange", currentRange);
     }
   };
+
   const goToPage = (page) => {
-    currentPage = page;
+    setCurrentPage(page);
     this.$emit("onRangeChange", currentRange);
   };
+
   const goToPrevious = () => {
     if (currentPage > 1) {
-      currentPage -= 1;
+      setCurrentPage(currentPage - 1);
       this.$emit("onRangeChange", currentRange);
     }
   };
+
   const goToNext = () => {
     if (currentPage < numPages) {
-      currentPage += 1;
+      setCurrentPage(currentPage + 1);
       this.$emit("onRangeChange", currentRange);
     }
   };
+
   const goToEnd = () => {
-    currentPage = numPages;
+    setCurrentPage(numPages);
     this.$emit("onRangeChange", currentRange);
   };
 

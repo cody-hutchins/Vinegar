@@ -10,8 +10,9 @@ const ThemesGithub = () => {
       avatar_url: "",
     },
     readme: "",
+    full_name: "",
   };
-  const themesInstalled = [];
+  const themesInstalled: string[] = [];
   let themes = [];
   function mounted() {
     themes = ipcRenderer.sendSync("get-themes");

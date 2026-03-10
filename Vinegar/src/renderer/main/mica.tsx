@@ -29,7 +29,7 @@ async function spawnMica() {
       data: "",
     };
   }
-  if (micaCache.path == imgSrc.path) {
+  if (micaCache.path === imgSrc.path) {
     imgSrc = micaCache;
   } else {
     imgSrc = await ipcRenderer.sendSync("get-wallpaper", {

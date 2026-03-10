@@ -1,3 +1,4 @@
+import { Col, Popover, Row } from "react-bootstrap";
 import { useChromeStore } from "../../store/chrome.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 
@@ -40,10 +41,10 @@ export const ChromeBottom = () => {
                           placement={"right"}>
                           <div className={"content"}>
                             <div className={"shadow-artwork"}>
-                              <MediaItemArtwork url={"currentArtUrl"} />
+                              <MediaItemArtwork url={currentArtUrl} />
                             </div>
                             <div className={"popover-artwork"}>
-                              <MediaItemArtwork url={"currentArtUrl"} />
+                              <MediaItemArtwork url={currentArtUrl} />
                             </div>
                             <div className={"song-name"}>{mk.nowPlayingItem["attributes"]["name"]}</div>
                             <div
@@ -180,7 +181,7 @@ export const ChromeBottom = () => {
                         className={"artwork"}
                         id={"artworkLCD"}
                         style={{ pointerEvents: "none" }}>
-                        <MediaItemArtwork url={"currentArtUrl"} />
+                        <MediaItemArtwork url={currentArtUrl} />
                       </div>
                     )}
                     <div className={"playback-info"}>
@@ -309,7 +310,7 @@ export const ChromeBottom = () => {
               {typeof mk.volume !== "undefined" && (
                 <input
                   type={"range"}
-                  wheel={"volumeWheel"}
+                  wheel={volumeWheel}
                   step={cfg.audio.volumeStep}
                   min={"0"}
                   max={cfg.audio.maxVolume}

@@ -22,13 +22,13 @@ const App = () => {
     <div>
       {isLoading ? (
         <div id={"LOADER"}>
-          <svg>{include("../assets/cider-round.svg")}</svg>
+          <svg>{import("../assets/cider-round.svg")}</svg>
         </div>
       ) : (
         <div
           className={"notransparency"}
           onContextMenu={() => false}
-          loading={"1"}
+          loading={1}
           os-release={parseInt(process.env.osRelease)}
           platform={process.env.platform}>
           <script
@@ -47,7 +47,7 @@ const App = () => {
                 <motion.div name={"fsModeSwitch"}>
                   <div
                     id={"app-main"}
-                    style={{ display: appMode == "player" ? "inherit" : "none" }}>
+                    style={{ display: appMode === "player" ? "inherit" : "none" }}>
                     <ChromeTop />
                     <AppNavigation />
                     <ChromeBottom />
@@ -69,7 +69,7 @@ const App = () => {
                 </motion.div>
 
                 <motion.div name={"fsModeSwitch"}>
-                  {appMode == "mini" && (
+                  {appMode === "mini" && (
                     <div className={"fullscreen-view-container"}>
                       <MiniView
                         image={currentArtUrlRaw}
@@ -82,7 +82,7 @@ const App = () => {
                 </motion.div>
 
                 <motion.div name={"fsModeSwitch"}>
-                  {appMode == "oobe" && (
+                  {appMode === "oobe" && (
                     <div className={"fullscreen-view-container oobe"}>
                       <OOBE />
                     </div>
@@ -94,10 +94,11 @@ const App = () => {
             </div>
           )}
 
-          {Object.keys(process.env.components).map((component) => {
-            include(component);
+          {Object.keys(process.env.components).map((component, index) => {
+            import(component);
             return (
               <script
+                key={index}
                 type={"text/x-template"}
                 id={"am-musiccovershelf"}>
                 <h1>{component.attributes.title.stringForDisplay}</h1>

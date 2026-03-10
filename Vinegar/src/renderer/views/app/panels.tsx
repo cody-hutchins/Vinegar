@@ -46,12 +46,12 @@ const Panels = () => {
           <motion.div name={"modal"}>
             {modals.qrcode && (
               <QRCodeModal
-                src={"webremoteqr"}
-                url={"webremoteurl"}
+                src={webremoteqr}
+                url={webremoteurl}
               />
             )}
           </motion.div>
-          <motion.div name={"modal"}>{modals.moreInfo && <MoreInfoModal data={"moreinfodata"} />}</motion.div>
+          <motion.div name={"modal"}>{modals.moreInfo && <MoreInfoModal data={moreinfodata} />}</motion.div>
         </AnimatePresence>
         <div
           id={"apple-music-video-container"}

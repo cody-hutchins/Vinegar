@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const MoreInfoModal = ({ data }: { data: object }) => {
   const app = this.$root;
-  const timedelay = false;
+  let timedelay = false;
   function close() {
     app.modals.moreInfo = false;
   }
@@ -15,8 +15,10 @@ const MoreInfoModal = ({ data }: { data: object }) => {
     <div id={"moreinfo-modal"}>
       <div
         className={"modal-fullscreen spatialproperties-panel moreinfo-modal"}
-        clickself={() => {
-          if (timedelay) close();
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            if (timedelay) close();
+          }
         }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>

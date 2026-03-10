@@ -16,7 +16,7 @@ const Browse = ({ data }: { data: object }) => {
           {data.relationships && data.relationships.tabs && (
             <template>
               {data.relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
-                <template>
+                <div key={index}>
                   <div className={"row"}>
                     {recom.attributes.name !== "Chart Set" && (
                       <div className={"col"}>
@@ -65,6 +65,7 @@ const Browse = ({ data }: { data: object }) => {
                           <div className={"grouping-container"}>
                             {recom.attributes.links.map((link) => (
                               <button
+                                key={link.name}
                                 className={"grouping-btn"}
                                 onClick={() => $root.goToGrouping(link.url)}>
                                 {link.label}
@@ -75,7 +76,7 @@ const Browse = ({ data }: { data: object }) => {
                       )}
                     </template>
                   )}
-                </template>
+                </div>
               ))}
             </template>
           )}

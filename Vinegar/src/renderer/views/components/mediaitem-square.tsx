@@ -10,7 +10,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
   const app = this.$root;
   const badges = this.$root.socialBadges.badgeMap;
   const itemBadges = [];
-  const unavailable = false;
+  let unavailable = false;
   async function mounted() {
     await getBadges();
     if (typeof item.attributes.playParams === "object") {
@@ -75,14 +75,14 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
       }
     }
   }
-  async function getBadges() {
+  function getBadges() {
     const id = ((item.attributes?.playParams ?? false) ? item.attributes?.playParams.id : null) || item.id;
     if (id && badges[id]) {
       const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
-          self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
-            self.itemBadges.push(data.data.data[0]);
+          app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+            itemBadges.push(data.data.data[0]);
           });
         });
       }
@@ -277,7 +277,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             hidden: false,
             disabled: true,
             action: function () {
-              app.love(self.item);
+              app.love(item);
             },
           },
           {
@@ -287,7 +287,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             name: app.getLz("action.unlove"),
             hidden: true,
             action: function () {
-              app.unlove(self.item);
+              app.unlove(item);
             },
           },
           {
@@ -297,7 +297,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             hidden: false,
             disabled: true,
             action: function () {
-              app.dislike(self.item);
+              app.dislike(item);
             },
           },
           {
@@ -307,7 +307,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             active: true,
             hidden: true,
             action: function () {
-              app.unlove(self.item);
+              app.unlove(item);
             },
           },
         ],
@@ -327,10 +327,10 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             hidden: false,
             disabled: true,
             action: function () {
-              const item_id = self.item.attributes.playParams.id ?? self.item.id;
-              const data_type = self.item.attributes.playParams.kind ?? self.item.type;
+              const item_id = item.attributes.playParams.id ?? item.id;
+              const data_type = item.attributes.playParams.kind ?? item.type;
               app.addToLibrary(item_id);
-              self.addedToLibrary = true;
+              addedToLibrary = true;
             },
           },
           {
@@ -340,17 +340,17 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             hidden: true,
             action: async function () {
               console.log("remove");
-              const item_id = self.item.attributes.playParams.id ?? self.item.id;
-              const data_type = self.item.attributes.playParams.kind ?? self.item.type;
-              await self.removeFromLibrary(item_id);
-              self.addedToLibrary = false;
+              const item_id = item.attributes.playParams.id ?? item.id;
+              const data_type = item.attributes.playParams.kind ?? item.type;
+              await removeFromLibrary(item_id);
+              addedToLibrary = false;
             },
           },
           {
             name: app.getLz("action.playNext"),
             icon: "./assets/arrow-bend-up.svg",
             action: function () {
-              app.mk.playNext({ [self.item.attributes.playParams.kind ?? self.item.type]: self.item.attributes.playParams.id ?? self.item.id });
+              app.mk.playNext({ [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id });
               app.mk.queue._reindex();
               app.selectedMediaItems = [];
             },
@@ -359,7 +359,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             name: app.getLz("action.playLater"),
             icon: "./assets/arrow-bend-down.svg",
             action: function () {
-              app.mk.playLater({ [self.item.attributes.playParams.kind ?? self.item.type]: self.item.attributes.playParams.id ?? self.item.id });
+              app.mk.playLater({ [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id });
               app.mk.queue._reindex();
               app.selectedMediaItems = [];
             },
@@ -368,14 +368,14 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             icon: "./assets/feather/share.svg",
             name: app.getLz("action.share"),
             action: function () {
-              if (!self.item.attributes.url && self.item.relationships) {
-                if (self.item.relationships.catalog) {
-                  app.mkapi(self.item.attributes.playParams.kind, false, self.item.relationships.catalog.data[0].id).then((u) => {
-                    self.app.copyToClipboard(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+              if (!item.attributes.url && item.relationships) {
+                if (item.relationships.catalog) {
+                  app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
+                    app.copyToClipboard(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
                   });
                 }
               } else {
-                self.app.copyToClipboard(self.item.attributes.url);
+                app.copyToClipboard(item.attributes.url);
               }
             },
           },
@@ -383,21 +383,21 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             icon: "./assets/feather/share.svg",
             name: `${app.getLz("action.share")} (song.link)`,
             action: function () {
-              if (!self.item.attributes.url && self.item.relationships) {
-                if (self.item.relationships.catalog) {
-                  app.mkapi(self.item.attributes.playParams.kind, false, self.item.relationships.catalog.data[0].id).then((u) => {
-                    self.app.songLinkShare(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+              if (!item.attributes.url && item.relationships) {
+                if (item.relationships.catalog) {
+                  app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
+                    app.songLinkShare(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
                   });
                 }
               } else {
-                self.app.songLinkShare(self.item.attributes.url);
+                app.songLinkShare(item.attributes.url);
               }
             },
           },
         ],
       },
     };
-    if ((self.item.attributes.playParams.kind ?? self.item.type).includes("playlist")) {
+    if ((item.attributes.playParams.kind ?? item.type).includes("playlist")) {
       // remove the add to playlist option by id "addToPlaylist" using the .filter() method
       menus.normal.items = menus.normal.items.filter(function (item) {
         return item.id !== "addToPlaylist";
@@ -407,7 +407,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
 
     try {
       await isInLibrary().then((_) => {
-        if (self.addedToLibrary) {
+        if (addedToLibrary) {
           menus.normal.items.find((x) => x.id === "addToLibrary").hidden = true;
           menus.normal.items.find((x) => x.id === "removeFromLibrary").hidden = false;
         } else {
@@ -416,7 +416,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
       });
     } catch (e) {}
     try {
-      const rating = await app.getRating(self.item);
+      const rating = await app.getRating(item);
       if (rating === 0) {
         menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
         menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
@@ -446,18 +446,18 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
         icon: "./assets/star.svg",
         name: app.getLz("action.favorite"),
         action: () => {
-          self.$root.setArtistFavorite(item.id, true);
+          $root.setArtistFavorite(item.id, true);
         },
       },
       unfollow: {
         icon: "./assets/star.svg",
         name: app.getLz("action.removeFavorite"),
         action: () => {
-          self.$root.setArtistFavorite(item.id, false);
+          $root.setArtistFavorite(item.id, false);
         },
       },
     };
-    if (self.app.cfg.home.followedArtists.includes(item.id)) {
+    if (app.cfg.home.followedArtists.includes(item.id)) {
       followAction = "unfollow";
     }
     app.showMenuPanel(
@@ -477,7 +477,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             icon: "./assets/feather/share.svg",
             name: app.getLz("term.share"),
             action: () => {
-              self.app.copyToClipboard(item.attributes.url);
+              app.copyToClipboard(item.attributes.url);
             },
           },
           {
@@ -502,103 +502,111 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
     return beforeDestroy;
   }, []);
   return (
-    <>
-      <div id={"mediaitem-square"}>
+    <div
+      id={"mediaitem-square"}
+      style={{ flexShrink: 0 }}>
+      <div
+        tabIndex={0}
+        className={"cd-mediaitem-square-container"}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            app.routeView(item);
+          }
+        }}
+        controller-click={app.routeView(item)}
+        onContextMenu={(e) => {
+          if (e.target === e.currentTarget) {
+            getContextMenu(e);
+          }
+        }}
+        v-observe-visibility={"{callback: visibilityChanged}"}>
+        {reasonShown && <div className={"reasonSP "}>{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
         <div
-          tabIndex={"0"}
-          className={"cd-mediaitem-square-container"}
-          clickself={app.routeView(item)}
-          controller-click={app.routeView(item)}
-          contextmenuself={"getContextMenu"}
-          v-observe-visibility={"{callback: visibilityChanged}"}>
-          {reasonShown && <div className={"reasonSP "}>{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
+          style={{ "--spcolor": getBgColor() }}
+          className={"cd-mediaitem-square"}
+          className={getClasses()}
+          contextMenu={getContextMenu()}>
           <div
-            style={{ "--spcolor": getBgColor() }}
-            className={"cd-mediaitem-square"}
-            className={getClasses()}
-            contextMenu={"getContextMenu"}>
-            <div
-              className={"artwork-container"}
-              style={{ display: isVisible ? "inherit" : "none" }}>
-              {unavailable && (
-                <div className={"unavailable-overlay"}>
-                  <div className={"codicon codicon-circle-slash"} />
-                </div>
-              )}
-              <div
-                className={"artwork"}
-                onClick={() => app.routeView(item)}>
-                <MediaItemArtwork
-                  url={getArtworkUrl()}
-                  video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                  size={"size"}
-                  upscaling={"true"}
-                  shadow={"subtle"}
-                  bgcolor={getBgColor()}
-                  video-priority={forceVideo}
-                  type={item.type}
-                />
+            className={"artwork-container"}
+            style={{ display: isVisible ? "inherit" : "none" }}>
+            {unavailable && (
+              <div className={"unavailable-overlay"}>
+                <div className={"codicon codicon-circle-slash"} />
               </div>
-              {!nomenu.includes(item.type) && (
-                <button
-                  className={"menu-btn"}
-                  onClick={() => getContextMenu}
-                  aria-label={$root.getLz("term.more")}>
-                  {import("../svg/more.svg")}
-                </button>
-              )}
-              {!noplay.includes(item.type) && (
-                <button
-                  className={"play-btn"}
-                  onClick={() => app.playMediaItem(item)}
-                  aria-label={$root.getLz("term.play")}>
-                  {import("../svg/play.svg")}
-                </button>
-              )}
-              {itemBadges.length !== 0 &&
-                itemBadges.limit(1).map((badge) => (
-                  <div
-                    className={"socialBadge"}
-                    key={badge.id}>
-                    <MediaItemArtwork
-                      url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
-                      size={"32"}
-                    />
-                  </div>
-                ))}
-            </div>
+            )}
             <div
-              className={"info-rect"}
-              className={"{'info-rect-card': kind === 'card'}"}
-              style={{ "--bgartwork": getArtworkUrl(size, true), display: isVisible ? "inherit" : "none" }}>
-              {(item.attributes.artistNames === null || kind !== "card") && (
-                <div
-                  className={"title"}
-                  title={item.attributes?.name ?? item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? ""}
-                  onClick={() => app.routeView(item)}>
-                  <div className={"item-navigate text-overflow-elipsis"}>{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
-                  {item.attributes && item.attributes.contentRating === "explicit" && (
-                    <div
-                      className={"explicit-icon"}
-                      style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
-                    />
-                  )}
-                </div>
-              )}
-              {getSubtitle() !== "" && (
-                <div
-                  title={getSubtitle()}
-                  className={"subtitle item-navigate text-overflow-elipsis"}
-                  onClick={() => getSubtitleNavigation()}>
-                  {getSubtitle()}
-                </div>
-              )}
-              {getSubtitle() === "" && kind !== "card" && <div className={"subtitle"}>&nbsp;</div>}
+              className={"artwork"}
+              onClick={() => app.routeView(item)}>
+              <MediaItemArtwork
+                url={getArtworkUrl()}
+                video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                size={"size"}
+                upscaling={true}
+                shadow={"subtle"}
+                bgcolor={getBgColor()}
+                video-priority={forceVideo}
+                type={item.type}
+              />
             </div>
+            {!nomenu.includes(item.type) && (
+              <button
+                className={"menu-btn"}
+                onClick={() => getContextMenu}
+                aria-label={$root.getLz("term.more")}>
+                {import("../svg/more.svg")}
+              </button>
+            )}
+            {!noplay.includes(item.type) && (
+              <button
+                className={"play-btn"}
+                onClick={() => app.playMediaItem(item)}
+                aria-label={$root.getLz("term.play")}>
+                {import("../svg/play.svg")}
+              </button>
+            )}
+            {itemBadges.length !== 0 &&
+              itemBadges.limit(1).map((badge) => (
+                <div
+                  className={"socialBadge"}
+                  key={badge.id}>
+                  <MediaItemArtwork
+                    url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
+                    size={"32"}
+                  />
+                </div>
+              ))}
+          </div>
+          <div
+            className={"info-rect"}
+            className={"{'info-rect-card': kind === 'card'}"}
+            style={{ "--bgartwork": getArtworkUrl(size, true), display: isVisible ? "inherit" : "none" }}>
+            {(item.attributes.artistNames === null || kind !== "card") && (
+              <div
+                className={"title"}
+                title={item.attributes?.name ?? item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? ""}
+                onClick={() => app.routeView(item)}>
+                <div className={"item-navigate text-overflow-elipsis"}>{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
+                {item.attributes && item.attributes.contentRating === "explicit" && (
+                  <div
+                    className={"explicit-icon"}
+                    style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
+                  />
+                )}
+              </div>
+            )}
+            {getSubtitle() !== "" && (
+              <div
+                title={getSubtitle()}
+                className={"subtitle item-navigate text-overflow-elipsis"}
+                onClick={() => getSubtitleNavigation()}>
+                {getSubtitle()}
+              </div>
+            )}
+            {getSubtitle() === "" && kind !== "card" && <div className={"subtitle"}>&nbsp;</div>}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

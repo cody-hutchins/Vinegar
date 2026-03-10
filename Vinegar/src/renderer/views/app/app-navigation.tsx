@@ -91,6 +91,7 @@ const AppNavigation = () => {
                   </button>
                   {$root.pluginMenuTopEntries.map((entry) => (
                     <button
+                      key={entry.id}
                       className={"usermenu-item"}
                       onClick={() => entry.onClick()}>
                       <span

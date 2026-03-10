@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import AnimatedartworkView from "./animatedartwork-view.jsx";
 
 const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size?: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
@@ -13,28 +14,23 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
     opacity: 0,
     transition: "opacity .25s linear",
   };
-  const classes = [];
-  const imgSrc = "";
+  const classes: string[] = [];
+  let imgSrc = "";
 
-  const computed = {
-    windowRelativeScale: function () {
-      return app.$store.state.windowRelativeScale;
-    },
-  };
+  const windowRelativeScale = app.$store.state.windowRelativeScale;
 
-  const watch = {
-    windowRelativeScale: function (newValue, oldValue) {
-      swapImage(newValue);
-    },
-    url: function (newValue, oldValue) {
-      imgSrc = app.getMediaItemArtwork(url, size, width);
-    },
-  };
+  useEffect(() => {
+    swapImage(newValue);
+  }, [windowRelativeScale]);
 
-  function mounted() {
+  useEffect(() => {
+    imgSrc = app.getMediaItemArtwork(url, size, width);
+  }, [url]);
+
+  useEffect(() => {
     getClasses();
     imgSrc = app.getMediaItemArtwork(url, size, width);
-  }
+  }, []);
 
   const swapImage = (newValue) => {
     if (!upscaling || window.devicePixelRatio !== 1) return;
@@ -56,7 +52,7 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
           save: {
             name: app.getLz("action.openArtworkInBrowser"),
             action: () => {
-              window.open(app.getMediaItemArtwork(self.url, 1024, 1024));
+              window.open(app.getMediaItemArtwork(url, 1024, 1024));
             },
           },
         },
@@ -120,8 +116,8 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
           />
           {video && getVideoPriority() && <div className={"animatedartwork-view-box"} />}
           <AnimatedartworkView
-            priority={getVideoPriority()}
-            video={"video"}
+            priority={!!getVideoPriority()}
+            video={video ?? ""}
           />
         </div>
       </div>

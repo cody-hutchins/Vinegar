@@ -3,7 +3,6 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size: string | number; images: string | number }) => {
   let src = "";
-  function mounted() {}
   useEffect(() => {
     src = app.getMediaItemArtwork(url, size);
   }, []);

@@ -14,8 +14,16 @@ const AirplayModal = () => {
   return (
     <div
       className={"spatialproperties-panel castmenu modal-fullscreen airplay-modal"}
-      clickself={close}
-      contextmenuself={close}>
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          close();
+        }
+      }}
+      onContextMenu={(e) => {
+        if (e.target === e.currentTarget) {
+          close();
+        }
+      }}>
       <div className={"modal-window airplay-modal"}>
         <div className={"modal-header"}>
           <div className={"modal-title"}>Enter password</div>

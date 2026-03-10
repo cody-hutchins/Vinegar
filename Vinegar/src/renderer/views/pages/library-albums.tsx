@@ -1,4 +1,7 @@
 import { useEffect, useMemo } from "react";
+import Pagination from "../components/pagination";
+import MediaItemSquare from "../components/mediaitem-square";
+import MediaItemListItem from "../components/mediaitem-list-item";
 
 const Component = () => {
   const pageSize = this.$root.cfg.libraryPrefs.pageSize;
@@ -81,7 +84,11 @@ const Component = () => {
                     }}>
                     <optgroup label={$root.getLz("term.sortBy")}>
                       {library.albums.sortingOptions.map((sort, index) => (
-                        <option value={"index"}>{sort}</option>
+                        <option
+                          key={index}
+                          value={"index"}>
+                          {sort}
+                        </option>
                       ))}
                     </optgroup>
                   </select>
@@ -122,9 +129,9 @@ const Component = () => {
                 </div>
               </div>
             </div>
-            <pagination
+            <Pagination
               length={app.library.albums.displayListing.length}
-              pageSize={"pageSize"}
+              pageSize={pageSize}
               scroll={prefs.scroll}
               scrollSelector={"#app-content"}
               onRangeChange={onRangeChange}
@@ -138,7 +145,8 @@ const Component = () => {
                   (item) =>
                     prefs.viewAs === "covers" && (
                       <MediaItemSquare
-                        size={"'300'"}
+                        key={item.id}
+                        size={"300"}
                         item={item}
                       />
                     ),
@@ -149,9 +157,9 @@ const Component = () => {
               (item) =>
                 prefs.viewAs === "list" && (
                   <MediaItemListItem
-                    show-duration={"false"}
-                    show-meta-data={"true"}
-                    show-library-status={"false"}
+                    showDuration={false}
+                    showMetadata={true}
+                    showLibraryStatus={false}
                     key={item.id}
                     item={item}
                   />

@@ -1,4 +1,4 @@
-const EditorialNotes = ({ title, content }: { title: any; content: any }) => (
+const EditorialNotes = ({ title, content }: { title: string; content: string }) => (
   <div className={"modal-backdrop"}>
     <div className={"modal-dialog"}>
       <div className={"modal-header"}>

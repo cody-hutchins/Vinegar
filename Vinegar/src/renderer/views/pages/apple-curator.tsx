@@ -15,7 +15,7 @@ const AppleCurator = ({ data }: { data: object }) => {
           {data.relationships && data.relationships.grouping && (
             <template>
               {data.relationships.grouping.data[0].relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
-                <div>
+                <div key={index}>
                   <div className={"row"}>
                     {recom.attributes.name !== "Chart Set" && (
                       <div className={"col"}>
@@ -36,8 +36,8 @@ const AppleCurator = ({ data }: { data: object }) => {
                     <div>
                       {(recom.attributes.name && recom.attributes.name.includes("ideo")) || index === 0 ? (
                         <MediaItemScrollerHorizontalMVView
-                          imagesize={"800"}
-                          browsesp={"index === 0"}
+                          imagesize={800}
+                          browsesp={index === 0}
                           items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
                         />
                       ) : recom.attributes.name === "Chart Set" ? (

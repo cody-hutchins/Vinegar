@@ -61,9 +61,9 @@ const ArtistFeed = () => {
       const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
       chunkArtistData.forEach((chunkResult) =>
         chunkResult.data.data.forEach((item) => {
-          self.artists.push(item);
+          artists.push(item);
           if (item.views["latest-release"].data.length !== 0) {
-            self.artistFeed.push(item.views["latest-release"].data[0]);
+            artistFeed.push(item.views["latest-release"].data[0]);
           }
         }),
       );
@@ -102,9 +102,11 @@ const ArtistFeed = () => {
                     )}
                   </div>
                 </div>
-                <vue-horizontal>
+                <div style={{ overflowX: "auto", display: "flex", scrollSnapType: "x mandatory" }}>
                   {artists.map((artist) => (
-                    <div style={{ margin: "6px" }}>
+                    <div
+                      key={artist.id}
+                      style={{ margin: "6px" }}>
                       <MediaItemSquare
                         item={artist}
                         kind={"small"}
@@ -112,7 +114,7 @@ const ArtistFeed = () => {
                       <button
                         onClick={() => unfollow(artist.id)}
                         className={"md-btn md-btn-glyph"}
-                        style={{ display: flex }}>
+                        style={{ display: "flex" }}>
                         <div className={"sidebar-icon"}>
                           <div
                             className={"svg-icon"}
@@ -123,7 +125,7 @@ const ArtistFeed = () => {
                       </button>
                     </div>
                   ))}
-                </vue-horizontal>
+                </div>
               </div>
             </div>
           </div>

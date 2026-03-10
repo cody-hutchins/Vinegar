@@ -1,115 +1,9 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "../components/MediaItemArtwork.jsx";
-import LibraryArtistItem from "../components/libraryartist-item.jsx";
+// import LibraryArtistItem from "../components/libraryartist-item.jsx";
 import InlineCollectionList from "../components/inline-collection-list.jsx";
 
-const Component = () => {
-  const app = this.$root;
-  const library = this.$root.library;
-  const ciderPodcasts = [];
-  const podcasts = [];
-  const episodes = [];
-  const search = {
-    term: "",
-    loading: false,
-    results: [],
-    resultsLibrary: [],
-    next: "",
-  };
-  const podcastSelected = {
-    id: -1,
-  };
-  const selected = {
-    id: -1,
-  };
-  const collectionList = {
-    response: null,
-    title: null,
-    type: null,
-    requestBody: null,
-  };
-  let clresponse = [];
-  let clready = false;
-  let cltitle = "";
-  let cltype = "artists";
-
-  function mounted() {
-    this.$root.getLibraryArtistsFull(null, 0);
-    this.$root.$on("ap-inlinecollection", function (e) {
-      console.log("hey", e);
-      clready = true;
-      clresponse = e.response;
-      cltitle = e.title ?? "";
-      cltype = e.type;
-    });
-  }
-  useEffect(() => {
-    mounted();
-  }, []);
-  function getInlineCollection(e) {
-    console.log("hey", e);
-  }
-  return (
-    <>
-      <div id={"cider-library-artists"}>
-        <div className={"content-inner library-artists-page"}>
-          {/* <div className="row">
-                <div className="col" style={{padding:0}}>
-                    <h1 className="header-text">{$root.getLz('term.artists')}</h1>
-                </div>
-
-            </div>  */}
-          <div className={"inner-container"}>
-            <div className={"list-container"}>
-              <div
-                className={"col"}
-                style={{ padding: 0 }}>
-                <div
-                  className={"search-input-container"}
-                  style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
-                  <div className={"search-input--icon"} />
-                  <input
-                    type={"search"}
-                    style={{ width: "100%" }}
-                    spellCheck={"false"}
-                    placeholder={$root.getLz("term.search") + "..."}
-                    input={$root.searchLibraryArtists}
-                    v-model={library.artists.search}
-                    className={"search-input"}
-                  />
-                </div>
-              </div>
-              <div className={"podcasts-list"}>
-                {library.artists.displayListing.map((item) => (
-                  <LibraryArtistItem
-                    show-duration={"false"}
-                    show-meta-data={"true"}
-                    show-library-status={"false"}
-                    item={item}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className={"episodes-list"}>
-              {clready && (
-                <div className={"episodes-inline-info"}>
-                  <InlineCollectionList
-                    parentSelector={"'.episodes-list'"}
-                    data={clresponse}
-                    type={cltype}
-                    title={cltitle}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export const Component2 = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
+const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   const isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
@@ -296,3 +190,112 @@ export const Component2 = ({ item, parent, index = -1, showArtwork = true, showL
     </>
   );
 };
+
+const LibraryArtists = () => {
+  const app = this.$root;
+  const library = this.$root.library;
+  const ciderPodcasts = [];
+  const podcasts = [];
+  const episodes = [];
+  const search = {
+    term: "",
+    loading: false,
+    results: [],
+    resultsLibrary: [],
+    next: "",
+  };
+  const podcastSelected = {
+    id: -1,
+  };
+  const selected = {
+    id: -1,
+  };
+  const collectionList = {
+    response: null,
+    title: null,
+    type: null,
+    requestBody: null,
+  };
+  let clresponse = [];
+  let clready = false;
+  let cltitle = "";
+  let cltype = "artists";
+
+  function mounted() {
+    this.$root.getLibraryArtistsFull(null, 0);
+    this.$root.$on("ap-inlinecollection", function (e) {
+      console.log("hey", e);
+      clready = true;
+      clresponse = e.response;
+      cltitle = e.title ?? "";
+      cltype = e.type;
+    });
+  }
+  useEffect(() => {
+    mounted();
+  }, []);
+  function getInlineCollection(e) {
+    console.log("hey", e);
+  }
+  return (
+    <>
+      <div id={"cider-library-artists"}>
+        <div className={"content-inner library-artists-page"}>
+          {/* <div className="row">
+                <div className="col" style={{padding:0}}>
+                    <h1 className="header-text">{$root.getLz('term.artists')}</h1>
+                </div>
+
+            </div>  */}
+          <div className={"inner-container"}>
+            <div className={"list-container"}>
+              <div
+                className={"col"}
+                style={{ padding: 0 }}>
+                <div
+                  className={"search-input-container"}
+                  style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
+                  <div className={"search-input--icon"} />
+                  <input
+                    type={"search"}
+                    style={{ width: "100%" }}
+                    spellCheck={false}
+                    placeholder={$root.getLz("term.search") + "..."}
+                    input={$root.searchLibraryArtists}
+                    v-model={library.artists.search}
+                    className={"search-input"}
+                  />
+                </div>
+              </div>
+              <div className={"podcasts-list"}>
+                {library.artists.displayListing.map((item) => (
+                  <LibraryArtistItem
+                    key={item.id}
+                    showDuration={false}
+                    showMetadata={true}
+                    showLibraryStatus={false}
+                    item={item}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className={"episodes-list"}>
+              {clready && (
+                <div className={"episodes-inline-info"}>
+                  <InlineCollectionList
+                    parentSelector={".episodes-list"}
+                    data={clresponse}
+                    type={cltype}
+                    title={cltitle}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default LibraryArtists;

@@ -67,6 +67,7 @@ const Sidebar = () => {
                           .filter((a) => a.content === null)
                           .map((hint, index) => (
                             <button
+                              key={index}
                               className={"search-hint text-overflow-elipsis"}
                               className={"{active: ($root.search.cursor === index)}"}
                               onClick={() => {
@@ -83,6 +84,7 @@ const Sidebar = () => {
                             .filter((a) => a.content !== null)
                             .map((item, position) => (
                               <MediaItemSmarthints
+                                key={position}
                                 item={item.content}
                                 position={position}
                               />

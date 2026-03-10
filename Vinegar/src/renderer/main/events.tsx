@@ -44,14 +44,14 @@ const Events = {
         app.appRoute("home");
       }
       // CTRL+SHIFT+H
-      if (event.ctrlKey && event.shiftKey && event.keyCode == 72) {
+      if (event.ctrlKey && event.shiftKey && event.keyCode === 72) {
         const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
           l: app.mklang,
         });
         app.showCollection(hist.data, app.getLz("term.history"));
       }
       // CTRL+F10
-      if (event.ctrlKey && event.keyCode == 121) {
+      if (event.ctrlKey && event.keyCode === 121) {
         try {
           app.mk._services.mediaItemPlayback._currentPlayer.stop();
         } catch (e) {}
@@ -75,7 +75,7 @@ const Events = {
         } catch (e) {}
       }
       // CTRL+F11
-      if (event.ctrlKey && event.keyCode == 122) {
+      if (event.ctrlKey && event.keyCode === 122) {
         try {
           ipcRenderer.send("detachDT", "");
         } catch (e) {}
@@ -96,7 +96,7 @@ const Events = {
 
     // Refresh Focus
     function refreshFocus() {
-      if (document.hasFocus() == false) {
+      if (document.hasFocus() === false) {
         app.windowFocus(false);
       } else {
         app.windowFocus(true);

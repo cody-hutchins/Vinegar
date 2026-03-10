@@ -25,24 +25,19 @@ Array.prototype.limit = function (n) {
 export const AnimatedNumber = ({ number }: { number: 0 }) => {
   let displayNumber = number ? number : 0;
   let interval = -1;
-
-  const watch = {
-    number() {
-      clearInterval(interval);
-
-      if (number == displayNumber) {
-        return;
+  useEffect(() => {
+    clearInterval(interval);
+    if (number === displayNumber) {
+      return;
+    }
+    interval = window.setInterval(() => {
+      if (displayNumber !== number) {
+        let change = (number - displayNumber) / 10;
+        change = change >= 0 ? Math.ceil(change) : Math.floor(change);
+        displayNumber = displayNumber + change;
       }
-
-      interval = window.setInterval(() => {
-        if (displayNumber !== number) {
-          let change = (number - displayNumber) / 10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          displayNumber = displayNumber + change;
-        }
-      }, 20);
-    },
-  };
+    }, 20);
+  }, [number]);
 
   return <div style={{ display: "inline-block" }}>{displayNumber}</div>;
 };
@@ -69,7 +64,7 @@ const initMusicKit = () => {
     function waitForApp() {
       if (typeof app.init !== "undefined") {
         app.init();
-        if (app.cfg.visual.window_background_style == "mica" && !app.isDev) {
+        if (app.cfg.visual.window_background_style === "mica" && !app.isDev) {
           app.spawnMica();
         }
       } else {
@@ -85,8 +80,8 @@ const capiInit = () => {
   request.timeout = 5000;
   request.addEventListener("load", initMusicKit);
   request.onreadystatechange = function (aEvt) {
-    if (request.readyState == 4 && request.status != 200) {
-      if (localStorage.getItem("lastToken") != null) {
+    if (request.readyState === 4 && request.status !== 200) {
+      if (localStorage.getItem("lastToken") !== null) {
         initMusicKit();
       } else {
         console.error(`Failed to load capi, cannot get token [${request.status}]`);
@@ -140,7 +135,7 @@ const xmlToJson = (xml) => {
   // Create the return object
   let obj = {};
 
-  if (xml.nodeType == 1) {
+  if (xml.nodeType === 1) {
     // element
     // do attributes
     if (xml.attributes.length > 0) {
@@ -150,7 +145,7 @@ const xmlToJson = (xml) => {
         obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
       }
     }
-  } else if (xml.nodeType == 3) {
+  } else if (xml.nodeType === 3) {
     // text
     obj = xml.nodeValue;
   }
@@ -246,7 +241,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 document.addEventListener(
   "contextmenu",
   function (e) {
-    if (e.target.tagName.toLowerCase() == "textarea" || (e.target.tagName.toLowerCase() == "input" && e.target.type != "checkbox" && e.target.type != "radio" && e.target.disabled == false)) {
+    if (e.target.tagName.toLowerCase() === "textarea" || (e.target.tagName.toLowerCase() === "input" && e.target.type !== "checkbox" && e.target.type !== "radio" && e.target.disabled === false)) {
       e.preventDefault();
       const menuPanel = {
         items: {

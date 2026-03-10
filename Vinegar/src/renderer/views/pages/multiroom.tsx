@@ -53,7 +53,7 @@ const Multiroom = ({ data }: { data: object }) => {
                         recom?.relationships?.contents?.data.map(
                           (recom, index) =>
                             (recom.relationships?.contents?.data ?? []).length > 0 && (
-                              <template>
+                              <div key={index}>
                                 <div className={"row"}>
                                   {recom.attributes.name !== "Chart Set" && (
                                     <div className={"col"}>
@@ -75,8 +75,8 @@ const Multiroom = ({ data }: { data: object }) => {
                                     {(recom.attributes.name && recom.attributes.name.includes("ideo")) || index === 0 ? (
                                       <template>
                                         <MediaItemScrollerHorizontalMVView
-                                          imagesize={"800"}
-                                          browsesp={"index === 0"}
+                                          imagesize={800}
+                                          browsesp={index === 0}
                                           items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
                                         />
                                       </template>
@@ -87,7 +87,7 @@ const Multiroom = ({ data }: { data: object }) => {
                                     )}
                                   </template>
                                 )}
-                              </template>
+                              </div>
                             ),
                         )}
                     </template>

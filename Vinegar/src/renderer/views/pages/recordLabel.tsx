@@ -1,3 +1,4 @@
+import MediaItemArtwork from "../components/mediaitem-artwork.js";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
 const RecordLabel = ({ data }: { data: string }) => {
@@ -66,7 +67,10 @@ const RecordLabel = ({ data }: { data: string }) => {
                   </div>
                 </div>
                 {data.views["latest-releases"].data.map((item) => (
-                  <MediaItemSquare item={item} />
+                  <MediaItemSquare
+                    key={item.id}
+                    item={item}
+                  />
                 ))}
               </template>
             )}
@@ -78,7 +82,10 @@ const RecordLabel = ({ data }: { data: string }) => {
                   </div>
                 </div>
                 {data.views["top-releases"].data.map((item) => (
-                  <MediaItemSquare item={item} />
+                  <MediaItemSquare
+                    key={item.id}
+                    item={item}
+                  />
                 ))}
               </template>
             )}
@@ -90,7 +97,10 @@ const RecordLabel = ({ data }: { data: string }) => {
                   </div>
                 </div>
                 {data.relationships.playlists.data.limit(5).map((item) => (
-                  <MediaItemSquare item={item} />
+                  <MediaItemSquare
+                    key={item.id}
+                    item={item}
+                  />
                 ))}
               </template>
             )}

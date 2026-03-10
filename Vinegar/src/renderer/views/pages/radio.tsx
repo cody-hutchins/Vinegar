@@ -32,9 +32,9 @@ const Radio = ({ data }: { data: object }) => {
         <div className={"content-inner"}>
           <h1 className={"header-text"}>{$root.getLz("term.radio")}</h1>
           {data.relationships && data.relationships.tabs && (
-            <template>
+            <>
               {data.relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
-                <template>
+                <div key={index}>
                   <div className={"row"}>
                     {recom.attributes.name !== "Chart Set" && (
                       <div className={"col"}>
@@ -84,6 +84,7 @@ const Radio = ({ data }: { data: object }) => {
                           <div className={"grouping-container"}>
                             {recom.attributes.links.map((link) => (
                               <button
+                                key={link.id}
                                 className={"grouping-btn"}
                                 onClick={() => $root.goToGrouping(link.url)}>
                                 {link.label}
@@ -94,9 +95,9 @@ const Radio = ({ data }: { data: object }) => {
                       )}
                     </template>
                   )}
-                </template>
+                </div>
               ))}
-            </template>
+            </>
           )}
         </div>
       </div>

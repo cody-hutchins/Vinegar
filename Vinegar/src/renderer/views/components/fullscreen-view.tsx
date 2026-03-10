@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Queue from "./queue.jsx";
 import LyricsView from "./lyrics-view.jsx";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
+import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 
 const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
   const app = this.$root;
@@ -62,7 +63,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
       <div id={"fullscreen-view"}>
         <div
           className={"fullscreen-view"}
-          tabIndex={"0"}>
+          tabIndex={0}>
           <div className={"background"}>
             <div className={"bgArtworkMaterial"}>
               <div className={"bg-artwork-container"}>
@@ -151,7 +152,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                   <MediaItemArtwork
                     size={"600"}
                     video={"video"}
-                    videoPriority={"true"}
+                    videoPriority={true}
                     url={(image ?? "").replace("{w}", "600").replace("{h}", "600")}
                   />
                 </div>
@@ -330,7 +331,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
             </div>
           ) : (
             <div className={"app-content-container"}>
-              <app-content-area></app-content-area>
+              <app-content-area />
             </div>
           )}
           <div className={"tab-toggles"}>

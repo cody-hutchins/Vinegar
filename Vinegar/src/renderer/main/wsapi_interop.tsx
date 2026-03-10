@@ -34,7 +34,7 @@ const wsapi = {
     const nowPlayingItem = mk.nowPlayingItem;
     const isPlayingExport = mk.isPlaying;
     const remainingTimeExport = mk.currentPlaybackTimeRemaining;
-    const attributes = nowPlayingItem != null ? nowPlayingItem.attributes : {};
+    const attributes = nowPlayingItem !== null ? nowPlayingItem.attributes : {};
 
     attributes.status = isPlayingExport ? isPlayingExport : false;
     attributes.name = attributes.name ? attributes.name : "No Title Found";

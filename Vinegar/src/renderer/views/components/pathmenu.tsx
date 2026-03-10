@@ -2,7 +2,7 @@ import { ipcRenderer } from "electron";
 import { useEffect } from "react";
 
 const PathMenu = () => {
-  let folders = [];
+  let folders: string[] = [];
   function mounted() {
     folders = this.$root.cfg.libraryPrefs.localPaths;
   }
@@ -31,8 +31,16 @@ const PathMenu = () => {
     <div id={"pathmenu"}>
       <div
         className={"spatialproperties-panel castmenu pathmenu modal-fullscreen"}
-        clickself={close()}
-        contextmenuself={close()}>
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            close();
+          }
+        }}
+        onContextMenu={(e) => {
+          if (e.target === e.currentTarget) {
+            close();
+          }
+        }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
             <div className={"modal-title"}>Edit Paths</div>
@@ -44,7 +52,9 @@ const PathMenu = () => {
           </div>
           <div className={"modal-content"}>
             {folders.map((folder) => (
-              <div className={"md-option-line"}>
+              <div
+                key={folder.id}
+                className={"md-option-line"}>
                 <div className={"md-option-segment"}>{folder}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button

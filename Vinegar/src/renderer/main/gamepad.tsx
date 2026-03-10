@@ -99,7 +99,7 @@ function simulateGamepad() {
       if (Date.now() - lastButtonPress["A"] > buttonPressDelay) {
         lastButtonPress["A"] = Date.now();
         sounds.Confirm.play();
-        if (elementType == 0) {
+        if (elementType === 0) {
           document.activeElement.dispatchEvent(new Event("click"));
           document.activeElement.dispatchEvent(new Event("controller-click"));
         } else {
@@ -116,7 +116,7 @@ function simulateGamepad() {
       }
       if (Date.now() - lastButtonPress["B"] > buttonPressDelay) {
         lastButtonPress["B"] = Date.now();
-        if (elementType == 0) {
+        if (elementType === 0) {
           document.activeElement.dispatchEvent(new Event("contextmenu"));
           setTimeout(() => {
             if ($(".menu-option").length > 0) {
@@ -264,7 +264,7 @@ function simulateGamepad() {
       case "x":
         // set cursorPos to the top right of the screen
         // sounds.Menu.play()
-        if (elementType == 0) {
+        if (elementType === 0) {
           document.activeElement.dispatchEvent(new Event("contextmenu"));
         } else {
           element.dispatchEvent(new Event("contextmenu"));
@@ -274,7 +274,7 @@ function simulateGamepad() {
         break;
       case "z":
         sounds.Confirm.play();
-        if (elementType == 0) {
+        if (elementType === 0) {
           document.activeElement.dispatchEvent(new Event("click"));
           document.activeElement.dispatchEvent(new Event("controller-click"));
         } else {

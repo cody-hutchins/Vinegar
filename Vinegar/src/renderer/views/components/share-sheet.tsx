@@ -42,8 +42,16 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
       <template>
         <div
           className={"modal-fullscreen addtoplaylist-panel"}
-          clickself={app.resetState()}
-          contextmenuself={app.resetState()}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              app.resetState();
+            }
+          }}
+          onContextMenu={(e) => {
+            if (e.target === e.currentTarget) {
+              app.resetState();
+            }
+          }}>
           <div className={"modal-window"}>
             <div className={"modal-header"}>
               <div className={"modal-title"}>{app.getLz("action.addToPlaylist")}</div>
@@ -63,7 +71,7 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
               </button>
               {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
                 <SidebarPlaylist
-                  playlist-select={playlistSelect}
+                  playlistSelect={playlistSelect}
                   key={item.id}
                   item={item}
                 />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Component = () => {
+const AudioPlaybackRate = () => {
   const app = this.$root;
   const [playbackRate, setPlaybackRate] = useState(this.$root.cfg.audio.playbackRate);
   const playbackRateWheel = (event) => {
@@ -13,8 +13,7 @@ const Component = () => {
   const playbackRateClick = (newValue) => {
     newValue = Number(newValue);
     if (newValue >= 0.25 && newValue <= 2) {
-      newValue = String(newValue).length & gt;
-      4 ? newValue.toFixed(2) : newValue;
+      newValue = String(newValue).length > 4 ? newValue.toFixed(2) : newValue;
       this.$root.mk.playbackRate = newValue;
       this.$root.cfg.audio.playbackRate = newValue;
       setPlaybackRate(newValue);
@@ -25,8 +24,16 @@ const Component = () => {
       <div id={"audio-playbackrate"}>
         <div
           className={"modal-fullscreen addtoplaylist-panel"}
-          clickself={(app.modals.audioPlaybackRate = false)}
-          contextmenuself={(app.modals.audioPlaybackRate = false)}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              app.modals.audioPlaybackRate = false;
+            }
+          }}
+          onContextMenu={(e) => {
+            if (e.target === e.currentTarget) {
+              app.modals.audioPlaybackRate = false;
+            }
+          }}>
           <div className={"modal-window"}>
             <div className={"modal-header"}>
               <div className={"modal-title"}>{app.getLz("settings.option.audio.changePlaybackRate")}</div>
@@ -45,7 +52,7 @@ const Component = () => {
                     type={"range"}
                     step={0.05}
                     min={0.25}
-                    max={"2"}
+                    max={2}
                     onWheel={playbackRateWheel}
                     onChange={(e) => playbackRateClick(e.target.value)}
                     v-model={playbackRate}
@@ -59,3 +66,5 @@ const Component = () => {
     </>
   );
 };
+
+export default AudioPlaybackRate;

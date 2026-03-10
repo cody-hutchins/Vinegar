@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
-const Component = ({ data }: { data: object }) => {
+const LibrarySongs = ({ data }: { data: object }) => {
   const videos = [];
   const loaded = false;
   useEffect(() => {
@@ -25,6 +25,7 @@ const Component = ({ data }: { data: object }) => {
           {videos.length > 0 ? (
             videos.map((item) => (
               <MediaItemSquare
+                key={item.id}
                 size={"300"}
                 item={item}
               />
@@ -39,3 +40,5 @@ const Component = ({ data }: { data: object }) => {
     </div>
   );
 };
+
+export default LibrarySongs;

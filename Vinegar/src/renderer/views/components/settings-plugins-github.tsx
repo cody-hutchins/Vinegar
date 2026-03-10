@@ -10,8 +10,9 @@ const PluginsGithub = () => {
       avatar_url: "",
     },
     readme: "",
+    full_name: "",
   };
-  const themesInstalled = [];
+  const themesInstalled: string[] = [];
   function mounted() {
     getRepos();
     // getInstalledThemes();

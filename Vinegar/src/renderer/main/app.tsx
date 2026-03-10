@@ -30,7 +30,7 @@ if (app.cfg.advanced.disableLogging === true) {
 app.$mount("#app");
 
 // Init CiderAudio and force audiocontext
-if (app.cfg.advanced.AudioContext != true) {
+if (app.cfg.advanced.AudioContext !== true) {
   app.cfg.advanced.AudioContext = true;
   window.location.reload();
 }

@@ -40,26 +40,26 @@ const Artist = ({ data }: { data: object }) => {
     headerVisible = visible;
   }
   async function artistMenu(event) {
-    let followAction = "follow";
-    const followActions = {
-      follow: {
-        icon: "./assets/feather/plus-circle.svg",
-        name: app.getLz("action.follow"),
-        action: () => {
-          self.app.cfg.home.followedArtists.push(self.data.id);
-        },
-      },
-      unfollow: {
-        icon: "./assets/feather/x-circle.svg",
-        name: app.getLz("action.unfollow"),
-        action: () => {
-          const index = self.app.cfg.home.followedArtists.indexOf(self.data.id);
-          if (index > -1) {
-            self.app.cfg.home.followedArtists.splice(index, 1);
-          }
-        },
-      },
-    };
+    // let followAction = "follow";
+    // const followActions = {
+    //   follow: {
+    //     icon: "./assets/feather/plus-circle.svg",
+    //     name: app.getLz("action.follow"),
+    //     action: () => {
+    //       app.cfg.home.followedArtists.push(data.id);
+    //     },
+    //   },
+    //   unfollow: {
+    //     icon: "./assets/feather/x-circle.svg",
+    //     name: app.getLz("action.unfollow"),
+    //     action: () => {
+    //       const index = app.cfg.home.followedArtists.indexOf(data.id);
+    //       if (index > -1) {
+    //         app.cfg.home.followedArtists.splice(index, 1);
+    //       }
+    //     },
+    //   },
+    // };
     const favoriteActions = {
       favorite: {
         icon: "./assets/star.svg",
@@ -76,9 +76,9 @@ const Artist = ({ data }: { data: object }) => {
         },
       },
     };
-    if (app.cfg.home.followedArtists.includes(self.data.id)) {
-      followAction = "unfollow";
-    }
+    // if (app.cfg.home.followedArtists.includes(data.id)) {
+    //   followAction = "unfollow";
+    // }
     const inFavorites = (
       await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${app.artistPage.data.id}`, {
         "fields[artists]": "inFavorites",
@@ -91,7 +91,7 @@ const Artist = ({ data }: { data: object }) => {
             icon: "./assets/feather/play.svg",
             name: app.getLz("action.startRadio"),
             action: () => {
-              app.mk.setStationQueue({ artist: self.data.id }).then(() => {
+              app.mk.setStationQueue({ artist: data.id }).then(() => {
                 app.mk.play();
               });
             },
@@ -102,7 +102,7 @@ const Artist = ({ data }: { data: object }) => {
             icon: "./assets/feather/share.svg",
             name: app.getLz("term.share"),
             action: () => {
-              self.app.copyToClipboard(self.data.attributes.url);
+              app.copyToClipboard(data.attributes.url);
             },
           },
         ],
@@ -193,15 +193,15 @@ const Artist = ({ data }: { data: object }) => {
               </div>
               <button
                 className={"more-btn-round favorite"}
-                onClick={() => artistMenu}
-                style={{ pointerEvents: all }}
+                onClick={artistMenu}
+                style={{ pointerEvents: "all" }}
                 aria-label={app.getLz("term.more")}>
                 <div className={"svg-icon"} />
               </button>
               <button
                 className={"more-btn-round menu"}
-                onClick={() => artistMenu}
-                style={{ pointerEvents: all }}
+                onClick={artistMenu}
+                style={{ pointerEvents: "all" }}
                 aria-label={app.getLz("term.more")}>
                 <div className={"svg-icon"} />
               </button>
@@ -227,7 +227,7 @@ const Artist = ({ data }: { data: object }) => {
           </div>
           <div
             className={"floating-header"}
-            style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
+            style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "inherit" }}>
             <div className={"row"}>
               <div className={"col-auto cider-flex-center"}>
                 <button
@@ -265,6 +265,7 @@ const Artist = ({ data }: { data: object }) => {
                   <div style={{ width: "auto", margin: "0 auto" }}>
                     {data.views["latest-release"].data.map((song) => (
                       <MediaItemSquare
+                        key={song.id}
                         kind={"card"}
                         no-scale={"true"}
                         item={song}

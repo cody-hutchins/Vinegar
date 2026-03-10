@@ -18,7 +18,7 @@ const QRCodeModal = ({ src, url }: { src: string; url: string }) => {
           <div className={"modal-content"}>
             <img
               className={"qrimg"}
-              src={"src"}
+              src={src}
             />
           </div>
         </div>

@@ -1,6 +1,6 @@
 import SVGIcon from "../../main/components/svg-icon.jsx";
 
-const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: object; playlistSelect: () => void; relateMediaItems: string[] }) => {
+const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: object; playlistSelect?: (playlist: object) => void; relateMediaItems?: string[] }) => {
   let folderOpened = false;
   let children = [];
   const playlistRoot = "p.playlistsroot";
@@ -254,7 +254,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
             {!renaming ? (
               <template>
                 <SVGIcon
-                  url={"icon"}
+                  url={icon}
                   name={"sidebar-playlist"}
                 />
                 {item.attributes.name}
@@ -277,8 +277,8 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
               {children.length !== 0 ? (
                 children.map((item) => (
                   <SidebarPlaylist
-                    relate-media-items={relateMediaItems}
-                    playlist-select={playlistSelect}
+                    relateMediaItems={relateMediaItems}
+                    playlistSelect={playlistSelect}
                     item={item}
                     key={item.id}
                   />

@@ -6,7 +6,7 @@ const MenuPanel = () => {
   const content = this.$root.menuPanel.content;
   const getSvgIcon = this.$root.getSvgIcon;
   let position = [0, 0];
-  const size = [0, 0];
+  let size = [0, 0];
   const event = this.$root.menuPanel.event;
   let direction = "down";
   let elStyle: Record<string, string | number> = {
@@ -119,18 +119,22 @@ const MenuPanel = () => {
       <div id={"cider-menu-panel"}>
         <div
           className={"menu-panel"}
-          clickself={() => {
-            menuPanel.visible = false;
-            if ($root.hintscontext) {
-              $root.hintscontext = false;
-              focusOther();
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              menuPanel.visible = false;
+              if ($root.hintscontext) {
+                $root.hintscontext = false;
+                focusOther();
+              }
             }
           }}
-          contextmenuself={() => {
-            menuPanel.visible = false;
-            if ($root.hintscontext) {
-              $root.hintscontext = false;
-              focusOther();
+          onContextMenu={(e) => {
+            if (e.target === e.currentTarget) {
+              menuPanel.visible = false;
+              if ($root.hintscontext) {
+                $root.hintscontext = false;
+                focusOther();
+              }
             }
           }}>
           <div
@@ -153,6 +157,7 @@ const MenuPanel = () => {
                   (item) =>
                     canDisplay(item) && (
                       <button
+                        key={item.id}
                         className={"menu-option-header"}
                         className={getClasses(item)}
                         v-b-tooltiphover
@@ -179,6 +184,7 @@ const MenuPanel = () => {
                 (item) =>
                   canDisplay(item) && (
                     <button
+                      key={item.id}
                       className={"menu-option"}
                       style={getItemStyle(item)}
                       onClick={() => action(item)}>

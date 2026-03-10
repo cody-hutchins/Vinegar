@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import Pagination from "../components/pagination.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 
-const Component = () => {
+const LibrarySongs = () => {
   const app = this.$root;
   const library = this.$root.library;
   const mediaItemSize = "compact";
@@ -172,10 +172,10 @@ const Component = () => {
                 <MediaItemListItem
                   class-list={"compact"}
                   item={item}
-                  parent={"'librarysongs'"}
+                  parent={"librarysongs"}
                   index={index}
-                  show-meta-data={"true"}
-                  show-library-status={"false"}
+                  showMetadata={true}
+                  showLibraryStatus={false}
                   key={item.id}
                 />
               ))}
@@ -187,10 +187,10 @@ const Component = () => {
               {currentSlice.map((item, index) => (
                 <MediaItemListItem
                   item={item}
-                  parent={"'librarysongs'"}
+                  parent={"librarysongs"}
                   index={index}
-                  show-meta-data={"true"}
-                  show-library-status={"false"}
+                  showMetadata={true}
+                  showLibraryStatus={false}
                   key={item.id}
                 />
               ))}
@@ -201,3 +201,5 @@ const Component = () => {
     </>
   );
 };
+
+export default LibrarySongs;

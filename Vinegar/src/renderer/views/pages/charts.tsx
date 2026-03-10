@@ -4,12 +4,12 @@ import ListItemHorizontal from "../components/listitem-horizontal.jsx";
 
 const Charts = () => {
   const app = this.$root;
-  const songs = [];
-  const albums = [];
-  const playlists = [];
-  const musicvideos = [];
-  const citycharts = [];
-  const globalcharts = [];
+  let songs = [];
+  let albums = [];
+  let playlists = [];
+  let musicvideos = [];
+  let citycharts = [];
+  let globalcharts = [];
   const categories = [];
 
   useEffect(() => {
@@ -29,20 +29,18 @@ const Charts = () => {
       "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
       "fields[playlists]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url,curatorName",
     });
-    const self: Record<string, any> = {};
     const page = res.data?.results ?? [];
-    self.songs = page.songs[0] ?? [];
-    self.albums = page.albums[0] ?? [];
-    self.playlists = page.playlists[0] ?? [];
-    self.musicvideos = page["music-videos"][0] ?? [];
-    self.citycharts = page.cityCharts[0] ?? [];
-    self.globalcharts = page.dailyGlobalTopCharts[0] ?? [];
-    return self;
+    songs = page.songs[0] ?? [];
+    albums = page.albums[0] ?? [];
+    playlists = page.playlists[0] ?? [];
+    musicvideos = page["music-videos"][0] ?? [];
+    citycharts = page.cityCharts[0] ?? [];
+    globalcharts = page.dailyGlobalTopCharts[0] ?? [];
     // app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
     //     let page = res.data?.results ?? [];
-    //     self.songs = page.songs[0] ?? [];
-    //     self.albums = page.albums[0] ?? [];
-    //     self.playlists = page.playlists[0] ?? [];
+    //     songs = page.songs[0] ?? [];
+    //     albums = page.albums[0] ?? [];
+    //     playlists = page.playlists[0] ?? [];
     // })
   }
 

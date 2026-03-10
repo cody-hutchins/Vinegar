@@ -6,6 +6,7 @@ import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import Pagination from "../components/pagination.jsx";
+import { Tab, Tabs } from "react-bootstrap";
 
 const Playlist = ({ data }: { data: object }) => {
   const app = this.$root;
@@ -65,28 +66,46 @@ const Playlist = ({ data }: { data: object }) => {
     return beforeDestroy;
   }, []);
 
-  const watch = {
-    data: {
-      handler: function () {
-        isInLibrary();
-        getBadges();
+  useEffect(() => {
+    isInLibrary();
+    getBadges();
 
-        if (data.relationships !== null) {
-          if (data.id === "ciderlocal") {
-            displayListing = data.relationships.tracks.data;
-          } else {
-            generateNestedPlaylist(data.relationships.tracks.data);
-            if (!hasNestedPlaylist) {
-              displayListing = data.relationships.tracks.data;
-            }
-          }
+    if (data.relationships !== null) {
+      if (data.id === "ciderlocal") {
+        displayListing = data.relationships.tracks.data;
+      } else {
+        generateNestedPlaylist(data.relationships.tracks.data);
+        if (!hasNestedPlaylist) {
+          displayListing = data.relationships.tracks.data;
         }
+      }
+    }
 
-        inPlaylist = data.type === "library-playlists";
-      },
-      deep: true,
-    },
-  };
+    inPlaylist = data.type === "library-playlists";
+  }, [data]);
+
+  useEffect(() => {
+    isInLibrary();
+    getBadges();
+
+    if (data.relationships !== null) {
+      if (data.id === "ciderlocal") {
+        displayListing = data.relationships.tracks.data;
+      } else {
+        generateNestedPlaylist(data.relationships.tracks.data);
+        if (!hasNestedPlaylist) {
+          displayListing = data.relationships.tracks.data;
+        }
+      }
+    }
+
+    inPlaylist = data.type === "library-playlists";
+  }, [data]);
+  const shouldPaginate = useMemo(() => {
+    const result = data.relationships.tracks.data.length > pageSize;
+    console.log(result);
+    return result;
+  }, [data]);
   const currentSlice = useMemo(() => {
     return displayListing.slice(start, end);
   }, [displayListing, start, end]);
@@ -117,11 +136,7 @@ const Playlist = ({ data }: { data: object }) => {
       return nestedPlaylist;
     }
   }, [shouldPaginate, nestedPlaylist]);
-  const shouldPaginate = useMemo(() => {
-    const result = data.relationships.tracks.data.length > pageSize;
-    console.log(result);
-    return result;
-  }, [data]);
+
   function onRangeChange(newRange) {
     start = newRange[0];
     end = newRange[1];
@@ -210,8 +225,8 @@ const Playlist = ({ data }: { data: object }) => {
       const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
-          self.app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
-            self.itemBadges.push(data.data.data[0]);
+          app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+            itemBadges.push(data.data.data[0]);
           });
         });
       }
@@ -331,7 +346,7 @@ const Playlist = ({ data }: { data: object }) => {
           icon: "./assets/feather/x-circle.svg",
           name: app.getLz("action.removeFromPlaylist"),
           action: () => {
-            self.remove();
+            remove();
           },
         },
       ],
@@ -340,7 +355,7 @@ const Playlist = ({ data }: { data: object }) => {
           icon: "./assets/feather/x-circle.svg",
           name: app.getLz("action.removeFromPlaylist"),
           action: () => {
-            self.remove();
+            remove();
           },
         },
       ],
@@ -415,7 +430,7 @@ const Playlist = ({ data }: { data: object }) => {
           hidden: false,
           disabled: true,
           action: function () {
-            app.love(self.data);
+            app.love(data);
           },
         },
         {
@@ -425,7 +440,7 @@ const Playlist = ({ data }: { data: object }) => {
           name: app.getLz("action.unlove"),
           hidden: true,
           action: function () {
-            app.unlove(self.data);
+            app.unlove(data);
           },
         },
         {
@@ -435,7 +450,7 @@ const Playlist = ({ data }: { data: object }) => {
           hidden: false,
           disabled: true,
           action: function () {
-            app.dislike(self.data);
+            app.dislike(data);
           },
         },
         {
@@ -445,7 +460,7 @@ const Playlist = ({ data }: { data: object }) => {
           active: true,
           hidden: true,
           action: function () {
-            app.unlove(self.data);
+            app.unlove(data);
           },
         },
       ],
@@ -492,7 +507,7 @@ const Playlist = ({ data }: { data: object }) => {
     app.showMenuPanel(menuItems, event);
 
     try {
-      const rating = await app.getRating(self.data);
+      const rating = await app.getRating(data);
       if (rating === 0) {
         menuItems.headerItems.find((x) => x.id === "love").disabled = false;
         menuItems.headerItems.find((x) => x.id === "dislike").disabled = false;
@@ -506,8 +521,8 @@ const Playlist = ({ data }: { data: object }) => {
     } catch (err) {}
   }
   function getItemParent(data) {
-    kind = data.attributes.playParams.kind;
-    id = data.attributes.playParams.id;
+    const kind = data.attributes.playParams.kind;
+    const id = data.attributes.playParams.id;
     return `${kind}:${id}`;
   }
   function getFormattedDate() {
@@ -525,7 +540,7 @@ const Playlist = ({ data }: { data: object }) => {
         prefix = app.getLz("term.time.added") + " ";
         break;
     }
-    let month, year;
+    // let month, year;
     try {
       const releaseDate = new Date(date);
       // month = new Intl.DateTimeFormat(app.cfg.general.language.replace('_','-'), {month: 'long'}).format(releaseDate);
@@ -603,7 +618,7 @@ const Playlist = ({ data }: { data: object }) => {
     if (data && typeof data.views !== "undefined") return "";
     return "d-none";
   }
-  async function getCopiedPlayListSongs(event) {
+  function getCopiedPlayListSongs(event) {
     if (event.ctrlKey && event.keyCode === 67) {
       const urls = [];
       app.selectedMediaItems.forEach((item) => {
@@ -619,11 +634,11 @@ const Playlist = ({ data }: { data: object }) => {
   }
   async function pasteSongs(event) {
     if (event.ctrlKey && event.keyCode === 86 && data.attributes.canEdit) {
-      let clipboard = await navigator.clipboard.readText();
+      const clipboard = await navigator.clipboard.readText();
       const songs = [];
 
-      clipboard = clipboard.split(",");
-      clipboard.forEach((item) => {
+      const clipboards = clipboard.split(",");
+      clipboards.forEach((item) => {
         songs.push({
           id: item.substring(item.indexOf("i=") + 2, item.length),
           type: "songs",
@@ -728,7 +743,11 @@ const Playlist = ({ data }: { data: object }) => {
               <div
                 className={"playlist-display"}
                 style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-                mouseoverself={minClass(false)}>
+                onMouseOver={(e) => {
+                  if (e.target === e.currentTarget) {
+                    minClass(false);
+                  }
+                }}>
                 <div className={"playlistInfo"}>
                   {hasHero() && (
                     <div className={"playlist-hero"}>
@@ -800,6 +819,7 @@ const Playlist = ({ data }: { data: object }) => {
                               <template>
                                 {data.relationships.artists?.data.map((artist) => (
                                   <ArtistChip
+                                    key={artist.id}
                                     style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
                                     item={artist}
                                   />
@@ -904,7 +924,7 @@ const Playlist = ({ data }: { data: object }) => {
                             aria-label={"showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')"}>
                             <SVGIcon
                               style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
-                              url={"showSearch ? './assets/search-alt.svg' : './assets/search.svg'"}
+                              url={showSearch ? "./assets/search-alt.svg" : "./assets/search.svg"}
                             />
                           </button>
                           <button
@@ -913,7 +933,7 @@ const Playlist = ({ data }: { data: object }) => {
                             onClick={() => menu}
                             aria-label={app.getLz("term.more")}>
                             <div
-                              style={{ "background-color": "#" + hasHeroObject()?.bgColor ?? "" }}
+                              style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
                               className={"svg-icon"}
                             />
                           </button>
@@ -1011,7 +1031,7 @@ const Playlist = ({ data }: { data: object }) => {
                   <div className={"col-auto cider-flex-center"}>
                     <button
                       className={"more-btn-round"}
-                      style={{ float: right }}
+                      style={{ float: "right" }}
                       onClick={() => menu}
                       aria-label={app.getLz("term.more")}>
                       <div className={"svg-icon"} />
@@ -1083,7 +1103,7 @@ const Playlist = ({ data }: { data: object }) => {
                             ) : (
                               <template>
                                 {nestedSlices.map((disc) => (
-                                  <div>
+                                  <div key={disc.id}>
                                     <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                     {disc.tracks.map((item, index) => (
                                       <MediaItemListItem
@@ -1109,6 +1129,7 @@ const Playlist = ({ data }: { data: object }) => {
                             <div className={"badge-container"}>
                               {itemBadges.map((badge) => (
                                 <div
+                                  key={badge.id}
                                   className={"socialBadge"}
                                   title={`${badge.attributes.name} - ${badge.attributes.handle}`}>
                                   <MediaItemArtwork
@@ -1147,6 +1168,7 @@ const Playlist = ({ data }: { data: object }) => {
                         (view) =>
                           data.views[view].data.length !== 0 && (
                             <Tab
+                              key={view.id}
                               lazy
                               title={data.views[view].attributes.title}>
                               <div>

@@ -5,6 +5,7 @@ import MediaItemSmarthints from "../components/mediaitem-smarthints.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import { useChromeStore } from "../../store/chrome.js";
 import { AnimatePresence } from "framer-motion";
+import { Popover } from "react-bootstrap";
 
 const ChromeTop = ({ search = {} }: { search?: object }) => {
   const chrome = useChromeStore((state) => state.chrome);
@@ -181,7 +182,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                     <div
                       className={"artwork"}
                       id={"artworkLCD"}>
-                      <MediaItemArtwork url={"currentArtUrl"} />
+                      <MediaItemArtwork url={currentArtUrl} />
                     </div>
                     <Popover
                       custom-className={"mediainfo-popover"}
@@ -190,12 +191,12 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                       placement={"bottom"}>
                       <div className={"content"}>
                         <div className={"shadow-artwork"}>
-                          <MediaItemArtwork url={"currentArtUrl"} />
+                          <MediaItemArtwork url={currentArtUrl} />
                         </div>
                         <div className={"popover-artwork"}>
                           <MediaItemArtwork
                             size={"210"}
-                            url={"currentArtUrl"}
+                            url={currentArtUrl}
                           />
                         </div>
                         <div className={"song-name"}>{mk.nowPlayingItem["attributes"]["name"]}</div>
@@ -386,7 +387,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                       className={"artwork"}
                       id={"artworkLCD"}
                       style={{ pointerEvents: "none" }}>
-                      <MediaItemArtwork url={"currentArtUrl"} />
+                      <MediaItemArtwork url={currentArtUrl} />
                     </div>
                     <div className={"playback-info"}>
                       <div className={"info-rect"} />

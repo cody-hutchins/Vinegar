@@ -1,7 +1,8 @@
 import { ipcRenderer } from "electron";
 import { CiderAudio } from "../../audio/audio.js";
+import { useEffect } from "react";
 
-const Component = () => {
+const CastMenu = () => {
   const devices = {
     cast: [],
     airplay: [],
@@ -12,11 +13,9 @@ const Component = () => {
     scan();
   }
 
-  const watch = {
-    activeCasts: function (newVal, oldVal) {
-      this.$root.activeCasts = activeCasts;
-    },
-  };
+  useEffect(() => {
+    this.$root.activeCasts = activeCasts;
+  }, [activeCasts]);
 
   const close = () => {
     this.$root.modals.castMenu = false;
@@ -87,8 +86,16 @@ const Component = () => {
       <div id={"castmenu"}>
         <div
           className={"spatialproperties-panel castmenu modal-fullscreen"}
-          clickself={close()}
-          contextmenuself={close()}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              close();
+            }
+          }}
+          onContextMenu={(e) => {
+            if (e.target === e.currentTarget) {
+              close();
+            }
+          }}>
           <div className={"modal-window"}>
             <div className={"modal-header"}>
               <div className={"modal-title"}>{$root.getLz("action.cast.todevices")}</div>
@@ -167,10 +174,10 @@ const Component = () => {
                     Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to "Everyone" or "Anyone on the same network".
                     {/* {$root.getLz('action.cast.airplay.underdevelopment')}  */}
                     {devices.airplay.map((device) => (
-                      <template>
+                      <div key={device.id}>
                         <div
                           className={"md-option-line"}
-                          style={{ cursor: pointer }}
+                          style={{ cursor: "pointer" }}
                           onClick={() => setAirPlayCast(device)}>
                           <div className={"md-option-segment"}>
                             {device.name}
@@ -220,7 +227,7 @@ const Component = () => {
                             </div>
                           )}
                         </div>
-                      </template>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -254,3 +261,4 @@ const Component = () => {
     </>
   );
 };
+export default CastMenu;

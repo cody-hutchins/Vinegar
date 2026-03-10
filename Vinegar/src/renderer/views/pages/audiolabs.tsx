@@ -186,7 +186,11 @@ const Audiolabs = () => {
                   v-model={$root.cfg.audio.maikiwiAudio.spatialProfile}
                   onChange={() => CiderAudio.hierarchical_loading()}>
                   {spprofiles.map((profile) => (
-                    <option value={profile.id}>{$root.getProfileLz("CTS", profile.name)}</option>
+                    <option
+                      key={profile.id}
+                      value={profile.id}>
+                      {$root.getProfileLz("CTS", profile.name)}
+                    </option>
                   ))}
                 </select>
               </div>

@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import MediaItemListItem from "./mediaitem-list-item.jsx";
 
 const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object[]; showLibraryStatus?: boolean }) => {
-  const itemPages = [];
-  const simplifiedParent = [];
+  let itemPages = [];
+  let simplifiedParent: string;
 
   function mounted() {
     // give every item an id
@@ -20,44 +21,43 @@ const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object
       console.debug("simplifiedParent: " + simplifiedParent);
     } catch (e) {}
   }
-  const watch = {
-    items: function (items) {
-      // give every item an id
-      items.forEach(function (item, index) {
-        item.id = index;
-      });
-      // split items into pages
-      itemPages = app.arrayToChunk(items, 4);
-      try {
-        simplifiedParent = JSON.stringify(
-          items.map(function (x) {
-            return x.attributes.playParams;
-          }),
-        );
-        console.log("simplifiedParent: " + simplifiedParent);
-      } catch (e) {}
-    },
-  };
+  useEffect(() => {
+    // give every item an id
+    items.forEach(function (item, index) {
+      item.id = index;
+    });
+    // split items into pages
+    itemPages = app.arrayToChunk(items, 4);
+    try {
+      simplifiedParent = JSON.stringify(
+        items.map(function (x) {
+          return x.attributes.playParams;
+        }),
+      );
+      console.log("simplifiedParent: " + simplifiedParent);
+    } catch (e) {}
+  }, [items]);
+
   const sayHello = () => {
     alert("Hello world!");
   };
 
   return (
     <div id={"listitem-horizontal"}>
-      <div className={"listitem-horizontal"}>
-        <vue-horizontal>
-          {itemPages.map((items) =>
-            items.map((song) => (
-              <MediaItemListItem
-                show-library-status={showLibraryStatus}
-                key={song.id}
-                parent={"'listitem-hr' + simplifiedParent"}
-                index={song.index}
-                item={song}
-              />
-            )),
-          )}
-        </vue-horizontal>
+      <div
+        className={"listitem-horizontal"}
+        style={{ overflowX: "auto", display: "flex", scrollSnapType: "x mandatory" }}>
+        {itemPages.map((items) =>
+          items.map((song) => (
+            <MediaItemListItem
+              showLibraryStatus={showLibraryStatus}
+              key={song.id}
+              parent={"listitem-hr" + simplifiedParent}
+              index={song.index}
+              item={song}
+            />
+          )),
+        )}
       </div>
     </div>
   );

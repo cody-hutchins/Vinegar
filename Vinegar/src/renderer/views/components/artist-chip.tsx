@@ -7,7 +7,7 @@ export const ArtistChip = ({ item }: { item: object }) => {
     id: null,
   };
 
-  async function mounted() {
+  function mounted() {
     let artistId = item.id;
     if (typeof item.relationships === "object") {
       artistId = item.relationships.catalog.data[0].id;
@@ -31,8 +31,12 @@ export const ArtistChip = ({ item }: { item: object }) => {
       <div id={"artist-chip"}>
         <div
           className={"artist-chip"}
-          clickself={"route"}
-          tabIndex={"0"}>
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              route();
+            }
+          }}
+          tabIndex={0}>
           {image ? (
             <div
               className={"artist-chip__image"}

@@ -1,61 +1,61 @@
-const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation: string[]; onindex: () => void; yoffset: number }) => {
+import { useEffect } from "react";
+
+const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation?: string; onindex?: () => void; yoffset?: number }) => {
   const app = this.$root;
-  const watch = {
-    time: function () {
-      if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview) {
-        const currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
-        if (currentLine && currentLine.getElementsByClassName("lyricWaiting").length > 0) {
-          const duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
-          const u = (time - currentLine.getAttribute("start")) / duration;
-          if (u < 0.25 && !currentLine.classList.contains("mode1")) {
-            try {
-              currentLine.classList.add("mode1");
-              currentLine.classList.remove("mode3");
-              currentLine.classList.remove("mode2");
-            } catch (e) {}
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 0.25;
-            currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
-          } else if (u >= 0.25 && u < 0.5 && !currentLine.classList.contains("mode2")) {
-            try {
-              currentLine.classList.add("mode2");
-              currentLine.classList.remove("mode1");
-              currentLine.classList.remove("mode3");
-            } catch (e) {}
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
-            currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
-          } else if (u >= 0.5 && u < 0.75 && !currentLine.classList.contains("mode3")) {
-            try {
-              currentLine.classList.add("mode3");
-              currentLine.classList.remove("mode1");
-              currentLine.classList.remove("mode2");
-            } catch (e) {}
-            currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
-          } else if (u >= 0.75 && currentLine.classList.contains("mode3")) {
-            try {
-              currentLine.classList.remove("mode1");
-              currentLine.classList.remove("mode2");
-              currentLine.classList.remove("mode3");
-            } catch (e) {}
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
-            currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
-            currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
-          }
+  useEffect(() => {
+    if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview) {
+      const currentLine = this.$refs.lyricsview.querySelector(`.lyric-line.active`);
+      if (currentLine && currentLine.getElementsByClassName("lyricWaiting").length > 0) {
+        const duration = currentLine.getAttribute("end") - currentLine.getAttribute("start");
+        const u = (time - currentLine.getAttribute("start")) / duration;
+        if (u < 0.25 && !currentLine.classList.contains("mode1")) {
+          try {
+            currentLine.classList.add("mode1");
+            currentLine.classList.remove("mode3");
+            currentLine.classList.remove("mode2");
+          } catch (e) {}
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 0.25;
+          currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
+        } else if (u >= 0.25 && u < 0.5 && !currentLine.classList.contains("mode2")) {
+          try {
+            currentLine.classList.add("mode2");
+            currentLine.classList.remove("mode1");
+            currentLine.classList.remove("mode3");
+          } catch (e) {}
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
+          currentLine.getElementsByClassName("WaitingDot3")[0].style.opacity = 0.25;
+        } else if (u >= 0.5 && u < 0.75 && !currentLine.classList.contains("mode3")) {
+          try {
+            currentLine.classList.add("mode3");
+            currentLine.classList.remove("mode1");
+            currentLine.classList.remove("mode2");
+          } catch (e) {}
+          currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
+        } else if (u >= 0.75 && currentLine.classList.contains("mode3")) {
+          try {
+            currentLine.classList.remove("mode1");
+            currentLine.classList.remove("mode2");
+            currentLine.classList.remove("mode3");
+          } catch (e) {}
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 1;
         }
       }
-      getActiveLyric();
-    },
-  };
+    }
+    getActiveLyric();
+  }, [time]);
   const seekTo = (startTime) => {
     if (startTime !== 9999999) app.seekTo(startTime, false);
   };

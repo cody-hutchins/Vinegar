@@ -6,7 +6,7 @@ import Keybinds from "./settings-keybinds.jsx";
 import PluginsGithub from "./settings-plugins-github.jsx";
 import ThemesGithub from "./settings-themes-github.jsx";
 import { Modal, Tab } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SettingsWindow = () => {
   const app = this.$root;
@@ -15,13 +15,13 @@ const SettingsWindow = () => {
   const canChangeHash = false;
   let lastfmConnecting = false;
   const [modalShow, setModalShow] = useState(false);
-  const watch = {
-    tabIndex: function (val) {
-      if (canChangeHash) {
-        // window.location.hash = `#settings/${val}`
-      }
-    },
-  };
+
+  useEffect(() => {
+    if (canChangeHash) {
+      // window.location.hash = `#settings/${val}`
+    }
+  }, [tabIndex]);
+
   function sidebarVis() {
     const tabIndex = app.$store.state.pageState["settings"].currentTabIndex;
     if (tabIndex === 3 || tabIndex === 5 || tabIndex === 10) {
@@ -165,15 +165,19 @@ const SettingsWindow = () => {
     const token = document.getElementById("lfmToken").value;
     ipcRenderer.send("lastfm:auth", token);
   }
-  function openLocalSongsPathMenu() {
-    app.modals.pathMenu = true;
-  }
+  // function openLocalSongsPathMenu() {
+  //   app.modals.pathMenu = true;
+  // }
   return (
     <>
       <div id={"settings-window"}>
         <div
           className={"settings-panel"}
-          clickself={close()}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              close();
+            }
+          }}
         />
         <button
           className={"close-btn minmax-btn"}
@@ -1806,7 +1810,7 @@ const SettingsWindow = () => {
                             </div>
                             <div className="md-option-header" style={{marginLeft: -0.55em}}>
                                 <span>{app.cfg.connectUser.username}</span>
-                                <img src="'https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32'"
+                                <img src="https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32'
                                      alt="Discord Avatar" />
                             </div>
 

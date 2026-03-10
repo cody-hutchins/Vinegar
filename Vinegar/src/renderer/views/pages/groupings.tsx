@@ -3,10 +3,10 @@ import ListItemHorizontal from "../components/listitem-horizontal.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 
-const Component = () => {
+const Groupings = () => {
   const app = this.$root;
   let data = null;
-  const query = "";
+  let query = "";
 
   async function mounted() {
     const queryDefaults = {
@@ -22,8 +22,7 @@ const Component = () => {
     };
     const hash = window.location.hash;
     // get everything after the first / character but keep everything afterwards
-    const query = hash.substring(hash.indexOf("/") + 1, hash.indexOf("&") > 0 ? hash.indexOf("&") : hash.length);
-    query = query;
+    query = hash.substring(hash.indexOf("/") + 1, hash.indexOf("&") > 0 ? hash.indexOf("&") : hash.length);
     // if(!query.includes("?")) {
     //   query += queryDefaults;
     // }
@@ -48,7 +47,7 @@ const Component = () => {
               {data.relationships && data.relationships.tabs && (
                 <template>
                   {data.relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
-                    <template>
+                    <div key={index}>
                       <div className={"row"}>
                         {recom.attributes.name !== "Chart Set" && (
                           <div className={"col"}>
@@ -97,6 +96,7 @@ const Component = () => {
                               <div className={"grouping-container"}>
                                 {recom.attributes.links.map((link) => (
                                   <button
+                                    key={link.id}
                                     className={"grouping-btn"}
                                     onClick={() => $root.goToGrouping(link.url)}>
                                     {link.label}
@@ -107,7 +107,7 @@ const Component = () => {
                           )}
                         </template>
                       )}
-                    </template>
+                    </div>
                   ))}
                 </template>
               )}
@@ -118,3 +118,5 @@ const Component = () => {
     </>
   );
 };
+
+export default Groupings;

@@ -30,7 +30,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
       <div id={"mini-view"}>
         <div
           className={"mini-view"}
-          tabIndex={"0"}>
+          tabIndex={0}>
           <div className={"background"} />
           {app.cfg.visual.miniplayer_top_toggle === false && (
             <div

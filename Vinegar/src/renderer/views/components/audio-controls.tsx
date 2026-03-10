@@ -1,46 +1,58 @@
-const Component = () => {
+import { useEffect } from "react";
+
+const AudioControls = () => {
   const app = this.$root;
   let maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
   let volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
   let volume: number = this.$root.cfg.audio.volume * 100;
-  const watch = {
-    maxVolume: (newValue: number, _oldValue: number) => {
-      if (newValue > 100) {
-        newValue = 100;
-      } else {
-        newValue = Math.round(newValue);
-      }
-      this.$root.cfg.audio.maxVolume = newValue / 100;
-      maxVolume = newValue;
-      console.log(newValue, _oldValue);
-    },
-    volume: (newValue: number, _oldValue: number) => {
-      if (newValue > maxVolume) {
-        newValue = 100;
-      } else {
-        newValue = Math.round(newValue);
-      }
-      this.$root.mk.volume = newValue / 100;
-      volume = newValue;
-      console.log(newValue, _oldValue);
-    },
-    volumeStep: (newValue: number, _oldValue: number) => {
-      if (newValue > maxVolume) {
-        newValue = 100;
-      } else {
-        newValue = Math.round(newValue);
-      }
-      this.$root.cfg.audio.volumeStep = newValue / 100;
-      volumeStep = newValue;
-      console.log(newValue, _oldValue);
-    },
-  };
+
+  useEffect(() => {
+    if (newValue > 100) {
+      newValue = 100;
+    } else {
+      newValue = Math.round(newValue);
+    }
+    this.$root.cfg.audio.maxVolume = newValue / 100;
+    maxVolume = newValue;
+    console.log(newValue, _oldValue);
+  }, [maxVolume]);
+
+  useEffect(() => {
+    if (newValue > maxVolume) {
+      newValue = 100;
+    } else {
+      newValue = Math.round(newValue);
+    }
+    this.$root.mk.volume = newValue / 100;
+    volume = newValue;
+    console.log(newValue, _oldValue);
+  }, [volume]);
+
+  useEffect(() => {
+    if (newValue > maxVolume) {
+      newValue = 100;
+    } else {
+      newValue = Math.round(newValue);
+    }
+    this.$root.cfg.audio.volumeStep = newValue / 100;
+    volumeStep = newValue;
+    console.log(newValue, _oldValue);
+  }, [volumeStep]);
+
   return (
     <div id={"audio-controls"}>
       <div
         className={"modal-fullscreen addtoplaylist-panel"}
-        clickself={(app.modals.audioControls = false)}
-        contextmenuself={(app.modals.audioControls = false)}>
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            app.modals.audioControls = false;
+          }
+        }}
+        onContextMenu={(e) => {
+          if (e.target === e.currentTarget) {
+            app.modals.audioControls = false;
+          }
+        }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
             <div className={"modal-title"}>{app.getLz("term.audioControls")}</div>
@@ -102,3 +114,5 @@ const Component = () => {
     </div>
   );
 };
+
+export default AudioControls;

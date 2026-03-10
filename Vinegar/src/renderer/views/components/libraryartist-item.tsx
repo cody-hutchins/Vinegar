@@ -1,3 +1,5 @@
+import MediaItemArtwork from "./mediaitem-artwork";
+
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   const isVisible = false;
   let addedToLibrary = false;
@@ -155,7 +157,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           onClick={() => select}
           className={"cd-mediaitem-list-item"}
           className={"{'mediaitem-selected': app.select_hasMediaItem(guid)}"}
-          contextMenu={"contextMenu"}>
+          contextMenu={contextMenu}>
           {showArtwork === true && (
             <div
               className={"artwork"}

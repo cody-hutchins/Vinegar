@@ -5,7 +5,7 @@ import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizo
 import MediaitemSmarthints from "../components/mediaitem-smarthints.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
-const Component = ({ search }: { search: object }) => {
+const Search = ({ search }: { search: object }) => {
   const app = this.$root;
   let recentlyPlayed = [];
   let categoriesView = [];
@@ -166,7 +166,7 @@ const Component = ({ search }: { search: object }) => {
                       (section) =>
                         section !== "song" &&
                         section !== "top" && (
-                          <template>
+                          <div key={section.id}>
                             <div className={"row"}>
                               <div className={"col"}>
                                 <h3>{app.friendlyTypes(section)}</h3>
@@ -181,7 +181,7 @@ const Component = ({ search }: { search: object }) => {
                                 <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
                               </template>
                             )}
-                          </template>
+                          </div>
                         ),
                     )}
                   </template>
@@ -211,7 +211,7 @@ const Component = ({ search }: { search: object }) => {
               <template>
                 <h1>{$root.getLz("term.library")}</h1>
                 {$root.search.resultsLibrary.map((section, key) => (
-                  <div>
+                  <div key={key}>
                     <h3>{app.friendlyTypes(key)}</h3>
                     {key.includes("songs") ? (
                       <div className={"mediaitem-list-item__grid"}>
@@ -238,7 +238,7 @@ const Component = ({ search }: { search: object }) => {
                       <div className={"mediaitem-list-item__grid"}>
                         <ListitemHorizontal items={recentlyPlayed.limit(10)} />
                       </div>
-                      {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="'385'" size="600" item="item" imagesize"800" />)} */}
+                      {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="385" size="600" item="item" imagesize"800" />)} */}
                       <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
                     </div>
                   )}
@@ -246,12 +246,13 @@ const Component = ({ search }: { search: object }) => {
                 <div className={"categories"}>
                   {getFlattenedCategories().map((item) => (
                     <MediaItemSquare
-                      kind={"'385'"}
-                      imageformat={"'bb'"}
+                      key={item.id}
+                      kind={"385"}
+                      imageformat={"bb"}
                       size={"600"}
-                      removeamtext={"true"}
+                      removeamtext={true}
                       item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
-                      imagesize={"800"}
+                      imagesize={800}
                     />
                   ))}
                 </div>
@@ -263,3 +264,4 @@ const Component = ({ search }: { search: object }) => {
     </div>
   );
 };
+export default Search;

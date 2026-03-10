@@ -5,7 +5,7 @@ import SVGIcon from "../../main/components/svg-icon.jsx";
 const Zoo = () => {
   let artistLoaded = false;
   let artist = {};
-  async function mounted() {
+  function mounted() {
     app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/669831761`).then((response) => {
       artist = response.data.data[0];
       artistLoaded = true;

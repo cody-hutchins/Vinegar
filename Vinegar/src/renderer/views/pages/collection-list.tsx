@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
@@ -106,14 +106,19 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             <div className={"well itemContainer " + getClasses()}>
               {data.data.map((item, key) =>
                 item.type === "artists" ? (
-                  <MediaItemSquare item={item} />
+                  <MediaItemSquare
+                    key={key}
+                    item={item}
+                  />
                 ) : getKind(item) === "song" ? (
                   <MediaItemListItem
+                    key={key}
                     index={key}
                     item={item}
                   />
                 ) : (
                   <MediaItemSquare
+                    key={key}
                     item={item}
                     type={getKind(item)}
                   />

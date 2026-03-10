@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from "react";
+import MediaItemSquare from "../components/mediaitem-square";
+import MediaItemListItem from "../components/mediaitem-list-item";
 
-const Component = () => {
+const LibraryRecentlyAdded = () => {
   let loading = false;
   const firstRoute = `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`;
   const items = useMemo(() => {
@@ -69,8 +71,8 @@ const Component = () => {
             <div className={"well itemContainer collection-list-square"}>
               {items.map((ite) => (
                 <MediaItemListItem
-                  show-meta-data={"true"}
-                  show-library-status={"false"}
+                  showMetadata={true}
+                  showLibraryStatus={false}
                   item={item}
                   key={item.id}
                 />
@@ -94,3 +96,4 @@ const Component = () => {
     </>
   );
 };
+export default LibraryRecentlyAdded;
