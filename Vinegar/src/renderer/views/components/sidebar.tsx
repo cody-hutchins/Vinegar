@@ -98,8 +98,8 @@ const Sidebar = () => {
             scrollaxis={"y"}>
             {/* AM Navigation  */}
             <div
-              v-show={$root.getThemeDirective("windowLayout") !== "twopanel"}
-              className={"sidebarCatalogSection"}>
+style={{ display: $root.getThemeDirective("windowLayout") !== "twopanel" ? 'inherit' : 'none' }}
+className={"sidebarCatalogSection"}>
               <div
                 className={"app-sidebar-header-text"}
                 onClick={() => {

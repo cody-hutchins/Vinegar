@@ -518,8 +518,13 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             className={getClasses()}
             contextMenu={"getContextMenu"}>
             <div
+<<<<<<< Updated upstream
               className={"artwork-container"}
               v-show={isVisible}>
+=======
+              className="artwork-container"
+              style={{ display: isVisible ? 'inherit' : 'none' }}>
+>>>>>>> Stashed changes
               {unavailable && (
                 <div className={"unavailable-overlay"}>
                   <div className={"codicon codicon-circle-slash"} />
@@ -571,7 +576,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               className={"info-rect"}
               className={"{'info-rect-card': kind === 'card'}"}
               v-show={isVisible}
-              style={{ "--bgartwork": getArtworkUrl(size, true) }}>
+              style={{ "--bgartwork": getArtworkUrl(size, true), display: isVisible ? 'inherit' : 'none'  }}>
               {(item.attributes.artistNames === null || kind !== "card") && (
                 <div
                   className={"title"}

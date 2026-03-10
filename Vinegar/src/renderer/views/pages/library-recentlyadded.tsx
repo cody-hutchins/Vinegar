@@ -79,7 +79,7 @@ const Component = () => {
           ) : null}
           <div
             className={"well itemContainer collection-list-square"}
-            v-show={loading}>
+            style={{ display: loading ? 'inherit' : 'none' }}>
             <div className={"spinner"} />
           </div>
           {nextUrl && !loading ? (

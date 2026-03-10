@@ -765,14 +765,13 @@ const Playlist = ({ data }: { data: object }) => {
                               className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
                               onClick={() => editPlaylistName()}
-                              v-show={!nameEditing}
-                              style={{ color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
+                              style={{ display: nameEditing ? 'none' : 'inherit', color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
                               {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                             </div>
                             <div
                               className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
-                              v-show={nameEditing}>
+                              style={{ display: nameEditing ? 'inherit' : 'none' }}>
                               <input
                                 type={"text"}
                                 spellCheck={"false"}

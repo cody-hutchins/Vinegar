@@ -458,12 +458,12 @@ const Component = ({ data }: { data: object }) => {
                                 <div
                                   className={"playlist-name"}
                                   onClick={() => editPlaylistName()}
-                                  v-show={!nameEditing}>
+                                  style={{ display: nameEditing ? 'none' : 'inherit' }}>
                                   {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                                 </div>
                                 <div
                                   className={"playlist-name"}
-                                  v-show={nameEditing}>
+                                  style={{ display: nameEditing ? 'inherit' : 'none' }}>
                                   <input
                                     type={"text"}
                                     spellCheck={"false"}

@@ -117,7 +117,7 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
             <motion.div name={"fabfade"}>
               <button
                 className={"top-fab"}
-                v-show={showFab}
+                style={{display: showFab ? 'inherit': 'none'}}
                 onClick={() => scrollToTop()}
                 aria-label={app.getLz("action.scrollToTop")}>
                 {import("../svg/arrow-up.svg")}
@@ -126,7 +126,7 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
           </AnimatePresence>
           <div
             className={"well itemContainer"}
-            v-show={loading}>
+            style={{ display: loading ? 'inherit' : 'none' }}>
             <div className={"spinner"} />
           </div>
         </div>

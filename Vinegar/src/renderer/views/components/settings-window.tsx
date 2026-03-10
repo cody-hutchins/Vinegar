@@ -249,7 +249,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.platform !== "linux"}>
+                  style={{ display: app.platform !== "linux" ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>{$root.getLz("settings.option.window.openOnStartup")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
@@ -262,9 +262,10 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.general.onStartup.enabled}>
+                  style={{ display: app.cfg.general.onStartup.enabled ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>{$root.getLz("settings.option.window.openOnStartup.hidden")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
+
                     <label>
                       <input
                         type={"checkbox"}
@@ -563,7 +564,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.audio.normalization && app.cfg.audio.advanced}>
+                  style={{ display: app.cfg.audio.normalization && app.cfg.audio.advanced ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>
                     {$root.getLz("settings.option.audio.dbspl.display")}
                     <br />
@@ -580,7 +581,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.audio.dBSPL}>
+                  style={{ display: app.cfg.audio.dBSPL ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>
                     {$root.getLz("settings.option.audio.dbfs.calibration")}
                     <br />
@@ -798,7 +799,7 @@ const SettingsWindow = () => {
         <option value={1.4}>1.4x</option>
         <div
           className={"md-option-line"}
-          v-show={app.platform !== "darwin"}>
+          style={{ display: app.platform !== "darwin" ? 'inherit' : 'none' }}>
           <div className={"md-option-segment"}>{$root.getLz("settings.option.window.close_button_hide")}</div>
           <div className={"md-option-segment md-option-segment_auto"}>
             <label>
@@ -811,7 +812,7 @@ const SettingsWindow = () => {
         </div>
         <div
           className={"md-option-line"}
-          v-show={app.platform !== "darwin"}>
+          style={{ display: app.platform !== "darwin" ? 'inherit' : 'none' }}>
           <div className={"md-option-segment"}>
             {$root.getLz("settings.option.window.useNativeTitleBar")}
             <br />
@@ -829,7 +830,7 @@ const SettingsWindow = () => {
         </div>
         <div
           className={"md-option-line"}
-          v-show={app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar}>
+          style={{ display: app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar ? 'inherit' : 'none' }}>
           <div className={"md-option-segment"}>{$root.getLz("settings.option.window.windowControlStyle")}</div>
           <div className={"md-option-segment md-option-segment_auto"}>
             <label>
@@ -1294,7 +1295,7 @@ const SettingsWindow = () => {
                   </div>
                 </div>
 
-                <div v-show={app.cfg.connectivity.discord_rpc.enabled !== false}>
+                <div style={{ display: app.cfg.connectivity.discord_rpc.enabled !== false ? 'inherit' : 'none' }}>
                   <div className={"md-option-line"}>
                     <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.reload")}</div>
                     <div className={"md-option-segment md-option-segment_auto"}>
@@ -1391,7 +1392,7 @@ const SettingsWindow = () => {
                     </div>
                   </div>
 
-                  <div v-show={app.cfg.connectivity.discord_rpc.activity.buttons.enabled === true}>
+                  <div style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.enabled === true ? 'inherit' : 'none' }}>
                     <div className={"md-option-line"}>
                       <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.firstButton")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
@@ -1403,7 +1404,7 @@ const SettingsWindow = () => {
                             {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                               <option
                                 v-bind:value={"option"}
-                                v-show={app.cfg.connectivity.discord_rpc.activity.buttons.second !== option}>
+                                style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.second !== option ? 'inherit' : 'none' }}>
                                 {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                               </option>
                             ))}
@@ -1415,7 +1416,7 @@ const SettingsWindow = () => {
 
                     <div
                       className={"md-option-line"}
-                      v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled"}>
+                      style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled" ? 'inherit' : 'none' }}>
                       <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.secondButton")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
@@ -1425,7 +1426,7 @@ const SettingsWindow = () => {
                             {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                               <option
                                 v-bind:value={"option"}
-                                v-show={app.cfg.connectivity.discord_rpc.activity.buttons.first !== option}>
+                                style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== option ? 'inherit' : 'none' }}>
                                 {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                               </option>
                             ))}
@@ -1458,7 +1459,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={lastfmConnecting}>
+                  style={{ display: lastfmConnecting ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>
                     {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken")}
                     <small>
@@ -1489,7 +1490,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  style={{ display: app.cfg.connectivity.lastfm.enabled ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.lastfmScrobble.delay")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
@@ -1504,7 +1505,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  style={{ display: app.cfg.connectivity.lastfm.enabled ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>
                     {$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop")}
                     <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
@@ -1520,7 +1521,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  style={{ display: app.cfg.connectivity.lastfm.enabled ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
@@ -1533,7 +1534,7 @@ const SettingsWindow = () => {
                 </div>
                 <div
                   className={"md-option-line"}
-                  v-show={app.cfg.connectivity.lastfm.enabled}>
+                  style={{ display: app.cfg.connectivity.lastfm.enabled ? 'inherit' : 'none' }}>
                   <div className={"md-option-segment"}>
                     {$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes")}
                     <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>

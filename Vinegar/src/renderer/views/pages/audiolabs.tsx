@@ -50,7 +50,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              v-show={app.cfg.audio.maikiwiAudio.ciderPPE === true}>
+              style={{ display: app.cfg.audio.maikiwiAudio.ciderPPE === true? 'inherit' : 'none' }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength")}
                 <br />
@@ -105,7 +105,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              v-show={app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true}>
+              style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true? 'inherit' : 'none' }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [1]
                 <br />
@@ -139,7 +139,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              v-show={app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}>
+              style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true? 'inherit' : 'none' }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [2]
                 <br />
@@ -173,7 +173,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              v-show={app.cfg.audio.maikiwiAudio.spatial === true}>
+              style={{ display: app.cfg.audio.maikiwiAudio.spatial === true ? 'inherit' : 'none' }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile")}
                 <br />
