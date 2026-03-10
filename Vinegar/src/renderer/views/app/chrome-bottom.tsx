@@ -25,11 +25,15 @@ export const ChromeBottom = () => {
                     onContextMenu={nowPlayingContextMenu}>
                     {cfg.visual.artworkDisplayLayout === "default" && (
                       <div
-                        clickstop={switchArtworkDisplayLayout()}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          switchArtworkDisplayLayout();
+                        }}
                         className={"artwork"}
                         id={"artworkLCD"}>
                         <MediaItemArtwork url={$root.currentArtUrl} />
-                        <b-popover
+                        <Popover
                           custom-className={"mediainfo-popover"}
                           target={"artworkLCD"}
                           triggers={"hover"}
@@ -76,7 +80,7 @@ export const ChromeBottom = () => {
                               </button>
                             </div>
                           </div>
-                        </b-popover>
+                        </Popover>
                       </div>
                     )}
                     <div className={"playback-info"}>
@@ -190,9 +194,9 @@ export const ChromeBottom = () => {
           <div className={"app-chrome--center"}>
             <div className={"app-chrome-playback-duration-bottom"}>
               {mkReady() && mk.nowPlayingItem?.attributes?.isLive !== true && (
-                <b-row>
-                  <b-col sm={"auto"}>{convertTime(getSongProgress())}</b-col>
-                  <b-col>
+                <Row>
+                  <Col sm={"auto"}>{convertTime(getSongProgress())}</Col>
+                  <Col>
                     <input
                       type={"range"}
                       step={0.01}
@@ -219,9 +223,9 @@ export const ChromeBottom = () => {
                       max={mk.currentPlaybackDuration}
                       value={getSongProgress()}
                     />
-                  </b-col>
-                  {!mk.nowPlayingItem?.isLiveRadioStation ? <b-col sm={"auto"}>{convertTime(mk.currentPlaybackDuration)}</b-col> : <b-col sm={"auto"}>{getLz("term.live")}</b-col>}
-                </b-row>
+                  </Col>
+                  {!mk.nowPlayingItem?.isLiveRadioStation ? <Col sm={"auto"}>{convertTime(mk.currentPlaybackDuration)}</Col> : <Col sm={"auto"}>{getLz("term.live")}</Col>}
+                </Row>
               )}
             </div>
             <div className={"app-chrome-playback-controls"}>

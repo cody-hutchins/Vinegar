@@ -11,7 +11,7 @@ const MediaItemScrollerHorizontalSP = ({ items, withReason }: { items?: object[]
               item={item}
               size={"300"}
               reasonShown={withReason}
-              v-bind:key={item.id}
+              key={item.id}
             />
           ))}
         </vue-horizontal>

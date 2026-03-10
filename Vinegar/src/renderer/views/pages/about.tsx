@@ -208,7 +208,11 @@ const About = () => {
                           style={{ textAlign: "right" }}>
                           {member.twitter && (
                             <button
-                              clickstop={window.open(member.twitter)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(member.twitter);
+                              }}
                               className={"social-btn"}>
                               <svg
                                 xmlns={"http://www.w3.org/2000/svg"}

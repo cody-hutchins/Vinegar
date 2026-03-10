@@ -183,7 +183,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                       id={"artworkLCD"}>
                       <MediaItemArtwork url={"currentArtUrl"} />
                     </div>
-                    <b-popover
+                    <Popover
                       custom-className={"mediainfo-popover"}
                       target={"artworkLCD"}
                       triggers={"hover"}
@@ -233,7 +233,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                           </button>
                         </div>
                       </div>
-                    </b-popover>
+                    </Popover>
                     <div className={"playback-info"}>
                       <div className={"chrome-icon-container"}>
                         {cfg.general.privateEnabled === true && (

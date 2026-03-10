@@ -150,7 +150,7 @@ const Queue = () => {
               {history.map((item) => (
                 <MediaItemListItem
                   show-library-status={"false"}
-                  v-bind:key={item.id}
+                  key={item.id}
                   item={item}
                 />
               ))}

@@ -158,7 +158,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
                   className={"lyric-line"}
                   onClick={() => seekTo(lyric.startTime)}
                   className={"{unsynced : lyric.startTime === 9999999}"}
-                  v-bind:line-index={index.toString()}>
+                  line-index={index.toString()}>
                   {richlyrics && richlyrics !== [] && richlyrics.length > 0 ? (
                     <template>
                       <div className={"richl"}>
@@ -185,7 +185,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
                   onClick={() => seekTo(lyric.startTime)}
                   start={lyric.startTime}
                   end={lyric.endTime}
-                  v-bind:line-index={index.toString()}>
+                  line-index={index.toString()}>
                   <div className={"lyricWaiting"}>
                     <div className={"WaitingDot1"} />
                     <div className={"WaitingDot2"} />

@@ -13,7 +13,7 @@ export const MadeForYou = ({ item }: { item: object }) => (
       {madeforyou.data.map((item) => (
         <MediaItemSquare
           item={item}
-          v-bind:key={item.id}
+          key={item.id}
         />
       ))}
     </div>

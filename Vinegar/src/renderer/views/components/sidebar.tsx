@@ -234,7 +234,7 @@ const Sidebar = () => {
                   <template>
                     {$root.getPlaylistFolderChildren("p.applemusic").map((item) => (
                       <SidebarPlaylist
-                        v-bind:key={item.id}
+                        key={item.id}
                         item={item}
                       />
                     ))}
@@ -261,7 +261,7 @@ const Sidebar = () => {
                 </button>
                 {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
                   <SidebarPlaylist
-                    v-bind:key={item.id}
+                    key={item.id}
                     madeforyou
                     item={item}
                   />
@@ -270,7 +270,11 @@ const Sidebar = () => {
             )}
             {$root.cfg.visual.artworkDisplayLayout === "sidebar" && (
               <div
-                clickstop={switchArtworkDisplayLayout()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  switchArtworkDisplayLayout();
+                }}
                 className={"artwork"}
                 id={"artworkLCD"}
                 style={{ position: "sticky", bottom: "0px" }}>

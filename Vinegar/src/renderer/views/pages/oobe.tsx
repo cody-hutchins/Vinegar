@@ -135,8 +135,8 @@ const OOBE = () => {
             <div className={"oobe-view"}>
               <div className={"oobe-header"}>{getLz("oobe.visual.title")}</div>
               <div className={"oobe-body visual"}>
-                <b-row>
-                  <b-col>
+                <Row>
+                  <Col>
                     <div
                       className={"card bg-dark text-white stylePicker"}
                       onClick={() => (cfg.visual.directives.windowLayout = "twopanel")}
@@ -150,8 +150,8 @@ const OOBE = () => {
                       </div>
                       <div className={"card-footer"}>Mojave</div>
                     </div>
-                  </b-col>
-                  <b-col>
+                  </Col>
+                  <Col>
                     <div
                       className={"card bg-dark text-white stylePicker"}
                       onClick={() => (cfg.visual.directives.windowLayout = "default")}
@@ -165,8 +165,8 @@ const OOBE = () => {
                       </div>
                       <div className={"card-footer"}>Maverick</div>
                     </div>
-                  </b-col>
-                </b-row>
+                  </Col>
+                </Row>
                 <div className={"blurb"}>{getLz("oobe.visual.layout.text")}</div>
               </div>
               <div className={"oobe-footer"}>

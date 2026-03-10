@@ -142,7 +142,7 @@ const ArtistFeed = () => {
                   {artistFeed.length > 0 ? (
                     artistFeed.map((item) => (
                       <MediaItemListItem
-                        v-bind:key={item.id}
+                        key={item.id}
                         item={item}
                       />
                     ))

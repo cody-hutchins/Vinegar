@@ -280,7 +280,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
                     relate-media-items={relateMediaItems}
                     playlist-select={playlistSelect}
                     item={item}
-                    v-bind:key={item.id}
+                    key={item.id}
                   />
                 ))
               ) : (

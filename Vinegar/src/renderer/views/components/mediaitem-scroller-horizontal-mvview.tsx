@@ -11,7 +11,7 @@ const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp = false,
             <MediaItemMVViewSP
               item={(item?.attributes?.kind !== null || item?.attributes?.type === "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) ?? item}
               imagesize={imagesize}
-              v-bind:key={item.id}
+              key={item.id}
               badge={item.attributes ?? []}
             />
           ) : (
@@ -21,7 +21,7 @@ const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp = false,
               key={item?.id ?? ""}
               item={item ? (item.attributes?.kind !== null || item.type === "editorial-elements" ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
               imagesize={imagesize}
-              v-bind:key={item.id}
+              key={item.id}
             />
           ),
         )}

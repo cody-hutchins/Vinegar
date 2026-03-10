@@ -64,7 +64,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
             <SidebarPlaylist
               playlist-select={playlistSelect}
               relate-media-items={relateItems}
-              v-bind:key={item.id}
+              key={item.id}
               item={item}
             />
           ))}

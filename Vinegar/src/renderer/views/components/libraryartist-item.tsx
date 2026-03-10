@@ -170,7 +170,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           <div
             className={"info-rect"}
             style={{ paddingLeft: showArtwork ? "" : "16px" }}
-            dblclick={app.routeView(item)}>
+            onDoubleClick={() => app.routeView(item)}>
             <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
           </div>
         </div>

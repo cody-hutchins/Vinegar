@@ -50,7 +50,7 @@ const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object
             items.map((song) => (
               <MediaItemListItem
                 show-library-status={showLibraryStatus}
-                v-bind:key={song.id}
+                key={song.id}
                 parent={"'listitem-hr' + simplifiedParent"}
                 index={song.index}
                 item={song}

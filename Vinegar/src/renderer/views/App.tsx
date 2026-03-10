@@ -47,7 +47,7 @@ const App = () => {
                 <motion.div name={"fsModeSwitch"}>
                   <div
                     id={"app-main"}
-                    v-show={"appMode == 'player'"}>
+                    style={{ display: appMode == "player" ? "inherit" : "none" }}>
                     <ChromeTop />
                     <AppNavigation />
                     <ChromeBottom />
@@ -55,7 +55,7 @@ const App = () => {
                 </motion.div>
 
                 <motion.div name={"fsModeSwitch"}>
-                  {appMode == "fullscreen" && (
+                  {appMode === "fullscreen" && (
                     <div className={"fullscreen-view-container"}>
                       <FullscreenView
                         ref={"fsView"}

@@ -559,7 +559,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
                 itemBadges.limit(1).map((badge) => (
                   <div
                     className={"socialBadge"}
-                    v-bind:key={badge.id}>
+                    key={badge.id}>
                     <MediaItemArtwork
                       url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
                       size={"32"}
@@ -570,7 +570,6 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
             <div
               className={"info-rect"}
               className={"{'info-rect-card': kind === 'card'}"}
-              v-show={isVisible}
               style={{ "--bgartwork": getArtworkUrl(size, true), display: isVisible ? "inherit" : "none" }}>
               {(item.attributes.artistNames === null || kind !== "card") && (
                 <div

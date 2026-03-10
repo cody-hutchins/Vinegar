@@ -61,7 +61,7 @@ const Component = () => {
               {items.map((item) => (
                 <MediaItemSquare
                   item={item}
-                  v-bind:key={item.id}
+                  key={item.id}
                 />
               ))}
             </div>
@@ -72,7 +72,7 @@ const Component = () => {
                   show-meta-data={"true"}
                   show-library-status={"false"}
                   item={item}
-                  v-bind:key={item.id}
+                  key={item.id}
                 />
               ))}
             </div>

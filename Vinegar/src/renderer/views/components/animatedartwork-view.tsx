@@ -89,7 +89,7 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
         {video && (
           <div
             className={"animated"}
-            v-bind:vid={app.hashCode(video).toString()}>
+            vid={app.hashCode(video).toString()}>
             <video
               ref={"video"}
               className={"animated-artwork-video"}

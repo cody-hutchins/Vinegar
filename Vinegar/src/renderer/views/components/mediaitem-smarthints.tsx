@@ -478,7 +478,11 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
                 />
                 <button
                   className={"circular-play-button"}
-                  clickstop={playTrack(item)}>
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    playTrack(item);
+                  }}>
                   <div
                     className={"_svg-icon"}
                     style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}

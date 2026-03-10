@@ -5,6 +5,8 @@ import { InstalledThemes } from "./settings-installed-themes.jsx";
 import Keybinds from "./settings-keybinds.jsx";
 import PluginsGithub from "./settings-plugins-github.jsx";
 import ThemesGithub from "./settings-themes-github.jsx";
+import { Modal, Tab } from "react-bootstrap";
+import { useState } from "react";
 
 const SettingsWindow = () => {
   const app = this.$root;
@@ -12,6 +14,7 @@ const SettingsWindow = () => {
   const tabIndex = 0;
   const canChangeHash = false;
   let lastfmConnecting = false;
+  const [modalShow, setModalShow] = useState(false);
   const watch = {
     tabIndex: function (val) {
       if (canChangeHash) {
@@ -183,7 +186,7 @@ const SettingsWindow = () => {
           className={"close-btn"}
           onClick={() => close()}
         />
-        <b-tab>
+        <Tab>
           <template title>
             <div>
               <SVGIcon
@@ -337,14 +340,15 @@ const SettingsWindow = () => {
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <button
                       className={"md-btn"}
-                      v-b-modalmodal-1>
+                      onClick={() => setModalShow(true)}>
                       {$root.getLz("settings.option.general.customizeSidebar.customize")}
                     </button>
                   </div>
-                  <b-modal
+                  <Modal
                     id={"modal-1"}
                     centered
                     size={"lg"}
+                    show={modalShow}
                     title={$root.getLz("settings.option.general.customizeSidebar")}>
                     <div className={"settings-option-body"}>
                       <div className={"md-option-line"}>
@@ -414,7 +418,7 @@ const SettingsWindow = () => {
                         </div>
                       </div>
                     </div>
-                  </b-modal>
+                  </Modal>
                 </div>
                 <div className={"md-option-line"}>
                   <div className={"md-option-segment"}>{$root.getLz("settings.option.general.keybindings")}</div>
@@ -461,8 +465,8 @@ const SettingsWindow = () => {
               </div>
             </div>
           </div>
-        </b-tab>
-        <b-tab>
+        </Tab>
+        <Tab>
           <template title={"#"}>
             <div>
               <SVGIcon
@@ -598,8 +602,8 @@ const SettingsWindow = () => {
               </div>
             </div>
           </div>
-        </b-tab>
-        <b-tab>
+        </Tab>
+        <Tab>
           <template>
             <div>
               <SVGIcon
@@ -613,8 +617,8 @@ const SettingsWindow = () => {
           <div className={"settings-tab-content"}>
             <Audiolabs />
           </div>
-        </b-tab>
-        <b-tab>
+        </Tab>
+        <Tab>
           <template>
             <div>
               <SVGIcon
@@ -628,7 +632,7 @@ const SettingsWindow = () => {
           <div className={"settings-tab-content"}>
             <InstalledThemes />
           </div>
-        </b-tab>
+        </Tab>
         <template>
           <div>
             <SVGIcon
@@ -891,7 +895,7 @@ const SettingsWindow = () => {
             </div>
           </div>
         </div>
-        <b-tab>
+        <Tab>
           <template>
             <div>
               <SVGIcon
@@ -905,8 +909,8 @@ const SettingsWindow = () => {
           <div className={"settings-tab-content"}>
             <PluginsGithub />
           </div>
-        </b-tab>
-        <b-tab>
+        </Tab>
+        <Tab>
           <template>
             <div>
               <SVGIcon
@@ -1250,8 +1254,8 @@ const SettingsWindow = () => {
               </div>
             </div>
           </div>
-        </b-tab>
-        <b-tab>
+        </Tab>
+        <Tab>
           <template>
             <div>
               <SVGIcon
@@ -1402,7 +1406,7 @@ const SettingsWindow = () => {
                             onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
                             {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                               <option
-                                v-bind:value={"option"}
+                                value={"option"}
                                 style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.second !== option ? "inherit" : "none" }}>
                                 {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                               </option>
@@ -1424,7 +1428,7 @@ const SettingsWindow = () => {
                             v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
                             {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                               <option
-                                v-bind:value={"option"}
+                                value={"option"}
                                 style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== option ? "inherit" : "none" }}>
                                 {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                               </option>
@@ -1472,7 +1476,7 @@ const SettingsWindow = () => {
                   </div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
-                      <form submitprevent={"submitToken"}>
+                      <form submitprevent={submitToken}>
                         <input
                           type={"text"}
                           autoFocus
@@ -1557,7 +1561,7 @@ const SettingsWindow = () => {
               </div>
             </div>
           </div>
-        </b-tab>
+        </Tab>
         <template>
           <div>
             <SVGIcon
@@ -1753,21 +1757,21 @@ const SettingsWindow = () => {
         <option value={"100"}>100</option>
         <option value={"500"}>500</option>
         {/*keybinds Settings  */}
-        <b-tab id={"hid"}>
+        <Tab id={"hid"}>
           <template>
             <Keybinds />
           </template>
-        </b-tab>
+        </Tab>
         {/*keybinds-settings  */}
         {/*Github-theme-settings  */}
-        <b-tab id={"hid"}>
+        <Tab id={"hid"}>
           <template>
             <ThemesGithub />
           </template>
-        </b-tab>
+        </Tab>
         {/*Github-theme-settings  */}
         {/* Connect Settings  */}
-        {/* Not Prod Ready<b-tab title={$root.getLz('settings.header.connect')}>
+        {/* Not Prod Ready<Tab title={$root.getLz('settings.header.connect')}>
                 <div className="md-option-container">
                     <!!!!!-- Cider Connect / Linking Settings -!->
                     <div className="md-option-header">
@@ -1847,7 +1851,7 @@ const SettingsWindow = () => {
 
                         </div>}</div>
                 </div>
-            </b-tab>*/}
+            </Tab>*/}
       </div>
     </>
   );

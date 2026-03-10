@@ -176,7 +176,7 @@ const Component = () => {
                   index={index}
                   show-meta-data={"true"}
                   show-library-status={"false"}
-                  v-bind:key={item.id}
+                  key={item.id}
                 />
               ))}
             </div>
@@ -191,7 +191,7 @@ const Component = () => {
                   index={index}
                   show-meta-data={"true"}
                   show-library-status={"false"}
-                  v-bind:key={item.id}
+                  key={item.id}
                 />
               ))}
             </div>

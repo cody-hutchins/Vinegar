@@ -70,22 +70,22 @@ export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
           v-model={$root.cfg.visual.styles}
           end={$root.reloadStyles()}>
           {$root.cfg.visual.styles.map((theme) => (
-            <b-list-group-item
+            <List-group-item
               variant={"dark"}
               key={theme}>
-              <b-row>
-                <b-col sm={"auto"}>
+              <Row>
+                <Col sm={"auto"}>
                   <div className={"handle codicon codicon-grabber"} />
-                </b-col>
-                <b-col className={"themeLabel"}>{getThemeName(theme)}</b-col>
-                <b-col sm={"auto"}>
+                </Col>
+                <Col className={"themeLabel"}>{getThemeName(theme)}</Col>
+                <Col sm={"auto"}>
                   <button
                     className={"removeItem codicon codicon-close"}
                     onClick={() => remove(theme)}
                   />
-                </b-col>
-              </b-row>
-            </b-list-group-item>
+                </Col>
+              </Row>
+            </List-group-item>
           ))}
         </draggable>
       </div>
@@ -303,35 +303,39 @@ export const InstalledThemes = () => {
                       onContextMenu={() => contextMenu($event, theme)}
                       className={"list-group-item list-group-item-dark"}
                       className={"{'applied': $root.cfg.visual.styles.includes(theme.file)}"}>
-                      <b-row>
-                        <b-col className={"themeLabel"}>{theme.name}</b-col>
+                      <Row>
+                        <Col className={"themeLabel"}>{theme.name}</Col>
                         {$root.cfg.visual.styles.includes(theme.file) ? (
                           <template>
                             {theme.pack && (
-                              <b-col sm={"auto"}>
+                              <Col sm={"auto"}>
                                 <button className={"themeContextMenu codicon codicon-package"} />
-                              </b-col>
+                              </Col>
                             )}
-                            <b-col sm={"auto"}>
+                            <Col sm={"auto"}>
                               <button className={"themeContextMenu codicon codicon-check"} />
-                            </b-col>
+                            </Col>
                           </template>
                         ) : (
                           <template>
                             {theme.pack && (
-                              <b-col sm={"auto"}>
+                              <Col sm={"auto"}>
                                 <button className={"themeContextMenu codicon codicon-package"} />
-                              </b-col>
+                              </Col>
                             )}
-                            <b-col sm={"auto"}>
+                            <Col sm={"auto"}>
                               <button
-                                clickstop={contextMenu($event, theme)}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  contextMenu(e, theme);
+                                }}
                                 className={"themeContextMenu codicon codicon-list-unordered"}
                               />
-                            </b-col>
+                            </Col>
                           </template>
                         )}
-                      </b-row>
+                      </Row>
                     </li>
                     {theme.pack.map(
                       (packEntry) =>
@@ -341,22 +345,22 @@ export const InstalledThemes = () => {
                             onContextMenu={() => contextMenu($event, theme)}
                             className={"list-group-item list-group-item-dark addon"}
                             className={"{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"}>
-                            <b-row>
-                              <b-col className={"themeLabel"}>{packEntry.name}</b-col>
+                            <Row>
+                              <Col className={"themeLabel"}>{packEntry.name}</Col>
                               {$root.cfg.visual.styles.includes(packEntry.file) ? (
                                 <template>
-                                  <b-col sm={"auto"}>
+                                  <Col sm={"auto"}>
                                     <button className={"themeContextMenu codicon codicon-check"} />
-                                  </b-col>
+                                  </Col>
                                 </template>
                               ) : (
                                 <template>
-                                  <b-col sm={"auto"}>
+                                  <Col sm={"auto"}>
                                     <button className={"themeContextMenu codicon codicon-diff-added"} />
-                                  </b-col>
+                                  </Col>
                                 </template>
                               )}
-                            </b-row>
+                            </Row>
                           </li>
                         ),
                     )}

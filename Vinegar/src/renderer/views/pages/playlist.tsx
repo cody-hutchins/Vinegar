@@ -1020,13 +1020,13 @@ const Playlist = ({ data }: { data: object }) => {
                 </div>
               </div>
               <div className={"playlist-body scrollbody"}>
-                <b-tabs
+                <Tabs
                   pills
                   className={"track-pills pilldim fancy-pills"}
                   align={"center"}
                   content-className={"mt-3"}
                   nav-wrapper-className={navClass(data)}>
-                  <b-tab
+                  <Tab
                     title={$root.getLz("term.tracks")}
                     id={"songList"}
                     active>
@@ -1076,7 +1076,7 @@ const Playlist = ({ data }: { data: object }) => {
                                     showIndex={true}
                                     showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
                                     context-ext={buildContextMenu()}
-                                    v-bind:key={item.id}
+                                    key={item.id}
                                   />
                                 ))}
                               </template>
@@ -1093,7 +1093,7 @@ const Playlist = ({ data }: { data: object }) => {
                                         showIndex={true}
                                         showIndexPlaylist={(data.attributes.playParams?.kind ?? data.type ?? "").includes("playlist")}
                                         context-ext={buildContextMenu()}
-                                        v-bind:key={item.id}
+                                        key={item.id}
                                       />
                                     ))}
                                   </div>
@@ -1140,13 +1140,13 @@ const Playlist = ({ data }: { data: object }) => {
                         </template>
                       )}
                     </div>
-                  </b-tab>
+                  </Tab>
                   {typeof data.views !== "undefined" && (
                     <template>
                       {data.meta.views.order.map(
                         (view) =>
                           data.views[view].data.length !== 0 && (
-                            <b-tab
+                            <Tab
                               lazy
                               title={data.views[view].attributes.title}>
                               <div>
@@ -1161,12 +1161,12 @@ const Playlist = ({ data }: { data: object }) => {
                                   </div>
                                 </div>
                               </div>
-                            </b-tab>
+                            </Tab>
                           ),
                       )}
                     </template>
                   )}
-                </b-tabs>
+                </Tabs>
               </div>
             </template>
           )}

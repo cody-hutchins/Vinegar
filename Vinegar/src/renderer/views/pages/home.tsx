@@ -195,7 +195,7 @@ const Component = () => {
                       recentlyPlayed.limit(6).map((item) => (
                         <MediaItemListItem
                           item={item}
-                          v-bind:key={item.id}
+                          key={item.id}
                         />
                       ))
                     ) : (
@@ -235,7 +235,7 @@ const Component = () => {
                       artistFeed.limit(6).map((item) => (
                         <MediaItemListItem
                           item={item}
-                          v-bind:key={item.id}
+                          key={item.id}
                         />
                       ))
                     ) : followedArtists.length > 0 ? (
