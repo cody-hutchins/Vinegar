@@ -2,8 +2,8 @@ import { html } from "../html.js";
 import bootbox from "bootbox";
 
 export const i18nEditor = () => {
-  let listing = ipcRenderer.sendSync("get-i18n-listing");
-  let baseLz = ipcRenderer.sendSync("get-i18n", "en_US");
+  const listing = ipcRenderer.sendSync("get-i18n-listing");
+  const baseLz = ipcRenderer.sendSync("get-i18n", "en_US");
 
   function exportLz() {
     bootbox.alert(`<textarea spellcheck='false' style="width:100%;height: 300px;">${JSON.stringify(app.lz, true, " ")}</textarea>`);
@@ -11,8 +11,8 @@ export const i18nEditor = () => {
     navigator.clipboard.writeText(JSON.stringify(app.lz, true, " ")).then((r) => console.debug("Copied to clipboard."));
   }
   const getLanguages = () => {
-    let langs = this.$root.lzListing;
-    let categories = {
+    const langs = this.$root.lzListing;
+    const categories = {
       main: [],
       fun: [],
       unsorted: [],
@@ -27,49 +27,85 @@ export const i18nEditor = () => {
     }
     // return
     return categories;
-  }
+  };
 
   return (
-    <div className="content-inner i18n-page">
-      <div className="row nopadding">
-        <div className="col nopadding">
+    <div className={"content-inner i18n-page"}>
+      <div className={"row nopadding"}>
+        <div className={"col nopadding"}>
           <h1>i18n Editor</h1>
         </div>
-        <div className="col-auto nopadding selectCol">
-          <select className="md-select" onChange={() => {$root.setLz('');$root.setLzManual()}} v-model="$root.cfg.general.language">
-            {getLanguages().map((categories, index) => <optgroup label="index">
-              {categories.map((lang) => <option value={lang.code}>{lang.nameNative} ({lang.nameEnglish})</option>)}
-            </optgroup>)}
+        <div className={"col-auto nopadding selectCol"}>
+          <select
+            className={"md-select"}
+            onChange={() => {
+              $root.setLz("");
+              $root.setLzManual();
+            }}
+            v-model={"$root.cfg.general.language"}>
+            {getLanguages().map((categories, index) => (
+              <optgroup label={"index"}>
+                {categories.map((lang) => (
+                  <option value={lang.code}>
+                    {lang.nameNative} ({lang.nameEnglish})
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
-          <button className="md-btn" onClick={exportLz}>Export</button>
+          <button
+            className={"md-btn"}
+            onClick={exportLz}>
+            Export
+          </button>
         </div>
       </div>
       <hr />
-      <div className="md-option-container">
-        {baseLz.map((val, key) => <template>
-          {$root.lz[key] ? <div className="md-option-line">
-            <div className="md-option-segment">{key }</div>
-            <div className="md-option-segment">
-              {typeof $root.lz[key] == "object" ? <template>
-                {$root.lz[key].map((variant, vkey) => <div>
-                  {variant}
-                  <input type="text" v-model="$root.lz[key][vkey]" />
-                </div>)}
-              </template> :
-              <textarea type="text" v-model="$root.lz[key]"/>
-                }
-            </div>
-          </div>:
-          <div className="md-option-line">
-            <div className="md-option-segment">
-              <b>{ key }</b>
-            </div>
-            <div className="md-option-segment">
-              <textarea type="text" v-model="$root.lz[key]" placeholder="val"/>
-            </div>
-          </div>
-        </template>)}
+      <div className={"md-option-container"}>
+        {baseLz.map((val, key) => (
+          <template>
+            {$root.lz[key] ? (
+              <div className={"md-option-line"}>
+                <div className={"md-option-segment"}>{key}</div>
+                <div className={"md-option-segment"}>
+                  {typeof $root.lz[key] === "object" ? (
+                    <template>
+                      {$root.lz[key].map((variant, vkey) => (
+                        <div>
+                          {variant}
+                          <input
+                            type={"text"}
+                            v-model={"$root.lz[key][vkey]"}
+                          />
+                        </div>
+                      ))}
+                    </template>
+                  ) : (
+                    <textarea
+                      type={"text"}
+                      v-model={"$root.lz[key]"}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className={"md-option-line"}>
+                <div className={"md-option-segment"}>
+                  <b>{key}</b>
+                </div>
+                <div className={"md-option-segment"}>
+                  <textarea
+                    type={"text"}
+                    v-model={"$root.lz[key]"}
+                    placeholder={"val"}
+                  />
+                </div>
+              </div>
+            )}
+          </template>
+        ))}
       </div>
-    </div>);
-  };
+    </div>
+  );
+};
 export default i18nEditor;

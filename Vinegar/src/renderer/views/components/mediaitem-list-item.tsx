@@ -579,7 +579,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           tabIndex={0}
           className={"[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]"}>
           <div
-            style={{ display: isVisible ? 'inherit' : 'none' }}
+            style={{ display: isVisible ? "inherit" : "none" }}
             className={"listitem-content"}>
             {!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7 && <div className={"popular"} />}
             {showLibraryStatus === true && (

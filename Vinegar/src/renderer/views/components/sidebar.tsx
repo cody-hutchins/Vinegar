@@ -44,13 +44,15 @@ const Sidebar = () => {
                         }
                       }, 300)
                     }
-                    v-on:keyupenter={() => {
-                      $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
-                      $root.search.showHints = false;
-                      $root.search.showSearchView = true;
-                      $root.search.cursor = -1;
+                    onKeyUp={(e) => {
+                      if (e.key === "Enter") {
+                        $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+                        $root.search.showHints = false;
+                        $root.search.showSearchView = true;
+                        $root.search.cursor = -1;
+                      }
+                      $root.searchCursor();
                     }}
-                    v-on:keyup={$root.searchCursor}
                     onChange={() => $root.appRoute("search")}
                     onInput={() => $root.getSearchHints()}
                     placeholder={$root.getLz("term.search") + "..."}
@@ -98,8 +100,8 @@ const Sidebar = () => {
             scrollaxis={"y"}>
             {/* AM Navigation  */}
             <div
-style={{ display: $root.getThemeDirective("windowLayout") !== "twopanel" ? 'inherit' : 'none' }}
-className={"sidebarCatalogSection"}>
+              style={{ display: $root.getThemeDirective("windowLayout") !== "twopanel" ? "inherit" : "none" }}
+              className={"sidebarCatalogSection"}>
               <div
                 className={"app-sidebar-header-text"}
                 onClick={() => {

@@ -765,13 +765,13 @@ const Playlist = ({ data }: { data: object }) => {
                               className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
                               onClick={() => editPlaylistName()}
-                              style={{ display: nameEditing ? 'none' : 'inherit', color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
+                              style={{ display: nameEditing ? "none" : "inherit", color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
                               {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                             </div>
                             <div
                               className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
-                              style={{ display: nameEditing ? 'inherit' : 'none' }}>
+                              style={{ display: nameEditing ? "inherit" : "none" }}>
                               <input
                                 type={"text"}
                                 spellCheck={"false"}
@@ -813,7 +813,7 @@ const Playlist = ({ data }: { data: object }) => {
                                 {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                   <div
                                     className={"content"}
-                                    v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
+                                    dangerouslySetInnerHTML={{ __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short }}
                                     onClick={() => openInfoModal()}
                                   />
                                 ) : (
@@ -834,7 +834,7 @@ const Playlist = ({ data }: { data: object }) => {
                           <div className={"playlist-desc-expanded"}>
                             <div
                               className={"content"}
-                              v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
+                              dangerouslySetInnerHTML={{ __html: data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : "" }}
                             />
                             <button
                               className={"more-btn"}

@@ -22,7 +22,7 @@ Array.prototype.limit = function (n) {
   return this.slice(0, n);
 };
 
-export const AnimatedNumber = ({ number }: { number: 0}) => {
+export const AnimatedNumber = ({ number }: { number: 0 }) => {
   let displayNumber = number ? number : 0;
   let interval = -1;
 
@@ -41,10 +41,10 @@ export const AnimatedNumber = ({ number }: { number: 0}) => {
           displayNumber = displayNumber + change;
         }
       }, 20);
-    }
+    },
   };
 
-  return (<div style={{display: 'inline-block'}}>{displayNumber}</div>);
+  return <div style={{ display: "inline-block" }}>{displayNumber}</div>;
 };
 
 const initMusicKit = () => {
@@ -54,7 +54,7 @@ const initMusicKit = () => {
       token: localStorage.getItem("lastToken"),
     });
   }
-  let parsedJson = JSON.parse(this.responseText);
+  const parsedJson = JSON.parse(this.responseText);
   localStorage.setItem("lastToken", parsedJson.token);
   MusicKit.configure({
     developerToken: parsedJson.token,
@@ -78,7 +78,7 @@ const initMusicKit = () => {
     }
     waitForApp();
   });
-}
+};
 
 const capiInit = () => {
   const request = new XMLHttpRequest();
@@ -95,7 +95,7 @@ const capiInit = () => {
   };
   request.open("GET", "https://api.cider.sh/v1/");
   request.send();
-}
+};
 
 document.addEventListener("musickitloaded", function () {
   if (showOobe()) return;
@@ -130,11 +130,11 @@ const getBase64FromUrl = async (url: string | URL | Request) => {
 
 const Clone = (obj: object) => {
   return JSON.parse(JSON.stringify(obj));
-}
+};
 
 const uuidv4 = () => {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
-}
+};
 
 const xmlToJson = (xml) => {
   // Create the return object
@@ -145,8 +145,8 @@ const xmlToJson = (xml) => {
     // do attributes
     if (xml.attributes.length > 0) {
       obj["@attributes"] = {};
-      for (var j = 0; j < xml.attributes.length; j++) {
-        let attribute = xml.attributes.item(j);
+      for (let j = 0; j < xml.attributes.length; j++) {
+        const attribute = xml.attributes.item(j);
         obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
       }
     }
@@ -157,14 +157,14 @@ const xmlToJson = (xml) => {
 
   // do children
   if (xml.hasChildNodes()) {
-    for (var i = 0; i < xml.childNodes.length; i++) {
-      var item = xml.childNodes.item(i);
-      var nodeName = item.nodeName;
+    for (let i = 0; i < xml.childNodes.length; i++) {
+      const item = xml.childNodes.item(i);
+      const nodeName = item.nodeName;
       if (typeof obj[nodeName] === "undefined") {
         obj[nodeName] = xmlToJson(item);
       } else {
         if (typeof obj[nodeName].push === "undefined") {
-          var old = obj[nodeName];
+          const old = obj[nodeName];
           obj[nodeName] = [];
           obj[nodeName].push(old);
         }
@@ -174,13 +174,13 @@ const xmlToJson = (xml) => {
   }
   console.log(obj);
   return obj;
-}
+};
 
 const asyncForEach = (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
-}
+};
 
 const checkIfScrollIsStatic = setInterval(() => {
   try {
@@ -200,7 +200,7 @@ const webGPU = async () => {
   } catch (e) {
     console.log("WebGPU disabled / WebGPU initialization failed");
   }
-}
+};
 
 const isJson = (item) => {
   item = typeof item !== "string" ? JSON.stringify(item) : item;
@@ -216,7 +216,7 @@ const isJson = (item) => {
   }
 
   return false;
-}
+};
 
 webGPU().then();
 
@@ -234,10 +234,10 @@ const showOobe = () => {
     waitForApp();
     return true;
   }
-}
+};
 
-let screenWidth = screen.width;
-let screenHeight = screen.height;
+const screenWidth = screen.width;
+const screenHeight = screen.height;
 
 document.addEventListener("DOMContentLoaded", async function () {
   // app.oobeInit()

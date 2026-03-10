@@ -72,10 +72,12 @@ const Component = ({ search }: { search: object }) => {
                   }
                 }, 300)
               }
-              v-on:keyupenter={() => {
-                $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
-                $root.search.showHints = false;
-                $root.search.showSearchView = true;
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+                  $root.search.showHints = false;
+                  $root.search.showSearchView = true;
+                }
               }}
               onInput={() => $root.getSearchHints()}
               placeholder={$root.getLz("term.search") + "..."}

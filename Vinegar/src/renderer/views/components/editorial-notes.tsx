@@ -1,4 +1,4 @@
-const EditorialNotes = () => (
+const EditorialNotes = ({ title, content }: { title: any; content: any }) => (
   <div className={"modal-backdrop"}>
     <div className={"modal-dialog"}>
       <div className={"modal-header"}>
@@ -7,14 +7,13 @@ const EditorialNotes = () => (
           className={"close"}>
           &times;
         </button>
-        <h4
-          className={"modal-title"}
-          v-html={title}
-        />
+        <h4 className={"modal-title"}>
+          <div dangerouslySetInnerHTML={{ __html: title }} />
+        </h4>
       </div>
       <div
         className={"modal-content"}
-        v-html={content}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
       <div className={"modal-footer"} />
     </div>

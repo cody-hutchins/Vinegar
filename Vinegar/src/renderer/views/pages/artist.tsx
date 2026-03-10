@@ -315,7 +315,7 @@ const Artist = ({ data }: { data: object }) => {
                   {data.attributes.artistBio && (
                     <div className={"col"}>
                       <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
-                      <p v-html={data.attributes.artistBio} />
+                      <p dangerouslySetInnerHTML={{ __html: data.attributes.artistBio }} />
                     </div>
                   )}
                   <div className={"col"}>

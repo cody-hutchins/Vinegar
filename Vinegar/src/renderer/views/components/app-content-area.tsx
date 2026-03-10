@@ -28,7 +28,11 @@ const AppContentArea = () => {
           <AnimatePresence>
             {Object.keys(process.env.appRoutes).map((appRoute) => (
               <motion.div
-                v-onenter={appRoute.onEnter}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    appRoute.onEnter();
+                  }
+                }}
                 name={$root.chrome.desiredPageTransition}>
                 {appRoute.condition && <template>{appRoute.component}</template>}
               </motion.div>
@@ -36,7 +40,11 @@ const AppContentArea = () => {
             {/*  */}
             <motion.div
               name={$root.chrome.desiredPageTransition}
-              v-on:enter={$root.getMadeForYou()}>
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  $root.getMadeForYou();
+                }
+              }}>
               {$root.page === "library-madeforyou" && <template>{import("../pages/madeforyou.jsx")}</template>}
             </motion.div>
           </AnimatePresence>

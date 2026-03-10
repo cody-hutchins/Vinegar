@@ -10,9 +10,7 @@ const AppNavigation = () => {
 
   return (
     <>
-      <div
-        className={"app-navigation"}
-        v-cloak>
+      <div className={"app-navigation"}>
         <AnimatePresence>
           <motion.div name={"wpfade"}>
             {chrome.menuOpened && (

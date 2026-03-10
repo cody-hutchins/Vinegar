@@ -511,9 +511,16 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                         }
                       }, 300)
                     }
-                    v-on:keyupenter={"searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);search.showHints = false;search.showSearchView = true;search.cursor = -1"}
+                    onKeyUp={(e) => {
+                      if (e.key === "Enter") {
+                        searchQuery(search.hints[search.cursor]?.content ?? search.hints[search.cursor]?.searchTerm ?? search.term);
+                        search.showHints = false;
+                        search.showSearchView = true;
+                        search.cursor = -1;
+                      }
+                      searchCursor();
+                    }}
                     onChange={() => $root.appRoute("search")}
-                    v-on:keyup={"searchCursor"}
                     onInput={() => getSearchHints()}
                     placeholder={$root.getLz("term.search") + "..."}
                     v-model={search.term}

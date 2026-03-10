@@ -33,7 +33,7 @@ const Multiroom = ({ data }: { data: object }) => {
               <h1 className={"header-text"}>{data.attributes?.title ?? ""}</h1>
               <h2
                 className={"header-desc"}
-                v-html={data.relationships?.children?.data[0]?.attributes?.description ?? ""}></h2>
+                dangerouslySetInnerHTML={{ __html: data.relationships?.children?.data[0]?.attributes?.description ?? "" }}></h2>
               {data.relationships && (
                 <template>
                   {datatype === "rooms" && (data?.relationships?.contents?.data ?? []).length > 0 ? (

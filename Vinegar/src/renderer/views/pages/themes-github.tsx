@@ -193,7 +193,7 @@ const ThemesGithub = () => {
                 </div>
                 <hr />
                 <div
-                  v-html={openRepo.readme}
+                  dangerouslySetInnerHTML={{ __html: openRepo.readme }}
                   className={"github-content"}
                 />
               </div>

@@ -341,7 +341,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                 className={"md-select"}
                 style={{ width: "220px", textAlign: "center", marginRight: "245px" }}
                 v-model={$root.cfg.audio.equalizer.preset}
-                v-on:onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
+                onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
                 <optgroup label={$root.getLz("term.userPresets")}>
                   {$root.cfg.audio.equalizer.presets.map((preset) => (
                     <option value={preset.preset}>{preset.name}</option>

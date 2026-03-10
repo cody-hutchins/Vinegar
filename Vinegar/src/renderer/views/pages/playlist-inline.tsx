@@ -458,12 +458,12 @@ const Component = ({ data }: { data: object }) => {
                                 <div
                                   className={"playlist-name"}
                                   onClick={() => editPlaylistName()}
-                                  style={{ display: nameEditing ? 'none' : 'inherit' }}>
+                                  style={{ display: nameEditing ? "none" : "inherit" }}>
                                   {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
                                 </div>
                                 <div
                                   className={"playlist-name"}
-                                  style={{ display: nameEditing ? 'inherit' : 'none' }}>
+                                  style={{ display: nameEditing ? "inherit" : "none" }}>
                                   <input
                                     type={"text"}
                                     spellCheck={"false"}
@@ -500,7 +500,7 @@ const Component = ({ data }: { data: object }) => {
                                     {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                       <div
                                         className={"content"}
-                                        v-html={data.attributes.description?.short ?? data.attributes.editorialNotes?.short}
+                                        dangerouslySetInnerHTML={{ __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short }}
                                         onClick={() => openInfoModal()}
                                       />
                                     ) : (
@@ -521,7 +521,7 @@ const Component = ({ data }: { data: object }) => {
                               <div className={"playlist-desc-expanded"}>
                                 <div
                                   className={"content"}
-                                  v-html={data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : ""}
+                                  dangerouslySetInnerHTML={{ __html: data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : "" }}
                                 />
                                 <button
                                   className={"more-btn"}

@@ -132,8 +132,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             <motion.div name={"fabfade"}>
               <button
                 className={"top-fab"}
-                style={{display: showFab ? 'inherit' : 'none'}}
-
+                style={{ display: showFab ? "inherit" : "none" }}
                 onClick={() => scrollToTop()}
                 aria-label={app.getLz("action.scrollToTop")}>
                 {import("../svg/arrow-up.svg")}
@@ -142,7 +141,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
           </AnimatePresence>
           <div
             className={"well itemContainer"}
-            style={{ display: loading ? 'inherit' : 'none' }}>
+            style={{ display: loading ? "inherit" : "none" }}>
             <div className={"spinner"} />
           </div>
         </div>

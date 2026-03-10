@@ -31,7 +31,7 @@ const MoreInfoModal = ({ data }: { data: object }) => {
           <div className={"modal-content"}>
             <div
               className={"content"}
-              v-html={data.content}
+              dangerouslySetInnerHTML={{ __html: data.content }}
             />
           </div>
         </div>
