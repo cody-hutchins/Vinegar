@@ -1,3 +1,4 @@
+import { Col, Row } from "react-bootstrap";
 import MediaItemArtwork from "../components/mediaitem-artwork.js";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 
@@ -24,90 +25,88 @@ const RecordLabel = ({ data }: { data: string }) => {
     }
   }
   return (
-    <>
-      <div id={"cider-recordlabel"}>
-        <div className={"content-inner artist-page"}>
-          <div
-            className={"artist-header"}
-            style={getArtistPalette(data)}>
-            <div className={"row"}>
-              <div
-                className={"col-sm"}
-                style={{ width: "auto" }}>
-                <div className={"artist-image"}>
-                  <MediaItemArtwork
-                    shadow={"large"}
-                    url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                    size={"220"}
-                    type={"artists"}
-                  />
-                </div>
+    <div id={"cider-recordlabel"}>
+      <div className={"content-inner artist-page"}>
+        <div
+          className={"artist-header"}
+          style={getArtistPalette(data)}>
+          <Row>
+            <Col
+              sm
+              style={{ width: "auto" }}>
+              <div className={"artist-image"}>
+                <MediaItemArtwork
+                  shadow={"large"}
+                  url={data.attributes.artwork ? data.attributes.artwork.url : ""}
+                  size={"220"}
+                  type={"artists"}
+                />
               </div>
-              <div className={"col cider-flex-center"}>
-                <h1>{data.attributes.name}</h1>
-              </div>
+            </Col>
+            <Col className={"cider-flex-center"}>
+              <h1>{data.attributes.name}</h1>
+            </Col>
+          </Row>
+        </div>
+        <div className={"artist-body"}>
+          {$root.showingPlaylist.attributes.description && (
+            <div>
+              <Row>
+                <h3>{$root.getLz("term.about")}</h3>
+              </Row>
+              <Row>
+                <div>{$root.showingPlaylist.attributes.description.standard}</div>
+              </Row>
             </div>
-          </div>
-          <div className={"artist-body"}>
-            {$root.showingPlaylist.attributes.description && (
-              <div>
-                <div className={"row"}>
-                  <h3>{$root.getLz("term.about")}</h3>
-                </div>
-                <div className={"row"}>
-                  <div>{$root.showingPlaylist.attributes.description.standard}</div>
-                </div>
-              </div>
-            )}
-            {data.views && data.views["latest-releases"] && (
-              <template>
-                <div className={"row"}>
-                  <div className={"col"}>
-                    <h3>{data.views["latest-releases"].attributes.title ?? ""}</h3>
-                  </div>
-                </div>
-                {data.views["latest-releases"].data.map((item) => (
-                  <MediaItemSquare
-                    key={item.id}
-                    item={item}
-                  />
-                ))}
-              </template>
-            )}
-            {data.views && data.views["top-releases"] && (
-              <template>
-                <div className={"row"}>
-                  <div className={"col"}>
-                    <h3>{data.views["top-releases"].attributes.title ?? ""}</h3>
-                  </div>
-                </div>
-                {data.views["top-releases"].data.map((item) => (
-                  <MediaItemSquare
-                    key={item.id}
-                    item={item}
-                  />
-                ))}
-              </template>
-            )}
-            {data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0 && (
-              <template>
-                <div className={"row"}>
-                  <div className={"col"}>
-                    <h3>{$root.getLz("term.playlists")}</h3>
-                  </div>
-                </div>
-                {data.relationships.playlists.data.limit(5).map((item) => (
-                  <MediaItemSquare
-                    key={item.id}
-                    item={item}
-                  />
-                ))}
-              </template>
-            )}
-          </div>
+          )}
+          {data.views && data.views["latest-releases"] && (
+            <template>
+              <Row>
+                <Col>
+                  <h3>{data.views["latest-releases"].attributes.title ?? ""}</h3>
+                </Col>
+              </Row>
+              {data.views["latest-releases"].data.map((item) => (
+                <MediaItemSquare
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </template>
+          )}
+          {data.views && data.views["top-releases"] && (
+            <template>
+              <Row>
+                <Col>
+                  <h3>{data.views["top-releases"].attributes.title ?? ""}</h3>
+                </Col>
+              </Row>
+              {data.views["top-releases"].data.map((item) => (
+                <MediaItemSquare
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </template>
+          )}
+          {data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0 && (
+            <template>
+              <Row>
+                <Col>
+                  <h3>{$root.getLz("term.playlists")}</h3>
+                </Col>
+              </Row>
+              {data.relationships.playlists.data.limit(5).map((item) => (
+                <MediaItemSquare
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </template>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default RecordLabel;

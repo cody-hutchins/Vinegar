@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import MediaItemArtwork from "../components/MediaItemArtwork.jsx";
 // import LibraryArtistItem from "../components/libraryartist-item.jsx";
 import InlineCollectionList from "../components/inline-collection-list.jsx";
+import { Col } from "react-bootstrap";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   const isVisible = false;
@@ -238,63 +239,59 @@ const LibraryArtists = () => {
     console.log("hey", e);
   }
   return (
-    <>
-      <div id={"cider-library-artists"}>
-        <div className={"content-inner library-artists-page"}>
-          {/* <div className="row">
+    <div id={"cider-library-artists"}>
+      <div className={"content-inner library-artists-page"}>
+        {/* <div className="row">
                 <div className="col" style={{padding:0}}>
                     <h1 className="header-text">{$root.getLz('term.artists')}</h1>
                 </div>
 
             </div>  */}
-          <div className={"inner-container"}>
-            <div className={"list-container"}>
+        <div className={"inner-container"}>
+          <div className={"list-container"}>
+            <Col style={{ padding: 0 }}>
               <div
-                className={"col"}
-                style={{ padding: 0 }}>
-                <div
-                  className={"search-input-container"}
-                  style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
-                  <div className={"search-input--icon"} />
-                  <input
-                    type={"search"}
-                    style={{ width: "100%" }}
-                    spellCheck={false}
-                    placeholder={$root.getLz("term.search") + "..."}
-                    input={$root.searchLibraryArtists}
-                    v-model={library.artists.search}
-                    className={"search-input"}
-                  />
-                </div>
+                className={"search-input-container"}
+                style={{ width: "calc('100%', '-20px')", margin: "16px 10px 10px 10px" }}>
+                <div className={"search-input--icon"} />
+                <input
+                  type={"search"}
+                  style={{ width: "100%" }}
+                  spellCheck={false}
+                  placeholder={$root.getLz("term.search") + "..."}
+                  input={$root.searchLibraryArtists}
+                  v-model={library.artists.search}
+                  className={"search-input"}
+                />
               </div>
-              <div className={"podcasts-list"}>
-                {library.artists.displayListing.map((item) => (
-                  <LibraryArtistItem
-                    key={item.id}
-                    showDuration={false}
-                    showMetadata={true}
-                    showLibraryStatus={false}
-                    item={item}
-                  />
-                ))}
+            </Col>
+            <div className={"podcasts-list"}>
+              {library.artists.displayListing.map((item) => (
+                <LibraryArtistItem
+                  key={item.id}
+                  showDuration={false}
+                  showMetadata={true}
+                  showLibraryStatus={false}
+                  item={item}
+                />
+              ))}
+            </div>
+          </div>
+          <div className={"episodes-list"}>
+            {clready && (
+              <div className={"episodes-inline-info"}>
+                <InlineCollectionList
+                  parentSelector={".episodes-list"}
+                  data={clresponse}
+                  type={cltype}
+                  title={cltitle}
+                />
               </div>
-            </div>
-            <div className={"episodes-list"}>
-              {clready && (
-                <div className={"episodes-inline-info"}>
-                  <InlineCollectionList
-                    parentSelector={".episodes-list"}
-                    data={clresponse}
-                    type={cltype}
-                    title={cltitle}
-                  />
-                </div>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

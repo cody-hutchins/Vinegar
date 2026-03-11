@@ -84,22 +84,20 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
   }, []);
 
   return (
-    <>
-      <div id={"animatedartwork-view"}>
-        {video && (
-          <div
-            className={"animated"}
-            vid={app.hashCode(video).toString()}>
-            <video
-              ref={"video"}
-              className={"animated-artwork-video"}
-              loop
-              id={"animated-artwork"}
-            />
-          </div>
-        )}
-      </div>
-    </>
+    <div id={"animatedartwork-view"}>
+      {video && (
+        <div
+          className={"animated"}
+          vid={app.hashCode(video).toString()}>
+          <video
+            ref={"video"}
+            className={"animated-artwork-video"}
+            loop
+            id={"animated-artwork"}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 export default AnimatedArtworkView;

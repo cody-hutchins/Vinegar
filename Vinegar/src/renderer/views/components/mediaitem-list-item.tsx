@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
-const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
-  const showInLibrary = false;
+type Item = { id: string; attributes: { trackNumber: string; genreNames: string[]; durationInMillis: number; playCount: string; url: string; artistName: string; contentRating: string; releaseDate: string; albumName: string; name: string; artwork: { url: string }; playParams: { id: string; kind: string; isLibrary: boolean } }; type: string };
+
+const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: Item; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
+  let showInLibrary = false;
   let isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
   const app = this.$root;
   let displayDuration = true;
-  const addClasses: Record<string, any> = {};
-  let itemId = 0;
+  let addClasses: Record<string, any> = {};
+  let itemId: number | string = 0;
   let isLibrary = false;
   let isLoved = null;
 
@@ -38,7 +40,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     const color = `#${item.attributes.artwork !== null && item.attributes.artwork.bgColor !== null ? item.attributes.artwork.bgColor : ``}`;
     return color;
   }
-  async function checkLibrary() {
+  function checkLibrary() {
     if ((item?.id ?? "").toString().startsWith("ciderlocal")) {
       return true;
     }
@@ -54,18 +56,20 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     });
     return addedToLibrary;
   }
+
   function getClasses() {
     addClasses = {};
     if (typeof item.attributes.playParams === "undefined" && item.type !== "podcast-episodes") {
       addClasses["disabled"] = true;
     }
     if (classList) {
-      const classList = classList.split(" ");
-      for (let i = 0; i < classList.length; i++) {
-        addClasses[classList[i]] = true;
+      const _classList = classList.split(" ");
+      for (let i = 0; i < _classList.length; i++) {
+        addClasses[_classList[i]] = true;
       }
     }
   }
+
   function dragStart(evt) {
     evt.dataTransfer.setData(
       "text/plain",
@@ -75,14 +79,17 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       }),
     );
   }
+
   function uuidv4() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
   }
-  function msToMinSec(ms) {
+
+  function msToMinSec(ms: number) {
     const minutes = Math.floor(ms / 60000);
     const seconds = ((ms % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
+
   function getDataType() {
     let type;
     if (typeof item.attributes.playParams !== "undefined") {
@@ -342,10 +349,10 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             icon: "./assets/feather/share.svg",
             name: app.getLz("action.share"),
             action: async function () {
-              const item = item;
-              if (!item.attributes.url) {
-                if (item.type.includes("library")) {
-                  const result = (await app.mk.api.v3.music(`/v1/me/library/${item.type.replace("library-", "")}/${item.id}/catalog`)).data.data[0];
+              const _item = item;
+              if (!_item.attributes.url) {
+                if (_item.type.includes("library")) {
+                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`)).data.data[0];
                   if (result.attributes.url) {
                     app.copyToClipboard(result.attributes.url);
                   } else {
@@ -353,7 +360,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
                   }
                 }
               } else {
-                app.copyToClipboard(item.attributes.url);
+                app.copyToClipboard(_item.attributes.url);
               }
             },
           },
@@ -361,14 +368,14 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             icon: "./assets/feather/share.svg",
             name: `${app.getLz("action.share")} (song.link)`,
             action: async function () {
-              const item = item;
-              if (item.type.startsWith("library-")) {
-                item.attributes.url = item.relationships.catalog.data[0].attributes.url;
-                item.attributes.url = item.relationships.catalog.data[0].attributes.url;
+              const _item = item;
+              if (_item.type.startsWith("library-")) {
+                _item.attributes.url = _item.relationships.catalog.data[0].attributes.url;
+                _item.attributes.url = _item.relationships.catalog.data[0].attributes.url;
               }
-              if (!item.attributes.url) {
-                if (item.type.includes("library")) {
-                  const result = (await app.mk.api.v3.music(`/v1/me/library/${item.type.replace("library-", "")}/${item.id}/catalog`)).data.data[0];
+              if (!_item.attributes.url) {
+                if (_item.type.includes("library")) {
+                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`)).data.data[0];
                   if (result.attributes.url) {
                     app.copyToClipboard(result.attributes.url);
                   } else {
@@ -376,7 +383,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
                   }
                 }
               } else {
-                app.songLinkShare(item.attributes.url);
+                app.songLinkShare(_item.attributes.url);
               }
             },
           },
@@ -398,32 +405,34 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       await checkLibrary().then((res) => {
         console.log(res);
         if (res) {
-          menus.normal.items.find((x) => x.id === "addToLibrary").hidden = true;
-          menus.normal.items.find((x) => x.id === "removeFromLibrary").hidden = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary")!.hidden = true;
+          menus.normal.items.find((x) => x.id === "removeFromLibrary")!.hidden = false;
         } else {
-          menus.normal.items.find((x) => x.id === "addToLibrary").disabled = false;
+          menus.normal.items.find((x) => x.id === "addToLibrary")!.disabled = false;
         }
       });
     } catch (e) {}
     try {
       const rating = await app.getRating(item);
       if (rating === 0) {
-        menus.normal.headerItems.find((x) => x.id === "love").disabled = false;
-        menus.normal.headerItems.find((x) => x.id === "dislike").disabled = false;
+        menus.normal.headerItems.find((x) => x.id === "love")!.disabled = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike")!.disabled = false;
       } else if (rating === 1) {
-        menus.normal.headerItems.find((x) => x.id === "unlove").hidden = false;
-        menus.normal.headerItems.find((x) => x.id === "love").hidden = true;
+        menus.normal.headerItems.find((x) => x.id === "unlove")!.hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "love")!.hidden = true;
       } else if (rating === -1) {
-        menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
-        menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
+        menus.normal.headerItems.find((x) => x.id === "undo_dislike")!.hidden = false;
+        menus.normal.headerItems.find((x) => x.id === "dislike")!.hidden = true;
       }
     } catch (err) {
       console.log(err);
     }
   }
+
   const visibilityChanged = (_isVisible, entry) => {
     isVisible = _isVisible;
   };
+
   async function getHeartStatus() {
     try {
       await app.getRating(item).then((res) => {
@@ -437,38 +446,40 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       console.log(err);
     }
   }
+
   function addToLibrary() {
-    const item = item;
-    if (item.attributes.playParams?.id) {
-      console.log("adding to library", item.attributes.playParams?.id);
-      app.addToLibrary(item.attributes.playParams?.id.toString());
+    const _item = item;
+    if (_item.attributes.playParams?.id) {
+      console.log("adding to library", _item.attributes.playParams?.id);
+      app.addToLibrary(_item.attributes.playParams?.id.toString());
       addedToLibrary = true;
-    } else if (item.id) {
-      console.log("adding to library", item.id);
-      app.addToLibrary(item.id.toString());
+    } else if (_item.id) {
+      console.log("adding to library", _item.id);
+      app.addToLibrary(_item.id.toString());
       addedToLibrary = true;
     }
   }
   async function removeFromLibrary() {
-    const item = item;
+    const _item = item;
     const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
-    let id = item.id ?? item.attributes.playParams?.id;
-    const res = await app.mkapi(item.attributes.playParams?.kind ?? item.type, item.attributes.playParams?.isLibrary ?? false, item.attributes.playParams?.id ?? item.id, params);
+    let id = _item.id ?? _item.attributes.playParams?.id;
+    const res = await app.mkapi(_item.attributes.playParams?.kind ?? _item.type, _item.attributes.playParams?.isLibrary ?? false, _item.attributes.playParams?.id ?? _item.id, params);
     if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
       id = res.relationships.library.data[0].id;
     }
-    const kind = item.attributes.playParams?.kind ?? data.item ?? "";
+    const kind = _item.attributes.playParams?.kind ?? data.item ?? "";
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    if (item.attributes.playParams?.id) {
+    if (_item.attributes.playParams?.id) {
       console.log("remove from library", id);
       app.removeFromLibrary(truekind, id);
       addedToLibrary = false;
-    } else if (item.id) {
+    } else if (_item.id) {
       console.log("remove from library", id);
       app.removeFromLibrary(truekind, id);
       addedToLibrary = false;
     }
   }
+
   function playTrack() {
     const childIndex = index;
     const kind = item.attributes.playParams ? (item.attributes.playParams?.kind ?? item.type ?? "") : (item.type ?? "");
@@ -480,7 +491,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       if (parent !== null && childIndex !== null) {
         app.queueParentandplayChild(parent, childIndex, item);
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
-        function shuffleArray(array) {
+        function shuffleArray(array: Array<any>) {
           for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             const temp = array[i];
@@ -496,7 +507,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           })
           .then(function () {
             app.mk.play().then(function () {
-              const playlistId = id;
+              // const playlistId = id;
 
               function getPlaylist(id, isLibrary) {
                 if (isLibrary) {
@@ -554,149 +565,147 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     }
   }
   return (
-    <>
-      <div id={"mediaitem-list-item"}>
+    <div id={"mediaitem-list-item"}>
+      <div
+        v-observe-visibility={"{callback: visibilityChanged, throttle: 100}"}
+        onContextMenu={contextMenu}
+        onClick={() => select}
+        data-id={itemId}
+        data-type={getDataType()}
+        data-index={index}
+        data-guid={guid}
+        data-islibrary={isLibrary}
+        key={itemId}
+        className={"cd-mediaitem-list-item"}
+        onMouseEnter={checkLibrary}
+        onMouseOver={() => {
+          showInLibrary = true;
+        }}
+        onMouseLeave={() => {
+          showInLibrary = false;
+        }}
+        onDoubleClick={route}
+        controller-click={route()}
+        tabIndex={0}
+        className={"[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]"}>
         <div
-          v-observe-visibility={"{callback: visibilityChanged, throttle: 100}"}
-          onContextMenu={contextMenu}
-          onClick={() => select}
-          data-id={itemId}
-          data-type={getDataType()}
-          data-index={index}
-          data-guid={guid}
-          data-islibrary={isLibrary}
-          key={itemId}
-          className={"cd-mediaitem-list-item"}
-          onMouseEnter={checkLibrary}
-          onMouseOver={() => {
-            showInLibrary = true;
-          }}
-          onMouseLeave={() => {
-            showInLibrary = false;
-          }}
-          onDoubleClick={route}
-          controller-click={route()}
-          tabIndex={0}
-          className={"[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]"}>
-          <div
-            style={{ display: isVisible ? "inherit" : "none" }}
-            className={"listitem-content"}>
-            {!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7 && <div className={"popular"} />}
-            {showLibraryStatus === true && (
-              <div className={"isLibrary"}>
-                {showInLibrary && (
-                  <div style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
-                    {!addedToLibrary && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) ? (
-                      <button
-                        onClick={() => addToLibrary()}
-                        aria-label={$root.getLz("action.addToLibrary")}>
-                        <div
-                          className={"svg-icon addIcon"}
-                          style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}
-                        />
-                      </button>
-                    ) : null}
+          style={{ display: isVisible ? "inherit" : "none" }}
+          className={"listitem-content"}>
+          {!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7 && <div className={"popular"} />}
+          {showLibraryStatus === true && (
+            <div className={"isLibrary"}>
+              {showInLibrary && (
+                <div style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
+                  {!addedToLibrary && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) ? (
+                    <button
+                      onClick={() => addToLibrary()}
+                      aria-label={$root.getLz("action.addToLibrary")}>
+                      <div
+                        className={"svg-icon addIcon"}
+                        style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}
+                      />
+                    </button>
+                  ) : null}
+                </div>
+              )}
+              {!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex && (
+                <div style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
+                  <div>
+                    <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
                   </div>
-                )}
-                {!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex && (
-                  <div style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
-                    <div>
-                      <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
-                    </div>
-                  </div>
-                )}
-                {app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id) && (
-                  <div style={{ display: showInLibrary ? "none" : "block" }}>
-                    <div className={"loadbar-sound"} />
-                  </div>
-                )}
-              </div>
-            )}
-            {showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) && (
-              <div className={"artwork"}>
-                <MediaItemArtwork
-                  url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-                  size={"48"}
-                  bgcolor={getBgColor()}
-                  type={item.type}
-                />
-                <button
-                  className={"overlay-play"}
-                  onClick={() => playTrack()}
-                  aria-label={$root.getLz("term.play")}>
-                  {import("../svg/play.svg")}
-                </button>
-              </div>
-            )}
-            <div
-              className={"info-rect"}
-              style={{ paddingLeft: showArtwork ? "" : "16px" }}
-              onDoubleClick={route}>
-              <div
-                className={"title text-overflow-elipsis"}
-                title={item.attributes.name}>
-                {item.attributes.name}
-              </div>
-              <div
-                className={"subtitle text-overflow-elipsis"}
-                style={{ "-webkit-box-orient": "horizontal" }}>
-                {item.attributes.artistName && (
-                  <template>
-                    <div
-                      className={"artist item-navigate text-overflow-elipsis"}
-                      title={item.attributes.artistName}
-                      onClick={() => app.searchAndNavigate(item, "artist")}>
-                      {item.attributes.artistName}
-                    </div>
-                    {item.attributes.albumName && <template>&nbsp;—&nbsp;</template>}
-                    {item.attributes.albumName && (
-                      <template>
-                        <div
-                          className={"artist item-navigate text-overflow-elipsis"}
-                          title={item.attributes.albumName}
-                          onClick={() => app.searchAndNavigate(item, "album")}>
-                          {item.attributes.albumName}
-                        </div>
-                      </template>
-                    )}
-                  </template>
-                )}
-              </div>
-            </div>
-            <div className={"heart-icon"}>
-              {/*{(isLoved === false) && <div className="heart-unfilled"  style={{'--url': 'url(./assets/feather/heart.svg)'}} />}*/}
-              {isLoved === true && (
-                <div
-                  className={"heart-filled"}
-                  style={{ url: "url(./assets/feather/heart-fill.svg)" }}
-                />
+                </div>
+              )}
+              {app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id) && (
+                <div style={{ display: showInLibrary ? "none" : "block" }}>
+                  <div className={"loadbar-sound"} />
+                </div>
               )}
             </div>
-            {item.attributes && item.attributes.contentRating === "explicit" && <div className={"explicit-icon"} />}
-            {showMetadata === true && (
-              <template onDoubleClick={route}>
-                <div className={"metainfo"}>{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
-                <div className={"metainfo"}>{item.attributes.genreNames[0] ?? ""}</div>
-              </template>
-            )}
-            {displayDuration && (
+          )}
+          {showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) && (
+            <div className={"artwork"}>
+              <MediaItemArtwork
+                url={item.attributes.artwork ? item.attributes.artwork.url : ""}
+                size={"48"}
+                bgcolor={getBgColor()}
+                type={item.type}
+              />
+              <button
+                className={"overlay-play"}
+                onClick={() => playTrack()}
+                aria-label={$root.getLz("term.play")}>
+                {import("../svg/play.svg")}
+              </button>
+            </div>
+          )}
+          <div
+            className={"info-rect"}
+            style={{ paddingLeft: showArtwork ? "" : "16px" }}
+            onDoubleClick={route}>
+            <div
+              className={"title text-overflow-elipsis"}
+              title={item.attributes.name}>
+              {item.attributes.name}
+            </div>
+            <div
+              className={"subtitle text-overflow-elipsis"}
+              style={{ "-webkit-box-orient": "horizontal" }}>
+              {item.attributes.artistName && (
+                <template>
+                  <div
+                    className={"artist item-navigate text-overflow-elipsis"}
+                    title={item.attributes.artistName}
+                    onClick={() => app.searchAndNavigate(item, "artist")}>
+                    {item.attributes.artistName}
+                  </div>
+                  {item.attributes.albumName && <template>&nbsp;—&nbsp;</template>}
+                  {item.attributes.albumName && (
+                    <template>
+                      <div
+                        className={"artist item-navigate text-overflow-elipsis"}
+                        title={item.attributes.albumName}
+                        onClick={() => app.searchAndNavigate(item, "album")}>
+                        {item.attributes.albumName}
+                      </div>
+                    </template>
+                  )}
+                </template>
+              )}
+            </div>
+          </div>
+          <div className={"heart-icon"}>
+            {/*{(isLoved === false) && <div className="heart-unfilled"  style={{'--url': 'url(./assets/feather/heart.svg)'}} />}*/}
+            {isLoved === true && (
               <div
-                className={"duration"}
-                onDoubleClick={route}>
-                {msToMinSec(item.attributes.durationInMillis ?? 0)}
-              </div>
-            )}
-            {item.attributes.playCount && (
-              <div
-                className={"duration"}
-                onDoubleClick={route}>
-                {item.attributes.playCount}
-              </div>
+                className={"heart-filled"}
+                style={{ url: "url(./assets/feather/heart-fill.svg)" }}
+              />
             )}
           </div>
+          {item.attributes && item.attributes.contentRating === "explicit" && <div className={"explicit-icon"} />}
+          {showMetadata === true && (
+            <template onDoubleClick={route}>
+              <div className={"metainfo"}>{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
+              <div className={"metainfo"}>{item.attributes.genreNames[0] ?? ""}</div>
+            </template>
+          )}
+          {displayDuration && (
+            <div
+              className={"duration"}
+              onDoubleClick={route}>
+              {msToMinSec(item.attributes.durationInMillis ?? 0)}
+            </div>
+          )}
+          {item.attributes.playCount && (
+            <div
+              className={"duration"}
+              onDoubleClick={route}>
+              {item.attributes.playCount}
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

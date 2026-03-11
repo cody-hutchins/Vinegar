@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
+import { Col, Row } from "react-bootstrap";
 
 const ArtistFeed = () => {
   const app = this.$root;
@@ -77,87 +78,87 @@ const ArtistFeed = () => {
   }
 
   return (
-    <>
-      <div id={"cider-artist-feed"}>
-        <div className={"content-inner"}>
-          <div>
-            <div className={"row"}>
-              <div className={"col"}>
-                <div className={"row nopadding"}>
-                  <div className={"col nopadding"}>
-                    <h3>{app.getLz("home.followedArtists")}</h3>
-                  </div>
-                  <div className={"col-auto nopadding cider-flex-center"}>
-                    {!syncingFavs ? (
-                      <button
-                        className={"cd-btn-seeall"}
-                        onClick={() => syncFavorites()}>
-                        {app.getLz("home.syncFavorites")}
-                      </button>
-                    ) : (
-                      <div
-                        className={"spinner"}
-                        style={{ height: "26px" }}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div style={{ overflowX: "auto", display: "flex", scrollSnapType: "x mandatory" }}>
-                  {artists.map((artist) => (
-                    <div
-                      key={artist.id}
-                      style={{ margin: "6px" }}>
-                      <MediaItemSquare
-                        item={artist}
-                        kind={"small"}
-                      />
-                      <button
-                        onClick={() => unfollow(artist.id)}
-                        className={"md-btn md-btn-glyph"}
-                        style={{ display: "flex" }}>
-                        <div className={"sidebar-icon"}>
-                          <div
-                            className={"svg-icon"}
-                            style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
-                          />
-                        </div>
-                        {app.getLz("action.removeFavorite")}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className={"row"}>
-              <div className={"col"}>
-                <div className={"row nopadding"}>
-                  <div className={"col nopadding"}>
-                    <h3>{app.getLz("home.artistsFeed")}</h3>
-                  </div>
-                </div>
-                <div
-                  className={"well"}
-                  style={{ marginTop: 0 }}>
-                  {artistFeed.length > 0 ? (
-                    artistFeed.map((item) => (
-                      <MediaItemListItem
-                        key={item.id}
-                        item={item}
-                      />
-                    ))
+    <div id={"cider-artist-feed"}>
+      <div className={"content-inner"}>
+        <div>
+          <Row>
+            <Col>
+              <Row className={"nopadding"}>
+                <Col className={"nopadding"}>
+                  <h3>{app.getLz("home.followedArtists")}</h3>
+                </Col>
+                <Col
+                  auto
+                  className={"nopadding cider-flex-center"}>
+                  {!syncingFavs ? (
+                    <button
+                      className={"cd-btn-seeall"}
+                      onClick={() => syncFavorites()}>
+                      {app.getLz("home.syncFavorites")}
+                    </button>
                   ) : (
-                    <div className={"spinner"} />
+                    <div
+                      className={"spinner"}
+                      style={{ height: "26px" }}
+                    />
                   )}
-                </div>
+                </Col>
+              </Row>
+              <div style={{ overflowX: "auto", display: "flex", scrollSnapType: "x mandatory" }}>
+                {artists.map((artist) => (
+                  <div
+                    key={artist.id}
+                    style={{ margin: "6px" }}>
+                    <MediaItemSquare
+                      item={artist}
+                      kind={"small"}
+                    />
+                    <button
+                      onClick={() => unfollow(artist.id)}
+                      className={"md-btn md-btn-glyph"}
+                      style={{ display: "flex" }}>
+                      <div className={"sidebar-icon"}>
+                        <div
+                          className={"svg-icon"}
+                          style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
+                        />
+                      </div>
+                      {app.getLz("action.removeFavorite")}
+                    </button>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
+            </Col>
+          </Row>
+        </div>
+
+        <div>
+          <Row>
+            <Col>
+              <Row className={"nopadding"}>
+                <Col className={"nopadding"}>
+                  <h3>{app.getLz("home.artistsFeed")}</h3>
+                </Col>
+              </Row>
+              <div
+                className={"well"}
+                style={{ marginTop: 0 }}>
+                {artistFeed.length > 0 ? (
+                  artistFeed.map((item) => (
+                    <MediaItemListItem
+                      key={item.id}
+                      item={item}
+                    />
+                  ))
+                ) : (
+                  <div className={"spinner"} />
+                )}
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default ArtistFeed;

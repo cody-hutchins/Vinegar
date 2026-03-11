@@ -1,3 +1,4 @@
+import { Col, Row } from "react-bootstrap";
 import MediaItemArtwork from "./mediaitem-artwork.js";
 import MediaItemScrollerHorizontalLarge from "./mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalSP from "./mediaitem-scroller-horizontal-sp.jsx";
@@ -44,62 +45,56 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
     }
   };
   return (
-    <>
-      <div id={"listennow-child"}>
-        <div v-observe-visibility={"{callback: visibilityChanged}"}>
-          {isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf" ? (
-            <template>
-              <div className={"row"}>
-                {recom?.relationships["primary-content"]?.data?.length > 0 ? (
+    <div id={"listennow-child"}>
+      <div v-observe-visibility={"{callback: visibilityChanged}"}>
+        {isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf" ? (
+          <template>
+            <Row className={"row"}>
+              {recom?.relationships["primary-content"]?.data?.length > 0 ? (
+                <Col style={{ display: "flex", marginBlock: "1rem" }}>
                   <div
-                    className={"col"}
-                    style={{ display: "flex", marginBlock: "1rem" }}>
-                    <div
-                      onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                      className={"listennow-chip"}
-                      style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
-                      className={"{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }"}>
-                      {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
-                        <MediaItemArtwork
-                          url={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork?.url}
-                          size={"100"}
-                        />
-                      )}
-                    </div>
-                    <div
-                      onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                      style={{ width: "fit-content" }}
-                      className={"{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}"}>
-                      <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
-                      <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
-                    </div>
+                    onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                    className={"listennow-chip"}
+                    style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
+                    className={"{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }"}>
+                    {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
+                      <MediaItemArtwork
+                        url={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork?.url}
+                        size={"100"}
+                      />
+                    )}
                   </div>
-                ) : (
                   <div
-                    className={"col"}
-                    style={{ display: "flex", marginBlock: "1rem" }}>
-                    <h3
-                      onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                      style={{ width: "fit-content", marginBlock: 0 }}
-                      className={"{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}"}>
-                      {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
-                    </h3>
+                    onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                    style={{ width: "fit-content" }}
+                    className={"{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}"}>
+                    <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
+                    <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
                   </div>
-                )}
-              </div>
-              {recom.attributes.display.kind === "MusicCoverShelf" || recom.attributes.display.kind === "MusicCircleCoverShelf" ? (
-                <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)} />
+                </Col>
               ) : (
-                <MediaItemScrollerHorizontalSP
-                  withReason={index === 0}
-                  items={recom.relationships.contents.data.limit(10)}
-                />
+                <Col style={{ display: "flex", marginBlock: "1rem" }}>
+                  <h3
+                    onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                    style={{ width: "fit-content", marginBlock: 0 }}
+                    className={"{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}"}>
+                    {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
+                  </h3>
+                </Col>
               )}
-            </template>
-          ) : null}
-        </div>
+            </Row>
+            {recom.attributes.display.kind === "MusicCoverShelf" || recom.attributes.display.kind === "MusicCircleCoverShelf" ? (
+              <MediaItemScrollerHorizontalLarge items={recom.relationships.contents.data.limit(10)} />
+            ) : (
+              <MediaItemScrollerHorizontalSP
+                withReason={index === 0}
+                items={recom.relationships.contents.data.limit(10)}
+              />
+            )}
+          </template>
+        ) : null}
       </div>
-    </>
+    </div>
   );
 };
 

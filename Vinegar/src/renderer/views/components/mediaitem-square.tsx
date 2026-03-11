@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
-const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; size?: string; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
+const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: object; kind?: string; imagesize?: number; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
   const isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
@@ -540,7 +540,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
               <MediaItemArtwork
                 url={getArtworkUrl()}
                 video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                size={"size"}
+                size={imagesize}
                 upscaling={true}
                 shadow={"subtle"}
                 bgcolor={getBgColor()}
@@ -579,7 +579,7 @@ const MediaItemSquare = ({ item, kind = "", size = "190", forceVideo = false, re
           <div
             className={"info-rect"}
             className={"{'info-rect-card': kind === 'card'}"}
-            style={{ "--bgartwork": getArtworkUrl(size, true), display: isVisible ? "inherit" : "none" }}>
+            style={{ "--bgartwork": getArtworkUrl(imagesize, true), display: isVisible ? "inherit" : "none" }}>
             {(item.attributes.artistNames === null || kind !== "card") && (
               <div
                 className={"title"}

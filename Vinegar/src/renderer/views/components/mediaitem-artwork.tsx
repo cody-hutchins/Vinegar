@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import AnimatedartworkView from "./animatedartwork-view.jsx";
 
-const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { size?: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
+const MediaItemArtwork = ({ imagesize = 120, width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { imagesize?: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
   const app = this.$root;
   const isVisible = false;
   const style = {
@@ -24,18 +24,18 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
   }, [windowRelativeScale]);
 
   useEffect(() => {
-    imgSrc = app.getMediaItemArtwork(url, size, width);
+    imgSrc = app.getMediaItemArtwork(url, imagesize, width);
   }, [url]);
 
   useEffect(() => {
     getClasses();
-    imgSrc = app.getMediaItemArtwork(url, size, width);
+    imgSrc = app.getMediaItemArtwork(url, imagesize, width);
   }, []);
 
   const swapImage = (newValue) => {
     if (!upscaling || window.devicePixelRatio !== 1) return;
     if (newValue > 1.5) {
-      imgSrc = app.getMediaItemArtwork(url, parseInt(size * 2.0), parseInt(size * 2.0));
+      imgSrc = app.getMediaItemArtwork(url, parseInt(imagesize * 2.0), parseInt(imagesize * 2.0));
     }
   };
 
@@ -91,37 +91,35 @@ const MediaItemArtwork = ({ size = "120", width, bgcolor = "", url = "", type = 
 
   const getArtworkStyle = () => {
     return {
-      width: size + "px",
-      height: size + "px",
+      width: imagesize + "px",
+      height: imagesize + "px",
     };
   };
 
   return (
-    <>
-      <div id={"mediaitem-artwork"}>
-        <div
-          className={"mediaitem-artwork"}
-          style={awStyle}
-          contextMenu={"contextMenu"}
-          className={"[{'rounded': (type === 'artists')}, classes]"}
-          key={url}>
-          <img
-            src={imgSrc}
-            ref={image}
-            decoding={"async"}
-            loading={"lazy"}
-            style={imgStyle}
-            load={imgLoaded()}
-            className={"mediaitem-artwork--img"}
-          />
-          {video && getVideoPriority() && <div className={"animatedartwork-view-box"} />}
-          <AnimatedartworkView
-            priority={!!getVideoPriority()}
-            video={video ?? ""}
-          />
-        </div>
+    <div id={"mediaitem-artwork"}>
+      <div
+        className={"mediaitem-artwork"}
+        style={awStyle}
+        contextMenu={"contextMenu"}
+        className={"[{'rounded': (type === 'artists')}, classes]"}
+        key={url}>
+        <img
+          src={imgSrc}
+          ref={"image"}
+          decoding={"async"}
+          loading={"lazy"}
+          style={imgStyle}
+          load={imgLoaded()}
+          className={"mediaitem-artwork--img"}
+        />
+        {video && getVideoPriority() && <div className={"animatedartwork-view-box"} />}
+        <AnimatedartworkView
+          priority={!!getVideoPriority()}
+          video={video ?? ""}
+        />
       </div>
-    </>
+    </div>
   );
 };
 

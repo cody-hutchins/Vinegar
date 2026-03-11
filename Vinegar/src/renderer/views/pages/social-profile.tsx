@@ -1,5 +1,6 @@
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
+import { Row, Col } from "react-bootstrap";
 
 const SocialProfile = ({ data }: { data: object }) => {
   const app = this.$root;
@@ -30,9 +31,9 @@ const SocialProfile = ({ data }: { data: object }) => {
         <div
           className={"artist-header"}
           style={getArtistPalette(data)}>
-          <div className={"row"}>
-            <div
-              className={"col-sm"}
+          <Row>
+            <Col
+              sm
               style={{ width: "auto" }}>
               <div className={"artist-image"}>
                 <MediaItemArtwork
@@ -42,20 +43,20 @@ const SocialProfile = ({ data }: { data: object }) => {
                   type={"artists"}
                 />
               </div>
-            </div>
-            <div className={"col cider-flex-center"}>
+            </Col>
+            <Col className={"cider-flex-center"}>
               <h1>{data.attributes.name}</h1>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
         <div className={"artist-body"}>
           {data.relationships && data.relationships["shared-playlists"] && (
             <template>
-              <div className={"row"}>
-                <div className={"col"}>
+              <Row>
+                <Col>
                   <h3>{"Shared Playlists" ?? ""}</h3>
-                </div>
-              </div>
+                </Col>
+              </Row>
               {data.relationships["shared-playlists"].data.limit(10).map((item) => (
                 <MediaItemSquare
                   key={item.id}

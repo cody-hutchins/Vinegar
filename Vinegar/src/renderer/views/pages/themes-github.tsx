@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Col, Row } from "react-bootstrap";
 
 const ThemesGithub = () => {
   const repos = [];
@@ -111,32 +112,38 @@ const ThemesGithub = () => {
     <div id={"themes-github"}>
       <div className={"github-themes-page"}>
         <div className={"gh-header"}>
-          <div className={"row"}>
-            <div className={"col nopadding"}>
+          <Row>
+            <Col className={"nopadding"}>
               <h1 className={"header-text"}>{$root.getLz("settings.header.visual.theme.github.page")}</h1>
-            </div>
-            <div className={"col-auto nopadding flex-center"}>
+            </Col>
+            <Col
+              auto
+              className={" nopadding flex-center"}>
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => $root.appRoute("installed-themes")}>
                 {$root.getLz("settings.option.visual.theme.manageStyles")}
               </button>
-            </div>
-            <div className={"col-auto flex-center"}>
+            </Col>
+            <Col
+              auto
+              className={"flex-center"}>
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => $root.checkForThemeUpdates()}>
                 {$root.getLz("settings.option.visual.theme.checkForUpdates")}
               </button>
-            </div>
-            <div className={"col-auto nopadding flex-center"}>
+            </Col>
+            <Col
+              auto
+              className={"nopadding flex-center"}>
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => installThemeURL()}>
                 {$root.getLz("settings.option.visual.theme.github.download")}
               </button>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
         <div className={"gh-content"}>
           <div className={"repos-list"}>
@@ -147,15 +154,15 @@ const ThemesGithub = () => {
                   onClick={() => showRepo(repo)}
                   className={"list-group-item list-group-item-dark"}
                   style={{ background: repo.id === openRepo.id ? "var(--keyColor)" : "" }}>
-                  <div className={"row"}>
-                    <div className={"col flex-center"}>
+                  <Row className={"row"}>
+                    <Col className={"flex-center"}>
                       <div>
                         <h4 className={"repo-name"}>{repo.description !== null ? repo.description : repo.full_name}</h4>
                         <div>⭐ {repo.stargazers_count}</div>
                       </div>
-                    </div>
-                    <div className={"col-auto"}>{themesInstalled.includes(repo.full_name.toLowerCase()) && <span className={"codicon codicon-cloud-download"} />}</div>
-                  </div>
+                    </Col>
+                    <Col auto>{themesInstalled.includes(repo.full_name.toLowerCase()) && <span className={"codicon codicon-cloud-download"} />}</Col>
+                  </Row>
                 </li>
               ))}
             </ul>
@@ -163,8 +170,8 @@ const ThemesGithub = () => {
           {openRepo.full_name ? (
             <div className={"github-preview"}>
               <div className={"gh-preview-header"}>
-                <div className={"row nopadding"}>
-                  <div className={"col nopadding flex-center"}>
+                <Row className={"row nopadding"}>
+                  <Col className={"nopadding flex-center"}>
                     <div>
                       <h3 className={"repo-preview-name"}>{openRepo.description}</h3>
                       <div>
@@ -182,15 +189,17 @@ const ThemesGithub = () => {
                       </div>
                       <div>⭐ {openRepo.stargazers_count}</div>
                     </div>
-                  </div>
-                  <div className={"col-auto nopadding flex-center"}>
+                  </Col>
+                  <Col
+                    auto
+                    className={"nopadding flex-center"}>
                     <button
                       className={"md-btn md-btn-primary"}
                       onClick={() => installThemeRepo(openRepo)}>
                       {!themesInstalled.includes(openRepo.full_name.toLowerCase()) ? <span>{$root.getLz("action.install")}</span> : <span>{$root.getLz("action.update")}</span>}
                     </button>
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               </div>
               <hr />
               <div

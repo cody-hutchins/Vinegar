@@ -260,131 +260,135 @@ export const InstalledThemes = () => {
   }
 
   return (
-    <>
-      <div id={"installed-themes"}>
-        <div className={"installed-themes-page"}>
-          <div className={"gh-header"}>
-            <div className={"row"}>
-              <div className={"col nopadding"}>
-                <h1 className={"header-text"}>{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
-              </div>
-              <div className={"col-auto nopadding flex-center"}>
-                <button
-                  className={"md-btn md-btn-small md-btn-block"}
-                  onClick={() => $root.appRoute("themes-github")}>
-                  {$root.getLz("settings.option.visual.theme.github.explore")}
-                </button>
-              </div>
-              <div className={"col-auto  flex-center"}>
-                <button
-                  className={"md-btn md-btn-small md-btn-block"}
-                  onClick={() => $root.checkForThemeUpdates()}>
-                  {$root.getLz("settings.option.visual.theme.checkForUpdates")}
-                </button>
-              </div>
-              <div className={"col-auto nopadding flex-center"}>
-                <button
-                  className={"md-btn md-btn-small md-btn-block"}
-                  onClick={() => openThemesFolder()}>
-                  {$root.getLz("settings.option.visual.theme.github.openfolder")}
-                </button>
-              </div>
+    <div id={"installed-themes"}>
+      <div className={"installed-themes-page"}>
+        <div className={"gh-header"}>
+          <Row>
+            <Col className={"nopadding"}>
+              <h1 className={"header-text"}>{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
+            </Col>
+            <Col
+              auto
+              className={"nopadding flex-center"}>
+              <button
+                className={"md-btn md-btn-small md-btn-block"}
+                onClick={() => $root.appRoute("themes-github")}>
+                {$root.getLz("settings.option.visual.theme.github.explore")}
+              </button>
+            </Col>
+            <Col
+              auto
+              className={"flex-center"}>
+              <button
+                className={"md-btn md-btn-small md-btn-block"}
+                onClick={() => $root.checkForThemeUpdates()}>
+                {$root.getLz("settings.option.visual.theme.checkForUpdates")}
+              </button>
+            </Col>
+            <Col
+              auto
+              className={"nopadding flex-center"}>
+              <button
+                className={"md-btn md-btn-small md-btn-block"}
+                onClick={() => openThemesFolder()}>
+                {$root.getLz("settings.option.visual.theme.github.openfolder")}
+              </button>
+            </Col>
+          </Row>
+        </div>
+        <div className={"gh-content"}>
+          <div className={"repos-list"}>
+            <div className={"repo-header"}>
+              <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
             </div>
+            <ul className={"list-group list-group-flush"}>
+              {themes.map((theme) => (
+                <div key={theme.id}>
+                  <li
+                    onClick={() => addStyle(theme.file)}
+                    onContextMenu={() => contextMenu($event, theme)}
+                    className={"list-group-item list-group-item-dark"}
+                    className={"{'applied': $root.cfg.visual.styles.includes(theme.file)}"}>
+                    <Row>
+                      <Col className={"themeLabel"}>{theme.name}</Col>
+                      {$root.cfg.visual.styles.includes(theme.file) ? (
+                        <template>
+                          {theme.pack && (
+                            <Col sm={"auto"}>
+                              <button className={"themeContextMenu codicon codicon-package"} />
+                            </Col>
+                          )}
+                          <Col sm={"auto"}>
+                            <button className={"themeContextMenu codicon codicon-check"} />
+                          </Col>
+                        </template>
+                      ) : (
+                        <template>
+                          {theme.pack && (
+                            <Col sm={"auto"}>
+                              <button className={"themeContextMenu codicon codicon-package"} />
+                            </Col>
+                          )}
+                          <Col sm={"auto"}>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                contextMenu(e, theme);
+                              }}
+                              className={"themeContextMenu codicon codicon-list-unordered"}
+                            />
+                          </Col>
+                        </template>
+                      )}
+                    </Row>
+                  </li>
+                  {theme.pack.map(
+                    (packEntry) =>
+                      theme.pack && (
+                        <li
+                          key={packEntry.id}
+                          onClick={() => addStyle(packEntry.file)}
+                          onContextMenu={() => contextMenu($event, theme)}
+                          className={"list-group-item list-group-item-dark addon"}
+                          className={"{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"}>
+                          <Row>
+                            <Col className={"themeLabel"}>{packEntry.name}</Col>
+                            {$root.cfg.visual.styles.includes(packEntry.file) ? (
+                              <template>
+                                <Col sm={"auto"}>
+                                  <button className={"themeContextMenu codicon codicon-check"} />
+                                </Col>
+                              </template>
+                            ) : (
+                              <template>
+                                <Col sm={"auto"}>
+                                  <button className={"themeContextMenu codicon codicon-diff-added"} />
+                                </Col>
+                              </template>
+                            )}
+                          </Row>
+                        </li>
+                      ),
+                  )}
+                </div>
+              ))}
+            </ul>
           </div>
-          <div className={"gh-content"}>
-            <div className={"repos-list"}>
-              <div className={"repo-header"}>
-                <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
-              </div>
-              <ul className={"list-group list-group-flush"}>
-                {themes.map((theme) => (
-                  <div key={theme.id}>
-                    <li
-                      onClick={() => addStyle(theme.file)}
-                      onContextMenu={() => contextMenu($event, theme)}
-                      className={"list-group-item list-group-item-dark"}
-                      className={"{'applied': $root.cfg.visual.styles.includes(theme.file)}"}>
-                      <Row>
-                        <Col className={"themeLabel"}>{theme.name}</Col>
-                        {$root.cfg.visual.styles.includes(theme.file) ? (
-                          <template>
-                            {theme.pack && (
-                              <Col sm={"auto"}>
-                                <button className={"themeContextMenu codicon codicon-package"} />
-                              </Col>
-                            )}
-                            <Col sm={"auto"}>
-                              <button className={"themeContextMenu codicon codicon-check"} />
-                            </Col>
-                          </template>
-                        ) : (
-                          <template>
-                            {theme.pack && (
-                              <Col sm={"auto"}>
-                                <button className={"themeContextMenu codicon codicon-package"} />
-                              </Col>
-                            )}
-                            <Col sm={"auto"}>
-                              <button
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  contextMenu(e, theme);
-                                }}
-                                className={"themeContextMenu codicon codicon-list-unordered"}
-                              />
-                            </Col>
-                          </template>
-                        )}
-                      </Row>
-                    </li>
-                    {theme.pack.map(
-                      (packEntry) =>
-                        theme.pack && (
-                          <li
-                            key={packEntry.id}
-                            onClick={() => addStyle(packEntry.file)}
-                            onContextMenu={() => contextMenu($event, theme)}
-                            className={"list-group-item list-group-item-dark addon"}
-                            className={"{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"}>
-                            <Row>
-                              <Col className={"themeLabel"}>{packEntry.name}</Col>
-                              {$root.cfg.visual.styles.includes(packEntry.file) ? (
-                                <template>
-                                  <Col sm={"auto"}>
-                                    <button className={"themeContextMenu codicon codicon-check"} />
-                                  </Col>
-                                </template>
-                              ) : (
-                                <template>
-                                  <Col sm={"auto"}>
-                                    <button className={"themeContextMenu codicon codicon-diff-added"} />
-                                  </Col>
-                                </template>
-                              )}
-                            </Row>
-                          </li>
-                        ),
-                    )}
-                  </div>
-                ))}
-              </ul>
-            </div>
 
-            <div className={"style-editor-container"}>
-              <div className={"repo-header"}>
-                <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
-              </div>
-              {themes.length !== 0 && (
-                <StylestackEditor
-                  ref={"stackEditor"}
-                  themes={themes}
-                />
-              )}
+          <div className={"style-editor-container"}>
+            <div className={"repo-header"}>
+              <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
             </div>
+            {themes.length !== 0 && (
+              <StylestackEditor
+                ref={"stackEditor"}
+                themes={themes}
+              />
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

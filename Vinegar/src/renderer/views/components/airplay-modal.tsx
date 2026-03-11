@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { ipcRenderer } from "electron";
+import { Row, Col } from "react-bootstrap";
+
 const AirplayModal = () => {
   const [passcode, setPasscode] = useState("");
   const close = () => {
@@ -42,16 +44,16 @@ const AirplayModal = () => {
           />
         </div>
         <div className={"md-footer"}>
-          <div className={"row"}>
-            <div className={"col"}>
+          <Row>
+            <Col>
               <button
                 style={{ width: "100%" }}
                 onClick={enterPassword}
                 className={"md-btn md-btn-block md-btn-primary"}>
                 OK
               </button>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
       </div>
     </div>

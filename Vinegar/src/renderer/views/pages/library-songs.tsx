@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import Pagination from "../components/pagination.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
+import { Col, Row } from "react-bootstrap";
 
 const LibrarySongs = () => {
   const app = this.$root;
@@ -45,33 +46,31 @@ const LibrarySongs = () => {
   }
 
   return (
-    <>
-      <div id={"cider-library-songs"}>
-        <div className={"content-inner library-page"}>
-          <div className={"library-header"}>
-            <div className={"row"}>
+    <div id={"cider-library-songs"}>
+      <div className={"content-inner library-page"}>
+        <div className={"library-header"}>
+          <Row>
+            <Col style={{ padding: 0 }}>
               <div
-                className={"col"}
-                style={{ padding: 0 }}>
-                <div
-                  className={"search-input-container"}
-                  style={{ width: "100%", margin: "16px 0" }}>
-                  <div className={"search-input--icon"} />
-                  <input
-                    type={"search"}
-                    style={{ width: "100%" }}
-                    spellCheck={"false"}
-                    placeholder={app.getLz("term.search") + "..."}
-                    input={$root.searchLibrarySongs}
-                    v-model={library.songs.search}
-                    className={"search-input"}
-                  />
-                </div>
+                className={"search-input-container"}
+                style={{ width: "100%", margin: "16px 0" }}>
+                <div className={"search-input--icon"} />
+                <input
+                  type={"search"}
+                  style={{ width: "100%" }}
+                  spellCheck={"false"}
+                  placeholder={app.getLz("term.search") + "..."}
+                  input={$root.searchLibrarySongs}
+                  v-model={library.songs.search}
+                  className={"search-input"}
+                />
               </div>
-              <div className={"col-auto cider-flex-center"}>
-                <div className={"row"}>
+            </Col>
+            <Col className={"cider-flex-center"}>
+              <Row>
+                <Col>
                   <button
-                    className={"col md-btn md-btn-primary  md-btn-icon"}
+                    className={"md-btn md-btn-primary  md-btn-icon"}
                     style={{ minWidth: "100px", marginRight: "3px" }}
                     onClick={() => {
                       app.mk.shuffleMode = 0;
@@ -80,8 +79,10 @@ const LibrarySongs = () => {
                     <img className={"md-ico-play"} />
                     {app.getLz("term.play")}
                   </button>
+                </Col>
+                <Col>
                   <button
-                    className={"col md-btn md-btn-primary  md-btn-icon"}
+                    className={"md-btn md-btn-primary  md-btn-icon"}
                     style={{ minWidth: "100px", marginRight: "3px" }}
                     onClick={() => {
                       app.mk.shuffleMode = 1;
@@ -90,115 +91,119 @@ const LibrarySongs = () => {
                     <img className={"md-ico-shuffle"} />
                     {app.getLz("term.shuffle")}
                   </button>
-                  <div className={"col"}>
-                    <select
-                      className={"md-select"}
-                      v-model={prefs.sort}
-                      onChange={() => $root.searchLibrarySongs()}>
-                      <optgroup label={app.getLz("term.sortBy")}>
-                        {library.songs.sortingOptions.map((sort, index) => (
-                          <option value={"index"}>{sort}</option>
-                        ))}
-                      </optgroup>
-                    </select>
-                  </div>
-                  <div className={"col"}>
-                    <select
-                      className={"md-select"}
-                      v-model={prefs.sortOrder}
-                      onChange={() => $root.searchLibrarySongs()}>
-                      <optgroup label={app.getLz("term.sortOrder")}>
-                        <option value={"asc"}>{app.getLz("term.sortOrder.ascending")}</option>
-                        <option value={"desc"}>{app.getLz("term.sortOrder.descending")}</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                  <div className={"col"}>
-                    <select
-                      className={"md-select"}
-                      v-model={prefs.size}
-                      onChange={() => $root.searchLibrarySongs()}>
-                      <optgroup label={app.getLz("term.size")}>
-                        <option value={"normal"}>{app.getLz("term.size.normal")}</option>
-                        <option value={"compact"}>{app.getLz("term.size.compact")}</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                  <div className={"col"}>
-                    <select
-                      className={"md-select"}
-                      v-model={prefs.scroll}>
-                      <optgroup label={app.getLz("term.scroll")}>
-                        <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
-                        <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className={"col-auto cider-flex-center"}>
-                {library.songs.downloadState === 2 ? (
-                  <button
-                    onClick={() => $root.getLibrarySongsFull(true)}
-                    className={"reload-btn"}
-                    aria-label={app.getLz("menubar.options.reload")}>
-                    {import("../svg/redo.svg")}
-                  </button>
-                ) : (
-                  <button
-                    className={"reload-btn"}
-                    style={{ opacity: 0.8, pointerEvents: "none" }}
-                    aria-label={app.getLz("menubar.options.reload")}>
-                    <div className={"spinner"} />
-                  </button>
-                )}
-              </div>
-            </div>
-            <Pagination
-              length={library.songs.displayListing.length}
-              pageSize={pageSize}
-              scroll={prefs.scroll}
-              scrollSelector={"#app-content"}
-              onRangeChange={onRangeChange}
-            />
-          </div>
-          {library.songs.downloadState === 3 ? (
-            <div>Library contains no songs.</div>
-          ) : prefs.size === "compact" ? (
-            <div
-              className={"well"}
-              key={"1"}>
-              {currentSlice.map((item, index) => (
-                <MediaItemListItem
-                  class-list={"compact"}
-                  item={item}
-                  parent={"librarysongs"}
-                  index={index}
-                  showMetadata={true}
-                  showLibraryStatus={false}
-                  key={item.id}
-                />
-              ))}
-            </div>
-          ) : (
-            <div
-              className={"well"}
-              key={"2"}>
-              {currentSlice.map((item, index) => (
-                <MediaItemListItem
-                  item={item}
-                  parent={"librarysongs"}
-                  index={index}
-                  showMetadata={true}
-                  showLibraryStatus={false}
-                  key={item.id}
-                />
-              ))}
-            </div>
-          )}
+                </Col>
+                <Col>
+                  <select
+                    className={"md-select"}
+                    v-model={prefs.sort}
+                    onChange={() => $root.searchLibrarySongs()}>
+                    <optgroup label={app.getLz("term.sortBy")}>
+                      {library.songs.sortingOptions.map((sort, index) => (
+                        <option
+                          value={index}
+                          key={index}>
+                          {sort}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </Col>
+                <Col>
+                  <select
+                    className={"md-select"}
+                    v-model={prefs.sortOrder}
+                    onChange={() => $root.searchLibrarySongs()}>
+                    <optgroup label={app.getLz("term.sortOrder")}>
+                      <option value={"asc"}>{app.getLz("term.sortOrder.ascending")}</option>
+                      <option value={"desc"}>{app.getLz("term.sortOrder.descending")}</option>
+                    </optgroup>
+                  </select>
+                </Col>
+                <Col>
+                  <select
+                    className={"md-select"}
+                    v-model={prefs.size}
+                    onChange={() => $root.searchLibrarySongs()}>
+                    <optgroup label={app.getLz("term.size")}>
+                      <option value={"normal"}>{app.getLz("term.size.normal")}</option>
+                      <option value={"compact"}>{app.getLz("term.size.compact")}</option>
+                    </optgroup>
+                  </select>
+                </Col>
+                <Col>
+                  <select
+                    className={"md-select"}
+                    v-model={prefs.scroll}>
+                    <optgroup label={app.getLz("term.scroll")}>
+                      <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
+                      <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                    </optgroup>
+                  </select>
+                </Col>
+              </Row>
+            </Col>
+            <Col className={"cider-flex-center"}>
+              {library.songs.downloadState === 2 ? (
+                <button
+                  onClick={() => $root.getLibrarySongsFull(true)}
+                  className={"reload-btn"}
+                  aria-label={app.getLz("menubar.options.reload")}>
+                  {import("../svg/redo.svg")}
+                </button>
+              ) : (
+                <button
+                  className={"reload-btn"}
+                  style={{ opacity: 0.8, pointerEvents: "none" }}
+                  aria-label={app.getLz("menubar.options.reload")}>
+                  <div className={"spinner"} />
+                </button>
+              )}
+            </Col>
+          </Row>
+          <Pagination
+            length={library.songs.displayListing.length}
+            pageSize={pageSize}
+            scroll={prefs.scroll}
+            scrollSelector={"#app-content"}
+            onRangeChange={onRangeChange}
+          />
         </div>
+        {library.songs.downloadState === 3 ? (
+          <div>Library contains no songs.</div>
+        ) : prefs.size === "compact" ? (
+          <div
+            className={"well"}
+            key={"1"}>
+            {currentSlice.map((item, index) => (
+              <MediaItemListItem
+                class-list={"compact"}
+                item={item}
+                parent={"librarysongs"}
+                index={index}
+                showMetadata={true}
+                showLibraryStatus={false}
+                key={item.id}
+              />
+            ))}
+          </div>
+        ) : (
+          <div
+            className={"well"}
+            key={"2"}>
+            {currentSlice.map((item, index) => (
+              <MediaItemListItem
+                item={item}
+                parent={"librarysongs"}
+                index={index}
+                showMetadata={true}
+                showLibraryStatus={false}
+                key={item.id}
+              />
+            ))}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

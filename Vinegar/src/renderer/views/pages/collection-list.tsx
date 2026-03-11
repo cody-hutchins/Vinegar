@@ -94,63 +94,61 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
     }
   }
   return (
-    <>
-      <div id={"cider-collection-list"}>
-        <div className={"content-inner collection-page"}>
-          <h3
-            className={"header-text"}
-            v-observe-visibility={{ callback: headerVisibility }}>
-            {title}
-          </h3>
-          {data["data"] !== "null" && (
-            <div className={"well itemContainer " + getClasses()}>
-              {data.data.map((item, key) =>
-                item.type === "artists" ? (
-                  <MediaItemSquare
-                    key={key}
-                    item={item}
-                  />
-                ) : getKind(item) === "song" ? (
-                  <MediaItemListItem
-                    key={key}
-                    index={key}
-                    item={item}
-                  />
-                ) : (
-                  <MediaItemSquare
-                    key={key}
-                    item={item}
-                    type={getKind(item)}
-                  />
-                ),
-              )}
-              {triggerEnabled && (
-                <button
-                  style={{ opacity: 0, height: "32px" }}
-                  v-observe-visibility={{ callback: visibilityChanged }}>
-                  {app.getLz("term.showMore")}
-                </button>
-              )}
-            </div>
-          )}
-          <AnimatePresence>
-            <motion.div name={"fabfade"}>
+    <div id={"cider-collection-list"}>
+      <div className={"content-inner collection-page"}>
+        <h3
+          className={"header-text"}
+          v-observe-visibility={{ callback: headerVisibility }}>
+          {title}
+        </h3>
+        {data["data"] !== "null" && (
+          <div className={"well itemContainer " + getClasses()}>
+            {data.data.map((item, key) =>
+              item.type === "artists" ? (
+                <MediaItemSquare
+                  key={key}
+                  item={item}
+                />
+              ) : getKind(item) === "song" ? (
+                <MediaItemListItem
+                  key={key}
+                  index={key}
+                  item={item}
+                />
+              ) : (
+                <MediaItemSquare
+                  key={key}
+                  item={item}
+                  type={getKind(item)}
+                />
+              ),
+            )}
+            {triggerEnabled && (
               <button
-                className={"top-fab"}
-                style={{ display: showFab ? "inherit" : "none" }}
-                onClick={() => scrollToTop()}
-                aria-label={app.getLz("action.scrollToTop")}>
-                {import("../svg/arrow-up.svg")}
+                style={{ opacity: 0, height: "32px" }}
+                v-observe-visibility={{ callback: visibilityChanged }}>
+                {app.getLz("term.showMore")}
               </button>
-            </motion.div>
-          </AnimatePresence>
-          <div
-            className={"well itemContainer"}
-            style={{ display: loading ? "inherit" : "none" }}>
-            <div className={"spinner"} />
+            )}
           </div>
+        )}
+        <AnimatePresence>
+          <motion.div name={"fabfade"}>
+            <button
+              className={"top-fab"}
+              style={{ display: showFab ? "inherit" : "none" }}
+              onClick={() => scrollToTop()}
+              aria-label={app.getLz("action.scrollToTop")}>
+              {import("../svg/arrow-up.svg")}
+            </button>
+          </motion.div>
+        </AnimatePresence>
+        <div
+          className={"well itemContainer"}
+          style={{ display: loading ? "inherit" : "none" }}>
+          <div className={"spinner"} />
         </div>
       </div>
-    </>
+    </div>
   );
 };

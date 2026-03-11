@@ -1,3 +1,5 @@
+import { Col, Row } from "react-bootstrap";
+
 const MediaItemSmarthints = ({ item, position }: { item: object; position: number }) => {
   const app = this.$root;
   const guid = uuidv4();
@@ -434,85 +436,83 @@ const MediaItemSmarthints = ({ item, position }: { item: object; position: numbe
     });
   }
   return (
-    <>
-      <div id={"mediaitem-smarthints"}>
-        <div
-          className={"cd-queue-item"}
-          onClick={() => {
-            $root.search.showHints = false;
-            $root.routeView(item);
-            $root.search.cursor = -1;
-            $root.search.term === "";
-          }}
+    <div id={"mediaitem-smarthints"}>
+      <div
+        className={"cd-queue-item"}
+        onClick={() => {
+          $root.search.showHints = false;
+          $root.routeView(item);
+          $root.search.cursor = -1;
+          $root.search.term === "";
+        }}
+        onContextMenu={() => {
+          $root.hintscontext = true;
+          getContextMenu();
+        }}
+        className={{
+          hintactive:
+            $root.search.cursor ===
+            position +
+              $root.search.hints.filter((a) => {
+                return a.content === null;
+              }).length,
+        }}>
+        <Row
           onContextMenu={() => {
             $root.hintscontext = true;
             getContextMenu();
-          }}
-          className={{
-            hintactive:
-              $root.search.cursor ===
-              position +
-                $root.search.hints.filter((a) => {
-                  return a.content === null;
-                }).length,
           }}>
-          <div
-            className={"row"}
+          <Col
+            auto
+            className={"cider-flex-center"}
             onContextMenu={() => {
               $root.hintscontext = true;
               getContextMenu();
             }}>
             <div
-              className={"col-auto cider-flex-center"}
-              onContextMenu={() => {
-                $root.hintscontext = true;
-                getContextMenu();
-              }}>
-              <div
-                className={"artwork"}
-                className={"{'circle': item.type === 'artists'}"}>
-                <MediaItemArtwork
-                  url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-                  size={"32"}
-                  style={{ position: "relative", zIndex: "-1" }}
+              className={"artwork"}
+              className={"{'circle': item.type === 'artists'}"}>
+              <MediaItemArtwork
+                url={item.attributes.artwork ? item.attributes.artwork.url : ""}
+                size={"32"}
+                style={{ position: "relative", zIndex: "-1" }}
+              />
+              <button
+                className={"circular-play-button"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  playTrack(item);
+                }}>
+                <div
+                  className={"_svg-icon"}
+                  style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}
                 />
-                <button
-                  className={"circular-play-button"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    playTrack(item);
-                  }}>
-                  <div
-                    className={"_svg-icon"}
-                    style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}
-                  />
-                </button>
-              </div>
+              </button>
             </div>
-            <div
-              className={"col queue-info"}
-              onContextMenu={() => {
-                $root.hintscontext = true;
-                getContextMenu();
-              }}>
-              <div className={"queue-title text-overflow-elipsis"}>{item.attributes.name}</div>
-              <div className={"queue-subtitle text-overflow-elipsis"}>{item.attributes.artistName}</div>
+          </Col>
+          <Col
+            className={"queue-info"}
+            onContextMenu={() => {
+              $root.hintscontext = true;
+              getContextMenu();
+            }}>
+            <div className={"queue-title text-overflow-elipsis"}>{item.attributes.name}</div>
+            <div className={"queue-subtitle text-overflow-elipsis"}>{item.attributes.artistName}</div>
+          </Col>
+          {item.attributes.contentRating === "explicit" && (
+            <div className={"queue-explicit-icon cider-flex-center"}>
+              <div className={"explicit-icon"} />
             </div>
-            {item.attributes.contentRating === "explicit" && (
-              <div className={"queue-explicit-icon cider-flex-center"}>
-                <div className={"explicit-icon"} />
-              </div>
-            )}
-            {/*<div className="col queue-duration-info">
+          )}
+          {/*<Col className="queue-duration-info">
             <div className="queue-duration cider-flex-center">
                 {convertTimeToString(item.content.attributes.durationInMillis)}
             </div>
-        </div>*/}
-          </div>
-        </div>
+        </Col>*/}
+        </Row>
       </div>
-    </>
+    </div>
   );
 };
 

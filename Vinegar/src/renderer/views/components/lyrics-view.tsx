@@ -146,60 +146,61 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
     } catch (e) {}
   }, 50);
   return (
-    <>
-      <div id={"lyrics-view"}>
-        <div
-          ref={"lyricsview"}
-          className={"md-body lyric-body"}>
-          {lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics) ? (
-            lyrics.map((lyric, index) =>
-              lyric && lyric.line && lyric.line !== "lrcInstrumental" ? (
-                <h3
-                  className={"lyric-line"}
-                  onClick={() => seekTo(lyric.startTime)}
-                  className={"{unsynced : lyric.startTime === 9999999}"}
-                  line-index={index.toString()}>
-                  {richlyrics && richlyrics !== [] && richlyrics.length > 0 ? (
-                    <template>
-                      <div className={"richl"}>
-                        {getVerseLine(index - 1).map((verse) => (
-                          <span
-                            className={"verse"}
-                            lyricstart={lyric.startTime}
-                            versestart={verse.o}>
-                            {verse.c}
-                          </span>
-                        ))}
-                      </div>
-                    </template>
-                  ) : (
-                    <template>
-                      <div className={"norm"}>{lyric.line}</div>
-                    </template>
-                  )}
-                  {lyric.translation && lyric.translation !== "" ? <div className={"lyrics-translation"}>{lyric.translation}</div> : null}
-                </h3>
-              ) : (
-                <h3
-                  className={"lyric-line"}
-                  onClick={() => seekTo(lyric.startTime)}
-                  start={lyric.startTime}
-                  end={lyric.endTime}
-                  line-index={index.toString()}>
-                  <div className={"lyricWaiting"}>
-                    <div className={"WaitingDot1"} />
-                    <div className={"WaitingDot2"} />
-                    <div className={"WaitingDot3"} />
-                  </div>
-                </h3>
-              ),
-            )
-          ) : (
-            <div className={"no-lyrics"}>{app.getLz("term.noLyrics")}</div>
-          )}
-        </div>
+    <div id={"lyrics-view"}>
+      <div
+        ref={"lyricsview"}
+        className={"md-body lyric-body"}>
+        {lyrics && lyrics !== [] && lyrics.length > 0 && !qqInstrumental(lyrics) ? (
+          lyrics.map((lyric, index) =>
+            lyric && lyric.line && lyric.line !== "lrcInstrumental" ? (
+              <h3
+                key={index}
+                className={"lyric-line"}
+                onClick={() => seekTo(lyric.startTime)}
+                className={"{unsynced : lyric.startTime === 9999999}"}
+                line-index={index.toString()}>
+                {richlyrics && richlyrics !== [] && richlyrics.length > 0 ? (
+                  <template>
+                    <div className={"richl"}>
+                      {getVerseLine(index - 1).map((verse) => (
+                        <span
+                          key={verse.id}
+                          className={"verse"}
+                          lyricstart={lyric.startTime}
+                          versestart={verse.o}>
+                          {verse.c}
+                        </span>
+                      ))}
+                    </div>
+                  </template>
+                ) : (
+                  <template>
+                    <div className={"norm"}>{lyric.line}</div>
+                  </template>
+                )}
+                {lyric.translation && lyric.translation !== "" ? <div className={"lyrics-translation"}>{lyric.translation}</div> : null}
+              </h3>
+            ) : (
+              <h3
+                key={lyric.id}
+                className={"lyric-line"}
+                onClick={() => seekTo(lyric.startTime)}
+                start={lyric.startTime}
+                end={lyric.endTime}
+                line-index={index.toString()}>
+                <div className={"lyricWaiting"}>
+                  <div className={"WaitingDot1"} />
+                  <div className={"WaitingDot2"} />
+                  <div className={"WaitingDot3"} />
+                </div>
+              </h3>
+            ),
+          )
+        ) : (
+          <div className={"no-lyrics"}>{app.getLz("term.noLyrics")}</div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -3,56 +3,54 @@ import { AnimatePresence, motion } from "framer-motion";
 const AppContentArea = () => {
   const scrollPos = 0;
   return (
-    <>
-      <div id={"app-content-area"}>
-        <div
-          id={"app-content"}
-          scrollpos={$root.chrome.contentScrollPosY}
-          scrollaxis={"y"}
-          style={{ overflow: $root.chrome.contentAreaScrolling ? "" : "hidden" }}>
-          {$root.getThemeDirective("appNavigation") === "seperate" && (
-            <div id={"navigation-bar"}>
-              <button
-                className={"nav-item"}
-                onClick={() => $root.navigateBack()}>
-                {import("../svg/chevron-left.svg")}
-              </button>
-              <button
-                className={"nav-item"}
-                onClick={() => $root.navigateForward()}>
-                {import("../svg/chevron-right.svg")}
-              </button>
-            </div>
-          )}
-          {/**/}
-          <AnimatePresence>
-            {Object.keys(process.env.appRoutes).map((appRoute) => (
-              <motion.div
-                key={appRoute}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    appRoute.onEnter();
-                  }
-                }}
-                name={$root.chrome.desiredPageTransition}>
-                {appRoute.condition && <template>{appRoute.component}</template>}
-              </motion.div>
-            ))}
-            {/*  */}
+    <div id={"app-content-area"}>
+      <div
+        id={"app-content"}
+        scrollpos={$root.chrome.contentScrollPosY}
+        scrollaxis={"y"}
+        style={{ overflow: $root.chrome.contentAreaScrolling ? "" : "hidden" }}>
+        {$root.getThemeDirective("appNavigation") === "seperate" && (
+          <div id={"navigation-bar"}>
+            <button
+              className={"nav-item"}
+              onClick={() => $root.navigateBack()}>
+              {import("../svg/chevron-left.svg")}
+            </button>
+            <button
+              className={"nav-item"}
+              onClick={() => $root.navigateForward()}>
+              {import("../svg/chevron-right.svg")}
+            </button>
+          </div>
+        )}
+        {/**/}
+        <AnimatePresence>
+          {Object.keys(process.env.appRoutes).map((appRoute) => (
             <motion.div
-              name={$root.chrome.desiredPageTransition}
+              key={appRoute}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  $root.getMadeForYou();
+                  appRoute.onEnter();
                 }
-              }}>
-              {$root.page === "library-madeforyou" && <template>{import("../pages/madeforyou.jsx")}</template>}
+              }}
+              name={$root.chrome.desiredPageTransition}>
+              {appRoute.condition && <template>{appRoute.component}</template>}
             </motion.div>
-          </AnimatePresence>
-          {/**/}
-        </div>
+          ))}
+          {/*  */}
+          <motion.div
+            name={$root.chrome.desiredPageTransition}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                $root.getMadeForYou();
+              }
+            }}>
+            {$root.page === "library-madeforyou" && <template>{import("../pages/madeforyou.jsx")}</template>}
+          </motion.div>
+        </AnimatePresence>
+        {/**/}
       </div>
-    </>
+    </div>
   );
 };
 

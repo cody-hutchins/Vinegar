@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemListItem from "./mediaitem-list-item.jsx";
+import { Col, Row } from "react-bootstrap";
 
 const Queue = () => {
   const drag = false;
@@ -124,124 +125,126 @@ const Queue = () => {
   }
 
   return (
-    <>
-      <div id={"cider-queue"}>
-        <div className={"queue-panel"}>
-          <div className={"row"}>
-            <div className={"col"}>
-              {page === "queue" && <h3 className={"queue-header-text"}>{app.getLz("term.queue")}</h3>}
-              {page === "history" && <h3 className={"queue-header-text"}>{app.getLz("term.history")}</h3>}
-            </div>
-            <div className={"col-auto cider-flex-center"}>
-              <button
-                className={"autoplay"}
-                style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
-                onClick={() => {
-                  app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
-                }}
-                title={app.getLz("term.autoplay")}
-                v-b-tooltiphover>
-                <img className={"infinity"} />
-              </button>
-            </div>
+    <div id={"cider-queue"}>
+      <div className={"queue-panel"}>
+        <Row>
+          <Col>
+            {page === "queue" && <h3 className={"queue-header-text"}>{app.getLz("term.queue")}</h3>}
+            {page === "history" && <h3 className={"queue-header-text"}>{app.getLz("term.history")}</h3>}
+          </Col>
+          <Col
+            auto
+            className={"cider-flex-center"}>
+            <button
+              className={"autoplay"}
+              style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
+              onClick={() => {
+                app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
+              }}
+              title={app.getLz("term.autoplay")}
+              v-b-tooltiphover>
+              <img className={"infinity"} />
+            </button>
+          </Col>
+        </Row>
+        {page === "history" && (
+          <div className={"queue-body"}>
+            {history.map((item) => (
+              <MediaItemListItem
+                showLibraryStatus={"false"}
+                key={item.id}
+                item={item}
+              />
+            ))}
           </div>
-          {page === "history" && (
-            <div className={"queue-body"}>
-              {history.map((item) => (
-                <MediaItemListItem
-                  showLibraryStatus={"false"}
-                  key={item.id}
-                  item={item}
-                />
+        )}
+        {page === "queue" && (
+          <div className={"queue-body"}>
+            <draggable
+              v-model={queueItems}
+              start={"drag=true"}
+              end={"drag=false;move()"}>
+              {displayQueueItems.map((queueItem, position) => (
+                <div key={position}>
+                  {position === 0 ? (
+                    <div key={queueItem.item.id} />
+                  ) : (
+                    <div
+                      className={"cd-queue-item"}
+                      className={"{selected: selectedItems.includes(queueItem.item.id)}"}
+                      onClick={(e) => select(e, queueItem.item.id)}
+                      onDoubleClick={() => playQueueItem(queueItem.item.id)}
+                      key={queueItem.item.id}
+                      onContextMenu={(e) => queueContext(e, queueItem.item)}>
+                      <Row>
+                        <Col
+                          auto
+                          className={"cider-flex-center"}>
+                          <div className={"artwork"}>
+                            <MediaItemArtwork
+                              url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ""}
+                              size={"32"}
+                            />
+                          </div>
+                        </Col>
+                        <Col className={"queue-info"}>
+                          <div className={"queue-title text-overflow-elipsis"}>{queueItem.item.attributes.name}</div>
+                          <div className={"queue-subtitle text-overflow-elipsis"}>
+                            {queueItem.item.attributes.artistName} — {queueItem.item.attributes.albumName}
+                          </div>
+                        </Col>
+                        {queueItem.item.attributes.contentRating === "explicit" && (
+                          <div className={"queue-explicit-icon cider-flex-center"}>
+                            <div className={"explicit-icon"} />
+                          </div>
+                        )}
+                        <Col className={"queue-duration-info"}>
+                          <div className={"queue-duration cider-flex-center"}>{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+                </div>
               ))}
-            </div>
-          )}
-          {page === "queue" && (
-            <div className={"queue-body"}>
-              <draggable
-                v-model={queueItems}
-                start={"drag=true"}
-                end={"drag=false;move()"}>
-                {displayQueueItems.map((queueItem, position) => (
-                  <template>
-                    {position === 0 ? (
-                      <div key={queueItem.item.id} />
-                    ) : (
-                      <div
-                        className={"cd-queue-item"}
-                        className={"{selected: selectedItems.includes(queueItem.item.id)}"}
-                        onClick={(e) => select(e, queueItem.item.id)}
-                        onDoubleClick={() => playQueueItem(queueItem.item.id)}
-                        key={queueItem.item.id}
-                        onContextMenu={(e) => queueContext(e, queueItem.item)}>
-                        <div className={"row"}>
-                          <div className={"col-auto cider-flex-center"}>
-                            <div className={"artwork"}>
-                              <MediaItemArtwork
-                                url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ""}
-                                size={"32"}
-                              />
-                            </div>
-                          </div>
-                          <div className={"col queue-info"}>
-                            <div className={"queue-title text-overflow-elipsis"}>{queueItem.item.attributes.name}</div>
-                            <div className={"queue-subtitle text-overflow-elipsis"}>
-                              {queueItem.item.attributes.artistName} — {queueItem.item.attributes.albumName}
-                            </div>
-                          </div>
-                          {queueItem.item.attributes.contentRating === "explicit" && (
-                            <div className={"queue-explicit-icon cider-flex-center"}>
-                              <div className={"explicit-icon"} />
-                            </div>
-                          )}
-                          <div className={"col queue-duration-info"}>
-                            <div className={"queue-duration cider-flex-center"}>{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </template>
-                ))}
-              </draggable>
-            </div>
-          )}
-          <div className={"queue-footer"}>
-            <div
-              className={"btn-group"}
-              style={{ width: "100%" }}>
-              <button
-                className={"md-btn md-btn-small"}
-                className={"{'md-btn-primary': (page === 'queue')}"}
-                onClick={() => {
-                  page = "queue";
-                }}>
-                {app.getLz("term.queue")}
-              </button>
-              <button
-                className={"md-btn md-btn-small"}
-                className={"{'md-btn-primary': (page === 'history')}"}
-                onClick={() => {
-                  geory();
-                  page = "history";
-                }}>
-                {app.getLz("term.history")}
-              </button>
-            </div>
-            {queueItems.length > 1 && (
-              <button
-                className={"md-btn md-btn-small"}
-                style={{ width: "100%", marginTop: "6px" }}
-                onClick={() => {
-                  app.mk.clearQueue();
-                  updateQueue();
-                }}>
-                {app.getLz("term.clearAll")}
-              </button>
-            )}
+            </draggable>
           </div>
+        )}
+        <div className={"queue-footer"}>
+          <div
+            className={"btn-group"}
+            style={{ width: "100%" }}>
+            <button
+              className={"md-btn md-btn-small"}
+              className={"{'md-btn-primary': (page === 'queue')}"}
+              onClick={() => {
+                page = "queue";
+              }}>
+              {app.getLz("term.queue")}
+            </button>
+            <button
+              className={"md-btn md-btn-small"}
+              className={"{'md-btn-primary': (page === 'history')}"}
+              onClick={() => {
+                geory();
+                page = "history";
+              }}>
+              {app.getLz("term.history")}
+            </button>
+          </div>
+          {queueItems.length > 1 && (
+            <button
+              className={"md-btn md-btn-small"}
+              style={{ width: "100%", marginTop: "6px" }}
+              onClick={() => {
+                app.mk.clearQueue();
+                updateQueue();
+              }}>
+              {app.getLz("term.clearAll")}
+            </button>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

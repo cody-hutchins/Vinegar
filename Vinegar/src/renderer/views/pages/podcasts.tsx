@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { AnimatePresence, motion } from "framer-motion";
+import { Row, Col } from "react-bootstrap";
 
 export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   function msToMinSec(ms: number) {
@@ -216,8 +217,10 @@ export const Podcasts = () => {
           <div className={"episodes-list"}>
             {podcastSelected.id !== -1 && (
               <div className={"episodes-inline-info"}>
-                <div className={"row"}>
-                  <div className={"col-auto cider-flex-center"}>
+                <Row className={"row"}>
+                  <Col
+                    auto
+                    className={"cider-flex-center"}>
                     <div className={"podcast-artwork"}>
                       <MediaItemArtwork
                         shadow={"large"}
@@ -225,23 +228,23 @@ export const Podcasts = () => {
                         size={"300"}
                       />
                     </div>
-                  </div>
-                  <div className={"col podcast-show-info"}>
+                  </Col>
+                  <Col className={"podcast-show-info"}>
                     <h1>{podcastSelected.attributes.name}</h1>
                     <small>{podcastSelected.attributes.releaseFrequency}</small>
                     <small>Created: {new Date(podcastSelected.attributes.createdDate).toLocaleDateString()}</small>
-                  </div>
-                </div>
+                  </Col>
+                </Row>
                 <div className={"well podcast-show-description"}>{podcastSelected.attributes.description.standard}</div>
                 {!isSubscribed(podcastSelected.id) && (
-                  <div className={"row"}>
-                    <div className={"col"}>
+                  <Row>
+                    <Col>
                       <button className={"md-btn md-btn-block"}>{$root.getLz("podcast.followOnCider")}</button>
-                    </div>
-                    <div className={"col"}>
+                    </Col>
+                    <Col>
                       <button className={"md-btn md-btn-block"}>{$root.getLz("podcast.subscribeOnItunes")}</button>
-                    </div>
-                  </div>
+                    </Col>
+                  </Row>
                 )}
                 <h3>{$root.getLz("podcast.episodes")}</h3>
               </div>
@@ -291,22 +294,22 @@ export const Podcasts = () => {
                     {msToMinSec(selected.attributes.durationInMilliseconds)} • {new Date(selected.attributes.releaseDateTime).toLocaleString()}
                   </div>
                   {selected.attributes.description.standard && <div className={"well podcast-description"}>{selected.attributes.description.standard}</div>}
-                  <div className={"row"}>
-                    <div className={"col"}>
+                  <Row>
+                    <Col>
                       <button
                         className={"md-btn md-btn-block meta-btn"}
                         onClick={() => openUrl(selected.attributes.websiteUrl)}>
                         {$root.getLz("podcast.website")}
                       </button>
-                    </div>
-                    <div className={"col"}>
+                    </Col>
+                    <Col>
                       <button
                         className={"md-btn md-btn-block meta-btn"}
                         onClick={() => $root.share(selected.attributes.websiteUrl)}>
                         {$root.getLz("action.share")}
                       </button>
-                    </div>
-                  </div>
+                    </Col>
+                  </Row>
                 </div>
               )}
             </motion.div>

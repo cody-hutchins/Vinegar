@@ -1,7 +1,7 @@
 import MediaItemMVViewSP from "./mediaitem-mvview-sp.jsx";
 import MediaItemSquare from "./mediaitem-square.jsx";
 
-const MediaItemScrollerHorizontalMVView = ({ items, imagesize, browsesp = false, kind = "" }: { items: object[]; imagesize?: number; browsesp?: boolean; kind?: string }) => {
+const MediaItemScrollerHorizontalMVView = ({ items, imagesize = 16, browsesp = false, kind = "" }: { items: object[]; imagesize?: number; browsesp?: boolean; kind?: string }) => {
   const app = this.$root;
   return (
     <div

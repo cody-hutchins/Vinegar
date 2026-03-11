@@ -1,3 +1,5 @@
+import { Col, Row } from "react-bootstrap";
+
 const EQView = ({ src, url }: { src: string; url: string }) => {
   const app = this.$root;
   const eqPreset = () => ({
@@ -860,24 +862,24 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
             </div>
           </div>
           <div className={"modal-lowercontent"}>
-            <div className={"row"}>
-              <div className={"col"}>
+            <Row>
+              <Col>
                 <button
                   className={"md-btn"}
                   style={{ width: "100%" }}
                   onClick={() => resetGain()}>
                   {$root.getLz("term.reset")}
                 </button>
-              </div>
-              <div className={"col"}>
+              </Col>
+              <Col>
                 <button
                   className={"md-btn"}
                   style={{ width: "100%" }}
                   onClick={presetOptions}>
                   {$root.getLz("term.menu")}
                 </button>
-              </div>
-            </div>
+              </Col>
+            </Row>
           </div>
         </div>
       </div>

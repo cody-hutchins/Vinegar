@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
+import { Col, Row } from "react-bootstrap";
 
 const LibrarySongs = ({ data }: { data: object }) => {
   const videos = [];
@@ -14,13 +15,11 @@ const LibrarySongs = ({ data }: { data: object }) => {
   return (
     <div id={"cider-library-videos"}>
       <div className={"content-inner"}>
-        <div className={"row"}>
-          <div
-            className={"col"}
-            style={{ padding: 0 }}>
+        <Row className={"row"}>
+          <Col style={{ padding: 0 }}>
             <h1 className={"header-text"}>{$root.getLz("term.videos")}</h1>
-          </div>
-        </div>
+          </Col>
+        </Row>
         <div className={"madeforyou-body"}>
           {videos.length > 0 ? (
             videos.map((item) => (

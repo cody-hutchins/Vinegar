@@ -1,3 +1,4 @@
+import { Col, Row } from "react-bootstrap";
 import { html } from "../html.js";
 import bootbox from "bootbox";
 
@@ -31,11 +32,11 @@ export const i18nEditor = () => {
 
   return (
     <div className={"content-inner i18n-page"}>
-      <div className={"row nopadding"}>
-        <div className={"col nopadding"}>
+      <Row className={"row nopadding"}>
+        <Col className={"nopadding"}>
           <h1>i18n Editor</h1>
-        </div>
-        <div className={"col-auto nopadding selectCol"}>
+        </Col>
+        <Col auto className={"nopadding selectCol"}>
           <select
             className={"md-select"}
             onChange={() => {
@@ -44,9 +45,9 @@ export const i18nEditor = () => {
             }}
             v-model={"$root.cfg.general.language"}>
             {getLanguages().map((categories, index) => (
-              <optgroup label={"index"}>
+              <optgroup label={index} key={index}>
                 {categories.map((lang) => (
-                  <option value={lang.code}>
+                  <option value={lang.code} key={lang.code}>
                     {lang.nameNative} ({lang.nameEnglish})
                   </option>
                 ))}
@@ -58,12 +59,12 @@ export const i18nEditor = () => {
             onClick={exportLz}>
             Export
           </button>
-        </div>
-      </div>
+        </Col>
+      </Row>
       <hr />
       <div className={"md-option-container"}>
         {baseLz.map((val, key) => (
-          <template>
+          <div key={key}>
             {$root.lz[key] ? (
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>{key}</div>
@@ -71,7 +72,7 @@ export const i18nEditor = () => {
                   {typeof $root.lz[key] === "object" ? (
                     <template>
                       {$root.lz[key].map((variant, vkey) => (
-                        <div>
+                        <div key={vkey}>
                           {variant}
                           <input
                             type={"text"}
@@ -102,7 +103,7 @@ export const i18nEditor = () => {
                 </div>
               </div>
             )}
-          </template>
+          </div>
         ))}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Col, Row } from "react-bootstrap";
 
 const MenuPanel = () => {
   const app = this.$root;
@@ -115,96 +116,94 @@ const MenuPanel = () => {
   }
 
   return (
-    <>
-      <div id={"cider-menu-panel"}>
+    <div id={"cider-menu-panel"}>
+      <div
+        className={"menu-panel"}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            menuPanel.visible = false;
+            if ($root.hintscontext) {
+              $root.hintscontext = false;
+              focusOther();
+            }
+          }
+        }}
+        onContextMenu={(e) => {
+          if (e.target === e.currentTarget) {
+            menuPanel.visible = false;
+            if ($root.hintscontext) {
+              $root.hintscontext = false;
+              focusOther();
+            }
+          }
+        }}>
         <div
-          className={"menu-panel"}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              menuPanel.visible = false;
-              if ($root.hintscontext) {
-                $root.hintscontext = false;
-                focusOther();
-              }
-            }
-          }}
-          onContextMenu={(e) => {
-            if (e.target === e.currentTarget) {
-              menuPanel.visible = false;
-              if ($root.hintscontext) {
-                $root.hintscontext = false;
-                focusOther();
-              }
-            }
-          }}>
-          <div
-            className={"menu-panel-body"}
-            ref={"menubody"}
-            style={elStyle}
-            className={getBodyClasses()}>
-            {content.name !== "" && (
-              <div className={"menu-header-text"}>
-                <div className={"row"}>
-                  <div className={"col"}>
-                    <h3 className={"queue-header-text"}>{content.name}</h3>
-                  </div>
-                </div>
-              </div>
-            )}
-            {Object.keys(content.headerItems).length !== 0 && (
-              <div className={"menu-header-body"}>
-                {content.headerItems.map(
-                  (item) =>
-                    canDisplay(item) && (
-                      <button
-                        key={item.id}
-                        className={"menu-option-header"}
-                        className={getClasses(item)}
-                        v-b-tooltiphover
-                        title={item.name}
-                        style={getItemStyle(item)}
-                        onClick={() => action(item)}>
-                        {item.icon && (
-                          <div
-                            className={"sidebar-icon"}
-                            style={{ margin: 0 }}>
-                            <div
-                              className={"svg-icon"}
-                              style={{ "--url": "url(" + item.icon + ")" }}
-                            />
-                          </div>
-                        )}
-                      </button>
-                    ),
-                )}
-              </div>
-            )}
-            <div className={"menu-body"}>
-              {content.items.map(
+          className={"menu-panel-body"}
+          ref={"menubody"}
+          style={elStyle}
+          className={getBodyClasses()}>
+          {content.name !== "" && (
+            <div className={"menu-header-text"}>
+              <Row>
+                <Col>
+                  <h3 className={"queue-header-text"}>{content.name}</h3>
+                </Col>
+              </Row>
+            </div>
+          )}
+          {Object.keys(content.headerItems).length !== 0 && (
+            <div className={"menu-header-body"}>
+              {content.headerItems.map(
                 (item) =>
                   canDisplay(item) && (
                     <button
                       key={item.id}
-                      className={"menu-option"}
+                      className={"menu-option-header"}
+                      className={getClasses(item)}
+                      v-b-tooltiphover
+                      title={item.name}
                       style={getItemStyle(item)}
                       onClick={() => action(item)}>
                       {item.icon && (
-                        <div className={"sidebar-icon"}>
+                        <div
+                          className={"sidebar-icon"}
+                          style={{ margin: 0 }}>
                           <div
                             className={"svg-icon"}
                             style={{ "--url": "url(" + item.icon + ")" }}
                           />
                         </div>
                       )}
-                      {item.name}
                     </button>
                   ),
               )}
             </div>
+          )}
+          <div className={"menu-body"}>
+            {content.items.map(
+              (item) =>
+                canDisplay(item) && (
+                  <button
+                    key={item.id}
+                    className={"menu-option"}
+                    style={getItemStyle(item)}
+                    onClick={() => action(item)}>
+                    {item.icon && (
+                      <div className={"sidebar-icon"}>
+                        <div
+                          className={"svg-icon"}
+                          style={{ "--url": "url(" + item.icon + ")" }}
+                        />
+                      </div>
+                    )}
+                    {item.name}
+                  </button>
+                ),
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import Pagination from "../components/pagination.jsx";
-import { Tab, Tabs } from "react-bootstrap";
+import { Col, Row, Tab, Tabs } from "react-bootstrap";
 
 const Playlist = ({ data }: { data: object }) => {
   const app = this.$root;
@@ -762,9 +762,10 @@ const Playlist = ({ data }: { data: object }) => {
                       />
                     </div>
                   )}
-                  <div className={"row"}>
-                    <div
-                      className={"col-auto cider-flex-center"}
+                  <Row>
+                    <Col
+                      auto
+                      className={"cider-flex-center"}
                       onMouseOver={() => minClass(false)}>
                       <div className={"mediaContainer"}>
                         <MediaItemArtwork
@@ -775,8 +776,8 @@ const Playlist = ({ data }: { data: object }) => {
                           size={"500"}
                         />
                       </div>
-                    </div>
-                    <div className={"col playlist-info"}>
+                    </Col>
+                    <Col className={"playlist-info"}>
                       {!editorialNotesExpanded && (
                         <template>
                           <div>
@@ -939,8 +940,8 @@ const Playlist = ({ data }: { data: object }) => {
                           </button>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </Col>
+                  </Row>
                 </div>
                 {data.attributes.artwork !== null && !hasHero() && (
                   <div className={"artworkContainer"}>
@@ -972,11 +973,13 @@ const Playlist = ({ data }: { data: object }) => {
               <div
                 className={"floating-header"}
                 style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
-                <div className={"row"}>
-                  <div className={"col"}>
+                <Row>
+                  <Col>
                     <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
-                  </div>
-                  <div className={"col-auto cider-flex-center"}>
+                  </Col>
+                  <Col
+                    auto
+                    className={"cider-flex-center"}>
                     <div>
                       <button
                         className={"md-btn md-btn-primary  md-btn-icon"}
@@ -1027,8 +1030,10 @@ const Playlist = ({ data }: { data: object }) => {
                         </select>
                       )}
                     </div>
-                  </div>
-                  <div className={"col-auto cider-flex-center"}>
+                  </Col>
+                  <Col
+                    auto
+                    className={"cider-flex-center"}>
                     <button
                       className={"more-btn-round"}
                       style={{ float: "right" }}
@@ -1036,8 +1041,8 @@ const Playlist = ({ data }: { data: object }) => {
                       aria-label={app.getLz("term.more")}>
                       <div className={"svg-icon"} />
                     </button>
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               </div>
               <div className={"playlist-body scrollbody"}>
                 <Tabs
@@ -1172,16 +1177,16 @@ const Playlist = ({ data }: { data: object }) => {
                               lazy
                               title={data.views[view].attributes.title}>
                               <div>
-                                <div className={"row"}>
-                                  <div className={"col"}>
+                                <Row>
+                                  <Col>
                                     <h3>{data.views[view].attributes.title}</h3>
-                                  </div>
-                                </div>
-                                <div className={"row"}>
-                                  <div className={"col"}>
+                                  </Col>
+                                </Row>
+                                <Row className={"row"}>
+                                  <Col>
                                     <MediaitemScrollerHorizontal items={data.views[view].data} />
-                                  </div>
-                                </div>
+                                  </Col>
+                                </Row>
                               </div>
                             </Tab>
                           ),

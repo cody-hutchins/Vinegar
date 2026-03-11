@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
+import { Row, Col } from "react-bootstrap";
 
 const Home = () => {
   const app = this.$root;
@@ -166,152 +167,158 @@ const Home = () => {
   }
 
   return (
-    <>
-      <div id={"cider-home"}>
-        <div className={"content-inner home-page"}>
-          {page === "main" && (
-            <div>
-              <div className={"row"}>
-                <div className={"col"}>
-                  <div className={"row"}>
-                    <div className={"col nopadding"}>
-                      <h3>{app.getLz("home.recentlyPlayed")}</h3>
-                    </div>
-                    <div className={"col-auto nopadding cider-flex-center"}>
-                      <button
-                        className={"cd-btn-seeall"}
-                        onClick={() => seeAllHistory()}>
-                        {app.getLz("term.history")}
-                      </button>
-                      <button
-                        className={"cd-btn-seeall"}
-                        onClick={() => seeAllRecentlyPlayed()}>
-                        {app.getLz("term.seeAll")}
-                      </button>
-                    </div>
-                  </div>
-                  <div className={"well artistfeed-well"}>
-                    {isSectionReady("recentlyPlayed") ? (
-                      recentlyPlayed.limit(6).map((item) => (
-                        <MediaItemListItem
-                          item={item}
-                          key={item.id}
-                        />
-                      ))
-                    ) : (
-                      <div className={"spinner"} />
-                    )}
-                  </div>
-                </div>
-                <div className={"col"}>
-                  <div className={"row"}>
-                    <div className={"col nopadding"}>
-                      <h3>{app.getLz("home.artistsFeed")}</h3>
-                    </div>
-                    <div className={"col-auto nopadding cider-flex-center"}>
-                      {!syncingFavs ? (
-                        <button
-                          className={"cd-btn-seeall"}
-                          onClick={() => syncFavorites()}>
-                          {app.getLz("home.syncFavorites")}
-                        </button>
-                      ) : (
-                        <div
-                          className={"spinner"}
-                          style={{ height: "26px" }}
-                        />
-                      )}
-                      <button
-                        className={"cd-btn-seeall"}
-                        onClick={() => app.appRoute("artist-feed")}>
-                        {app.getLz("term.seeAll")}
-                      </button>
-                    </div>
-                  </div>
-                  <div
-                    className={"well artistfeed-well"}
-                    style={{ marginTop: 0 }}>
-                    {artistFeed.length > 0 ? (
-                      artistFeed.limit(6).map((item) => (
-                        <MediaItemListItem
-                          item={item}
-                          key={item.id}
-                        />
-                      ))
-                    ) : followedArtists.length > 0 ? (
-                      <div className={"spinner"} />
-                    ) : (
-                      <div className={"no-artist"}> {app.getLz("home.artistsFeed.noArtist")}</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {/*{(app.isDev) && <div className="row" > */}
-              {/*                <div className="col"> */}
-              {/*                    <h3>Your Favorites</h3> */}
-              {/*                    <div className="well">*/}
-              {/*{(favorites.length === 0) && <div className="hint-text" >Items you have added to your favorites will */}
-              {/*                            appear here. */}
-              {/*                        </div>}*/}
-              {/*<MediaItemScrollerHorizontal kind="small" items="favorites" */}
-              {/*                                                       item={item} />*/}
-              {/*</div> */}
-              {/*                </div> */}
-              {/*            </div>}*/}
-              {!seenReplay && (
-                <div className={"row"}>
-                  <div className={"col"}>
+    <div id={"cider-home"}>
+      <div className={"content-inner home-page"}>
+        {page === "main" && (
+          <div>
+            <Row>
+              <Col>
+                <Row>
+                  <Col className={"nopadding"}>
+                    <h3>{app.getLz("home.recentlyPlayed")}</h3>
+                  </Col>
+                  <Col
+                    auto
+                    className={"nopadding cider-flex-center"}>
                     <button
-                      className={"md-btn md-btn-block md-btn-replay--hero"}
-                      onClick={() => $root.appRoute("replay")}>
-                      {$root.getLz("term.replay")} {year}
+                      className={"cd-btn-seeall"}
+                      onClick={() => seeAllHistory()}>
+                      {app.getLz("term.history")}
                     </button>
-                  </div>
+                    <button
+                      className={"cd-btn-seeall"}
+                      onClick={() => seeAllRecentlyPlayed()}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </Col>
+                </Row>
+                <div className={"well artistfeed-well"}>
+                  {isSectionReady("recentlyPlayed") ? (
+                    recentlyPlayed.limit(6).map((item) => (
+                      <MediaItemListItem
+                        item={item}
+                        key={item.id}
+                      />
+                    ))
+                  ) : (
+                    <div className={"spinner"} />
+                  )}
                 </div>
-              )}
-              <div className={"row"}>
-                <div className={"col"}>
-                  <div className={"row"}>
-                    <div className={"col nopadding"}>
-                      <h3>{app.getLz("home.madeForYou")}</h3>
-                    </div>
-                    <div className={"col-auto nopadding cider-flex-center"}>
-                      {seenReplay && (
-                        <button
-                          className={"md-btn md-btn-replay"}
-                          onClick={() => $root.appRoute("replay")}>
-                          {$root.getLz("term.replay")} {year}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <div className={"well"}>{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={madeForYou} /> : <div className={"spinner"} />}</div>
+              </Col>
+              <Col>
+                <Row>
+                  <Col className={"nopadding"}>
+                    <h3>{app.getLz("home.artistsFeed")}</h3>
+                  </Col>
+                  <Col
+                    auto
+                    className={"nopadding cider-flex-center"}>
+                    {!syncingFavs ? (
+                      <button
+                        className={"cd-btn-seeall"}
+                        onClick={() => syncFavorites()}>
+                        {app.getLz("home.syncFavorites")}
+                      </button>
+                    ) : (
+                      <div
+                        className={"spinner"}
+                        style={{ height: "26px" }}
+                      />
+                    )}
+                    <button
+                      className={"cd-btn-seeall"}
+                      onClick={() => app.appRoute("artist-feed")}>
+                      {app.getLz("term.seeAll")}
+                    </button>
+                  </Col>
+                </Row>
+                <div
+                  className={"well artistfeed-well"}
+                  style={{ marginTop: 0 }}>
+                  {artistFeed.length > 0 ? (
+                    artistFeed.limit(6).map((item) => (
+                      <MediaItemListItem
+                        item={item}
+                        key={item.id}
+                      />
+                    ))
+                  ) : followedArtists.length > 0 ? (
+                    <div className={"spinner"} />
+                  ) : (
+                    <div className={"no-artist"}> {app.getLz("home.artistsFeed.noArtist")}</div>
+                  )}
                 </div>
-              </div>
-              {friendsListeningTo && friendsListeningTo.length > 0 && (
-                <div className={"row"}>
-                  <div className={"col"}>
-                    <div className={"row"}>
-                      <div className={"col nopadding"}>
-                        <h3>{app.getLz("home.friendsListeningTo")}</h3>
-                      </div>
-                      <div className={"col-auto nopadding cider-flex-center"}>
-                        <button
-                          className={"cd-btn-seeall"}
-                          onClick={() => app.showSocialListeningTo()}>
-                          {app.getLz("term.seeAll")}
-                        </button>
-                      </div>
-                    </div>
-                    <div className={"well"}>{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items={friendsListeningTo} /> : <div className={"spinner"} />}</div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+              </Col>
+            </Row>
+            {/*{(app.isDev) && <div className="row" > */}
+            {/*                <div className="col"> */}
+            {/*                    <h3>Your Favorites</h3> */}
+            {/*                    <div className="well">*/}
+            {/*{(favorites.length === 0) && <div className="hint-text" >Items you have added to your favorites will */}
+            {/*                            appear here. */}
+            {/*                        </div>}*/}
+            {/*<MediaItemScrollerHorizontal kind="small" items="favorites" */}
+            {/*                                                       item={item} />*/}
+            {/*</div> */}
+            {/*                </div> */}
+            {/*            </div>}*/}
+            {!seenReplay && (
+              <Row>
+                <Col>
+                  <button
+                    className={"md-btn md-btn-block md-btn-replay--hero"}
+                    onClick={() => $root.appRoute("replay")}>
+                    {$root.getLz("term.replay")} {year}
+                  </button>
+                </Col>
+              </Row>
+            )}
+            <Row>
+              <Col>
+                <Row>
+                  <Col className={"nopadding"}>
+                    <h3>{app.getLz("home.madeForYou")}</h3>
+                  </Col>
+                  <Col
+                    auto
+                    className={"nopadding cider-flex-center"}>
+                    {seenReplay && (
+                      <button
+                        className={"md-btn md-btn-replay"}
+                        onClick={() => $root.appRoute("replay")}>
+                        {$root.getLz("term.replay")} {year}
+                      </button>
+                    )}
+                  </Col>
+                </Row>
+                <div className={"well"}>{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={madeForYou} /> : <div className={"spinner"} />}</div>
+              </Col>
+            </Row>
+            {friendsListeningTo && friendsListeningTo.length > 0 && (
+              <Row>
+                <Col>
+                  <Row>
+                    <Col className={"nopadding"}>
+                      <h3>{app.getLz("home.friendsListeningTo")}</h3>
+                    </Col>
+                    <Col
+                      auto
+                      className={"nopadding cider-flex-center"}>
+                      <button
+                        className={"cd-btn-seeall"}
+                        onClick={() => app.showSocialListeningTo()}>
+                        {app.getLz("term.seeAll")}
+                      </button>
+                    </Col>
+                  </Row>
+                  <div className={"well"}>{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items={friendsListeningTo} /> : <div className={"spinner"} />}</div>
+                </Col>
+              </Row>
+            )}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

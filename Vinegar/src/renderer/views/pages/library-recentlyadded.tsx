@@ -54,46 +54,44 @@ const LibraryRecentlyAdded = () => {
   }
 
   return (
-    <>
-      <div id={"cider-recentlyadded"}>
-        <div className={"content-inner"}>
-          <h1 className={"header-text"}>{$root.getLz("term.recentlyAdded")}</h1>
-          {itemSize === "normal" ? (
-            <div className={"well itemContainer collection-list-square"}>
-              {items.map((item) => (
-                <MediaItemSquare
-                  item={item}
-                  key={item.id}
-                />
-              ))}
-            </div>
-          ) : itemSize === "compact" ? (
-            <div className={"well itemContainer collection-list-square"}>
-              {items.map((ite) => (
-                <MediaItemListItem
-                  showMetadata={true}
-                  showLibraryStatus={false}
-                  item={item}
-                  key={item.id}
-                />
-              ))}
-            </div>
-          ) : null}
-          <div
-            className={"well itemContainer collection-list-square"}
-            style={{ display: loading ? "inherit" : "none" }}>
-            <div className={"spinner"} />
+    <div id={"cider-recentlyadded"}>
+      <div className={"content-inner"}>
+        <h1 className={"header-text"}>{$root.getLz("term.recentlyAdded")}</h1>
+        {itemSize === "normal" ? (
+          <div className={"well itemContainer collection-list-square"}>
+            {items.map((item) => (
+              <MediaItemSquare
+                item={item}
+                key={item.id}
+              />
+            ))}
           </div>
-          {nextUrl && !loading ? (
-            <button
-              style={{ opacity: 0, height: "32px" }}
-              v-observe-visibility={"{callback: visibilityChanged}"}>
-              {$root.getLz("term.showMore")}
-            </button>
-          ) : null}
+        ) : itemSize === "compact" ? (
+          <div className={"well itemContainer collection-list-square"}>
+            {items.map((ite) => (
+              <MediaItemListItem
+                showMetadata={true}
+                showLibraryStatus={false}
+                item={item}
+                key={item.id}
+              />
+            ))}
+          </div>
+        ) : null}
+        <div
+          className={"well itemContainer collection-list-square"}
+          style={{ display: loading ? "inherit" : "none" }}>
+          <div className={"spinner"} />
         </div>
+        {nextUrl && !loading ? (
+          <button
+            style={{ opacity: 0, height: "32px" }}
+            v-observe-visibility={"{callback: visibilityChanged}"}>
+            {$root.getLz("term.showMore")}
+          </button>
+        ) : null}
       </div>
-    </>
+    </div>
   );
 };
 export default LibraryRecentlyAdded;

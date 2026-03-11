@@ -1,3 +1,4 @@
+import { Col, Row } from "react-bootstrap";
 import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
@@ -141,25 +142,25 @@ const Search = ({ search }: { search: object }) => {
               <template>
                 <h3>{app.getLz("term.topResult")}</h3>
                 <MediaitemScrollerHorizontal items={"search?.results[search?.results?.meta?.results?.order[0]]?.data"} />
-                <div className={"row"}>
+                <Row>
                   {search.results.song ? (
-                    <div className={"col"}>
-                      <div className={"row"}>
-                        <div className={"col"}>
+                    <Col>
+                      <Row>
+                        <Col>
                           <h3>{app.getLz("term.songs")}</h3>
-                        </div>
-                      </div>
+                        </Col>
+                      </Row>
                       <div className={"mediaitem-list-item__grid"}>
                         <ListitemHorizontal items={search.results.song.data.limit(12)} />
                       </div>
-                    </div>
+                    </Col>
                   ) : (
                     <div style={{ textAlign: "center" }}>
                       <h3>{app.getLz("error.noResults")}</h3>
                       <p>{app.getLz("error.noResults.description")}</p>
                     </div>
                   )}
-                </div>
+                </Row>
                 {search.results["meta"] !== null && (
                   <template>
                     {search.results.meta.results.order.map(
@@ -167,11 +168,11 @@ const Search = ({ search }: { search: object }) => {
                         section !== "song" &&
                         section !== "top" && (
                           <div key={section.id}>
-                            <div className={"row"}>
-                              <div className={"col"}>
+                            <Row>
+                              <Col>
                                 <h3>{app.friendlyTypes(section)}</h3>
-                              </div>
-                            </div>
+                              </Col>
+                            </Row>
                             {!app.friendlyTypes(section).includes("Video") ? (
                               <template>
                                 <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
@@ -188,21 +189,21 @@ const Search = ({ search }: { search: object }) => {
                 )}
                 {search.resultsSocial.playlist && (
                   <template>
-                    <div className={"row"}>
-                      <div className={"col"}>
+                    <Row>
+                      <Col>
                         <h3>{app.getLz("term.sharedPlaylists")}</h3>
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
                     <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)} />
                   </template>
                 )}
                 {search.resultsSocial.profile && (
                   <template>
-                    <div className={"row"}>
-                      <div className={"col"}>
+                    <Row>
+                      <Col>
                         <h3>{app.getLz("term.people")}</h3>
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
                     <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)} />
                   </template>
                 )}
@@ -233,14 +234,14 @@ const Search = ({ search }: { search: object }) => {
               <div>
                 <div>
                   {categoriesView !== null && categoriesView !== [] && categoriesView[0]?.attributes !== null && categoriesView[0]?.attributes.title !== null && (
-                    <div className={"col"}>
+                    <Col>
                       <h3>{$root.getLz("home.recentlyPlayed")}</h3>
                       <div className={"mediaitem-list-item__grid"}>
                         <ListitemHorizontal items={recentlyPlayed.limit(10)} />
                       </div>
                       {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="385" size="600" item="item" imagesize"800" />)} */}
                       <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
-                    </div>
+                    </Col>
                   )}
                 </div>
                 <div className={"categories"}>
