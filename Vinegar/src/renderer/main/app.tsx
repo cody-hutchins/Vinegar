@@ -16,7 +16,7 @@ window.CiderCache = CiderCache;
 window.CiderFrontAPI = CiderFrontAPI;
 window.wsapi = wsapi;
 
-if (app.cfg.advanced.disableLogging === true) {
+if (app.cfg.advanced.disableLogging) {
   window.console = {
     log: function () {},
     error: function () {},
@@ -30,7 +30,7 @@ if (app.cfg.advanced.disableLogging === true) {
 app.$mount("#app");
 
 // Init CiderAudio and force audiocontext
-if (app.cfg.advanced.AudioContext !== true) {
+if (!app.cfg.advanced.AudioContext) {
   app.cfg.advanced.AudioContext = true;
   window.location.reload();
 }

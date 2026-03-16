@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import classNames from "classnames";
 import { useChromeStore } from "../../store/chrome.js";
 import AddToPlaylist from "../components/add-to-playlist-panel.jsx";
 import EQView from "../components/eq-view.jsx";
@@ -17,9 +18,7 @@ const Panels = () => {
       <AnimatePresence>
         <motion.div name={"wpfade"}>
           {cfg.visual.window_background_style === "artwork" && (
-            <div
-              className={"bg-artwork-container"}
-              className={"{noanimation: (!cfg.visual.bg_artwork_rotation || !animateBackground)}"}>
+            <div className={classNames("bg-artwork-container", { noanimation: !cfg.visual.bg_artwork_rotation || !animateBackground })}>
               <img
                 load={(chrome.artworkReady = true)}
                 className={"bg-artwork a"}
@@ -54,7 +53,7 @@ const Panels = () => {
       </AnimatePresence>
       <div
         id={"apple-music-video-container"}
-        className={"{'mini': mvViewMode === 'mini'}"}>
+        className={classNames({ mini: mvViewMode === "mini" })}>
         <div id={"apple-music-video-player-controls"}>
           <div
             id={"player-exit"}
@@ -70,7 +69,7 @@ const Panels = () => {
               height={"21"}
               viewBox={"0 0 21 21"}
               aria-role={"presentation"}
-              focusable={"false"}
+              focusable={false}
               onClick={() => {
                 exitMV();
                 fullscreen(false);
@@ -141,9 +140,8 @@ const Panels = () => {
               {mvViewMode === "full" && (
                 <div className={"app-chrome-item volume display--large"}>
                   <button
-                    className={"volume-button--small volume"}
+                    className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
                     onClick={() => muteButtonPressed()}
-                    className={"{'active': cfg.audio.volume === 0}"}
                     title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
                     v-b-tooltiphover
                   />
@@ -186,10 +184,9 @@ const Panels = () => {
                   {lyrics && lyrics !== [] && lyrics.length > 0 ? (
                     <template>
                       <button
-                        className={"playback-button--small lyrics"}
+                        className={classNames("playback-button--small lyrics", { active: drawer.panel === "lyrics" })}
                         title={$root.getLz("term.lyrics")}
                         v-b-tooltiphover
-                        className={"{'active': drawer.panel === 'lyrics'}"}
                         onClick={() => invokeDrawer("lyrics")}
                       />
                     </template>
@@ -205,7 +202,7 @@ const Panels = () => {
               )}
               <div
                 id={"player-pip"}
-                className={"{'mini': mvViewMode === 'mini'}"}
+                className={classNames({ mini: mvViewMode === "mini" })}
                 onClick={() => pip()}
                 title={"Picture-in-Picture"}
                 v-b-tooltiphover>

@@ -157,7 +157,7 @@ const Playlist = ({ data }: { data: object }) => {
   function openInfoModal() {
     app.moreinfodata = [];
     app.moreinfodata = {
-      title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title ?? "" ?? "") : "",
+      title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title) || "" : "",
       subtitle: data?.attributes?.artistName ?? "",
       content: data?.attributes?.editorialNotes !== null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
     };
@@ -518,7 +518,9 @@ const Playlist = ({ data }: { data: object }) => {
         menuItems.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
         menuItems.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
-    } catch (err) {}
+    } catch (e) {
+      console.log(e);
+    }
   }
   function getItemParent(data) {
     const kind = data.attributes.playParams.kind;
@@ -682,7 +684,7 @@ const Playlist = ({ data }: { data: object }) => {
     }
   }
   function search() {
-    let filtered = [];
+    let filtered: object[];
 
     if (searchQuery === "") {
       filtered = data.relationships.tracks.data;
@@ -727,8 +729,7 @@ const Playlist = ({ data }: { data: object }) => {
     <div id={"cider-playlist"}>
       {data !== [] && data.attributes !== null && (
         <div
-          className={"content-inner playlist-page"}
-          className={classes}
+          className={classNames("content-inner playlist-page", classes)}
           is-album={isAlbum()}
           style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
           {app.playlists.loadingState === 0 && (
@@ -742,7 +743,7 @@ const Playlist = ({ data }: { data: object }) => {
             <template>
               <div
                 className={"playlist-display"}
-                style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                style={{ backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
                 onMouseOver={(e) => {
                   if (e.target === e.currentTarget) {
                     minClass(false);
@@ -758,7 +759,7 @@ const Playlist = ({ data }: { data: object }) => {
                       />
                       <div
                         className={"hero-tint"}
-                        style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                        style={{ backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
                       />
                     </div>
                   )}
@@ -770,7 +771,7 @@ const Playlist = ({ data }: { data: object }) => {
                       <div className={"mediaContainer"}>
                         <MediaItemArtwork
                           shadow={"large"}
-                          video-priority={"true"}
+                          video-priority={true}
                           url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
                           video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
                           size={"500"}
@@ -785,8 +786,8 @@ const Playlist = ({ data }: { data: object }) => {
                               className={"playlist-name"}
                               onMouseOver={() => minClass(false)}
                               onClick={() => editPlaylistName()}
-                              style={{ display: nameEditing ? "none" : "inherit", color: "#" + hasHeroObject()?.textColor1 ?? "", filter: `drop-shadow(${"1px 3px 8px #" + hasHeroObject()?.textColor4 ?? ""})` }}>
-                              {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
+                              style={{ display: nameEditing ? "none" : "inherit", color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject()?.textColor1 : "", filter: `drop-shadow(${hasHeroObject()?.textColor4 ? "1px 3px 8px #" + hasHeroObject()?.textColor4 : ""})` }}>
+                              {data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}
                             </div>
                             <div
                               className={"playlist-name"}
@@ -794,7 +795,7 @@ const Playlist = ({ data }: { data: object }) => {
                               style={{ display: nameEditing ? "inherit" : "none" }}>
                               <input
                                 type={"text"}
-                                spellCheck={"false"}
+                                spellCheck={false}
                                 className={"nameEdit"}
                                 v-model={data.attributes.name}
                                 onBlur={editPlaylist}
@@ -806,7 +807,7 @@ const Playlist = ({ data }: { data: object }) => {
                             </div>
                             <div
                               className={"playlist-time genre"}
-                              style={{ margin: "0px", color: "#" + hasHeroObject()?.textColor2 ?? "" }}>
+                              style={{ margin: "0px", color: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}>
                               {getAlbumGenre()}
                             </div>
                             {getArtistName(data) !== "" && !useArtistChip && (
@@ -821,7 +822,7 @@ const Playlist = ({ data }: { data: object }) => {
                                 {data.relationships.artists?.data.map((artist) => (
                                   <ArtistChip
                                     key={artist.id}
-                                    style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}
+                                    style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}
                                     item={artist}
                                   />
                                 ))}
@@ -830,7 +831,7 @@ const Playlist = ({ data }: { data: object }) => {
                             {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
                               <div
                                 className={"playlist-desc"}
-                                style={{ color: "#" + hasHeroObject()?.textColor3 ?? "" }}>
+                                style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}>
                                 {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                   <div
                                     className={"content"}
@@ -871,7 +872,7 @@ const Playlist = ({ data }: { data: object }) => {
                         style={{ zIndex: 20 }}>
                         <button
                           className={"md-btn md-btn-primary md-btn-icon"}
-                          style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
+                          style={{ minWidth: "100px", background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "", borderTop: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "", border: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}
                           onClick={() => {
                             app.mk.shuffleMode = 0;
                             play();
@@ -881,7 +882,7 @@ const Playlist = ({ data }: { data: object }) => {
                         </button>
                         <button
                           className={"md-btn md-btn-primary md-btn-icon"}
-                          style={{ minWidth: "100px", background: "#" + hasHeroObject()?.textColor4 ?? "", borderTop: "#" + hasHeroObject()?.textColor3 ?? "", border: "#" + hasHeroObject()?.textColor2 ?? "" }}
+                          style={{ minWidth: "100px", background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "", borderTop: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "", border: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}
                           onClick={() => {
                             app.mk.shuffleMode = 1;
                             play();
@@ -889,7 +890,7 @@ const Playlist = ({ data }: { data: object }) => {
                           <img className={"md-ico-shuffle"} />
                           {app.getLz("term.shuffle")}
                         </button>
-                        {inLibrary !== null && confirm !== true && (
+                        {inLibrary !== null && !confirm && (
                           <button
                             className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
@@ -898,7 +899,7 @@ const Playlist = ({ data }: { data: object }) => {
                             {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                           </button>
                         )}
-                        {confirm === true && (
+                        {!confirm && (
                           <button
                             className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
@@ -919,22 +920,22 @@ const Playlist = ({ data }: { data: object }) => {
                         )}
                         <div style={{ display: "flex", float: "right" }}>
                           <button
-                            style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
+                            style={{ background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "" }}
                             className={"['search-btn', showSearch ? 'active' : '']"}
                             onClick={() => toggleSearch()}
                             aria-label={"showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')"}>
                             <SVGIcon
-                              style={{ width: "15px", backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                              style={{ width: "15px", backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
                               url={showSearch ? "./assets/search-alt.svg" : "./assets/search.svg"}
                             />
                           </button>
                           <button
-                            style={{ background: "#" + hasHeroObject()?.textColor4 ?? "" }}
+                            style={{ background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "" }}
                             className={"more-btn-round"}
                             onClick={() => menu}
                             aria-label={app.getLz("term.more")}>
                             <div
-                              style={{ backgroundColor: "#" + hasHeroObject()?.bgColor ?? "" }}
+                              style={{ backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
                               className={"svg-icon"}
                             />
                           </button>
@@ -975,7 +976,7 @@ const Playlist = ({ data }: { data: object }) => {
                 style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
                 <Row>
                   <Col>
-                    <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
+                    <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}</h3>
                   </Col>
                   <Col
                     auto
@@ -1001,7 +1002,7 @@ const Playlist = ({ data }: { data: object }) => {
                         <img className={"md-ico-shuffle"} />
                         {app.getLz("term.shuffle")}
                       </button>
-                      {inLibrary !== null && confirm !== true && (
+                      {inLibrary !== null && !confirm && (
                         <button
                           className={"md-btn md-btn-icon"}
                           style={{ minWidth: "180px" }}
@@ -1010,7 +1011,7 @@ const Playlist = ({ data }: { data: object }) => {
                           {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                         </button>
                       )}
-                      {confirm === true && (
+                      {!confirm && (
                         <button
                           className={"md-btn md-btn-icon"}
                           style={{ minWidth: "180px" }}
@@ -1067,7 +1068,7 @@ const Playlist = ({ data }: { data: object }) => {
                               <div className={"search-input--icon"} />
                               <input
                                 type={"search"}
-                                spellCheck={"false"}
+                                spellCheck={false}
                                 placeholder={$root.getLz("term.search") + "..."}
                                 onInput={() => search()}
                                 v-model={searchQuery}

@@ -35,7 +35,7 @@ export class Plugins {
   }
 
   public getPlugins(): any {
-    let plugins: any = {};
+    const plugins: any = {};
 
     if (existsSync(this.basePluginsPath)) {
       readdirSync(this.basePluginsPath).forEach(async (file) => {

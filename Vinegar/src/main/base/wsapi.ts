@@ -2,8 +2,8 @@ import WebSocket, { WebSocketServer } from "ws";
 import electron from "electron";
 
 interface standardResponse {
-  status?: Number;
-  message?: String;
+  status?: number;
+  message?: string;
   data?: any;
   type?: string;
 }
@@ -22,7 +22,7 @@ export class wsapi {
   createId() {
     // create random guid
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-      var r = (Math.random() * 16) | 0,
+      const r = (Math.random() * 16) | 0,
         v = c == "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
@@ -107,8 +107,8 @@ export class wsapi {
       ws.on("message", function incoming(_message: any) {});
       // ws on message
       ws.on("message", (message: any) => {
-        let data = JSON.parse(message);
-        let response: standardResponse = {
+        const data = JSON.parse(message);
+        const response: standardResponse = {
           status: 0,
           data: {},
           message: "OK",

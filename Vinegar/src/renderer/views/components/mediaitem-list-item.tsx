@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
-
+import classNames from "classnames";
 
 const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: MusicKit.MediaItem; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
   let showInLibrary = false;
@@ -9,7 +9,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   const guid = uuidv4();
   const app = this.$root;
   let displayDuration = true;
-  let addClasses: Record<string, any> = {};
+  let addClasses: Record<string, unknown> = {};
   let itemId: number | string = 0;
   let isLibrary = false;
   let isLoved = null;
@@ -180,7 +180,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             name: app.getLz("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-up.svg",
             action: () => {
-              const itemsToPlay: Record<string, any[]> = {};
+              const itemsToPlay: Record<string, unknown[]> = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -202,7 +202,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             name: app.getLz("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-down.svg",
             action: () => {
-              const itemsToPlay: Record<string, any[]> = {};
+              const itemsToPlay: Record<string, unknown[]> = {};
               app.selectedMediaItems.forEach((item) => {
                 if (!itemsToPlay[item.kind]) {
                   itemsToPlay[item.kind] = [];
@@ -410,7 +410,9 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           menus.normal.items.find((x) => x.id === "addToLibrary")!.disabled = false;
         }
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
     try {
       const rating = await app.getRating(item);
       if (rating === 0) {
@@ -490,7 +492,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       if (parent !== null && childIndex !== null) {
         app.queueParentandplayChild(parent, childIndex, item);
       } else if (kind.includes("playlist") && (id.startsWith("p.") || id.startsWith("pl."))) {
-        function shuffleArray(array: Array<any>) {
+        function shuffleArray(array: unknown[]) {
           for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             const temp = array[i];
@@ -547,7 +549,9 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
                     });
                   }
                 });
-              } catch (e) {}
+              } catch (e) {
+                console.log(e);
+              }
             });
           });
       } else {
@@ -575,7 +579,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
         data-guid={guid}
         data-islibrary={isLibrary}
         key={itemId}
-        className={"cd-mediaitem-list-item"}
+        className={classNames("cd-mediaitem-list-item", { "mediaitem-selected": app.select_hasMediaItem(guid) }, addClasses)}
         onMouseEnter={checkLibrary}
         onMouseOver={() => {
           showInLibrary = true;
@@ -585,17 +589,16 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
         }}
         onDoubleClick={route}
         controller-click={route()}
-        tabIndex={0}
-        className={"[{'mediaitem-selected': app.select_hasMediaItem(guid)}, addClasses]"}>
+        tabIndex={0}>
         <div
           style={{ display: isVisible ? "inherit" : "none" }}
           className={"listitem-content"}>
           {!showInLibrary && item?.meta?.popularity !== null && item?.meta?.popularity > 0.7 && <div className={"popular"} />}
-          {showLibraryStatus === true && (
+          {showLibraryStatus && (
             <div className={"isLibrary"}>
               {showInLibrary && (
                 <div style={{ display: showInLibrary ? "block" : "none", marginLeft: "11px" }}>
-                  {!addedToLibrary && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) ? (
+                  {!addedToLibrary && (!showIndex || (showIndex && showIndexPlaylist)) ? (
                     <button
                       onClick={() => addToLibrary()}
                       aria-label={$root.getLz("action.addToLibrary")}>
@@ -610,7 +613,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               {!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex && (
                 <div style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
                   <div>
-                    <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : (index * 1 + 1 ?? "")}</div>
+                    <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : index ? index * 1 + 1 : ""}</div>
                   </div>
                 </div>
               )}
@@ -621,7 +624,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               )}
             </div>
           )}
-          {showArtwork === true && (showIndex === false || (showIndex === true && showIndexPlaylist !== false)) && (
+          {showArtwork && (!showIndex || (showIndex && showIndexPlaylist)) && (
             <div className={"artwork"}>
               <MediaItemArtwork
                 url={item.attributes.artwork ? item.attributes.artwork.url : ""}
@@ -673,8 +676,8 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             </div>
           </div>
           <div className={"heart-icon"}>
-            {/*{(isLoved === false) && <div className="heart-unfilled"  style={{'--url': 'url(./assets/feather/heart.svg)'}} />}*/}
-            {isLoved === true && (
+            {/*{(!isLoved) && <div className="heart-unfilled"  style={{'--url': 'url(./assets/feather/heart.svg)'}} />}*/}
+            {isLoved && (
               <div
                 className={"heart-filled"}
                 style={{ url: "url(./assets/feather/heart-fill.svg)" }}
@@ -682,7 +685,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             )}
           </div>
           {item.attributes && item.attributes.contentRating === "explicit" && <div className={"explicit-icon"} />}
-          {showMetadata === true && (
+          {showMetadata && (
             <template onDoubleClick={route}>
               <div className={"metainfo"}>{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
               <div className={"metainfo"}>{item.attributes.genreNames[0] ?? ""}</div>

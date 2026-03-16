@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 
 const RemotePair = () => {
-  async function mounted() {
+  useEffect(() => {
     ipcRenderer.send("get-remote-pair-url");
     ipcRenderer.on("send-remote-pair-url", (event, url) => {
-      url = url;
-      app.webview.src = url;
-      document.getElementById("foo").src = url;
+      const _url = url;
+      app.webview.src = _url;
+      document.getElementById("foo").src = _url;
     });
-  }
-  useEffect(() => {
-    mounted().then();
   }, []);
   return (
     <div id={"remote-pair"}>

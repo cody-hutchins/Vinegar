@@ -184,7 +184,7 @@ const checkIfScrollIsStatic = setInterval(() => {
       // do something
     }
     position = document.getElementsByClassName("lyric-body")[0].scrollTop;
-  } catch (e) {}
+  } catch (e) {console.log(e);}
 }, 50);
 
 // WebGPU Console Notification
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 document.addEventListener(
   "contextmenu",
   function (e) {
-    if (e.target.tagName.toLowerCase() === "textarea" || (e.target.tagName.toLowerCase() === "input" && e.target.type !== "checkbox" && e.target.type !== "radio" && e.target.disabled === false)) {
+    if (e.target.tagName.toLowerCase() === "textarea" || (e.target.tagName.toLowerCase() === "input" && e.target.type !== "checkbox" && e.target.type !== "radio" && !e.target.disabled)) {
       e.preventDefault();
       const menuPanel = {
         items: {

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 
 const ThemesGithub = () => {
@@ -16,11 +17,13 @@ const ThemesGithub = () => {
   };
   const themesInstalled: string[] = [];
   let themes = [];
-  function mounted() {
+
+  useEffect(() => {
     themes = ipcRenderer.sendSync("get-themes");
     getRepos();
     getInstalledThemes();
-  }
+  }, []);
+
   function openThemesFolder() {
     ipcRenderer.invoke("open-path", "themes");
   }
@@ -28,7 +31,7 @@ const ThemesGithub = () => {
     const themes = ipcRenderer.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
-      if (theme.github_repo !== "" && typeof theme.commit !== "") {
+      if (theme.github_repo !== "" && typeof theme.commit !== "undefined") {
         themesInstalled.push(theme.github_repo.toLowerCase());
       }
     });

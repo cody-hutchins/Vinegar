@@ -39,21 +39,21 @@ export default class ChromecastPlugin {
 
   private async searchForGCDevices() {
     try {
-      let browser = this.mdns.createBrowser(this.mdns.tcp("googlecast"));
+      const browser = this.mdns.createBrowser(this.mdns.tcp("googlecast"));
       browser.on("ready", browser.discover);
 
       browser.on("update", (service: any) => {
         if (service.addresses && service.fullname && service.fullname.includes("_googlecast._tcp")) {
-          let a = service.txt.filter((u: any) => String(u).startsWith("fn="));
-          let name = (a[0] ?? "").substring(3) != "" ? (a[0] ?? "").substring(3) : service.fullname.substring(0, service.fullname.indexOf("._googlecast"));
+          const a = service.txt.filter((u: any) => String(u).startsWith("fn="));
+          const name = (a[0] ?? "").substring(3) != "" ? (a[0] ?? "").substring(3) : service.fullname.substring(0, service.fullname.indexOf("._googlecast"));
           this.ondeviceup(service.addresses[0], name + " (" + (service.type[0]?.description ?? "") + ")", "", "googlecast");
         }
       });
       const Client = (await import("node-ssdp")).Client;
       // also do a SSDP/UPnP search
-      let ssdpBrowser = new Client();
+      const ssdpBrowser = new Client();
       ssdpBrowser.on("response", (headers: any, statusCode: any, rinfo: any) => {
-        var location = getLocation(headers);
+        const location = getLocation(headers);
         if (location != null) {
           this.getServiceDescription(location, rinfo.address);
         }
@@ -72,9 +72,9 @@ export default class ChromecastPlugin {
       ssdpBrowser.search("urn:dial-multiscreen-org:device:dial:1");
 
       // actual upnp devices
-      let ssdpBrowser2 = new Client();
+      const ssdpBrowser2 = new Client();
       ssdpBrowser2.on("response", (headers: any, statusCode: any, rinfo: any) => {
-        var location = getLocation(headers);
+        const location = getLocation(headers);
         if (location != null) {
           this.getServiceDescription(location, rinfo.address);
         }
@@ -138,7 +138,7 @@ export default class ChromecastPlugin {
         console.log(err);
         return;
       }
-      let media = {
+      const media = {
         // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
         contentId: "http://" + this.getIp() + ":" + this.ciderPort + "/audio.wav",
         contentType: "audio/wav",
@@ -193,10 +193,10 @@ export default class ChromecastPlugin {
 
   private getIp() {
     let ip: string = "";
-    let ip2: any = [];
+    const ip2: any = [];
     let alias = 0;
     const ifaces: any = os.networkInterfaces();
-    for (let dev in ifaces) {
+    for (const dev in ifaces) {
       ifaces[dev].forEach((details: any) => {
         if (details.family === "IPv4" && !details.internal) {
           if (!/(loopback|vmware|internal|hamachi|vboxnet|virtualbox)/gi.test(dev + (alias ? ":" + alias : ""))) {
@@ -221,7 +221,7 @@ export default class ChromecastPlugin {
 
     let client;
     if (castMode === "googlecast") {
-      let client = new this.audioClient();
+      const client = new this.audioClient();
       client.volume = 100;
       client.stepInterval = 0.5;
       client.muted = false;
@@ -253,7 +253,7 @@ export default class ChromecastPlugin {
     } else {
       // upnp devices
       try {
-        let client = new MediaRendererClient(UPNPDesc);
+        const client = new MediaRendererClient(UPNPDesc);
         const options = {
           autoplay: true,
           contentType: "audio/x-wav",

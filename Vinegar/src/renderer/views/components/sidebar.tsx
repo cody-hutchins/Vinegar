@@ -3,6 +3,7 @@ import SVGIcon from "../../main/components/svg-icon.jsx";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemSmarthints from "./mediaitem-smarthints.jsx";
 import SidebarPlaylist from "./sidebar-playlist.jsx";
+import classNames from "classnames";
 
 const Sidebar = () => {
   const switchArtworkDisplayLayout = () => {
@@ -28,7 +29,7 @@ const Sidebar = () => {
                 <div className={"search-input--icon"} />
                 <input
                   type={"search"}
-                  spellCheck={"false"}
+                  spellCheck={false}
                   onClick={() => {
                     $root.appRoute("search");
                     $root.search.showHints = true;
@@ -38,7 +39,7 @@ const Sidebar = () => {
                   }}
                   onBlur={() =>
                     $root.setTimeout(() => {
-                      if ($root.hintscontext !== true) {
+                      if (!$root.hintscontext) {
                         $root.search.showHints = false;
                       }
                     }, 300)
@@ -67,8 +68,7 @@ const Sidebar = () => {
                         .map((hint, index) => (
                           <button
                             key={index}
-                            className={"search-hint text-overflow-elipsis"}
-                            className={"{active: ($root.search.cursor === index)}"}
+                            className={classNames("search-hint", "text-overflow-elipsis", { active: $root.search.cursor === index })}
                             onClick={() => {
                               $root.search.term = hint.searchTerm;
                               $root.search.showHints = false;
@@ -104,11 +104,10 @@ const Sidebar = () => {
             style={{ display: $root.getThemeDirective("windowLayout") !== "twopanel" ? "inherit" : "none" }}
             className={"sidebarCatalogSection"}>
             <div
-              className={"app-sidebar-header-text"}
+              className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.cider })}
               onClick={() => {
                 $root.cfg.general.sidebarCollapsed.cider = !$root.cfg.general.sidebarCollapsed.cider;
-              }}
-              className={"{collapsed: $root.cfg.general.sidebarCollapsed.cider}"}>
+              }}>
               {$root.getLz("app.name")}
             </div>
             {!$root.cfg.general.sidebarCollapsed.cider && (
@@ -122,11 +121,10 @@ const Sidebar = () => {
               </template>
             )}
             <div
-              className={"app-sidebar-header-text"}
+              className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.applemusic })}
               onClick={() => {
                 $root.cfg.general.sidebarCollapsed.applemusic = !$root.cfg.general.sidebarCollapsed.applemusic;
-              }}
-              className={"{collapsed: $root.cfg.general.sidebarCollapsed.applemusic}"}>
+              }}>
               {$root.getLz("term.appleMusic")}
             </div>
             {!$root.cfg.general.sidebarCollapsed.applemusic && (
@@ -153,11 +151,10 @@ const Sidebar = () => {
             )}
           </div>
           <div
-            className={"app-sidebar-header-text"}
+            className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.library })}
             onClick={() => {
               $root.cfg.general.sidebarCollapsed.library = !$root.cfg.general.sidebarCollapsed.library;
-            }}
-            className={"{collapsed: $root.cfg.general.sidebarCollapsed.library}"}>
+            }}>
             {$root.getLz("term.library")}
           </div>
           {!$root.cfg.general.sidebarCollapsed.library && (
@@ -222,12 +219,11 @@ const Sidebar = () => {
           {$root.getPlaylistFolderChildren("p.applemusic").length !== 0 && (
             <template>
               <div
-                className={"app-sidebar-header-text"}
+                className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.amplaylists })}
                 onClick={() => {
                   $root.cfg.general.sidebarCollapsed.amplaylists = !$root.cfg.general.sidebarCollapsed.amplaylists;
                 }}
-                contextMenu={$root.playlistHeaderContextMenu}
-                className={"{collapsed: $root.cfg.general.sidebarCollapsed.amplaylists}"}>
+                contextMenu={$root.playlistHeaderContextMenu}>
                 {$root.getLz("term.appleMusic")}
                 {$root.getLz("term.playlists")}
               </div>
@@ -244,12 +240,11 @@ const Sidebar = () => {
             </template>
           )}
           <div
-            className={"app-sidebar-header-text"}
+            className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.playlists })}
             onClick={() => {
               $root.cfg.general.sidebarCollapsed.playlists = !$root.cfg.general.sidebarCollapsed.playlists;
             }}
-            contextMenu={$root.playlistHeaderContextMenu}
-            className={"{collapsed: $root.cfg.general.sidebarCollapsed.playlists}"}>
+            contextMenu={$root.playlistHeaderContextMenu}>
             {$root.getLz("term.playlists")}
           </div>
           {!$root.cfg.general.sidebarCollapsed.playlists && (
@@ -291,31 +286,28 @@ const Sidebar = () => {
               <div className={"app-chrome-item"}>
                 {$root.mk.shuffleMode === 0 ? (
                   <button
-                    className={"playback-button--small shuffle"}
                     onClick={() => {
                       $root.mk.shuffleMode = 1;
                     }}
                     title={$root.getLz("term.enableShuffle")}
-                    className={$root.isDisabled() && "disabled"}
+                    className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                     v-b-tooltiphoverrighttop
                   />
                 ) : (
                   <button
-                    className={"playback-button--small shuffle active"}
                     onClick={() => {
                       $root.mk.shuffleMode = 0;
                     }}
                     title={$root.getLz("term.disableShuffle")}
-                    className={$root.isDisabled() && "disabled"}
+                    className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                     v-b-tooltiphoverrighttop
                   />
                 )}
               </div>
               <div className={"app-chrome-item"}>
                 <button
-                  className={"playback-button previous"}
+                  className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                   onClick={() => $root.prevButton()}
-                  className={$root.isPrevDisabled() && "disabled"}
                   title={$root.getLz("term.previous")}
                   v-b-tooltiphover
                 />
@@ -339,21 +331,19 @@ const Sidebar = () => {
               </div>
               <div className={"app-chrome-item"}>
                 <button
-                  className={"playback-button next"}
+                  className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                   onClick={() => $root.skipToNextItem()}
                   title={$root.getLz("term.next")}
-                  className={$root.isNextDisabled() && "disabled"}
                   v-b-tooltiphover
                 />
               </div>
               <div className={"app-chrome-item"}>
                 {$root.mk.repeatMode === 0 ? (
                   <button
-                    className={"playback-button--small repeat"}
                     onClick={() => {
                       $root.mk.repeatMode = 1;
                     }}
-                    className={$root.isDisabled() && "disabled"}
+                    className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
                     title={$root.getLz("term.enableRepeatOne")}
                     v-b-tooltiphover
                   />
@@ -363,9 +353,8 @@ const Sidebar = () => {
             <div className={"app-chrome-item volume"}>
               <div className={"input-container"}>
                 <button
-                  className={"volume-button--small volume"}
+                  className={classNames("volume-button--small volume", { active: $root.cfg.audio.volume === 0 })}
                   onClick={() => $root.muteButtonPressed()}
-                  className={"{'active': $root.cfg.audio.volume === 0}"}
                   title={$root.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
                   v-b-tooltiphover
                 />

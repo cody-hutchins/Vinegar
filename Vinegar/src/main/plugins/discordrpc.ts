@@ -177,7 +177,7 @@ export default class DiscordRPC {
     }
 
     // Check if show buttons is (true) or (false)
-    let activity: Object = {
+    let activity: object = {
       details: this._utils.getStoreValue("connectivity.discord_rpc.activity.details_format"),
       state: this._utils.getStoreValue("connectivity.discord_rpc.activity.state_format"),
       largeImageKey: attributes?.artwork?.url?.replace("{w}", "1024").replace("{h}", "1024"),
@@ -209,7 +209,7 @@ export default class DiscordRPC {
   /**
    * Filter the Discord activity object
    */
-  private filterActivity(activity: any, attributes: any): Object {
+  private filterActivity(activity: any, attributes: any): object {
     // Handling Activity Buttons
     if (this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.enabled") && this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first") != "disabled") {
       const activityUrls: { [key: string]: any } = {

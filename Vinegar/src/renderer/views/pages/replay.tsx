@@ -29,7 +29,7 @@ const Replay = () => {
 
   function songsToArray(songsData) {
     const songs = [];
-    const topGenres: Record<string, any> = {};
+    const topGenres: Record<string, unknown> = {};
     let genrePlayCount = 0;
     songsData.forEach(function (songData) {
       const song = songData.relationships.song.data[0];
@@ -106,7 +106,7 @@ const Replay = () => {
                   <MediaItemArtwork
                     url={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.previewFrame.url}
                     video={loaded.playlist.attributes.editorialVideo.motionWideVideo21x9.video}
-                    video-priority={"true"}
+                    video-priority={true}
                   />
                 </div>
                 {/* )} */}
@@ -137,8 +137,8 @@ const Replay = () => {
                     className={"replay-playlist-container"}>
                     <MediaItemSquare
                       kind={"card"}
-                      no-scale={"true"}
-                      force-video={"true"}
+                      no-scale={true}
+                      force-video={true}
                       item={loaded.playlist}
                     />
                   </Col>
@@ -190,7 +190,7 @@ const Replay = () => {
                 <h3>{$root.getLz("term.topSongs")}</h3>
                 <div className={"well"}>
                   <ListitemHorizontal
-                    showLibraryStatus={"false"}
+                    showLibraryStatus={false}
                     items={songsToArray(loaded.views["top-songs"].data)}
                   />
                 </div>

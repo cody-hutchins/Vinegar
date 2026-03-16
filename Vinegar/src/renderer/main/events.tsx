@@ -54,10 +54,10 @@ const Events = {
       if (event.ctrlKey && event.keyCode === 121) {
         try {
           app.mk._services.mediaItemPlayback._currentPlayer.stop();
-        } catch (e) {}
+        } catch (e) {console.log(e);}
         try {
           app.mk._services.mediaItemPlayback._currentPlayer.destroy();
-        } catch (e) {}
+        } catch (e) {console.log(e);}
         try {
           this.radiohls.destroy();
           this.radiohls = null;
@@ -72,13 +72,13 @@ const Events = {
               clearInterval(searchInt);
             }
           }, 1000);
-        } catch (e) {}
+        } catch (e) {console.log(e);}
       }
       // CTRL+F11
       if (event.ctrlKey && event.keyCode === 122) {
         try {
           ipcRenderer.send("detachDT", "");
-        } catch (e) {}
+        } catch (e) {console.log(e);}
       }
       // Prevent Scrolling on spacebar
       if (event.keyCode === 32 && event.target === document.body) {
@@ -96,7 +96,7 @@ const Events = {
 
     // Refresh Focus
     function refreshFocus() {
-      if (document.hasFocus() === false) {
+      if (!document.hasFocus()) {
         app.windowFocus(false);
       } else {
         app.windowFocus(true);

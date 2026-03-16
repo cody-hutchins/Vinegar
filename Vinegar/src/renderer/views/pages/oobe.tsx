@@ -1,5 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import { useAppStore } from "../../store/app.js";
+import classNames from "classnames";
 const OOBE = () => {
   let screen = "before_we_start";
   const cfg = useAppStore((state) => state.cfg);
@@ -11,8 +12,8 @@ const OOBE = () => {
     screen = "signin";
     capiInit();
   }
-  function getLz() {
-    return this.$root.getLz.apply(this.$root, arguments);
+  function getLz(...args) {
+    return this.$root.getLz(args);
   }
   function getLanguages() {
     const langs = this.$root.lzListing;
@@ -142,9 +143,8 @@ const OOBE = () => {
               <Row>
                 <Col>
                   <div
-                    className={"card bg-dark text-white stylePicker"}
-                    onClick={() => (cfg.visual.directives.windowLayout = "twopanel")}
-                    className={"{'style-active': (cfg.visual.directives.windowLayout === 'twopanel')}"}>
+                    className={classNames("card bg-dark text-white stylePicker", { "style-active": cfg.visual.directives.windowLayout === "twopanel" })}
+                    onClick={() => (cfg.visual.directives.windowLayout = "twopanel")}>
                     <div className={"card-body"}>
                       <img
                         className={"visualPreview"}
@@ -157,9 +157,8 @@ const OOBE = () => {
                 </Col>
                 <Col>
                   <div
-                    className={"card bg-dark text-white stylePicker"}
-                    onClick={() => (cfg.visual.directives.windowLayout = "default")}
-                    className={"{'style-active': (cfg.visual.directives.windowLayout === 'default')}"}>
+                    className={classNames("card bg-dark text-white stylePicker", { "style-active": cfg.visual.directives.windowLayout === "default" })}
+                    onClick={() => (cfg.visual.directives.windowLayout = "default")}>
                     <div className={"card-body"}>
                       <img
                         className={"visualPreview"}

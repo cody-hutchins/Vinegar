@@ -10,12 +10,10 @@ const CastMenu = () => {
   };
   let scanning = false;
   let activeCasts = this.$root.activeCasts;
-  function mounted() {
-    scan();
-  }
 
   useEffect(() => {
     this.$root.activeCasts = activeCasts;
+    scan();
   }, [activeCasts]);
 
   const close = () => {
@@ -170,7 +168,7 @@ const CastMenu = () => {
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>
-                  Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to "Everyone" or "Anyone on the same network".
+                  Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to &quot;Everyone&quot; or &quot;Anyone on the same network&quot;.
                   {/* {$root.getLz('action.cast.airplay.underdevelopment')}  */}
                   {devices.airplay.map((device) => (
                     <div key={device.id}>

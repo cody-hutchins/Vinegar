@@ -205,7 +205,7 @@ export class AppEvents {
     } else if (arg.includes("music.apple.com")) {
       // URL (used with itms/itmss/music/musics uris)
       console.log(arg);
-      let url = arg.split("//")[1];
+      const url = arg.split("//")[1];
       console.warn(`[LinkHandler] Attempting to load url: ${url}`);
       utils.getWindow().webContents.send("play", "url", url);
     } else if (arg.includes("/debug/appdata")) {

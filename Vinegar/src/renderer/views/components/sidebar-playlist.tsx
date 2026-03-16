@@ -1,4 +1,7 @@
+import classNames from "classnames";
 import SVGIcon from "../../main/components/svg-icon.jsx";
+import { useEffect } from "react";
+import MusicKit from "@musickit-js";
 
 const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: MusicKit.MediaItem; playlistSelect?: (playlist: object) => void; relateMediaItems?: string[] }) => {
   let folderOpened = false;
@@ -8,7 +11,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
   let icon = "";
   let hasRelatedMediaItems = false;
 
-  async function mounted() {
+  useEffect(() => {
     if (item.type !== "library-playlist-folders") {
       icon = "./assets/feather/list.svg";
     } else {
@@ -22,7 +25,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
         }
       }
     }
-  }
+  }, []);
   function clickEvent() {
     if (item.type !== "library-playlist-folders") {
       if (playlistSelect) {
@@ -242,8 +245,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
         key={item.id}>
         <button
           key={item.id}
-          className={"app-sidebar-item app-sidebar-item-playlist"}
-          className={item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected]}
+          className={classNames("app-sidebar-item", "app-sidebar-item-playlist", item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected])}
           onContextMenu={(e) => playlistContextMenu(e, item.id)}
           onDragStart={(e) => startDrag(e, item)}
           onDragOver={dragOver}

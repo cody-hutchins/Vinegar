@@ -86,7 +86,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
               type={"search"}
               ref={"searchInput"}
               style={{ width: "100%" }}
-              spellCheck={"false"}
+              spellCheck={false}
               placeholder={app.getLz("term.search") + "..."}
               v-model={searchQuery}
               onInput={() => search()}

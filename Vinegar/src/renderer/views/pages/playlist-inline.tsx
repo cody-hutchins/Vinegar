@@ -31,9 +31,9 @@ const PlaylistInline = ({ data }: { data: object }) => {
   }, [data]);
 
   function openInfoModal() {
-    app.moreinfodata = [];
+    // app.moreinfodata = [];
     app.moreinfodata = {
-      title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title ?? "" ?? "") : "",
+      title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title) || "" : "",
       subtitle: data?.attributes?.artistName ?? "",
       content: data?.attributes?.editorialNotes !== null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
     };
@@ -421,7 +421,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                 height={"21"}
                 viewBox={"0 0 21 21"}
                 aria-role={"presentation"}
-                focusable={"false"}>
+                focusable={false}>
                 <path
                   d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
                   fillRule={"nonzero"}
@@ -448,7 +448,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                         <div style={{ width: "260px", height: "260px" }}>
                           <MediaItemArtwork
                             shadow={"large"}
-                            video-priority={"true"}
+                            video-priority={true}
                             url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
                             video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
                             size={"260"}
@@ -463,14 +463,14 @@ const PlaylistInline = ({ data }: { data: object }) => {
                                 className={"playlist-name"}
                                 onClick={() => editPlaylistName()}
                                 style={{ display: nameEditing ? "none" : "inherit" }}>
-                                {data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}
+                                {data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}
                               </div>
                               <div
                                 className={"playlist-name"}
                                 style={{ display: nameEditing ? "inherit" : "none" }}>
                                 <input
                                   type={"text"}
-                                  spellCheck={"false"}
+                                  spellCheck={false}
                                   className={"nameEdit"}
                                   v-model={data.attributes.name}
                                   onBlur={editPlaylist}
@@ -495,7 +495,10 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               {useArtistChip && (
                                 <template>
                                   {data.relationships.artists?.data.map((artist) => (
-                                    <ArtistChip item={artist} />
+                                    <ArtistChip
+                                      key={artist.id}
+                                      item={artist}
+                                    />
                                   ))}
                                 </template>
                               )}
@@ -560,7 +563,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             <img className={"md-ico-shuffle"} />
                             {app.getLz("term.shuffle")}
                           </button>
-                          {inLibrary !== null && confirm !== true && (
+                          {inLibrary !== null && !confirm && (
                             <button
                               className={"md-btn md-btn-icon"}
                               style={{ minWidth: "180px" }}
@@ -569,7 +572,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                             </button>
                           )}
-                          {confirm === true && (
+                          {confirm && (
                             <button
                               className={"md-btn md-btn-icon"}
                               style={{ minWidth: "180px" }}
@@ -604,7 +607,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                   style={{ opacity: headerVisible ? 0 : 1, pointerEvents: headerVisible ? "none" : "" }}>
                   <Row>
                     <Col>
-                      <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title ?? "" ?? "") : ""}</h3>
+                      <h3>{data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}</h3>
                     </Col>
                     <Col
                       auto
@@ -630,7 +633,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                           <img className={"md-ico-shuffle"} />
                           {app.getLz("term.shuffle")}
                         </button>
-                        {inLibrary !== null && confirm !== true && (
+                        {inLibrary !== null && !confirm && (
                           <button
                             className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
@@ -639,7 +642,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
                           </button>
                         )}
-                        {confirm === true && (
+                        {confirm && (
                           <button
                             className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
@@ -796,7 +799,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                 height={"21"}
                 viewBox={"0 0 21 21"}
                 aria-role={"presentation"}
-                focusable={"false"}>
+                focusable={false}>
                 <path
                   d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
                   fillRule={"nonzero"}

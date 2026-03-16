@@ -6,8 +6,8 @@ import MediaItemScrollerHorizontalSP from "./mediaitem-scroller-horizontal-sp.js
 const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   const isVisible = true;
   const app = this.$root;
-  const visibilityChanged = (isVisible, entry) => {
-    // isVisible = isVisible
+  const visibilityChanged = (_isVisible, entry) => {
+    // isVisible = _isVisible
   };
   const showCollection = (recom) => {
     console.debug(recom);
@@ -54,9 +54,8 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                 <Col style={{ display: "flex", marginBlock: "1rem" }}>
                   <div
                     onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
-                    className={"listennow-chip"}
+                    className={"listennow-chip" + recom?.relationships["primary-content"]?.data[0]?.type === "artists" ? "circle" : ""}>
                     style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
-                    className={"{ 'circle': recom?.relationships['primary-content']?.data[0]?.type === 'artists'  }"}>
                     {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
                       <MediaItemArtwork
                         url={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork?.url}
@@ -67,7 +66,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                   <div
                     onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
                     style={{ width: "fit-content" }}
-                    className={"{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}"}>
+                    className={(recom?.attributes?.title?.contentIds?.length ?? 0) > 0 || recom?.relationships["primary-content"]?.data?.length > 0 ? "item-navigate" : ""}>
                     <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
                     <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
                   </div>
@@ -77,7 +76,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                   <h3
                     onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
                     style={{ width: "fit-content", marginBlock: 0 }}
-                    className={"{'item-navigate' : (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 | recom?.relationships['primary-content']?.data?.length > 0}"}>
+                    className={(recom?.attributes?.title?.contentIds?.length ?? 0) > 0 || recom?.relationships["primary-content"]?.data?.length > 0 ? "item-navigate" : ""}>
                     {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
                   </h3>
                 </Col>

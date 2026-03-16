@@ -1,4 +1,6 @@
 import { Col, Row } from "react-bootstrap";
+import classNames from "classnames";
+import MediaItemArtwork from "./mediaitem-artwork";
 
 const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; position: number }) => {
   const app = this.$root;
@@ -274,7 +276,9 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
         menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
         menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
-    } catch (err) {}
+    } catch (e) {
+      console.log(e);
+    }
 
     if (contextExt) {
       if (contextExt.normal) {
@@ -285,7 +289,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
       }
     }
   }
-  async function artistMenu(event) {
+  function artistMenu(event) {
     let followAction = "follow";
     const followActions = {
       follow: {
@@ -427,7 +431,9 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
                     });
                   }
                 });
-              } catch (e) {}
+              } catch (e) {
+                console.log(e);
+              }
             });
           });
       } else {
@@ -438,7 +444,6 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
   return (
     <div id={"mediaitem-smarthints"}>
       <div
-        className={"cd-queue-item"}
         onClick={() => {
           $root.search.showHints = false;
           $root.routeView(item);
@@ -449,14 +454,14 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           $root.hintscontext = true;
           getContextMenu();
         }}
-        className={{
+        className={classNames("cd-queue-item", {
           hintactive:
             $root.search.cursor ===
             position +
               $root.search.hints.filter((a) => {
                 return a.content === null;
               }).length,
-        }}>
+        })}>
         <Row
           onContextMenu={() => {
             $root.hintscontext = true;
@@ -469,12 +474,10 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
               $root.hintscontext = true;
               getContextMenu();
             }}>
-            <div
-              className={"artwork"}
-              className={"{'circle': item.type === 'artists'}"}>
+            <div className={classNames("artwork", { circle: item.type === "artists" })}>
               <MediaItemArtwork
                 url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-                size={"32"}
+                imagesize={"32"}
                 style={{ position: "relative", zIndex: "-1" }}
               />
               <button
@@ -486,7 +489,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
                 }}>
                 <div
                   className={"_svg-icon"}
-                  style={{ icon: "url(\.\/assets\/play\.svg)", width: "15px" }}
+                  style={{ icon: "url(./assets/play.svg)", width: "15px" }}
                 />
               </button>
             </div>

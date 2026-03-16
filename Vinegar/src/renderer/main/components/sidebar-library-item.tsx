@@ -15,8 +15,7 @@ const SidebarLibraryItem = ({ name, page, svgIcon = "", svgIconName, cdClick }: 
   }, []);
   return (
     <button
-      className={"app-sidebar-item"}
-      className={"$root.getSidebarItemClass(page)"}
+      className={`app-sidebar-item ${$root.getSidebarItemClass(page)}`}
       onClick={() => $root.setWindowHash(page)}>
       {svgIconData !== "" && (
         <SVGIcon

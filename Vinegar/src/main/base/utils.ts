@@ -145,7 +145,7 @@ export class utils {
    * Sets a store
    * @returns store
    */
-  static getStore(): Object {
+  static getStore(): object {
     return Store.cfg.store;
   }
 

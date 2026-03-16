@@ -54,7 +54,7 @@ const SocialProfile = ({ data }: { data: object }) => {
             <template>
               <Row>
                 <Col>
-                  <h3>{"Shared Playlists" ?? ""}</h3>
+                  <h3>Shared Playlists</h3>
                 </Col>
               </Row>
               {data.relationships["shared-playlists"].data.limit(10).map((item) => (

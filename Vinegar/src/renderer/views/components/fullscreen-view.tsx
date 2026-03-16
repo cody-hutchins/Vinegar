@@ -1,13 +1,16 @@
 import { useEffect } from "react";
+import classNames from "classnames";
 import Queue from "./queue.jsx";
 import LyricsView from "./lyrics-view.jsx";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import { Col, Row } from "react-bootstrap";
+import AppContentArea from "./app-content-area.js";
 
 const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
   const app = this.$root;
-  const tabMode = "lyrics";
+  let tabMode = "lyrics";
+  const enableCatalog = false;
   let video = null;
   const immersiveEnabled = app.cfg.advanced.experiments.includes("immersive-preview");
   async function mounted() {
@@ -146,8 +149,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           <Row className={"fs-row"}>
             <Col className={"artwork-col"}>
               <div
-                className={"artwork"}
-                className={$root.mk.isPlaying && "playing"}
+                className={classNames("artwork", { playing: $root.mk.isPlaying })}
                 onClick={() => app.fullscreen(false)}>
                 <MediaItemArtwork
                   size={"600"}
@@ -218,16 +220,14 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.shuffleMode === 0 ? (
                           <button
-                            className={"playback-button--small shuffle"}
-                            className={$root.isDisabled() && "disabled"}
+                            className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                             onClick={() => ($root.mk.shuffleMode = 1)}
                             title={$root.getLz("term.enableShuffle")}
                             v-b-tooltiphover
                           />
                         ) : (
                           <button
-                            className={"playback-button--small shuffle active"}
-                            className={$root.isDisabled() && "disabled"}
+                            className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                             onClick={() => ($root.mk.shuffleMode = 0)}
                             title={$root.getLz("term.disableShuffle")}
                             v-b-tooltiphover
@@ -236,9 +236,8 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       </div>
                       <div className={"app-chrome-item display--large"}>
                         <button
-                          className={"playback-button previous"}
+                          className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                           onClick={() => $root.prevButton()}
-                          className={$root.isPrevDisabled() && "disabled"}
                           title={$root.getLz("term.previous")}
                           v-b-tooltiphover
                         />
@@ -262,9 +261,8 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       </div>
                       <div className={"app-chrome-item display--large"}>
                         <button
-                          className={"playback-button next"}
+                          className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                           onClick={() => $root.skipToNextItem()}
-                          className={$root.isNextDisabled() && "disabled"}
                           title={$root.getLz("term.next")}
                           v-b-tooltiphover
                         />
@@ -272,8 +270,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.repeatMode === 0 ? (
                           <button
-                            className={"playback-button--small repeat"}
-                            className={$root.isDisabled() && "disabled"}
+                            className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
                             onClick={() => ($root.mk.repeatMode = 1)}
                             title={$root.getLz("term.enableRepeatOne")}
                             v-b-tooltiphover
@@ -285,9 +282,8 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                   <div className={"app-chrome-item volume display--large"}>
                     <div className={"input-container"}>
                       <button
-                        className={"volume-button--small volume"}
+                        className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
                         onClick={() => app.muteButtonPressed()}
-                        className={"{'active': app.cfg.audio.volume === 0}"}
                         title={app.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
                         v-b-tooltiphover
                       />
@@ -331,24 +327,21 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           </Row>
         ) : (
           <div className={"app-content-container"}>
-            <app-content-area />
+            <AppContentArea />
           </div>
         )}
         <div className={"tab-toggles"}>
           <div
-            className={"lyrics"}
-            className={"{active: tabMode === 'lyrics'}"}
+            className={classNames("lyrics", { active: tabMode === "lyrics" })}
             onClick={() => (tabMode = tabMode === "lyrics" ? "" : "lyrics")}
           />
           <div
-            className={"queue"}
-            className={"{active: tabMode === 'queue'}"}
+            className={classNames("queue", { active: tabMode === "queue" })}
             onClick={() => (tabMode = tabMode === "queue" ? "" : "queue")}
           />
-          {false && (
+          {enableCatalog && (
             <div
-              className={"queue"}
-              className={"{active: tabMode === 'catalog'}"}
+              className={classNames("queue", { active: tabMode === "catalog" })}
               onClick={() => {
                 tabMode = tabMode === "catalog" ? "" : "catalog";
               }}

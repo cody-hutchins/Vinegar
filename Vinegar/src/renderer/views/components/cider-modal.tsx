@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import classNames from "classnames";
 
 const CiderModal = ({ playlists }: { playlists: object[] }) => {
   const playlistSorted = [];
@@ -64,8 +65,8 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
                 playlist.type !== "library-playlist-folders" &&
                 playlistSorted.map((playlist) => (
                   <button
-                    className={"playlist-item"}
-                    className={"{ focused: playlist.id === focused }"}
+                    key={playlist.id}
+                    className={classNames("playlist-item", { focused: playlist.id === focused })}
                     onClick={() => addToPlaylist(playlist.id)}
                     style={{ width: "100%" }}>
                     <div className={"icon"}>{import("../svg/playlist.svg")}</div>
@@ -82,7 +83,7 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
                   type={"search"}
                   ref={"searchInput"}
                   style={{ width: "100%" }}
-                  spellCheck={"false"}
+                  spellCheck={false}
                   placeholder={app.getLz("term.search") + "..."}
                   v-model={searchQuery}
                   input={search()}

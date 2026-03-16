@@ -30,7 +30,7 @@ const ThemesGithub = () => {
     const themes = ipcRenderer.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
-      if (theme.github_repo !== "" && typeof theme.commit !== "") {
+      if (theme.github_repo !== "" && typeof theme.commit !== "undefined") {
         themesInstalled.push(theme.github_repo.toLowerCase());
       }
     });

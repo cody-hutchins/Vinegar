@@ -29,7 +29,7 @@ const LibrarySongs = ({ data }: { data: object }) => {
                 item={item}
               />
             ))
-          ) : loaded === true ? (
+          ) : loaded ? (
             <div>{$root.getLz("term.noVideos")}</div>
           ) : (
             <div />

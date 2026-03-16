@@ -2,7 +2,7 @@ const CiderKit = {
   v1: {
     musickit: {
       async mkv3(route, body, options) {
-        let opts = {
+        const opts = {
           method: "POST",
           cache: "no-cache",
           credentials: "same-origin",
@@ -18,7 +18,7 @@ const CiderKit = {
           body: body,
           options: options,
         });
-        let response = await fetch("./api/musickit/v3", opts);
+        const response = await fetch("./api/musickit/v3", opts);
         return response.json();
       },
     },

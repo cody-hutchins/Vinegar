@@ -1,10 +1,11 @@
 import { ipcRenderer } from "electron";
+import classNames from "classnames";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemSmarthints from "../components/mediaitem-smarthints.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import { useChromeStore } from "../../store/chrome.js";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Popover } from "react-bootstrap";
 
 const ChromeTop = ({ search = {} }: { search?: object }) => {
@@ -41,11 +42,10 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
         ) : (
           <div className={"app-chrome-item full-height"}>
             <button
-              className={"app-mainmenu"}
+              className={classNames("app-mainmenu", { active: chrome.menuOpened })}
               blur={mainMenuVisibility(false)}
               onClick={() => mainMenuVisibility(true)}
               contextMenu={mainMenuVisibility(true)}
-              className={"{active: chrome.menuOpened}"}
               aria-label={$root.getLz("term.quickNav")}
             />
           </div>
@@ -95,8 +95,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               <div className={"app-chrome-item display--large"}>
                 {mk.shuffleMode === 0 ? (
                   <button
-                    className={"playback-button--small shuffle"}
-                    className={isDisabled() && "disabled"}
+                    className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                     onClick={() => {
                       mk.shuffleMode = 1;
                     }}
@@ -105,8 +104,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   />
                 ) : (
                   <button
-                    className={"playback-button--small shuffle active"}
-                    className={isDisabled() && "disabled"}
+                    className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                     onClick={() => {
                       mk.shuffleMode = 0;
                     }}
@@ -117,9 +115,8 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               </div>
               <div className={"app-chrome-item display--large"}>
                 <button
-                  className={"playback-button previous"}
+                  className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                   onClick={() => prevButton()}
-                  className={isPrevDisabled() && "disabled"}
                   title={$root.getLz("term.previous")}
                   v-b-tooltiphover
                 />
@@ -143,18 +140,15 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               </div>
               <div className={"app-chrome-item display--large"}>
                 <button
-                  className={"playback-button next"}
+                  className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                   onClick={() => skipToNextItem()}
-                  className={isNextDisabled() && "disabled"}
                   title={$root.getLz("term.next")}
                   v-b-tooltiphover
                 />
               </div>
               <div className={"app-chrome-item display--large"}>
                 <button
-                  className={"playback-button--small repeat"}
-                  className={mk.repeatMode === 1 ? "repeatOne" : mk.repeatMode === 2 ? "active" : ""}
-                  className={isDisabled() && "disabled"}
+                  className={classNames("playback-button--small", "repeat", { repeatOne: mkdir.repeatMode === 1 }, { active: mk.repeatMode === 2 }, { disabled: isDisabled() })}
                   onClick={() => repeatIncrement()}
                   title={$root.lz.repeat[mk.repeatMode]}
                   v-b-tooltiphover
@@ -236,35 +230,35 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   </Popover>
                   <div className={"playback-info"}>
                     <div className={"chrome-icon-container"}>
-                      {cfg.general.privateEnabled === true && (
+                      {cfg.general.privateEnabled && (
                         <div
                           className={"audio-type private-icon"}
                           title={$root.getLz("term.privateSession")}
                           v-b-tooltiphover
                         />
                       )}
-                      {cfg.audio.maikiwiAudio.spatial === true && (
+                      {cfg.audio.maikiwiAudio.spatial && (
                         <div
                           className={"audio-type spatial-icon"}
                           title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}
                           v-b-tooltiphover
                         />
                       )}
-                      {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true && (
+                      {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) && (
                         <div
                           className={"audio-type lossless-icon"}
                           title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}
                           v-b-tooltiphover
                         />
                       )}
-                      {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE === true && (
+                      {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
                         <div
                           className={"audio-type ppe-icon"}
                           title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
                           v-b-tooltiphover
                         />
                       )}
-                      {mk.nowPlayingItem?.attributes?.isLive === true && (
+                      {mk.nowPlayingItem?.attributes?.isLive && (
                         <svg
                           className={"audio-type live-icon"}
                           title={$root.getLz("term.live")}
@@ -326,7 +320,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                         </div>
                       </div>
                     </div>
-                    {mk.nowPlayingItem?.attributes?.isLive !== true && (
+                    {!mk.nowPlayingItem?.attributes?.isLive && (
                       <div className={"song-progress"}>
                         <div
                           className={"song-duration"}
@@ -431,9 +425,8 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
           <template>
             <div className={"app-chrome-item volume display--large"}>
               <button
-                className={"volume-button--small volume"}
+                className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
                 onClick={() => muteButtonPressed()}
-                className={"{'active': cfg.audio.volume === 0}"}
                 title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
                 v-b-tooltiphover
               />
@@ -463,10 +456,9 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             </div>
             <div className={"app-chrome-item generic"}>
               <button
-                className={"playback-button--small queue"}
+                className={classNames("playback-button--small queue", { active: drawer.panel === "queue" })}
                 title={$root.getLz("term.queue")}
                 v-b-tooltiphover
-                className={"{'active': drawer.panel === 'queue'}"}
                 onClick={() => invokeDrawer("queue")}
               />
             </div>
@@ -474,10 +466,9 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               {lyrics && lyrics !== [] && lyrics.length > 0 ? (
                 <template>
                   <button
-                    className={"playback-button--small lyrics"}
+                    className={classNames("playback-button--small lyrics", { active: drawer.panel === "lyrics" })}
                     title={$root.getLz("term.lyrics")}
                     v-b-tooltiphover
-                    className={"{'active': drawer.panel === 'lyrics'}"}
                     onClick={() => invokeDrawer("lyrics")}
                   />
                 </template>
@@ -498,7 +489,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                 <div className={"search-input--icon"} />
                 <input
                   type={"search"}
-                  spellCheck={"false"}
+                  spellCheck={false}
                   onClick={() => {
                     $root.appRoute("search");
                     search.showHints = true;
@@ -506,7 +497,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   onFocus={() => (search.showHints = true)}
                   onBlur={() =>
                     setTimeout(() => {
-                      if (hintscontext !== true) {
+                      if (!hintscontext) {
                         search.showHints = false;
                       }
                     }, 300)
@@ -538,8 +529,8 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                         })
                         .map((hint, index) => (
                           <button
-                            className={"search-hint text-overflow-elipsis"}
-                            className={"{active: (search.cursor === index)}"}
+                            key={index}
+                            className={classNames("search-hint text-overflow-elipsis", { active: search.cursor === index })}
                             onClick={() => {
                               search.term = hint.searchTerm;
                               search.showHints = false;
@@ -554,12 +545,11 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                           return a.content !== null;
                         })
                         .map((item, position) => (
-                          <template>
-                            <MediaItemSmarthints
-                              item={item.content}
-                              position={position}
-                            />
-                          </template>
+                          <MediaItemSmarthints
+                            key={position}
+                            item={item.content}
+                            position={position}
+                          />
                         ))}
                     </div>
                   </div>

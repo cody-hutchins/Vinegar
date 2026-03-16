@@ -50,7 +50,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              style={{ display: app.cfg.audio.maikiwiAudio.ciderPPE === true ? "inherit" : "none" }}>
+              style={{ display: app.cfg.audio.maikiwiAudio.ciderPPE ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength")}
                 <br />
@@ -76,7 +76,7 @@ const Audiolabs = () => {
               <div className={"md-option-segment"}>
                 Cider Opportunistic Correction System
                 <br />
-                <small>Takes advantage of the sonic characteristics of a specific equipment and adapts it to be more 'Cider' oriented.</small>
+                <small>Takes advantage of the sonic characteristics of a specific equipment and adapts it to be more &apos;Cider&apos; oriented.</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <select
@@ -105,7 +105,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true ? "inherit" : "none" }}>
+              style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer1 ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [1]
                 <br />
@@ -118,7 +118,11 @@ const Audiolabs = () => {
                   v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer1_value}
                   onChange={() => CiderAudio.hierarchical_loading()}>
                   {arprofiles.map((profile) => (
-                    <option value={profile.id}>{$root.getProfileLz("CAR", profile.id)}</option>
+                    <option
+                      key={profile.id}
+                      value={profile.id}>
+                      {$root.getProfileLz("CAR", profile.id)}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -139,7 +143,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true ? "inherit" : "none" }}>
+              style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer2 ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [2]
                 <br />
@@ -152,7 +156,11 @@ const Audiolabs = () => {
                   v-model={$root.cfg.audio.maikiwiAudio.atmosphereRealizer2_value}
                   onChange={() => CiderAudio.hierarchical_loading()}>
                   {arprofiles.map((profile) => (
-                    <option value={profile.id}>{$root.getProfileLz("CAR", profile.id)}</option>
+                    <option
+                      key={profile.id}
+                      value={profile.id}>
+                      {$root.getProfileLz("CAR", profile.id)}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -173,7 +181,7 @@ const Audiolabs = () => {
             </div>
             <div
               className={"md-option-line"}
-              style={{ display: app.cfg.audio.maikiwiAudio.spatial === true ? "inherit" : "none" }}>
+              style={{ display: app.cfg.audio.maikiwiAudio.spatial ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
                 {$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile")}
                 <br />

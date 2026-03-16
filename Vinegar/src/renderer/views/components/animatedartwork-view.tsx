@@ -64,7 +64,9 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
             }
             try {
               hls.loadLevel = parseInt(quality || 1);
-            } catch (e) {}
+            } catch (e) {
+              console.log(e);
+            }
           }, 200);
         }
       });

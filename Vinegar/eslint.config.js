@@ -10,7 +10,7 @@ import tseslint from "typescript-eslint";
 
 const config = defineConfig([
   { settings: { react: { version: "19" } } },
-  { ignores: [ "node_modules", "**/lib" ] },
+  { ignores: ["node_modules", "**/lib"] },
   {
     files: ["**/*.{jsx,tsx}"],
     plugins: { js },

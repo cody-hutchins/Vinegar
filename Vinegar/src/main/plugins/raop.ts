@@ -90,8 +90,8 @@ export default class RAOP {
     try {
       d = text.filter((u: any) => String(u).startsWith("features="));
       if (d.length == 0) d = text.filter((u: any) => String(u).startsWith("ft="));
-      let features_set = d.length > 0 ? d[0].substring(d[0].indexOf("=") + 1).split(",") : [];
-      let features = [...(features_set.length > 0 ? parseInt(features_set[0]).toString(2).split("") : []), ...(features_set.length > 1 ? parseInt(features_set[1]).toString(2).split("") : [])];
+      const features_set = d.length > 0 ? d[0].substring(d[0].indexOf("=") + 1).split(",") : [];
+      const features = [...(features_set.length > 0 ? parseInt(features_set[0]).toString(2).split("") : []), ...(features_set.length > 1 ? parseInt(features_set[1]).toString(2).split("") : [])];
       if (features.length > 0) {
         audiook = features[features.length - 1 - 9] == "1";
       }
@@ -99,9 +99,9 @@ export default class RAOP {
     if (audiook) {
       let shown_name = name;
       try {
-        let model = text.filter((u: any) => String(u).startsWith("model="));
-        let manufacturer = text.filter((u: any) => String(u).startsWith("manufacturer="));
-        let name1 = text.filter((u: any) => String(u).startsWith("name="));
+        const model = text.filter((u: any) => String(u).startsWith("model="));
+        const manufacturer = text.filter((u: any) => String(u).startsWith("manufacturer="));
+        const name1 = text.filter((u: any) => String(u).startsWith("name="));
         if (name1.length > 0) {
           shown_name = name1[0].split("=")[1];
         } else if (manufacturer.length > 0) {
@@ -109,7 +109,7 @@ export default class RAOP {
           shown_name = shown_name.trim().length > 1 ? shown_name : (host ?? "Unknown").replace(".local", "");
         }
       } catch (e) {}
-      let host_name = addresses != null && typeof addresses == "object" && addresses.length > 0 ? addresses[0] : typeof addresses == "string" ? addresses : "";
+      const host_name = addresses != null && typeof addresses == "object" && addresses.length > 0 ? addresses[0] : typeof addresses == "string" ? addresses : "";
 
       if (
         this.castDevices.findIndex((item: any) => {
@@ -179,7 +179,7 @@ export default class RAOP {
           this._win.webContents.executeJavaScript(`console.log(
                     "${service.name} ${service.host}:${service.port} ${service.addresses} ${service.fullname}"
                 )`);
-          let itemname = service.fullname.substring(service.fullname.indexOf("@") + 1, service.fullname.indexOf("._raop._tcp"));
+          const itemname = service.fullname.substring(service.fullname.indexOf("@") + 1, service.fullname.indexOf("._raop._tcp"));
           this.ondeviceup(itemname, service.host, service.port, service.addresses, service.txt);
         }
       });
@@ -193,7 +193,7 @@ export default class RAOP {
           this._win.webContents.executeJavaScript(`console.log(
                     "${service.name} ${service.host}:${service.port} ${service.addresses}"
                 )`);
-          let itemname = service.fullname.substring(service.fullname.indexOf("@") + 1, service.fullname.indexOf("._airplay._tcp"));
+          const itemname = service.fullname.substring(service.fullname.indexOf("@") + 1, service.fullname.indexOf("._airplay._tcp"));
           this.ondeviceup(itemname, service.host, service.port, service.addresses, service.txt, true);
         }
       });
@@ -219,7 +219,7 @@ export default class RAOP {
         }
         this.ipairplay = ipv4;
         this.portairplay = ipport;
-        let identifier = ipv4 + ":" + ipport + "ap";
+        const identifier = ipv4 + ":" + ipport + "ap";
         let idx = this.devices.findIndex((a: any) => {
           return a.id == identifier;
         });
@@ -291,7 +291,7 @@ export default class RAOP {
 
     electron.ipcMain.on("setAirPlayPasscode", (event, passcode, identifier) => {
       if (this.devices.length > 0) {
-        let idx = this.devices.findIndex((a: any) => {
+        const idx = this.devices.findIndex((a: any) => {
           return a.id == identifier;
         });
         if (idx != -1) {
@@ -302,7 +302,7 @@ export default class RAOP {
 
     electron.ipcMain.on("setAirPlayVolume", (event, volume, identifier) => {
       if (this.devices.length > 0) {
-        let idx = this.devices.findIndex((a: any) => {
+        const idx = this.devices.findIndex((a: any) => {
           return a.id == identifier;
         });
         if (idx != -1) {
@@ -367,7 +367,7 @@ export default class RAOP {
 
     electron.ipcMain.on("updateAirplayInfo", (event, title, artist, album, artworkURL) => {
       if (this.airtunes && this.devices.length > 0) {
-        for (let i in this.devices) {
+        for (const i in this.devices) {
           console.log(this.devices[i].controller.key, title, artist, album);
           this.airtunes.setTrackInfo(this.devices[i].controller.key, title, artist, album);
         }
@@ -386,7 +386,7 @@ export default class RAOP {
       .then(() => {
         if (identifier == "") {
           if (this.airtunes) {
-            for (let i in this.devices) {
+            for (const i in this.devices) {
               this.devices[i].state = -1;
             }
             this.airtunes.stopAll(() => {
@@ -404,7 +404,7 @@ export default class RAOP {
             this.devices = [];
           }
         } else {
-          let idx = this.devices.findIndex((a: any) => {
+          const idx = this.devices.findIndex((a: any) => {
             return a.id == identifier;
           });
           if (idx != -1) {
@@ -439,7 +439,7 @@ export default class RAOP {
           .then((res) => res.buffer())
           .then((buffer) => {
             if (this.airtunes && this.devices.length > 0) {
-              for (let i in this.devices) {
+              for (const i in this.devices) {
                 this.airtunes.setArtwork(this.devices[i].controller.key, buffer, "image/png");
               }
             }
@@ -464,14 +464,14 @@ export default class RAOP {
    */
   onNowPlayingItemDidChange(attributes: any): void {
     if (this.airtunes && this.devices.length > 0) {
-      let title = attributes?.name ?? "";
-      let artist = attributes?.artistName ?? "";
-      let album = attributes?.albumName ?? "";
-      for (let i in this.devices) {
+      const title = attributes?.name ?? "";
+      const artist = attributes?.artistName ?? "";
+      const album = attributes?.albumName ?? "";
+      for (const i in this.devices) {
         console.log(this.devices[i].controller.key, title, artist, album);
         this.airtunes.setTrackInfo(this.devices[i].controller.key, title, artist, album);
       }
-      let artworkURL = attributes?.artwork?.url ?? null;
+      const artworkURL = attributes?.artwork?.url ?? null;
 
       if (artworkURL != null) {
         this.uploadImageAirplay(artworkURL.replace("{w}", "1024").replace("{h}", "1024"));
@@ -485,14 +485,14 @@ export default class RAOP {
    */
   onPlaybackStateDidChange(attributes: any): void {
     if (this.airtunes && this.devices.length > 0) {
-      let title = attributes?.name ?? "";
-      let artist = attributes?.artistName ?? "";
-      let album = attributes?.albumName ?? "";
-      for (let i in this.devices) {
+      const title = attributes?.name ?? "";
+      const artist = attributes?.artistName ?? "";
+      const album = attributes?.albumName ?? "";
+      for (const i in this.devices) {
         console.log(this.devices[i].controller.key, title, artist, album);
         this.airtunes.setTrackInfo(this.devices[i].controller.key, title, artist, album);
       }
-      let artworkURL = attributes?.artwork?.url ?? null;
+      const artworkURL = attributes?.artwork?.url ?? null;
 
       if (artworkURL != null) {
         this.uploadImageAirplay(artworkURL.replace("{w}", "1024").replace("{h}", "1024"));
@@ -503,7 +503,7 @@ export default class RAOP {
   playbackTimeDidChange(attributes: any): void {
     // console.log(attributes)
     if (this.airtunes && this.devices.length > 0 && attributes?.currentPlaybackTime != null && attributes?.durationInMillis != null) {
-      for (let i in this.devices) {
+      for (const i in this.devices) {
         this.airtunes.setProgress(this.devices[i].controller.key, Math.round(attributes.currentPlaybackTime), Math.floor(attributes.durationInMillis / 1000));
       }
     }

@@ -11,8 +11,9 @@ const ArtworkMaterial = ({ url, size = "32", images = "2" }: { url: string; size
       <div className={"artworkMaterial"}>
         {images.map((image) => (
           <MediaItemArtwork
+            key={image.id}
             url={src}
-            size={"500"}
+            imagesize={"500"}
           />
         ))}
       </div>

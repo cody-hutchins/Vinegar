@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import { Col } from "react-bootstrap";
+import classNames from "classnames";
 
 const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
   const app = this.$root;
@@ -32,7 +33,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
         className={"mini-view"}
         tabIndex={0}>
         <div className={"background"} />
-        {app.cfg.visual.miniplayer_top_toggle === false && (
+        {!app.cfg.visual.miniplayer_top_toggle && (
           <div
             className={"player-pin"}
             title={"Pin to Top"}
@@ -51,7 +52,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
             </svg>
           </div>
         )}
-        {app.cfg.visual.miniplayer_top_toggle === true && (
+        {app.cfg.visual.miniplayer_top_toggle && (
           <div
             className={"player-pin"}
             title={"Unpin to Top"}
@@ -78,7 +79,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
             height={"21"}
             viewBox={"0 0 21 21"}
             aria-role={"presentation"}
-            focusable={"false"}
+            focusable={false}
             xmlns={"http://www.w3.org/2000/svg"}>
             <defs>
               <radialGradient
@@ -173,16 +174,14 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <div className={"app-chrome-item display--large"}>
                       {$root.mk.shuffleMode === 0 ? (
                         <button
-                          className={"playback-button--small shuffle"}
-                          className={$root.isDisabled() && "disabled"}
+                          className={classNames("playback-button--small shuffle", { disabled: $root.isDisabled() })}
                           onClick={() => ($root.mk.shuffleMode = 1)}
                           title={$root.getLz("term.enableShuffle")}
                           v-b-tooltiphover
                         />
                       ) : (
                         <button
-                          className={"playback-button--small shuffle active"}
-                          className={$root.isDisabled() && "disabled"}
+                          className={classNames("playback-button--small shuffle active", { disabled: $root.isDisabled() })}
                           onClick={() => ($root.mk.shuffleMode = 0)}
                           title={$root.getLz("term.disableShuffle")}
                           v-b-tooltiphover
@@ -191,9 +190,8 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     </div>
                     <div className={"app-chrome-item display--large"}>
                       <button
-                        className={"playback-button previous"}
+                        className={classNames("playback-button previous", { disabled: $root.isPrevDisabled() })}
                         onClick={() => $root.prevButton()}
-                        className={$root.isPrevDisabled() && "disabled"}
                         title={$root.getLz("term.previous")}
                         v-b-tooltiphover
                       />
@@ -217,9 +215,8 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     </div>
                     <div className={"app-chrome-item display--large"}>
                       <button
-                        className={"playback-button next"}
+                        className={classNames("playback-button next", { disabled: $root.isNextDisabled() })}
                         onClick={() => $root.skipToNextItem()}
-                        className={$root.isNextDisabled() && "disabled"}
                         title={$root.getLz("term.next")}
                         v-b-tooltiphover
                       />
@@ -227,8 +224,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     <div className={"app-chrome-item display--large"}>
                       {$root.mk.repeatMode === 0 ? (
                         <button
-                          className={"playback-button--small repeat"}
-                          className={$root.isDisabled() && "disabled"}
+                          className={classNames("playback-button--small repeat", { disabled: $root.isDisabled() })}
                           onClick={() => ($root.mk.repeatMode = 1)}
                           title={$root.getLz("term.enableRepeatOne")}
                           v-b-tooltiphover
@@ -239,9 +235,8 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                   <div className={"app-chrome-item volume display--large"}>
                     <div className={"input-container"}>
                       <button
-                        className={"volume-button--small volume"}
+                        className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
                         onClick={() => app.muteButtonPressed()}
-                        className={"{'active': app.cfg.audio.volume === 0}"}
                       />
                       {typeof app.mk.volume !== "undefined" && (
                         <input

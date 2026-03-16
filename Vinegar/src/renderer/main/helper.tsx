@@ -1,6 +1,6 @@
 const helpers = {
   _fetch(url, opts = {}) {
-    if (app.cfg.advanced.experiments.includes("cider_mirror") === true) {
+    if (app.cfg.advanced.experiments.includes("cider_mirror")) {
       if (url.includes("api.github.com/")) {
         return fetch(url.replace("api.github.com/", "mirror.api.cider.sh/v2/api/"), opts);
       } else if (url.includes("raw.githubusercontent.com/")) {
@@ -143,7 +143,7 @@ const helpers = {
       this.listennow.timestamp = 0;
       this.browsepage.timestamp = 0;
       this.radio.timestamp = 0;
-    } catch (e) {}
+    } catch (e) {console.log(e);}
   },
   /**
    * Grabs translation for localization.
@@ -267,7 +267,7 @@ const helpers = {
         }
         const found = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/${type}/${item}`);
         this.socialBadges.mediaItems.push(found.data.data[0]);
-      } catch (e) {}
+      } catch (e) {console.log(e);}
     });
   },
   quit() {
@@ -408,7 +408,7 @@ const helpers = {
           id: self.selectedMediaItems[i].id,
           type: self.selectedMediaItems[i].kind,
         });
-      } else if ((self.selectedMediaItems[i].kind === "album" || self.selectedMediaItems[i].kind === "albums") && self.selectedMediaItems[i].isLibrary !== true) {
+      } else if ((self.selectedMediaItems[i].kind === "album" || self.selectedMediaItems[i].kind === "albums") && !self.selectedMediaItems[i].isLibrary) {
         self.selectedMediaItems[i].kind = "albums";
         const res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -421,7 +421,7 @@ const helpers = {
           id: self.selectedMediaItems[i].id,
           type: self.selectedMediaItems[i].kind,
         });
-      } else if (self.selectedMediaItems[i].kind === "library-album" || self.selectedMediaItems[i].kind === "library-albums" || (self.selectedMediaItems[i].kind === "album" && self.selectedMediaItems[i].isLibrary === true)) {
+      } else if (self.selectedMediaItems[i].kind === "library-album" || self.selectedMediaItems[i].kind === "library-albums" || (self.selectedMediaItems[i].kind === "album" && self.selectedMediaItems[i].isLibrary)) {
         self.selectedMediaItems[i].kind = "library-albums";
         const res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -486,7 +486,7 @@ const helpers = {
           type: self.selectedMediaItems[i].kind,
         });
         song_ids.push(self.selectedMediaItems[i].id);
-      } else if ((self.selectedMediaItems[i].kind === "album" || self.selectedMediaItems[i].kind === "albums") && self.selectedMediaItems[i].isLibrary !== true) {
+      } else if ((self.selectedMediaItems[i].kind === "album" || self.selectedMediaItems[i].kind === "albums") && !self.selectedMediaItems[i].isLibrary) {
         self.selectedMediaItems[i].kind = "albums";
         const res = await self.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -501,7 +501,7 @@ const helpers = {
           type: self.selectedMediaItems[i].kind,
         });
         song_ids.push(self.selectedMediaItems[i].id);
-      } else if (self.selectedMediaItems[i].kind === "library-album" || self.selectedMediaItems[i].kind === "library-albums" || (self.selectedMediaItems[i].kind === "album" && self.selectedMediaItems[i].isLibrary === true)) {
+      } else if (self.selectedMediaItems[i].kind === "library-album" || self.selectedMediaItems[i].kind === "library-albums" || (self.selectedMediaItems[i].kind === "album" && self.selectedMediaItems[i].isLibrary)) {
         self.selectedMediaItems[i].kind = "library-albums";
         const res = await self.mk.api.v3.music(`/v1/me/library/albums/${self.selectedMediaItems[i].id}/tracks`);
         const ids = res.data.data.map(function (i) {
@@ -521,7 +521,7 @@ const helpers = {
 
     if (await this.isSongInPlaylist(song_ids, playlist_id)) {
       app.confirm(app.getLz("action.addToPlaylist.duplicate"), (result) => {
-        if (result === true) {
+        if (result) {
           app.addToPlaylist(playlist_id, pl_items);
         }
       });
@@ -585,7 +585,7 @@ const helpers = {
       if (this.chrome.userinfo.attributes.artwork && !this.chrome.hideUserInfo) {
         document.documentElement.style.setProperty("--cvar-userprofileimg", `url("${this.getMediaItemArtwork(this.chrome.userinfo.attributes.artwork.url)}")`);
       }
-    } catch (err) {}
+    } catch (e) {console.log(e);}
 
     // Used to get a scale factor for the window for CSS scaling
     window.addEventListener("resize", (e) => this.setWindowScaleFactor());
@@ -673,7 +673,7 @@ const helpers = {
                           if (!(i === 0 && ids[0] === lastItem.attributes.playParams.id)) {
                             try {
                               app.mk.playLater({ songs: [id] });
-                            } catch (err) {}
+                            } catch (e) {console.log(e);}
                           }
                           i++;
                         }
@@ -770,7 +770,7 @@ const helpers = {
             //CiderAudio.audioNodes.gainNode.gain.value = (Math.min(Math.pow(10, (replaygain.gain / 20)), (1 / replaygain.peak)))
             CiderAudio.audioNodes.gainNode.gain.value = gain;
             CiderAudio.hierarchical_loading();
-          } catch (e) {}
+          } catch (e) {console.log(e);}
         }
       } catch (e) {
         try {
@@ -882,10 +882,10 @@ const helpers = {
         localFiles = true;
         try {
           localStorage.setItem("playingBitrate", app.mk.nowPlayingItem.flavor);
-        } catch (e) {}
+        } catch (e) {console.log(e);}
       }
 
-      if (app.cfg.audio.normalization === false) {
+      if !(app.cfg.audio.normalization) {
         CiderAudio.hierarchical_loading();
       } // Just Reload for Adaptive CAP if norm is off
       else {
@@ -895,10 +895,10 @@ const helpers = {
           try {
             previewURL = app.mk.nowPlayingItem.previewURL;
           } catch (e) {
-            if (e instanceof TypeError === false) {
+            if (!(e instanceof TypeError)) {
               console.debug("[Cider][MaikiwiSoundCheck] normalizer function err: " + e);
             } else {
-              if (localFiles === true) {
+              if (localFiles) {
                 CiderAudio.audioNodes.gainNode.gain.value = 0.822242649947;
               }
             }
@@ -908,10 +908,10 @@ const helpers = {
               try {
                 previewURL = response.data.data[0].attributes.previews[0].url;
               } catch (e) {
-                if (e instanceof TypeError === false) {
+                if (!(e instanceof TypeError)) {
                   console.debug("[Cider][MaikiwiSoundCheck] normalizer function err: " + e);
                 } else {
-                  if (localFiles === true) {
+                  if (localFiles) {
                     CiderAudio.audioNodes.gainNode.gain.value = 0.822242649947;
                   }
                 }
@@ -920,7 +920,7 @@ const helpers = {
                 console.debug("[Cider][MaikiwiSoundCheck] previewURL response.data.data[0].attributes.previews[0].url: " + previewURL);
                 ipcRenderer.send("getPreviewURL", previewURL);
               } else {
-                if (localFiles === true) {
+                if (localFiles) {
                   CiderAudio.audioNodes.gainNode.gain.value = 0.822242649947;
                 }
               }
@@ -932,10 +932,10 @@ const helpers = {
             }
           }
         } catch (e) {
-          if (e instanceof TypeError === false) {
+          if (!(e instanceof TypeError)) {
             console.debug("[Cider][MaikiwiSoundCheck] normalizer function err: " + e);
           } else {
-            if (localFiles === true) {
+            if (localFiles) {
               CiderAudio.audioNodes.gainNode.gain.value = 0.822242649947;
             }
           }
@@ -1031,7 +1031,7 @@ const helpers = {
   },
   showFoo(querySelector, time) {
     clearTimeout(this.idleTimer);
-    if (this.idleState === true) {
+    if (this.idleState) {
       document.querySelector(querySelector).classList.remove("inactive");
     }
     this.idleState = false;
@@ -1195,7 +1195,7 @@ const helpers = {
     if (this.getThemeDirective("appNavigation") === "seperate") {
       classes.navbar = true;
     }
-    if (this.getThemeDirective("macosemu") === true) {
+    if (this.getThemeDirective("macosemu")) {
       classes.macosemu = true;
     }
     return classes;
@@ -1383,11 +1383,11 @@ const helpers = {
               }
             });
           }
-        } catch (e) {}
+        } catch (e) {console.log(e);}
         if (playlist.type === "library-playlist-folders") {
           try {
             await deepScan(playlist.id).catch((e) => {});
-          } catch (e) {}
+          } catch (e) {console.log(e);}
         }
         newListing.push(playlist);
       });
@@ -1910,7 +1910,7 @@ const helpers = {
         href: window.location.hash,
         position: $("#app-content").scrollTop(),
       });
-    } catch (e) {}
+    } catch (e) {console.log(e);}
   },
   routeView(item) {
     this.setPagePos();
@@ -2151,7 +2151,7 @@ const helpers = {
               artistId = artistQuery.artists.data[0].id;
               console.debug(artistId);
             }
-          } catch (e) {}
+          } catch (e) {console.log(e);}
         }
         console.debug(artistId);
         if (artistId !== "") self.appRoute(`artist/${artistId}`);
@@ -2187,7 +2187,7 @@ const helpers = {
               albumId = albumQuery.albums.data[0].id;
               console.debug(albumId);
             }
-          } catch (e) {}
+          } catch (e) {console.log(e);}
         }
         if (albumId !== "") {
           self.appRoute(`album/${albumId}`);
@@ -2211,7 +2211,7 @@ const helpers = {
               labelId = labelQuery["record-labels"].data[0].id;
               console.debug(labelId);
             }
-          } catch (e) {}
+          } catch (e) {console.log(e);}
         }
         if (labelId !== "") {
           app.showingPlaylist = [];
@@ -3367,7 +3367,7 @@ const helpers = {
               //4xx rejected
               getToken(2, "", "", id, lang, "");
             }
-          } catch (e) {}
+          } catch (e) {console.log(e);}
         };
         req2.send();
       }
@@ -3737,7 +3737,7 @@ const helpers = {
                   const u = data.map((x) => x.id);
                   try {
                     data.splice(u.indexOf(item.attributes.playParams.id ?? item.id), 1);
-                  } catch (e) {}
+                  } catch (e) {console.log(e);}
                   if (app.mk.shuffleMode === 1) {
                     shuffleArray(data);
                   }
@@ -3867,7 +3867,7 @@ const helpers = {
       console.log(err);
       try {
         app.mk.stop();
-      } catch (e) {}
+      } catch (e) {console.log(e);}
       this.playMediaItemById(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.url);
     }
   },
@@ -4128,21 +4128,21 @@ const helpers = {
             });
             try {
               clearInterval(bginterval);
-            } catch (err) {}
+            } catch (e) {console.log(e);}
           } else {
             this.setLibraryArtBG();
           }
         } else if (this.mk.nowPlayingItem["id"] === this.currentTrackID) {
           try {
             clearInterval(bginterval);
-          } catch (err) {}
+          } catch (e) {console.log(e);}
         }
       } catch (e) {
         if (this.mk.nowPlayingItem && this.mk.nowPlayingItem["id"] && document.querySelector(".bg-artwork")) {
           this.setLibraryArtBG();
           try {
             clearInterval(bginterval);
-          } catch (err) {}
+          } catch (e) {console.log(e);}
         }
       }
     }, 200);
@@ -4168,7 +4168,7 @@ const helpers = {
       } else {
         document.querySelector(".app-playback-controls .artwork").style.setProperty("--artwork", `url("")`);
       }
-    } catch (e) {}
+    } catch (e) {console.log(e);}
   },
   async setLibraryArtBG() {
     if (typeof this.mk.nowPlayingItem === "undefined") return;
@@ -4184,7 +4184,7 @@ const helpers = {
           self.$store.commit("setLCDArtwork", img);
         });
       }
-    } catch (e) {}
+    } catch (e) {console.log(e);}
   },
   quickPlay(query) {
     const self = this;
@@ -4667,7 +4667,7 @@ const helpers = {
         menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
         menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
-    } catch (err) {}
+    } catch (e) {console.log(e);}
   },
   openSettingsPage(page) {
     switch (page) {
@@ -4811,11 +4811,11 @@ const helpers = {
     //this.modals.qrcode = true;
   },
   checkMarquee() {
-    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-artist") === true) {
+    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-artist")) {
       document.getElementsByClassName("song-artist")[0].classList.add("marquee");
       document.getElementsByClassName("song-artist")[1].classList.add("marquee-after");
     }
-    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") === true) {
+    if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name")) {
       document.getElementsByClassName("song-name")[0].classList.add("marquee");
       document.getElementsByClassName("song-name")[1].classList.add("marquee-after");
     }

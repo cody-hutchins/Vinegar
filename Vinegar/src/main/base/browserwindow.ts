@@ -698,7 +698,7 @@ export class BrowserWindow {
             redirectURL: `http://localhost:${this.clientPort}/apple-hls.js`,
           });
         } else if (details.url.includes("ciderlocal") && !details.url.includes("https://apic-desktop.musixmatch.com")) {
-          let text = details.url.toString().includes("ids=") ? decodeURIComponent(details.url.toString()).split("?ids=")[1] : decodeURIComponent(details.url.toString().substring(details.url.toString().lastIndexOf("/") + 1));
+          const text = details.url.toString().includes("ids=") ? decodeURIComponent(details.url.toString()).split("?ids=")[1] : decodeURIComponent(details.url.toString().substring(details.url.toString().lastIndexOf("/") + 1));
           //console.log('localurl',text)
           callback({
             redirectURL: `http://localhost:${this.clientPort}/ciderlocal/${Buffer.from(text).toString("base64url")}`,
@@ -715,7 +715,7 @@ export class BrowserWindow {
       if (details.url === "https://buy.itunes.apple.com/account/web/info") {
         details.requestHeaders["sec-fetch-site"] = "same-site";
         details.requestHeaders["DNT"] = "1";
-        let itspod = await BrowserWindow.win.webContents.executeJavaScript(`window.localStorage.getItem("music.ampwebplay.itspod")`);
+        const itspod = await BrowserWindow.win.webContents.executeJavaScript(`window.localStorage.getItem("music.ampwebplay.itspod")`);
         if (itspod != null) details.requestHeaders["Cookie"] = `itspod=${itspod}`;
       }
       if (details.url.includes("apple.com")) {
@@ -743,7 +743,7 @@ export class BrowserWindow {
       callback({ requestHeaders: details.requestHeaders });
     });
 
-    let location = `http://localhost:${this.clientPort}/`;
+    const location = `http://localhost:${this.clientPort}/`;
 
     if (app.isPackaged) {
       BrowserWindow.win.loadURL(location);
@@ -771,7 +771,7 @@ export class BrowserWindow {
       };
       Object.assign(options, args);
 
-      let res = await fetch(
+      const res = await fetch(
         `https://amp-api.music.apple.com/${options.route}?${new URLSearchParams({
           ...options.GETBody,
         }).toString()}`,
@@ -787,7 +787,7 @@ export class BrowserWindow {
           },
         },
       );
-      let json = await res.json();
+      const json = await res.json();
       return json;
     });
 
@@ -883,21 +883,21 @@ export class BrowserWindow {
           mkdirSync(utils.getPath("plugins"));
         }
         if (url.endsWith("/")) url = url.slice(0, -1);
-        let response = await utils.fetch(`${url}/archive/refs/heads/main.zip`);
-        let repo = url.split("/").slice(-2).join("/");
-        let apiRepo = (await utils.fetch(`https://api.github.com/repos/${repo}`).then((res) => res.json())) as { id: number };
+        const response = await utils.fetch(`${url}/archive/refs/heads/main.zip`);
+        const repo = url.split("/").slice(-2).join("/");
+        const apiRepo = (await utils.fetch(`https://api.github.com/repos/${repo}`).then((res) => res.json())) as { id: number };
         console.debug(`REPO ID: ${apiRepo.id}`);
         // extract the files from the first folder in the zip response
-        let zip = new AdmZip(await response.buffer());
-        let entry = zip.getEntries()[0];
+        const zip = new AdmZip(await response.buffer());
+        const entry = zip.getEntries()[0];
         if (!existsSync(join(utils.getPath("plugins"), "gh_" + apiRepo.id))) {
           mkdirSync(join(utils.getPath("plugins"), "gh_" + apiRepo.id));
         }
         console.log(join(utils.getPath("plugins"), "gh_" + apiRepo.id));
         zip.extractEntryTo(entry, join(utils.getPath("plugins"), "gh_" + apiRepo.id), false, true);
-        let commit = (await utils.fetch(`https://api.github.com/repos/${repo}/commits`).then((res) => res.json())) as { sha: string }[];
+        const commit = (await utils.fetch(`https://api.github.com/repos/${repo}/commits`).then((res) => res.json())) as { sha: string }[];
         console.debug(`COMMIT SHA: ${commit[0].sha}`);
-        let theme = JSON.parse(readFileSync(join(utils.getPath("plugins"), "gh_" + apiRepo.id, "package.json"), "utf8"));
+        const theme = JSON.parse(readFileSync(join(utils.getPath("plugins"), "gh_" + apiRepo.id, "package.json"), "utf8"));
         theme.id = apiRepo.id;
         theme.commit = commit[0].sha;
         writeFileSync(join(utils.getPath("plugins"), "gh_" + apiRepo.id, "package.json"), JSON.stringify(theme, null, 4), "utf8");
@@ -920,9 +920,9 @@ export class BrowserWindow {
           mkdirSync(utils.getPath("themes"));
         }
         if (url.endsWith("/")) url = url.slice(0, -1);
-        let response = await utils.fetch(`${url}/archive/refs/heads/main.zip`);
-        let repo = url.split("/").slice(-2).join("/");
-        let apiRepo = (await utils
+        const response = await utils.fetch(`${url}/archive/refs/heads/main.zip`);
+        const repo = url.split("/").slice(-2).join("/");
+        const apiRepo = (await utils
           .fetch(`https://api.github.com/repos/${repo}`, {
             headers: {
               "User-Agent": utils.getWindow().webContents.getUserAgent(),
@@ -932,19 +932,19 @@ export class BrowserWindow {
         console.error(apiRepo);
         console.debug(`REPO ID: ${apiRepo.id}`);
         // extract the files from the first folder in the zip response
-        let zip = new AdmZip(await response.buffer());
+        const zip = new AdmZip(await response.buffer());
         if (!existsSync(join(utils.getPath("themes"), "gh_" + apiRepo.id))) {
           mkdirSync(join(utils.getPath("themes"), "gh_" + apiRepo.id));
         }
         console.log(join(utils.getPath("themes"), "gh_" + apiRepo.id));
         zip.getEntries().forEach((entry) => {
           if (entry.entryName.endsWith("/")) return;
-          let subFolder = entry.entryName.split("/").slice(1, -1).join("/");
+          const subFolder = entry.entryName.split("/").slice(1, -1).join("/");
           zip.extractEntryTo(entry, join(utils.getPath("themes"), "gh_" + apiRepo.id, "/", subFolder), false, true);
         });
-        let commit = (await utils.fetch(`https://api.github.com/repos/${repo}/commits`).then((res) => res.json())) as { sha: string }[];
+        const commit = (await utils.fetch(`https://api.github.com/repos/${repo}/commits`).then((res) => res.json())) as { sha: string }[];
         console.debug(`COMMIT SHA: ${commit[0].sha}`);
-        let theme = JSON.parse(readFileSync(join(utils.getPath("themes"), "gh_" + apiRepo.id, "theme.json"), "utf8"));
+        const theme = JSON.parse(readFileSync(join(utils.getPath("themes"), "gh_" + apiRepo.id, "theme.json"), "utf8"));
         theme.id = apiRepo.id;
         theme.commit = commit[0].sha;
         writeFileSync(join(utils.getPath("themes"), "gh_" + apiRepo.id, "theme.json"), JSON.stringify(theme, null, 4), "utf8");
@@ -959,22 +959,22 @@ export class BrowserWindow {
 
     ipcMain.on("get-themes", (event, _key) => {
       if (existsSync(utils.getPath("themes"))) {
-        let files = readdirSync(utils.getPath("themes"));
-        let themes = [];
-        for (let file of files) {
+        const files = readdirSync(utils.getPath("themes"));
+        const themes = [];
+        for (const file of files) {
           if (file.endsWith(".less")) {
             themes.push(file);
           } else if (statSync(join(utils.getPath("themes"), file)).isDirectory()) {
-            let subFiles = readdirSync(join(utils.getPath("themes"), file));
-            for (let subFile of subFiles) {
+            const subFiles = readdirSync(join(utils.getPath("themes"), file));
+            for (const subFile of subFiles) {
               if (subFile.endsWith("index.less")) {
                 themes.push(join(file, subFile));
               }
             }
           }
         }
-        let themeObjects = [];
-        for (let theme of themes) {
+        const themeObjects = [];
+        for (const theme of themes) {
           let themePath = join(utils.getPath("themes"), theme);
           let themeName = theme;
           let themeDescription = "";
@@ -987,7 +987,7 @@ export class BrowserWindow {
           }
           if (existsSync(join(themePath, "theme.json"))) {
             try {
-              let themeJson = JSON.parse(readFileSync(join(themePath, "theme.json"), "utf8"));
+              const themeJson = JSON.parse(readFileSync(join(themePath, "theme.json"), "utf8"));
               themeObjects.push({
                 name: themeJson.name || themeName,
                 description: themeJson.description || themeDescription,
@@ -1202,12 +1202,12 @@ export class BrowserWindow {
 
     ipcMain.on("writeWAV", (event, leftpcm, rightpcm, bufferlength) => {
       function interleave16(leftChannel: any, rightChannel: any) {
-        var length = leftChannel.length + rightChannel.length;
-        var result = new Int16Array(length);
+        const length = leftChannel.length + rightChannel.length;
+        const result = new Int16Array(length);
 
-        var inputIndex = 0;
+        let inputIndex = 0;
 
-        for (var index = 0; index < length; ) {
+        for (let index = 0; index < length; ) {
           result[index++] = leftChannel[inputIndex];
           result[index++] = rightChannel[inputIndex];
           inputIndex++;
@@ -1221,7 +1221,7 @@ export class BrowserWindow {
         let h = Float32Array.from([1]);
         let nsState = new Array(0);
         let ditherstate = new Float32Array(0);
-        let qt = Math.pow(2, 1 - 16);
+        const qt = Math.pow(2, 1 - 16);
 
         //noise shifting order 3
         h = Float32Array.from([1.623, -0.982, 0.109]);
@@ -1262,7 +1262,7 @@ export class BrowserWindow {
               input -= h[i] * nsState[channel][i];
             }
             // console.log('a3',input);
-            let d_rand = 0.0;
+            const d_rand = 0.0;
             // ditherstate = new Float32Array(h.length);
             // d_rand = hpDither(channel);
             const tmpOutput = qt * Math.round(input / qt + d_rand);
@@ -1277,15 +1277,15 @@ export class BrowserWindow {
       }
 
       function convert(n: any) {
-        var v = n < 0 ? n * 32768 : n * 32767; // convert in range [-32768, 32767]
+        const v = n < 0 ? n * 32768 : n * 32767; // convert in range [-32768, 32767]
         return Math.max(-32768, Math.min(32768, v)); // clamp
       }
 
       function bitratechange(e: any) {
-        var t = e.length;
-        let sampleRate = 96.0;
-        let outputSampleRate = 48.0;
-        var s = 0,
+        const t = e.length;
+        const sampleRate = 96.0;
+        const outputSampleRate = 48.0;
+        let s = 0,
           o = sampleRate / outputSampleRate,
           u = Math.ceil((t * outputSampleRate) / sampleRate),
           a = new Int16Array(u);
@@ -1297,7 +1297,7 @@ export class BrowserWindow {
         return a;
       }
 
-      let newaudio = quantization(leftpcm, rightpcm);
+      const newaudio = quantization(leftpcm, rightpcm);
       //let newaudio = [leftpcm, rightpcm];
       // console.log(newaudio.length);
 
@@ -1329,13 +1329,13 @@ export class BrowserWindow {
     //QR Code
     ipcMain.handle("showQR", async (_event, _) => {
       //macOS
-      let url = `http://${BrowserWindow.getIP()}:${this.remotePort}`;
+      const url = `http://${BrowserWindow.getIP()}:${this.remotePort}`;
       BrowserWindow.win.webContents.send("send-remote-pair-url", `https://cider.sh/remote/pair?url=${Buffer.from(encodeURI(url)).toString("base64")}`.toString());
     });
 
     ipcMain.on("get-remote-pair-url", (_event, _) => {
       // Linux and Windows
-      let url = `http://${BrowserWindow.getIP()}:${this.remotePort}`;
+      const url = `http://${BrowserWindow.getIP()}:${this.remotePort}`;
       //if (app.isPackaged) {
       BrowserWindow.win.webContents.send("send-remote-pair-url", `https://cider.sh/remote/pair?url=${Buffer.from(encodeURI(url)).toString("base64")}`.toString());
       //} else {
@@ -1359,7 +1359,7 @@ export class BrowserWindow {
         .then((res) => res.buffer())
         .then(async (buffer) => {
           const metadata = await parseBuffer(buffer, "audio/x-m4a");
-          let SoundCheckTag = metadata.native.iTunes[1].value;
+          const SoundCheckTag = metadata.native.iTunes[1].value;
           console.debug("sc", SoundCheckTag);
           BrowserWindow.win.webContents.send("SoundCheckTag", SoundCheckTag);
         })
@@ -1393,7 +1393,7 @@ export class BrowserWindow {
     });
 
     ipcMain.handle("folderSelector", async (_event) => {
-      let u = await dialog.showOpenDialog({
+      const u = await dialog.showOpenDialog({
         properties: ["openDirectory", "multiSelections"],
       });
       return u.filePaths;
@@ -1560,7 +1560,7 @@ export class BrowserWindow {
     /* *********************************************************************************************
      * Window Events
      * **********************************************************************************************/
-    let WND_STATE = {
+    const WND_STATE = {
       MINIMIZED: 0,
       NORMAL: 1,
       MAXIMIZED: 2,
@@ -1638,10 +1638,10 @@ export class BrowserWindow {
    */
   private static getIP(): string {
     let ip: string = "";
-    let ip2: any = [];
+    const ip2: any = [];
     let alias = 0;
     const ifaces: any = networkInterfaces();
-    for (let dev in ifaces) {
+    for (const dev in ifaces) {
       ifaces[dev].forEach((details: any) => {
         if (details.family === "IPv4" && !details.internal) {
           if (!/(loopback|vmware|internal|hamachi|vboxnet|virtualbox)/gi.test(dev + (alias ? ":" + alias : ""))) {
@@ -1677,7 +1677,7 @@ export class BrowserWindow {
       CtlN: "Cider",
       iV: "196623",
     };
-    let server2 = mdns.createAdvertisement(x, `${await getPort({ port: 3839 })}`, {
+    const server2 = mdns.createAdvertisement(x, `${await getPort({ port: 3839 })}`, {
       name: encoded,
       txt: txt_record,
     });

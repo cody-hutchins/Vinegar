@@ -6,6 +6,7 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
+import classNames from "classnames";
 
 const Artist = ({ data }: { data: object }) => {
   const topSongsExpanded = false;
@@ -133,9 +134,7 @@ const Artist = ({ data }: { data: object }) => {
   }
   return (
     <div id={"cider-artist"}>
-      <div
-        className={"content-inner artist-page"}
-        className={"[(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9) || hasHero()) ? 'animated' : '']"}>
+      <div className={classNames("content-inner", "artist-page", (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() ? "animated" : "")}>
         <div
           className={"['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"}
           key={data.id}
@@ -175,9 +174,8 @@ const Artist = ({ data }: { data: object }) => {
                 )}
               </Col>
               <Col
-                className={"cider-flex-center artist-title"}
-                className={"{'artist-animation-on': (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() }"}
-                style={{ color: "#" + hasHeroObject()?.textColor1 ?? "" }}>
+                className={classNames("cider-flex-center artist-title", { "artist-animation-on": (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() })}
+                style={{ color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject().textColor1 : "" }}>
                 <button
                   className={"artist-play"}
                   onClick={() =>
@@ -260,9 +258,7 @@ const Artist = ({ data }: { data: object }) => {
           </Row>
         </div>
         <div className={"artist-body"}>
-          <div
-            className={"arow well"}
-            className={"{arowb: data.views['latest-release'].data.length === 0}"}>
+          <div className={classNames("arow well", { arowb: data.views["latest-release"].data.length === 0 })}>
             {data.views["latest-release"].data.length !== 0 && (
               <div className={"latestRelease"}>
                 <h3>{app.getLz("term.latestReleases")}</h3>
@@ -271,7 +267,7 @@ const Artist = ({ data }: { data: object }) => {
                     <MediaItemSquare
                       key={song.id}
                       kind={"card"}
-                      no-scale={"true"}
+                      no-scale={true}
                       item={song}
                     />
                   ))}

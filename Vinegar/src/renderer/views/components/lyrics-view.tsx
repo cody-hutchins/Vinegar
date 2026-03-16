@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import classNames from "classnames";
 
 const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation?: string; onindex?: () => void; yoffset?: number }) => {
   const app = this.$root;
@@ -13,7 +14,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             currentLine.classList.add("mode1");
             currentLine.classList.remove("mode3");
             currentLine.classList.remove("mode2");
-          } catch (e) {}
+          } catch (e) {
+            console.log(e);
+          }
           currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
           currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
@@ -24,7 +27,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             currentLine.classList.add("mode2");
             currentLine.classList.remove("mode1");
             currentLine.classList.remove("mode3");
-          } catch (e) {}
+          } catch (e) {
+            console.log(e);
+          }
           currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
@@ -35,7 +40,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             currentLine.classList.add("mode3");
             currentLine.classList.remove("mode1");
             currentLine.classList.remove("mode2");
-          } catch (e) {}
+          } catch (e) {
+            console.log(e);
+          }
           currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
@@ -46,7 +53,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             currentLine.classList.remove("mode1");
             currentLine.classList.remove("mode2");
             currentLine.classList.remove("mode3");
-          } catch (e) {}
+          } catch (e) {
+            console.log(e);
+          }
           currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
@@ -107,7 +116,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
       if (app.drawer.open || app.appMode === "fullscreen") {
         try {
           this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${prevLine}}]`).childNodes.classList.remove("verse-active");
-        } catch (e) {}
+        } catch (e) {
+          console.log(e);
+        }
         for (child of this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${app.currentLyricsLine}}]`).querySelectorAll(".verse")) {
           if (time + delayfix >= child.getAttribute("lyricstart") * 1 + child.getAttribute("versestart") * 1) {
             child.classList.add("verse-active");
@@ -116,7 +127,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
           }
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
   const getActiveVerse = (timeStart, timeEnd, verseTime) => {
     const relativeTime = time - timeStart;
@@ -143,7 +156,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
         // do something
       }
       position = this.$refs.lyricsview.scrollTop;
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }, 50);
   return (
     <div id={"lyrics-view"}>
@@ -155,9 +170,8 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             lyric && lyric.line && lyric.line !== "lrcInstrumental" ? (
               <h3
                 key={index}
-                className={"lyric-line"}
+                className={classNames("lyric-line", { unsynced: lyric.startTime === 9999999 })}
                 onClick={() => seekTo(lyric.startTime)}
-                className={"{unsynced : lyric.startTime === 9999999}"}
                 line-index={index.toString()}>
                 {richlyrics && richlyrics !== [] && richlyrics.length > 0 ? (
                   <template>

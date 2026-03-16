@@ -123,7 +123,9 @@ const Home = () => {
         const dateB = new Date(b.attributes.releaseDate);
         return dateB - dateA;
       });
-    } catch (error) {}
+    } catch (e) {
+      console.log(e);
+    }
   }
   async function getRecentlyPlayed() {
     const hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
@@ -147,7 +149,9 @@ const Home = () => {
               return section;
             }
           })[0].relationships.contents.data;
-        } catch (err) {}
+        } catch (e) {
+          console.log(e);
+        }
         sectionsReady.push("madeForYou");
 
         try {
@@ -156,7 +160,9 @@ const Home = () => {
               return section;
             }
           })[0].relationships.contents.data;
-        } catch (err) {}
+        } catch (e) {
+          console.log(e);
+        }
         sectionsReady.push("recentlyPlayed");
         sectionsReady.push("friendsListeningTo");
       });

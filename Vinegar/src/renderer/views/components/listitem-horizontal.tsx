@@ -5,22 +5,6 @@ const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object
   let itemPages = [];
   let simplifiedParent: string;
 
-  function mounted() {
-    // give every item an id
-    items.forEach(function (item, index) {
-      item.id = index;
-    });
-    // split items into pages
-    itemPages = app.arrayToChunk(items, 4);
-    try {
-      simplifiedParent = JSON.stringify(
-        items.map(function (x) {
-          return x.attributes.playParams;
-        }),
-      );
-      console.debug("simplifiedParent: " + simplifiedParent);
-    } catch (e) {}
-  }
   useEffect(() => {
     // give every item an id
     items.forEach(function (item, index) {
@@ -35,7 +19,9 @@ const ListItemHorizontal = ({ items, showLibraryStatus = true }: { items: object
         }),
       );
       console.log("simplifiedParent: " + simplifiedParent);
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }, [items]);
 
   const sayHello = () => {

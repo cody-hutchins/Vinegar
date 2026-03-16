@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
+import classNames from "classnames";
 
 const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: MusicKit.MediaItem; kind?: string; imagesize?: number; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
-  const isVisible = false;
+  let isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
   const noplay = ["apple-curators", "editorial-elements", "editorial-items"];
@@ -201,8 +202,8 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
     }
     return classes;
   }
-  const visibilityChanged = (isVisible, entry) => {
-    isVisible = isVisible;
+  const visibilityChanged = (_isVisible, entry) => {
+    isVisible = _isVisible;
   };
   async function contextMenu(event) {
     if (nomenu.includes(item.type)) {
@@ -414,7 +415,9 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
           menus.normal.items.find((x) => x.id === "addToLibrary").disabled = false;
         }
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
     try {
       const rating = await app.getRating(item);
       if (rating === 0) {
@@ -427,7 +430,9 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
         menus.normal.headerItems.find((x) => x.id === "undo_dislike").hidden = false;
         menus.normal.headerItems.find((x) => x.id === "dislike").hidden = true;
       }
-    } catch (err) {}
+    } catch (e) {
+      console.log(e);
+    }
 
     if (contextExt) {
       if (contextExt.normal) {
@@ -438,7 +443,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
       }
     }
   }
-  const artistMenu = async (event) => {
+  const artistMenu = (event) => {
     console.debug(item);
     let followAction = "follow";
     const followActions = {
@@ -523,8 +528,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
         {reasonShown && <div className={"reasonSP "}>{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
         <div
           style={{ "--spcolor": getBgColor() }}
-          className={"cd-mediaitem-square"}
-          className={getClasses()}
+          className={"cd-mediaitem-square " + getClasses()}
           contextMenu={getContextMenu()}>
           <div
             className={"artwork-container"}
@@ -577,8 +581,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
               ))}
           </div>
           <div
-            className={"info-rect"}
-            className={"{'info-rect-card': kind === 'card'}"}
+            className={classNames("info-rect", { "info-rect-card": kind === "card" })}
             style={{ "--bgartwork": getArtworkUrl(imagesize, true), display: isVisible ? "inherit" : "none" }}>
             {(item.attributes.artistNames === null || kind !== "card") && (
               <div

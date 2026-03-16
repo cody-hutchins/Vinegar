@@ -1,11 +1,13 @@
+import { useEffect } from "react";
 import SidebarPlaylist from "./sidebar-playlist.jsx";
+import MusicKit from "@musickit-js";
 
 const ShareSheet = ({ playlists }: { playlists: MusicKit.Playlists[] }) => {
   let playlistSorted = [];
   const searchQuery: string = "";
   let focused = "";
   const app = this.$root;
-  function mounted() {
+  useEffect(() => {
     search();
     this.$refs.searchInput.focus();
     this.$refs.searchInput.addEventListener("keydown", (e) => {
@@ -15,7 +17,7 @@ const ShareSheet = ({ playlists }: { playlists: MusicKit.Playlists[] }) => {
         }
       }
     });
-  }
+  }, []);
   function playlistSelect(playlist: MusicKit.Playlists) {
     if (playlist.type !== "library-playlist-folders") {
       addToPlaylist(playlist.id);
@@ -86,7 +88,7 @@ const ShareSheet = ({ playlists }: { playlists: MusicKit.Playlists[] }) => {
                   type={"search"}
                   ref={"searchInput"}
                   style={{ width: "100%" }}
-                  spellCheck={"false"}
+                  spellCheck={false}
                   placeholder={app.getLz("term.search") + "..."}
                   v-model={searchQuery}
                   onInput={() => search()}

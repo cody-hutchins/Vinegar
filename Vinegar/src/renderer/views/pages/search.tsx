@@ -1,4 +1,5 @@
 import { Col, Row } from "react-bootstrap";
+import classNames from "classnames";
 import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
@@ -17,6 +18,7 @@ const Search = ({ search }: { search: object }) => {
     try {
       return search.results[search.results.meta.results.order[0]]["data"][0];
     } catch (error) {
+      console.log(error);
       return false;
     }
   }
@@ -62,13 +64,13 @@ const Search = ({ search }: { search: object }) => {
             <div className={"search-input--icon"} />
             <input
               type={"search"}
-              spellCheck={"false"}
+              spellCheck={false}
               onFocus={() => {
                 $root.search.showHints = true;
               }}
               onBlur={() =>
                 $root.setTimeout(() => {
-                  if ($root.hintscontext !== true) {
+                  if (!$root.hintscontext) {
                     $root.search.showHints = false;
                   }
                 }, 300)
@@ -92,8 +94,8 @@ const Search = ({ search }: { search: object }) => {
                     .filter((a) => a.content === null)
                     .map((hint, index) => (
                       <button
-                        className={"search-hint text-overflow-elipsis"}
-                        className={"{active: ($root.search.cursor === index)}"}
+                        key={index}
+                        className={classNames("search-hint text-overflow-elipsis", { active: $root.search.cursor === index })}
                         onClick={() => {
                           $root.search.term = hint.searchTerm;
                           $root.search.showHints = false;
@@ -105,13 +107,11 @@ const Search = ({ search }: { search: object }) => {
                   {$root.search.hints
                     .filter((a) => a.content !== null)
                     .map((item, position) => (
-                      <template>
-                        <MediaitemSmarthints
-                          item={item.content}
-                          position={position}>
-                          {" "}
-                        </MediaitemSmarthints>
-                      </template>
+                      <MediaitemSmarthints
+                        key={position}
+                        item={item.content}
+                        position={position}
+                      />
                     ))}
                 </div>
               </div>
@@ -123,16 +123,14 @@ const Search = ({ search }: { search: object }) => {
             onClick={() => {
               searchType = "catalog";
             }}
-            className={"md-btn md-btn-small"}
-            className={"{'md-btn-primary': searchType === 'catalog'}"}>
+            className={classNames("md-btn", "md-btn-small", { "md-btn-primary": searchType === "catalog" })}>
             {$root.getLz("term.appleMusic")}
           </button>
           <button
             onClick={() => {
               searchType = "library";
             }}
-            className={"md-btn md-btn-small"}
-            className={"{'md-btn-primary': searchType === 'library'}"}>
+            className={classNames("md-btn", "md-btn-small", { "md-btn-primary": searchType === "library" })}>
             {$root.getLz("term.library")}
           </button>
         </div>

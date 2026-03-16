@@ -127,7 +127,7 @@ const About = () => {
             <p style={{ textAlign: "center" }}> {$root.getLz().about.thanks()} </p>
 
             <p style={{ textAlign: "center" }}>
-              "{$root.getLz("term.appleMusic")}" - {$root.getLz("term.copyright")} © 2022{" "}
+              &quot;{$root.getLz("term.appleMusic")}&quot; - {$root.getLz("term.copyright")} © 2022{" "}
               <a
                 href={"https://www.apple.com/"}
                 className={"dt-footer__link"}

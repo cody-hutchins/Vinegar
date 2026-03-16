@@ -86,7 +86,10 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
           <div className={"well itemContainer"}>
             {data.data.map((item) =>
               item.type === "artists" ? (
-                <MediaItemSquare item={item} />
+                <MediaItemSquare
+                  key={item.id}
+                  item={item}
+                />
               ) : getKind(item) === "song" ? (
                 <MediaItemListItem
                   index={key}

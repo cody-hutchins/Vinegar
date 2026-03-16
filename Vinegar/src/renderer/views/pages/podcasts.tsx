@@ -170,7 +170,7 @@ export const Podcasts = () => {
                 <input
                   type={"search"}
                   style={{ width: "100%" }}
-                  spellCheck={"false"}
+                  spellCheck={false}
                   placeholder={$root.getLz("term.search") + "..."}
                   onChange={() => {
                     searchPodcasts();
@@ -187,6 +187,7 @@ export const Podcasts = () => {
                 {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.subscribedOnItunes")}</div>}
                 {podcasts.map((podcast) => (
                   <PodcastTab
+                    key={podcast.id}
                     isSelected={podcastSelected.id === podcast.id}
                     clicknative={selectPodcast(podcast)}
                     item={podcast}
@@ -198,6 +199,7 @@ export const Podcasts = () => {
                 {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("term.library")}</div>}
                 {search.resultsLibrary.map((podcast) => (
                   <PodcastTab
+                    key={podcast.id}
                     isSelected={podcastSelected.id === podcast.id}
                     clicknative={selectPodcast(podcast)}
                     item={podcast}
@@ -206,6 +208,7 @@ export const Podcasts = () => {
                 {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.itunesStore")}</div>}
                 {search.results.map((podcast) => (
                   <PodcastTab
+                    key={podcast.id}
                     isSelected={podcastSelected.id === podcast.id}
                     clicknative={selectPodcast(podcast)}
                     item={podcast}

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 
 const PluginsGithub = () => {
@@ -15,10 +16,11 @@ const PluginsGithub = () => {
     full_name: "",
   };
   const themesInstalled: string[] = [];
-  function mounted() {
+  useEffect(() => {
     getRepos();
     // getInstalledThemes();
-  }
+  }, []);
+
   function getInstalledThemes() {
     const themes = ipcRenderer.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank

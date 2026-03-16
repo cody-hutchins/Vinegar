@@ -6,7 +6,7 @@ export class CiderCastController extends RequestResponseController {
   constructor(client: string, sourceId: string, destinationId: string) {
     super(client, sourceId, destinationId, "urn:x-cast:com.ciderapp.customdata");
     this.once("close", onclose);
-    var self = this;
+    const self = this;
     function onclose() {
       self.stop();
     }
@@ -14,7 +14,7 @@ export class CiderCastController extends RequestResponseController {
 
   sendIp(ip: string) {
     // TODO: Implement Callback
-    let data = {
+    const data = {
       ip: ip,
     };
     this.request(data);
@@ -22,7 +22,7 @@ export class CiderCastController extends RequestResponseController {
 
   kill() {
     // TODO: Implement Callback
-    let data = {
+    const data = {
       action: "stop",
     };
     this.request(data);

@@ -74,7 +74,9 @@ const ArtistFeed = () => {
         const dateB = new Date(b.attributes.releaseDate);
         return dateB - dateA;
       });
-    } catch (err) {}
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (

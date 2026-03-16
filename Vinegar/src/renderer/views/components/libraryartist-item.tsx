@@ -1,13 +1,14 @@
+import classNames from "classnames";
 import MediaItemArtwork from "./mediaitem-artwork";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   const isVisible = false;
   let addedToLibrary = false;
-  const guid = uuidv4();
   const app = this.$root;
   const uuidv4 = () => {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
   };
+  const guid = uuidv4();
   const msToMinSec = (ms) => {
     const minutes = Math.floor(ms / 60000);
     const seconds = ((ms % 60000) / 1000).toFixed(0);
@@ -32,7 +33,9 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     let u = "";
     try {
       u = item.relationships.catalog.data[0].attributes.artwork.url;
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
     return u;
   };
   const contextMenu = (event) => {
@@ -154,16 +157,15 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
       <div
         v-observe-visibility={"{callback: visibilityChanged}"}
         onClick={() => select}
-        className={"cd-mediaitem-list-item"}
-        className={"{'mediaitem-selected': app.select_hasMediaItem(guid)}"}
+        className={classNames("cd-mediaitem-list-item", { "mediaitem-selected": app.select_hasMediaItem(guid) })}
         contextMenu={contextMenu}>
-        {showArtwork === true && (
+        {showArtwork && (
           <div
             className={"artwork"}
             style={{ display: isVisible ? "inherit" : "none" }}>
             <MediaItemArtwork
               url={getArtwork()}
-              size={"50"}
+              imagesize={"50"}
               type={item.type}
             />
           </div>

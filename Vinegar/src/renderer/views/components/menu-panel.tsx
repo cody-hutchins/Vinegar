@@ -100,7 +100,7 @@ const MenuPanel = () => {
       return false;
     }
   }
-  async function getActions() {
+  function getActions() {
     return content.items;
   }
   function action(item) {
@@ -138,10 +138,9 @@ const MenuPanel = () => {
           }
         }}>
         <div
-          className={"menu-panel-body"}
+          className={"menu-panel-body " + getBodyClasses()}
           ref={"menubody"}
-          style={elStyle}
-          className={getBodyClasses()}>
+          style={elStyle}>
           {content.name !== "" && (
             <div className={"menu-header-text"}>
               <Row>
@@ -158,8 +157,7 @@ const MenuPanel = () => {
                   canDisplay(item) && (
                     <button
                       key={item.id}
-                      className={"menu-option-header"}
-                      className={getClasses(item)}
+                      className={"menu-option-header " + getClasses(item)}
                       v-b-tooltiphover
                       title={item.name}
                       style={getItemStyle(item)}

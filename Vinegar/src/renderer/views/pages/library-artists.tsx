@@ -5,7 +5,7 @@ import InlineCollectionList from "../components/inline-collection-list.jsx";
 import { Col } from "react-bootstrap";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
-  const isVisible = false;
+  let isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
   const app = this.$root;
@@ -44,7 +44,9 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     let u = "";
     try {
       u = item.relationships.catalog.data[0].attributes.artwork.url;
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
     return u;
   }
   function contextMenu(event) {
@@ -113,18 +115,18 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     //CiderContextMenu.Create(event, menus[useMenu]); // Depreciated Context Menu
     app.showMenuPanel(menus[useMenu], event);
   }
-  function visibilityChanged(isVisible, entry) {
-    isVisible = isVisible;
+  function visibilityChanged(_isVisible, entry) {
+    isVisible = _isVisible;
   }
   function addToLibrary() {
-    const item = item;
-    if (item.attributes.playParams.id) {
-      console.log("adding to library", item.attributes.playParams.id);
-      app.addToLibrary(item.attributes.playParams.id.toString());
+    const _item = item;
+    if (_item.attributes.playParams.id) {
+      console.log("adding to library", _item.attributes.playParams.id);
+      app.addToLibrary(_item.attributes.playParams.id.toString());
       addedToLibrary = true;
-    } else if (item.id) {
-      console.log("adding to library", item.id);
-      app.addToLibrary(item.id.toString());
+    } else if (_item.id) {
+      console.log("adding to library", _item.id);
+      app.addToLibrary(_item.id.toString());
       addedToLibrary = true;
     }
   }
@@ -169,7 +171,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           onContextMenu={contextMenu}>
           {isVisible && (
             <template>
-              {showArtwork === true && (
+              {showArtwork && (
                 <div className={"artwork"}>
                   <MediaItemArtwork
                     url={getArtwork()}

@@ -3,8 +3,8 @@ import { useEffect } from "react";
 const ConnectLinked = () => {
   useEffect(() => {
     ipcRenderer.send("get-connected-url");
-    ipcRenderer.on("send-connected-url", (event, url) => {
-      url = url;
+    ipcRenderer.on("send-connected-url", (event, _url) => {
+      const url = _url;
       app.webview.src = url;
       document.getElementById("foo").src = url;
     });

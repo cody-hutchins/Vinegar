@@ -56,6 +56,9 @@ importers:
       chokidar:
         specifier: ^3.6.0
         version: 3.6.0
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       discord-auto-rpc:
         specifier: ^1.0.17
         version: 1.0.17(encoding@0.1.13)

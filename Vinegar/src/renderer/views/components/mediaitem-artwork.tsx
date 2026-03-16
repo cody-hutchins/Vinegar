@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import AnimatedartworkView from "./animatedartwork-view.jsx";
+import classNames from "classnames";
 
 const MediaItemArtwork = ({ imagesize = 120, width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { imagesize?: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
   const app = this.$root;
@@ -99,10 +100,9 @@ const MediaItemArtwork = ({ imagesize = 120, width, bgcolor = "", url = "", type
   return (
     <div id={"mediaitem-artwork"}>
       <div
-        className={"mediaitem-artwork"}
+        className={classNames("mediaitem-artwork", { rounded: type === "artists" }, classes)}
         style={awStyle}
         contextMenu={"contextMenu"}
-        className={"[{'rounded': (type === 'artists')}, classes]"}
         key={url}>
         <img
           src={imgSrc}

@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemListItem from "./mediaitem-list-item.jsx";
 import { Col, Row } from "react-bootstrap";
+import classNames from "classnames";
 
 const Queue = () => {
   const drag = false;
@@ -9,7 +10,7 @@ const Queue = () => {
   let queueItems = [];
   let selected = -1;
   let selectedItems = [];
-  const history = [];
+  let history = [];
   let page = "queue";
   const app = this.$root;
 
@@ -19,12 +20,12 @@ const Queue = () => {
     return queueItems.slice(queuePosition, lastDisplayPosition);
   }, [queuePosition, queueItems]);
 
-  function mounted() {
+  useEffect(() => {
     updateQueue();
-  }
+  }, []);
   async function geory() {
-    let history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: this.$root.mklang });
-    history = history.data.data;
+    const _history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: this.$root.mklang });
+    history = _history.data.data;
   }
   function select(e, id) {
     if (e.ctrlKey || e.shiftKey) {
@@ -151,7 +152,7 @@ const Queue = () => {
           <div className={"queue-body"}>
             {history.map((item) => (
               <MediaItemListItem
-                showLibraryStatus={"false"}
+                showLibraryStatus={false}
                 key={item.id}
                 item={item}
               />
@@ -170,8 +171,7 @@ const Queue = () => {
                     <div key={queueItem.item.id} />
                   ) : (
                     <div
-                      className={"cd-queue-item"}
-                      className={"{selected: selectedItems.includes(queueItem.item.id)}"}
+                      className={classNames("cd-queue-item", { selected: selectedItems.includes(queueItem.item.id) })}
                       onClick={(e) => select(e, queueItem.item.id)}
                       onDoubleClick={() => playQueueItem(queueItem.item.id)}
                       key={queueItem.item.id}
@@ -214,16 +214,14 @@ const Queue = () => {
             className={"btn-group"}
             style={{ width: "100%" }}>
             <button
-              className={"md-btn md-btn-small"}
-              className={"{'md-btn-primary': (page === 'queue')}"}
+              className={classNames("md-btn md-btn-small", { "md-btn-primary": page === "queue" })}
               onClick={() => {
                 page = "queue";
               }}>
               {app.getLz("term.queue")}
             </button>
             <button
-              className={"md-btn md-btn-small"}
-              className={"{'md-btn-primary': (page === 'history')}"}
+              className={classNames("md-btn md-btn-small", { "md-btn-primary": page === "history" })}
               onClick={() => {
                 geory();
                 page = "history";

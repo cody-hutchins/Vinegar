@@ -12,7 +12,7 @@ export class LocalFiles {
   // public static DB = ProviderDB.db;
   static eventEmitter = new EventEmitter();
 
-  static getDataType(item_id: String | any) {
+  static getDataType(item_id: string | any) {
     if ((item_id ?? "").startsWith("ciderlocalart")) return "artwork";
     else if ((item_id ?? "").startsWith("ciderlocal")) return "track";
   }
@@ -38,22 +38,22 @@ export class LocalFiles {
     let folders = utils.getStoreValue("libraryPrefs.localPaths");
     if (folders == null || folders.length == null || folders.length == 0) folders = [];
     let files: any[] = [];
-    for (var folder of folders) {
+    for (const folder of folders) {
       // get files from the Music folder
       files = files.concat(await LocalFiles.getFiles(folder));
     }
 
-    let supporttedformats = ["mp3", "aac", "webm", "flac", "m4a", "ogg", "wav", "opus"];
-    let audiofiles = files.filter((f) => supporttedformats.includes(f.substring(f.lastIndexOf(".") + 1)));
-    let metadatalist = [];
-    let metadatalistart = [];
+    const supporttedformats = ["mp3", "aac", "webm", "flac", "m4a", "ogg", "wav", "opus"];
+    const audiofiles = files.filter((f) => supporttedformats.includes(f.substring(f.lastIndexOf(".") + 1)));
+    const metadatalist = [];
+    const metadatalistart = [];
     let numid = 0;
-    for (var audio of audiofiles) {
+    for (const audio of audiofiles) {
       try {
         const metadata = await parseFile(audio);
-        let lochash = Md5.hashStr(audio) ?? numid;
+        const lochash = Md5.hashStr(audio) ?? numid;
         if (metadata != null) {
-          let form = {
+          const form = {
             id: "ciderlocal" + lochash,
             _id: "ciderlocal" + lochash,
             type: "podcast-episodes",
@@ -101,7 +101,7 @@ export class LocalFiles {
               sampleRate: metadata.format?.sampleRate ?? 0,
             },
           };
-          let art = {
+          const art = {
             id: "ciderlocal" + lochash,
             _id: "ciderlocalart" + lochash,
             url: metadata.common.picture != undefined ? metadata.common.picture[0].data.toString() : "",
@@ -174,7 +174,7 @@ export class LocalFiles {
     app.get("/ciderlocal/:songs", (req: any, res: any) => {
       const audio = atob(req.params.songs.replace(/_/g, "/").replace(/-/g, "+"));
       // console.log('auss', LocalFiles.localSongs)
-      let data = {
+      const data = {
         data: LocalFiles.localSongs.filter((f: any) => audio.split(",").includes(f.id)),
       };
       res.send(data);
@@ -188,7 +188,7 @@ export class LocalFiles {
       res.setHeader("Expires", new Date(Date.now() + 31536000000).toUTCString());
       res.setHeader("Content-Type", "image/jpeg");
 
-      let data = LocalFiles.localSongsArts.filter((f: any) => f.id == audio);
+      const data = LocalFiles.localSongsArts.filter((f: any) => f.id == audio);
       res.status(200).send(Buffer.from(data[0]?.url, "base64"));
     });
 

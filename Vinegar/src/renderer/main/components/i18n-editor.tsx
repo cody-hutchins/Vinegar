@@ -36,7 +36,9 @@ export const i18nEditor = () => {
         <Col className={"nopadding"}>
           <h1>i18n Editor</h1>
         </Col>
-        <Col auto className={"nopadding selectCol"}>
+        <Col
+          auto
+          className={"nopadding selectCol"}>
           <select
             className={"md-select"}
             onChange={() => {
@@ -45,9 +47,13 @@ export const i18nEditor = () => {
             }}
             v-model={"$root.cfg.general.language"}>
             {getLanguages().map((categories, index) => (
-              <optgroup label={index} key={index}>
+              <optgroup
+                label={index}
+                key={index}>
                 {categories.map((lang) => (
-                  <option value={lang.code} key={lang.code}>
+                  <option
+                    value={lang.code}
+                    key={lang.code}>
                     {lang.nameNative} ({lang.nameEnglish})
                   </option>
                 ))}

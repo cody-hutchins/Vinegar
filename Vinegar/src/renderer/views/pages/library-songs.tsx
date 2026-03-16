@@ -58,7 +58,7 @@ const LibrarySongs = () => {
                 <input
                   type={"search"}
                   style={{ width: "100%" }}
-                  spellCheck={"false"}
+                  spellCheck={false}
                   placeholder={app.getLz("term.search") + "..."}
                   input={$root.searchLibrarySongs}
                   v-model={library.songs.search}

@@ -1,7 +1,7 @@
 import { Col, Popover, Row } from "react-bootstrap";
 import { useChromeStore } from "../../store/chrome.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
-
+import classNames from "classnames";
 export const ChromeBottom = () => {
   const chrome = useChromeStore((state) => state.chrome);
 
@@ -84,9 +84,7 @@ export const ChromeBottom = () => {
                     </div>
                   )}
                   <div className={"playback-info"}>
-                    <div
-                      className={"song-name"}
-                      className={"[isElementOverflowing('#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name') ? 'marquee' : '']"}>
+                    <div className={"song-name" + isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""}>
                       {mk.nowPlayingItem["attributes"]["name"]}
                       {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
                         <div
@@ -108,29 +106,29 @@ export const ChromeBottom = () => {
                       </div>
                     )}
                     <div className={"chrome-icon-container"}>
-                      {cfg.general.privateEnabled === true && <div className={"audio-type private-icon"} />}
-                      {cfg.audio.maikiwiAudio.spatial === true && (
+                      {cfg.general.privateEnabled && <div className={"audio-type private-icon"} />}
+                      {cfg.audio.maikiwiAudio.spatial && (
                         <div
                           className={"audio-type spatial-icon"}
                           title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}
                           v-b-tooltiphover
                         />
                       )}
-                      {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) === true && (
+                      {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) && (
                         <div
                           className={"audio-type lossless-icon"}
                           title={mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}
                           v-b-tooltiphover
                         />
                       )}
-                      {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE === true && (
+                      {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
                         <div
                           className={"audio-type ppe-icon"}
                           title={$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
                           v-b-tooltiphover
                         />
                       )}
-                      {mk.nowPlayingItem?.attributes?.isLive === true && (
+                      {mk.nowPlayingItem?.attributes?.isLive && (
                         <svg
                           className={"audio-type live-icon"}
                           title={$root.getLz("term.live")}
@@ -193,7 +191,7 @@ export const ChromeBottom = () => {
         </div>
         <div className={"app-chrome--center"}>
           <div className={"app-chrome-playback-duration-bottom"}>
-            {mkReady() && mk.nowPlayingItem?.attributes?.isLive !== true && (
+            {mkReady() && !mk.nowPlayingItem?.attributes?.isLive && (
               <Row>
                 <Col sm={"auto"}>{convertTime(getSongProgress())}</Col>
                 <Col>
@@ -232,8 +230,7 @@ export const ChromeBottom = () => {
             <div className={"app-chrome-item"}>
               {mk.shuffleMode === 0 ? (
                 <button
-                  className={"playback-button--small shuffle"}
-                  className={isDisabled() && "disabled"}
+                  className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                   onClick={() => {
                     mk.shuffleMode = 1;
                   }}
@@ -242,8 +239,7 @@ export const ChromeBottom = () => {
                 />
               ) : (
                 <button
-                  className={"playback-button--small shuffle active"}
-                  className={isDisabled() && "disabled"}
+                  className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                   onClick={() => (mk.shuffleMode = 0)}
                   title={$root.getLz("term.disableShuffle")}
                   v-b-tooltiphover
@@ -252,9 +248,8 @@ export const ChromeBottom = () => {
             </div>
             <div className={"app-chrome-item"}>
               <button
-                className={"playback-button previous"}
+                className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                 onClick={prevButton}
-                className={isPrevDisabled() && "disabled"}
                 title={$root.getLz("term.previous")}
                 v-b-tooltiphover
               />
@@ -278,18 +273,15 @@ export const ChromeBottom = () => {
             </div>
             <div className={"app-chrome-item"}>
               <button
-                className={"playback-button next"}
+                className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                 onClick={skipToNextItem}
-                className={isNextDisabled() && "disabled"}
                 title={$root.getLz("term.next")}
                 v-b-tooltiphover
               />
             </div>
             <div className={"app-chrome-item"}>
               <button
-                className={"playback-button--small repeat"}
-                className={mk.repeatMode === 1 ? "repeatOne" : mk.repeatMode === 2 ? "active" : ""}
-                className={isDisabled() && "disabled"}
+                className={classNames("playback-button--small", "repeat", { repeatOne: mk.repeatMode === 1 }, { active: mk.repeatMode === 2 }, { disabled: isDisabled() })}
                 onClick={repeatIncrement}
                 title={$root.lz.repeat[mk.repeatMode]}
                 v-b-tooltiphover
@@ -300,9 +292,8 @@ export const ChromeBottom = () => {
         <div className={"app-chrome--right"}>
           <div className={"app-chrome-item volume"}>
             <button
-              className={"volume-button--small volume"}
+              className={"volume-button--small volume " + (cfg.audio.volume === 0 ? "active" : "")}
               onClick={muteButtonPressed}
-              className={"{'active': cfg.audio.volume === 0}"}
               title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
               v-b-tooltiphover
             />
@@ -332,8 +323,7 @@ export const ChromeBottom = () => {
           </div>
           <div className={"app-chrome-item generic"}>
             <button
-              className={"playback-button--small queue"}
-              className={"{'active': drawer.panel === 'queue'}"}
+              className={"playback-button--small queue " + (drawer.panel === "queue" ? "active" : "")}
               title={$root.getLz("term.queue")}
               v-b-tooltiphover
               onClick={() => invokeDrawer("queue")}
@@ -343,10 +333,9 @@ export const ChromeBottom = () => {
             {lyrics && lyrics !== [] && lyrics.length > 0 ? (
               <template>
                 <button
-                  className={"playback-button--small lyrics"}
+                  className={"playback-button--small lyrics " + (drawer.panel === "lyrics" ? "active" : "")}
                   title={$root.getLz("term.lyrics")}
                   v-b-tooltiphover
-                  className={"{'active': drawer.panel === 'lyrics'}"}
                   onClick={() => invokeDrawer("lyrics")}
                 />
               </template>

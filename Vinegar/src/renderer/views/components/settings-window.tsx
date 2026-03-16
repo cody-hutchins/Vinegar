@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ipcRenderer } from "electron";
 import SVGIcon from "../../main/components/SVGIcon.jsx";
 import Audiolabs from "../pages/audiolabs.jsx";
@@ -179,11 +180,10 @@ const SettingsWindow = () => {
         }}
       />
       <button
-        className={"close-btn minmax-btn"}
+        className={classNames("close-btn minmax-btn", { min: $store.state.pageState["settings"].fullscreen })}
         onClick={() => {
           $store.state.pageState["settings"].fullscreen = !$store.state.pageState["settings"].fullscreen;
         }}
-        className={"{'min': $store.state.pageState['settings'].fullscreen}"}
       />
       <button
         className={"close-btn"}
@@ -219,9 +219,13 @@ const SettingsWindow = () => {
                       }}
                       v-model={app.cfg.general.language}>
                       {getLanguages().map((categories, index) => (
-                        <optgroup label={index}>
+                        <optgroup
+                          key={index}
+                          label={index}>
                           {categories.map((lang) => (
-                            <option value={lang.code}>
+                            <option
+                              value={lang.code}
+                              key={lang.id}>
                               {lang.nameNative}({lang.nameEnglish})
                             </option>
                           ))}
@@ -555,7 +559,7 @@ const SettingsWindow = () => {
                   className={"md-option-segment"}
                   style={{ whiteSpace: "pre-line" }}>
                   {$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
-                  <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
+                  <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -563,7 +567,7 @@ const SettingsWindow = () => {
                       type={"checkbox"}
                       v-model={app.cfg.audio.normalization}
                       onChange={toggleNormalization}
-                      disabled={app.cfg.audio.maikiwiAudio.spatial === true || app.cfg.audio.maikiwiAudio.ciderPPE === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 === true || app.cfg.audio.maikiwiAudio.atmosphereRealizer2 === true}
+                      disabled={app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 || app.cfg.audio.maikiwiAudio.atmosphereRealizer2}
                     />
                   </label>
                 </div>
@@ -1301,7 +1305,7 @@ const SettingsWindow = () => {
                 </div>
               </div>
 
-              <div style={{ display: app.cfg.connectivity.discord_rpc.enabled !== false ? "inherit" : "none" }}>
+              <div style={{ display: app.cfg.connectivity.discord_rpc.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-line"}>
                   <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.reload")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
@@ -1398,7 +1402,7 @@ const SettingsWindow = () => {
                   </div>
                 </div>
 
-                <div style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.enabled === true ? "inherit" : "none" }}>
+                <div style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.enabled ? "inherit" : "none" }}>
                   <div className={"md-option-line"}>
                     <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.firstButton")}</div>
                     <div className={"md-option-segment md-option-segment_auto"}>
@@ -1409,6 +1413,7 @@ const SettingsWindow = () => {
                           onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
                           {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                             <option
+                              key={option.id}
                               value={"option"}
                               style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.second !== option ? "inherit" : "none" }}>
                               {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
@@ -1431,6 +1436,7 @@ const SettingsWindow = () => {
                           v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
                           {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                             <option
+                              key={option.id}
                               value={"option"}
                               style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== option ? "inherit" : "none" }}>
                               {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Col, ListGroupItem, Row } from "react-bootstrap";
+import classNames from "classnames";
 
 //Not used for Now
 export const StylestackEditor = ({ themes = [] }: { themes?: object[] }) => {
@@ -107,34 +108,34 @@ export const InstalledThemes = () => {
     readme: "",
   };
   const themesInstalled = [];
-  const themes = [];
+  let themes = [];
   useEffect(() => {
     getThemesList();
   }, []);
 
   function getThemesList() {
-    let themes = ipcRenderer.sendSync("get-themes");
-    themes.unshift({
+    const _themes = ipcRenderer.sendSync("get-themes");
+    _themes.unshift({
       name: "Acrylic Grain",
       file: "grain.less",
     });
-    themes.unshift({
+    _themes.unshift({
       name: "Sweetener",
       file: "sweetener.less",
     });
-    themes.unshift({
+    _themes.unshift({
       name: "Reduce Visuals",
       file: "reduce_visuals.less",
     });
-    // themes.unshift({
+    // _themes.unshift({
     //     name: "Inline Drawer",
     //     file: "inline_drawer.less"
     // })
-    themes.unshift({
+    _themes.unshift({
       name: "Dark",
       file: "dark.less",
     });
-    themes = themes;
+    themes = _themes;
   }
   function contextMenu(event, theme) {
     const menu = {
@@ -179,7 +180,7 @@ export const InstalledThemes = () => {
     const themes = ipcRenderer.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
-      if (theme.github_repo !== "" && typeof theme.commit !== "") {
+      if (theme.github_repo !== "" && typeof theme.commit !== "undefined") {
         themesInstalled.push(theme.github_repo.toLowerCase());
       }
     });
@@ -307,8 +308,7 @@ export const InstalledThemes = () => {
                   <li
                     onClick={() => addStyle(theme.file)}
                     onContextMenu={() => contextMenu($event, theme)}
-                    className={"list-group-item list-group-item-dark"}
-                    className={"{'applied': $root.cfg.visual.styles.includes(theme.file)}"}>
+                    className={classNames("list-group-item list-group-item-dark", { applied: $root.cfg.visual.styles.includes(theme.file) })}>
                     <Row>
                       <Col className={"themeLabel"}>{theme.name}</Col>
                       {$root.cfg.visual.styles.includes(theme.file) ? (
@@ -350,8 +350,7 @@ export const InstalledThemes = () => {
                           key={packEntry.id}
                           onClick={() => addStyle(packEntry.file)}
                           onContextMenu={() => contextMenu($event, theme)}
-                          className={"list-group-item list-group-item-dark addon"}
-                          className={"{'applied': $root.cfg.visual.styles.includes(packEntry.file)}"}>
+                          className={classNames("list-group-item list-group-item-dark addon", { applied: $root.cfg.visual.styles.includes(packEntry.file) })}>
                           <Row>
                             <Col className={"themeLabel"}>{packEntry.name}</Col>
                             {$root.cfg.visual.styles.includes(packEntry.file) ? (
