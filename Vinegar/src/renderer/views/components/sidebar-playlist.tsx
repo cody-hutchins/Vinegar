@@ -1,6 +1,6 @@
 import SVGIcon from "../../main/components/svg-icon.jsx";
 
-const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: object; playlistSelect?: (playlist: object) => void; relateMediaItems?: string[] }) => {
+const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: MusicKit.MediaItem; playlistSelect?: (playlist: object) => void; relateMediaItems?: string[] }) => {
   let folderOpened = false;
   let children = [];
   const playlistRoot = "p.playlistsroot";
@@ -43,7 +43,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
       this.$root.editPlaylist(item.id, item.attributes.name);
     }
   }
-  async function getChildren() {
+  function getChildren() {
     children = this.$root.playlists.listing.filter((child) => {
       if (child.parent === item.id) {
         return child;

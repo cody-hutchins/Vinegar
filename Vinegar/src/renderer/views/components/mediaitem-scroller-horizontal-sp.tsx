@@ -1,6 +1,6 @@
 import MediaItemSquare from "./mediaitem-square.jsx";
 
-const MediaItemScrollerHorizontalSP = ({ items, withReason }: { items?: object[]; withReason?: boolean }) => {
+const MediaItemScrollerHorizontalSP = ({ items, withReason }: { items: MusicKit.MediaItem[]; withReason?: boolean }) => {
   return (
     <div id={"mediaitem-scroller-horizontal-sp"}>
       <div
@@ -10,7 +10,7 @@ const MediaItemScrollerHorizontalSP = ({ items, withReason }: { items?: object[]
           <MediaItemSquare
             kind={"card"}
             item={item}
-            size={"300"}
+            imagesize={300}
             reasonShown={withReason}
             key={item.id}
           />

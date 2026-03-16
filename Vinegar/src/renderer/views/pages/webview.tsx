@@ -1,4 +1,4 @@
-const Webview = () =>
+const Webview = ({ page, webview }: { page: string; webview: { url: string } }) =>
   page === "webview" && (
     <template>
       <div style={{ display: "flex", width: "100%", height: "100%" }}>

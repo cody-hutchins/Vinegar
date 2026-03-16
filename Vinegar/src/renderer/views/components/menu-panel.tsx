@@ -8,7 +8,7 @@ const MenuPanel = () => {
   const getSvgIcon = this.$root.getSvgIcon;
   let position = [0, 0];
   let size = [0, 0];
-  const event = this.$root.menuPanel.event;
+  let event = this.$root.menuPanel.event;
   let direction = "down";
   let elStyle: Record<string, string | number> = {
     opacity: 0,
@@ -23,8 +23,8 @@ const MenuPanel = () => {
     } else {
       document.addEventListener(
         "mouseover",
-        (event) => {
-          event = event;
+        (_event) => {
+          event = _event;
           position = [event.clientX, event.clientY];
           console.log("pos", position);
           setTimeout(getStyle);

@@ -39,7 +39,7 @@ const SocialProfile = ({ data }: { data: object }) => {
                 <MediaItemArtwork
                   shadow={"large"}
                   url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                  size={"220"}
+                  imagesize={"220"}
                   type={"artists"}
                 />
               </div>

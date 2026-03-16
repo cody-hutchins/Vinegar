@@ -1,6 +1,6 @@
 import MediaItemArtwork from "./MediaItemArtwork.jsx";
 
-const MediaItemMVView = ({ item, imagesize }: { item: object; imagesize: number }) => {
+const MediaItemMVView = ({ item, imagesize }: { item: MusicKit.MediaItem; imagesize: number }) => {
   const app = this.$root;
   return (
     <div id={"mediaitem-mvview"}>

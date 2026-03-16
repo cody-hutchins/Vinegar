@@ -1,8 +1,8 @@
 import SidebarPlaylist from "./sidebar-playlist.jsx";
 
-const ShareSheet = ({ playlists }: { playlists: object[] }) => {
+const ShareSheet = ({ playlists }: { playlists: MusicKit.Playlists[] }) => {
   let playlistSorted = [];
-  const searchQuery = "";
+  const searchQuery: string = "";
   let focused = "";
   const app = this.$root;
   function mounted() {
@@ -16,7 +16,7 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
       }
     });
   }
-  function playlistSelect(playlist) {
+  function playlistSelect(playlist: MusicKit.Playlists) {
     if (playlist.type !== "library-playlist-folders") {
       addToPlaylist(playlist.id);
     }
@@ -30,7 +30,7 @@ const ShareSheet = ({ playlists }: { playlists: object[] }) => {
       playlistSorted = playlists;
     } else {
       playlistSorted = playlists.filter((playlist) => {
-        return playlist.attributes.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
+        return playlist.attributes!.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
       });
       if (playlistSorted.length === 1) {
         focused = playlistSorted[0].id;

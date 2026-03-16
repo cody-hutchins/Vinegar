@@ -1,6 +1,6 @@
 import MediaItemSquare from "./mediaitem-square.jsx";
 
-const MediaItemScrollerHorizontalLarge = ({ items }: { items: object[] }) => {
+const MediaItemScrollerHorizontalLarge = ({ items }: { items: MusicKit.MediaItem[] }) => {
   return (
     <div
       id={"mediaitem-scroller-horizontal-large"}

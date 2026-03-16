@@ -1,6 +1,6 @@
 import MediaItemArtwork from "./MediaItemArtwork.jsx";
 
-const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: object; imagesize: number; badge: object }) => {
+const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: MusicKit.MediaItem; imagesize: number; badge: object }) => {
   const app = this.$root;
   function log(item) {
     console.log(item);

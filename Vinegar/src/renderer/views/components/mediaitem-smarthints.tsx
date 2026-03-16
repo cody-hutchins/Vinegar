@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 
-const MediaItemSmarthints = ({ item, position }: { item: object; position: number }) => {
+const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; position: number }) => {
   const app = this.$root;
   const guid = uuidv4();
   let addedToLibrary = false;

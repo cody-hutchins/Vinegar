@@ -142,7 +142,7 @@ const Artist = ({ data }: { data: object }) => {
           v-observe-visibility={"{callback: isHeaderVisible}"}>
           {hasAnimated() && (
             <AnimatedArtworkView
-              priority={"true"}
+              priority={true}
               video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? ""}
             />
           )}
@@ -152,13 +152,13 @@ const Artist = ({ data }: { data: object }) => {
             <Row>
               <Col
                 auto
-                style={{ width: auto }}>
+                style={{ width: "auto" }}>
                 {!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero() && (
                   <div className={"artist-image"}>
                     <MediaItemArtwork
                       shadow={"large"}
                       url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                      size={"190"}
+                      imagesize={"190"}
                       type={"artists"}
                     />
                     <button

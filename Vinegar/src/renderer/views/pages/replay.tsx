@@ -87,7 +87,7 @@ const Replay = () => {
               onClick={() => getReplayYear(year.attributes.year)}>
               <div className={"artwork-container"}>
                 <MediaItemArtwork
-                  size={"200"}
+                  imagesize={"200"}
                   url={year.relationships.playlist.data[0].attributes.artwork.url}
                 />
               </div>

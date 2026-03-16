@@ -250,7 +250,6 @@ const Search = ({ search }: { search: object }) => {
                       key={item.id}
                       kind={"385"}
                       imageformat={"bb"}
-                      size={"600"}
                       removeamtext={true}
                       item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
                       imagesize={800}

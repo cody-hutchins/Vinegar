@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
-type Item = { id: string; attributes: { trackNumber: string; genreNames: string[]; durationInMillis: number; playCount: string; url: string; artistName: string; contentRating: string; releaseDate: string; albumName: string; name: string; artwork: { url: string }; playParams: { id: string; kind: string; isLibrary: boolean } }; type: string };
 
-const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: Item; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
+const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: MusicKit.MediaItem; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
   let showInLibrary = false;
   let isVisible = false;
   let addedToLibrary = false;
