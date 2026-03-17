@@ -7,6 +7,7 @@ import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-h
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 import classNames from "classnames";
+import { useOnInView } from "react-intersection-observer";
 
 const Artist = ({ data }: { data: object }) => {
   const topSongsExpanded = false;
@@ -41,6 +42,7 @@ const Artist = ({ data }: { data: object }) => {
   function isHeaderVisible(visible) {
     headerVisible = visible;
   }
+  const ref = useOnInView(isHeaderVisible);
   async function artistMenu(event) {
     // let followAction = "follow";
     // const followActions = {
@@ -136,9 +138,9 @@ const Artist = ({ data }: { data: object }) => {
     <div id={"cider-artist"}>
       <div className={classNames("content-inner", "artist-page", (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() ? "animated" : "")}>
         <div
-          className={"['artist-header', { 'artist-header-compact': app.cfg.visual.compactArtistHeader }]"}
-          key={data.id}
-          v-observe-visibility={"{callback: isHeaderVisible}"}>
+          ref={ref}
+          className={classNames("artist-header", { "artist-header-compact": app.cfg.visual.compactArtistHeader })}
+          key={data.id}>
           {hasAnimated() && (
             <AnimatedArtworkView
               priority={true}

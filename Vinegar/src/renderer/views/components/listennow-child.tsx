@@ -2,6 +2,7 @@ import { Col, Row } from "react-bootstrap";
 import MediaItemArtwork from "./mediaitem-artwork.js";
 import MediaItemScrollerHorizontalLarge from "./mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalSP from "./mediaitem-scroller-horizontal-sp.jsx";
+import { useOnInView } from "react-intersection-observer";
 
 const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   const isVisible = true;
@@ -9,6 +10,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   const visibilityChanged = (_isVisible, entry) => {
     // isVisible = _isVisible
   };
+  const ref = useOnInView(visibilityChanged);
   const showCollection = (recom) => {
     console.debug(recom);
     app.showCollection(recom.relationships.contents, recom.attributes.title ? recom.attributes.title.stringForDisplay : "", "listen_now");
@@ -46,7 +48,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   };
   return (
     <div id={"listennow-child"}>
-      <div v-observe-visibility={"{callback: visibilityChanged}"}>
+      <div ref={ref}>
         {isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf" ? (
           <template>
             <Row className={"row"}>

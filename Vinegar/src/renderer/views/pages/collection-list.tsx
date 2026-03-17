@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
+import { useOnInView } from "react-intersection-observer";
 
 const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
   const app = this.$root;
@@ -85,6 +86,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
       showFab = true;
     }
   }
+  const headerRef = useOnInView(headerVisibility);
   function visibilityChanged(isVisible, entry) {
     if (isVisible) {
       canSeeTrigger = true;
@@ -93,12 +95,13 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
       canSeeTrigger = false;
     }
   }
+  const buttonRef = useOnInView(visibilityChanged);
   return (
     <div id={"cider-collection-list"}>
       <div className={"content-inner collection-page"}>
         <h3
           className={"header-text"}
-          v-observe-visibility={{ callback: headerVisibility }}>
+          ref={headerRef}>
           {title}
         </h3>
         {data["data"] !== "null" && (
@@ -126,7 +129,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
             {triggerEnabled && (
               <button
                 style={{ opacity: 0, height: "32px" }}
-                v-observe-visibility={{ callback: visibilityChanged }}>
+                ref={buttonRef}>
                 {app.getLz("term.showMore")}
               </button>
             )}

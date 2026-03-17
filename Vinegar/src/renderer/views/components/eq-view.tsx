@@ -1,4 +1,6 @@
 import { Col, Row } from "react-bootstrap";
+import { CiderAudio } from "../../audio/audio";
+import { notyf } from "../..";
 
 const EQView = ({ src, url }: { src: string; url: string }) => {
   const app = this.$root;
@@ -194,6 +196,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         }
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {
+        console.log(e);
         CiderAudio.hierarchical_loading();
       }
     } else {
@@ -208,6 +211,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         }
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {
+        console.log(e);
         CiderAudio.hierarchical_loading();
       }
     }
@@ -218,6 +222,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {
+        console.log(e);
         CiderAudio.hierarchical_loading();
       }
     } else {
@@ -301,6 +306,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       try {
         CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
       } catch (e) {
+        console.log(e);
         CiderAudio.hierarchical_loading();
         CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
       }

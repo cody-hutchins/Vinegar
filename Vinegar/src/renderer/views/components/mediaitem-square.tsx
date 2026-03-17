@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
+import { useOnInView } from "react-intersection-observer";
 import classNames from "classnames";
 
 const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: MusicKit.MediaItem; kind?: string; imagesize?: number; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
@@ -205,6 +206,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
   const visibilityChanged = (_isVisible, entry) => {
     isVisible = _isVisible;
   };
+  const ref = useOnInView(visibilityChanged);
   async function contextMenu(event) {
     if (nomenu.includes(item.type)) {
       return;
@@ -511,6 +513,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
       id={"mediaitem-square"}
       style={{ flexShrink: 0 }}>
       <div
+        ref={ref}
         tabIndex={0}
         className={"cd-mediaitem-square-container"}
         onClick={(e) => {
@@ -523,8 +526,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
           if (e.target === e.currentTarget) {
             getContextMenu(e);
           }
-        }}
-        v-observe-visibility={"{callback: visibilityChanged}"}>
+        }}>
         {reasonShown && <div className={"reasonSP "}>{item?.meta?.reason?.stringForDisplay ?? ""}</div>}
         <div
           style={{ "--spcolor": getBgColor() }}

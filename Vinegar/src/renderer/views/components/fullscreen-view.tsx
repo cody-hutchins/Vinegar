@@ -4,7 +4,7 @@ import Queue from "./queue.jsx";
 import LyricsView from "./lyrics-view.jsx";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
-import { Col, Row } from "react-bootstrap";
+import { Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import AppContentArea from "./app-content-area.js";
 
 const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
@@ -27,8 +27,9 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           video = null;
         }
       } catch (e) {
+        console.log(e);
         video = null;
-        e = null;
+        // e = null;
       }
     } else if (app.mk.nowPlayingItem._container.type === "library-albums") {
       try {
@@ -39,8 +40,9 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
           video = null;
         }
       } catch (e) {
-        e = null;
+        console.log(e);
         video = null;
+        // e = null;
       }
     }
   }
@@ -219,87 +221,87 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <div className={"control-buttons"}>
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.shuffleMode === 0 ? (
-                          <button
-                            className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
-                            onClick={() => ($root.mk.shuffleMode = 1)}
-                            title={$root.getLz("term.enableShuffle")}
-                            v-b-tooltiphover
-                          />
+                          <OverlayTrigger overlay={<Tooltip id={"shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                            <button
+                              className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
+                              onClick={() => ($root.mk.shuffleMode = 1)}
+                            />
+                          </OverlayTrigger>
                         ) : (
-                          <button
-                            className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
-                            onClick={() => ($root.mk.shuffleMode = 0)}
-                            title={$root.getLz("term.disableShuffle")}
-                            v-b-tooltiphover
-                          />
+                          <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                            <button
+                              className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
+                              onClick={() => ($root.mk.shuffleMode = 0)}
+                            />
+                          </OverlayTrigger>
                         )}
                       </div>
                       <div className={"app-chrome-item display--large"}>
-                        <button
-                          className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
-                          onClick={() => $root.prevButton()}
-                          title={$root.getLz("term.previous")}
-                          v-b-tooltiphover
-                        />
+                        <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                          <button
+                            className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
+                            onClick={() => $root.prevButton()}
+                          />
+                        </OverlayTrigger>
                       </div>
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                          <button
-                            className={"playback-button stop"}
-                            onClick={() => $root.mk.stop()}
-                            title={$root.getLz("term.stop")}
-                            v-b-tooltiphover
-                          />
+                          <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                            <button
+                              className={"playback-button stop"}
+                              onClick={() => $root.mk.stop()}
+                            />
+                          </OverlayTrigger>
                         ) : (
-                          <button
-                            className={"playback-button play"}
-                            onClick={() => $root.mk.play()}
-                            title={$root.getLz("term.play")}
-                            v-b-tooltiphover
-                          />
+                          <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                            <button
+                              className={"playback-button play"}
+                              onClick={() => $root.mk.play()}
+                            />
+                          </OverlayTrigger>
                         )}
                       </div>
                       <div className={"app-chrome-item display--large"}>
-                        <button
-                          className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
-                          onClick={() => $root.skipToNextItem()}
-                          title={$root.getLz("term.next")}
-                          v-b-tooltiphover
-                        />
+                        <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+                          <button
+                            className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
+                            onClick={() => $root.skipToNextItem()}
+                          />
+                        </OverlayTrigger>
                       </div>
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.repeatMode === 0 ? (
-                          <button
-                            className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
-                            onClick={() => ($root.mk.repeatMode = 1)}
-                            title={$root.getLz("term.enableRepeatOne")}
-                            v-b-tooltiphover
-                          />
+                          <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("term.enableRepeatOne")}</Tooltip>}>
+                            <button
+                              className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
+                              onClick={() => ($root.mk.repeatMode = 1)}
+                            />
+                          </OverlayTrigger>
                         ) : null}
                       </div>
                     </div>
                   </div>
                   <div className={"app-chrome-item volume display--large"}>
                     <div className={"input-container"}>
-                      <button
-                        className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
-                        onClick={() => app.muteButtonPressed()}
-                        title={app.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
-                        v-b-tooltiphover
-                      />
-                      {typeof app.mk.volume !== "undefined" && (
-                        <input
-                          type={"range"}
-                          className={"slider"}
-                          wheel={app.volumeWheel}
-                          step={app.cfg.audio.volumeStep}
-                          min={"0"}
-                          max={app.cfg.audio.maxVolume}
-                          v-model={app.mk.volume}
-                          onChange={() => app.checkMuteChange()}
-                          v-b-tooltiphover
-                          title={$root.formatVolumeTooltip()}
+                      <OverlayTrigger overlay={<Tooltip id={"mute"}>{app.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+                        <button
+                          className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
+                          onClick={() => app.muteButtonPressed()}
                         />
+                      </OverlayTrigger>
+                      {typeof app.mk.volume !== "undefined" && (
+                        <OverlayTrigger overlay={<Tooltip id={"slider"}>{$root.formatVolumeTooltip()}</Tooltip>}>
+                          <input
+                            type={"range"}
+                            className={"slider"}
+                            onWheel={app.volumeWheel}
+                            step={app.cfg.audio.volumeStep}
+                            min={"0"}
+                            max={app.cfg.audio.maxVolume}
+                            v-model={app.mk.volume}
+                            onChange={() => app.checkMuteChange()}
+                          />
+                        </OverlayTrigger>
                       )}
                     </div>
                   </div>

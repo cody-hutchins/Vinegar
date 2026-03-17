@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 
 const MenuPanel = () => {
   const app = this.$root;
@@ -155,24 +155,26 @@ const MenuPanel = () => {
               {content.headerItems.map(
                 (item) =>
                   canDisplay(item) && (
-                    <button
+                    <OverlayTrigger
                       key={item.id}
-                      className={"menu-option-header " + getClasses(item)}
-                      v-b-tooltiphover
-                      title={item.name}
-                      style={getItemStyle(item)}
-                      onClick={() => action(item)}>
-                      {item.icon && (
-                        <div
-                          className={"sidebar-icon"}
-                          style={{ margin: 0 }}>
+                      overlay={<Tooltip id={"sidebar"}>{item.name}</Tooltip>}>
+                      <button
+                        className={"menu-option-header " + getClasses(item)}
+                        title={item.name}
+                        style={getItemStyle(item)}
+                        onClick={() => action(item)}>
+                        {item.icon && (
                           <div
-                            className={"svg-icon"}
-                            style={{ "--url": "url(" + item.icon + ")" }}
-                          />
-                        </div>
-                      )}
-                    </button>
+                            className={"sidebar-icon"}
+                            style={{ margin: 0 }}>
+                            <div
+                              className={"svg-icon"}
+                              style={{ "--url": "url(" + item.icon + ")" }}
+                            />
+                          </div>
+                        )}
+                      </button>
+                    </OverlayTrigger>
                   ),
               )}
             </div>

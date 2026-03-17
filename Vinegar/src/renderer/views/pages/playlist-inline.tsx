@@ -5,6 +5,7 @@ import ArtworkMaterial from "../components/artwork-material.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
+import { useOnInView } from "react-intersection-observer";
 
 const PlaylistInline = ({ data }: { data: object }) => {
   const app = this.$root;
@@ -61,6 +62,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
   function isHeaderVisible(visible) {
     headerVisible = visible;
   }
+  const ref = useOnInView(isHeaderVisible);
   function getBadges() {
     // TODO find why it was just returning
     if (badgesRequested) {
@@ -542,7 +544,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                         )}
                         <div
                           className={"playlist-controls"}
-                          v-observe-visibility={"{callback: isHeaderVisible}"}>
+                          ref={ref}>
                           <button
                             className={"md-btn md-btn-primary md-btn-icon"}
                             style={{ minWidth: "100px" }}

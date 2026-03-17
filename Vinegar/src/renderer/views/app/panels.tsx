@@ -8,6 +8,7 @@ import MoreInfoModal from "../components/moreinfo-modal.jsx";
 import PluginMenu from "../components/plugin-menu.jsx";
 import QRCodeModal from "../components/qrcode-modal.jsx";
 import SettingsWindow from "../components/settings-window.jsx";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Panels = () => {
   const chrome = useChromeStore((state) => state.chrome);
@@ -139,57 +140,52 @@ const Panels = () => {
             <div className={"app-chrome-item display--large"}>
               {mvViewMode === "full" && (
                 <div className={"app-chrome-item volume display--large"}>
-                  <button
-                    className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
-                    onClick={() => muteButtonPressed()}
-                    title={cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
-                    v-b-tooltiphover
-                  />
-                  {typeof mk.volume !== "undefined" && (
-                    <input
-                      type={"range"}
-                      wheel={"volumeWheel"}
-                      step={cfg.audio.volumeStep}
-                      min={"0"}
-                      max={cfg.audio.maxVolume}
-                      v-model={mk.volume}
-                      onChange={() => checkMuteChange()}
-                      v-b-tooltiphover
-                      title={formatVolumeTooltip()}
+                  <OverlayTrigger overlay={<Tooltip id={"volume"}>{cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+                    <button
+                      className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
+                      onClick={() => muteButtonPressed()}
                     />
+                  </OverlayTrigger>
+                  {typeof mk.volume !== "undefined" && (
+                    <OverlayTrigger overlay={<Tooltip id={"volume-wheel"}>{formatVolumeTooltip()}</Tooltip>}>
+                      <input
+                        type={"range"}
+                        wheel={"volumeWheel"}
+                        step={cfg.audio.volumeStep}
+                        min={"0"}
+                        max={cfg.audio.maxVolume}
+                        v-model={mk.volume}
+                        onChange={() => checkMuteChange()}
+                      />
+                    </OverlayTrigger>
                   )}
                 </div>
               )}
-              {mvViewMode === "full" && (
-                <template>
-                  {mk.isPlaying ? (
+              {mvViewMode === "full" &&
+                (mk.isPlaying ? (
+                  <OverlayTrigger overlay={<Tooltip id={"pause"}>{$root.getLz("term.pause")}</Tooltip>}>
                     <button
                       className={"playback-button pause"}
                       onClick={() => mk.pause()}
-                      title={$root.getLz("term.pause")}
-                      v-b-tooltiphover
                     />
-                  ) : (
+                  </OverlayTrigger>
+                ) : (
+                  <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
                     <button
                       className={"playback-button play"}
                       onClick={() => mk.play()}
-                      title={$root.getLz("term.play")}
-                      v-b-tooltiphover
                     />
-                  )}
-                </template>
-              )}
+                  </OverlayTrigger>
+                ))}
               {mvViewMode === "full" && (
                 <div className={"app-chrome-item generic"}>
                   {lyrics && lyrics !== [] && lyrics.length > 0 ? (
-                    <template>
+                    <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{$root.getLz("term.lyrics")}</Tooltip>}>
                       <button
                         className={classNames("playback-button--small lyrics", { active: drawer.panel === "lyrics" })}
-                        title={$root.getLz("term.lyrics")}
-                        v-b-tooltiphover
                         onClick={() => invokeDrawer("lyrics")}
                       />
-                    </template>
+                    </OverlayTrigger>
                   ) : (
                     <template>
                       <button
@@ -200,22 +196,22 @@ const Panels = () => {
                   )}
                 </div>
               )}
-              <div
-                id={"player-pip"}
-                className={classNames({ mini: mvViewMode === "mini" })}
-                onClick={() => pip()}
-                title={"Picture-in-Picture"}
-                v-b-tooltiphover>
-                {import("../svg/pip.svg")}
-              </div>
-              {mvViewMode === "full" && (
+              <OverlayTrigger overlay={<Tooltip id={"pip"}>Picture-in-Picture</Tooltip>}>
                 <div
-                  id={"player-fullscreen"}
-                  onClick={() => fullscreen(!fullscreenState, true)}
-                  title={"Fullscreen"}
-                  v-b-tooltiphover>
-                  {import("../svg/fullscreen.svg")}
+                  id={"player-pip"}
+                  className={classNames({ mini: mvViewMode === "mini" })}
+                  onClick={() => pip()}>
+                  {import("../svg/pip.svg")}
                 </div>
+              </OverlayTrigger>
+              {mvViewMode === "full" && (
+                <OverlayTrigger overlay={<Tooltip id={"fullscreen"}>Fullscreen</Tooltip>}>
+                  <div
+                    id={"player-fullscreen"}
+                    onClick={() => fullscreen(!fullscreenState, true)}>
+                    {import("../svg/fullscreen.svg")}
+                  </div>
+                </OverlayTrigger>
               )}
             </div>
           </div>

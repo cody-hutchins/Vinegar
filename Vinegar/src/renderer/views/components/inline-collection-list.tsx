@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useOnInView } from "react-intersection-observer";
 import MediaItemListItem from "./mediaitem-list-item";
 import MediaItemSquare from "./mediaitem-square";
 
@@ -74,12 +75,15 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
       canSeeTrigger = false;
     }
   };
+  const h3Ref = useOnInView(headerVisibility);
+  const buttonRef = useOnInView(visibilityChanged);
+
   return (
     <div id={"inline-collection-list"}>
       <div className={"collection-page"}>
         <h3
           className={"header-text"}
-          v-observe-visibility={"{callback: headerVisibility}"}>
+          ref={h3Ref}>
           {title}
         </h3>
         {data["data"] !== "null" && (
@@ -104,8 +108,8 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
             )}
             {triggerEnabled ? (
               <button
-                style={{ opacity: 0, height: "32px" }}
-                v-observe-visibility={"{callback: visibilityChanged}"}>
+                ref={buttonRef}
+                style={{ opacity: 0, height: "32px" }}>
                 {app.getLz("term.showMore")}
               </button>
             ) : null}

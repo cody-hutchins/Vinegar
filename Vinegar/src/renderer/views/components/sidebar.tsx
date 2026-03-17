@@ -1,3 +1,4 @@
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
@@ -285,92 +286,96 @@ const Sidebar = () => {
             <div className={"control-buttons"}>
               <div className={"app-chrome-item"}>
                 {$root.mk.shuffleMode === 0 ? (
-                  <button
-                    onClick={() => {
-                      $root.mk.shuffleMode = 1;
-                    }}
-                    title={$root.getLz("term.enableShuffle")}
-                    className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
-                    v-b-tooltiphoverrighttop
-                  />
+                  <OverlayTrigger
+                    placement={"top-end"}
+                    overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                    <button
+                      onClick={() => {
+                        $root.mk.shuffleMode = 1;
+                      }}
+                      className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
+                    />
+                  </OverlayTrigger>
                 ) : (
-                  <button
-                    onClick={() => {
-                      $root.mk.shuffleMode = 0;
-                    }}
-                    title={$root.getLz("term.disableShuffle")}
-                    className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
-                    v-b-tooltiphoverrighttop
-                  />
+                  <OverlayTrigger
+                    placement={"top-end"}
+                    overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                    <button
+                      onClick={() => {
+                        $root.mk.shuffleMode = 0;
+                      }}
+                      className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
+                    />
+                  </OverlayTrigger>
                 )}
               </div>
               <div className={"app-chrome-item"}>
-                <button
-                  className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
-                  onClick={() => $root.prevButton()}
-                  title={$root.getLz("term.previous")}
-                  v-b-tooltiphover
-                />
+                <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                  <button
+                    className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
+                    onClick={() => $root.prevButton()}
+                  />
+                </OverlayTrigger>
               </div>
               <div className={"app-chrome-item"}>
                 {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                  <button
-                    className={"playback-button stop"}
-                    onClick={() => $root.mk.stop()}
-                    title={$root.getLz("term.stop")}
-                    v-b-tooltiphover
-                  />
+                  <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("stop")}</Tooltip>}>
+                    <button
+                      className={"playback-button stop"}
+                      onClick={() => $root.mk.stop()}
+                    />
+                  </OverlayTrigger>
                 ) : (
-                  <button
-                    className={"playback-button play"}
-                    onClick={() => $root.mk.play()}
-                    title={$root.getLz("term.play")}
-                    v-b-tooltiphover
-                  />
+                  <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("play")}</Tooltip>}>
+                    <button
+                      className={"playback-button play"}
+                      onClick={() => $root.mk.play()}
+                    />
+                  </OverlayTrigger>
                 )}
               </div>
               <div className={"app-chrome-item"}>
-                <button
-                  className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
-                  onClick={() => $root.skipToNextItem()}
-                  title={$root.getLz("term.next")}
-                  v-b-tooltiphover
-                />
+                <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("next")}</Tooltip>}>
+                  <button
+                    className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
+                    onClick={() => $root.skipToNextItem()}
+                  />
+                </OverlayTrigger>
               </div>
               <div className={"app-chrome-item"}>
                 {$root.mk.repeatMode === 0 ? (
-                  <button
-                    onClick={() => {
-                      $root.mk.repeatMode = 1;
-                    }}
-                    className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
-                    title={$root.getLz("term.enableRepeatOne")}
-                    v-b-tooltiphover
-                  />
+                  <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("enableRepeatOne")}</Tooltip>}>
+                    <button
+                      onClick={() => {
+                        $root.mk.repeatMode = 1;
+                      }}
+                      className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
+                    />
+                  </OverlayTrigger>
                 ) : null}
               </div>
             </div>
             <div className={"app-chrome-item volume"}>
               <div className={"input-container"}>
-                <button
-                  className={classNames("volume-button--small volume", { active: $root.cfg.audio.volume === 0 })}
-                  onClick={() => $root.muteButtonPressed()}
-                  title={$root.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}
-                  v-b-tooltiphover
-                />
-                {typeof $root.mk.volume !== "undefined" && (
-                  <input
-                    type={"range"}
-                    className={""}
-                    onWheel={$root.volumeWheel}
-                    step={$root.cfg.audio.volumeStep}
-                    min={"0"}
-                    max={$root.cfg.audio.maxVolume}
-                    v-model={$root.mk.volume}
-                    onChange={() => $root.checkMuteChange()}
-                    v-b-tooltiphover
-                    title={$root.formatVolumeTooltip()}
+                <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+                  <button
+                    className={classNames("volume-button--small volume", { active: $root.cfg.audio.volume === 0 })}
+                    onClick={() => $root.muteButtonPressed()}
                   />
+                </OverlayTrigger>
+                {typeof $root.mk.volume !== "undefined" && (
+                  <OverlayTrigger overlay={<Tooltip id={"range"}>{$root.formatVolumeTooltip()}</Tooltip>}>
+                    <input
+                      type={"range"}
+                      className={""}
+                      onWheel={$root.volumeWheel}
+                      step={$root.cfg.audio.volumeStep}
+                      min={"0"}
+                      max={$root.cfg.audio.maxVolume}
+                      v-model={$root.mk.volume}
+                      onChange={() => $root.checkMuteChange()}
+                    />
+                  </OverlayTrigger>
                 )}
               </div>
             </div>

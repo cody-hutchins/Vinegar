@@ -1,8 +1,9 @@
 import classNames from "classnames";
 import MediaItemArtwork from "./mediaitem-artwork";
+import { useOnInView } from "react-intersection-observer";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
-  const isVisible = false;
+  let isVisible = false;
   let addedToLibrary = false;
   const app = this.$root;
   const uuidv4 = () => {
@@ -17,7 +18,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
   const getDataType = () => {
     return item.type;
   };
-  const select = async (e) => {
+  const select = async (event) => {
     const u = item;
     const u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
       platform: "web",
@@ -109,6 +110,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
   const visibilityChanged = (_isVisible, entry) => {
     isVisible = _isVisible;
   };
+  const ref = useOnInView(visibilityChanged);
   const addToLibrary = () => {
     const item = item;
     if (item.attributes.playParams.id) {
@@ -155,10 +157,10 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
   return (
     <div id={"libraryartist-item"}>
       <div
-        v-observe-visibility={"{callback: visibilityChanged}"}
+        ref={ref}
         onClick={() => select}
         className={classNames("cd-mediaitem-list-item", { "mediaitem-selected": app.select_hasMediaItem(guid) })}
-        contextMenu={contextMenu}>
+        onContextMenu={contextMenu}>
         {showArtwork && (
           <div
             className={"artwork"}

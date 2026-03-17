@@ -32,6 +32,9 @@ importers:
       '@crowdin/ota-client':
         specifier: ^2.0.2
         version: 2.0.2
+      '@dnd-kit/dom':
+        specifier: ^0.3.2
+        version: 0.3.2
       '@electron/notarize':
         specifier: ^3.1.1
         version: 3.1.1
@@ -128,6 +131,9 @@ importers:
       react-dom:
         specifier: ^19.2.4
         version: 19.2.4(react@19.2.4)
+      react-intersection-observer:
+        specifier: ^10.0.3
+        version: 10.0.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       resonance-audio:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1087,6 +1093,21 @@ packages:
     resolution: {integrity: sha512-0cp4PsWQ/9avqTVMCtZ+GirikIA36ikvjtHweU4/j8yLtgObI0+JUPhYFScgwlteveGB1rt3Cm8UhN04XayDig==}
     engines: {node: '>= 8.9.0'}
 
+  '@dnd-kit/abstract@0.3.2':
+    resolution: {integrity: sha512-uvPVK+SZYD6Viddn9M0K0JQdXknuVSxA/EbMlFRanve3P/XTc18oLa5zGftKSGjfQGmuzkZ34E26DSbly1zi3Q==}
+
+  '@dnd-kit/collision@0.3.2':
+    resolution: {integrity: sha512-pNmNSLCI8S9fNQ7QJ3fBCDjiT0sqBhUFcKgmyYaGvGCAU+kq0AP8OWlh0JSisc9k5mFyxmRpmFQcnJpILz/RPA==}
+
+  '@dnd-kit/dom@0.3.2':
+    resolution: {integrity: sha512-cIUAVgt2szQyz6JRy7I+0r+xeyOAGH21Y15hb5bIyHoDEaZBvIDH+OOlD9eoLjCbsxDLN9WloU2CBi3OE6LYDg==}
+
+  '@dnd-kit/geometry@0.3.2':
+    resolution: {integrity: sha512-3UBPuIS7E3oGiHxOE8h810QA+0pnrnCtGxl4Os1z3yy5YkC/BEYGY+TxWPTQaY1/OMV7GCX7ZNMlama2QN3n3w==}
+
+  '@dnd-kit/state@0.3.2':
+    resolution: {integrity: sha512-dLUIkoYrIJhGXfF2wGLTfb46vUokEsO/OoE21TSfmahYrx7ysTmnwbePsznFaHlwgZhQEh6AlLvthLCeY21b1A==}
+
   '@electron/asar@3.4.1':
     resolution: {integrity: sha512-i4/rNPRS84t0vSRa2HorerGRXWyF4vThfHesw0dmcWHp+cspK743UanA0suA5Q5y8kzY2y6YKrvbIUn69BCAiA==}
     engines: {node: '>=10.12.0'}
@@ -1850,6 +1871,9 @@ packages:
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+
+  '@preact/signals-core@1.14.0':
+    resolution: {integrity: sha512-AowtCcCU/33lFlh1zRFf/u+12rfrhtNakj7UpaGEsmMwUKpKWMVvcktOGcwBBNiB4lWrZWc01LhiyyzVklJyaQ==}
 
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
@@ -6458,6 +6482,15 @@ packages:
     peerDependencies:
       react: ^19.2.4
 
+  react-intersection-observer@10.0.3:
+    resolution: {integrity: sha512-luICLMbs0zxTO/70Zy7K5jOXkABPEVSAF8T3FdZUlctsrIaPLmx8TZe2SSA+CY2HGWfz2INyNTnp82pxNNsShA==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -8728,6 +8761,36 @@ snapshots:
       ajv: 6.14.0
       ajv-keywords: 3.5.2(ajv@6.14.0)
 
+  '@dnd-kit/abstract@0.3.2':
+    dependencies:
+      '@dnd-kit/geometry': 0.3.2
+      '@dnd-kit/state': 0.3.2
+      tslib: 2.8.1
+
+  '@dnd-kit/collision@0.3.2':
+    dependencies:
+      '@dnd-kit/abstract': 0.3.2
+      '@dnd-kit/geometry': 0.3.2
+      tslib: 2.8.1
+
+  '@dnd-kit/dom@0.3.2':
+    dependencies:
+      '@dnd-kit/abstract': 0.3.2
+      '@dnd-kit/collision': 0.3.2
+      '@dnd-kit/geometry': 0.3.2
+      '@dnd-kit/state': 0.3.2
+      tslib: 2.8.1
+
+  '@dnd-kit/geometry@0.3.2':
+    dependencies:
+      '@dnd-kit/state': 0.3.2
+      tslib: 2.8.1
+
+  '@dnd-kit/state@0.3.2':
+    dependencies:
+      '@preact/signals-core': 1.14.0
+      tslib: 2.8.1
+
   '@electron/asar@3.4.1':
     dependencies:
       commander: 5.1.0
@@ -9664,6 +9727,8 @@ snapshots:
   '@pkgr/core@0.2.9': {}
 
   '@popperjs/core@2.11.8': {}
+
+  '@preact/signals-core@1.14.0': {}
 
   '@protobufjs/aspromise@1.1.2': {}
 
@@ -15469,6 +15534,12 @@ snapshots:
     dependencies:
       react: 19.2.4
       scheduler: 0.27.0
+
+  react-intersection-observer@10.0.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+    optionalDependencies:
+      react-dom: 19.2.4(react@19.2.4)
 
   react-is@16.13.1: {}
 

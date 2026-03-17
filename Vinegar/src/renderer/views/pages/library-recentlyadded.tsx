@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import MediaItemSquare from "../components/mediaitem-square";
 import MediaItemListItem from "../components/mediaitem-list-item";
+import { useOnInView } from "react-intersection-observer";
 
 const LibraryRecentlyAdded = () => {
   let loading = false;
@@ -37,7 +38,7 @@ const LibraryRecentlyAdded = () => {
       getNextData();
     }
   }
-
+  const ref = useOnInView(visibilityChanged);
   async function getNextData() {
     if (this.$store.state.pageState["recentlyAdded"].nextUrl) {
       loading = true;
@@ -86,7 +87,7 @@ const LibraryRecentlyAdded = () => {
         {nextUrl && !loading ? (
           <button
             style={{ opacity: 0, height: "32px" }}
-            v-observe-visibility={"{callback: visibilityChanged}"}>
+            ref={ref}>
             {$root.getLz("term.showMore")}
           </button>
         ) : null}

@@ -7,6 +7,7 @@ import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizo
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import Pagination from "../components/pagination.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
+import { useOnInView } from "react-intersection-observer";
 
 const Playlist = ({ data }: { data: object }) => {
   const app = this.$root;
@@ -188,6 +189,7 @@ const Playlist = ({ data }: { data: object }) => {
   function isHeaderVisible(visible) {
     headerVisible = visible;
   }
+  const ref = useOnInView(isHeaderVisible);
   function hasHero() {
     if (data.attributes?.editorialArtwork?.bannerUber) {
       return data.attributes?.editorialArtwork?.bannerUber.url;
@@ -868,7 +870,7 @@ const Playlist = ({ data }: { data: object }) => {
                       )}
                       <div
                         className={"playlist-controls"}
-                        v-observe-visibility={"{callback: isHeaderVisible}"}
+                        ref={ref}
                         style={{ zIndex: 20 }}>
                         <button
                           className={"md-btn md-btn-primary md-btn-icon"}

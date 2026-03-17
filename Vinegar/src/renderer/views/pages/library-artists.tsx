@@ -3,6 +3,7 @@ import MediaItemArtwork from "../components/MediaItemArtwork.jsx";
 // import LibraryArtistItem from "../components/libraryartist-item.jsx";
 import InlineCollectionList from "../components/inline-collection-list.jsx";
 import { Col } from "react-bootstrap";
+import { useOnInView } from "react-intersection-observer";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   let isVisible = false;
@@ -118,6 +119,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
   function visibilityChanged(_isVisible, entry) {
     isVisible = _isVisible;
   }
+  const ref = useOnInView(visibilityChanged);
   function addToLibrary() {
     const _item = item;
     if (_item.attributes.playParams.id) {
@@ -165,7 +167,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     <>
       <div id={"libraryartist-item"}>
         <div
-          v-observe-visibility={"{callback: visibilityChanged}"}
+          ref={ref}
           onClick={() => select}
           className={`cd-mediaitem-list-item ${app.select_hasMediaItem(guid) ? "mediaitem-selected" : ""}`}
           onContextMenu={contextMenu}>

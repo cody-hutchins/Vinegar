@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemListItem from "./mediaitem-list-item.jsx";
-import { Col, Row } from "react-bootstrap";
+import { Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import classNames from "classnames";
 
 const Queue = () => {
@@ -136,16 +136,16 @@ const Queue = () => {
           <Col
             auto
             className={"cider-flex-center"}>
-            <button
-              className={"autoplay"}
-              style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
-              onClick={() => {
-                app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
-              }}
-              title={app.getLz("term.autoplay")}
-              v-b-tooltiphover>
-              <img className={"infinity"} />
-            </button>
+            <OverlayTrigger overlay={<Tooltip id={"autoplay"}>{app.getLz("term.autoplay")}</Tooltip>}>
+              <button
+                className={"autoplay"}
+                style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
+                onClick={() => {
+                  app.mk.autoplayEnabled = !app.mk.autoplayEnabled;
+                }}>
+                <img className={"infinity"} />
+              </button>
+            </OverlayTrigger>
           </Col>
         </Row>
         {page === "history" && (
@@ -183,7 +183,7 @@ const Queue = () => {
                           <div className={"artwork"}>
                             <MediaItemArtwork
                               url={queueItem.item.attributes.artwork ? queueItem.item.attributes.artwork.url : ""}
-                              size={"32"}
+                              imagesize={"32"}
                             />
                           </div>
                         </Col>

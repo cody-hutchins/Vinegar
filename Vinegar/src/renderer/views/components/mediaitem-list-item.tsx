@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import classNames from "classnames";
+import { useOnInView } from "react-intersection-observer";
 
 const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: MusicKit.MediaItem; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
   let showInLibrary = false;
@@ -433,7 +434,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   const visibilityChanged = (_isVisible, entry) => {
     isVisible = _isVisible;
   };
-
+  const ref = useOnInView(visibilityChanged);
   async function getHeartStatus() {
     try {
       await app.getRating(item).then((res) => {
@@ -570,7 +571,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
   return (
     <div id={"mediaitem-list-item"}>
       <div
-        v-observe-visibility={"{callback: visibilityChanged, throttle: 100}"}
+        ref={ref}
         onContextMenu={contextMenu}
         onClick={() => select}
         data-id={itemId}
