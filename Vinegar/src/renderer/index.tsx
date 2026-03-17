@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { Notyf } from "notyf";
 export const notyf = new Notyf();
 
 export function clamp(num, min, max) {
@@ -75,7 +77,7 @@ const initMusicKit = () => {
   });
 };
 
-const capiInit = () => {
+export const capiInit = () => {
   const request = new XMLHttpRequest();
   request.timeout = 5000;
   request.addEventListener("load", initMusicKit);
@@ -110,7 +112,7 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-const getBase64FromUrl = async (url: string | URL | Request) => {
+export const getBase64FromUrl = async (url: string | URL | Request) => {
   const data = await fetch(url);
   const blob = await data.blob();
   return new Promise((resolve) => {
@@ -123,17 +125,17 @@ const getBase64FromUrl = async (url: string | URL | Request) => {
   });
 };
 
-const Clone = (obj: object) => {
+export const Clone = (obj: object) => {
   return JSON.parse(JSON.stringify(obj));
 };
 
-const uuidv4 = () => {
+export const uuidv4 = () => {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
 };
 
-const xmlToJson = (xml) => {
+export const xmlToJson = (xml) => {
   // Create the return object
-  let obj = {};
+  let obj: Record<string, any> = {};
 
   if (xml.nodeType === 1) {
     // element
@@ -171,13 +173,13 @@ const xmlToJson = (xml) => {
   return obj;
 };
 
-const asyncForEach = (array, callback) => {
+export const asyncForEach = (array, callback) => {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
 };
 
-const checkIfScrollIsStatic = setInterval(() => {
+export const checkIfScrollIsStatic = setInterval(() => {
   try {
     if (position === document.getElementsByClassName("lyric-body")[0].scrollTop) {
       clearInterval(checkIfScrollIsStatic);
@@ -188,7 +190,7 @@ const checkIfScrollIsStatic = setInterval(() => {
 }, 50);
 
 // WebGPU Console Notification
-const webGPU = async () => {
+export const webGPU = async () => {
   try {
     const currentGPU = await navigator.gpu.requestAdapter();
     console.log("WebGPU enabled on", currentGPU.name, "with feature ID", currentGPU.features.size);
@@ -197,20 +199,16 @@ const webGPU = async () => {
   }
 };
 
-const isJson = (item) => {
-  item = typeof item !== "string" ? JSON.stringify(item) : item;
+export const isJson = (item: unknown) => {
+  let _item = typeof item !== "string" ? JSON.stringify(item) : item;
 
   try {
-    item = JSON.parse(item);
+    _item = JSON.parse(_item);
   } catch (e) {
+    console.error(e);
     return false;
   }
-
-  if (typeof item === "object" && item !== null) {
-    return true;
-  }
-
-  return false;
+  return typeof _item === "object" && _item !== null;
 };
 
 webGPU().then();
@@ -231,8 +229,8 @@ const showOobe = () => {
   }
 };
 
-const screenWidth = screen.width;
-const screenHeight = screen.height;
+export const screenWidth = screen.width;
+export const screenHeight = screen.height;
 
 document.addEventListener("DOMContentLoaded", async function () {
   // app.oobeInit()

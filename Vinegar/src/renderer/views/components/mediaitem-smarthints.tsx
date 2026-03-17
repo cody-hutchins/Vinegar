@@ -1,6 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import classNames from "classnames";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
+import { uuidv4 } from "../../index.js";
 
 const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; position: number }) => {
   const app = this.$root;
@@ -36,9 +37,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
       .replace(/[^a-z]+/g, "")
       .slice(2, 10);
   }
-  function uuidv4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
-  }
+
   function getContextMenu(event) {
     if (event) {
       if (item.type === "artists") {

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import { useOnInView } from "react-intersection-observer";
 import classNames from "classnames";
+import { uuidv4 } from "../../index.js";
 
 const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: MusicKit.MediaItem; kind?: string; imagesize?: number; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
   let isVisible = false;
@@ -143,9 +144,7 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
     );
     addedToLibrary = true;
   }
-  function uuidv4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
-  }
+
   function getArtworkUrl(size = -1, includeUrl = false) {
     let artwork = item?.attributes?.artwork ? item?.attributes?.artwork?.url : (item?.attributes?.editorialArtwork?.subscriptionCover?.url ?? "");
     if (size !== -1) {

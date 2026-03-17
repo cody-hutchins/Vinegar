@@ -9,7 +9,7 @@ import Pagination from "../components/pagination.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
 
-const Playlist = ({ data }: { data: object }) => {
+const Playlist = ({ data }: { data: MusicKit.Item }) => {
   const app = this.$root;
   let editorialNotesExpanded = false;
   const drag = false;

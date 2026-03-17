@@ -1,18 +1,16 @@
 import { useEffect } from "react";
-import MediaItemArtwork from "../components/MediaItemArtwork.jsx";
 // import LibraryArtistItem from "../components/libraryartist-item.jsx";
 import InlineCollectionList from "../components/inline-collection-list.jsx";
 import { Col } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
+import { uuidv4 } from "../../index.js";
+import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
   let isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
   const app = this.$root;
-  function uuidv4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
-  }
   function msToMinSec(ms) {
     const minutes = Math.floor(ms / 60000);
     const seconds = ((ms % 60000) / 1000).toFixed(0);
