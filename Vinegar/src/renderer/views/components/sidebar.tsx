@@ -24,78 +24,74 @@ const Sidebar = () => {
     <div id={"cider-app-sidebar"}>
       <div id={"app-sidebar"}>
         {$root.getThemeDirective("windowLayout") !== "twopanel" && (
-          <template>
-            <div className={"app-sidebar-header"}>
-              <div className={"search-input-container"}>
-                <div className={"search-input--icon"} />
-                <input
-                  type={"search"}
-                  spellCheck={false}
-                  onClick={() => {
-                    $root.appRoute("search");
-                    $root.search.showHints = true;
-                  }}
-                  onFocus={() => {
-                    $root.search.showHints = true;
-                  }}
-                  onBlur={() =>
-                    $root.setTimeout(() => {
-                      if (!$root.hintscontext) {
-                        $root.search.showHints = false;
-                      }
-                    }, 300)
-                  }
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+          <div className={"app-sidebar-header"}>
+            <div className={"search-input-container"}>
+              <div className={"search-input--icon"} />
+              <input
+                type={"search"}
+                spellCheck={false}
+                onClick={() => {
+                  $root.appRoute("search");
+                  $root.search.showHints = true;
+                }}
+                onFocus={() => {
+                  $root.search.showHints = true;
+                }}
+                onBlur={() =>
+                  $root.setTimeout(() => {
+                    if (!$root.hintscontext) {
                       $root.search.showHints = false;
-                      $root.search.showSearchView = true;
-                      $root.search.cursor = -1;
                     }
-                    $root.searchCursor();
-                  }}
-                  onChange={() => $root.appRoute("search")}
-                  onInput={() => $root.getSearchHints()}
-                  placeholder={$root.getLz("term.search") + "..."}
-                  v-model={$root.search.term}
-                  ref={"searchInput"}
-                  className={"search-input"}
-                />
-                {$root.search.showHints && $root.search.hints.length !== 0 && (
-                  <div className={"search-hints-container"}>
-                    <div className={"search-hints"}>
-                      {$root.search.hints
-                        .filter((a) => a.content === null)
-                        .map((hint, index) => (
-                          <button
-                            key={index}
-                            className={classNames("search-hint", "text-overflow-elipsis", { active: $root.search.cursor === index })}
-                            onClick={() => {
-                              $root.search.term = hint.searchTerm;
-                              $root.search.showHints = false;
-                              $root.searchQuery(hint.searchTerm);
-                              $root.search.cursor = -1;
-                            }}>
-                            {hint.displayTerm}
-                          </button>
-                        ))}
-                      <template>
-                        {$root.search.hints
-                          .filter((a) => a.content !== null)
-                          .map((item, position) => (
-                            <MediaItemSmarthints
-                              key={position}
-                              item={item.content}
-                              position={position}
-                            />
-                          ))}
-                      </template>
-                    </div>
+                  }, 300)
+                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+                    $root.search.showHints = false;
+                    $root.search.showSearchView = true;
+                    $root.search.cursor = -1;
+                  }
+                  $root.searchCursor();
+                }}
+                onChange={() => $root.appRoute("search")}
+                onInput={() => $root.getSearchHints()}
+                placeholder={$root.getLz("term.search") + "..."}
+                v-model={$root.search.term}
+                ref={"searchInput"}
+                className={"search-input"}
+              />
+              {$root.search.showHints && $root.search.hints.length !== 0 && (
+                <div className={"search-hints-container"}>
+                  <div className={"search-hints"}>
+                    {$root.search.hints
+                      .filter((a) => a.content === null)
+                      .map((hint, index) => (
+                        <button
+                          key={index}
+                          className={classNames("search-hint", "text-overflow-elipsis", { active: $root.search.cursor === index })}
+                          onClick={() => {
+                            $root.search.term = hint.searchTerm;
+                            $root.search.showHints = false;
+                            $root.searchQuery(hint.searchTerm);
+                            $root.search.cursor = -1;
+                          }}>
+                          {hint.displayTerm}
+                        </button>
+                      ))}
+                    {$root.search.hints
+                      .filter((a) => a.content !== null)
+                      .map((item, position) => (
+                        <MediaItemSmarthints
+                          key={position}
+                          item={item.content}
+                          position={position}
+                        />
+                      ))}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-          </template>
+          </div>
         )}
         <div
           className={"app-sidebar-content"}
@@ -112,14 +108,12 @@ const Sidebar = () => {
               {$root.getLz("app.name")}
             </div>
             {!$root.cfg.general.sidebarCollapsed.cider && (
-              <template>
-                <SidebarLibraryItem
-                  name={$root.getLz("home.title")}
-                  svg-icon={"./assets/feather/home.svg"}
-                  svg-icon-name={"home"}
-                  page={"home"}
-                />
-              </template>
+              <SidebarLibraryItem
+                name={$root.getLz("home.title")}
+                svg-icon={"./assets/feather/home.svg"}
+                svg-icon-name={"home"}
+                page={"home"}
+              />
             )}
             <div
               className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.applemusic })}
@@ -129,7 +123,7 @@ const Sidebar = () => {
               {$root.getLz("term.appleMusic")}
             </div>
             {!$root.cfg.general.sidebarCollapsed.applemusic && (
-              <template>
+              <>
                 <SidebarLibraryItem
                   name={$root.getLz("term.listenNow")}
                   svg-icon={"./assets/feather/play-circle.svg"}
@@ -148,7 +142,7 @@ const Sidebar = () => {
                   svg-icon-name={"radio"}
                   page={"radio"}
                 />
-              </template>
+              </>
             )}
           </div>
           <div
@@ -159,7 +153,7 @@ const Sidebar = () => {
             {$root.getLz("term.library")}
           </div>
           {!$root.cfg.general.sidebarCollapsed.library && (
-            <template>
+            <>
               {$root.cfg.general.sidebarItems.recentlyAdded && (
                 <SidebarLibraryItem
                   name={$root.getLz("term.recentlyAdded")}
@@ -208,17 +202,17 @@ const Sidebar = () => {
                   page={"podcasts"}
                 />
               )}
-            </template>
+            </>
           )}
-          {/*{($root.cfg.libraryPrefs.localPaths.length !== 0) && <template><div className="app-sidebar-header-text"
-                     onClick={() =>{$root.cfg.general.sidebarCollapsed.localLibrary = !$root.cfg.general.sidebarCollapsed.localLibrary}}
-                     className="{collapsed: $root.cfg.general.sidebarCollapsed.localLibrary}">
-                    Local Library
-                </div>{(!$root.cfg.general.sidebarCollapsed.localLibrary) && <template>
-                    <SidebarPlaylist item={{attributes: { name:'Songs'} , id:'ciderlocal'}} />
-                </template>}</template>}*/}
+          {/*{($root.cfg.libraryPrefs.localPaths.length !== 0) && <><div className="app-sidebar-header-text"
+                onClick={() =>{$root.cfg.general.sidebarCollapsed.localLibrary = !$root.cfg.general.sidebarCollapsed.localLibrary}}
+                className="{collapsed: $root.cfg.general.sidebarCollapsed.localLibrary}">
+              Local Library
+          </div>{(!$root.cfg.general.sidebarCollapsed.localLibrary) && <>
+              <SidebarPlaylist item={{attributes: { name:'Songs'} , id:'ciderlocal'}} />
+          </>}</>}*/}
           {$root.getPlaylistFolderChildren("p.applemusic").length !== 0 && (
-            <template>
+            <>
               <div
                 className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.amplaylists })}
                 onClick={() => {
@@ -228,17 +222,14 @@ const Sidebar = () => {
                 {$root.getLz("term.appleMusic")}
                 {$root.getLz("term.playlists")}
               </div>
-              {!$root.cfg.general.sidebarCollapsed.amplaylists && (
-                <template>
-                  {$root.getPlaylistFolderChildren("p.applemusic").map((item) => (
-                    <SidebarPlaylist
-                      key={item.id}
-                      item={item}
-                    />
-                  ))}
-                </template>
-              )}
-            </template>
+              {!$root.cfg.general.sidebarCollapsed.amplaylists &&
+                $root.getPlaylistFolderChildren("p.applemusic").map((item) => (
+                  <SidebarPlaylist
+                    key={item.id}
+                    item={item}
+                  />
+                ))}
+            </>
           )}
           <div
             className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.playlists })}
@@ -249,7 +240,7 @@ const Sidebar = () => {
             {$root.getLz("term.playlists")}
           </div>
           {!$root.cfg.general.sidebarCollapsed.playlists && (
-            <template>
+            <>
               <button
                 className={"app-sidebar-item"}
                 onClick={() => $root.playlistHeaderContextMenu}>
@@ -263,7 +254,7 @@ const Sidebar = () => {
                   item={item}
                 />
               ))}
-            </template>
+            </>
           )}
           {$root.cfg.visual.artworkDisplayLayout === "sidebar" && (
             <div

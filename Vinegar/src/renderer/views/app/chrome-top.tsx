@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import classNames from "classnames";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
@@ -20,21 +19,21 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             <div className={"window-controls-macos"}>
               <div
                 className={"close"}
-                onClick={() => ipcRenderer.send("close")}
+                onClick={() => window.electronAPI.send("close")}
               />
               <div
                 className={"minimize"}
-                onClick={() => ipcRenderer.send("minimize")}
+                onClick={() => window.electronAPI.send("minimize")}
               />
               {chrome.maximized ? (
                 <div
                   className={"minmax restore"}
-                  onClick={() => ipcRenderer.send("maximize")}
+                  onClick={() => window.electronAPI.send("maximize")}
                 />
               ) : (
                 <div
                   className={"minmax"}
-                  onClick={() => ipcRenderer.send("maximize")}
+                  onClick={() => window.electronAPI.send("maximize")}
                 />
               )}
             </div>
@@ -43,15 +42,15 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
           <div className={"app-chrome-item full-height"}>
             <button
               className={classNames("app-mainmenu", { active: chrome.menuOpened })}
-              blur={mainMenuVisibility(false)}
+              onBlur={() => mainMenuVisibility(false)}
               onClick={() => mainMenuVisibility(true)}
-              contextMenu={mainMenuVisibility(true)}
+              onContextMenu={() => mainMenuVisibility(true)}
               aria-label={$root.getLz("term.quickNav")}
             />
           </div>
         )}
         {getThemeDirective("appNavigation") !== "seperate" ? (
-          <template>
+          <>
             {getThemeDirective("windowLayout") === "twopanel" && <div className={"vdiv"} />}
             <div className={"app-chrome-item"}>
               <OverlayTrigger overlay={<Tooltip id={"navigation-back"}>{$root.getLz("term.navigateBack")}</Tooltip>}>
@@ -88,74 +87,72 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               </div>
             )}
             {getThemeDirective("windowLayout") !== "twopanel" && <div className={"vdiv display--large"} />}
-          </template>
+          </>
         ) : getThemeDirective("windowLayout") !== "twopanel" ? (
-          <template>
-            <div className={"app-chrome-item playback-control-buttons"}>
-              <div className={"app-chrome-item display--large"}>
-                {mk.shuffleMode === 0 ? (
-                  <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
-                    <button
-                      className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
-                      onClick={() => {
-                        mk.shuffleMode = 1;
-                      }}
-                    />
-                  </OverlayTrigger>
-                ) : (
-                  <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
-                    <button
-                      className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
-                      onClick={() => {
-                        mk.shuffleMode = 0;
-                      }}
-                    />
-                  </OverlayTrigger>
-                )}
-              </div>
-              <div className={"app-chrome-item display--large"}>
-                <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+          <div className={"app-chrome-item playback-control-buttons"}>
+            <div className={"app-chrome-item display--large"}>
+              {mk.shuffleMode === 0 ? (
+                <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
                   <button
-                    className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
-                    onClick={() => prevButton()}
+                    className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
+                    onClick={() => {
+                      mk.shuffleMode = 1;
+                    }}
                   />
                 </OverlayTrigger>
-              </div>
-              <div className={"app-chrome-item display--large"}>
-                {mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                  <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
-                    <button
-                      className={"playback-button stop"}
-                      onClick={() => mk.stop()}
-                    />
-                  </OverlayTrigger>
-                ) : (
-                  <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
-                    <button
-                      className={"playback-button play"}
-                      onClick={() => mk.play()}
-                    />
-                  </OverlayTrigger>
-                )}
-              </div>
-              <div className={"app-chrome-item display--large"}>
-                <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+              ) : (
+                <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
                   <button
-                    className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
-                    onClick={() => skipToNextItem()}
+                    className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
+                    onClick={() => {
+                      mk.shuffleMode = 0;
+                    }}
                   />
                 </OverlayTrigger>
-              </div>
-              <div className={"app-chrome-item display--large"}>
-                <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.lz.repeat[mk.repeatMode]}</Tooltip>}>
-                  <button
-                    className={classNames("playback-button--small", "repeat", { repeatOne: mkdir.repeatMode === 1 }, { active: mk.repeatMode === 2 }, { disabled: isDisabled() })}
-                    onClick={() => repeatIncrement()}
-                  />
-                </OverlayTrigger>
-              </div>
+              )}
             </div>
-          </template>
+            <div className={"app-chrome-item display--large"}>
+              <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                <button
+                  className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
+                  onClick={() => prevButton()}
+                />
+              </OverlayTrigger>
+            </div>
+            <div className={"app-chrome-item display--large"}>
+              {mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
+                <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                  <button
+                    className={"playback-button stop"}
+                    onClick={() => mk.stop()}
+                  />
+                </OverlayTrigger>
+              ) : (
+                <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                  <button
+                    className={"playback-button play"}
+                    onClick={() => mk.play()}
+                  />
+                </OverlayTrigger>
+              )}
+            </div>
+            <div className={"app-chrome-item display--large"}>
+              <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+                <button
+                  className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
+                  onClick={() => skipToNextItem()}
+                />
+              </OverlayTrigger>
+            </div>
+            <div className={"app-chrome-item display--large"}>
+              <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.lz.repeat[mk.repeatMode]}</Tooltip>}>
+                <button
+                  className={classNames("playback-button--small", "repeat", { repeatOne: mkdir.repeatMode === 1 }, { active: mk.repeatMode === 2 }, { disabled: isDisabled() })}
+                  onClick={() => repeatIncrement()}
+                />
+              </OverlayTrigger>
+            </div>
+          </div>
         ) : null}
       </div>
       <div className={"app-chrome--center"}>
@@ -350,17 +347,15 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   )}
                 </div>
                 {mk.nowPlayingItem["attributes"]["playParams"] && (
-                  <template>
-                    <div className={"actions"}>
-                      <OverlayTrigger overlay={<Tooltip id={"more"}>{$root.getLz("term.more")}</Tooltip>}>
-                        <button
-                          className={"lcdMenu"}
-                          onClick={nowPlayingContextMenu}>
-                          <div className={"svg-icon"} />
-                        </button>
-                      </OverlayTrigger>
-                    </div>
-                  </template>
+                  <div className={"actions"}>
+                    <OverlayTrigger overlay={<Tooltip id={"more"}>{$root.getLz("term.more")}</Tooltip>}>
+                      <button
+                        className={"lcdMenu"}
+                        onClick={nowPlayingContextMenu}>
+                        <div className={"svg-icon"} />
+                      </button>
+                    </OverlayTrigger>
+                  </div>
                 )}
               </div>
             ) : (
@@ -410,7 +405,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
       </div>
       <div className={"app-chrome--right"}>
         {getThemeDirective("windowLayout") !== "twopanel" ? (
-          <template>
+          <>
             <div className={"app-chrome-item volume display--large"}>
               <OverlayTrigger overlay={<Tooltip id={"more"}>{cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
                 <button
@@ -459,15 +454,13 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   />
                 </OverlayTrigger>
               ) : (
-                <template>
-                  <button
-                    className={"playback-button--small lyrics"}
-                    style={{ opacity: 0.3, pointerEvents: "none" }}
-                  />
-                </template>
+                <button
+                  className={"playback-button--small lyrics"}
+                  style={{ opacity: 0.3, pointerEvents: "none" }}
+                />
               )}
             </div>
-          </template>
+          </>
         ) : (
           <div className={"app-chrome-item search"}>
             <div className={"search-input-container"}>
@@ -549,22 +542,22 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             <div className={"window-controls"}>
               <div
                 className={"minimize"}
-                onClick={() => ipcRenderer.send("minimize")}
+                onClick={() => window.electronAPI.send("minimize")}
               />
               {chrome.maximized ? (
                 <div
                   className={"minmax restore"}
-                  onClick={() => ipcRenderer.send("maximize")}
+                  onClick={() => window.electronAPI.send("maximize")}
                 />
               ) : (
                 <div
                   className={"minmax"}
-                  onClick={() => ipcRenderer.send("maximize")}
+                  onClick={() => window.electronAPI.send("maximize")}
                 />
               )}
               <div
                 className={"close"}
-                onClick={() => ipcRenderer.send("close")}
+                onClick={() => window.electronAPI.send("close")}
               />
             </div>
           </div>

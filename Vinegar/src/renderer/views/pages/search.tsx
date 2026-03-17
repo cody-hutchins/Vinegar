@@ -137,7 +137,7 @@ const Search = ({ search }: { search: object }) => {
         {search !== null && search !== [] && search.term !== "" && $root.search.showSearchView ? (
           <div>
             {searchType === "catalog" ? (
-              <template>
+              <>
                 <h3>{app.getLz("term.topResult")}</h3>
                 <MediaitemScrollerHorizontal items={"search?.results[search?.results?.meta?.results?.order[0]]?.data"} />
                 <Row>
@@ -159,55 +159,44 @@ const Search = ({ search }: { search: object }) => {
                     </div>
                   )}
                 </Row>
-                {search.results["meta"] !== null && (
-                  <template>
-                    {search.results.meta.results.order.map(
-                      (section) =>
-                        section !== "song" &&
-                        section !== "top" && (
-                          <div key={section.id}>
-                            <Row>
-                              <Col>
-                                <h3>{app.friendlyTypes(section)}</h3>
-                              </Col>
-                            </Row>
-                            {!app.friendlyTypes(section).includes("Video") ? (
-                              <template>
-                                <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
-                              </template>
-                            ) : (
-                              <template>
-                                <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
-                              </template>
-                            )}
-                          </div>
-                        ),
-                    )}
-                  </template>
-                )}
+                {search.results["meta"] !== null &&
+                  search.results.meta.results.order.map(
+                    (section) =>
+                      section !== "song" &&
+                      section !== "top" && (
+                        <div key={section.id}>
+                          <Row>
+                            <Col>
+                              <h3>{app.friendlyTypes(section)}</h3>
+                            </Col>
+                          </Row>
+                          {!app.friendlyTypes(section).includes("Video") ? <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} /> : <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />}
+                        </div>
+                      ),
+                  )}
                 {search.resultsSocial.playlist && (
-                  <template>
+                  <>
                     <Row>
                       <Col>
                         <h3>{app.getLz("term.sharedPlaylists")}</h3>
                       </Col>
                     </Row>
                     <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)} />
-                  </template>
+                  </>
                 )}
                 {search.resultsSocial.profile && (
-                  <template>
+                  <>
                     <Row>
                       <Col>
                         <h3>{app.getLz("term.people")}</h3>
                       </Col>
                     </Row>
                     <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)} />
-                  </template>
+                  </>
                 )}
-              </template>
+              </>
             ) : (
-              <template>
+              <>
                 <h1>{$root.getLz("term.library")}</h1>
                 {$root.search.resultsLibrary.map((section, key) => (
                   <div key={key}>
@@ -223,7 +212,7 @@ const Search = ({ search }: { search: object }) => {
                     )}
                   </div>
                 ))}
-              </template>
+              </>
             )}
           </div>
         ) : (

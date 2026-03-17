@@ -253,14 +253,14 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
           href={item.href}
           onClick={() => clickEvent()}>
           {!renaming ? (
-            <template>
+            <>
               <SVGIcon
                 url={icon}
                 name={"sidebar-playlist"}
               />
               {item.attributes.name}
               {hasRelatedMediaItems && <small className={"presentNotice"}>(Track present)</small>}
-            </template>
+            </>
           ) : (
             <input
               type={"text"}

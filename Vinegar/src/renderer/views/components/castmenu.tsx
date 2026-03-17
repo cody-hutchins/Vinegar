@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import { CiderAudio } from "../../audio/audio.js";
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
@@ -21,11 +20,11 @@ const CastMenu = () => {
   };
 
   const scan = () => {
-    ipcRenderer.send("getChromeCastDevices", "");
-    ipcRenderer.send("getAirplayDevice", "");
+    window.electronAPI.send("getChromeCastDevices", "");
+    window.electronAPI.send("getAirplayDevice", "");
     setTimeout(() => {
-      devices.cast = ipcRenderer.sendSync("getKnownCastDevices");
-      devices.airplay = ipcRenderer.sendSync("getKnownAirplayDevices");
+      devices.cast = window.electronAPI.sendSync("getKnownCastDevices");
+      devices.airplay = window.electronAPI.sendSync("getKnownAirplayDevices");
       scanning = false;
     }, 2000);
     console.log(devices);
@@ -35,7 +34,7 @@ const CastMenu = () => {
   const setCast = (device) => {
     CiderAudio.sendAudio();
     activeCasts.push(device);
-    ipcRenderer.send("performGCCast", device, "Cider", "Playing ...", "Test build", "");
+    window.electronAPI.send("performGCCast", device, "Cider", "Playing ...", "Test build", "");
   };
 
   const setAirPlayCast = (device) => {
@@ -45,14 +44,14 @@ const CastMenu = () => {
       })
     ) {
       activeCasts.push(device);
-      ipcRenderer.send("performAirplayPCM", device.host, device.port, null, "", "", "", "", device.txt, device.airplay2, false);
+      window.electronAPI.send("performAirplayPCM", device.host, device.port, null, "", "", "", "", device.txt, device.airplay2, false);
     }
   };
 
   const disconnectAirPlayCast = (device) => {
     app.confirm("Do you want to disconnect device?", (res) => {
       if (res) {
-        ipcRenderer.send("disconnectAirplay", device.host + ":" + device.port + "ap");
+        window.electronAPI.send("disconnectAirplay", device.host + ":" + device.port + "ap");
         console.log("disconnectAirplay", device.host + ":" + device.port + "ap");
         const idx = activeCasts.findIndex((a) => {
           return a.host === device.host && a.port === device.port;
@@ -74,8 +73,8 @@ const CastMenu = () => {
   };
   const stopCasting = () => {
     CiderAudio.stopAudio();
-    ipcRenderer.send("disconnectAirplay", "");
-    ipcRenderer.send("stopGCast", "");
+    window.electronAPI.send("disconnectAirplay", "");
+    window.electronAPI.send("stopGCast", "");
     activeCasts = [];
     // vm.$forceUpdate();
   };
@@ -111,55 +110,51 @@ const CastMenu = () => {
               className={"md-option-container"}
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
               {!scanning ? (
-                <template>
-                  {devices.cast.map((device) => (
-                    <div
-                      key={device.id}
-                      className={"md-option-line"}
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setCast(device)}>
-                      <div className={"md-option-segment"}>
-                        {device.name}
-                        <br />
-                        <small>{device.host}</small>
-                      </div>
-                      {activeCasts.includes(device) ? (
-                        <div
-                          className={"md-option-segment_auto"}
-                          style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                          Connected
-                        </div>
-                      ) : (
-                        <div
-                          className={"md-option-segment_auto"}
-                          style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                          <svg
-                            width={"20"}
-                            height={"20"}
-                            viewBox={"0 0 34 34"}
-                            fill={"#fff"}
-                            version={"1.1"}
-                            xmlns={"http://www.w3.org/2000/svg"}
-                            xmlSpace={"preserve"}
-                            className={"castPlayIndicator"}>
-                            <path
-                              d={"M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"}
-                              style={{ fillRule: "nonzero" }}
-                            />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </template>
-              ) : (
-                <template>
+                devices.cast.map((device) => (
                   <div
+                    key={device.id}
                     className={"md-option-line"}
-                    style={{ cursor: "pointer" }}>
-                    <div className={"md-option-segment"}>{$root.getLz("action.cast.scanning")}</div>
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setCast(device)}>
+                    <div className={"md-option-segment"}>
+                      {device.name}
+                      <br />
+                      <small>{device.host}</small>
+                    </div>
+                    {activeCasts.includes(device) ? (
+                      <div
+                        className={"md-option-segment_auto"}
+                        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        Connected
+                      </div>
+                    ) : (
+                      <div
+                        className={"md-option-segment_auto"}
+                        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <svg
+                          width={"20"}
+                          height={"20"}
+                          viewBox={"0 0 34 34"}
+                          fill={"#fff"}
+                          version={"1.1"}
+                          xmlns={"http://www.w3.org/2000/svg"}
+                          xmlSpace={"preserve"}
+                          className={"castPlayIndicator"}>
+                          <path
+                            d={"M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"}
+                            style={{ fillRule: "nonzero" }}
+                          />
+                        </svg>
+                      </div>
+                    )}
                   </div>
-                </template>
+                ))
+              ) : (
+                <div
+                  className={"md-option-line"}
+                  style={{ cursor: "pointer" }}>
+                  <div className={"md-option-segment"}>{$root.getLz("action.cast.scanning")}</div>
+                </div>
               )}
             </div>
             <div className={"md-labeltext"}>{$root.getLz("action.cast.airplay")}</div>

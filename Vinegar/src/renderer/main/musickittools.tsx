@@ -1,8 +1,8 @@
-import { ipcRenderer } from "electron";
+import { window.electronAPI } from "electron";
 
 const MusicKitTools = {
   async v3Backend({ route = "", getBody = {}, options = {} }) {
-    return await await ipcRenderer.invoke("mkv3", {
+    return await window.electronAPI.invoke("mkv3", {
       token: MusicKit.getInstance().developerToken,
       route: route,
       mediaToken: MusicKit.getInstance().musicUserToken,

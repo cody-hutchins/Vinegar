@@ -491,7 +491,7 @@ const CiderAudio = {
                   const audioData = data.audioBuffer;
                   const bufferSize = data.bufferSize;
                   if (audioData[0].some((item) => item !== 0) || audioData[0].some((item) => item !== 0)) {
-                    ipcRenderer.send("writeWAV", audioData[0], audioData[1], bufferSize);
+                    window.electronAPI.send("writeWAV", audioData[0], audioData[1], bufferSize);
                   }
                   break;
                 case "stop":

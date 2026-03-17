@@ -5,7 +5,7 @@ const wsapi = {
     const decoded = atob(encoded);
     const json = JSON.parse(decoded);
     console.log(json);
-    const response = await await MusicKit.getInstance().api.v3.music(json.route, json.body, json.options);
+    const response = await MusicKit.getInstance().api.v3.music(json.route, json.body, json.options);
     const ret = response.data;
     return JSON.stringify(ret);
   },
@@ -16,7 +16,7 @@ const wsapi = {
         types: "songs,artists,albums,playlists",
       })
       .then((results) => {
-        ipcRenderer.send("wsapi-returnSearch", JSON.stringify(results));
+        window.electronAPI.send("wsapi-returnSearch", JSON.stringify(results));
       });
   },
   searchLibrary(term, limit) {
@@ -26,7 +26,7 @@ const wsapi = {
         types: "library-songs,library-artists,library-albums,library-playlists",
       })
       .then((results) => {
-        ipcRenderer.send("wsapi-returnSearchLibrary", JSON.stringify(results));
+        window.electronAPI.send("wsapi-returnSearchLibrary", JSON.stringify(results));
       });
   },
   getAttributes: function () {
@@ -63,31 +63,31 @@ const wsapi = {
     MusicKit.getInstance().autoplayEnabled = value;
   },
   returnDynamic(data, type) {
-    ipcRenderer.send("wsapi-returnDynamic", JSON.stringify(data), type);
+    window.electronAPI.send("wsapi-returnDynamic", JSON.stringify(data), type);
   },
   musickitApi(method, id, params, library = false) {
     if (library) {
       MusicKit.getInstance()
         .api.library[method](id, params)
         .then((results) => {
-          ipcRenderer.send("wsapi-returnMusicKitApi", JSON.stringify(results), method);
+          window.electronAPI.send("wsapi-returnMusicKitApi", JSON.stringify(results), method);
         });
     } else {
       MusicKit.getInstance()
         .api[method](id, params)
         .then((results) => {
-          ipcRenderer.send("wsapi-returnMusicKitApi", JSON.stringify(results), method);
+          window.electronAPI.send("wsapi-returnMusicKitApi", JSON.stringify(results), method);
         });
     }
   },
   getPlaybackState() {
-    ipcRenderer.send("wsapi-updatePlaybackState", MusicKitInterop.getAttributes());
+    window.electronAPI.send("wsapi-updatePlaybackState", MusicKitInterop.getAttributes());
   },
   getLyrics() {
-    ipcRenderer.send("wsapi-returnLyrics", JSON.stringify(app.lyrics));
+    window.electronAPI.send("wsapi-returnLyrics", JSON.stringify(app.lyrics));
   },
   getQueue() {
-    ipcRenderer.send("wsapi-returnQueue", JSON.stringify(MusicKit.getInstance().queue));
+    window.electronAPI.send("wsapi-returnQueue", JSON.stringify(MusicKit.getInstance().queue));
   },
   playNext(type, id) {
     const request = {};
@@ -132,7 +132,7 @@ const wsapi = {
     app.repeatIncrement();
   },
   getmaxVolume() {
-    ipcRenderer.send("wsapi-returnvolumeMax", JSON.stringify(app.cfg.audio.maxVolume));
+    window.electronAPI.send("wsapi-returnvolumeMax", JSON.stringify(app.cfg.audio.maxVolume));
   },
   getLibraryStatus(kind, id) {
     if (kind === undefined || id === "no-id-found") return;
@@ -148,7 +148,7 @@ const wsapi = {
         const inLibrary = res && res.attributes && res.attributes.inLibrary;
 
         app.getRating({ type: truekind, id: id }).then((rating) => {
-          ipcRenderer.send("wsapi-libraryStatus", inLibrary, rating);
+          window.electronAPI.send("wsapi-libraryStatus", inLibrary, rating);
         });
       });
   },
@@ -169,11 +169,11 @@ const wsapi = {
           },
         )
         .then(function () {
-          ipcRenderer.send("wsapi-rate", kind, id, rating);
+          window.electronAPI.send("wsapi-rate", kind, id, rating);
         });
     } else if (rating === undefined) {
       app.getRating({ type: truekind, id: id }).then((rating) => {
-        ipcRenderer.send("wsapi-rate", kind, id, rating);
+        window.electronAPI.send("wsapi-rate", kind, id, rating);
       });
     } else {
       app.mk.api.v3
@@ -193,14 +193,14 @@ const wsapi = {
           },
         )
         .then(function () {
-          ipcRenderer.send("wsapi-rate", kind, id, rating);
+          window.electronAPI.send("wsapi-rate", kind, id, rating);
         });
     }
   },
   changeLibrary(kind, id, shouldAdd) {
     if (shouldAdd) {
       app.addToLibrary(id);
-      ipcRenderer.send("wsapi-change-library", kind, id, shouldAdd);
+      window.electronAPI.send("wsapi-change-library", kind, id, shouldAdd);
     } else {
       const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
@@ -218,7 +218,7 @@ const wsapi = {
               app.removeFromLibrary(kind, item.id);
             }
 
-            ipcRenderer.send("wsapi-change-library", kind, id, shouldAdd);
+            window.electronAPI.send("wsapi-change-library", kind, id, shouldAdd);
           }
         });
     }

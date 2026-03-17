@@ -51,23 +51,22 @@ const Radio = ({ data }: { data: object }) => {
                       {app.getLz("term.seeAll")}
                     </button>
                   )}
-                  {index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
-                    <template>
-                      {recom.relationships.room ? (
-                        <button
-                          className={"cd-btn-seeall"}
-                          onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
-                          {app.getLz("term.seeAll")}
-                        </button>
-                      ) : (
-                        <button
-                          className={"cd-btn-seeall"}
-                          onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                          {app.getLz("term.seeAll")}
-                        </button>
-                      )}
-                    </template>
-                  )}
+                  {index !== 0 &&
+                    recom.relationships &&
+                    ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) &&
+                    (recom.relationships.room ? (
+                      <button
+                        className={"cd-btn-seeall"}
+                        onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
+                        {app.getLz("term.seeAll")}
+                      </button>
+                    ) : (
+                      <button
+                        className={"cd-btn-seeall"}
+                        onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
+                        {app.getLz("term.seeAll")}
+                      </button>
+                    ))}
                 </Col>
               </Row>
               {recom.attributes.name === "Recently Played" ? (
@@ -80,22 +79,19 @@ const Radio = ({ data }: { data: object }) => {
                   />
                 </div>
               ) : (
-                <template>
-                  {recom.attributes.links && recom.attributes.editorialElementKind.includes("391") && (
-                    <template>
-                      <div className={"grouping-container"}>
-                        {recom.attributes.links.map((link) => (
-                          <button
-                            key={link.id}
-                            className={"grouping-btn"}
-                            onClick={() => $root.goToGrouping(link.url)}>
-                            {link.label}
-                          </button>
-                        ))}
-                      </div>
-                    </template>
-                  )}
-                </template>
+                recom.attributes.links &&
+                recom.attributes.editorialElementKind.includes("391") && (
+                  <div className={"grouping-container"}>
+                    {recom.attributes.links.map((link) => (
+                      <button
+                        key={link.id}
+                        className={"grouping-btn"}
+                        onClick={() => $root.goToGrouping(link.url)}>
+                        {link.label}
+                      </button>
+                    ))}
+                  </div>
+                )
               )}
             </div>
           ))}

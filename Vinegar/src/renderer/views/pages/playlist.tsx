@@ -735,14 +735,12 @@ const Playlist = ({ data }: { data: object }) => {
           is-album={isAlbum()}
           style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
           {app.playlists.loadingState === 0 && (
-            <template>
-              <div className={"content-inner centered"}>
-                <div className={"spinner"} />
-              </div>
-            </template>
+            <div className={"content-inner centered"}>
+              <div className={"spinner"} />
+            </div>
           )}
           {app.playlists.loadingState === 1 && (
-            <template>
+            <>
               <div
                 className={"playlist-display"}
                 style={{ backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
@@ -757,7 +755,7 @@ const Playlist = ({ data }: { data: object }) => {
                       <MediaItemArtwork
                         shadow={"none"}
                         url={hasHero()}
-                        size={"2160"}
+                        imagesize={"2160"}
                       />
                       <div
                         className={"hero-tint"}
@@ -776,97 +774,90 @@ const Playlist = ({ data }: { data: object }) => {
                           video-priority={true}
                           url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
                           video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
-                          size={"500"}
+                          imagesize={"500"}
                         />
                       </div>
                     </Col>
                     <Col className={"playlist-info"}>
                       {!editorialNotesExpanded && (
-                        <template>
-                          <div>
-                            <div
-                              className={"playlist-name"}
-                              onMouseOver={() => minClass(false)}
-                              onClick={() => editPlaylistName()}
-                              style={{ display: nameEditing ? "none" : "inherit", color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject()?.textColor1 : "", filter: `drop-shadow(${hasHeroObject()?.textColor4 ? "1px 3px 8px #" + hasHeroObject()?.textColor4 : ""})` }}>
-                              {data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}
-                            </div>
-                            <div
-                              className={"playlist-name"}
-                              onMouseOver={() => minClass(false)}
-                              style={{ display: nameEditing ? "inherit" : "none" }}>
-                              <input
-                                type={"text"}
-                                spellCheck={false}
-                                className={"nameEdit"}
-                                v-model={data.attributes.name}
-                                onBlur={editPlaylist}
-                                onChange={editPlaylist}
-                                onKeyDown={(e) => {
-                                  if (e.key === "enter") editPlaylist();
-                                }}
-                              />
-                            </div>
-                            <div
-                              className={"playlist-time genre"}
-                              style={{ margin: "0px", color: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}>
-                              {getAlbumGenre()}
-                            </div>
-                            {getArtistName(data) !== "" && !useArtistChip && (
-                              <div
-                                className={"playlist-artist item-navigate"}
-                                onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
-                                {getArtistName(data)}
-                              </div>
-                            )}
-                            {useArtistChip && (
-                              <template>
-                                {data.relationships.artists?.data.map((artist) => (
-                                  <ArtistChip
-                                    key={artist.id}
-                                    style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}
-                                    item={artist}
-                                  />
-                                ))}
-                              </template>
-                            )}
-                            {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
-                              <div
-                                className={"playlist-desc"}
-                                style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}>
-                                {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
-                                  <div
-                                    className={"content"}
-                                    dangerouslySetInnerHTML={{ __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short }}
-                                    onClick={() => openInfoModal()}
-                                  />
-                                ) : (
-                                  <>
-                                    {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
-                                                onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
-                                            {app.getLz('term.showMore')}
-                                        </button> : */}
-                                  </>
-                                )}
-                              </div>
-                            )}
+                        <div>
+                          <div
+                            className={"playlist-name"}
+                            onMouseOver={() => minClass(false)}
+                            onClick={() => editPlaylistName()}
+                            style={{ display: nameEditing ? "none" : "inherit", color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject()?.textColor1 : "", filter: `drop-shadow(${hasHeroObject()?.textColor4 ? "1px 3px 8px #" + hasHeroObject()?.textColor4 : ""})` }}>
+                            {data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}
                           </div>
-                        </template>
+                          <div
+                            className={"playlist-name"}
+                            onMouseOver={() => minClass(false)}
+                            style={{ display: nameEditing ? "inherit" : "none" }}>
+                            <input
+                              type={"text"}
+                              spellCheck={false}
+                              className={"nameEdit"}
+                              v-model={data.attributes.name}
+                              onBlur={editPlaylist}
+                              onChange={editPlaylist}
+                              onKeyDown={(e) => {
+                                if (e.key === "enter") editPlaylist();
+                              }}
+                            />
+                          </div>
+                          <div
+                            className={"playlist-time genre"}
+                            style={{ margin: "0px", color: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}>
+                            {getAlbumGenre()}
+                          </div>
+                          {getArtistName(data) !== "" && !useArtistChip && (
+                            <div
+                              className={"playlist-artist item-navigate"}
+                              onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
+                              {getArtistName(data)}
+                            </div>
+                          )}
+                          {useArtistChip &&
+                            data.relationships.artists?.data.map((artist) => (
+                              <ArtistChip
+                                key={artist.id}
+                                style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}
+                                item={artist}
+                              />
+                            ))}
+                          {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
+                            <div
+                              className={"playlist-desc"}
+                              style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}>
+                              {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
+                                <div
+                                  className={"content"}
+                                  dangerouslySetInnerHTML={{ __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short }}
+                                  onClick={() => openInfoModal()}
+                                />
+                              ) : (
+                                <>
+                                  {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
+                                      onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
+                                      {app.getLz('term.showMore')}
+                                    </button> : */}
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       )}
                       {editorialNotesExpanded && (
-                        <template>
-                          <div className={"playlist-desc-expanded"}>
-                            <div
-                              className={"content"}
-                              dangerouslySetInnerHTML={{ __html: data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : "" }}
-                            />
-                            <button
-                              className={"more-btn"}
-                              onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
-                              {app.getLz("term.showLess")}
-                            </button>
-                          </div>
-                        </template>
+                        <div className={"playlist-desc-expanded"}>
+                          <div
+                            className={"content"}
+                            dangerouslySetInnerHTML={{ __html: data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : "" }}
+                          />
+                          <button
+                            className={"more-btn"}
+                            onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
+                            {app.getLz("term.showLess")}
+                          </button>
+                        </div>
                       )}
                       <div
                         className={"playlist-controls"}
@@ -1094,9 +1085,8 @@ const Playlist = ({ data }: { data: object }) => {
                             v-model={data.relationships.tracks.data}
                             start={"drag=true"}
                             end={"drag=false;put()"}>
-                            {!hasNestedPlaylist ? (
-                              <template>
-                                {currentSlice.map((item, index) => (
+                            {!hasNestedPlaylist
+                              ? currentSlice.map((item, index) => (
                                   <MediaItemListItem
                                     item={item}
                                     parent={getItemParent(data)}
@@ -1106,11 +1096,8 @@ const Playlist = ({ data }: { data: object }) => {
                                     context-ext={buildContextMenu()}
                                     key={item.id}
                                   />
-                                ))}
-                              </template>
-                            ) : (
-                              <template>
-                                {nestedSlices.map((disc) => (
+                                ))
+                              : nestedSlices.map((disc) => (
                                   <div key={disc.id}>
                                     <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                     {disc.tracks.map((item, index) => (
@@ -1126,8 +1113,6 @@ const Playlist = ({ data }: { data: object }) => {
                                     ))}
                                   </div>
                                 ))}
-                              </template>
-                            )}
                           </draggable>
                         </div>
                       </div>
@@ -1159,46 +1144,41 @@ const Playlist = ({ data }: { data: object }) => {
                         {data.attributes.copyright}
                       </div>
                       {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
-                        <template>
-                          <div
-                            className={"playlist-time showExtended item-navigate"}
-                            style={{ color: "#fa586a", fontWeight: "bold" }}
-                            onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                            {$root.getLz("action.showAlbum")}
-                          </div>
-                        </template>
+                        <div
+                          className={"playlist-time showExtended item-navigate"}
+                          style={{ color: "#fa586a", fontWeight: "bold" }}
+                          onClick={() => app.routeView(data.relationships.catalog.data[0])}>
+                          {$root.getLz("action.showAlbum")}
+                        </div>
                       )}
                     </div>
                   </Tab>
-                  {typeof data.views !== "undefined" && (
-                    <template>
-                      {data.meta.views.order.map(
-                        (view) =>
-                          data.views[view].data.length !== 0 && (
-                            <Tab
-                              key={view.id}
-                              lazy
-                              title={data.views[view].attributes.title}>
-                              <div>
-                                <Row>
-                                  <Col>
-                                    <h3>{data.views[view].attributes.title}</h3>
-                                  </Col>
-                                </Row>
-                                <Row className={"row"}>
-                                  <Col>
-                                    <MediaitemScrollerHorizontal items={data.views[view].data} />
-                                  </Col>
-                                </Row>
-                              </div>
-                            </Tab>
-                          ),
-                      )}
-                    </template>
-                  )}
+                  {typeof data.views !== "undefined" &&
+                    data.meta.views.order.map(
+                      (view) =>
+                        data.views[view].data.length !== 0 && (
+                          <Tab
+                            key={view.id}
+                            lazy
+                            title={data.views[view].attributes.title}>
+                            <div>
+                              <Row>
+                                <Col>
+                                  <h3>{data.views[view].attributes.title}</h3>
+                                </Col>
+                              </Row>
+                              <Row className={"row"}>
+                                <Col>
+                                  <MediaitemScrollerHorizontal items={data.views[view].data} />
+                                </Col>
+                              </Row>
+                            </div>
+                          </Tab>
+                        ),
+                    )}
                 </Tabs>
               </div>
-            </template>
+            </>
           )}
         </div>
       )}

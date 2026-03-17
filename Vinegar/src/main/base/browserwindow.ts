@@ -334,10 +334,8 @@ export class BrowserWindow {
     trafficLightPosition: { x: 15, y: 20 },
     webPreferences: {
       experimentalFeatures: true,
-      nodeIntegration: true,
       sandbox: true,
       allowRunningInsecureContent: true,
-      contextIsolation: false,
       webviewTag: true,
       plugins: true,
       nodeIntegrationInWorker: true,

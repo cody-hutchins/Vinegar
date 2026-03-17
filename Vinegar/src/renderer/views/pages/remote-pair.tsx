@@ -2,8 +2,8 @@ import { useEffect } from "react";
 
 const RemotePair = () => {
   useEffect(() => {
-    ipcRenderer.send("get-remote-pair-url");
-    ipcRenderer.on("send-remote-pair-url", (event, url) => {
+    window.electronAPI.send("get-remote-pair-url");
+    window.electronAPI.on("send-remote-pair-url", (event, url) => {
       const _url = url;
       app.webview.src = _url;
       document.getElementById("foo").src = _url;

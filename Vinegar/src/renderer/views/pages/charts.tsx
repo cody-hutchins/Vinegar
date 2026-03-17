@@ -50,7 +50,7 @@ const Charts = () => {
       <div className={"content-inner"}>
         <h1 className={"header-text"}>{$root.getLz("term.charts")}</h1>
         {songs !== [] && (
-          <template>
+          <>
             <Row>
               <Col>
                 <h3>{songs.name ?? ""}</h3>
@@ -70,10 +70,10 @@ const Charts = () => {
             <div className={"mediaitem-list-item__grid"}>
               <ListItemHorizontal items={(songs?.data ?? []).limit(12)} />
             </div>
-          </template>
+          </>
         )}
         {albums !== [] && (
-          <template>
+          <>
             <Row>
               <Col>
                 <h3>{albums.name ?? ""}</h3>
@@ -91,10 +91,10 @@ const Charts = () => {
               )}
             </Row>
             <MediaItemScrollerHorizontalLarge items={(albums?.data ?? []).limit(10)} />
-          </template>
+          </>
         )}
         {playlists !== [] && (
-          <template>
+          <>
             <Row>
               <Col>
                 <h3>{playlists.name ?? ""}</h3>
@@ -112,10 +112,10 @@ const Charts = () => {
               )}
             </Row>
             <MediaItemScrollerHorizontalLarge items={(playlists?.data ?? []).limit(10)} />
-          </template>
+          </>
         )}
         {musicvideos !== [] && (
-          <template>
+          <>
             <Row>
               <Col>
                 <h3>{musicvideos.name ?? ""}</h3>
@@ -133,10 +133,10 @@ const Charts = () => {
               )}
             </Row>
             <MediaItemScrollerHorizontalLarge items={(musicvideos?.data ?? []).limit(10)} />
-          </template>
+          </>
         )}
         {globalcharts !== [] && (
-          <template>
+          <>
             <Row>
               <Col>
                 <h3>{globalcharts.name ?? ""}</h3>
@@ -154,10 +154,10 @@ const Charts = () => {
               )}
             </Row>
             <MediaItemScrollerHorizontalLarge items={(globalcharts?.data ?? []).limit(10)} />
-          </template>
+          </>
         )}
         {citycharts !== [] && (
-          <template>
+          <>
             <Row>
               <Col>
                 <h3>{citycharts.name ?? ""}</h3>
@@ -175,7 +175,7 @@ const Charts = () => {
               )}
             </Row>
             <MediaItemScrollerHorizontalLarge items={(citycharts?.data ?? []).limit(10)} />
-          </template>
+          </>
         )}
       </div>
     </div>

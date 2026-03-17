@@ -32,7 +32,7 @@ async function spawnMica() {
   if (micaCache.path === imgSrc.path) {
     imgSrc = micaCache;
   } else {
-    imgSrc = await ipcRenderer.sendSync("get-wallpaper", {
+    imgSrc = await window.electronAPI.sendSync("get-wallpaper", {
       blurAmount: 256,
     });
     CiderCache.putCache("mica-cache", imgSrc);

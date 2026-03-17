@@ -77,7 +77,7 @@ const Events = {
       // CTRL+F11
       if (event.ctrlKey && event.keyCode === 122) {
         try {
-          ipcRenderer.send("detachDT", "");
+          window.electronAPI.send("detachDT", "");
         } catch (e) {console.log(e);}
       }
       // Prevent Scrolling on spacebar

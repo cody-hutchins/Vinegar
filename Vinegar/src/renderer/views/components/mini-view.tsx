@@ -116,144 +116,142 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
           </div>
           <div className={"controls-parents"}>
             {app.mkReady() && (
-              <template>
-                <div
-                  className={"app-playback-controls"}
-                  onMouseOver={() => {
-                    app.chrome.progresshover = true;
-                  }}
-                  onMouseLeave={() => {
-                    app.chrome.progresshover = false;
-                  }}
-                  onContextMenu={app.nowPlayingContextMenu}>
-                  <div className={"playback-info"}>
-                    <div className={"song-name"}>{app.mk.nowPlayingItem["attributes"]["name"]}</div>
-                    <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden", marginBottom: "5px" }}>
-                      <div
-                        className={"item-navigate song-artist"}
-                        style={{ display: "inline-block" }}
-                        onClick={() => app.getNowPlayingItemDetailed(`artist`)}>
-                        {app.mk.nowPlayingItem["attributes"]["artistName"]}
-                      </div>
-                      <div
-                        className={"song-artist item-navigate"}
-                        style={{ display: "inline-block" }}
-                        onClick={() => app.getNowPlayingItemDetailed("album")}>
-                        {app.mk.nowPlayingItem["attributes"]["albumName"] ? " — " + app.mk.nowPlayingItem["attributes"]["albumName"] : ""}
-                      </div>
+              <div
+                className={"app-playback-controls"}
+                onMouseOver={() => {
+                  app.chrome.progresshover = true;
+                }}
+                onMouseLeave={() => {
+                  app.chrome.progresshover = false;
+                }}
+                onContextMenu={app.nowPlayingContextMenu}>
+                <div className={"playback-info"}>
+                  <div className={"song-name"}>{app.mk.nowPlayingItem["attributes"]["name"]}</div>
+                  <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden", marginBottom: "5px" }}>
+                    <div
+                      className={"item-navigate song-artist"}
+                      style={{ display: "inline-block" }}
+                      onClick={() => app.getNowPlayingItemDetailed(`artist`)}>
+                      {app.mk.nowPlayingItem["attributes"]["artistName"]}
                     </div>
-
-                    <div className={"song-progress"}>
-                      <div
-                        className={"song-duration"}
-                        style={{ justifyContent: "space-between", height: "1px", marginBottom: "1px", display: app.chrome.progresshover ? "flex" : "none" }}>
-                        <p style={{ width: "auto" }}>{app.convertTime(app.getSongProgress())}</p>
-                        <p style={{ width: "auto" }}>{app.convertTime(app.mk.currentPlaybackDuration)}</p>
-                      </div>
-
-                      <input
-                        type={"range"}
-                        step={0.01}
-                        min={"0"}
-                        style={app.progressBarStyle()}
-                        onInput={() => {
-                          app.playerLCD.desiredDuration = $event.target.value;
-                          app.playerLCD.userInteraction = true;
-                        }}
-                        onMouseUp={() => {
-                          app.mk.seekToTime($event.target.value);
-                          app.playerLCD.desiredDuration = 0;
-                          app.playerLCD.userInteraction = false;
-                        }}
-                        max={app.mk.currentPlaybackDuration}
-                        value={app.getSongProgress()}
-                      />
+                    <div
+                      className={"song-artist item-navigate"}
+                      style={{ display: "inline-block" }}
+                      onClick={() => app.getNowPlayingItemDetailed("album")}>
+                      {app.mk.nowPlayingItem["attributes"]["albumName"] ? " — " + app.mk.nowPlayingItem["attributes"]["albumName"] : ""}
                     </div>
                   </div>
-                  <div className={"control-buttons"}>
-                    <div className={"app-chrome-item display--large"}>
-                      {$root.mk.shuffleMode === 0 ? (
-                        <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
-                          <button
-                            className={classNames("playback-button--small shuffle", { disabled: $root.isDisabled() })}
-                            onClick={() => ($root.mk.shuffleMode = 1)}
-                          />
-                        </OverlayTrigger>
-                      ) : (
-                        <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
-                          <button
-                            className={classNames("playback-button--small shuffle active", { disabled: $root.isDisabled() })}
-                            onClick={() => ($root.mk.shuffleMode = 0)}
-                          />
-                        </OverlayTrigger>
-                      )}
+
+                  <div className={"song-progress"}>
+                    <div
+                      className={"song-duration"}
+                      style={{ justifyContent: "space-between", height: "1px", marginBottom: "1px", display: app.chrome.progresshover ? "flex" : "none" }}>
+                      <p style={{ width: "auto" }}>{app.convertTime(app.getSongProgress())}</p>
+                      <p style={{ width: "auto" }}>{app.convertTime(app.mk.currentPlaybackDuration)}</p>
                     </div>
-                    <div className={"app-chrome-item display--large"}>
-                      <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
-                        <button
-                          className={classNames("playback-button previous", { disabled: $root.isPrevDisabled() })}
-                          onClick={() => $root.prevButton()}
-                        />
-                      </OverlayTrigger>
-                    </div>
-                    <div className={"app-chrome-item display--large"}>
-                      {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                        <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
-                          <button
-                            className={"playback-button stop"}
-                            onClick={() => $root.mk.stop()}
-                          />
-                        </OverlayTrigger>
-                      ) : (
-                        <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
-                          <button
-                            className={"playback-button play"}
-                            onClick={() => $root.mk.play()}
-                          />
-                        </OverlayTrigger>
-                      )}
-                    </div>
-                    <div className={"app-chrome-item display--large"}>
-                      <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
-                        <button
-                          className={classNames("playback-button next", { disabled: $root.isNextDisabled() })}
-                          onClick={() => $root.skipToNextItem()}
-                        />
-                      </OverlayTrigger>
-                    </div>
-                    <div className={"app-chrome-item display--large"}>
-                      {$root.mk.repeatMode === 0 ? (
-                        <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("term.enableRepeatOne")}</Tooltip>}>
-                          <button
-                            className={classNames("playback-button--small repeat", { disabled: $root.isDisabled() })}
-                            onClick={() => ($root.mk.repeatMode = 1)}
-                          />
-                        </OverlayTrigger>
-                      ) : null}
-                    </div>
-                  </div>
-                  <div className={"app-chrome-item volume display--large"}>
-                    <div className={"input-container"}>
-                      <button
-                        className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
-                        onClick={() => app.muteButtonPressed()}
-                      />
-                      {typeof app.mk.volume !== "undefined" && (
-                        <input
-                          type={"range"}
-                          className={"slider"}
-                          onWheel={app.volumeWheel}
-                          step={app.cfg.audio.volumeStep}
-                          min={"0"}
-                          max={app.cfg.audio.maxVolume}
-                          v-model={app.mk.volume}
-                          onChange={() => app.checkMuteChange()}
-                        />
-                      )}
-                    </div>
+
+                    <input
+                      type={"range"}
+                      step={0.01}
+                      min={"0"}
+                      style={app.progressBarStyle()}
+                      onInput={() => {
+                        app.playerLCD.desiredDuration = $event.target.value;
+                        app.playerLCD.userInteraction = true;
+                      }}
+                      onMouseUp={() => {
+                        app.mk.seekToTime($event.target.value);
+                        app.playerLCD.desiredDuration = 0;
+                        app.playerLCD.userInteraction = false;
+                      }}
+                      max={app.mk.currentPlaybackDuration}
+                      value={app.getSongProgress()}
+                    />
                   </div>
                 </div>
-              </template>
+                <div className={"control-buttons"}>
+                  <div className={"app-chrome-item display--large"}>
+                    {$root.mk.shuffleMode === 0 ? (
+                      <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                        <button
+                          className={classNames("playback-button--small shuffle", { disabled: $root.isDisabled() })}
+                          onClick={() => ($root.mk.shuffleMode = 1)}
+                        />
+                      </OverlayTrigger>
+                    ) : (
+                      <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                        <button
+                          className={classNames("playback-button--small shuffle active", { disabled: $root.isDisabled() })}
+                          onClick={() => ($root.mk.shuffleMode = 0)}
+                        />
+                      </OverlayTrigger>
+                    )}
+                  </div>
+                  <div className={"app-chrome-item display--large"}>
+                    <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                      <button
+                        className={classNames("playback-button previous", { disabled: $root.isPrevDisabled() })}
+                        onClick={() => $root.prevButton()}
+                      />
+                    </OverlayTrigger>
+                  </div>
+                  <div className={"app-chrome-item display--large"}>
+                    {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
+                      <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                        <button
+                          className={"playback-button stop"}
+                          onClick={() => $root.mk.stop()}
+                        />
+                      </OverlayTrigger>
+                    ) : (
+                      <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                        <button
+                          className={"playback-button play"}
+                          onClick={() => $root.mk.play()}
+                        />
+                      </OverlayTrigger>
+                    )}
+                  </div>
+                  <div className={"app-chrome-item display--large"}>
+                    <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+                      <button
+                        className={classNames("playback-button next", { disabled: $root.isNextDisabled() })}
+                        onClick={() => $root.skipToNextItem()}
+                      />
+                    </OverlayTrigger>
+                  </div>
+                  <div className={"app-chrome-item display--large"}>
+                    {$root.mk.repeatMode === 0 ? (
+                      <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("term.enableRepeatOne")}</Tooltip>}>
+                        <button
+                          className={classNames("playback-button--small repeat", { disabled: $root.isDisabled() })}
+                          onClick={() => ($root.mk.repeatMode = 1)}
+                        />
+                      </OverlayTrigger>
+                    ) : null}
+                  </div>
+                </div>
+                <div className={"app-chrome-item volume display--large"}>
+                  <div className={"input-container"}>
+                    <button
+                      className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
+                      onClick={() => app.muteButtonPressed()}
+                    />
+                    {typeof app.mk.volume !== "undefined" && (
+                      <input
+                        type={"range"}
+                        className={"slider"}
+                        onWheel={app.volumeWheel}
+                        step={app.cfg.audio.volumeStep}
+                        min={"0"}
+                        max={app.cfg.audio.maxVolume}
+                        v-model={app.mk.volume}
+                        onChange={() => app.checkMuteChange()}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </Col>

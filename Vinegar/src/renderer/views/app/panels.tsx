@@ -187,12 +187,10 @@ const Panels = () => {
                       />
                     </OverlayTrigger>
                   ) : (
-                    <template>
-                      <button
-                        className={"playback-button--small lyrics"}
-                        style={{ opacity: 0.3, pointerEvents: "none" }}
-                      />
-                    </template>
+                    <button
+                      className={"playback-button--small lyrics"}
+                      style={{ opacity: 0.3, pointerEvents: "none" }}
+                    />
                   )}
                 </div>
               )}

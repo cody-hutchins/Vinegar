@@ -22,7 +22,7 @@ const PluginsGithub = () => {
   }, []);
 
   function getInstalledThemes() {
-    const themes = ipcRenderer.sendSync("get-themes");
+    const themes = window.electronAPI.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
       if (theme.github_repo !== "") {
@@ -59,13 +59,13 @@ const PluginsGithub = () => {
     });
     app.confirm(msg, (res) => {
       if (res) {
-        ipcRenderer.once("plugin-installed", (event, arg) => {
+        window.electronAPI.once("plugin-installed", (event, arg) => {
           if (arg.success) {
             themes = [];
             notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
             app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
               if (ok) {
-                ipcRenderer.invoke("relaunchApp");
+                window.electronAPI.invoke("relaunchApp");
               } else {
                 return;
               }
@@ -74,19 +74,19 @@ const PluginsGithub = () => {
             notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
           }
         });
-        ipcRenderer.invoke("get-github-plugin", repo.html_url);
+        window.electronAPI.invoke("get-github-plugin", repo.html_url);
       }
     });
   }
   function installThemeURL() {
     app.prompt(app.getLz("settings.prompt.visual.plugin.github.URL"), (result) => {
       if (result) {
-        ipcRenderer.once("plugin-installed", (event, arg) => {
+        window.electronAPI.once("plugin-installed", (event, arg) => {
           if (arg.success) {
-            themes = ipcRenderer.sendSync("get-themes");
+            themes = window.electronAPI.sendSync("get-themes");
             app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
               if (ok) {
-                ipcRenderer.invoke("relaunchApp");
+                window.electronAPI.invoke("relaunchApp");
               } else {
                 return;
               }
@@ -96,7 +96,7 @@ const PluginsGithub = () => {
             notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
           }
         });
-        ipcRenderer.invoke("get-github-plugin", result);
+        window.electronAPI.invoke("get-github-plugin", result);
       }
     });
   }

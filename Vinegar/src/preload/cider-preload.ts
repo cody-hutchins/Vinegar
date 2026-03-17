@@ -1,4 +1,5 @@
-global.ipcRenderer = require("electron").ipcRenderer;
+import { contextBridge, ipcRenderer } from "electron";
+import { IElectronAPI } from "../types";
 console.info("Loaded Preload");
 
 let cache = { playParams: { id: 0 }, status: null, remainingTime: 0 },
@@ -12,8 +13,8 @@ const MusicKitInterop = {
       if (!attributes) return;
       MusicKitInterop.updateMediaState(attributes);
       if (MusicKitInterop.filterTrack(attributes, true, false)) {
-        global.ipcRenderer.send("playbackStateDidChange", attributes);
-        global.ipcRenderer.send("wsapi-updatePlaybackState", attributes);
+        ipcRenderer.send("playbackStateDidChange", attributes);
+        ipcRenderer.send("wsapi-updatePlaybackState", attributes);
       }
     });
 
@@ -52,16 +53,16 @@ const MusicKitInterop = {
       attributes.primaryArtist = app.cfg.connectivity.lastfm.remove_featured ? await this.fetchSongRelationships() : attributes.artistName;
 
       MusicKitInterop.updateMediaSession(attributes);
-      global.ipcRenderer.send("nowPlayingItemDidChange", attributes);
+      ipcRenderer.send("nowPlayingItemDidChange", attributes);
 
       if (MusicKitInterop.filterTrack(attributes, false, true)) {
-        global.ipcRenderer.send("lastfm:FilteredNowPlayingItemDidChange", attributes);
+        ipcRenderer.send("lastfm:FilteredNowPlayingItemDidChange", attributes);
       } else if (attributes.name !== "no-title-found" && attributes.playParams.id !== "no-id-found") {
-        global.ipcRenderer.send("lastfm:nowPlayingChange", attributes);
+        ipcRenderer.send("lastfm:nowPlayingChange", attributes);
       }
 
       if (app.cfg.general.playbackNotifications && !document.hasFocus() && attributes.artistName && attributes.artwork && attributes.name) {
-        global.ipcRenderer.send("playbackNotifications:create", attributes);
+        ipcRenderer.send("playbackNotifications:create", attributes);
       }
 
       if (MusicKit.getInstance().nowPlayingItem) {
@@ -73,7 +74,7 @@ const MusicKitInterop = {
 
     /* MusicKit.Events.authorizationStatusDidChange */
     MusicKit.getInstance().addEventListener(MusicKit.Events.authorizationStatusDidChange, () => {
-      global.ipcRenderer.send("authorizationStatusDidChange", MusicKit.getInstance().authorizationStatus);
+      ipcRenderer.send("authorizationStatusDidChange", MusicKit.getInstance().authorizationStatus);
     });
 
     /* MusicKit.Events.mediaPlaybackError */
@@ -83,12 +84,12 @@ const MusicKitInterop = {
 
     /* MusicKit.Events.shuffleModeDidChange */
     MusicKit.getInstance().addEventListener(MusicKit.Events.shuffleModeDidChange, () => {
-      global.ipcRenderer.send("shuffleModeDidChange", MusicKit.getInstance().shuffleMode);
+      ipcRenderer.send("shuffleModeDidChange", MusicKit.getInstance().shuffleMode);
     });
 
     /* MusicKit.Events.repeatModeDidChange */
     MusicKit.getInstance().addEventListener(MusicKit.Events.repeatModeDidChange, () => {
-      global.ipcRenderer.send("repeatModeDidChange", MusicKit.getInstance().repeatMode);
+      ipcRenderer.send("repeatModeDidChange", MusicKit.getInstance().repeatMode);
     });
   },
 
@@ -345,6 +346,16 @@ const MusicKitInterop = {
     }
   },
 };
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+contextBridge.exposeInMainWorld("electronAPI", {
+  send: (channel: string, ...data: any) => ipcRenderer.send(channel, data),
+  sendSync: (channel: string, ...data: any) => ipcRenderer.sendSync(channel, data),
+  on: (callback: (...args: any[]) => void) => ipcRenderer.on("update-status", (event, ...args) => callback(...args)),
+  invoke: (...data: any[]) => ipcRenderer.invoke("perform-task", data),
+  once: (channel: string, listener: () => void) => ipcRenderer.once(channel, listener),
+} as IElectronAPI);
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 process.once("loaded", () => {
   console.debug("[cider:preload] IPC Listeners Created!");

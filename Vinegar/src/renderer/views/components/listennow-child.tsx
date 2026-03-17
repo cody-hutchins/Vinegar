@@ -49,8 +49,8 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
   return (
     <div id={"listennow-child"}>
       <div ref={ref}>
-        {isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf" ? (
-          <template>
+        {isVisible && recom.attributes.display.kind !== "MusicSuperHeroShelf" && (
+          <>
             <Row className={"row"}>
               {recom?.relationships["primary-content"]?.data?.length > 0 ? (
                 <Col style={{ display: "flex", marginBlock: "1rem" }}>
@@ -92,8 +92,8 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                 items={recom.relationships.contents.data.limit(10)}
               />
             )}
-          </template>
-        ) : null}
+          </>
+        )}
       </div>
     </div>
   );

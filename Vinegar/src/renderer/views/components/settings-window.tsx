@@ -1,6 +1,4 @@
 import classNames from "classnames";
-import { ipcRenderer } from "electron";
-import SVGIcon from "../../main/components/SVGIcon.jsx";
 import Audiolabs from "../pages/audiolabs.jsx";
 import { InstalledThemes } from "./settings-installed-themes.jsx";
 import Keybinds from "./settings-keybinds.jsx";
@@ -8,10 +6,11 @@ import PluginsGithub from "./settings-plugins-github.jsx";
 import ThemesGithub from "./settings-themes-github.jsx";
 import { Modal, Tab } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import SVGIcon from "../../main/components/svg-icon.jsx";
 
 const SettingsWindow = () => {
   const app = this.$root;
-  const themes = ipcRenderer.sendSync("get-themes");
+  const themes = window.electronAPI.sendSync("get-themes");
   const tabIndex = 0;
   const canChangeHash = false;
   let lastfmConnecting = false;
@@ -42,7 +41,7 @@ const SettingsWindow = () => {
   function reinstallWidevineCDM() {
     app.confirm(app.getLz("settings.option.experimental.reinstallwidevine.confirm"), (ok) => {
       if (ok) {
-        ipcRenderer.invoke("reinstall-widevine-cdm");
+        window.electronAPI.invoke("reinstall-widevine-cdm");
       }
     });
   }
@@ -50,14 +49,14 @@ const SettingsWindow = () => {
     app.openSettingsPage("github-themes");
   }
   function copyLogs() {
-    ipcRenderer.send("fetch-log");
+    window.electronAPI.send("fetch-log");
     notyf.success(app.getLz("term.share.success"));
   }
   function openAppData() {
-    ipcRenderer.send("open-appdata");
+    window.electronAPI.send("open-appdata");
   }
   function changeDisplayTheme() {
-    ipcRenderer.send("changeDisplayTheme", app.cfg.visual.overrideDisplayTheme);
+    window.electronAPI.send("changeDisplayTheme", app.cfg.visual.overrideDisplayTheme);
   }
   const getLanguages = () => {
     const langs = this.$root.lzListing;
@@ -102,9 +101,9 @@ const SettingsWindow = () => {
     app.chrome.hideUserInfo = !app.cfg.visual.showuserinfo;
   };
   const sendDataToMTT = () => {
-    ipcRenderer.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
+    window.electronAPI.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
     //  setStoreValue does not change plugin store values somehow
-    ipcRenderer.invoke("update-store-mtt", app.cfg.general.close_behavior);
+    window.electronAPI.invoke("update-store-mtt", app.cfg.general.close_behavior);
   };
   function checkIfUpdateDisabled() {
     if (app.cfg.main.UPDATABLE) return;
@@ -118,28 +117,28 @@ const SettingsWindow = () => {
   function promptForRelaunch() {
     app.confirm(app.getLz("action.relaunch.confirm"), (result) => {
       if (result) {
-        ipcRenderer.send("relaunchApp", "");
+        window.electronAPI.send("relaunchApp", "");
       }
     });
   }
   function authCC() {
-    ipcRenderer.send("cc-auth");
+    window.electronAPI.send("cc-auth");
   }
   function logoutCC() {
-    ipcRenderer.send("cc-logout");
+    window.electronAPI.send("cc-logout");
   }
   function reloadDiscordRPC() {
-    ipcRenderer.send("discordrpc:reload");
+    window.electronAPI.send("discordrpc:reload");
   }
   function lfmDisconnect() {
     this.$root.cfg.connectivity.lastfm.enabled = false;
     this.$root.cfg.connectivity.lastfm.secrets.username = "";
     this.$root.cfg.connectivity.lastfm.secrets.key = "";
-    ipcRenderer.send("lastfm:disconnect");
+    window.electronAPI.send("lastfm:disconnect");
   }
   async function lfmAuthorize() {
     lastfmConnecting = true;
-    window.open(await ipcRenderer.invoke("lastfm:url"));
+    window.open(await window.electronAPI.invoke("lastfm:url"));
     app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connecting"));
 
     /* Just a timeout for the button */
@@ -151,7 +150,7 @@ const SettingsWindow = () => {
       }
     }, 40000);
 
-    ipcRenderer.once("lastfm:authenticated", (_e, session) => {
+    window.electronAPI.once("lastfm:authenticated", (_e, session) => {
       this.$root.cfg.connectivity.lastfm.secrets.username = session.username;
       this.$root.cfg.connectivity.lastfm.secrets.key = session.key;
       this.$root.cfg.connectivity.lastfm.enabled = true;
@@ -164,7 +163,7 @@ const SettingsWindow = () => {
   }
   function submitToken() {
     const token = document.getElementById("lfmToken").value;
-    ipcRenderer.send("lastfm:auth", token);
+    window.electronAPI.send("lastfm:auth", token);
   }
   // function openLocalSongsPathMenu() {
   //   app.modals.pathMenu = true;
@@ -611,45 +610,39 @@ const SettingsWindow = () => {
         </div>
       </Tab>
       <Tab>
-        <template>
-          <div>
-            <SVGIcon
-              url={"./assets/feather/zap.svg"}
-              classes={"svg-md"}
-              name={"settings-audiolabs"}
-            />
-          </div>
-          <div>{$root.getLz("settings.option.audio.audioLab")}</div>
-        </template>
+        <div>
+          <SVGIcon
+            url={"./assets/feather/zap.svg"}
+            classes={"svg-md"}
+            name={"settings-audiolabs"}
+          />
+        </div>
+        <div>{$root.getLz("settings.option.audio.audioLab")}</div>
         <div className={"settings-tab-content"}>
           <Audiolabs />
         </div>
       </Tab>
       <Tab>
-        <template>
-          <div>
-            <SVGIcon
-              url={"./assets/feather/style.svg"}
-              classes={"svg-md"}
-              name={"settings-styles"}
-            />
-          </div>
-          <div>{$root.getLz("settings.header.visual.styles")}</div>
-        </template>
+        <div>
+          <SVGIcon
+            url={"./assets/feather/style.svg"}
+            classes={"svg-md"}
+            name={"settings-styles"}
+          />
+        </div>
+        <div>{$root.getLz("settings.header.visual.styles")}</div>
         <div className={"settings-tab-content"}>
           <InstalledThemes />
         </div>
       </Tab>
-      <template>
-        <div>
-          <SVGIcon
-            url={"./assets/feather/pen-tool.svg"}
-            classes={"svg-md"}
-            name={"settings-visual"}
-          />
-        </div>
-        <div>{$root.getLz("settings.header.visual")}</div>
-      </template>
+      <div>
+        <SVGIcon
+          url={"./assets/feather/pen-tool.svg"}
+          classes={"svg-md"}
+          name={"settings-visual"}
+        />
+      </div>
+      <div>{$root.getLz("settings.header.visual")}</div>
       <div className={"md-option-container"}>
         {/* Visual Settings  */}
         <div className={"md-option-header"}>
@@ -903,31 +896,27 @@ const SettingsWindow = () => {
         </div>
       </div>
       <Tab>
-        <template>
-          <div>
-            <SVGIcon
-              url={"./assets/feather/plugins.svg"}
-              classes={"svg-md"}
-              name={"settings-plugins"}
-            />
-          </div>
-          <div>{$root.getLz("term.plugins")}</div>
-        </template>
+        <div>
+          <SVGIcon
+            url={"./assets/feather/plugins.svg"}
+            classes={"svg-md"}
+            name={"settings-plugins"}
+          />
+        </div>
+        <div>{$root.getLz("term.plugins")}</div>
         <div className={"settings-tab-content"}>
           <PluginsGithub />
         </div>
       </Tab>
       <Tab>
-        <template>
-          <div>
-            <SVGIcon
-              url={"./assets/feather/mic.svg"}
-              classes={"svg-md"}
-              name={"settings-lyrics"}
-            />
-          </div>
-          <div>{$root.getLz("settings.header.lyrics")}</div>
-        </template>
+        <div>
+          <SVGIcon
+            url={"./assets/feather/mic.svg"}
+            classes={"svg-md"}
+            name={"settings-lyrics"}
+          />
+        </div>
+        <div>{$root.getLz("settings.header.lyrics")}</div>
         <div className={"settings-tab-content"}>
           <div className={"md-option-container"}>
             {/* Lyric Settings  */}
@@ -1263,16 +1252,14 @@ const SettingsWindow = () => {
         </div>
       </Tab>
       <Tab>
-        <template>
-          <div>
-            <SVGIcon
-              url={"./assets/feather/radio.svg"}
-              classes={"svg-md"}
-              name={"settings-connectivity"}
-            />
-          </div>
-          <div>{$root.getLz("settings.header.connectivity")}</div>
-        </template>
+        <div>
+          <SVGIcon
+            url={"./assets/feather/radio.svg"}
+            classes={"svg-md"}
+            name={"settings-connectivity"}
+          />
+        </div>
+        <div>{$root.getLz("settings.header.connectivity")}</div>
         <div className={"settings-tab-content"}>
           <div className={"md-option-container"}>
             {/* Connectivity Settings  */}
@@ -1571,16 +1558,14 @@ const SettingsWindow = () => {
           </div>
         </div>
       </Tab>
-      <template>
-        <div>
-          <SVGIcon
-            url={"./assets/feather/hard-drive.svg"}
-            classes={"svg-md"}
-            name={"settings-advanced"}
-          />
-        </div>
-        <div>{$root.getLz("settings.header.advanced")}</div>
-      </template>
+      <div>
+        <SVGIcon
+          url={"./assets/feather/hard-drive.svg"}
+          classes={"svg-md"}
+          name={"settings-advanced"}
+        />
+      </div>
+      <div>{$root.getLz("settings.header.advanced")}</div>
       <div className={"md-option-container"}>
         {/* Debug Settings  */}
         <div className={"md-option-header"}>
@@ -1767,16 +1752,12 @@ const SettingsWindow = () => {
       <option value={"500"}>500</option>
       {/*keybinds Settings  */}
       <Tab id={"hid"}>
-        <template>
-          <Keybinds />
-        </template>
+        <Keybinds />
       </Tab>
       {/*keybinds-settings  */}
       {/*Github-theme-settings  */}
       <Tab id={"hid"}>
-        <template>
-          <ThemesGithub />
-        </template>
+        <ThemesGithub />
       </Tab>
       {/*Github-theme-settings  */}
       {/* Connect Settings  */}

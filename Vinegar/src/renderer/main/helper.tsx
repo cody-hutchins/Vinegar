@@ -47,7 +47,7 @@ const helpers = {
   },
   async oobeInit() {
     this.appMode = "oobe";
-    for (const [k, v] of Object.entries(ipcRenderer.sendSync("get-i18n-listing"))) {
+    for (const [k, v] of Object.entries(window.electronAPI.sendSync("get-i18n-listing"))) {
       if (v.code === navigator.language.replace("-", "_")) {
         this.cfg.general.language = v.code;
         break;
@@ -57,10 +57,10 @@ const helpers = {
     this.setLzManual();
     clearTimeout(this.hangtimer);
     document.body.removeAttribute("loading");
-    ipcRenderer.invoke("renderer-ready", true);
+    window.electronAPI.invoke("renderer-ready", true);
     document.querySelector("#LOADER").remove();
 
-    ipcRenderer.on("recv-cookies", function (_event, cookies) {
+    window.electronAPI.on("recv-cookies", function (_event, cookies) {
       console.log("[appIPC] recv-cookies");
       Object.keys(cookies).forEach((key) => {
         localStorage.setItem(key, cookies[key]);
@@ -116,7 +116,7 @@ const helpers = {
     if (val) {
       this.mk.isAuthorized ? (this.chrome.menuOpened = !this.chrome.menuOpened) : false;
       if (!this.mk.isAuthorized) {
-        ipcRenderer.send("auth-window");
+        window.electronAPI.send("auth-window");
       }
     } else {
       setTimeout(() => {
@@ -137,7 +137,7 @@ const helpers = {
     if (lang === "") {
       lang = this.cfg.general.language;
     }
-    this.lz = ipcRenderer.sendSync("get-i18n", lang);
+    this.lz = window.electronAPI.sendSync("get-i18n", lang);
     this.mklang = await this.MKJSLang();
     try {
       this.listennow.timestamp = 0;
@@ -271,7 +271,7 @@ const helpers = {
     });
   },
   quit() {
-    ipcRenderer.invoke("quit-app");
+    window.electronAPI.invoke("quit-app");
   },
   async openAppleMusicURL(url) {
     const properties = MusicKit.formattedMediaURL(url);
@@ -552,7 +552,7 @@ const helpers = {
     this.mk = MusicKit.getInstance();
     const needsReload = typeof localStorage["music.ampwebplay.media-user-token"] === "undefined";
     if (needsReload) {
-      ipcRenderer.send("auth-window");
+      window.electronAPI.send("auth-window");
       this.mkIsReady = true;
     }
     // this.mk.authorize().then(() => {
@@ -715,11 +715,11 @@ const helpers = {
 
     MusicKit.getInstance().videoContainerElement = document.getElementById("apple-music-video-player");
 
-    ipcRenderer.on("setStoreValue", (e, key, value) => {
+    window.electronAPI.on("setStoreValue", (e, key, value) => {
       app.cfg[key] = value;
     });
 
-    ipcRenderer.on("theme-update", async (event, arg) => {
+    window.electronAPI.on("theme-update", async (event, arg) => {
       await less.refresh(true, true, true);
       self.setTheme(self.cfg.visual.theme, true);
       if (app.cfg.visual.styles.length !== 0) {
@@ -731,7 +731,7 @@ const helpers = {
      * DiscordRPC Reload Return Event
      * @author @coredev-uk
      */
-    ipcRenderer.on("rpcReloaded", (e, user) => {
+    window.electronAPI.on("rpcReloaded", (e, user) => {
       if (user.username) {
         app.notyf.success(
           app.stringTemplateParser(app.getLz("settings.option.connectivity.discordRPC.reconnectedToUser"), {
@@ -742,16 +742,16 @@ const helpers = {
       }
     });
 
-    ipcRenderer.on("getUpdatedLocalList", (event, data) => {
+    window.electronAPI.on("getUpdatedLocalList", (event, data) => {
       // console.log("cider-local", data);
       this.library.localsongs = data;
     });
 
-    ipcRenderer.on("window-state-changed", (event, data) => {
+    window.electronAPI.on("window-state-changed", (event, data) => {
       this.chrome.windowState = data;
     });
 
-    ipcRenderer.on("SoundCheckTag", (event, tag) => {
+    window.electronAPI.on("SoundCheckTag", (event, tag) => {
       // let replaygain = self.parseSCTagToRG(tag)
       try {
         if (app.mk.nowPlayingItem.type !== "song") {
@@ -774,10 +774,10 @@ const helpers = {
         }
       } catch (e) {
         try {
-          ipcRenderer.send("SoundCheckTag", event, tag);
+          window.electronAPI.send("SoundCheckTag", event, tag);
         } catch (e) {
           try {
-            ipcRenderer.send("SoundCheckTag", event, tag);
+            window.electronAPI.send("SoundCheckTag", event, tag);
           } catch (e) {
             console.log("[Cider][MaikiwiSoundCheck] Error [Gave up after 3 consecutive attempts]: " + e);
           }
@@ -785,7 +785,7 @@ const helpers = {
       } // brute force until it works
     });
 
-    ipcRenderer.on("play", function (_event, mode, id) {
+    window.electronAPI.on("play", function (_event, mode, id) {
       if (mode !== "url") {
         self.mk.setQueue({ [mode]: id, parameters: { l: self.mklang } }).then(() => {
           app.mk.play();
@@ -796,7 +796,7 @@ const helpers = {
     });
 
     this.mk.addEventListener(MusicKit.Events.playbackStateDidChange, (event) => {
-      ipcRenderer.send("wsapi-updatePlaybackState", wsapi.getAttributes());
+      window.electronAPI.send("wsapi-updatePlaybackState", wsapi.getAttributes());
       document.body.setAttribute("playback-state", event.state === 2 ? "playing" : "paused");
     });
 
@@ -805,7 +805,7 @@ const helpers = {
       this.currentSongInfo = a;
       self.playerLCD.playbackDuration = self.mk.currentPlaybackTime;
       // wsapi
-      ipcRenderer.send("wsapi-updatePlaybackState", wsapi.getAttributes());
+      window.electronAPI.send("wsapi-updatePlaybackState", wsapi.getAttributes());
     });
 
     this.mk.addEventListener(MusicKit.Events.queueItemsDidChange, () => {
@@ -918,7 +918,7 @@ const helpers = {
               }
               if (previewURL) {
                 console.debug("[Cider][MaikiwiSoundCheck] previewURL response.data.data[0].attributes.previews[0].url: " + previewURL);
-                ipcRenderer.send("getPreviewURL", previewURL);
+                window.electronAPI.send("getPreviewURL", previewURL);
               } else {
                 if (localFiles) {
                   CiderAudio.audioNodes.gainNode.gain.value = 0.822242649947;
@@ -928,7 +928,7 @@ const helpers = {
           } else {
             if (previewURL) {
               console.debug("[Cider][MaikiwiSoundCheck] previewURL in app.mk.nowPlayingItem.previewURL: " + previewURL);
-              ipcRenderer.send("getPreviewURL", previewURL);
+              window.electronAPI.send("getPreviewURL", previewURL);
             }
           }
         } catch (e) {
@@ -962,7 +962,7 @@ const helpers = {
       app.getCurrentArtURL().then((urls) => {
         app.currentArtUrl = urls?.currentArtUrl ?? "";
         app.currentArtUrlRaw = urls?.currentArtUrlRaw ?? "";
-        ipcRenderer.send("discordrpc:updateImage", app.currentArtUrl);
+        window.electronAPI.send("discordrpc:updateImage", app.currentArtUrl);
       });
       // app.getNowPlayingArtwork(42);
       app.getNowPlayingArtworkBG(32);
@@ -978,7 +978,7 @@ const helpers = {
 
     this.mk.addEventListener(MusicKit.Events.playbackVolumeDidChange, (_a) => {
       this.cfg.audio.volume = this.mk.volume;
-      ipcRenderer.send("mpris:volumeChange", this.mk.volume);
+      window.electronAPI.send("mpris:volumeChange", this.mk.volume);
     });
 
     this.refreshPlaylists(this.isDev);
@@ -1000,7 +1000,7 @@ const helpers = {
     document.querySelector("#apple-music-video-player-controls").addEventListener("mousemove", () => {
       this.showFoo(".music-player-info", 2000);
     });
-    ipcRenderer.invoke("renderer-ready", true);
+    window.electronAPI.invoke("renderer-ready", true);
     document.querySelector("#LOADER").remove();
     if (this.cfg.general.themeUpdateNotification && !this.isDev) {
       this.checkForThemeUpdates();
@@ -1045,7 +1045,7 @@ const helpers = {
   },
   async checkForThemeUpdates() {
     const self = this;
-    const themes = ipcRenderer.sendSync("get-themes");
+    const themes = window.electronAPI.sendSync("get-themes");
     await asyncForEach(themes, async (theme) => {
       if (theme.commit !== "") {
         if (theme.commit !== "") {
@@ -3102,7 +3102,7 @@ const helpers = {
     const track = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.title ?? "") : "";
     const artist = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.artistName ?? "") : "";
     const time = this.mk.nowPlayingItem !== null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1;
-    ipcRenderer.invoke("getYTLyrics", track, artist).then((result) => {
+    window.electronAPI.invoke("getYTLyrics", track, artist).then((result) => {
       if (result.length > 0) {
         const ytid = result[0]["id"]["videoId"];
         if (app.cfg.lyrics.enable_yt) {
@@ -4421,7 +4421,7 @@ const helpers = {
       } else {
         this.airplayTrys[idx].attempts = this.airplayTrys[idx].attempts + 1;
         setTimeout(() => {
-          ipcRenderer.send("performAirplayPCM", ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv, true);
+          window.electronAPI.send("performAirplayPCM", ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv, true);
         }, 1000);
       }
     } else {
@@ -4710,7 +4710,7 @@ const helpers = {
   fullscreen(flag, mv = false) {
     this.fullscreenState = flag;
     if (flag) {
-      ipcRenderer.send("setFullScreen", true);
+      window.electronAPI.send("setFullScreen", true);
       if (!mv) {
         app.appMode = "fullscreen";
       } else {
@@ -4723,7 +4723,7 @@ const helpers = {
         }
       });
     } else {
-      ipcRenderer.send("setFullScreen", false);
+      window.electronAPI.send("setFullScreen", false);
       app.appMode = "player";
     }
   },
@@ -4742,18 +4742,18 @@ const helpers = {
       this.tmpHeight = window.innerHeight;
       this.tmpX = window.screenX;
       this.tmpY = window.screenY;
-      ipcRenderer.send("unmaximize");
-      ipcRenderer.send("windowmin", 250, 250);
-      if (this.miniTmpX !== "" && this.miniTmpY !== "") ipcRenderer.send("windowmove", this.miniTmpX, this.miniTmpY);
-      ipcRenderer.send("windowresize", 300, 300, false);
+      window.electronAPI.send("unmaximize");
+      window.electronAPI.send("windowmin", 250, 250);
+      if (this.miniTmpX !== "" && this.miniTmpY !== "") window.electronAPI.send("windowmove", this.miniTmpX, this.miniTmpY);
+      window.electronAPI.send("windowresize", 300, 300, false);
       app.appMode = "mini";
     } else {
       this.miniTmpX = window.screenX;
       this.miniTmpY = window.screenY;
-      ipcRenderer.send("windowmin", 844, 410);
-      ipcRenderer.send("windowresize", this.tmpWidth, this.tmpHeight, false);
-      ipcRenderer.send("windowmove", this.tmpX, this.tmpY);
-      ipcRenderer.send("windowontop", false);
+      window.electronAPI.send("windowmin", 844, 410);
+      window.electronAPI.send("windowresize", this.tmpWidth, this.tmpHeight, false);
+      window.electronAPI.send("windowmove", this.tmpX, this.tmpY);
+      window.electronAPI.send("windowontop", false);
       //this.cfg.visual.miniplayer_top_toggle = true;
       app.appMode = "player";
     }
@@ -4761,14 +4761,14 @@ const helpers = {
   pinMiniPlayer(status = false) {
     if (!status) {
       if (!this.cfg.visual.miniplayer_top_toggle) {
-        ipcRenderer.send("windowontop", true);
+        window.electronAPI.send("windowontop", true);
         this.cfg.visual.miniplayer_top_toggle = true;
       } else {
-        ipcRenderer.send("windowontop", false);
+        window.electronAPI.send("windowontop", false);
         this.cfg.visual.miniplayer_top_toggle = false;
       }
     } else {
-      ipcRenderer.send("windowontop", this.cfg.visual.miniplayer_top_toggle ?? false);
+      window.electronAPI.send("windowontop", this.cfg.visual.miniplayer_top_toggle ?? false);
     }
   },
   formatTimezoneOffset: (e = new Date()) => {
@@ -4806,8 +4806,8 @@ const helpers = {
     }
   },
   async showWebRemoteQR() {
-    //this.webremoteqr = await ipcRenderer.invoke('setRemoteQR','')
-    this.webremoteurl = await ipcRenderer.invoke("showQR", "");
+    //this.webremoteqr = await window.electronAPI.invoke('setRemoteQR','')
+    this.webremoteurl = await window.electronAPI.invoke("showQR", "");
     //this.modals.qrcode = true;
   },
   checkMarquee() {
@@ -4821,10 +4821,10 @@ const helpers = {
     }
   },
   closeWindow() {
-    ipcRenderer.send("close");
+    window.electronAPI.send("close");
   },
   darwinShare(url) {
-    ipcRenderer.send("share-menu", url);
+    window.electronAPI.send("share-menu", url);
   },
   arrayToChunk(arr, chunkSize) {
     const R = [];
@@ -4992,7 +4992,7 @@ const helpers = {
     // });
   },
   authCC() {
-    ipcRenderer.send("cc-auth");
+    window.electronAPI.send("cc-auth");
   },
   _playRadioStream(e) {
     const xhr = new XMLHttpRequest();

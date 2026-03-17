@@ -34,7 +34,7 @@ const AppContentArea = () => {
                 }
               }}
               name={$root.chrome.desiredPageTransition}>
-              {appRoute.condition && <template>{appRoute.component}</template>}
+              {appRoute.condition ? appRoute.component : ""}
             </motion.div>
           ))}
           {/*  */}
@@ -45,7 +45,7 @@ const AppContentArea = () => {
                 $root.getMadeForYou();
               }
             }}>
-            {$root.page === "library-madeforyou" && <template>{import("../pages/madeforyou.jsx")}</template>}
+            {$root.page === "library-madeforyou" ? import("../pages/madeforyou.jsx") : ""}
           </motion.div>
         </AnimatePresence>
         {/**/}

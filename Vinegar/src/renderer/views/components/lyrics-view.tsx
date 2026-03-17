@@ -69,7 +69,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
     if (startTime !== 9999999) app.seekTo(startTime, false);
   };
   const getActiveLyric = () => {
-    const delayfix = app.activeCasts[0]?.hasOwnProperty("airplay2") ? -2.5 : 0.1;
+    const delayfix = Object.hasOwn(app.activeCasts[0], "airplay2") ? -2.5 : 0.1;
     const prevLine = app.currentLyricsLine;
     for (let i = 0; i < lyrics.length; i++) {
       if (time + delayfix >= lyrics[i].startTime && time + delayfix <= app.lyrics[i].endTime) {
@@ -174,23 +174,19 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
                 onClick={() => seekTo(lyric.startTime)}
                 line-index={index.toString()}>
                 {richlyrics && richlyrics !== [] && richlyrics.length > 0 ? (
-                  <template>
-                    <div className={"richl"}>
-                      {getVerseLine(index - 1).map((verse) => (
-                        <span
-                          key={verse.id}
-                          className={"verse"}
-                          lyricstart={lyric.startTime}
-                          versestart={verse.o}>
-                          {verse.c}
-                        </span>
-                      ))}
-                    </div>
-                  </template>
+                  <div className={"richl"}>
+                    {getVerseLine(index - 1).map((verse) => (
+                      <span
+                        key={verse.id}
+                        className={"verse"}
+                        lyricstart={lyric.startTime}
+                        versestart={verse.o}>
+                        {verse.c}
+                      </span>
+                    ))}
+                  </div>
                 ) : (
-                  <template>
-                    <div className={"norm"}>{lyric.line}</div>
-                  </template>
+                  <div className={"norm"}>{lyric.line}</div>
                 )}
                 {lyric.translation && lyric.translation !== "" ? <div className={"lyrics-translation"}>{lyric.translation}</div> : null}
               </h3>

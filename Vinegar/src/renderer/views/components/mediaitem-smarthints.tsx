@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import classNames from "classnames";
-import MediaItemArtwork from "./mediaitem-artwork";
+import MediaItemArtwork from "./mediaitem-artwork.jsx";
 
 const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; position: number }) => {
   const app = this.$root;

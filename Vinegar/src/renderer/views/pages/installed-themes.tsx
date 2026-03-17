@@ -114,7 +114,7 @@ export const InstalledThemes = () => {
   }, []);
 
   function getThemesList() {
-    const _themes = ipcRenderer.sendSync("get-themes");
+    const _themes = window.electronAPI.sendSync("get-themes");
     _themes.unshift({
       name: "Acrylic Grain",
       file: "grain.less",
@@ -151,11 +151,11 @@ export const InstalledThemes = () => {
               (res) => {
                 if (res) {
                   console.debug(theme);
-                  ipcRenderer.once("theme-uninstalled", (event, args) => {
+                  window.electronAPI.once("theme-uninstalled", (event, args) => {
                     console.debug(event, args);
                     getThemesList();
                   });
-                  ipcRenderer.invoke("uninstall-theme", theme.path);
+                  window.electronAPI.invoke("uninstall-theme", theme.path);
                 }
               },
             );
@@ -174,10 +174,10 @@ export const InstalledThemes = () => {
     this.$root.showMenuPanel(menu, event);
   }
   function openThemesFolder() {
-    ipcRenderer.invoke("open-path", "themes");
+    window.electronAPI.invoke("open-path", "themes");
   }
   function getInstalledThemes() {
-    const themes = ipcRenderer.sendSync("get-themes");
+    const themes = window.electronAPI.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
       if (theme.github_repo !== "" && typeof theme.commit !== "undefined") {
@@ -216,31 +216,31 @@ export const InstalledThemes = () => {
     });
     app.confirm(msg, (res) => {
       if (res) {
-        ipcRenderer.once("theme-installed", (event, arg) => {
+        window.electronAPI.once("theme-installed", (event, arg) => {
           if (arg.success) {
-            themes = ipcRenderer.sendSync("get-themes");
+            themes = window.electronAPI.sendSync("get-themes");
             getInstalledThemes();
             notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
           } else {
             notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
           }
         });
-        ipcRenderer.invoke("get-github-theme", repo.html_url);
+        window.electronAPI.invoke("get-github-theme", repo.html_url);
       }
     });
   }
   function installThemeURL() {
     app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
       if (result) {
-        ipcRenderer.once("theme-installed", (event, arg) => {
+        window.electronAPI.once("theme-installed", (event, arg) => {
           if (arg.success) {
-            themes = ipcRenderer.sendSync("get-themes");
+            themes = window.electronAPI.sendSync("get-themes");
             notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
           } else {
             notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
           }
         });
-        ipcRenderer.invoke("get-github-theme", result);
+        window.electronAPI.invoke("get-github-theme", result);
       }
     });
   }
@@ -312,7 +312,7 @@ export const InstalledThemes = () => {
                     <Row>
                       <Col className={"themeLabel"}>{theme.name}</Col>
                       {$root.cfg.visual.styles.includes(theme.file) ? (
-                        <template>
+                        <>
                           {theme.pack && (
                             <Col sm={"auto"}>
                               <button className={"themeContextMenu codicon codicon-package"} />
@@ -321,9 +321,9 @@ export const InstalledThemes = () => {
                           <Col sm={"auto"}>
                             <button className={"themeContextMenu codicon codicon-check"} />
                           </Col>
-                        </template>
+                        </>
                       ) : (
-                        <template>
+                        <>
                           {theme.pack && (
                             <Col sm={"auto"}>
                               <button className={"themeContextMenu codicon codicon-package"} />
@@ -339,7 +339,7 @@ export const InstalledThemes = () => {
                               className={"themeContextMenu codicon codicon-list-unordered"}
                             />
                           </Col>
-                        </template>
+                        </>
                       )}
                     </Row>
                   </li>
@@ -354,17 +354,13 @@ export const InstalledThemes = () => {
                           <Row>
                             <Col className={"themeLabel"}>{packEntry.name}</Col>
                             {$root.cfg.visual.styles.includes(packEntry.file) ? (
-                              <template>
-                                <Col sm={"auto"}>
-                                  <button className={"themeContextMenu codicon codicon-check"} />
-                                </Col>
-                              </template>
+                              <Col sm={"auto"}>
+                                <button className={"themeContextMenu codicon codicon-check"} />
+                              </Col>
                             ) : (
-                              <template>
-                                <Col sm={"auto"}>
-                                  <button className={"themeContextMenu codicon codicon-diff-added"} />
-                                </Col>
-                              </template>
+                              <Col sm={"auto"}>
+                                <button className={"themeContextMenu codicon codicon-diff-added"} />
+                              </Col>
                             )}
                           </Row>
                         </li>

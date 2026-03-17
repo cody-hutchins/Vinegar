@@ -51,7 +51,7 @@ const SocialProfile = ({ data }: { data: object }) => {
         </div>
         <div className={"artist-body"}>
           {data.relationships && data.relationships["shared-playlists"] && (
-            <template>
+            <>
               <Row>
                 <Col>
                   <h3>Shared Playlists</h3>
@@ -63,7 +63,7 @@ const SocialProfile = ({ data }: { data: object }) => {
                   item={item}
                 />
               ))}
-            </template>
+            </>
           )}
         </div>
       </div>

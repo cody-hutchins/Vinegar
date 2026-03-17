@@ -13,171 +13,167 @@ export const ChromeBottom = () => {
         <div className={"app-chrome--left"}>
           <div className={"app-chrome-item playback-controls"}>
             {mkReady() ? (
-              <template>
-                <div
-                  className={"app-playback-controls"}
-                  onMouseOver={() => {
-                    chrome.progresshover = true;
-                  }}
-                  onMouseLeave={() => {
-                    chrome.progresshover = false;
-                  }}
-                  onContextMenu={nowPlayingContextMenu}>
-                  {cfg.visual.artworkDisplayLayout === "default" && (
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        switchArtworkDisplayLayout();
-                      }}
-                      className={"artwork"}
-                      id={"artworkLCD"}>
-                      <MediaItemArtwork url={$root.currentArtUrl} />
-                      <Popover
-                        custom-className={"mediainfo-popover"}
-                        target={"artworkLCD"}
-                        triggers={"hover"}
-                        placement={"right"}>
-                        <div className={"content"}>
-                          <div className={"shadow-artwork"}>
-                            <MediaItemArtwork url={currentArtUrl} />
-                          </div>
-                          <div className={"popover-artwork"}>
-                            <MediaItemArtwork url={currentArtUrl} />
-                          </div>
-                          <div className={"song-name"}>{mk.nowPlayingItem["attributes"]["name"]}</div>
-                          <div
-                            className={"song-artist"}
-                            onClick={() => getNowPlayingItemDetailed(`artist`)}>
-                            {mk.nowPlayingItem["attributes"]["artistName"]}
-                          </div>
-                          <div
-                            className={"song-album"}
-                            onClick={() => getNowPlayingItemDetailed(`album`)}>
-                            {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
-                          </div>
-                          <hr />
-                          <div
-                            className={"btn-group"}
-                            style={{ width: "100%" }}>
-                            <button
-                              className={"md-btn md-btn-small"}
-                              style={{ width: "100%" }}
-                              onClick={() => {
-                                drawer.open = false;
-                                miniPlayer(true);
-                              }}>
-                              {$root.getLz("term.miniplayer")}
-                            </button>
-                            <button
-                              className={"md-btn md-btn-small"}
-                              style={{ width: "100%" }}
-                              onClick={() => {
-                                drawer.open = false;
-                                fullscreen(true);
-                              }}>
-                              {$root.getLz("term.fullscreenView")}
-                            </button>
-                          </div>
+              <div
+                className={"app-playback-controls"}
+                onMouseOver={() => {
+                  chrome.progresshover = true;
+                }}
+                onMouseLeave={() => {
+                  chrome.progresshover = false;
+                }}
+                onContextMenu={nowPlayingContextMenu}>
+                {cfg.visual.artworkDisplayLayout === "default" && (
+                  <div
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      switchArtworkDisplayLayout();
+                    }}
+                    className={"artwork"}
+                    id={"artworkLCD"}>
+                    <MediaItemArtwork url={$root.currentArtUrl} />
+                    <Popover
+                      custom-className={"mediainfo-popover"}
+                      target={"artworkLCD"}
+                      triggers={"hover"}
+                      placement={"right"}>
+                      <div className={"content"}>
+                        <div className={"shadow-artwork"}>
+                          <MediaItemArtwork url={currentArtUrl} />
                         </div>
-                      </Popover>
-                    </div>
-                  )}
-                  <div className={"playback-info"}>
-                    <div className={"song-name" + isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""}>
-                      {mk.nowPlayingItem["attributes"]["name"]}
-                      {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
+                        <div className={"popover-artwork"}>
+                          <MediaItemArtwork url={currentArtUrl} />
+                        </div>
+                        <div className={"song-name"}>{mk.nowPlayingItem["attributes"]["name"]}</div>
                         <div
-                          className={"explicit-icon"}
-                          style={{ display: "inline-block" }}
-                        />
-                      )}
-                    </div>
-                    <div
-                      className={"song-artist"}
-                      onClick={() => getNowPlayingItemDetailed(`artist`)}>
-                      {mk.nowPlayingItem["attributes"]["artistName"]}
-                    </div>
-                    {mk.nowPlayingItem["attributes"]["albumName"] && (
-                      <div
-                        className={"song-album"}
-                        onClick={() => getNowPlayingItemDetailed("album")}>
-                        {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
+                          className={"song-artist"}
+                          onClick={() => getNowPlayingItemDetailed(`artist`)}>
+                          {mk.nowPlayingItem["attributes"]["artistName"]}
+                        </div>
+                        <div
+                          className={"song-album"}
+                          onClick={() => getNowPlayingItemDetailed(`album`)}>
+                          {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
+                        </div>
+                        <hr />
+                        <div
+                          className={"btn-group"}
+                          style={{ width: "100%" }}>
+                          <button
+                            className={"md-btn md-btn-small"}
+                            style={{ width: "100%" }}
+                            onClick={() => {
+                              drawer.open = false;
+                              miniPlayer(true);
+                            }}>
+                            {$root.getLz("term.miniplayer")}
+                          </button>
+                          <button
+                            className={"md-btn md-btn-small"}
+                            style={{ width: "100%" }}
+                            onClick={() => {
+                              drawer.open = false;
+                              fullscreen(true);
+                            }}>
+                            {$root.getLz("term.fullscreenView")}
+                          </button>
+                        </div>
                       </div>
+                    </Popover>
+                  </div>
+                )}
+                <div className={"playback-info"}>
+                  <div className={"song-name" + isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""}>
+                    {mk.nowPlayingItem["attributes"]["name"]}
+                    {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
+                      <div
+                        className={"explicit-icon"}
+                        style={{ display: "inline-block" }}
+                      />
                     )}
-                    <div className={"chrome-icon-container"}>
-                      {cfg.general.privateEnabled && <div className={"audio-type private-icon"} />}
-                      {cfg.audio.maikiwiAudio.spatial && (
-                        <OverlayTrigger overlay={<Tooltip id={"spatial-icon"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
-                          <div className={"audio-type spatial-icon"} />
-                        </OverlayTrigger>
-                      )}
-                      {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) && (
-                        <OverlayTrigger overlay={<Tooltip id={"lossless-icon"}>{mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}</Tooltip>}>
-                          <div className={"audio-type lossless-icon"} />
-                        </OverlayTrigger>
-                      )}
-                      {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
-                        <OverlayTrigger overlay={<Tooltip id={"ppe-icon"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
-                          <div className={"audio-type ppe-icon"} />
-                        </OverlayTrigger>
-                      )}
-                      {mk.nowPlayingItem?.attributes?.isLive && (
-                        <OverlayTrigger overlay={<Tooltip id={"live-icon"}>{$root.getLz("term.live")}</Tooltip>}>
-                          <svg
-                            className={"audio-type live-icon"}
-                            xmlns={"http://www.w3.org/2000/svg"}
-                            width={"24"}
-                            height={"24"}
-                            viewBox={"0 0 24 24"}
-                            fill={"none"}
-                            stroke={"var(--keyColor)"}
-                            strokeWidth={"2"}
-                            strokeLinecap={"round"}
-                            strokeLinejoin={"round"}>
-                            <path d={"M5 12.55a11 11 0 0 1 14.08 0"} />
-                            <path d={"M1.42 9a16 16 0 0 1 21.16 0"} />
-                            <path d={"M8.53 16.11a6 6 0 0 1 6.95 0"} />
-                            <line
-                              x1={"12"}
-                              y1={"20"}
-                              x2={12.01}
-                              y2={"20"}
-                            />
-                          </svg>
-                        </OverlayTrigger>
-                      )}
-                    </div>
                   </div>
-                  {mk.nowPlayingItem["attributes"]["playParams"] && (
-                    <div className={"actions"}>
-                      <OverlayTrigger overlay={<Tooltip id={"lcdMenu-icon"}>{$root.getLz("term.more")}</Tooltip>}>
-                        <button
-                          className={"lcdMenu"}
-                          onClick={nowPlayingContextMenu}>
-                          <div className={"svg-icon"} />
-                        </button>
-                      </OverlayTrigger>
-                    </div>
-                  )}
-                </div>
-              </template>
-            ) : (
-              <template>
-                <div className={"app-playback-controls"}>
-                  {cfg.visual.artworkDisplayLayout === "default" && (
+                  <div
+                    className={"song-artist"}
+                    onClick={() => getNowPlayingItemDetailed(`artist`)}>
+                    {mk.nowPlayingItem["attributes"]["artistName"]}
+                  </div>
+                  {mk.nowPlayingItem["attributes"]["albumName"] && (
                     <div
-                      className={"artwork"}
-                      id={"artworkLCD"}
-                      style={{ pointerEvents: "none" }}>
-                      <MediaItemArtwork url={currentArtUrl} />
+                      className={"song-album"}
+                      onClick={() => getNowPlayingItemDetailed("album")}>
+                      {mk.nowPlayingItem["attributes"]["albumName"] ? mk.nowPlayingItem["attributes"]["albumName"] : ""}
                     </div>
                   )}
-                  <div className={"playback-info"}>
-                    <div className={"song-name"} />
+                  <div className={"chrome-icon-container"}>
+                    {cfg.general.privateEnabled && <div className={"audio-type private-icon"} />}
+                    {cfg.audio.maikiwiAudio.spatial && (
+                      <OverlayTrigger overlay={<Tooltip id={"spatial-icon"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
+                        <div className={"audio-type spatial-icon"} />
+                      </OverlayTrigger>
+                    )}
+                    {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) && (
+                      <OverlayTrigger overlay={<Tooltip id={"lossless-icon"}>{mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}</Tooltip>}>
+                        <div className={"audio-type lossless-icon"} />
+                      </OverlayTrigger>
+                    )}
+                    {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
+                      <OverlayTrigger overlay={<Tooltip id={"ppe-icon"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
+                        <div className={"audio-type ppe-icon"} />
+                      </OverlayTrigger>
+                    )}
+                    {mk.nowPlayingItem?.attributes?.isLive && (
+                      <OverlayTrigger overlay={<Tooltip id={"live-icon"}>{$root.getLz("term.live")}</Tooltip>}>
+                        <svg
+                          className={"audio-type live-icon"}
+                          xmlns={"http://www.w3.org/2000/svg"}
+                          width={"24"}
+                          height={"24"}
+                          viewBox={"0 0 24 24"}
+                          fill={"none"}
+                          stroke={"var(--keyColor)"}
+                          strokeWidth={"2"}
+                          strokeLinecap={"round"}
+                          strokeLinejoin={"round"}>
+                          <path d={"M5 12.55a11 11 0 0 1 14.08 0"} />
+                          <path d={"M1.42 9a16 16 0 0 1 21.16 0"} />
+                          <path d={"M8.53 16.11a6 6 0 0 1 6.95 0"} />
+                          <line
+                            x1={"12"}
+                            y1={"20"}
+                            x2={12.01}
+                            y2={"20"}
+                          />
+                        </svg>
+                      </OverlayTrigger>
+                    )}
                   </div>
                 </div>
-              </template>
+                {mk.nowPlayingItem["attributes"]["playParams"] && (
+                  <div className={"actions"}>
+                    <OverlayTrigger overlay={<Tooltip id={"lcdMenu-icon"}>{$root.getLz("term.more")}</Tooltip>}>
+                      <button
+                        className={"lcdMenu"}
+                        onClick={nowPlayingContextMenu}>
+                        <div className={"svg-icon"} />
+                      </button>
+                    </OverlayTrigger>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className={"app-playback-controls"}>
+                {cfg.visual.artworkDisplayLayout === "default" && (
+                  <div
+                    className={"artwork"}
+                    id={"artworkLCD"}
+                    style={{ pointerEvents: "none" }}>
+                    <MediaItemArtwork url={currentArtUrl} />
+                  </div>
+                )}
+                <div className={"playback-info"}>
+                  <div className={"song-name"} />
+                </div>
+              </div>
             )}
           </div>
         </div>

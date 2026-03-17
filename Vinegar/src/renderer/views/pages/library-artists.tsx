@@ -172,7 +172,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           className={`cd-mediaitem-list-item ${app.select_hasMediaItem(guid) ? "mediaitem-selected" : ""}`}
           onContextMenu={contextMenu}>
           {isVisible && (
-            <template>
+            <>
               {showArtwork && (
                 <div className={"artwork"}>
                   <MediaItemArtwork
@@ -188,7 +188,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
                 onDoubleClick={select}>
                 <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
               </div>
-            </template>
+            </>
           )}
         </div>
       </div>

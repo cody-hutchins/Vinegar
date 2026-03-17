@@ -27,14 +27,12 @@ const AppNavigation = () => {
                   {!chrome.hideUserInfo ? (
                     <div className={"sidebar-user-text"}>
                       {chrome.userinfo.id || mk.isAuthorized ? (
-                        <template>
+                        <>
                           <div className={"fullname text-overflow-elipsis"}>{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.name ?? "") : ""}</div>
                           <div className={"handle-text text-overflow-elipsis"}>{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.handle ?? "") : ""}</div>
-                        </template>
+                        </>
                       ) : (
-                        <template>
-                          <div onClick={() => mk.authorize()}>{$root.getLz("term.login")}</div>
-                        </template>
+                        <div onClick={() => mk.authorize()}>{$root.getLz("term.login")}</div>
                       )}
                     </div>
                   ) : (

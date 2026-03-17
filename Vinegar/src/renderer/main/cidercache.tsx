@@ -1,6 +1,6 @@
 const CiderCache = {
   async getCache(file) {
-    let cache = await ipcRenderer.sendSync("get-cache", file);
+    let cache = await window.electronAPI.sendSync("get-cache", file);
     if (isJson(cache)) {
       cache = JSON.parse(cache);
       if (Object.keys(cache).length === 0) {
@@ -13,7 +13,7 @@ const CiderCache = {
   },
   async putCache(file, data) {
     console.log(`Caching ${file}`);
-    ipcRenderer.invoke("put-cache", {
+    window.electronAPI.invoke("put-cache", {
       file: file,
       data: JSON.stringify(data),
     });

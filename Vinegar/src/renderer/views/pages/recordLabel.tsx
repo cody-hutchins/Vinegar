@@ -60,7 +60,7 @@ const RecordLabel = ({ data }: { data: string }) => {
             </div>
           )}
           {data.views && data.views["latest-releases"] && (
-            <template>
+            <>
               <Row>
                 <Col>
                   <h3>{data.views["latest-releases"].attributes.title ?? ""}</h3>
@@ -72,10 +72,10 @@ const RecordLabel = ({ data }: { data: string }) => {
                   item={item}
                 />
               ))}
-            </template>
+            </>
           )}
           {data.views && data.views["top-releases"] && (
-            <template>
+            <>
               <Row>
                 <Col>
                   <h3>{data.views["top-releases"].attributes.title ?? ""}</h3>
@@ -87,10 +87,10 @@ const RecordLabel = ({ data }: { data: string }) => {
                   item={item}
                 />
               ))}
-            </template>
+            </>
           )}
           {data.relationships && data.relationships.playlists && data.relationships.playlists.data.length > 0 && (
-            <template>
+            <>
               <Row>
                 <Col>
                   <h3>{$root.getLz("term.playlists")}</h3>
@@ -102,7 +102,7 @@ const RecordLabel = ({ data }: { data: string }) => {
                   item={item}
                 />
               ))}
-            </template>
+            </>
           )}
         </div>
       </div>

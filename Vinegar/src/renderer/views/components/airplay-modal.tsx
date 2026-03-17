@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ipcRenderer } from "electron";
 import { Row, Col } from "react-bootstrap";
 
 const AirplayModal = () => {
@@ -9,7 +8,7 @@ const AirplayModal = () => {
   };
   const enterPassword = () => {
     console.log("Entered passCode: ", passcode);
-    ipcRenderer.send("setAirPlayPasscode", passcode, this.$root.currentAirPlayCodeID);
+    window.electronAPI.send("setAirPlayPasscode", passcode, this.$root.currentAirPlayCodeID);
     close();
   };
 

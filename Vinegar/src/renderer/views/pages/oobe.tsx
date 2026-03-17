@@ -254,11 +254,11 @@ const OOBE = () => {
             <div className={"button-group"}>
               <button
                 className={"min"}
-                onClick={() => $root.ipcRenderer.send("minimize")}
+                onClick={() => $root.window.electronAPI.send("minimize")}
               />
               <button
                 className={"close"}
-                onClick={() => $root.ipcRenderer.send("close")}
+                onClick={() => $root.window.electronAPI.send("close")}
               />
             </div>
           )}

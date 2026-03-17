@@ -654,25 +654,23 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               className={"subtitle text-overflow-elipsis"}
               style={{ "-webkit-box-orient": "horizontal" }}>
               {item.attributes.artistName && (
-                <template>
+                <>
                   <div
                     className={"artist item-navigate text-overflow-elipsis"}
                     title={item.attributes.artistName}
                     onClick={() => app.searchAndNavigate(item, "artist")}>
                     {item.attributes.artistName}
                   </div>
-                  {item.attributes.albumName && <template>&nbsp;—&nbsp;</template>}
+                  {item.attributes.albumName && <>&nbsp;—&nbsp;</>}
                   {item.attributes.albumName && (
-                    <template>
-                      <div
-                        className={"artist item-navigate text-overflow-elipsis"}
-                        title={item.attributes.albumName}
-                        onClick={() => app.searchAndNavigate(item, "album")}>
-                        {item.attributes.albumName}
-                      </div>
-                    </template>
+                    <div
+                      className={"artist item-navigate text-overflow-elipsis"}
+                      title={item.attributes.albumName}
+                      onClick={() => app.searchAndNavigate(item, "album")}>
+                      {item.attributes.albumName}
+                    </div>
                   )}
-                </template>
+                </>
               )}
             </div>
           </div>

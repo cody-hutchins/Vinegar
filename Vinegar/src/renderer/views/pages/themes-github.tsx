@@ -19,15 +19,15 @@ const ThemesGithub = () => {
   const themesInstalled = [];
   let themes = [];
   useEffect(() => {
-    themes = ipcRenderer.sendSync("get-themes");
+    themes = window.electronAPI.sendSync("get-themes");
     getRepos();
     getInstalledThemes();
   }, []);
   function openThemesFolder() {
-    ipcRenderer.invoke("open-path", "themes");
+    window.electronAPI.invoke("open-path", "themes");
   }
   function getInstalledThemes() {
-    const themes = ipcRenderer.sendSync("get-themes");
+    const themes = window.electronAPI.sendSync("get-themes");
     // for each theme, get the github_repo property and push it to the themesInstalled array, if not blank
     themes.forEach((theme) => {
       if (theme.github_repo !== "" && typeof theme.commit !== "undefined") {
@@ -63,31 +63,31 @@ const ThemesGithub = () => {
     });
     app.confirm(msg, (res) => {
       if (res) {
-        ipcRenderer.once("theme-installed", (event, arg) => {
+        window.electronAPI.once("theme-installed", (event, arg) => {
           if (arg.success) {
-            themes = ipcRenderer.sendSync("get-themes");
+            themes = window.electronAPI.sendSync("get-themes");
             getInstalledThemes();
             notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
           } else {
             notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
           }
         });
-        ipcRenderer.invoke("get-github-theme", repo.html_url);
+        window.electronAPI.invoke("get-github-theme", repo.html_url);
       }
     });
   }
   function installThemeURL() {
     app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
       if (result) {
-        ipcRenderer.once("theme-installed", (event, arg) => {
+        window.electronAPI.once("theme-installed", (event, arg) => {
           if (arg.success) {
-            themes = ipcRenderer.sendSync("get-themes");
+            themes = window.electronAPI.sendSync("get-themes");
             notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
           } else {
             notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
           }
         });
-        ipcRenderer.invoke("get-github-theme", result);
+        window.electronAPI.invoke("get-github-theme", result);
       }
     });
   }

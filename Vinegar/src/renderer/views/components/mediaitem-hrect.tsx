@@ -18,7 +18,7 @@ const MediaItemHrect = ({ item }: { item: MusicKit.MediaItem }) => {
           <div className={"title text-overflow-elipsis"}>{item.attributes.name}</div>
           <div className={"subtitle text-overflow-elipsis"}>
             {item.type}
-            {item.attributes.artistName && <template>∙ {item.attributes.artistName}</template>}
+            {item.attributes.artistName && <>∙ {item.attributes.artistName}</>}
           </div>
         </div>
       </div>

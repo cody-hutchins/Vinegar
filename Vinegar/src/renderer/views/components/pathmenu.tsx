@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import { useEffect } from "react";
 
 const PathMenu = () => {
@@ -13,19 +12,19 @@ const PathMenu = () => {
     this.$root.modals.pathMenu = false;
   }
   async function add() {
-    const result = await ipcRenderer.invoke("folderSelector");
+    const result = await window.electronAPI.invoke("folderSelector");
     for (const i of result) {
       if (folders.findIndex((x) => x.startsWith(i)) === -1) {
         folders.push(i);
       }
     }
     this.$root.cfg.libraryPrefs.localPaths = folders;
-    ipcRenderer.invoke("scanLibrary");
+    window.electronAPI.invoke("scanLibrary");
   }
   function remove(dir) {
     folders = folders.filter((item) => item !== dir);
     this.$root.cfg.libraryPrefs.localPaths = folders;
-    ipcRenderer.invoke("scanLibrary");
+    window.electronAPI.invoke("scanLibrary");
   }
   return (
     <div id={"pathmenu"}>

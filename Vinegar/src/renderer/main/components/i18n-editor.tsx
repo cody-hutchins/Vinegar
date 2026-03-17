@@ -3,8 +3,8 @@ import { html } from "../html.js";
 import bootbox from "bootbox";
 
 export const i18nEditor = () => {
-  const listing = ipcRenderer.sendSync("get-i18n-listing");
-  const baseLz = ipcRenderer.sendSync("get-i18n", "en_US");
+  const listing = window.electronAPI.sendSync("get-i18n-listing");
+  const baseLz = window.electronAPI.sendSync("get-i18n", "en_US");
 
   function exportLz() {
     bootbox.alert(`<textarea spellcheck='false' style="width:100%;height: 300px;">${JSON.stringify(app.lz, true, " ")}</textarea>`);
@@ -76,17 +76,15 @@ export const i18nEditor = () => {
                 <div className={"md-option-segment"}>{key}</div>
                 <div className={"md-option-segment"}>
                   {typeof $root.lz[key] === "object" ? (
-                    <template>
-                      {$root.lz[key].map((variant, vkey) => (
-                        <div key={vkey}>
-                          {variant}
-                          <input
-                            type={"text"}
-                            v-model={"$root.lz[key][vkey]"}
-                          />
-                        </div>
-                      ))}
-                    </template>
+                    $root.lz[key].map((variant, vkey) => (
+                      <div key={vkey}>
+                        {variant}
+                        <input
+                          type={"text"}
+                          v-model={"$root.lz[key][vkey]"}
+                        />
+                      </div>
+                    ))
                   ) : (
                     <textarea
                       type={"text"}

@@ -38,62 +38,60 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
   };
   return (
     <div id={"add-to-playlist"}>
-      <template>
-        <div
-          className={"modal-fullscreen modal-generic"}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              app.resetState();
-            }
-          }}
-          onContextMenu={(e) => {
-            if (e.target === e.currentTarget) {
-              app.resetState();
-            }
-          }}>
-          <div className={"modal-window"}>
-            <div className={"modal-header"}>
-              <div className={"modal-title"}>{app.getLz("action.addToLibrary")}</div>
-              <button
-                className={"close-btn"}
-                onClick={() => app.resetState()}
-                aria-label={app.getLz("action.close")}
+      <div
+        className={"modal-fullscreen modal-generic"}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            app.resetState();
+          }
+        }}
+        onContextMenu={(e) => {
+          if (e.target === e.currentTarget) {
+            app.resetState();
+          }
+        }}>
+        <div className={"modal-window"}>
+          <div className={"modal-header"}>
+            <div className={"modal-title"}>{app.getLz("action.addToLibrary")}</div>
+            <button
+              className={"close-btn"}
+              onClick={() => app.resetState()}
+              aria-label={app.getLz("action.close")}
+            />
+          </div>
+          <div className={"modal-content"}>
+            {playlist.attributes.canEdit &&
+              playlist.type !== "library-playlist-folders" &&
+              playlistSorted.map((playlist) => (
+                <button
+                  key={playlist.id}
+                  className={classNames("playlist-item", { focused: playlist.id === focused })}
+                  onClick={() => addToPlaylist(playlist.id)}
+                  style={{ width: "100%" }}>
+                  <div className={"icon"}>{import("../svg/playlist.svg")}</div>
+                  <div className={"name"}>{playlist.attributes.name}</div>
+                </button>
+              ))}
+          </div>
+          <div className={"modal-search"}>
+            <div
+              className={"search-input-container"}
+              style={{ width: "100%", margin: "16px 0" }}>
+              <div className={"search-input--icon"} />
+              <input
+                type={"search"}
+                ref={"searchInput"}
+                style={{ width: "100%" }}
+                spellCheck={false}
+                placeholder={app.getLz("term.search") + "..."}
+                v-model={searchQuery}
+                input={search()}
+                className={"search-input"}
               />
-            </div>
-            <div className={"modal-content"}>
-              {playlist.attributes.canEdit &&
-                playlist.type !== "library-playlist-folders" &&
-                playlistSorted.map((playlist) => (
-                  <button
-                    key={playlist.id}
-                    className={classNames("playlist-item", { focused: playlist.id === focused })}
-                    onClick={() => addToPlaylist(playlist.id)}
-                    style={{ width: "100%" }}>
-                    <div className={"icon"}>{import("../svg/playlist.svg")}</div>
-                    <div className={"name"}>{playlist.attributes.name}</div>
-                  </button>
-                ))}
-            </div>
-            <div className={"modal-search"}>
-              <div
-                className={"search-input-container"}
-                style={{ width: "100%", margin: "16px 0" }}>
-                <div className={"search-input--icon"} />
-                <input
-                  type={"search"}
-                  ref={"searchInput"}
-                  style={{ width: "100%" }}
-                  spellCheck={false}
-                  placeholder={app.getLz("term.search") + "..."}
-                  v-model={searchQuery}
-                  input={search()}
-                  className={"search-input"}
-                />
-              </div>
             </div>
           </div>
         </div>
-      </template>
+      </div>
     </div>
   );
 };
