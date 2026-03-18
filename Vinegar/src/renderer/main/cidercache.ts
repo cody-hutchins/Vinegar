@@ -13,7 +13,7 @@ const CiderCache = {
   },
   async putCache(file, data) {
     console.log(`Caching ${file}`);
-    window.electronAPI.invoke("put-cache", {
+    await window.electronAPI.invoke("put-cache", {
       file: file,
       data: JSON.stringify(data),
     });

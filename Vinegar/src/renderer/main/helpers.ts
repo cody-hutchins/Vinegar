@@ -59,7 +59,7 @@ const helpers = {
     this.setLzManual();
     clearTimeout(this.hangtimer);
     document.body.removeAttribute("loading");
-    window.electronAPI.invoke("renderer-ready", true);
+    await window.electronAPI.invoke("renderer-ready", true);
     document.querySelector("#LOADER").remove();
 
     window.electronAPI.on("recv-cookies", function (_event, cookies) {
@@ -270,7 +270,7 @@ const helpers = {
     });
   },
   quit() {
-    window.electronAPI.invoke("quit-app");
+    await window.electronAPI.invoke("quit-app");
   },
   async openAppleMusicURL(url) {
     const properties = MusicKit.formattedMediaURL(url);
@@ -999,7 +999,7 @@ const helpers = {
     document.querySelector("#apple-music-video-player-controls").addEventListener("mousemove", () => {
       this.showFoo(".music-player-info", 2000);
     });
-    window.electronAPI.invoke("renderer-ready", true);
+    await window.electronAPI.invoke("renderer-ready", true);
     document.querySelector("#LOADER").remove();
     if (this.cfg.general.themeUpdateNotification && !this.isDev) {
       this.checkForThemeUpdates();
@@ -3101,7 +3101,7 @@ const helpers = {
     const track = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.title ?? "") : "";
     const artist = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem.artistName ?? "") : "";
     const time = this.mk.nowPlayingItem !== null ? (Math.round((this.mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1) : -1;
-    window.electronAPI.invoke("getYTLyrics", track, artist).then((result) => {
+    await window.electronAPI.invoke("getYTLyrics", track, artist).then((result) => {
       if (result.length > 0) {
         const ytid = result[0]["id"]["videoId"];
         if (app.cfg.lyrics.enable_yt) {

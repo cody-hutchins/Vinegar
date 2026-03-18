@@ -44,7 +44,7 @@ const SettingsWindow = () => {
   function reinstallWidevineCDM() {
     app.confirm(t("settings.option.experimental.reinstallwidevine.confirm"), (ok) => {
       if (ok) {
-        window.electronAPI.invoke("reinstall-widevine-cdm");
+        window.electronAPI.invoke("reinstall-widevine-cdm").then();
       }
     });
   }
@@ -103,10 +103,10 @@ const SettingsWindow = () => {
   const toggleUserInfo = () => {
     app.chrome.hideUserInfo = !app.cfg.visual.showuserinfo;
   };
-  const sendDataToMTT = () => {
-    window.electronAPI.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
+  const sendDataToMTT = async () => {
+    await window.electronAPI.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
     //  setStoreValue does not change plugin store values somehow
-    window.electronAPI.invoke("update-store-mtt", app.cfg.general.close_behavior);
+    await window.electronAPI.invoke("update-store-mtt", app.cfg.general.close_behavior);
   };
   function checkIfUpdateDisabled() {
     if (app.cfg.main.UPDATABLE) return;

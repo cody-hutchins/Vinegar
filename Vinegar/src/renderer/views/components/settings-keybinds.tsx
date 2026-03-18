@@ -46,7 +46,7 @@ const Keybinds = () => {
               clearTimeout(keyBindTimeout);
               notyf.success(t("settings.notyf.general.keybindings.update.success"));
               app.confirm(t("settings.prompt.general.keybindings.update.success"), (ok) => {
-                if (ok) window.electronAPI.invoke("relaunchApp");
+                if (ok) window.electronAPI.invoke("relaunchApp").then();
               });
             } else {
               keyBind = [];
@@ -77,7 +77,7 @@ const Keybinds = () => {
     app.cfg.general.keybindings.openDeveloperTools = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : "Shift", "I"];
     notyf.success(t("settings.notyf.general.keybindings.update.success"));
     app.confirm(t("settings.prompt.general.keybindings.update.success"), (ok) => {
-      if (ok) window.electronAPI.invoke("relaunchApp");
+      if (ok) window.electronAPI.invoke("relaunchApp").then();
     });
   };
 

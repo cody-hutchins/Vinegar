@@ -161,7 +161,7 @@ export const InstalledThemes = () => {
                     console.debug(event, args);
                     getThemesList();
                   });
-                  window.electronAPI.invoke("uninstall-theme", theme.path);
+                  window.electronAPI.invoke("uninstall-theme", theme.path).then();
                 }
               },
             );
@@ -179,8 +179,8 @@ export const InstalledThemes = () => {
     }
     this.$root.showMenuPanel(menu, event);
   };
-  function openThemesFolder() {
-    window.electronAPI.invoke("open-path", "themes");
+  async function openThemesFolder() {
+    await window.electronAPI.invoke("open-path", "themes");
   }
   function getInstalledThemes() {
     const themes = window.electronAPI.sendSync("get-themes");
@@ -232,7 +232,7 @@ export const InstalledThemes = () => {
             notyf.error(t("settings.notyf.visual.theme.install.error"));
           }
         });
-        window.electronAPI.invoke("get-github-theme", repo.html_url);
+        window.electronAPI.invoke("get-github-theme", repo.html_url).then();
       }
     });
   }
@@ -247,7 +247,7 @@ export const InstalledThemes = () => {
             notyf.error(t("settings.notyf.visual.theme.install.error"));
           }
         });
-        window.electronAPI.invoke("get-github-theme", result);
+        window.electronAPI.invoke("get-github-theme", result).then();
       }
     });
   }

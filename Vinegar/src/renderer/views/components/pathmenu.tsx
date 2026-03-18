@@ -21,12 +21,12 @@ const PathMenu = () => {
       }
     }
     this.$root.cfg.libraryPrefs.localPaths = folders;
-    window.electronAPI.invoke("scanLibrary");
+    await window.electronAPI.invoke("scanLibrary");
   }
-  function remove(dir) {
+  async function remove(dir) {
     folders = folders.filter((item) => item !== dir);
     this.$root.cfg.libraryPrefs.localPaths = folders;
-    window.electronAPI.invoke("scanLibrary");
+    await window.electronAPI.invoke("scanLibrary");
   }
   return (
     <div id={"pathmenu"}>

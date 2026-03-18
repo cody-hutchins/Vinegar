@@ -67,7 +67,7 @@ const PluginsGithub = () => {
             notyf.success(t("settings.notyf.visual.plugin.install.success"));
             app.confirm(t("settings.prompt.visual.plugin.github.success"), (ok) => {
               if (ok) {
-                window.electronAPI.invoke("relaunchApp");
+                window.electronAPI.invoke("relaunchApp").then();
               } else {
                 return;
               }
@@ -76,7 +76,7 @@ const PluginsGithub = () => {
             notyf.error(t("settings.notyf.visual.plugin.install.error"));
           }
         });
-        window.electronAPI.invoke("get-github-plugin", repo.html_url);
+        window.electronAPI.invoke("get-github-plugin", repo.html_url).then();
       }
     });
   }
@@ -88,7 +88,7 @@ const PluginsGithub = () => {
             themes = window.electronAPI.sendSync("get-themes");
             app.confirm(t("settings.prompt.visual.plugin.github.success"), (ok) => {
               if (ok) {
-                window.electronAPI.invoke("relaunchApp");
+                window.electronAPI.invoke("relaunchApp").then();
               } else {
                 return;
               }
@@ -98,7 +98,7 @@ const PluginsGithub = () => {
             notyf.error(t("settings.notyf.visual.plugin.install.error"));
           }
         });
-        window.electronAPI.invoke("get-github-plugin", result);
+        window.electronAPI.invoke("get-github-plugin", result).then();
       }
     });
   }

@@ -26,8 +26,8 @@ const ThemesGithub = () => {
     getInstalledThemes();
   }, []);
 
-  function openThemesFolder() {
-    window.electronAPI.invoke("open-path", "themes");
+  async function openThemesFolder() {
+    await window.electronAPI.invoke("open-path", "themes");
   }
   function getInstalledThemes() {
     const themes = window.electronAPI.sendSync("get-themes");
@@ -76,7 +76,7 @@ const ThemesGithub = () => {
             notyf.error(t("settings.notyf.visual.theme.install.error"));
           }
         });
-        window.electronAPI.invoke("get-github-theme", repo.html_url);
+        window.electronAPI.invoke("get-github-theme", repo.html_url).then();
       }
     });
   }
@@ -91,7 +91,7 @@ const ThemesGithub = () => {
             notyf.error(t("settings.notyf.visual.theme.install.error"));
           }
         });
-        window.electronAPI.invoke("get-github-theme", result);
+        window.electronAPI.invoke("get-github-theme", result).then();
       }
     });
   }
