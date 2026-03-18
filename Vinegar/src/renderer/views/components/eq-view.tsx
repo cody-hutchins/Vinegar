@@ -1,8 +1,10 @@
 import { Col, Row } from "react-bootstrap";
 import { CiderAudio } from "../../audio/audio";
 import { notyf } from "../..";
+import { useTranslation } from "react-i18next";
 
 const EQView = ({ src, url }: { src: string; url: string }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   const eqPreset = () => ({
     preset: uuidv4(),
@@ -93,7 +95,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       gain: [2.7, 2.2, 1.6, 1.4, 0.6, 0, 0, 0, 0, 0],
       Q: [1.4, 1.4, 1.4, 1.4, 1.4, 1, 1, 1, 1, 1],
       mix: 1,
-      vibrantBass: 0,
+      vibrantBass: 0, 
       userGenerated: false,
     },
     {
@@ -113,28 +115,28 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       items: {
         new: {
           icon: "./assets/feather/plus.svg",
-          name: app.getLz("action.newpreset"),
+          name: t("action.newpreset"),
           action: () => {
             addPreset();
           },
         },
         delete: {
           icon: "./assets/feather/x-circle.svg",
-          name: app.getLz("action.deletepreset"),
+          name: t("action.deletepreset"),
           action: () => {
             deletePreset();
           },
         },
         import: {
           icon: "./assets/feather/share.svg",
-          name: app.getLz("action.import"),
+          name: t("action.import"),
           action: () => {
             importPreset();
           },
         },
         export: {
           icon: "./assets/feather/share.svg",
-          name: app.getLz("action.export"),
+          name: t("action.export"),
           action: () => {
             exportPreset();
           },
@@ -154,14 +156,14 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       items: [
         {
           icon: "./assets/feather/share.svg",
-          name: app.getLz("action.import"),
+          name: t("action.import"),
           action: function () {
             notyf.error("Not implemented yet");
           },
         },
         {
           icon: "./assets/feather/share.svg",
-          name: app.getLz("action.export"),
+          name: t("action.export"),
           action: function () {
             notyf.error("Not implemented yet");
           },
@@ -173,13 +175,13 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
 
   const deletePreset = () => {
     const presets = this.$root.cfg.audio.equalizer.presets;
-    app.confirm(app.getLz("term.deletepreset.warn"), (result) => {
+    app.confirm(t("term.deletepreset.warn"), (result) => {
       if (result) {
         changePreset("default");
         // find the preset by id (preset) and remove it
         const index = presets.findIndex((p) => p.preset === preset);
         presets.splice(index, 1);
-        notyf.success(app.getLz("term.deletedpreset"));
+        notyf.success(t("term.deletedpreset"));
       }
     });
   };
@@ -252,7 +254,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   };
 
   const addPreset = () => {
-    app.prompt(app.getLz("term.newpreset.name"), (res) => {
+    app.prompt(t("term.newpreset.name"), (res) => {
       if (res) {
         const eqSettings = Clone(app.cfg.audio.equalizer);
         const newPreset = new eqPreset();
@@ -263,7 +265,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         newPreset.mix = eqSettings.mix;
         newPreset.vibrantBass = eqSettings.vibrantBass;
         app.cfg.audio.equalizer.presets.push(newPreset);
-        notyf.success(app.getLz("term.addedpreset"));
+        notyf.success(t("term.addedpreset"));
         changePreset(newPreset.preset);
       }
     });
@@ -346,11 +348,11 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
-            <div className={"modal-title"}>{$root.getLz("term.equalizer")}</div>
+            <div className={"modal-title"}>{t("term.equalizer")}</div>
             <button
               className={"close-btn"}
               onClick={() => close()}
-              aria-label={$root.getLz("action.close")}
+              aria-label={t("action.close")}
             />
             <div className={"md-option-segment md-option-segment_auto"}>
               <select
@@ -358,7 +360,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                 style={{ width: "220px", textAlign: "center", marginRight: "245px" }}
                 v-model={$root.cfg.audio.equalizer.preset}
                 onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
-                <optgroup label={$root.getLz("term.userPresets")}>
+                <optgroup label={t("term.userPresets")}>
                   {$root.cfg.audio.equalizer.presets.map((preset) => (
                     <option
                       key={preset.id}
@@ -367,7 +369,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                     </option>
                   ))}
                 </optgroup>
-                <optgroup label={$root.getLz("term.defaultPresets")}>
+                <optgroup label={t("term.defaultPresets")}>
                   {defaultPresets.map((preset) => (
                     <option
                       key={preset.id}
@@ -874,7 +876,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   className={"md-btn"}
                   style={{ width: "100%" }}
                   onClick={() => resetGain()}>
-                  {$root.getLz("term.reset")}
+                  {t("term.reset")}
                 </button>
               </Col>
               <Col>
@@ -882,7 +884,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   className={"md-btn"}
                   style={{ width: "100%" }}
                   onClick={presetOptions}>
-                  {$root.getLz("term.menu")}
+                  {t("term.menu")}
                 </button>
               </Col>
             </Row>

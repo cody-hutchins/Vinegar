@@ -2,8 +2,10 @@ import classNames from "classnames";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import { useEffect } from "react";
 import MusicKit from "@musickit-js";
+import { useTranslation } from "react-i18next";
 
 const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: MusicKit.MediaItem; playlistSelect?: (playlist: object) => void; relateMediaItems?: string[] }) => {
+  const { t } = useTranslation();
   let folderOpened = false;
   let children = [];
   const playlistRoot = "p.playlistsroot";
@@ -17,7 +19,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     } else {
       icon = "./assets/feather/folder.svg";
     }
-    const playlistMap = this.$root.playlists.trackMapping;
+    const playlistMap = $root.playlists.trackMapping;
     if (relateMediaItems.length !== 0) {
       if (playlistMap[relateMediaItems[0]]) {
         if (playlistMap[relateMediaItems[0]].includes(item.id)) {
@@ -41,13 +43,13 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     renaming = false;
 
     if (item.type === "library-playlist-folders") {
-      this.$root.editPlaylistFolder(item.id, item.attributes.name);
+      $root.editPlaylistFolder(item.id, item.attributes.name);
     } else {
-      this.$root.editPlaylist(item.id, item.attributes.name);
+      $root.editPlaylist(item.id, item.attributes.name);
     }
   }
   function getChildren() {
-    children = this.$root.playlists.listing.filter((child) => {
+    children = $root.playlists.listing.filter((child) => {
       if (child.parent === item.id) {
         return child;
       }
@@ -56,7 +58,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
   async function move(item, sendTo) {
     const type = item.type.replace("library-", "");
     const typeTo = sendTo.type;
-    this.$root.mk.api.v3.music(
+    $root.mk.api.v3.music(
       `/v1/me/library/${type}/${item.id}/parent`,
       {},
       {
@@ -74,26 +76,26 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
       },
     );
 
-    // find the item in this.$root.playlists.listing and store it in a variable
-    this.$root.playlists.listing.filter((playlist) => {
+    // find the item in $root.playlists.listing and store it in a variable
+    $root.playlists.listing.filter((playlist) => {
       if (playlist.id === item.id) {
         console.log(playlist);
         playlist.parent = sendTo.id;
       }
     });
-    if (typeof this.$root.getChildren === "function") {
-      this.$root.getChildren();
-      console.log(this.$root.children);
+    if (typeof $root.getChildren === "function") {
+      $root.getChildren();
+      console.log($root.children);
     }
     await getChildren();
-    this.$root.sortPlaylists();
-    // await this.$root.refreshPlaylists()
+    $root.sortPlaylists();
+    // await $root.refreshPlaylists()
   }
   function playlistContextMenu(event, playlist_id) {
     const menu = {
       items: {
         moveToParent: {
-          name: this.$root.getLz("action.moveToTop"),
+          name: t("action.moveToTop"),
           action: () => {
             move(item, {
               id: playlistRoot,
@@ -105,7 +107,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
           },
         },
         rename: {
-          name: this.$root.getLz("action.rename"),
+          name: t("action.rename"),
           action: () => {
             renaming = true;
             setTimeout(() => {
@@ -115,13 +117,13 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
           },
         },
         deleteFromPlaylist: {
-          name: this.$root.getLz("action.removeFromLibrary"),
+          name: t("action.removeFromLibrary"),
           action: () => {
-            this.$root.deletePlaylist(playlist_id);
+            $root.deletePlaylist(playlist_id);
           },
         },
         addToFavorites: {
-          name: this.$root.getLz("action.addToFavorites"),
+          name: t("action.addToFavorites"),
           disabled: true,
           hidden: true,
           action: () => {
@@ -161,10 +163,10 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     evt.dataTransfer.setData("text/plain", JSON.stringify(item));
   }
   function openPlaylist(item) {
-    this.$root.appRoute(`playlist_` + item.id);
-    this.$root.showingPlaylist = [];
+    $root.appRoute(`playlist_` + item.id);
+    $root.showingPlaylist = [];
     if (item.id === "ciderlocal") {
-      this.$root.showingPlaylist = {
+      $root.showingPlaylist = {
         id: "ciderlocal",
         type: "library-playlists",
         href: "",
@@ -193,13 +195,13 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
         relationships: {
           tracks: {
             href: "",
-            data: this.$root.library.localsongs,
+            data: $root.library.localsongs,
           },
         },
       };
-      this.$root.playlists.loadingState = 1;
+      $root.playlists.loadingState = 1;
     } else {
-      this.$root.getPlaylistFromID(this.$root.page.substring(9), true);
+      $root.getPlaylistFromID($root.page.substring(9), true);
     }
   }
   function getPlaylistChildren(item) {
@@ -207,7 +209,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     getChildren();
     toggleFolder();
 
-    this.$root.mk.api.v3.music(`v1/me/library/playlist-folders/${item.id}/children`).then((data) => {
+    $root.mk.api.v3.music(`v1/me/library/playlist-folders/${item.id}/children`).then((data) => {
       const children = data.data.data;
       children.forEach((child) => {
         if (!$root.playlists.listing.find((listing) => listing.id === child.id)) {
@@ -229,7 +231,7 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
     });
   }
   function isPlaylistSelected(item) {
-    if (this.$root.showingPlaylist.id === item.id) {
+    if ($root.showingPlaylist.id === item.id) {
       return ["active"];
     } else {
       return [];

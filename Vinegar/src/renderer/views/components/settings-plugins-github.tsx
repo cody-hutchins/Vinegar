@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const PluginsGithub = () => {
+  const { t } = useTranslation();
   let repos = [];
   let openRepo = {
     id: -1,
@@ -54,7 +56,7 @@ const PluginsGithub = () => {
     return marked.parse(text);
   }
   function installThemeRepo(repo) {
-    const msg = app.stringTemplateParser(app.getLz("settings.option.visual.plugin.github.install.confirm"), {
+    const msg = app.stringTemplateParser(t("settings.option.visual.plugin.github.install.confirm"), {
       repo: repo.full_name,
     });
     app.confirm(msg, (res) => {
@@ -62,8 +64,8 @@ const PluginsGithub = () => {
         window.electronAPI.once("plugin-installed", (event, arg) => {
           if (arg.success) {
             themes = [];
-            notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
-            app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
+            notyf.success(t("settings.notyf.visual.plugin.install.success"));
+            app.confirm(t("settings.prompt.visual.plugin.github.success"), (ok) => {
               if (ok) {
                 window.electronAPI.invoke("relaunchApp");
               } else {
@@ -71,7 +73,7 @@ const PluginsGithub = () => {
               }
             });
           } else {
-            notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
+            notyf.error(t("settings.notyf.visual.plugin.install.error"));
           }
         });
         window.electronAPI.invoke("get-github-plugin", repo.html_url);
@@ -79,21 +81,21 @@ const PluginsGithub = () => {
     });
   }
   function installThemeURL() {
-    app.prompt(app.getLz("settings.prompt.visual.plugin.github.URL"), (result) => {
+    app.prompt(t("settings.prompt.visual.plugin.github.URL"), (result) => {
       if (result) {
         window.electronAPI.once("plugin-installed", (event, arg) => {
           if (arg.success) {
             themes = window.electronAPI.sendSync("get-themes");
-            app.confirm(app.getLz("settings.prompt.visual.plugin.github.success"), (ok) => {
+            app.confirm(t("settings.prompt.visual.plugin.github.success"), (ok) => {
               if (ok) {
                 window.electronAPI.invoke("relaunchApp");
               } else {
                 return;
               }
             });
-            notyf.success(app.getLz("settings.notyf.visual.plugin.install.success"));
+            notyf.success(t("settings.notyf.visual.plugin.install.success"));
           } else {
-            notyf.error(app.getLz("settings.notyf.visual.plugin.install.error"));
+            notyf.error(t("settings.notyf.visual.plugin.install.error"));
           }
         });
         window.electronAPI.invoke("get-github-plugin", result);
@@ -120,7 +122,7 @@ const PluginsGithub = () => {
         <div className={"gh-header"}>
           <Row>
             <Col className={"nopadding"}>
-              <h1 className={"header-text"}>{$root.getLz("settings.header.visual.plugin.github.page")}</h1>
+              <h1 className={"header-text"}>{t("settings.header.visual.plugin.github.page")}</h1>
             </Col>
             <Col
               auto
@@ -128,7 +130,7 @@ const PluginsGithub = () => {
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => installThemeURL()}>
-                {$root.getLz("settings.option.visual.plugin.github.download")}
+                {t("settings.option.visual.plugin.github.download")}
               </button>
             </Col>
           </Row>
@@ -183,7 +185,7 @@ const PluginsGithub = () => {
                     <button
                       className={"md-btn md-btn-primary"}
                       onClick={() => installThemeRepo(openRepo)}>
-                      {!themesInstalled.includes(openRepo.full_name) ? <span>{$root.getLz("action.install")}</span> : <span>{$root.getLz("action.update")}</span>}
+                      {!themesInstalled.includes(openRepo.full_name) ? <span>{t("action.install")}</span> : <span>{t("action.update")}</span>}
                     </button>
                   </Col>
                 </Row>

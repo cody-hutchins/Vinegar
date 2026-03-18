@@ -8,8 +8,10 @@ import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 import classNames from "classnames";
 import { useOnInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
 const Artist = ({ data }: { data: object }) => {
+  const { t } = useTranslation();
   const topSongsExpanded = false;
   const app = this.$root;
   let headerVisible = true;
@@ -48,14 +50,14 @@ const Artist = ({ data }: { data: object }) => {
     // const followActions = {
     //   follow: {
     //     icon: "./assets/feather/plus-circle.svg",
-    //     name: app.getLz("action.follow"),
+    //     name: t("action.follow"),
     //     action: () => {
     //       app.cfg.home.followedArtists.push(data.id);
     //     },
     //   },
     //   unfollow: {
     //     icon: "./assets/feather/x-circle.svg",
-    //     name: app.getLz("action.unfollow"),
+    //     name: t("action.unfollow"),
     //     action: () => {
     //       const index = app.cfg.home.followedArtists.indexOf(data.id);
     //       if (index > -1) {
@@ -67,14 +69,14 @@ const Artist = ({ data }: { data: object }) => {
     const favoriteActions = {
       favorite: {
         icon: "./assets/star.svg",
-        name: app.getLz("action.favorite"),
+        name: t("action.favorite"),
         action: () => {
           app.setArtistFavorite(app.artistPage.data.id, true);
         },
       },
       removeFavorite: {
         icon: "./assets/star.svg",
-        name: app.getLz("action.removeFavorite"),
+        name: t("action.removeFavorite"),
         action: () => {
           app.setArtistFavorite(app.artistPage.data.id, false);
         },
@@ -93,7 +95,7 @@ const Artist = ({ data }: { data: object }) => {
         items: [
           {
             icon: "./assets/feather/play.svg",
-            name: app.getLz("action.startRadio"),
+            name: t("action.startRadio"),
             action: () => {
               app.mk.setStationQueue({ artist: data.id }).then(() => {
                 app.mk.play();
@@ -104,7 +106,7 @@ const Artist = ({ data }: { data: object }) => {
           // followActions[followAction],
           {
             icon: "./assets/feather/share.svg",
-            name: app.getLz("term.share"),
+            name: t("term.share"),
             action: () => {
               app.copyToClipboard(data.attributes.url);
             },
@@ -169,7 +171,7 @@ const Artist = ({ data }: { data: object }) => {
                           app.mk.play();
                         })
                       }
-                      aria-label={app.getLz("term.play")}>
+                      aria-label={t("term.play")}>
                       {import("../svg/play.svg")}
                     </button>
                   </div>
@@ -185,7 +187,7 @@ const Artist = ({ data }: { data: object }) => {
                       app.mk.play();
                     })
                   }
-                  aria-label={app.getLz("term.play")}>
+                  aria-label={t("term.play")}>
                   {import("../svg/play.svg")}
                 </button>
                 <h1>{data.attributes.name}</h1>
@@ -195,14 +197,14 @@ const Artist = ({ data }: { data: object }) => {
               className={"more-btn-round favorite"}
               onClick={artistMenu}
               style={{ pointerEvents: "all" }}
-              aria-label={app.getLz("term.more")}>
+              aria-label={t("term.more")}>
               <div className={"svg-icon"} />
             </button>
             <button
               className={"more-btn-round menu"}
               onClick={artistMenu}
               style={{ pointerEvents: "all" }}
-              aria-label={app.getLz("term.more")}>
+              aria-label={t("term.more")}>
               <div className={"svg-icon"} />
             </button>
           </div>
@@ -240,7 +242,7 @@ const Artist = ({ data }: { data: object }) => {
                     app.mk.play();
                   })
                 }
-                aria-label={app.getLz("term.play")}>
+                aria-label={t("term.play")}>
                 {import("../svg/play.svg")}
               </button>
             </Col>
@@ -253,7 +255,7 @@ const Artist = ({ data }: { data: object }) => {
               <button
                 className={"more-btn-round menu"}
                 onClick={() => artistMenu}
-                aria-label={app.getLz("term.more")}>
+                aria-label={t("term.more")}>
                 <div className={"svg-icon"} />
               </button>
             </Col>
@@ -263,7 +265,7 @@ const Artist = ({ data }: { data: object }) => {
           <div className={classNames("arow well", { arowb: data.views["latest-release"].data.length === 0 })}>
             {data.views["latest-release"].data.length !== 0 && (
               <div className={"latestRelease"}>
-                <h3>{app.getLz("term.latestReleases")}</h3>
+                <h3>{t("term.latestReleases")}</h3>
                 <div style={{ width: "auto", margin: "0 auto" }}>
                   {data.views["latest-release"].data.map((song) => (
                     <MediaItemSquare
@@ -280,7 +282,7 @@ const Artist = ({ data }: { data: object }) => {
               <div className={"topSongs"}>
                 <Row>
                   <Col style={{ padding: 0 }}>
-                    <h3>{app.getLz("term.topSongs")}</h3>
+                    <h3>{t("term.topSongs")}</h3>
                   </Col>
                 </Row>
                 <Row>
@@ -315,7 +317,7 @@ const Artist = ({ data }: { data: object }) => {
               <Row>
                 {data.attributes.artistBio && (
                   <Col>
-                    <h3>{$root.stringTemplateParser($root.getLz("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
+                    <h3>{$root.stringTemplateParser(t("term.aboutArtist"), { artistName: data.attributes.name })}</h3>
                     <p dangerouslySetInnerHTML={{ __html: data.attributes.artistBio }} />
                   </Col>
                 )}
@@ -334,7 +336,7 @@ const Artist = ({ data }: { data: object }) => {
                   )}
                   {data.attributes.genreNames && (
                     <div>
-                      <h3>{app.getLz("term.sortBy.genre")}</h3>
+                      <h3>{t("term.sortBy.genre")}</h3>
                       {data.attributes.genreNames.join(", ")}
                     </div>
                   )}

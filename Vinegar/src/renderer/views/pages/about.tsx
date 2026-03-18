@@ -1,111 +1,113 @@
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { t } = useTranslation();
   // const window = window;
   const version = app.version;
   const team = [
     {
       name: "cryptofyre",
       link: "https://github.com/cryptofyre",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/33162551?v=4",
       twitter: "https://twitter.com/cryptofyre",
     },
     {
       name: "Core",
       link: "https://github.com/coredev-uk",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/64542347?v=4",
       twitter: "https://twitter.com/core_hdd",
     },
     {
       name: "Quacksire",
       link: "https://github.com/quacksire",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/19170969?v=4",
       twitter: "https://twitter.com/duckdoquack",
     },
     {
       name: "booploops",
       link: "https://github.com/booploops",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/49113086?v=4",
       twitter: "https://twitter.com/boopl00ps",
     },
     {
       name: "vapormusic",
       link: "https://github.com/vapormusic",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/27716185?v=4",
     },
     {
       name: "Maikiwi",
       link: "https://github.com/maikirakiwi",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/74925636?v=4",
       twitter: "https://twitter.com/notmaikiwi",
     },
     {
       name: "yazninja",
       link: "https://github.com/yazninja",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/71800112?v=4",
       twitter: "https://twitter.com/YazNinjaa",
     },
     {
       name: "GamingLiamStudios",
       link: "https://github.com/GamingLiamStudios",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/58615717?v=4",
       twitter: "https://twitter.com/GLStudios_",
     },
     {
       name: "Amaru",
       link: "https://github.com/Amaru8",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/52407090?v=4",
     },
     {
       name: "lockieluke",
       link: "https://github.com/lockieluke",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/25424409?v=4",
       twitter: "https://twitter.com/lockie_luke",
     },
     {
       name: "Swiftzerr",
       link: "https://github.com/Swiftzerr",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/67812203?v=4",
     },
     {
       name: "Ishmeet",
       link: "https://github.com/StupeFied",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/89881655?v=4",
     },
     {
       name: "Monochromish",
       link: "https://github.com/Monochromish",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/79590499?v=4",
     },
     {
       name: "d3rpp",
       link: "https://github.com/d3rpp",
-      role: app.getLz("term.developer"),
+      role: t("term.developer"),
       avatar: "https://avatars.githubusercontent.com/u/45675641?v=4",
     },
     {
       name: "Void",
       link: "https://twitter.com/MoonyVoid",
-      role: app.getLz("term.socialTeam"),
+      role: t("term.socialTeam"),
       avatar: "https://pbs.twimg.com/profile_images/1226463559472816129/8LScNYED_400x400.jpg",
     },
     {
       name: "NoseySG",
       link: "https://twitter.com/noah_grose",
-      role: app.getLz("term.socialTeam"),
+      role: t("term.socialTeam"),
       avatar: "https://pbs.twimg.com/profile_images/1496944907260420099/D5gl6H4J_400x400.jpg",
     },
   ];
@@ -122,24 +124,24 @@ const About = () => {
             <p
               style={{ textAlign: "center" }}
               id={version}>
-              {$root.getLz("term.version")} {$root.version}
+              {t("term.version")} {$root.version}
             </p>
-            <p style={{ textAlign: "center" }}> {$root.getLz().about.thanks()} </p>
+            <p style={{ textAlign: "center" }}> {t().about.thanks()} </p>
 
             <p style={{ textAlign: "center" }}>
-              &quot;{$root.getLz("term.appleMusic")}&quot; - {$root.getLz("term.copyright")} © 2022{" "}
+              &quot;{t("term.appleMusic")}&quot; - {t("term.copyright")} © 2022{" "}
               <a
                 href={"https://www.apple.com/"}
                 className={"dt-footer__link"}
                 target={"_blank"}
                 rel={"noopener noreferrer"}
                 data-dt-link-to-exclude={""}>
-                {$root.getLz("term.appleInc")}
+                {t("term.appleInc")}
               </a>
-              {$root.getLz("term.rightsReserved")}
+              {t("term.rightsReserved")}
             </p>
             <hr />
-            <h3>{$root.getLz("term.sponsor")}</h3>
+            <h3>{t("term.sponsor")}</h3>
             <button
               onClick={() => window.open("https://github.com/sponsors/ciderapp")}
               className={"md-btn sponsorBtn githubBtn"}>
@@ -158,12 +160,12 @@ const About = () => {
               <img src={"./assets/open_collective.svg"} />
               Open Collective
             </button>
-            <h3>{$root.getLz("term.socials")}</h3>
+            <h3>{t("term.socials")}</h3>
             <button
               onClick={() => window.open("https://github.com/ciderapp/Cider")}
               className={"md-btn sponsorBtn githubBtn"}>
               <img src={"./assets/github.svg"} />
-              {$root.getLz("term.github")}
+              {t("term.github")}
             </button>
             <button
               onClick={() => window.open("https://discord.gg/applemusic")}
@@ -172,7 +174,7 @@ const About = () => {
                 style={{ height: "26px" }}
                 src={"./assets/discord.svg"}
               />
-              {$root.getLz("term.discord")}
+              {t("term.discord")}
             </button>
             <button
               onClick={() => window.open("https://twitter.com/UseCider")}
@@ -190,7 +192,7 @@ const About = () => {
           <Col>
             <Row>
               <Col>
-                <h3>{$root.getLz("term.ciderTeam")}</h3>
+                <h3>{t("term.ciderTeam")}</h3>
                 {team.map((member) => (
                   <div
                     key={member.name}
@@ -231,7 +233,7 @@ const About = () => {
           <Row>
             <Col>
               <h3></h3>
-              <h3>{$root.getLz("term.contributors")}</h3>
+              <h3>{t("term.contributors")}</h3>
               <img
                 className={"md-contributors"}
                 style={{ cursor: "pointer", width: "100%" }}

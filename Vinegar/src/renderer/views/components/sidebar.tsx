@@ -5,8 +5,11 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemSmarthints from "./mediaitem-smarthints.jsx";
 import SidebarPlaylist from "./sidebar-playlist.jsx";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
+  const { t } = useTranslation();
+
   const switchArtworkDisplayLayout = () => {
     switch (app.cfg.visual.artworkDisplayLayout) {
       case "default":
@@ -55,7 +58,7 @@ const Sidebar = () => {
                 }}
                 onChange={() => $root.appRoute("search")}
                 onInput={() => $root.getSearchHints()}
-                placeholder={$root.getLz("term.search") + "..."}
+                placeholder={t("term.search") + "..."}
                 v-model={$root.search.term}
                 ref={"searchInput"}
                 className={"search-input"}
@@ -105,11 +108,11 @@ const Sidebar = () => {
               onClick={() => {
                 $root.cfg.general.sidebarCollapsed.cider = !$root.cfg.general.sidebarCollapsed.cider;
               }}>
-              {$root.getLz("app.name")}
+              {t("app.name")}
             </div>
             {!$root.cfg.general.sidebarCollapsed.cider && (
               <SidebarLibraryItem
-                name={$root.getLz("home.title")}
+                name={t("home.title")}
                 svg-icon={"./assets/feather/home.svg"}
                 svg-icon-name={"home"}
                 page={"home"}
@@ -120,24 +123,24 @@ const Sidebar = () => {
               onClick={() => {
                 $root.cfg.general.sidebarCollapsed.applemusic = !$root.cfg.general.sidebarCollapsed.applemusic;
               }}>
-              {$root.getLz("term.appleMusic")}
+              {t("term.appleMusic")}
             </div>
             {!$root.cfg.general.sidebarCollapsed.applemusic && (
               <>
                 <SidebarLibraryItem
-                  name={$root.getLz("term.listenNow")}
+                  name={t("term.listenNow")}
                   svg-icon={"./assets/feather/play-circle.svg"}
                   svg-icon-name={"listenNow"}
                   page={"listen_now"}
                 />
                 <SidebarLibraryItem
-                  name={$root.getLz("term.browse")}
+                  name={t("term.browse")}
                   svg-icon={"./assets/feather/globe.svg"}
                   svg-icon-name={"browse"}
                   page={"browse"}
                 />
                 <SidebarLibraryItem
-                  name={$root.getLz("term.radio")}
+                  name={t("term.radio")}
                   svg-icon={"./assets/feather/radio.svg"}
                   svg-icon-name={"radio"}
                   page={"radio"}
@@ -150,13 +153,13 @@ const Sidebar = () => {
             onClick={() => {
               $root.cfg.general.sidebarCollapsed.library = !$root.cfg.general.sidebarCollapsed.library;
             }}>
-            {$root.getLz("term.library")}
+            {t("term.library")}
           </div>
           {!$root.cfg.general.sidebarCollapsed.library && (
             <>
               {$root.cfg.general.sidebarItems.recentlyAdded && (
                 <SidebarLibraryItem
-                  name={$root.getLz("term.recentlyAdded")}
+                  name={t("term.recentlyAdded")}
                   svg-icon={"./assets/feather/plus-circle.svg"}
                   svg-icon-name={"recentlyAdded"}
                   page={"library-recentlyadded"}
@@ -164,7 +167,7 @@ const Sidebar = () => {
               )}
               {$root.cfg.general.sidebarItems.songs && (
                 <SidebarLibraryItem
-                  name={$root.getLz("term.songs")}
+                  name={t("term.songs")}
                   svg-icon={"./assets/feather/music.svg"}
                   svg-icon-name={"songs"}
                   page={"library-songs"}
@@ -172,7 +175,7 @@ const Sidebar = () => {
               )}
               {$root.cfg.general.sidebarItems.albums && (
                 <SidebarLibraryItem
-                  name={$root.getLz("term.albums")}
+                  name={t("term.albums")}
                   svg-icon={"./assets/feather/disc.svg"}
                   svg-icon-name={"albums"}
                   page={"library-albums"}
@@ -180,7 +183,7 @@ const Sidebar = () => {
               )}
               {$root.cfg.general.sidebarItems.artists && (
                 <SidebarLibraryItem
-                  name={$root.getLz("term.artists")}
+                  name={t("term.artists")}
                   svg-icon={"./assets/feather/user.svg"}
                   svg-icon-name={"artists"}
                   page={"library-artists"}
@@ -188,7 +191,7 @@ const Sidebar = () => {
               )}
               {$root.cfg.general.sidebarItems.videos && (
                 <SidebarLibraryItem
-                  name={$root.getLz("term.videos")}
+                  name={t("term.videos")}
                   svg-icon={"./assets/feather/video.svg"}
                   svg-icon-name={"videos"}
                   page={"library-videos"}
@@ -196,7 +199,7 @@ const Sidebar = () => {
               )}
               {$root.cfg.general.sidebarItems.podcasts && (
                 <SidebarLibraryItem
-                  name={$root.getLz("term.podcasts")}
+                  name={t("term.podcasts")}
                   svg-icon={"./assets/feather/mic.svg"}
                   svg-icon-name={"podcasts"}
                   page={"podcasts"}
@@ -219,8 +222,8 @@ const Sidebar = () => {
                   $root.cfg.general.sidebarCollapsed.amplaylists = !$root.cfg.general.sidebarCollapsed.amplaylists;
                 }}
                 contextMenu={$root.playlistHeaderContextMenu}>
-                {$root.getLz("term.appleMusic")}
-                {$root.getLz("term.playlists")}
+                {t("term.appleMusic")}
+                {t("term.playlists")}
               </div>
               {!$root.cfg.general.sidebarCollapsed.amplaylists &&
                 $root.getPlaylistFolderChildren("p.applemusic").map((item) => (
@@ -237,7 +240,7 @@ const Sidebar = () => {
               $root.cfg.general.sidebarCollapsed.playlists = !$root.cfg.general.sidebarCollapsed.playlists;
             }}
             contextMenu={$root.playlistHeaderContextMenu}>
-            {$root.getLz("term.playlists")}
+            {t("term.playlists")}
           </div>
           {!$root.cfg.general.sidebarCollapsed.playlists && (
             <>
@@ -245,7 +248,7 @@ const Sidebar = () => {
                 className={"app-sidebar-item"}
                 onClick={() => $root.playlistHeaderContextMenu}>
                 <SVGIcon url={"./assets/feather/plus.svg"} />
-                <div className={"sidebar-item-text"}>{$root.getLz("action.createNew")}</div>
+                <div className={"sidebar-item-text"}>{t("action.createNew")}</div>
               </button>
               {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
                 <SidebarPlaylist
@@ -279,7 +282,7 @@ const Sidebar = () => {
                 {$root.mk.shuffleMode === 0 ? (
                   <OverlayTrigger
                     placement={"top-end"}
-                    overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                    overlay={<Tooltip id={"enable-shuffle"}>{t("term.enableShuffle")}</Tooltip>}>
                     <button
                       onClick={() => {
                         $root.mk.shuffleMode = 1;
@@ -290,7 +293,7 @@ const Sidebar = () => {
                 ) : (
                   <OverlayTrigger
                     placement={"top-end"}
-                    overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                    overlay={<Tooltip id={"disable-shuffle"}>{t("term.disableShuffle")}</Tooltip>}>
                     <button
                       onClick={() => {
                         $root.mk.shuffleMode = 0;
@@ -301,7 +304,7 @@ const Sidebar = () => {
                 )}
               </div>
               <div className={"app-chrome-item"}>
-                <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"previous"}>{t("term.previous")}</Tooltip>}>
                   <button
                     className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                     onClick={() => $root.prevButton()}
@@ -310,14 +313,14 @@ const Sidebar = () => {
               </div>
               <div className={"app-chrome-item"}>
                 {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                  <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("stop")}</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip id={"stop"}>{t("stop")}</Tooltip>}>
                     <button
                       className={"playback-button stop"}
                       onClick={() => $root.mk.stop()}
                     />
                   </OverlayTrigger>
                 ) : (
-                  <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("play")}</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip id={"play"}>{t("play")}</Tooltip>}>
                     <button
                       className={"playback-button play"}
                       onClick={() => $root.mk.play()}
@@ -326,7 +329,7 @@ const Sidebar = () => {
                 )}
               </div>
               <div className={"app-chrome-item"}>
-                <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("next")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"next"}>{t("next")}</Tooltip>}>
                   <button
                     className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                     onClick={() => $root.skipToNextItem()}
@@ -335,7 +338,7 @@ const Sidebar = () => {
               </div>
               <div className={"app-chrome-item"}>
                 {$root.mk.repeatMode === 0 ? (
-                  <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("enableRepeatOne")}</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip id={"repeat"}>{t("enableRepeatOne")}</Tooltip>}>
                     <button
                       onClick={() => {
                         $root.mk.repeatMode = 1;
@@ -348,7 +351,7 @@ const Sidebar = () => {
             </div>
             <div className={"app-chrome-item volume"}>
               <div className={"input-container"}>
-                <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
                   <button
                     className={classNames("volume-button--small volume", { active: $root.cfg.audio.volume === 0 })}
                     onClick={() => $root.muteButtonPressed()}

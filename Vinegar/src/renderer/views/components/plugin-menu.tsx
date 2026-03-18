@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 const PluginMenu = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   function closeMenu() {
     app.modals.pluginMenu = false;
@@ -19,11 +22,11 @@ const PluginMenu = () => {
         }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
-            <div className={"modal-title"}>{$root.getLz("term.pluginMenu")}</div>
+            <div className={"modal-title"}>{t("term.pluginMenu")}</div>
             <button
               className={"close-btn"}
               onClick={() => app.resetState()}
-              aria-label={app.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div className={"modal-content"}>
@@ -33,7 +36,7 @@ const PluginMenu = () => {
                 <span
                   className={"name"}
                   style={{ top: "0.5px" }}>
-                  {$root.getLz("term.pluginMenu.none")}
+                  {t("term.pluginMenu.none")}
                 </span>
               </span>
             )}

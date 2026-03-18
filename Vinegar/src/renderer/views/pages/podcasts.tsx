@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   function msToMinSec(ms: number) {
@@ -42,6 +43,7 @@ export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boo
 };
 
 export const Podcasts = () => {
+  const { t } = useTranslation();
   const ciderPodcasts = [];
   let podcasts = [];
   let episodes = [];
@@ -171,7 +173,7 @@ export const Podcasts = () => {
                   type={"search"}
                   style={{ width: "100%" }}
                   spellCheck={false}
-                  placeholder={$root.getLz("term.search") + "..."}
+                  placeholder={t("term.search") + "..."}
                   onChange={() => {
                     searchPodcasts();
                     librarySearch();
@@ -183,8 +185,8 @@ export const Podcasts = () => {
             </div>
             {search.term === "" ? (
               <div>
-                {ciderPodcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.followedOnCider")}</div>}
-                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.subscribedOnItunes")}</div>}
+                {ciderPodcasts.length !== 0 && <div className={"podcast-list-header"}>{t("podcast.followedOnCider")}</div>}
+                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{t("podcast.subscribedOnItunes")}</div>}
                 {podcasts.map((podcast) => (
                   <PodcastTab
                     key={podcast.id}
@@ -196,7 +198,7 @@ export const Podcasts = () => {
               </div>
             ) : (
               <div>
-                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("term.library")}</div>}
+                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{t("term.library")}</div>}
                 {search.resultsLibrary.map((podcast) => (
                   <PodcastTab
                     key={podcast.id}
@@ -205,7 +207,7 @@ export const Podcasts = () => {
                     item={podcast}
                   />
                 ))}
-                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{$root.getLz("podcast.itunesStore")}</div>}
+                {podcasts.length !== 0 && <div className={"podcast-list-header"}>{t("podcast.itunesStore")}</div>}
                 {search.results.map((podcast) => (
                   <PodcastTab
                     key={podcast.id}
@@ -242,20 +244,20 @@ export const Podcasts = () => {
                 {!isSubscribed(podcastSelected.id) && (
                   <Row>
                     <Col>
-                      <button className={"md-btn md-btn-block"}>{$root.getLz("podcast.followOnCider")}</button>
+                      <button className={"md-btn md-btn-block"}>{t("podcast.followOnCider")}</button>
                     </Col>
                     <Col>
-                      <button className={"md-btn md-btn-block"}>{$root.getLz("podcast.subscribeOnItunes")}</button>
+                      <button className={"md-btn md-btn-block"}>{t("podcast.subscribeOnItunes")}</button>
                     </Col>
                   </Row>
                 )}
-                <h3>{$root.getLz("podcast.episodes")}</h3>
+                <h3>{t("podcast.episodes")}</h3>
               </div>
             )}
             {search.results.length === 0 && podcastSelected.id === -1 && (
               <div className={"podcast-no-search-results"}>
-                <h3>{$root.getLz("error.noResults")}</h3>
-                <p>{$root.getLz("error.noResults.description")}</p>
+                <h3>{t("error.noResults")}</h3>
+                <p>{t("error.noResults.description")}</p>
               </div>
             )}
             {episodes.map((episode) => (
@@ -276,7 +278,7 @@ export const Podcasts = () => {
                     <button
                       className={"close-btn"}
                       onClick={() => (selected.id = -1)}
-                      aria-label={$root.getLz("action.close")}
+                      aria-label={t("action.close")}
                     />
                   </div>
                   <div className={"podcast-artwork"}>
@@ -290,7 +292,7 @@ export const Podcasts = () => {
                   <button
                     onClick={() => playEpisode(selected)}
                     className={"md-btn podcast-play-btn"}>
-                    {$root.getLz("podcast.playEpisode")}
+                    {t("podcast.playEpisode")}
                   </button>
                   <div className={"podcast-genre"}>{selected.attributes.genreNames[0]}</div>
                   <div className={"podcast-metainfo"}>
@@ -302,14 +304,14 @@ export const Podcasts = () => {
                       <button
                         className={"md-btn md-btn-block meta-btn"}
                         onClick={() => openUrl(selected.attributes.websiteUrl)}>
-                        {$root.getLz("podcast.website")}
+                        {t("podcast.website")}
                       </button>
                     </Col>
                     <Col>
                       <button
                         className={"md-btn md-btn-block meta-btn"}
                         onClick={() => $root.share(selected.attributes.websiteUrl)}>
-                        {$root.getLz("action.share")}
+                        {t("action.share")}
                       </button>
                     </Col>
                   </Row>

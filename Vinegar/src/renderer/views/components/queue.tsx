@@ -3,8 +3,10 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import MediaItemListItem from "./mediaitem-list-item.jsx";
 import { Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 const Queue = () => {
+  const { t } = useTranslation();
   const drag = false;
   let queuePosition = 0;
   let queueItems = [];
@@ -44,7 +46,7 @@ const Queue = () => {
       single: {
         items: [
           {
-            name: app.getLz("action.removeFromQueue"),
+            name: t("action.removeFromQueue"),
             action: function () {
               queueItems.splice(
                 queueItems.findIndex((queueItem) => queueItem.item.id === item.id),
@@ -55,7 +57,7 @@ const Queue = () => {
             },
           },
           {
-            name: app.getLz("action.startRadio"),
+            name: t("action.startRadio"),
             action: function () {
               app.mk
                 .setStationQueue({
@@ -67,13 +69,13 @@ const Queue = () => {
             },
           },
           {
-            name: app.getLz("action.goToArtist"),
+            name: t("action.goToArtist"),
             action: function () {
               app.searchAndNavigate(item, "artist");
             },
           },
           {
-            name: app.getLz("action.goToAlbum"),
+            name: t("action.goToAlbum"),
             action: function () {
               app.searchAndNavigate(item, "album");
             },
@@ -83,7 +85,7 @@ const Queue = () => {
       multiple: {
         items: [
           {
-            name: app.getLz("action.removeTracks").replace("${selectedItems.length}", selectedItems.length.toString()),
+            name: t("action.removeTracks").replace("${selectedItems.length}", selectedItems.length.toString()),
             action: function () {
               // add property to items to be removed
               selectedItems.forEach(function (item) {
@@ -130,13 +132,13 @@ const Queue = () => {
       <div className={"queue-panel"}>
         <Row>
           <Col>
-            {page === "queue" && <h3 className={"queue-header-text"}>{app.getLz("term.queue")}</h3>}
-            {page === "history" && <h3 className={"queue-header-text"}>{app.getLz("term.history")}</h3>}
+            {page === "queue" && <h3 className={"queue-header-text"}>{t("term.queue")}</h3>}
+            {page === "history" && <h3 className={"queue-header-text"}>{t("term.history")}</h3>}
           </Col>
           <Col
             auto
             className={"cider-flex-center"}>
-            <OverlayTrigger overlay={<Tooltip id={"autoplay"}>{app.getLz("term.autoplay")}</Tooltip>}>
+            <OverlayTrigger overlay={<Tooltip id={"autoplay"}>{t("term.autoplay")}</Tooltip>}>
               <button
                 className={"autoplay"}
                 style={{ background: app.mk.autoplayEnabled ? "var(--keyColor)" : "" }}
@@ -218,7 +220,7 @@ const Queue = () => {
               onClick={() => {
                 page = "queue";
               }}>
-              {app.getLz("term.queue")}
+              {t("term.queue")}
             </button>
             <button
               className={classNames("md-btn md-btn-small", { "md-btn-primary": page === "history" })}
@@ -226,7 +228,7 @@ const Queue = () => {
                 geory();
                 page = "history";
               }}>
-              {app.getLz("term.history")}
+              {t("term.history")}
             </button>
           </div>
           {queueItems.length > 1 && (
@@ -237,7 +239,7 @@ const Queue = () => {
                 app.mk.clearQueue();
                 updateQueue();
               }}>
-              {app.getLz("term.clearAll")}
+              {t("term.clearAll")}
             </button>
           )}
         </div>

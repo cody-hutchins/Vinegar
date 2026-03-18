@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const ArtistFeed = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   const followedArtists = this.$root.cfg.home.followedArtists;
   let artistFeed = [];
@@ -87,7 +89,7 @@ const ArtistFeed = () => {
             <Col>
               <Row className={"nopadding"}>
                 <Col className={"nopadding"}>
-                  <h3>{app.getLz("home.followedArtists")}</h3>
+                  <h3>{t("home.followedArtists")}</h3>
                 </Col>
                 <Col
                   auto
@@ -96,7 +98,7 @@ const ArtistFeed = () => {
                     <button
                       className={"cd-btn-seeall"}
                       onClick={() => syncFavorites()}>
-                      {app.getLz("home.syncFavorites")}
+                      {t("home.syncFavorites")}
                     </button>
                   ) : (
                     <div
@@ -125,7 +127,7 @@ const ArtistFeed = () => {
                           style={{ "--url": "url(./assets/feather/x-circle.svg)" }}
                         />
                       </div>
-                      {app.getLz("action.removeFavorite")}
+                      {t("action.removeFavorite")}
                     </button>
                   </div>
                 ))}
@@ -139,7 +141,7 @@ const ArtistFeed = () => {
             <Col>
               <Row className={"nopadding"}>
                 <Col className={"nopadding"}>
-                  <h3>{app.getLz("home.artistsFeed")}</h3>
+                  <h3>{t("home.artistsFeed")}</h3>
                 </Col>
               </Row>
               <div

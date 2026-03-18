@@ -9,9 +9,11 @@ import PluginMenu from "../components/plugin-menu.jsx";
 import QRCodeModal from "../components/qrcode-modal.jsx";
 import SettingsWindow from "../components/settings-window.jsx";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Panels = () => {
   const chrome = useChromeStore((state) => state.chrome);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -140,7 +142,7 @@ const Panels = () => {
             <div className={"app-chrome-item display--large"}>
               {mvViewMode === "full" && (
                 <div className={"app-chrome-item volume display--large"}>
-                  <OverlayTrigger overlay={<Tooltip id={"volume"}>{cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip id={"volume"}>{cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
                     <button
                       className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
                       onClick={() => muteButtonPressed()}
@@ -163,14 +165,14 @@ const Panels = () => {
               )}
               {mvViewMode === "full" &&
                 (mk.isPlaying ? (
-                  <OverlayTrigger overlay={<Tooltip id={"pause"}>{$root.getLz("term.pause")}</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip id={"pause"}>{t("term.pause")}</Tooltip>}>
                     <button
                       className={"playback-button pause"}
                       onClick={() => mk.pause()}
                     />
                   </OverlayTrigger>
                 ) : (
-                  <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip id={"play"}>{t("term.play")}</Tooltip>}>
                     <button
                       className={"playback-button play"}
                       onClick={() => mk.play()}
@@ -180,7 +182,7 @@ const Panels = () => {
               {mvViewMode === "full" && (
                 <div className={"app-chrome-item generic"}>
                   {lyrics && lyrics !== [] && lyrics.length > 0 ? (
-                    <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{$root.getLz("term.lyrics")}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{t("term.lyrics")}</Tooltip>}>
                       <button
                         className={classNames("playback-button--small lyrics", { active: drawer.panel === "lyrics" })}
                         onClick={() => invokeDrawer("lyrics")}

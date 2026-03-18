@@ -3,8 +3,10 @@ import ListItemHorizontal from "../components/listitem-horizontal.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Radio = ({ data }: { data: object }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   const recent = [];
   useEffect(() => {
@@ -30,7 +32,7 @@ const Radio = ({ data }: { data: object }) => {
   return (
     <div id={"cider-radio"}>
       <div className={"content-inner"}>
-        <h1 className={"header-text"}>{$root.getLz("term.radio")}</h1>
+        <h1 className={"header-text"}>{t("term.radio")}</h1>
         {data.relationships &&
           data.relationships.tabs &&
           data.relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
@@ -48,7 +50,7 @@ const Radio = ({ data }: { data: object }) => {
                     <button
                       className={"cd-btn-seeall"}
                       onClick={() => app.showCollection({ data: recent }, recom.attributes.name ?? "", "listen_now")}>
-                      {app.getLz("term.seeAll")}
+                      {t("term.seeAll")}
                     </button>
                   )}
                   {index !== 0 &&
@@ -58,13 +60,13 @@ const Radio = ({ data }: { data: object }) => {
                       <button
                         className={"cd-btn-seeall"}
                         onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
-                        {app.getLz("term.seeAll")}
+                        {t("term.seeAll")}
                       </button>
                     ) : (
                       <button
                         className={"cd-btn-seeall"}
                         onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                        {app.getLz("term.seeAll")}
+                        {t("term.seeAll")}
                       </button>
                     ))}
                 </Col>

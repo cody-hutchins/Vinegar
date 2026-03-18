@@ -2,8 +2,10 @@ import classNames from "classnames";
 import MediaItemArtwork from "./mediaitem-artwork";
 import { useOnInView } from "react-intersection-observer";
 import { uuidv4 } from "../..";
+import { useTranslation } from "react-i18next";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
+  const { t } = useTranslation();
   let isVisible = false;
   let addedToLibrary = false;
   const app = this.$root;
@@ -59,7 +61,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
       normal: {
         items: [
           {
-            name: app.getLz("action.goToArtist"),
+            name: t("action.goToArtist"),
             icon: "./assets/feather/user.svg",
             action: function () {
               app.searchAndNavigate(item, "artist");
@@ -68,7 +70,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/radio.svg",
-            name: app.getLz("action.startRadio"),
+            name: t("action.startRadio"),
             action: function () {
               app.mk.setStationQueue({ song: item.attributes.playParams.id ?? item.id }).then(() => {
                 app.mk.play();
@@ -78,7 +80,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/share.svg",
-            name: app.getLz("action.share"),
+            name: t("action.share"),
             action: function () {
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {

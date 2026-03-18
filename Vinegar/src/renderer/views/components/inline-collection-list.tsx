@@ -2,8 +2,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOnInView } from "react-intersection-observer";
 import MediaItemListItem from "./mediaitem-list-item";
 import MediaItemSquare from "./mediaitem-square";
+import { useTranslation } from "react-i18next";
 
 const InlineCollectionList = ({ data, title, type, parentSelector = null }: { data: object; title?: string; type?: string; parentSelector?: string | null }) => {
+  const { t } = useTranslation();
   let triggerEnabled = true;
   let canSeeTrigger = false;
   let showFab = false;
@@ -110,7 +112,7 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
               <button
                 ref={buttonRef}
                 style={{ opacity: 0, height: "32px" }}>
-                {app.getLz("term.showMore")}
+                {t("term.showMore")}
               </button>
             ) : null}
           </div>
@@ -121,7 +123,7 @@ const InlineCollectionList = ({ data, title, type, parentSelector = null }: { da
               className={"top-fab"}
               style={{ display: showFab ? "inherit" : "none" }}
               onClick={() => scrollToTop()}
-              aria-label={app.getLz("action.scrollToTop")}>
+              aria-label={t("action.scrollToTop")}>
               {import("../svg/arrow-up.svg")}
             </button>
           </motion.div>

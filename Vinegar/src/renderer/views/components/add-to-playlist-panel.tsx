@@ -1,7 +1,9 @@
 import SidebarPlaylist from "./sidebar-playlist.jsx";
 import { useAppStore } from "../../store/app.js";
+import { useTranslation } from "react-i18next";
 
 const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
+  const { t } = useTranslation();
   let playlistSorted = [];
   const searchQuery = "";
   let focused = "";
@@ -53,11 +55,11 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
       }}>
       <div className={"modal-window"}>
         <div className={"modal-header"}>
-          <div className={"modal-title"}>{app.getLz("action.addToPlaylist")}</div>
+          <div className={"modal-title"}>{t("action.addToPlaylist")}</div>
           <button
             className={"close-btn"}
             onClick={app.resetState}
-            aria-label={app.getLz("action.close")}
+            aria-label={t("action.close")}
           />
         </div>
         <div className={"modal-content"}>
@@ -66,7 +68,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
             onClick={app.addSelectedToNewPlaylist()}
             style={{ width: "100%" }}>
             <div className={"icon"}>{import("../svg/plus.svg")}</div>
-            <div className={"name"}>{app.getLz("action.createPlaylist")}</div>
+            <div className={"name"}>{t("action.createPlaylist")}</div>
           </button>
           {$root.getPlaylistFolderChildren("p.playlistsroot").map((item) => (
             <SidebarPlaylist
@@ -87,7 +89,7 @@ const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {
               ref={"searchInput"}
               style={{ width: "100%" }}
               spellCheck={false}
-              placeholder={app.getLz("term.search") + "..."}
+              placeholder={t("term.search") + "..."}
               v-model={searchQuery}
               onInput={() => search()}
               className={"search-input"}

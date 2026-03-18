@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import { Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: object[]; richlyrics?: object[]; image?: string }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   const tabMode = "";
 
@@ -172,14 +174,14 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                 <div className={"control-buttons"}>
                   <div className={"app-chrome-item display--large"}>
                     {$root.mk.shuffleMode === 0 ? (
-                      <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{t("term.enableShuffle")}</Tooltip>}>
                         <button
                           className={classNames("playback-button--small shuffle", { disabled: $root.isDisabled() })}
                           onClick={() => ($root.mk.shuffleMode = 1)}
                         />
                       </OverlayTrigger>
                     ) : (
-                      <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{t("term.disableShuffle")}</Tooltip>}>
                         <button
                           className={classNames("playback-button--small shuffle active", { disabled: $root.isDisabled() })}
                           onClick={() => ($root.mk.shuffleMode = 0)}
@@ -188,7 +190,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     )}
                   </div>
                   <div className={"app-chrome-item display--large"}>
-                    <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip id={"previous"}>{t("term.previous")}</Tooltip>}>
                       <button
                         className={classNames("playback-button previous", { disabled: $root.isPrevDisabled() })}
                         onClick={() => $root.prevButton()}
@@ -197,14 +199,14 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                   </div>
                   <div className={"app-chrome-item display--large"}>
                     {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                      <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"stop"}>{t("term.stop")}</Tooltip>}>
                         <button
                           className={"playback-button stop"}
                           onClick={() => $root.mk.stop()}
                         />
                       </OverlayTrigger>
                     ) : (
-                      <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"play"}>{t("term.play")}</Tooltip>}>
                         <button
                           className={"playback-button play"}
                           onClick={() => $root.mk.play()}
@@ -213,7 +215,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                     )}
                   </div>
                   <div className={"app-chrome-item display--large"}>
-                    <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip id={"next"}>{t("term.next")}</Tooltip>}>
                       <button
                         className={classNames("playback-button next", { disabled: $root.isNextDisabled() })}
                         onClick={() => $root.skipToNextItem()}
@@ -222,7 +224,7 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                   </div>
                   <div className={"app-chrome-item display--large"}>
                     {$root.mk.repeatMode === 0 ? (
-                      <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("term.enableRepeatOne")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"repeat"}>{t("term.enableRepeatOne")}</Tooltip>}>
                         <button
                           className={classNames("playback-button--small repeat", { disabled: $root.isDisabled() })}
                           onClick={() => ($root.mk.repeatMode = 1)}

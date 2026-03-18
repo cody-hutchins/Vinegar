@@ -3,8 +3,10 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import classNames from "classnames";
 import { useOnInView } from "react-intersection-observer";
 import { uuidv4 } from "../../index.js";
+import { useTranslation } from "react-i18next";
 
 const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: MusicKit.MediaItem; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
+  const { t } = useTranslation();
   let showInLibrary = false;
   let isVisible = false;
   let addedToLibrary = false;
@@ -168,14 +170,14 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
       multiple: {
         items: [
           {
-            name: app.getLz("action.addToPlaylist"),
+            name: t("action.addToPlaylist"),
             icon: "./assets/feather/plus.svg",
             action: function () {
               app.promptAddToPlaylist();
             },
           },
           {
-            name: app.getLz("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
+            name: t("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-up.svg",
             action: () => {
               const itemsToPlay: Record<string, unknown[]> = {};
@@ -197,7 +199,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             },
           },
           {
-            name: app.getLz("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
+            name: t("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-down.svg",
             action: () => {
               const itemsToPlay: Record<string, unknown[]> = {};
@@ -225,7 +227,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           {
             icon: "./assets/feather/heart.svg",
             id: "love",
-            name: app.getLz("action.love"),
+            name: t("action.love"),
             hidden: false,
             disabled: true,
             action: function () {
@@ -237,7 +239,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             icon: "./assets/feather/heart.svg",
             id: "unlove",
             active: true,
-            name: app.getLz("action.unlove"),
+            name: t("action.unlove"),
             hidden: true,
             action: function () {
               isLoved = false;
@@ -247,7 +249,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           {
             icon: "./assets/feather/thumbs-down.svg",
             id: "dislike",
-            name: app.getLz("action.dislike"),
+            name: t("action.dislike"),
             hidden: false,
             disabled: true,
             action: function () {
@@ -257,7 +259,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           {
             icon: "./assets/feather/thumbs-down.svg",
             id: "undo_dislike",
-            name: app.getLz("action.undoDislike"),
+            name: t("action.undoDislike"),
             active: true,
             hidden: true,
             action: function () {
@@ -269,7 +271,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           {
             id: "addToLibrary",
             icon: "./assets/feather/plus.svg",
-            name: app.getLz("action.addToLibrary"),
+            name: t("action.addToLibrary"),
             hidden: false,
             disabled: true,
             action: function () {
@@ -279,7 +281,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           {
             id: "removeFromLibrary",
             icon: "./assets/feather/x-circle.svg",
-            name: app.getLz("action.removeFromLibrary"),
+            name: t("action.removeFromLibrary"),
             hidden: true,
             action: function () {
               removeFromLibrary();
@@ -287,13 +289,13 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/list.svg",
-            name: app.getLz("action.addToPlaylist"),
+            name: t("action.addToPlaylist"),
             action: function () {
               app.promptAddToPlaylist();
             },
           },
           {
-            name: app.getLz("action.playNext"),
+            name: t("action.playNext"),
             icon: "./assets/arrow-bend-up.svg",
             action: function () {
               let type = item.attributes.playParams?.kind ?? item.type;
@@ -306,7 +308,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             },
           },
           {
-            name: app.getLz("action.playLater"),
+            name: t("action.playLater"),
             icon: "./assets/arrow-bend-down.svg",
             action: function () {
               let type = item.attributes.playParams?.kind ?? item.type;
@@ -320,7 +322,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/radio.svg",
-            name: app.getLz("action.startRadio"),
+            name: t("action.startRadio"),
             action: function () {
               app.mk.setStationQueue({ song: item.attributes.playParams?.id ?? item.id }).then(() => {
                 app.mk.play();
@@ -330,21 +332,21 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/user.svg",
-            name: app.getLz("action.goToArtist"),
+            name: t("action.goToArtist"),
             action: function () {
               app.searchAndNavigate(item, "artist");
             },
           },
           {
             icon: "./assets/feather/disc.svg",
-            name: app.getLz("action.goToAlbum"),
+            name: t("action.goToAlbum"),
             action: function () {
               app.searchAndNavigate(item, "album");
             },
           },
           {
             icon: "./assets/feather/share.svg",
-            name: app.getLz("action.share"),
+            name: t("action.share"),
             action: async function () {
               const _item = item;
               if (!_item.attributes.url) {
@@ -363,7 +365,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/share.svg",
-            name: `${app.getLz("action.share")} (song.link)`,
+            name: `${t("action.share")} (song.link)`,
             action: async function () {
               const _item = item;
               if (_item.type.startsWith("library-")) {
@@ -599,7 +601,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
                   {!addedToLibrary && (!showIndex || (showIndex && showIndexPlaylist)) ? (
                     <button
                       onClick={() => addToLibrary()}
-                      aria-label={$root.getLz("action.addToLibrary")}>
+                      aria-label={t("action.addToLibrary")}>
                       <div
                         className={"svg-icon addIcon"}
                         style={{ color: "var(--keyColor)", url: "url(./assets/feather/plus.svg)" }}
@@ -633,7 +635,7 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               <button
                 className={"overlay-play"}
                 onClick={() => playTrack()}
-                aria-label={$root.getLz("term.play")}>
+                aria-label={t("term.play")}>
                 {import("../svg/play.svg")}
               </button>
             </div>

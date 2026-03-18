@@ -4,9 +4,11 @@ import AppContentArea from "../components/app-content-area.jsx";
 import LyricsView from "../components/lyrics-view.jsx";
 import Queue from "../components/queue.jsx";
 import Sidebar from "../components/sidebar.jsx";
+import { useTranslation } from "react-i18next";
 
 const AppNavigation = () => {
   const chrome = useChromeStore((state) => state.chrome);
+  const { t } = useTranslation();
 
   return (
     <div className={"app-navigation"}>
@@ -32,11 +34,11 @@ const AppNavigation = () => {
                           <div className={"handle-text text-overflow-elipsis"}>{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.handle ?? "") : ""}</div>
                         </>
                       ) : (
-                        <div onClick={() => mk.authorize()}>{$root.getLz("term.login")}</div>
+                        <div onClick={() => mk.authorize()}>{t("term.login")}</div>
                       )}
                     </div>
                   ) : (
-                    <div className={"sidebar-user-text"}>{$root.getLz("app.name")}</div>
+                    <div className={"sidebar-user-text"}>{t("app.name")}</div>
                   )}
                 </button>
                 {/* Use 20px SVG for usermenu icon  */}
@@ -45,46 +47,46 @@ const AppNavigation = () => {
                     className={"usermenu-item"}
                     onClick={() => (cfg.general.privateEnabled = false)}>
                     <span className={"usermenu-item-icon"}> {import("../svg/x.svg")} </span>
-                    <span className={"usermenu-item-name"}>{$root.getLz("term.disablePrivateSession")}</span>
+                    <span className={"usermenu-item-name"}>{t("term.disablePrivateSession")}</span>
                   </button>
                 )}
                 <button
                   className={"usermenu-item"}
                   onClick={() => appRoute("remote-pair")}>
                   <span className={"usermenu-item-icon"}> {import("../svg/smartphone.svg")} </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("action.showWebRemoteQR")}</span>
+                  <span className={"usermenu-item-name"}>{t("action.showWebRemoteQR")}</span>
                 </button>
                 <button
                   className={"usermenu-item"}
                   onClick={() => (modals.castMenu = true)}>
                   <span className={"usermenu-item-icon"}> {import("../svg/cast.svg")} </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("term.cast")}</span>
+                  <span className={"usermenu-item-name"}>{t("term.cast")}</span>
                 </button>
                 <button
                   className={"usermenu-item"}
                   onClick={() => (modals.audioSettings = true)}>
                   <span className={"usermenu-item-icon"}> {import("../svg/headphones.svg")} </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("term.audioSettings")}</span>
+                  <span className={"usermenu-item-name"}>{t("term.audioSettings")}</span>
                 </button>
                 {pluginInstalled && (
                   <button
                     className={"usermenu-item"}
                     onClick={() => (modals.pluginMenu = true)}>
                     <span className={"usermenu-item-icon"}> {import("../svg/grid.svg")} </span>
-                    <span className={"usermenu-item-name"}>{$root.getLz("term.plugin")}</span>
+                    <span className={"usermenu-item-name"}>{t("term.plugin")}</span>
                   </button>
                 )}
                 <button
                   className={"usermenu-item"}
                   onClick={() => appRoute("about")}>
                   <span className={"usermenu-item-icon"}> {import("../svg/info.svg")} </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("term.about")}</span>
+                  <span className={"usermenu-item-name"}>{t("term.about")}</span>
                 </button>
                 <button
                   className={"usermenu-item"}
                   onClick={() => (modals.settings = true)}>
                   <span className={"usermenu-item-icon"}> {import("../svg/settings.svg")} </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("term.settings")}</span>
+                  <span className={"usermenu-item-name"}>{t("term.settings")}</span>
                 </button>
                 {$root.pluginMenuTopEntries.map((entry) => (
                   <button
@@ -107,7 +109,7 @@ const AppNavigation = () => {
                     style={{ right: "2.5px" }}>
                     {import("../svg/log-out.svg")}
                   </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("term.logout")}</span>
+                  <span className={"usermenu-item-name"}>{t("term.logout")}</span>
                 </button>
                 <button
                   className={"usermenu-item"}
@@ -117,7 +119,7 @@ const AppNavigation = () => {
                     style={{ right: "2.5px" }}>
                     {import("../svg/x.svg")}
                   </span>
-                  <span className={"usermenu-item-name"}>{$root.getLz("term.quit")}</span>
+                  <span className={"usermenu-item-name"}>{t("term.quit")}</span>
                 </button>
                 {!chrome.noC2Upgrade && (
                   <button
@@ -179,7 +181,7 @@ const AppNavigation = () => {
                   <button
                     className={"md-btn"}
                     onClick={() => modularUITest(!fullscreenLyrics)}>
-                    {fullscreenLyrics ? $root.getLz("term.defaultView") : $root.getLz("term.fullscreenView")}
+                    {fullscreenLyrics ? t("term.defaultView") : t("term.fullscreenView")}
                   </button>
                 </div>
               )}

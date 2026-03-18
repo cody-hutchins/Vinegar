@@ -1,7 +1,9 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const MoreInfoModal = ({ data }: { data: object }) => {
   const app = this.$root;
+  const { t } = useTranslation();
   let timedelay = false;
   function close() {
     app.modals.moreInfo = false;
@@ -27,7 +29,7 @@ const MoreInfoModal = ({ data }: { data: object }) => {
             <button
               className={"close-btn"}
               onClick={() => close()}
-              aria-label={app.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div className={"modal-content"}>

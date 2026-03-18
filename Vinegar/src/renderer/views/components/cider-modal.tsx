@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 const CiderModal = ({ playlists }: { playlists: object[] }) => {
+  const { t } = useTranslation();
   const playlistSorted = [];
   const searchQuery = "";
   const focused = "";
@@ -52,11 +54,11 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
         }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
-            <div className={"modal-title"}>{app.getLz("action.addToLibrary")}</div>
+            <div className={"modal-title"}>{t("action.addToLibrary")}</div>
             <button
               className={"close-btn"}
               onClick={() => app.resetState()}
-              aria-label={app.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div className={"modal-content"}>
@@ -83,7 +85,7 @@ const CiderModal = ({ playlists }: { playlists: object[] }) => {
                 ref={"searchInput"}
                 style={{ width: "100%" }}
                 spellCheck={false}
-                placeholder={app.getLz("term.search") + "..."}
+                placeholder={t("term.search") + "..."}
                 v-model={searchQuery}
                 input={search()}
                 className={"search-input"}

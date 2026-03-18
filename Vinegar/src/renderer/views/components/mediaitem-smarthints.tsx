@@ -2,8 +2,10 @@ import { Col, Row } from "react-bootstrap";
 import classNames from "classnames";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import { uuidv4 } from "../../index.js";
+import { useTranslation } from "react-i18next";
 
 const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; position: number }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   const guid = uuidv4();
   let addedToLibrary = false;
@@ -71,7 +73,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
       multiple: {
         items: [
           {
-            name: app.getLz("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
+            name: t("action.playTracksNext").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-up.svg",
             action: () => {
               const itemsToPlay = {};
@@ -93,7 +95,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
             },
           },
           {
-            name: app.getLz("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
+            name: t("action.playTracksLater").replace("${app.selectedMediaItems.length}", app.selectedMediaItems.length),
             icon: "./assets/arrow-bend-down.svg",
             action: () => {
               const itemsToPlay = {};
@@ -120,7 +122,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           {
             icon: "./assets/feather/heart.svg",
             id: "love",
-            name: app.getLz("action.love"),
+            name: t("action.love"),
             hidden: false,
             disabled: true,
             action: function () {
@@ -131,7 +133,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
             icon: "./assets/feather/heart.svg",
             id: "unlove",
             active: true,
-            name: app.getLz("action.unlove"),
+            name: t("action.unlove"),
             hidden: true,
             action: function () {
               app.unlove(item);
@@ -140,7 +142,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           {
             icon: "./assets/feather/thumbs-down.svg",
             id: "dislike",
-            name: app.getLz("action.dislike"),
+            name: t("action.dislike"),
             hidden: false,
             disabled: true,
             action: function () {
@@ -150,7 +152,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           {
             icon: "./assets/feather/thumbs-down.svg",
             id: "undo_dislike",
-            name: app.getLz("action.undoDislike"),
+            name: t("action.undoDislike"),
             active: true,
             hidden: true,
             action: function () {
@@ -162,7 +164,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           {
             icon: "./assets/feather/list.svg",
             id: "addToPlaylist",
-            name: app.getLz("action.addToPlaylist"),
+            name: t("action.addToPlaylist"),
             action: function () {
               app.promptAddToPlaylist();
             },
@@ -170,7 +172,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           {
             id: "addToLibrary",
             icon: "./assets/feather/plus.svg",
-            name: app.getLz("action.addToLibrary"),
+            name: t("action.addToLibrary"),
             hidden: false,
             disabled: true,
             action: function () {
@@ -183,7 +185,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           {
             id: "removeFromLibrary",
             icon: "./assets/feather/x-circle.svg",
-            name: app.getLz("action.removeFromLibrary"),
+            name: t("action.removeFromLibrary"),
             hidden: true,
             action: async function () {
               console.log("remove");
@@ -194,7 +196,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
             },
           },
           {
-            name: app.getLz("action.playNext"),
+            name: t("action.playNext"),
             icon: "./assets/arrow-bend-up.svg",
             action: function () {
               app.mk.playNext({ [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id });
@@ -203,7 +205,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
             },
           },
           {
-            name: app.getLz("action.playLater"),
+            name: t("action.playLater"),
             icon: "./assets/arrow-bend-down.svg",
             action: function () {
               app.mk.playLater({ [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id });
@@ -213,7 +215,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           },
           {
             icon: "./assets/feather/share.svg",
-            name: app.getLz("action.share"),
+            name: t("action.share"),
             action: function () {
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
@@ -228,7 +230,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           },
           {
             icon: "./assets/feather/share.svg",
-            name: `${app.getLz("action.share")} (song.link)`,
+            name: `${t("action.share")} (song.link)`,
             action: function () {
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
@@ -293,14 +295,14 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
     const followActions = {
       follow: {
         icon: "./assets/star.svg",
-        name: app.getLz("action.favorite"),
+        name: t("action.favorite"),
         action: () => {
           $root.setArtistFavorite(item.id, true);
         },
       },
       unfollow: {
         icon: "./assets/star.svg",
-        name: app.getLz("action.removeFavorite"),
+        name: t("action.removeFavorite"),
         action: () => {
           $root.setArtistFavorite(item.id, false);
         },
@@ -314,7 +316,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
         items: [
           {
             icon: "./assets/feather/play.svg",
-            name: app.getLz("action.startRadio"),
+            name: t("action.startRadio"),
             action: () => {
               app.mk.setStationQueue({ artist: "a-" + item.id }).then(() => {
                 app.mk.play();
@@ -324,14 +326,14 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
           followActions[followAction],
           {
             icon: "./assets/feather/share.svg",
-            name: app.getLz("term.share"),
+            name: t("term.share"),
             action: () => {
               app.copyToClipboard(item.attributes.url);
             },
           },
           {
             icon: "./assets/feather/external-link.svg",
-            name: app.getLz("action.openArtworkInBrowser"),
+            name: t("action.openArtworkInBrowser"),
             action: () => {
               window.open(app.getMediaItemArtwork(getArtworkUrl(), 1024, 1024));
             },

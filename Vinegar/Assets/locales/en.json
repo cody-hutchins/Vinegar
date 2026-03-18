@@ -1,0 +1,448 @@
+{
+    "action": {
+        "addToFavorites": "",
+        "addToLibrary": "",
+        "addToPlaylist": "",
+        "cast": {
+            "airplay": "",
+            "chromecast": "",
+            "scan": "",
+            "scanning": "",
+            "stop": "",
+            "todevices": ""
+        },
+        "close": "",
+        "copy": "",
+        "createNew": "",
+        "createPlaylist": "",
+        "deletepreset": "",
+        "dislike": "",
+        "done": "",
+        "editTracklist": "",
+        "export": "",
+        "favorite": "",
+        "follow": "",
+        "goToAlbum": "",
+        "goToArtist": "",
+        "import": "",
+        "love": "",
+        "moveToTop": "",
+        "newpreset": "",
+        "open": "",
+        "openArtworkInBrowser": "",
+        "playLater": "",
+        "playNext": "",
+        "playTracksLater": "",
+        "playTracksNext": "",
+        "relaunch":{"confirm": ""},
+        "removeFavorite": "",
+        "removeFromLibrary": "",
+        "removeFromPlaylist": "",
+        "removeFromQueue": "",
+        "removeTracks": "",
+        "rename": "",
+        "scrollToTop": "",
+        "share": "",
+        "showAlbum": "",
+        "showWebRemoteQR": "",
+        "startRadio": "",
+        "submit": "",
+        "undoDislike": "",
+        "unfollow": "",
+        "unlove": "",
+        "update": ""
+    },
+    "app": {"name": ""},
+    "date": {"format": ""},
+    "enableRepeatOne": "",
+    "error": {"noResults": {"description": ""}},
+    "home": {
+        "artistsFeed":{"noArtist": ""},
+        "followedArtists": "",
+        "friendsListeningTo": "",
+        "madeForYou": "",
+        "recentlyPlayed": "",
+        "syncFavorites": "",
+        "title": ""
+    },
+    "menubar": {"options": {"reload": ""}},
+    "next": "",
+    "play": "",
+    "podcast": {
+        "episodes": "",
+        "followedOnCider": "",
+        "followOnCider": "",
+        "itunesStore": "",
+        "playEpisode": "",
+        "subscribedOnItunes": "",
+        "subscribeOnItunes": "",
+        "website": ""
+    },
+    "settings": {
+        "description": {
+            "albums": "",
+            "artists": "",
+            "audio": "",
+            "browse": "",
+            "cast": "",
+            "developer": "",
+            "listnow": "",
+            "plugins": "",
+            "private": "",
+            "recentAdd": "",
+            "remote": "",
+            "search": "",
+            "settings": "",
+            "songs": "",
+            "header": {"advanced": ""}
+        },
+        "header": {
+            "audio": {
+                "quality": {
+                    "high":{"description": ""},
+                    "standard":{"description": ""}
+                }
+            },
+            "connectivity": "",
+            "debug": "",
+            "experimental": "",
+            "general": "",
+            "lyrics": "",
+            "visual": {
+                "animatedArtwork": {
+                    "always": "",
+                    "disable": "",
+                    "limited": ""
+                },
+                "animatedArtworkQuality": {
+                    "extreme": "",
+                    "high": "",
+                    "low": "",
+                    "medium": "",
+                    "veryHigh": ""
+                },
+                "hardwareAcceleration":{
+                    "default": "",
+                    "webGPU": ""
+                },
+                "plugin": {"github": {"page": ""}},
+                "styles": "",
+                "theme": {"github": {"page": ""}},
+                "windowBackgroundStyle": {
+                    "artwork": "",
+                    "color": "",
+                    "image": "",
+                    "none": ""
+                }
+            },
+            "window": ""
+        },
+        "notyf": {
+            "connectivity": {
+                "lastfmScrobble": {
+                    "connectError": "",
+                    "connecting": "",
+                    "connectSuccess": ""
+                }
+            },
+            "general":{"keybindings":{"update": {"success": ""}}},
+            "visual": {
+                "plugin": {"install": {"error": "", "success": ""}},
+                "theme": {"install": {"error": "", "success": ""}}
+            }
+        },
+        "option": {
+            "advanced": {
+                "playlistTrackMapping":{"description":""}
+            },
+            "audio":{
+                "advanced": "",
+                "audioLab": "",
+                "changePlaybackRate": "",
+                "dbfs": {
+                    "calibration": "",
+                    "description": ""
+                },
+                "dbspl": {
+                    "description": "",
+                    "display": ""
+                },
+                "enableAdvancedFunctionality": {
+                    "atmosphereRealizer":{"description": ""},
+                    "atmosphereRealizerMode":{"description": ""},
+                    "audioNormalization":{"description": ""},
+                    "ciderPPE":{"description": ""},
+                    "ciderPPEStrength": {
+                        "adaptive": "",
+                        "description": "",
+                        "legacy": "",
+                        "standard": ""
+                    },
+                    "tunedAudioSpatialization": {
+                        "description": "",
+                        "profile":{"description": ""}
+                    }
+                },
+                "maxVolume": "",
+                "playbackRate":{"change":""},
+                "quality": "",
+                "seamlessTransition": "",
+                "volumeStep": ""
+            },
+            "connectivity": {
+                "discordRPC": {
+                    "clearOnPause": "",
+                    "clientName": "",
+                    "detailsFormat": "",
+                    "firstButton": "",
+                    "hideTimestamp": "",
+                    "reload": "",
+                    "secondButton": "",
+                    "showActivityButtons": "",
+                    "stateFormat": ""
+                },
+                "lastfmScrobble": {
+                    "delay": "",
+                    "filterLoop":{"description": ""},
+                    "filterTypes":{"description": ""},
+                    "manualToken":{"link": ""},
+                    "removeFeatured": ""
+                },
+                "playbackNotifications": ""
+            },
+            "debug": {
+                "copy_log": "",
+                "openAppData": ""
+            },
+            "experimental": {
+                "compactUI": "",
+                "inline_playlists": "",
+                "reinstallwidevine":{"confirm": ""},
+                "unknownPlugin":{"description": ""}
+            },
+            "general": {
+                "customizeSidebar":{"customize": ""},
+                "keybindings": {
+                    "advanced": "",
+                    "control": "",
+                    "interface": "",
+                    "library": "",
+                    "pressEscape": "",
+                    "session": ""
+                },
+                "pagination": "",
+                "resumebehavior": {
+                    "description": "",
+                    "history":{"description": ""},
+                    "locally":{"description": ""}
+                },
+                "resumetabs": {
+                    "description": "",
+                    "dynamic":{"description": ""}
+                },
+                "showLovedTracksInline": "",
+                "themeUpdateNotification": ""
+            },
+            "lyrics": {
+                "enableMusixmatch": "",
+                "enableMusixmatchKaraoke": "",
+                "enableQQLyrics": "",
+                "musixmatchPreferredLanguage": "",
+                "enableYoutubeLyrics": ""
+            },
+            "visual": {
+                "accentColor": "",
+                "animatedArtwork": "",
+                "animatedArtworkQuality": "",
+                "animatedWindowBackground": "",
+                "compactArtistHeader": "",
+                "customAccentColor": "",
+                "hardwareAcceleration": {
+                    "description": ""
+                },
+                "plugin": {
+                    "github": {
+                        "download": "",
+                        "explore": "",
+                        "install":{"confirm": ""}
+                    }
+                },
+                "purplePodcastPlaybackBar": "",
+                "showPersonalInfo": "",
+                "theme": {
+                    "checkForUpdates": "",
+                    "github": {
+                        "applied": "",
+                        "available": "",
+                        "download": "",
+                        "explore": "",
+                        "install":{"confirm": ""},
+                        "openfolder": ""
+                    },
+                    "manageStyles": "",
+                    "uninstall": "",
+                    "viewInfo": ""
+                },
+                "transparent":{"description": ""},
+                "windowBackgroundStyle": "",
+                "windowColor": "",
+                "windowStyle": ""
+            },
+            "window":{
+                "close_button_hide": "",
+                "maxElementScale": "",
+                "openOnStartup":{"hidden": ""},
+                "useNativeTitleBar": "",
+                "windowControlStyle": {
+                    "left": "",
+                    "right": ""
+                }
+            }
+        },
+        "options":{"general":{"pagination":{"description": ""}}},
+        "prompt": {
+            "general":{"keybindings":{"update":{"success": ""}}},
+            "visual": {
+                "plugins": {
+                    "github": {
+                        "success": "",
+                        "URL": ""
+                    }
+                },
+                "theme": {
+                    "github": {
+                        "URL": ""
+                    },
+                    "uninstallTheme": ""
+                }
+            }
+        }
+    },
+    "stop": "",
+    "term": {
+        "about": "",
+        "aboutArtist": "",
+        "accountSettings": "",
+        "addedpreset": "",
+        "albums": "",
+        "appleInc": "",
+        "appleMusic": "",
+        "artists": "",
+        "audioControls": "",
+        "audioSettings": "",
+        "authed": "",
+        "autoplay": "",
+        "browse": "",
+        "cast": "",
+        "charts": "",
+        "ciderTeam": "",
+        "clearAll": "",
+        "confirm": "",
+        "contributors": "",
+        "copyright": "",
+        "defaultPresets": "",
+        "deletedpreset": {"warn": ""},
+        "developer": "",
+        "disabled": "",
+        "disablePrivateSession": "",
+        "disableShuffle": "",
+        "discNumber": "",
+        "discord": "",
+        "enableRepeatOne": "",
+        "enableShuffle": "",
+        "equalizer": "",
+        "fullscreenView": "",
+        "github": "",
+        "history": "",
+        "language": "",
+        "latestReleases": "",
+        "library": "",
+        "listenedTo": "",
+        "listenNow": "",
+        "live": "",
+        "login": "",
+        "logout": "",
+        "lyrics": "",
+        "menu": "",
+        "miniplayer": "",
+        "more": "",
+        "musicVideos": "",
+        "mute": "",
+        "navigateBack": "",
+        "navigateForward": "",
+        "newpreset": {"name": ""},
+        "next": "",
+        "noLyrics": "",
+        "noVideos": "",
+        "nowPlaying": "",
+        "pause": "",
+        "people": "",
+        "play": "",
+        "playlists": "",
+        "plays": "",
+        "plugin": "",
+        "pluginMenu": {"none": ""},
+        "plugins": "",
+        "podcasts": "",
+        "previous": "",
+        "privateSession": "",
+        "queue": "",
+        "quickNav": "",
+        "quit": "",
+        "radio": "",
+        "recentlyAdded": "",
+        "replay": "",
+        "reset": "",
+        "rightsReserved": "",
+        "scroll": {
+            "infinite": "",
+            "paged": ""
+        },
+        "search": "",
+        "seeAll": "",
+        "settings": "",
+        "share": {"success": ""},
+        "sharedPlaylists": "",
+        "showLess": "",
+        "showMore": "",
+        "shuffle": "",
+        "size": {"compact": "", "normal": ""},
+        "socials": "",
+        "socialTeam": "",
+        "songs": "",
+        "sortBy": {"genre": ""},
+        "sortOrder": {
+            "ascending": "",
+            "descending": ""
+        },
+        "sponsor": "",
+        "stop": "",
+        "themeManaged": "",
+        "time": {
+            "added": "",
+            "hours": "",
+            "minutes": "",
+            "released": "",
+            "updated": ""
+        },
+        "times": "",
+        "topAlbums": "",
+        "topArtists": "",
+        "topGenres": "",
+        "topResult": "",
+        "topSongs": "",
+        "tracks": "",
+        "uniqueAlbums": "",
+        "uniqueArtists": "",
+        "uniqueSongs": "",
+        "userPresets": "",
+        "variables": "",
+        "version": "",
+        "videos": "",
+        "viewAs": {"coverArt": "", "list": ""},
+        "volume": "",
+        "zoomin": "",
+        "zoomout": "",
+        "zoomreset": ""
+    }
+}

@@ -6,8 +6,10 @@ import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import { Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import AppContentArea from "./app-content-area.js";
+import { useTranslation } from "react-i18next";
 
 const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   let tabMode = "lyrics";
   const enableCatalog = false;
@@ -98,42 +100,42 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
             <div className={"top-nav-group"}>
               <SidebarLibraryItem
                 clicknative={"tabMode = 'catalog'"}
-                name={$root.getLz("home.title")}
+                name={t("home.title")}
                 svg-icon={"./assets/feather/home.svg"}
                 svg-icon-name={"home"}
                 page={"home"}
               />
               <SidebarLibraryItem
                 clicknative={"tabMode = 'catalog'"}
-                name={$root.getLz("term.listenNow")}
+                name={t("term.listenNow")}
                 svg-icon={"./assets/feather/play-circle.svg"}
                 svg-icon-name={"listenNow"}
                 page={"listen_now"}
               />
               <SidebarLibraryItem
                 clicknative={"tabMode = 'catalog'"}
-                name={$root.getLz("term.browse")}
+                name={t("term.browse")}
                 svg-icon={"./assets/feather/globe.svg"}
                 svg-icon-name={"browse"}
                 page={"browse"}
               />
               <SidebarLibraryItem
                 clicknative={"tabMode = 'catalog'"}
-                name={$root.getLz("term.radio")}
+                name={t("term.radio")}
                 svg-icon={"./assets/feather/radio.svg"}
                 svg-icon-name={"radio"}
                 page={"radio"}
               />
               <SidebarLibraryItem
                 clicknative={"tabMode = 'catalog'"}
-                name={$root.getLz("term.library")}
+                name={t("term.library")}
                 svg-icon={"./assets/feather/radio.svg"}
                 svg-icon-name={"library"}
                 page={"library"}
               />
               <SidebarLibraryItem
                 clicknative={"tabMode = ''"}
-                name={$root.getLz("term.nowPlaying")}
+                name={t("term.nowPlaying")}
                 svg-icon={"./assets/play.svg"}
                 svg-icon-name={"nowPlaying"}
                 page={"nowPlaying"}
@@ -221,14 +223,14 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     <div className={"control-buttons"}>
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.shuffleMode === 0 ? (
-                          <OverlayTrigger overlay={<Tooltip id={"shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                          <OverlayTrigger overlay={<Tooltip id={"shuffle"}>{t("term.enableShuffle")}</Tooltip>}>
                             <button
                               className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                               onClick={() => ($root.mk.shuffleMode = 1)}
                             />
                           </OverlayTrigger>
                         ) : (
-                          <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                          <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{t("term.disableShuffle")}</Tooltip>}>
                             <button
                               className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                               onClick={() => ($root.mk.shuffleMode = 0)}
@@ -237,7 +239,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                         )}
                       </div>
                       <div className={"app-chrome-item display--large"}>
-                        <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+                        <OverlayTrigger overlay={<Tooltip id={"previous"}>{t("term.previous")}</Tooltip>}>
                           <button
                             className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                             onClick={() => $root.prevButton()}
@@ -246,14 +248,14 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       </div>
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.isPlaying && $root.mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                          <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                          <OverlayTrigger overlay={<Tooltip id={"stop"}>{t("term.stop")}</Tooltip>}>
                             <button
                               className={"playback-button stop"}
                               onClick={() => $root.mk.stop()}
                             />
                           </OverlayTrigger>
                         ) : (
-                          <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                          <OverlayTrigger overlay={<Tooltip id={"play"}>{t("term.play")}</Tooltip>}>
                             <button
                               className={"playback-button play"}
                               onClick={() => $root.mk.play()}
@@ -262,7 +264,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                         )}
                       </div>
                       <div className={"app-chrome-item display--large"}>
-                        <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+                        <OverlayTrigger overlay={<Tooltip id={"next"}>{t("term.next")}</Tooltip>}>
                           <button
                             className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                             onClick={() => $root.skipToNextItem()}
@@ -271,7 +273,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                       </div>
                       <div className={"app-chrome-item display--large"}>
                         {$root.mk.repeatMode === 0 ? (
-                          <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.getLz("term.enableRepeatOne")}</Tooltip>}>
+                          <OverlayTrigger overlay={<Tooltip id={"repeat"}>{t("term.enableRepeatOne")}</Tooltip>}>
                             <button
                               className={classNames("playback-button--small", "repeat", { disabled: isDisabled() })}
                               onClick={() => ($root.mk.repeatMode = 1)}
@@ -283,7 +285,7 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                   </div>
                   <div className={"app-chrome-item volume display--large"}>
                     <div className={"input-container"}>
-                      <OverlayTrigger overlay={<Tooltip id={"mute"}>{app.cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"mute"}>{app.cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
                         <button
                           className={classNames("volume-button--small volume", { active: app.cfg.audio.volume === 0 })}
                           onClick={() => app.muteButtonPressed()}

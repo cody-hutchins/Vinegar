@@ -1,7 +1,10 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const AudioControls = () => {
   const app = this.$root;
+  const { t } = useTranslation();
+
   let maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
   let volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
   let volume: number = this.$root.cfg.audio.volume * 100;
@@ -55,16 +58,16 @@ const AudioControls = () => {
         }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
-            <div className={"modal-title"}>{app.getLz("term.audioControls")}</div>
+            <div className={"modal-title"}>{t("term.audioControls")}</div>
             <button
               className={"close-btn"}
               onClick={() => (app.modals.audioControls = false)}
-              aria-label={app.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div className={"modal-content"}>
             <div className={"md-option-line"}>
-              <div className={"md-option-segment"}>{app.getLz("term.volume")}</div>
+              <div className={"md-option-segment"}>{t("term.volume")}</div>
               <div className={"md-option-segment md-option-segment_auto percent"}>
                 <input
                   type={"number"}
@@ -76,7 +79,7 @@ const AudioControls = () => {
               </div>
             </div>
             <div className={"md-option-line"}>
-              <div className={"md-option-segment"}>{app.getLz("settings.option.audio.volumeStep")}</div>
+              <div className={"md-option-segment"}>{t("settings.option.audio.volumeStep")}</div>
               <div className={"md-option-segment md-option-segment_auto percent"}>
                 <input
                   type={"number"}
@@ -87,7 +90,7 @@ const AudioControls = () => {
               </div>
             </div>
             <div className={"md-option-line"}>
-              <div className={"md-option-segment"}>{app.getLz("settings.option.audio.maxVolume")}</div>
+              <div className={"md-option-segment"}>{t("settings.option.audio.maxVolume")}</div>
               <div className={"md-option-segment md-option-segment_auto percent"}>
                 <input
                   type={"number"}
@@ -98,7 +101,7 @@ const AudioControls = () => {
               </div>
             </div>
             <div className={"md-option-line"}>
-              <div className={"md-option-segment"}>{$root.getLz("settings.option.audio.advanced")}</div>
+              <div className={"md-option-segment"}>{t("settings.option.audio.advanced")}</div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <label>
                   <input

@@ -2,8 +2,10 @@ import { useEffect, useMemo } from "react";
 import Pagination from "../components/pagination.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const LibrarySongs = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   const library = this.$root.library;
   const mediaItemSize = "compact";
@@ -59,7 +61,7 @@ const LibrarySongs = () => {
                   type={"search"}
                   style={{ width: "100%" }}
                   spellCheck={false}
-                  placeholder={app.getLz("term.search") + "..."}
+                  placeholder={t("term.search") + "..."}
                   input={$root.searchLibrarySongs}
                   v-model={library.songs.search}
                   className={"search-input"}
@@ -77,7 +79,7 @@ const LibrarySongs = () => {
                       play();
                     }}>
                     <img className={"md-ico-play"} />
-                    {app.getLz("term.play")}
+                    {t("term.play")}
                   </button>
                 </Col>
                 <Col>
@@ -89,7 +91,7 @@ const LibrarySongs = () => {
                       play();
                     }}>
                     <img className={"md-ico-shuffle"} />
-                    {app.getLz("term.shuffle")}
+                    {t("term.shuffle")}
                   </button>
                 </Col>
                 <Col>
@@ -97,7 +99,7 @@ const LibrarySongs = () => {
                     className={"md-select"}
                     v-model={prefs.sort}
                     onChange={() => $root.searchLibrarySongs()}>
-                    <optgroup label={app.getLz("term.sortBy")}>
+                    <optgroup label={t("term.sortBy")}>
                       {library.songs.sortingOptions.map((sort, index) => (
                         <option
                           value={index}
@@ -113,9 +115,9 @@ const LibrarySongs = () => {
                     className={"md-select"}
                     v-model={prefs.sortOrder}
                     onChange={() => $root.searchLibrarySongs()}>
-                    <optgroup label={app.getLz("term.sortOrder")}>
-                      <option value={"asc"}>{app.getLz("term.sortOrder.ascending")}</option>
-                      <option value={"desc"}>{app.getLz("term.sortOrder.descending")}</option>
+                    <optgroup label={t("term.sortOrder")}>
+                      <option value={"asc"}>{t("term.sortOrder.ascending")}</option>
+                      <option value={"desc"}>{t("term.sortOrder.descending")}</option>
                     </optgroup>
                   </select>
                 </Col>
@@ -124,9 +126,9 @@ const LibrarySongs = () => {
                     className={"md-select"}
                     v-model={prefs.size}
                     onChange={() => $root.searchLibrarySongs()}>
-                    <optgroup label={app.getLz("term.size")}>
-                      <option value={"normal"}>{app.getLz("term.size.normal")}</option>
-                      <option value={"compact"}>{app.getLz("term.size.compact")}</option>
+                    <optgroup label={t("term.size")}>
+                      <option value={"normal"}>{t("term.size.normal")}</option>
+                      <option value={"compact"}>{t("term.size.compact")}</option>
                     </optgroup>
                   </select>
                 </Col>
@@ -134,9 +136,9 @@ const LibrarySongs = () => {
                   <select
                     className={"md-select"}
                     v-model={prefs.scroll}>
-                    <optgroup label={app.getLz("term.scroll")}>
-                      <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
-                      <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                    <optgroup label={t("term.scroll")}>
+                      <option value={"infinite"}>{t("term.scroll.infinite")}</option>
+                      <option value={"paged"}>{t("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                     </optgroup>
                   </select>
                 </Col>
@@ -147,14 +149,14 @@ const LibrarySongs = () => {
                 <button
                   onClick={() => $root.getLibrarySongsFull(true)}
                   className={"reload-btn"}
-                  aria-label={app.getLz("menubar.options.reload")}>
+                  aria-label={t("menubar.options.reload")}>
                   {import("../svg/redo.svg")}
                 </button>
               ) : (
                 <button
                   className={"reload-btn"}
                   style={{ opacity: 0.8, pointerEvents: "none" }}
-                  aria-label={app.getLz("menubar.options.reload")}>
+                  aria-label={t("menubar.options.reload")}>
                   <div className={"spinner"} />
                 </button>
               )}

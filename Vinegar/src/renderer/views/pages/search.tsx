@@ -6,8 +6,11 @@ import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-
 import MediaitemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import MediaitemSmarthints from "../components/mediaitem-smarthints.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
+import { useTranslation } from "react-i18next";
 
 const Search = ({ search }: { search: object }) => {
+  const { t } = useTranslation();
+
   const app = this.$root;
   let recentlyPlayed = [];
   let categoriesView = [];
@@ -83,7 +86,7 @@ const Search = ({ search }: { search: object }) => {
                 }
               }}
               onInput={() => $root.getSearchHints()}
-              placeholder={$root.getLz("term.search") + "..."}
+              placeholder={t("term.search") + "..."}
               v-model={$root.search.term}
               className={"search-input"}
             />
@@ -124,28 +127,28 @@ const Search = ({ search }: { search: object }) => {
               searchType = "catalog";
             }}
             className={classNames("md-btn", "md-btn-small", { "md-btn-primary": searchType === "catalog" })}>
-            {$root.getLz("term.appleMusic")}
+            {t("term.appleMusic")}
           </button>
           <button
             onClick={() => {
               searchType = "library";
             }}
             className={classNames("md-btn", "md-btn-small", { "md-btn-primary": searchType === "library" })}>
-            {$root.getLz("term.library")}
+            {t("term.library")}
           </button>
         </div>
         {search !== null && search !== [] && search.term !== "" && $root.search.showSearchView ? (
           <div>
             {searchType === "catalog" ? (
               <>
-                <h3>{app.getLz("term.topResult")}</h3>
+                <h3>{t("term.topResult")}</h3>
                 <MediaitemScrollerHorizontal items={"search?.results[search?.results?.meta?.results?.order[0]]?.data"} />
                 <Row>
                   {search.results.song ? (
                     <Col>
                       <Row>
                         <Col>
-                          <h3>{app.getLz("term.songs")}</h3>
+                          <h3>{t("term.songs")}</h3>
                         </Col>
                       </Row>
                       <div className={"mediaitem-list-item__grid"}>
@@ -154,8 +157,8 @@ const Search = ({ search }: { search: object }) => {
                     </Col>
                   ) : (
                     <div style={{ textAlign: "center" }}>
-                      <h3>{app.getLz("error.noResults")}</h3>
-                      <p>{app.getLz("error.noResults.description")}</p>
+                      <h3>{t("error.noResults")}</h3>
+                      <p>{t("error.noResults.description")}</p>
                     </div>
                   )}
                 </Row>
@@ -178,7 +181,7 @@ const Search = ({ search }: { search: object }) => {
                   <>
                     <Row>
                       <Col>
-                        <h3>{app.getLz("term.sharedPlaylists")}</h3>
+                        <h3>{t("term.sharedPlaylists")}</h3>
                       </Col>
                     </Row>
                     <MediaItemScrollerHorizontalLarge items={search.resultsSocial.playlist.data.limit(10)} />
@@ -188,7 +191,7 @@ const Search = ({ search }: { search: object }) => {
                   <>
                     <Row>
                       <Col>
-                        <h3>{app.getLz("term.people")}</h3>
+                        <h3>{t("term.people")}</h3>
                       </Col>
                     </Row>
                     <MediaItemScrollerHorizontalLarge items={search.resultsSocial.profile.data.limit(10)} />
@@ -197,7 +200,7 @@ const Search = ({ search }: { search: object }) => {
               </>
             ) : (
               <>
-                <h1>{$root.getLz("term.library")}</h1>
+                <h1>{t("term.library")}</h1>
                 {$root.search.resultsLibrary.map((section, key) => (
                   <div key={key}>
                     <h3>{app.friendlyTypes(key)}</h3>
@@ -222,7 +225,7 @@ const Search = ({ search }: { search: object }) => {
                 <div>
                   {categoriesView !== null && categoriesView !== [] && categoriesView[0]?.attributes !== null && categoriesView[0]?.attributes.title !== null && (
                     <Col>
-                      <h3>{$root.getLz("home.recentlyPlayed")}</h3>
+                      <h3>{t("home.recentlyPlayed")}</h3>
                       <div className={"mediaitem-list-item__grid"}>
                         <ListitemHorizontal items={recentlyPlayed.limit(10)} />
                       </div>

@@ -1,24 +1,26 @@
 import { useEffect } from "react";
 import { Jumbotron } from "react-bootstrap";
 import { CiderAudio } from "../../audio/audio.js";
+import { useTranslation } from "react-i18next";
 
 const Audiolabs = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   const arprofiles = CiderAudio.atmosphereRealizerProfiles;
   const spprofiles = CiderAudio.spatialProfiles;
   const ciderPPE = [
-    { name: "MAIKIWI", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
-    { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
-    { name: "NATURAL", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
-    { name: "LEGACY", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+    { name: "MAIKIWI", displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
+    { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+    { name: "NATURAL", displayName: t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
+    { name: "LEGACY", displayName: t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
   ];
   useEffect(() => {
     return {
       ciderPPE: [
-        { name: "MAIKIWI", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
-        { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
-        { name: "NATURAL", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
-        { name: "LEGACY", displayName: app.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+        { name: "MAIKIWI", displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
+        { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+        { name: "NATURAL", displayName: t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
+        { name: "LEGACY", displayName: t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
       ],
     };
   }, []);
@@ -30,15 +32,15 @@ const Audiolabs = () => {
           <div className={"settings-option-body"}>
             <div className={"md-option-line"}>
               <Jumbotron
-                header={$root.getLz("settings.option.audio.audioLab")}
+                header={t("settings.option.audio.audioLab")}
                 lead={"Designed by Cider Acoustic Technologies in California"}
               />
             </div>
             <div className={"md-option-line"}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
+                {t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <input
@@ -52,9 +54,9 @@ const Audiolabs = () => {
               className={"md-option-line"}
               style={{ display: app.cfg.audio.maikiwiAudio.ciderPPE ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength")}
+                {t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength")}
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <select
@@ -91,9 +93,9 @@ const Audiolabs = () => {
             </div>
             <div className={"md-option-line"}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer")} [1]
+                {t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer")} [1]
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <input
@@ -107,9 +109,9 @@ const Audiolabs = () => {
               className={"md-option-line"}
               style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer1 ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [1]
+                {t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [1]
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <select
@@ -129,9 +131,9 @@ const Audiolabs = () => {
             </div>
             <div className={"md-option-line"}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer")} [2]
+                {t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer")} [2]
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizer.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <input
@@ -145,9 +147,9 @@ const Audiolabs = () => {
               className={"md-option-line"}
               style={{ display: app.cfg.audio.maikiwiAudio.atmosphereRealizer2 ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [2]
+                {t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode")} [2]
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <select
@@ -167,9 +169,9 @@ const Audiolabs = () => {
             </div>
             <div className={"md-option-line"}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization")}
+                {t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization")}
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <input
@@ -183,9 +185,9 @@ const Audiolabs = () => {
               className={"md-option-line"}
               style={{ display: app.cfg.audio.maikiwiAudio.spatial ? "inherit" : "none" }}>
               <div className={"md-option-segment"}>
-                {$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile")}
+                {t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile")}
                 <br />
-                <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile.description")}</small>
+                <small>{t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile.description")}</small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <select

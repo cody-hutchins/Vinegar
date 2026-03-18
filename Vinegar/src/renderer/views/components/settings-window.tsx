@@ -7,8 +7,11 @@ import ThemesGithub from "./settings-themes-github.jsx";
 import { Modal, Tab } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import SVGIcon from "../../main/components/svg-icon.jsx";
+import { useTranslation } from "react-i18next";
+import { notyf } from "../../index.js";
 
 const SettingsWindow = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   const themes = window.electronAPI.sendSync("get-themes");
   const tabIndex = 0;
@@ -39,7 +42,7 @@ const SettingsWindow = () => {
     }
   }
   function reinstallWidevineCDM() {
-    app.confirm(app.getLz("settings.option.experimental.reinstallwidevine.confirm"), (ok) => {
+    app.confirm(t("settings.option.experimental.reinstallwidevine.confirm"), (ok) => {
       if (ok) {
         window.electronAPI.invoke("reinstall-widevine-cdm");
       }
@@ -50,7 +53,7 @@ const SettingsWindow = () => {
   }
   function copyLogs() {
     window.electronAPI.send("fetch-log");
-    notyf.success(app.getLz("term.share.success"));
+    notyf.success(t("term.share.success"));
   }
   function openAppData() {
     window.electronAPI.send("open-appdata");
@@ -115,7 +118,7 @@ const SettingsWindow = () => {
     }
   }
   function promptForRelaunch() {
-    app.confirm(app.getLz("action.relaunch.confirm"), (result) => {
+    app.confirm(t("action.relaunch.confirm"), (result) => {
       if (result) {
         window.electronAPI.send("relaunchApp", "");
       }
@@ -139,12 +142,12 @@ const SettingsWindow = () => {
   async function lfmAuthorize() {
     lastfmConnecting = true;
     window.open(await window.electronAPI.invoke("lastfm:url"));
-    app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connecting"));
+    app.notyf.success(t("settings.notyf.connectivity.lastfmScrobble.connecting"));
 
     /* Just a timeout for the button */
     setTimeout(() => {
       if (!this.$root.cfg.connectivity.lastfm.enabled) {
-        app.notyf.error(app.getLz("settings.notyf.connectivity.lastfmScrobble.connectError"));
+        app.notyf.error(t("settings.notyf.connectivity.lastfmScrobble.connectError"));
         console.warn("[lastfm:authorize] Last.fm authorization timed out.");
         lastfmConnecting = false;
       }
@@ -155,7 +158,7 @@ const SettingsWindow = () => {
       this.$root.cfg.connectivity.lastfm.secrets.key = session.key;
       this.$root.cfg.connectivity.lastfm.enabled = true;
       lastfmConnecting = false;
-      app.notyf.success(app.getLz("settings.notyf.connectivity.lastfmScrobble.connectSuccess"));
+      app.notyf.success(t("settings.notyf.connectivity.lastfmScrobble.connectSuccess"));
     });
   }
   function filterChange(e) {
@@ -197,17 +200,17 @@ const SettingsWindow = () => {
               name={"settings-general"}
             />
           </div>
-          <div>{$root.getLz("settings.header.general")}</div>
+          <div>{t("settings.header.general")}</div>
         </template>
         <div className={"settings-tab-content"}>
           <div className={"md-option-container"}>
             {/* General Settings  */}
             <div className={"md-option-header"}>
-              <span>{$root.getLz("settings.header.general")}</span>
+              <span>{t("settings.header.general")}</span>
             </div>
             <div className={"settings-option-body"}>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("term.language")}</div>
+                <div className={"md-option-segment"}>{t("term.language")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <select
@@ -235,17 +238,17 @@ const SettingsWindow = () => {
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("term.accountSettings")}</div>
+                <div className={"md-option-segment"}>{t("term.accountSettings")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     onClick={() => app.appRoute("apple-account-settings")}>
-                    {$root.getLz("term.accountSettings")}
+                    {t("term.accountSettings")}
                   </button>
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("term.privateSession")}</div>
+                <div className={"md-option-segment"}>{t("term.privateSession")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -259,7 +262,7 @@ const SettingsWindow = () => {
               <div
                 className={"md-option-line"}
                 style={{ display: app.platform !== "linux" ? "inherit" : "none" }}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.window.openOnStartup")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.window.openOnStartup")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -272,7 +275,7 @@ const SettingsWindow = () => {
               <div
                 className={"md-option-line"}
                 style={{ display: app.cfg.general.onStartup.enabled ? "inherit" : "none" }}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.window.openOnStartup.hidden")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.window.openOnStartup.hidden")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -284,16 +287,16 @@ const SettingsWindow = () => {
               </div>
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.general.resumebehavior")}
+                  {t("settings.option.general.resumebehavior")}
                   <br />
                   <small>
-                    {$root.getLz("settings.option.general.resumebehavior.description")}
+                    {t("settings.option.general.resumebehavior.description")}
                     <br />
-                    <b>{$root.getLz("settings.option.general.resumebehavior.locally")}: </b>
-                    {$root.getLz("settings.option.general.resumebehavior.locally.description")}
+                    <b>{t("settings.option.general.resumebehavior.locally")}: </b>
+                    {t("settings.option.general.resumebehavior.locally.description")}
                     <br />
-                    <b>{$root.getLz("settings.option.general.resumebehavior.history")}: </b>
-                    {$root.getLz("settings.option.general.resumebehavior.history.description")}
+                    <b>{t("settings.option.general.resumebehavior.history")}: </b>
+                    {t("settings.option.general.resumebehavior.history.description")}
                   </small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
@@ -302,22 +305,22 @@ const SettingsWindow = () => {
                       className={"md-select"}
                       style={{ width: "180px" }}
                       v-model={$root.cfg.general.resumeOnStartupBehavior}>
-                      <option value={"disabled"}>{$root.getLz("term.disabled")}</option>
-                      <option value={"local"}>{$root.getLz("settings.option.general.resumebehavior.locally")}</option>
-                      <option value={"history"}>{$root.getLz("settings.option.general.resumebehavior.history")}</option>
+                      <option value={"disabled"}>{t("term.disabled")}</option>
+                      <option value={"local"}>{t("settings.option.general.resumebehavior.locally")}</option>
+                      <option value={"history"}>{t("settings.option.general.resumebehavior.history")}</option>
                     </select>
                   </label>
                 </div>
               </div>
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.general.resumetabs")}
+                  {t("settings.option.general.resumetabs")}
                   <br />
                   <small>
-                    {$root.getLz("settings.option.general.resumetabs.description")}
+                    {t("settings.option.general.resumetabs.description")}
                     <br />
-                    <b>{$root.getLz("settings.option.general.resumetabs.dynamic")}: </b>
-                    {$root.getLz("settings.option.general.resumetabs.dynamic.description")}
+                    <b>{t("settings.option.general.resumetabs.dynamic")}: </b>
+                    {t("settings.option.general.resumetabs.dynamic.description")}
                   </small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
@@ -326,28 +329,28 @@ const SettingsWindow = () => {
                       className={"md-select"}
                       style={{ width: "180px" }}
                       v-model={$root.cfg.general.resumeTabs.tab}>
-                      <option value={"dynamic"}>{$root.getLz("settings.option.general.resumetabs.dynamic")}</option>
-                      <option value={"home"}>{$root.getLz("home.title")}</option>
-                      <option value={"listen_now"}>{$root.getLz("term.listenNow")}</option>
-                      <option value={"browse"}>{$root.getLz("term.browse")}</option>
-                      <option value={"radio"}>{$root.getLz("term.radio")}</option>
-                      <option value={"library-recentlyadded"}>{$root.getLz("term.recentlyAdded")}</option>
-                      <option value={"library-songs"}>{$root.getLz("term.songs")}</option>
-                      <option value={"library-albums"}>{$root.getLz("term.albums")}</option>
-                      <option value={"library-artists"}>{$root.getLz("term.artists")}</option>
-                      <option value={"library-videos"}>{$root.getLz("term.videos")}</option>
-                      <option value={"podcasts"}>{$root.getLz("term.podcasts")}</option>
+                      <option value={"dynamic"}>{t("settings.option.general.resumetabs.dynamic")}</option>
+                      <option value={"home"}>{t("home.title")}</option>
+                      <option value={"listen_now"}>{t("term.listenNow")}</option>
+                      <option value={"browse"}>{t("term.browse")}</option>
+                      <option value={"radio"}>{t("term.radio")}</option>
+                      <option value={"library-recentlyadded"}>{t("term.recentlyAdded")}</option>
+                      <option value={"library-songs"}>{t("term.songs")}</option>
+                      <option value={"library-albums"}>{t("term.albums")}</option>
+                      <option value={"library-artists"}>{t("term.artists")}</option>
+                      <option value={"library-videos"}>{t("term.videos")}</option>
+                      <option value={"podcasts"}>{t("term.podcasts")}</option>
                     </select>
                   </label>
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.general.customizeSidebar")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.general.customizeSidebar")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     onClick={() => setModalShow(true)}>
-                    {$root.getLz("settings.option.general.customizeSidebar.customize")}
+                    {t("settings.option.general.customizeSidebar.customize")}
                   </button>
                 </div>
                 <Modal
@@ -355,10 +358,10 @@ const SettingsWindow = () => {
                   centered
                   size={"lg"}
                   show={modalShow}
-                  title={$root.getLz("settings.option.general.customizeSidebar")}>
+                  title={t("settings.option.general.customizeSidebar")}>
                   <div className={"settings-option-body"}>
                     <div className={"md-option-line"}>
-                      <div className={"md-option-segment"}>{$root.getLz("term.recentlyAdded")}</div>
+                      <div className={"md-option-segment"}>{t("term.recentlyAdded")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
                           <input
@@ -369,7 +372,7 @@ const SettingsWindow = () => {
                       </div>
                     </div>
                     <div className={"md-option-line"}>
-                      <div className={"md-option-segment"}>{$root.getLz("term.songs")}</div>
+                      <div className={"md-option-segment"}>{t("term.songs")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
                           <input
@@ -380,7 +383,7 @@ const SettingsWindow = () => {
                       </div>
                     </div>
                     <div className={"md-option-line"}>
-                      <div className={"md-option-segment"}>{$root.getLz("term.albums")}</div>
+                      <div className={"md-option-segment"}>{t("term.albums")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
                           <input
@@ -391,7 +394,7 @@ const SettingsWindow = () => {
                       </div>
                     </div>
                     <div className={"md-option-line"}>
-                      <div className={"md-option-segment"}>{$root.getLz("term.artists")}</div>
+                      <div className={"md-option-segment"}>{t("term.artists")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
                           <input
@@ -402,7 +405,7 @@ const SettingsWindow = () => {
                       </div>
                     </div>
                     <div className={"md-option-line"}>
-                      <div className={"md-option-segment"}>{$root.getLz("term.videos")}</div>
+                      <div className={"md-option-segment"}>{t("term.videos")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
                           <input
@@ -413,7 +416,7 @@ const SettingsWindow = () => {
                       </div>
                     </div>
                     <div className={"md-option-line"}>
-                      <div className={"md-option-segment"}>{$root.getLz("term.podcasts")}</div>
+                      <div className={"md-option-segment"}>{t("term.podcasts")}</div>
                       <div className={"md-option-segment md-option-segment_auto"}>
                         <label>
                           <input
@@ -427,17 +430,17 @@ const SettingsWindow = () => {
                 </Modal>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.general.keybindings")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.general.keybindings")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     onClick={() => $root.openSettingsPage("keybindings")}>
-                    {$root.getLz("action.open")}
+                    {t("action.open")}
                   </button>
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.general.themeUpdateNotification")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.general.themeUpdateNotification")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -448,7 +451,7 @@ const SettingsWindow = () => {
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.general.showLovedTracksInline")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.general.showLovedTracksInline")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -481,17 +484,17 @@ const SettingsWindow = () => {
               name={"settings-audio"}
             />
           </div>
-          <div>{$root.getLz("settings.header.audio")}</div>
+          <div>{t("settings.header.audio")}</div>
         </template>
         <div className={"settings-tab-content"}>
           <div className={"md-option-container"}>
             {/* Audio Settings  */}
             <div className={"md-option-header"}>
-              <span>{$root.getLz("settings.header.audio")}</span>
+              <span>{t("settings.header.audio")}</span>
             </div>
             <div className={"settings-option-body"}>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.audio.quality")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.audio.quality")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <select
@@ -499,40 +502,40 @@ const SettingsWindow = () => {
                       style={{ width: "180px" }}
                       v-model={app.cfg.audio.quality}
                       onChange={changeAudioQuality}>
-                      {/* // <option value="">{$root.getLz('settings.header.audio.quality.hireslossless')}</option>  */}
-                      {/* <option value="">{$root.getLz('settings.header.audio.quality.lossless')}</option>  */}
+                      {/* // <option value="">{t('settings.header.audio.quality.hireslossless')}</option>  */}
+                      {/* <option value="">{t('settings.header.audio.quality.lossless')}</option>  */}
                       <option value={"HIGH"}>
-                        {$root.getLz("settings.header.audio.quality.high")}({$root.getLz("settings.header.audio.quality.high.description")})
+                        {t("settings.header.audio.quality.high")}({t("settings.header.audio.quality.high.description")})
                       </option>
                       <option value={"STANDARD"}>
-                        {$root.getLz("settings.header.audio.quality.standard")}({$root.getLz("settings.header.audio.quality.standard.description")})
+                        {t("settings.header.audio.quality.standard")}({t("settings.header.audio.quality.standard.description")})
                       </option>
                     </select>
                   </label>
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("term.audioControls")}</div>
+                <div className={"md-option-segment"}>{t("term.audioControls")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     onClick={() => (app.modals.audioControls = true)}>
-                    {$root.getLz("term.audioControls")}
+                    {t("term.audioControls")}
                   </button>
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.audio.changePlaybackRate")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.audio.changePlaybackRate")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     onClick={() => (app.modals.audioPlaybackRate = true)}>
-                    {$root.getLz("settings.option.audio.playbackRate.change")}
+                    {t("settings.option.audio.playbackRate.change")}
                   </button>
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.audio.seamlessTransition")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.audio.seamlessTransition")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -544,12 +547,12 @@ const SettingsWindow = () => {
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("term.equalizer")}</div>
+                <div className={"md-option-segment"}>{t("term.equalizer")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     onClick={() => (app.modals.equalizer = true)}>
-                    {$root.getLz("term.equalizer")}
+                    {t("term.equalizer")}
                   </button>
                 </div>
               </div>
@@ -557,8 +560,8 @@ const SettingsWindow = () => {
                 <div
                   className={"md-option-segment"}
                   style={{ whiteSpace: "pre-line" }}>
-                  {$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
-                  <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE ? `${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${$root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : $root.getLz("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
+                  {t("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
+                  <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE ? `${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -575,9 +578,9 @@ const SettingsWindow = () => {
                 className={"md-option-line"}
                 style={{ display: app.cfg.audio.normalization && app.cfg.audio.advanced ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.audio.dbspl.display")}
+                  {t("settings.option.audio.dbspl.display")}
                   <br />
-                  <small>{$root.getLz("settings.option.audio.dbspl.description")}</small>
+                  <small>{t("settings.option.audio.dbspl.description")}</small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -592,9 +595,9 @@ const SettingsWindow = () => {
                 className={"md-option-line"}
                 style={{ display: app.cfg.audio.dBSPL ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.audio.dbfs.calibration")}
+                  {t("settings.option.audio.dbfs.calibration")}
                   <br />
-                  <small>{$root.getLz("settings.option.audio.dbfs.description")}</small>
+                  <small>{t("settings.option.audio.dbfs.description")}</small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -617,7 +620,7 @@ const SettingsWindow = () => {
             name={"settings-audiolabs"}
           />
         </div>
-        <div>{$root.getLz("settings.option.audio.audioLab")}</div>
+        <div>{t("settings.option.audio.audioLab")}</div>
         <div className={"settings-tab-content"}>
           <Audiolabs />
         </div>
@@ -630,7 +633,7 @@ const SettingsWindow = () => {
             name={"settings-styles"}
           />
         </div>
-        <div>{$root.getLz("settings.header.visual.styles")}</div>
+        <div>{t("settings.header.visual.styles")}</div>
         <div className={"settings-tab-content"}>
           <InstalledThemes />
         </div>
@@ -642,25 +645,25 @@ const SettingsWindow = () => {
           name={"settings-visual"}
         />
       </div>
-      <div>{$root.getLz("settings.header.visual")}</div>
+      <div>{t("settings.header.visual")}</div>
       <div className={"md-option-container"}>
         {/* Visual Settings  */}
         <div className={"md-option-header"}>
-          <span>{$root.getLz("settings.header.visual")}</span>
+          <span>{t("settings.header.visual")}</span>
         </div>
         <div className={"settings-option-body"}>
           {/*<div className="md-option-line">
                                         <div className="md-option-segment">
-                                            {$root.getLz('settings.header.visual.theme')}
+                                            {t('settings.header.visual.theme')}
                                         </div>
                                         <div className="md-option-segment md-option-segment_auto">
                                             <button className="md-btn md-btn-block" onClick={() =>$root.appRoute('installed-themes')}>
-                                                {$root.getLz('settings.option.visual.theme.manageStyles')}
+                                                {t('settings.option.visual.theme.manageStyles')}
                                             </button>
                                         </div>
                                     </div>*/}
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.windowStyle")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.windowStyle")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <label>
                 <select
@@ -688,17 +691,17 @@ const SettingsWindow = () => {
             </div>
           </div>
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.windowBackgroundStyle")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.windowBackgroundStyle")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <label>
                 <select
                   className={"md-select"}
                   onChange={windowBgStyleChange}
                   v-model={app.cfg.visual.window_background_style}>
-                  <option value={"none"}>{$root.getLz("settings.header.visual.windowBackgroundStyle.none")}</option>
-                  <option value={"artwork"}>{$root.getLz("settings.header.visual.windowBackgroundStyle.artwork")}</option>
-                  <option value={"image"}>{$root.getLz("settings.header.visual.windowBackgroundStyle.image")}</option>
-                  <option value={"color"}>{$root.getLz("settings.header.visual.windowBackgroundStyle.color")}</option>
+                  <option value={"none"}>{t("settings.header.visual.windowBackgroundStyle.none")}</option>
+                  <option value={"artwork"}>{t("settings.header.visual.windowBackgroundStyle.artwork")}</option>
+                  <option value={"image"}>{t("settings.header.visual.windowBackgroundStyle.image")}</option>
+                  <option value={"color"}>{t("settings.header.visual.windowBackgroundStyle.color")}</option>
                   {$root.platform === "win32" && <option value={"mica"}>Mica (Beta)</option>}
                 </select>
               </label>
@@ -706,7 +709,7 @@ const SettingsWindow = () => {
           </div>
           {app.cfg.visual.window_background_style === "color" && (
             <div className={"md-option-line child"}>
-              <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.windowColor")}</div>
+              <div className={"md-option-segment"}>{t("settings.option.visual.windowColor")}</div>
               <div className={"md-option-segment_auto"}>
                 <input
                   type={"color"}
@@ -716,7 +719,7 @@ const SettingsWindow = () => {
             </div>
           )}
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.customAccentColor")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.customAccentColor")}</div>
             <div className={"md-option-segment_auto"}>
               <input
                 type={"checkbox"}
@@ -727,7 +730,7 @@ const SettingsWindow = () => {
           </div>
           {app.cfg.visual.customAccentColor && (
             <div className={"md-option-line child"}>
-              <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.accentColor")}</div>
+              <div className={"md-option-segment"}>{t("settings.option.visual.accentColor")}</div>
               <div className={"md-option-segment_auto"}>
                 <input
                   type={"color"}
@@ -737,7 +740,7 @@ const SettingsWindow = () => {
             </div>
           )}
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.purplePodcastPlaybackBar")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.purplePodcastPlaybackBar")}</div>
             <div className={"md-option-segment_auto"}>
               <input
                 type={"checkbox"}
@@ -747,7 +750,7 @@ const SettingsWindow = () => {
             </div>
           </div>
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.compactArtistHeader")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.compactArtistHeader")}</div>
             <div className={"md-option-segment_auto"}>
               <input
                 type={"checkbox"}
@@ -757,9 +760,9 @@ const SettingsWindow = () => {
           </div>
           <div className={"md-option-line"}>
             <div className={"md-option-segment"}>
-              {$root.getLz("settings.option.visual.hardwareAcceleration")}
+              {t("settings.option.visual.hardwareAcceleration")}
               <br />
-              <small>({$root.getLz("settings.option.visual.hardwareAcceleration.description")})</small>
+              <small>({t("settings.option.visual.hardwareAcceleration.description")})</small>
             </div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <label>
@@ -768,15 +771,15 @@ const SettingsWindow = () => {
                   style={{ width: " 180px" }}
                   v-model={app.cfg.visual.hw_acceleration}
                   onChange={() => promptForRelaunch()}>
-                  <option value={"default"}>{$root.getLz("settings.header.visual.hardwareAcceleration.default")}</option>
-                  <option value={"webgpu"}>{$root.getLz("settings.header.visual.hardwareAcceleration.webGPU")}</option>
-                  <option value={"disabled"}>{$root.getLz("term.disabled")}</option>
+                  <option value={"default"}>{t("settings.header.visual.hardwareAcceleration.default")}</option>
+                  <option value={"webgpu"}>{t("settings.header.visual.hardwareAcceleration.webGPU")}</option>
+                  <option value={"disabled"}>{t("term.disabled")}</option>
                 </select>
               </label>
             </div>
           </div>
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.showPersonalInfo")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.showPersonalInfo")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <label>
                 <input
@@ -790,11 +793,11 @@ const SettingsWindow = () => {
         </div>
         {/* Window Settings  */}
         <div className={"md-option-header"}>
-          <span>{$root.getLz("settings.header.window")}</span>
+          <span>{t("settings.header.window")}</span>
         </div>
       </div>
       <div className={"md-option-line"}>
-        <div className={"md-option-segment"}>{$root.getLz("settings.option.window.maxElementScale")}</div>
+        <div className={"md-option-segment"}>{t("settings.option.window.maxElementScale")}</div>
       </div>
       <option value={"-1"}>Default (1.5x)</option>
       <option value={"1"}>1.0x</option>
@@ -803,7 +806,7 @@ const SettingsWindow = () => {
       <div
         className={"md-option-line"}
         style={{ display: app.platform !== "darwin" ? "inherit" : "none" }}>
-        <div className={"md-option-segment"}>{$root.getLz("settings.option.window.close_button_hide")}</div>
+        <div className={"md-option-segment"}>{t("settings.option.window.close_button_hide")}</div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
             <input
@@ -817,9 +820,9 @@ const SettingsWindow = () => {
         className={"md-option-line"}
         style={{ display: app.platform !== "darwin" ? "inherit" : "none" }}>
         <div className={"md-option-segment"}>
-          {$root.getLz("settings.option.window.useNativeTitleBar")}
+          {t("settings.option.window.useNativeTitleBar")}
           <br />
-          <small>({$root.getLz("settings.option.visual.hardwareAcceleration.description")})</small>
+          <small>({t("settings.option.visual.hardwareAcceleration.description")})</small>
         </div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
@@ -834,57 +837,57 @@ const SettingsWindow = () => {
       <div
         className={"md-option-line"}
         style={{ display: app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar ? "inherit" : "none" }}>
-        <div className={"md-option-segment"}>{$root.getLz("settings.option.window.windowControlStyle")}</div>
+        <div className={"md-option-segment"}>{t("settings.option.window.windowControlStyle")}</div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
             <select
               className={"md-select"}
               v-model={app.cfg.visual.windowControlPosition}>
-              <option value={"0"}>{$root.getLz("settings.option.window.windowControlStyle.right")}</option>
-              <option value={"1"}>{$root.getLz("settings.option.window.windowControlStyle.left")}</option>
+              <option value={"0"}>{t("settings.option.window.windowControlStyle.right")}</option>
+              <option value={"1"}>{t("settings.option.window.windowControlStyle.left")}</option>
             </select>
           </label>
         </div>
       </div>
       {/* Advanced Visual  */}
       <div className={"md-option-header"}>
-        <span>{$root.getLz("settings.header.advanced")}</span>
+        <span>{t("settings.header.advanced")}</span>
       </div>
       <div className={"settings-option-body"}>
         <div className={"md-option-line"}>
-          <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.animatedArtwork")}</div>
+          <div className={"md-option-segment"}>{t("settings.option.visual.animatedArtwork")}</div>
           <div className={"md-option-segment md-option-segment_auto"}>
             <label>
               <select
                 className={"md-select"}
                 v-model={app.cfg.visual.animated_artwork}>
-                <option value={"always"}>{$root.getLz("settings.header.visual.animatedArtwork.always")}</option>
-                <option value={"limited"}>{$root.getLz("settings.header.visual.animatedArtwork.limited")}</option>
-                <option value={"disabled"}>{$root.getLz("settings.header.visual.animatedArtwork.disable")}</option>
+                <option value={"always"}>{t("settings.header.visual.animatedArtwork.always")}</option>
+                <option value={"limited"}>{t("settings.header.visual.animatedArtwork.limited")}</option>
+                <option value={"disabled"}>{t("settings.header.visual.animatedArtwork.disable")}</option>
               </select>
             </label>
           </div>
         </div>
         {(app.cfg.visual.animated_artwork === "always" || app.cfg.visual.animated_artwork === "limited") && (
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.animatedArtworkQuality")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.visual.animatedArtworkQuality")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <label>
                 <select
                   className={"md-select"}
                   v-model={app.cfg.visual.animated_artwork_qualityLevel}>
-                  <option value={"0"}>{$root.getLz("settings.header.visual.animatedArtworkQuality.low")}</option>
-                  <option value={"1"}>{$root.getLz("settings.header.visual.animatedArtworkQuality.medium")}</option>
-                  <option value={"2"}>{$root.getLz("settings.header.visual.animatedArtworkQuality.high")}</option>
-                  <option value={"3"}>{$root.getLz("settings.header.visual.animatedArtworkQuality.veryHigh")}</option>
-                  <option value={"4"}>{$root.getLz("settings.header.visual.animatedArtworkQuality.extreme")}</option>
+                  <option value={"0"}>{t("settings.header.visual.animatedArtworkQuality.low")}</option>
+                  <option value={"1"}>{t("settings.header.visual.animatedArtworkQuality.medium")}</option>
+                  <option value={"2"}>{t("settings.header.visual.animatedArtworkQuality.high")}</option>
+                  <option value={"3"}>{t("settings.header.visual.animatedArtworkQuality.veryHigh")}</option>
+                  <option value={"4"}>{t("settings.header.visual.animatedArtworkQuality.extreme")}</option>
                 </select>
               </label>
             </div>
           </div>
         )}
         <div className={"md-option-line"}>
-          <div className={"md-option-segment"}>{$root.getLz("settings.option.visual.animatedWindowBackground")}</div>
+          <div className={"md-option-segment"}>{t("settings.option.visual.animatedWindowBackground")}</div>
           <div className={"md-option-segment md-option-segment_auto"}>
             <label>
               <input
@@ -903,7 +906,7 @@ const SettingsWindow = () => {
             name={"settings-plugins"}
           />
         </div>
-        <div>{$root.getLz("term.plugins")}</div>
+        <div>{t("term.plugins")}</div>
         <div className={"settings-tab-content"}>
           <PluginsGithub />
         </div>
@@ -916,16 +919,16 @@ const SettingsWindow = () => {
             name={"settings-lyrics"}
           />
         </div>
-        <div>{$root.getLz("settings.header.lyrics")}</div>
+        <div>{t("settings.header.lyrics")}</div>
         <div className={"settings-tab-content"}>
           <div className={"md-option-container"}>
             {/* Lyric Settings  */}
             <div className={"md-option-header"}>
-              <span>{$root.getLz("settings.header.lyrics")}</span>
+              <span>{t("settings.header.lyrics")}</span>
             </div>
             <div className={"settings-option-body"}>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.lyrics.enableMusixmatch")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.lyrics.enableMusixmatch")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -937,7 +940,7 @@ const SettingsWindow = () => {
               </div>
               {app.cfg.lyrics.enable_mxm && (
                 <div className={"md-option-line"}>
-                  <div className={"md-option-segment"}>{$root.getLz("settings.option.lyrics.enableMusixmatchKaraoke")}</div>
+                  <div className={"md-option-segment"}>{t("settings.option.lyrics.enableMusixmatchKaraoke")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <input
@@ -949,7 +952,7 @@ const SettingsWindow = () => {
                 </div>
               )}
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.lyrics.musixmatchPreferredLanguage")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.lyrics.musixmatchPreferredLanguage")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <select
@@ -1226,7 +1229,7 @@ const SettingsWindow = () => {
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.lyrics.enableYoutubeLyrics")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.lyrics.enableYoutubeLyrics")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -1237,7 +1240,7 @@ const SettingsWindow = () => {
                 </div>
               </div>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.lyrics.enableQQLyrics")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.lyrics.enableQQLyrics")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -1259,16 +1262,16 @@ const SettingsWindow = () => {
             name={"settings-connectivity"}
           />
         </div>
-        <div>{$root.getLz("settings.header.connectivity")}</div>
+        <div>{t("settings.header.connectivity")}</div>
         <div className={"settings-tab-content"}>
           <div className={"md-option-container"}>
             {/* Connectivity Settings  */}
             <div className={"md-option-header"}>
-              <span>{$root.getLz("settings.header.connectivity")}</span>
+              <span>{t("settings.header.connectivity")}</span>
             </div>
             <div className={"settings-option-body"}>
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.playbackNotifications")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.connectivity.playbackNotifications")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -1281,7 +1284,7 @@ const SettingsWindow = () => {
 
               {/* DiscordRPC  */}
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -1294,32 +1297,32 @@ const SettingsWindow = () => {
 
               <div style={{ display: app.cfg.connectivity.discord_rpc.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-line"}>
-                  <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.reload")}</div>
+                  <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.reload")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <button
                       className={"md-btn"}
                       onClick={() => reloadDiscordRPC()}>
-                      {$root.getLz("menubar.options.reload")}
+                      {t("menubar.options.reload")}
                     </button>
                   </div>
                 </div>
 
                 <div className={"md-option-line"}>
-                  <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.clientName")}</div>
+                  <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.clientName")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <select
                         className={"md-select"}
                         v-model={app.cfg.connectivity.discord_rpc.client}>
-                        <option value={"Cider"}>{$root.getLz("app.name")}</option>
-                        <option value={"AppleMusic"}>{$root.getLz("term.appleMusic")}</option>
+                        <option value={"Cider"}>{t("app.name")}</option>
+                        <option value={"AppleMusic"}>{t("term.appleMusic")}</option>
                       </select>
                     </label>
                   </div>
                 </div>
 
                 <div className={"md-option-line"}>
-                  <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.clearOnPause")}</div>
+                  <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.clearOnPause")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <input
@@ -1331,7 +1334,7 @@ const SettingsWindow = () => {
                 </div>
 
                 <div className={"md-option-line"}>
-                  <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.hideTimestamp")}</div>
+                  <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.hideTimestamp")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <input
@@ -1344,10 +1347,10 @@ const SettingsWindow = () => {
 
                 <div className={"md-option-line"}>
                   <div className={"md-option-segment"}>
-                    {$root.getLz("settings.option.connectivity.discordRPC.detailsFormat")}
+                    {t("settings.option.connectivity.discordRPC.detailsFormat")}
                     <br />
                     <small>
-                      {$root.getLz("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
+                      {t("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
                     </small>
                   </div>
                   <div className={"md-option-segment md-option-segment_auto"}>
@@ -1362,9 +1365,9 @@ const SettingsWindow = () => {
 
                 <div className={"md-option-line"}>
                   <div className={"md-option-segment"}>
-                    {$root.getLz("settings.option.connectivity.discordRPC.stateFormat")}
+                    {t("settings.option.connectivity.discordRPC.stateFormat")}
                     <small>
-                      {$root.getLz("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
+                      {t("term.variables")}: {artist}, {composer}, {title},{album},{trackNumber}
                     </small>
                   </div>
                   <div className={"md-option-segment md-option-segment_auto"}>
@@ -1378,7 +1381,7 @@ const SettingsWindow = () => {
                 </div>
 
                 <div className={"md-option-line"}>
-                  <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.showActivityButtons")}</div>
+                  <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.showActivityButtons")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <input
@@ -1391,7 +1394,7 @@ const SettingsWindow = () => {
 
                 <div style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.enabled ? "inherit" : "none" }}>
                   <div className={"md-option-line"}>
-                    <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.firstButton")}</div>
+                    <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.firstButton")}</div>
                     <div className={"md-option-segment md-option-segment_auto"}>
                       <label>
                         <select
@@ -1403,10 +1406,10 @@ const SettingsWindow = () => {
                               key={option.id}
                               value={"option"}
                               style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.second !== option ? "inherit" : "none" }}>
-                              {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
+                              {t(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                             </option>
                           ))}
-                          <option value={"disabled"}>{$root.getLz("term.disabled")}</option>
+                          <option value={"disabled"}>{t("term.disabled")}</option>
                         </select>
                       </label>
                     </div>
@@ -1415,7 +1418,7 @@ const SettingsWindow = () => {
                   <div
                     className={"md-option-line"}
                     style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled" ? "inherit" : "none" }}>
-                    <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.discordRPC.secondButton")}</div>
+                    <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.secondButton")}</div>
                     <div className={"md-option-segment md-option-segment_auto"}>
                       <label>
                         <select
@@ -1426,10 +1429,10 @@ const SettingsWindow = () => {
                               key={option.id}
                               value={"option"}
                               style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== option ? "inherit" : "none" }}>
-                              {$root.getLz(`settings.option.connectivity.discordRPC.buttons.${option}`)}
+                              {t(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                             </option>
                           ))}
-                          <option value={"disabled"}>{$root.getLz("term.disabled")}</option>
+                          <option value={"disabled"}>{t("term.disabled")}</option>
                         </select>
                       </label>
                     </div>
@@ -1439,17 +1442,17 @@ const SettingsWindow = () => {
 
               {/* LastFM  */}
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.lastfmScrobble")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.connectivity.lastfmScrobble")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <button
                     className={"md-btn"}
                     id={"lfmConnect"}
                     onClick={() => (app.cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize())}>
-                    {$root.getLz(`term.${$root.cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
+                    {t(`term.${$root.cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
                     <br />
                     <small>
                       {app.cfg.connectivity.lastfm.enabled
-                        ? `${$root.getLz("term.authed")}:
+                        ? `${t("term.authed")}:
                                                 ${$root.cfg.connectivity.lastfm.secrets.username}`
                         : ""}
                     </small>
@@ -1460,13 +1463,13 @@ const SettingsWindow = () => {
                 className={"md-option-line"}
                 style={{ display: lastfmConnecting ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken")}
+                  {t("settings.option.connectivity.lastfmScrobble.manualToken")}
                   <small>
                     <a
                       href={"https://www.last.fm/api/auth?api_key=f9986d12aab5a0fe66193c559435ede3"}
                       target={"_blank"}
                       rel={"noreferrer"}>
-                      {$root.getLz("settings.option.connectivity.lastfmScrobble.manualToken.link")}
+                      {t("settings.option.connectivity.lastfmScrobble.manualToken.link")}
                     </a>
                   </small>
                 </div>
@@ -1481,7 +1484,7 @@ const SettingsWindow = () => {
                       <input
                         type={"submit"}
                         className={"md-btn"}
-                        value={$root.getLz("action.submit")}
+                        value={t("action.submit")}
                       />
                     </form>
                   </label>
@@ -1490,7 +1493,7 @@ const SettingsWindow = () => {
               <div
                 className={"md-option-line"}
                 style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.lastfmScrobble.delay")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.connectivity.lastfmScrobble.delay")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -1506,8 +1509,8 @@ const SettingsWindow = () => {
                 className={"md-option-line"}
                 style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop")}
-                  <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
+                  {t("settings.option.connectivity.lastfmScrobble.filterLoop")}
+                  <small>{t("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -1521,7 +1524,7 @@ const SettingsWindow = () => {
               <div
                 className={"md-option-line"}
                 style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
-                <div className={"md-option-segment"}>{$root.getLz("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
+                <div className={"md-option-segment"}>{t("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
@@ -1535,8 +1538,8 @@ const SettingsWindow = () => {
                 className={"md-option-line"}
                 style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
-                  {$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes")}
-                  <small>{$root.getLz("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>
+                  {t("settings.option.connectivity.lastfmScrobble.filterTypes")}
+                  <small>{t("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -1544,13 +1547,13 @@ const SettingsWindow = () => {
                       type={"checkbox"}
                       v-model={app.cfg.connectivity.lastfm.filter_types["song"]}
                     />
-                    {$root.getLz("term.songs")}
+                    {t("term.songs")}
                     <br />
                     <input
                       type={"checkbox"}
                       v-model={app.cfg.connectivity.lastfm.filter_types["musicVideo"]}
                     />
-                    {$root.getLz("term.musicVideos")}
+                    {t("term.musicVideos")}
                   </label>
                 </div>
               </div>
@@ -1565,30 +1568,30 @@ const SettingsWindow = () => {
           name={"settings-advanced"}
         />
       </div>
-      <div>{$root.getLz("settings.header.advanced")}</div>
+      <div>{t("settings.header.advanced")}</div>
       <div className={"md-option-container"}>
         {/* Debug Settings  */}
         <div className={"md-option-header"}>
-          <span>{$root.getLz("settings.header.debug")}</span>
+          <span>{t("settings.header.debug")}</span>
         </div>
         <div className={"settings-option-body"}>
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.debug.copy_log")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.debug.copy_log")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <button
                 className={"md-btn"}
                 onClick={() => copyLogs}>
-                {$root.getLz("action.copy")}
+                {t("action.copy")}
               </button>
             </div>
           </div>
           <div className={"md-option-line"}>
-            <div className={"md-option-segment"}>{$root.getLz("settings.option.debug.openAppData")}</div>
+            <div className={"md-option-segment"}>{t("settings.option.debug.openAppData")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <button
                 className={"md-btn"}
                 onClick={() => openAppData}>
-                {$root.getLz("action.open")}
+                {t("action.open")}
               </button>
             </div>
           </div>
@@ -1610,26 +1613,26 @@ const SettingsWindow = () => {
 
         {/* Experimental Settings  */}
         <div className={"md-option-header"}>
-          <span>{$root.getLz("settings.header.experimental")}</span>
+          <span>{t("settings.header.experimental")}</span>
         </div>
       </div>
       {/*<div className="md-option-line">
                                     <div className="md-option-segment">
-                                        {$root.getLz('settings.option.visual.plugin.github.explore')}
+                                        {t('settings.option.visual.plugin.github.explore')}
                                     </div>
                                     <div className="md-option-segment md-option-segment_auto">
                                         <button className="md-btn" onClick={() =>$root.openSettingsPage('github-plugins')}>{
-                                            $root.getLz("settings.option.visual.plugin.github.explore") }
+                                            t("settings.option.visual.plugin.github.explore") }
                                         </button>
                                     </div>
                                 </div>*/}
       <div className={"md-option-line"}>
-        <div className={"md-option-segment"}>{$root.getLz("settings.option.experimental.reinstallwidevine")}</div>
+        <div className={"md-option-segment"}>{t("settings.option.experimental.reinstallwidevine")}</div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <button
             className={"md-btn"}
             onClick={() => reinstallWidevineCDM}>
-            {$root.getLz("settings.option.experimental.reinstallwidevine")}
+            {t("settings.option.experimental.reinstallwidevine")}
           </button>
         </div>
       </div>
@@ -1647,9 +1650,9 @@ const SettingsWindow = () => {
       </div>
       <div className={"md-option-line"}>
         <div className={"md-option-segment"}>
-          {$root.getLz("settings.option.experimental.unknownPlugin")}
+          {t("settings.option.experimental.unknownPlugin")}
           <br />
-          <small>{$root.getLz("settings.option.experimental.unknownPlugin.description")}</small>
+          <small>{t("settings.option.experimental.unknownPlugin.description")}</small>
         </div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
@@ -1678,9 +1681,9 @@ const SettingsWindow = () => {
       </div>
       <div className={"md-option-line"}>
         <div className={"md-option-segment"}>
-          {$root.getLz("settings.option.advanced.playlistTrackMapping")}
+          {t("settings.option.advanced.playlistTrackMapping")}
           <br />
-          <small>{$root.getLz("settings.option.advanced.playlistTrackMapping.description")}</small>
+          <small>{t("settings.option.advanced.playlistTrackMapping.description")}</small>
         </div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
@@ -1693,8 +1696,8 @@ const SettingsWindow = () => {
       </div>
       <div className={"md-option-line"}>
         <div className={"md-option-segment"}>
-          {$root.getLz("settings.option.experimental.compactUI")}
-          {!!app.getThemeDirective("forceUI") && <small>{$root.getLz("term.themeManaged")}</small>}
+          {t("settings.option.experimental.compactUI")}
+          {!!app.getThemeDirective("forceUI") && <small>{t("term.themeManaged")}</small>}
         </div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
@@ -1708,7 +1711,7 @@ const SettingsWindow = () => {
         </div>
       </div>
       <div className={"md-option-line"}>
-        <div className={"md-option-segment"}>{$root.getLz("settings.option.experimental.inline_playlists")}</div>
+        <div className={"md-option-segment"}>{t("settings.option.experimental.inline_playlists")}</div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
             <input
@@ -1723,9 +1726,9 @@ const SettingsWindow = () => {
       {(app.platform === "win32" || app.platform === "linux") && (
         <div className={"md-option-line update-check"}>
           <div className={"md-option-segment"}>
-            {$root.getLz("settings.option.visual.transparent")}
+            {t("settings.option.visual.transparent")}
             <br />
-            <small>({$root.getLz("settings.option.visual.transparent.description")})</small>
+            <small>({t("settings.option.visual.transparent.description")})</small>
           </div>
           <div className={"md-option-segment md-option-segment_auto"}>
             <label>
@@ -1740,10 +1743,10 @@ const SettingsWindow = () => {
       )}
       <div className={"md-option-line"}>
         <div className={"md-option-segment"}>
-          {$root.getLz("settings.option.general.pagination")}
+          {t("settings.option.general.pagination")}
           <br />
           <small>
-            {$root.getLz("settings.options.general.pagination.description")}
+            {t("settings.options.general.pagination.description")}
             <br />
           </small>
         </div>
@@ -1761,29 +1764,29 @@ const SettingsWindow = () => {
       </Tab>
       {/*Github-theme-settings  */}
       {/* Connect Settings  */}
-      {/* Not Prod Ready<Tab title={$root.getLz('settings.header.connect')}>
+      {/* Not Prod Ready<Tab title={t('settings.header.connect')}>
                 <div className="md-option-container">
                     <!!!!!-- Cider Connect / Linking Settings -!->
                     <div className="md-option-header">
-                        <span>{$root.getLz('settings.header.connect')}</span>
+                        <span>{t('settings.header.connect')}</span>
                     </div>
                     <div className="settings-option-body">{(app.cfg.connectUser.auth === null) && <div className="md-option-line update-check" >
                             <div className="md-option-segment">
-                                {$root.getLz('settings.option.connect.link_account')}
-                                <small>{$root.getLz('settings.option.connect.link_account.description')}</small>
+                                {t('settings.option.connect.link_account')}
+                                <small>{t('settings.option.connect.link_account.description')}</small>
                                 <br/>
                                 <small>Debug Status: { app.cfg.connectUser }</small>
                             </div>
                             <div className="md-option-segment md-option-segment_auto">
                                 <button className="md-btn" id='settings.option.general.updateCider.check' onClick={() =>authCC()}>
-                                    {$root.getLz('term.connect')}
+                                    {t('term.connect')}
                                 </button>
                             </div>
                         </div>}{(app.cfg.connectUser.auth !== null) && <div>
                             <div className="md-option-line">
                                 <div className="md-option-segment">
-                                    {$root.getLz('settings.option.connect.link_account')}
-                                    <small>{$root.getLz('settings.option.connect.link_account.description')}</small>
+                                    {t('settings.option.connect.link_account')}
+                                    <small>{t('settings.option.connect.link_account.description')}</small>
                                     <br/>
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
@@ -1796,8 +1799,7 @@ const SettingsWindow = () => {
                             </div>
                             <div className="md-option-header" style={{marginLeft: -0.55em}}>
                                 <span>{app.cfg.connectUser.username}</span>
-                                <img src="https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32'
-                                     alt="Discord Avatar" />
+                                <img src="https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32' alt="Discord Avatar" />
                             </div>
 
                             <div className="md-option-line">

@@ -2,8 +2,10 @@ import { useEffect, useMemo } from "react";
 import MediaItemSquare from "../components/mediaitem-square";
 import MediaItemListItem from "../components/mediaitem-list-item";
 import { useOnInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
 const LibraryRecentlyAdded = () => {
+  const { t } = useTranslation();
   let loading = false;
   const firstRoute = `/v1/me/library/recently-added?l=${app.mklang}&platform=web&include[library-albums]=artists&include[library-artists]=catalog&fields[artists]=url&fields%5Balbums%5D=artistName%2CartistUrl%2Cartwork%2CcontentRating%2CeditorialArtwork%2Cname%2CplayParams%2CreleaseDate%2Curl&includeOnly=catalog%2Cartists&limit=25`;
   const items = useMemo(() => {
@@ -57,7 +59,7 @@ const LibraryRecentlyAdded = () => {
   return (
     <div id={"cider-recentlyadded"}>
       <div className={"content-inner"}>
-        <h1 className={"header-text"}>{$root.getLz("term.recentlyAdded")}</h1>
+        <h1 className={"header-text"}>{t("term.recentlyAdded")}</h1>
         {itemSize === "normal" ? (
           <div className={"well itemContainer collection-list-square"}>
             {items.map((item) => (
@@ -88,7 +90,7 @@ const LibraryRecentlyAdded = () => {
           <button
             style={{ opacity: 0, height: "32px" }}
             ref={ref}>
-            {$root.getLz("term.showMore")}
+            {t("term.showMore")}
           </button>
         ) : null}
       </div>

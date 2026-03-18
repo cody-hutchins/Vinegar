@@ -5,8 +5,11 @@ import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizo
 import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Replay = () => {
+  const { t } = useTranslation();
+
   let years = [];
   let loaded = {
     id: -1,
@@ -111,25 +114,25 @@ const Replay = () => {
                 </div>
                 {/* )} */}
                 <h1 className={"replay-header"}>
-                  {loaded.attributes.year} {$root.getLz("term.replay")}
+                  {loaded.attributes.year} {t("term.replay")}
                 </h1>
                 <hr />
                 <Row>
                   <Col>
                     <h4 onClick={() => (hourshow = !hourshow)}>
                       {convertToHours(loaded.attributes.listenTimeInMinutes)}
-                      {$root.getLz("term.time.hours")}
+                      {t("term.time.hours")}
                       {hourshow ? "" : loaded.attributes.listenTimeInMinutes % 60}
-                      {hourshow ? "" : $root.getLz("term.time.minutes")}
+                      {hourshow ? "" : t("term.time.minutes")}
                     </h4>
                     <h4>
-                      {loaded.attributes.uniqueAlbumCount} {$root.getLz("term.uniqueAlbums")}
+                      {loaded.attributes.uniqueAlbumCount} {t("term.uniqueAlbums")}
                     </h4>
                     <h4>
-                      {loaded.attributes.uniqueArtistCount} {$root.getLz("term.uniqueArtists")}
+                      {loaded.attributes.uniqueArtistCount} {t("term.uniqueArtists")}
                     </h4>
                     <h4>
-                      {loaded.attributes.uniqueSongCount} {$root.getLz("term.uniqueSongs")}
+                      {loaded.attributes.uniqueSongCount} {t("term.uniqueSongs")}
                     </h4>
                   </Col>
                   <Col
@@ -144,7 +147,7 @@ const Replay = () => {
                   </Col>
                 </Row>
                 {/*            Top Artists */}
-                <h3>{$root.getLz("term.topArtists")}</h3>
+                <h3>{t("term.topArtists")}</h3>
                 <div className={"well"}>
                   <MediaItemScrollerHorizontal>
                     {loaded.views["top-artists"].data.map((artistData) => (
@@ -156,17 +159,17 @@ const Replay = () => {
                         </div>
                         <div className={"card-footer"}>
                           {convertToHours(artistData.attributes.listenTimeInMinutes)}
-                          {$root.getLz("term.time.hours", { count: convertToHours(artistData.attributes.listenTimeInMinutes) })}
+                          {t("term.time.hours", { count: convertToHours(artistData.attributes.listenTimeInMinutes) })}
                           <br />
-                          {$root.getLz("term.listenedTo")} {artistData.attributes.playCount}
-                          {$root.getLz("term.times")}
+                          {t("term.listenedTo")} {artistData.attributes.playCount}
+                          {t("term.times")}
                         </div>
                       </div>
                     ))}
                   </MediaItemScrollerHorizontal>
                 </div>
                 {/*            Top Albums */}
-                <h3>{$root.getLz("term.topAlbums")}</h3>
+                <h3>{t("term.topAlbums")}</h3>
                 <div className={"well"}>
                   <MediaItemScrollerHorizontal>
                     {loaded.views["top-albums"].data.map((albumData) => (
@@ -178,23 +181,23 @@ const Replay = () => {
                         </div>
                         <div className={"card-footer"}>
                           {convertToHours(albumData.attributes.listenTimeInMinutes)}
-                          {$root.getLz("term.time.hours", { count: convertToHours(albumData.attributes.listenTimeInMinutes) })}
+                          {t("term.time.hours", { count: convertToHours(albumData.attributes.listenTimeInMinutes) })}
                           <br />
-                          {albumData.attributes.playCount} {$root.getLz("term.plays")}
+                          {albumData.attributes.playCount} {t("term.plays")}
                         </div>
                       </div>
                     ))}
                   </MediaItemScrollerHorizontal>
                 </div>
                 {/*            Top Songs */}
-                <h3>{$root.getLz("term.topSongs")}</h3>
+                <h3>{t("term.topSongs")}</h3>
                 <div className={"well"}>
                   <ListitemHorizontal
                     showLibraryStatus={false}
                     items={songsToArray(loaded.views["top-songs"].data)}
                   />
                 </div>
-                <h3>{$root.getLz("term.topGenres")}</h3>
+                <h3>{t("term.topGenres")}</h3>
                 <div className={"top-genres-container"}>
                   {loaded.topGenres.map((genre) => (
                     <div

@@ -1,8 +1,11 @@
 import { CiderAudio } from "../../audio/audio.js";
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const CastMenu = () => {
+  const { t } = useTranslation();
+
   const devices = {
     cast: [],
     airplay: [],
@@ -95,17 +98,17 @@ const CastMenu = () => {
         }}>
         <div className={"modal-window"}>
           <div className={"modal-header"}>
-            <div className={"modal-title"}>{$root.getLz("action.cast.todevices")}</div>
+            <div className={"modal-title"}>{t("action.cast.todevices")}</div>
             <button
               className={"close-btn"}
               onClick={() => close()}
-              aria-label={$root.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div
             className={"modal-content"}
             style={{ overflowY: "overlay", padding: "3%" }}>
-            <div className={"md-labeltext"}>{$root.getLz("action.cast.chromecast")}</div>
+            <div className={"md-labeltext"}>{t("action.cast.chromecast")}</div>
             <div
               className={"md-option-container"}
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
@@ -153,18 +156,18 @@ const CastMenu = () => {
                 <div
                   className={"md-option-line"}
                   style={{ cursor: "pointer" }}>
-                  <div className={"md-option-segment"}>{$root.getLz("action.cast.scanning")}</div>
+                  <div className={"md-option-segment"}>{t("action.cast.scanning")}</div>
                 </div>
               )}
             </div>
-            <div className={"md-labeltext"}>{$root.getLz("action.cast.airplay")}</div>
+            <div className={"md-labeltext"}>{t("action.cast.airplay")}</div>
             <div
               className={"md-option-container"}
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>
                   Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to &quot;Everyone&quot; or &quot;Anyone on the same network&quot;.
-                  {/* {$root.getLz('action.cast.airplay.underdevelopment')}  */}
+                  {/* {t('action.cast.airplay.underdevelopment')}  */}
                   {devices.airplay.map((device) => (
                     <div key={device.id}>
                       <div
@@ -233,7 +236,7 @@ const CastMenu = () => {
                     style={{ width: "100%" }}
                     onClick={() => stopCasting()}
                     className={"md-btn md-btn-block md-btn-primary"}>
-                    {$root.getLz("action.cast.stop")}
+                    {t("action.cast.stop")}
                   </button>
                 </Col>
               )}
@@ -242,7 +245,7 @@ const CastMenu = () => {
                   style={{ width: "100%" }}
                   className={"md-btn md-btn-block"}
                   onClick={() => scan()}>
-                  {$root.getLz("action.cast.scan")}
+                  {t("action.cast.scan")}
                 </button>
               </Col>
             </Row>

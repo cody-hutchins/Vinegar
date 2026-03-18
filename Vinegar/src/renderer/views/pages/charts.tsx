@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import ListItemHorizontal from "../components/listitem-horizontal.jsx";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Charts = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   let songs = [];
   let albums = [];
@@ -48,7 +50,7 @@ const Charts = () => {
   return (
     <div id={"cider-charts"}>
       <div className={"content-inner"}>
-        <h1 className={"header-text"}>{$root.getLz("term.charts")}</h1>
+        <h1 className={"header-text"}>{t("term.charts")}</h1>
         {songs !== [] && (
           <>
             <Row>
@@ -62,7 +64,7 @@ const Charts = () => {
                   <button
                     className={"cd-btn-seeall"}
                     onClick={() => app.showCollection(songs ?? [], songs.name ?? "", "default")}>
-                    {app.getLz("term.seeAll")}
+                    {t("term.seeAll")}
                   </button>
                 </Col>
               )}
@@ -85,7 +87,7 @@ const Charts = () => {
                   <button
                     className={"cd-btn-seeall"}
                     onClick={() => app.showCollection(albums ?? [], albums.name ?? "", "default")}>
-                    {app.getLz("term.seeAll")}
+                    {t("term.seeAll")}
                   </button>
                 </Col>
               )}
@@ -106,7 +108,7 @@ const Charts = () => {
                   <button
                     className={"cd-btn-seeall"}
                     onClick={() => app.showCollection(playlists ?? [], playlists.name ?? "", "default")}>
-                    {app.getLz("term.seeAll")}
+                    {t("term.seeAll")}
                   </button>
                 </Col>
               )}
@@ -127,7 +129,7 @@ const Charts = () => {
                   <button
                     className={"cd-btn-seeall"}
                     onClick={() => app.showCollection(musicvideos ?? [], musicvideos.name ?? "", "default")}>
-                    {app.getLz("term.seeAll")}
+                    {t("term.seeAll")}
                   </button>
                 </Col>
               )}
@@ -148,7 +150,7 @@ const Charts = () => {
                   <button
                     className={"cd-btn-seeall"}
                     onClick={() => app.showCollection(globalcharts ?? [], globalcharts.name ?? "", "default")}>
-                    {app.getLz("term.seeAll")}
+                    {t("term.seeAll")}
                   </button>
                 </Col>
               )}
@@ -169,7 +171,7 @@ const Charts = () => {
                   <button
                     className={"cd-btn-seeall"}
                     onClick={() => app.showCollection(citycharts ?? [], citycharts.name ?? "", "default")}>
-                    {app.getLz("term.seeAll")}
+                    {t("term.seeAll")}
                   </button>
                 </Col>
               )}

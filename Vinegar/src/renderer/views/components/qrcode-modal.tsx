@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 const QRCodeModal = ({ src, url }: { src: string; url: string }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   function close() {
     app.resetState();
@@ -12,7 +15,7 @@ const QRCodeModal = ({ src, url }: { src: string; url: string }) => {
             <button
               className={"close-btn"}
               onClick={() => close()}
-              aria-label={app.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div className={"modal-content"}>

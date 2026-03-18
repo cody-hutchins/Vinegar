@@ -1,7 +1,9 @@
 import { Col, Row } from "react-bootstrap";
 import { useAppStore } from "../../store/app.js";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 const OOBE = () => {
+  const { t } = useTranslation();
   let screen = "before_we_start";
   const cfg = useAppStore((state) => state.cfg);
   function signIn() {
@@ -13,7 +15,7 @@ const OOBE = () => {
     capiInit();
   }
   function getLz(...args) {
-    return this.$root.getLz(args);
+    return t(args);
   }
   function getLanguages() {
     const langs = this.$root.lzListing;
@@ -45,7 +47,7 @@ const OOBE = () => {
               {getLz("oobe.amupsell.text")}
 
               <div className={"md-option-line"}>
-                <div className={"md-option-segment"}>{$root.getLz("term.language")}</div>
+                <div className={"md-option-segment"}>{t("term.language")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <select
@@ -201,9 +203,9 @@ const OOBE = () => {
                 <div className={"settings-option-body"}>
                   <div className={"md-option-line"}>
                     <div className={"md-option-segment"}>
-                      {$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
+                      {t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}
                       <br />
-                      <small>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE.description")}</small>
+                      <small>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE.description")}</small>
                     </div>
                     <div className={"md-option-segment md-option-segment_auto"}>
                       <input

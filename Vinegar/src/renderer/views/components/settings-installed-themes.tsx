@@ -1,8 +1,10 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import classNames from "classnames";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export const StylestackEditor = ({ themes }: { themes: object[] }) => {
+  const { t } = useTranslation();
   const selected = null;
   const newTheme = null;
   let themeList = [];
@@ -145,11 +147,11 @@ export const InstalledThemes = () => {
     const menu = {
       items: {
         uninstall: {
-          name: app.getLz("settings.option.visual.theme.uninstall"),
+          name: t("settings.option.visual.theme.uninstall"),
           disabled: true,
           action: () => {
             app.confirm(
-              app.stringTemplateParser(app.getLz("settings.prompt.visual.theme.uninstallTheme"), {
+              app.stringTemplateParser(t("settings.prompt.visual.theme.uninstallTheme"), {
                 theme: theme.name ?? theme.file,
               }),
               (res) => {
@@ -166,7 +168,7 @@ export const InstalledThemes = () => {
           },
         },
         viewInfo: {
-          name: app.getLz("settings.option.visual.theme.viewInfo"),
+          name: t("settings.option.visual.theme.viewInfo"),
           disabled: true,
           action: () => {},
         },
@@ -216,7 +218,7 @@ export const InstalledThemes = () => {
     return marked.parse(text);
   }
   function installThemeRepo(repo) {
-    const msg = app.stringTemplateParser(app.getLz("settings.option.visual.theme.github.install.confirm"), {
+    const msg = app.stringTemplateParser(t("settings.option.visual.theme.github.install.confirm"), {
       repo: repo.full_name,
     });
     app.confirm(msg, (res) => {
@@ -225,9 +227,9 @@ export const InstalledThemes = () => {
           if (arg.success) {
             themes = window.electronAPI.sendSync("get-themes");
             getInstalledThemes();
-            notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
+            notyf.success(t("settings.notyf.visual.theme.install.success"));
           } else {
-            notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
+            notyf.error(t("settings.notyf.visual.theme.install.error"));
           }
         });
         window.electronAPI.invoke("get-github-theme", repo.html_url);
@@ -235,14 +237,14 @@ export const InstalledThemes = () => {
     });
   }
   function installThemeURL() {
-    app.prompt(app.getLz("settings.prompt.visual.theme.github.URL"), (result) => {
+    app.prompt(t("settings.prompt.visual.theme.github.URL"), (result) => {
       if (result) {
         window.electronAPI.once("theme-installed", (event, arg) => {
           if (arg.success) {
             themes = window.electronAPI.sendSync("get-themes");
-            notyf.success(app.getLz("settings.notyf.visual.theme.install.success"));
+            notyf.success(t("settings.notyf.visual.theme.install.success"));
           } else {
-            notyf.error(app.getLz("settings.notyf.visual.theme.install.error"));
+            notyf.error(t("settings.notyf.visual.theme.install.error"));
           }
         });
         window.electronAPI.invoke("get-github-theme", result);
@@ -269,27 +271,27 @@ export const InstalledThemes = () => {
         <div className={"gh-header"}>
           <Row>
             <Col className={"nopadding"}>
-              <h1 className={"header-text"}>{$root.getLz("settings.option.visual.theme.manageStyles")}</h1>
+              <h1 className={"header-text"}>{t("settings.option.visual.theme.manageStyles")}</h1>
             </Col>
             <Col className={"nopadding cider-flex-center"}>
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => $root.openSettingsPage("github-themes")}>
-                {$root.getLz("settings.option.visual.theme.github.explore")}
+                {t("settings.option.visual.theme.github.explore")}
               </button>
             </Col>
             <Col className={"cider-flex-center"}>
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => $root.checkForThemeUpdates()}>
-                {$root.getLz("settings.option.visual.theme.checkForUpdates")}
+                {t("settings.option.visual.theme.checkForUpdates")}
               </button>
             </Col>
             <Col className={"nopadding cider-flex-center"}>
               <button
                 className={"md-btn md-btn-small md-btn-block"}
                 onClick={() => openThemesFolder()}>
-                {$root.getLz("settings.option.visual.theme.github.openfolder")}
+                {t("settings.option.visual.theme.github.openfolder")}
               </button>
             </Col>
           </Row>
@@ -297,7 +299,7 @@ export const InstalledThemes = () => {
         <div className={"gh-content"}>
           <div className={"repos-list"}>
             <div className={"repo-header"}>
-              <h4>{$root.getLz("settings.option.visual.theme.github.available")}</h4>
+              <h4>{t("settings.option.visual.theme.github.available")}</h4>
             </div>
             <ul className={"list-group list-group-flush"}>
               {themes.map((theme) => (
@@ -367,7 +369,7 @@ export const InstalledThemes = () => {
 
           <div className={"style-editor-container"}>
             <div className={"repo-header"}>
-              <h4>{$root.getLz("settings.option.visual.theme.github.applied")} </h4>
+              <h4>{t("settings.option.visual.theme.github.applied")} </h4>
             </div>
             {themes.length !== 0 && (
               <StylestackEditor

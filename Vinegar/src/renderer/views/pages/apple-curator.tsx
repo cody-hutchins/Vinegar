@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-horizontal-large.jsx";
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const AppleCurator = ({ data }: { data: object }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   useEffect(() => {
     console.log("ping");
@@ -29,7 +31,7 @@ const AppleCurator = ({ data }: { data: object }) => {
                     <button
                       className={"cd-btn-seeall"}
                       onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                      {app.getLz("term.seeAll")}
+                      {t("term.seeAll")}
                     </button>
                   </Col>
                 )}

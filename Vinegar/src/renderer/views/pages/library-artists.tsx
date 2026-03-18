@@ -5,8 +5,10 @@ import { Col } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
 import { uuidv4 } from "../../index.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
+import { useTranslation } from "react-i18next";
 
 const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
+  const { t } = useTranslation();
   let isVisible = false;
   let addedToLibrary = false;
   const guid = uuidv4();
@@ -69,7 +71,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
       normal: {
         items: [
           {
-            name: app.getLz("action.goToArtist"),
+            name: t("action.goToArtist"),
             icon: "./assets/feather/user.svg",
             action: function () {
               app.searchAndNavigate(item, "artist");
@@ -78,7 +80,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           },
           {
             icon: "./assets/feather/radio.svg",
-            name: app.getLz("action.startRadio"),
+            name: t("action.startRadio"),
             action: function () {
               app.mk.setStationQueue({ song: item.attributes.playParams.id ?? item.id }).then(() => {
                 app.mk.play();
@@ -89,7 +91,7 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
           // Hidden for now, as it's not implemented yet
           /*{
               "icon": "./assets/feather/share.svg",
-              "name": app.getLz('action.share'),
+              "name": t('action.share'),
               "action": function () {
                   if (!item.attributes.url && item.relationships){
                       if (item.relationships.catalog){
@@ -245,7 +247,7 @@ const LibraryArtists = () => {
       <div className={"content-inner library-artists-page"}>
         {/* <div className="row">
                 <div className="col" style={{padding:0}}>
-                    <h1 className="header-text">{$root.getLz('term.artists')}</h1>
+                    <h1 className="header-text">{t('term.artists')}</h1>
                 </div>
 
             </div>  */}
@@ -260,7 +262,7 @@ const LibraryArtists = () => {
                   type={"search"}
                   style={{ width: "100%" }}
                   spellCheck={false}
-                  placeholder={$root.getLz("term.search") + "..."}
+                  placeholder={t("term.search") + "..."}
                   input={$root.searchLibraryArtists}
                   v-model={library.artists.search}
                   className={"search-input"}

@@ -2,8 +2,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
 import { useOnInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
-const Component = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
+const CollectionList = ({ data, title, type = "artists" }: { data: object; title?: string; type?: string }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   let triggerEnabled = true;
   let canSeeTrigger = false;
@@ -130,7 +132,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
               <button
                 style={{ opacity: 0, height: "32px" }}
                 ref={buttonRef}>
-                {app.getLz("term.showMore")}
+                {t("term.showMore")}
               </button>
             )}
           </div>
@@ -141,7 +143,7 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
               className={"top-fab"}
               style={{ display: showFab ? "inherit" : "none" }}
               onClick={() => scrollToTop()}
-              aria-label={app.getLz("action.scrollToTop")}>
+              aria-label={t("action.scrollToTop")}>
               {import("../svg/arrow-up.svg")}
             </button>
           </motion.div>
@@ -155,3 +157,5 @@ const Component = ({ data, title, type = "artists" }: { data: object; title?: st
     </div>
   );
 };
+
+export default CollectionList;

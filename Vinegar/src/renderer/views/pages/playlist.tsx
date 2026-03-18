@@ -8,8 +8,10 @@ import SVGIcon from "../../main/components/svg-icon.jsx";
 import Pagination from "../components/pagination.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
 const Playlist = ({ data }: { data: MusicKit.Item }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   let editorialNotesExpanded = false;
   const drag = false;
@@ -346,7 +348,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       normal: [
         {
           icon: "./assets/feather/x-circle.svg",
-          name: app.getLz("action.removeFromPlaylist"),
+          name: t("action.removeFromPlaylist"),
           action: () => {
             remove();
           },
@@ -355,7 +357,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       multiple: [
         {
           icon: "./assets/feather/x-circle.svg",
-          name: app.getLz("action.removeFromPlaylist"),
+          name: t("action.removeFromPlaylist"),
           action: () => {
             remove();
           },
@@ -428,7 +430,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         {
           icon: "./assets/feather/heart.svg",
           id: "love",
-          name: app.getLz("action.love"),
+          name: t("action.love"),
           hidden: false,
           disabled: true,
           action: function () {
@@ -439,7 +441,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
           icon: "./assets/feather/heart.svg",
           id: "unlove",
           active: true,
-          name: app.getLz("action.unlove"),
+          name: t("action.unlove"),
           hidden: true,
           action: function () {
             app.unlove(data);
@@ -448,7 +450,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         {
           icon: "./assets/feather/thumbs-down.svg",
           id: "dislike",
-          name: app.getLz("action.dislike"),
+          name: t("action.dislike"),
           hidden: false,
           disabled: true,
           action: function () {
@@ -458,7 +460,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         {
           icon: "./assets/feather/thumbs-down.svg",
           id: "undo_dislike",
-          name: app.getLz("action.undoDislike"),
+          name: t("action.undoDislike"),
           active: true,
           hidden: true,
           action: function () {
@@ -468,7 +470,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       ],
       items: {
         addToPlaylist: {
-          name: app.getLz("action.addToPlaylist"),
+          name: t("action.addToPlaylist"),
           icon: "./assets/feather/list.svg",
           action: () => {
             app.selectedMediaItems = [];
@@ -477,7 +479,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
           },
         },
         share: {
-          name: app.getLz("term.share"),
+          name: t("term.share"),
           icon: "./assets/feather/share.svg",
           action: () => {
             let route = "";
@@ -535,13 +537,13 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
     if (date === null || date === "") return "";
     switch (date) {
       case data.attributes.releaseDate:
-        prefix = app.getLz("term.time.released") + " ";
+        prefix = t("term.time.released") + " ";
         break;
       case data.attributes.lastModifiedDate:
-        prefix = app.getLz("term.time.updated") + " ";
+        prefix = t("term.time.updated") + " ";
         break;
       case data.attributes.dateAdded:
-        prefix = app.getLz("term.time.added") + " ";
+        prefix = t("term.time.added") + " ";
         break;
     }
     // let month, year;
@@ -559,8 +561,8 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         }).format(releaseDate);
       } catch (e) {
         // use the format in json instead
-        if (app.getLz("date.format") !== null) {
-          formatted = new app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
+        if (t("date.format") !== null) {
+          formatted = new t("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
         } else {
           formatted = new Intl.DateTimeFormat("en-US", {
             day: "numeric",
@@ -633,7 +635,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
           });
         });
       });
-      notyf.success(app.getLz("term.share.success"));
+      notyf.success(t("term.share.success"));
     }
   }
   async function pasteSongs(event) {
@@ -838,7 +840,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                                 <>
                                   {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
                                       onClick={() =>editorialNotesExpanded = !editorialNotesExpanded}>
-                                      {app.getLz('term.showMore')}
+                                      {t('term.showMore')}
                                     </button> : */}
                                 </>
                               )}
@@ -855,7 +857,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           <button
                             className={"more-btn"}
                             onClick={() => (editorialNotesExpanded = !editorialNotesExpanded)}>
-                            {app.getLz("term.showLess")}
+                            {t("term.showLess")}
                           </button>
                         </div>
                       )}
@@ -871,7 +873,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             play();
                           }}>
                           <img className={"md-ico-play"} />
-                          {app.getLz("term.play")}
+                          {t("term.play")}
                         </button>
                         <button
                           className={"md-btn md-btn-primary md-btn-icon"}
@@ -881,7 +883,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             play();
                           }}>
                           <img className={"md-ico-shuffle"} />
-                          {app.getLz("term.shuffle")}
+                          {t("term.shuffle")}
                         </button>
                         {inLibrary !== null && !confirm && (
                           <button
@@ -889,7 +891,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             style={{ minWidth: "180px" }}
                             onClick={() => confirmButton()}>
                             <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                            {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                            {!inLibrary ? t("action.addToLibrary") : t("action.removeFromLibrary")}
                           </button>
                         )}
                         {!confirm && (
@@ -898,16 +900,16 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             style={{ minWidth: "180px" }}
                             onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
                             <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                            {app.getLz("term.confirm")}
+                            {t("term.confirm")}
                           </button>
                         )}
                         {shouldPaginate && (
                           <select
                             className={"md-select"}
                             v-model={prefs.scroll}>
-                            <optgroup label={app.getLz("term.scroll")}>
-                              <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
-                              <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                            <optgroup label={t("term.scroll")}>
+                              <option value={"infinite"}>{t("term.scroll.infinite")}</option>
+                              <option value={"paged"}>{t("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                             </optgroup>
                           </select>
                         )}
@@ -916,7 +918,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             style={{ background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "" }}
                             className={"['search-btn', showSearch ? 'active' : '']"}
                             onClick={() => toggleSearch()}
-                            aria-label={"showSearch ? app.getLz('term.hideSearch') : app.getLz('term.showSearch')"}>
+                            aria-label={"showSearch ? t('term.hideSearch') : t('term.showSearch')"}>
                             <SVGIcon
                               style={{ width: "15px", backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
                               url={showSearch ? "./assets/search-alt.svg" : "./assets/search.svg"}
@@ -926,7 +928,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             style={{ background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "" }}
                             className={"more-btn-round"}
                             onClick={() => menu}
-                            aria-label={app.getLz("term.more")}>
+                            aria-label={t("term.more")}>
                             <div
                               style={{ backgroundColor: hasHeroObject()?.bgColor ? "#" + hasHeroObject().bgColor : "" }}
                               className={"svg-icon"}
@@ -954,11 +956,11 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                     }}>
                     {!editing ? (
                       <span>
-                        <div className={"codicon codicon-edit"} /> {$root.getLz("action.editTracklist")}
+                        <div className={"codicon codicon-edit"} /> {t("action.editTracklist")}
                       </span>
                     ) : (
                       <span>
-                        <div className={"codicon codicon-check"} /> {$root.getLz("action.done")}
+                        <div className={"codicon codicon-check"} /> {t("action.done")}
                       </span>
                     )}
                   </button>
@@ -983,7 +985,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           play();
                         }}>
                         <img className={"md-ico-play"} />
-                        {app.getLz("term.play")}
+                        {t("term.play")}
                       </button>
                       <button
                         className={"md-btn md-btn-primary  md-btn-icon"}
@@ -993,7 +995,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           play();
                         }}>
                         <img className={"md-ico-shuffle"} />
-                        {app.getLz("term.shuffle")}
+                        {t("term.shuffle")}
                       </button>
                       {inLibrary !== null && !confirm && (
                         <button
@@ -1001,7 +1003,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           style={{ minWidth: "180px" }}
                           onClick={() => confirmButton()}>
                           <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                          {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                          {!inLibrary ? t("action.addToLibrary") : t("action.removeFromLibrary")}
                         </button>
                       )}
                       {!confirm && (
@@ -1010,16 +1012,16 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           style={{ minWidth: "180px" }}
                           onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
                           <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                          {app.getLz("term.confirm")}
+                          {t("term.confirm")}
                         </button>
                       )}
                       {shouldPaginate && (
                         <select
                           className={"md-select"}
                           v-model={prefs.scroll}>
-                          <optgroup label={app.getLz("term.scroll")}>
-                            <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
-                            <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                          <optgroup label={t("term.scroll")}>
+                            <option value={"infinite"}>{t("term.scroll.infinite")}</option>
+                            <option value={"paged"}>{t("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                           </optgroup>
                         </select>
                       )}
@@ -1032,7 +1034,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                       className={"more-btn-round"}
                       style={{ float: "right" }}
                       onClick={() => menu}
-                      aria-label={app.getLz("term.more")}>
+                      aria-label={t("term.more")}>
                       <div className={"svg-icon"} />
                     </button>
                   </Col>
@@ -1046,7 +1048,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                   content-className={"mt-3"}
                   nav-wrapper-className={navClass(data)}>
                   <Tab
-                    title={$root.getLz("term.tracks")}
+                    title={t("term.tracks")}
                     id={"songList"}
                     active>
                     <div
@@ -1062,7 +1064,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                               <input
                                 type={"search"}
                                 spellCheck={false}
-                                placeholder={$root.getLz("term.search") + "..."}
+                                placeholder={t("term.search") + "..."}
                                 onInput={() => search()}
                                 v-model={searchQuery}
                                 className={"search-input"}
@@ -1099,7 +1101,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                                 ))
                               : nestedSlices.map((disc) => (
                                   <div key={disc.id}>
-                                    <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                    <div className={"playlist-time"}>{(t("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                     {disc.tracks.map((item, index) => (
                                       <MediaItemListItem
                                         item={item}
@@ -1148,7 +1150,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           className={"playlist-time showExtended item-navigate"}
                           style={{ color: "#fa586a", fontWeight: "bold" }}
                           onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                          {$root.getLz("action.showAlbum")}
+                          {t("action.showAlbum")}
                         </div>
                       )}
                     </div>

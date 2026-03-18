@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const PathMenu = () => {
+  const { t } = useTranslation();
   let folders: string[] = [];
   function mounted() {
     folders = this.$root.cfg.libraryPrefs.localPaths;
@@ -46,7 +48,7 @@ const PathMenu = () => {
             <button
               className={"close-btn"}
               onClick={() => close()}
-              aria-label={$root.getLz("action.close")}
+              aria-label={t("action.close")}
             />
           </div>
           <div className={"modal-content"}>

@@ -1,8 +1,11 @@
 import { Col, Row } from "react-bootstrap";
 import MediaItemArtwork from "../components/mediaitem-artwork.js";
 import MediaItemSquare from "../components/mediaitem-square.jsx";
+import { useTranslation } from "react-i18next";
 
 const RecordLabel = ({ data }: { data: string }) => {
+  const { t } = useTranslation();
+
   const topSongsExpanded = false;
   function getArtistPalette(artist) {
     if (artist?.attributes?.artwork !== null) {
@@ -52,7 +55,7 @@ const RecordLabel = ({ data }: { data: string }) => {
           {$root.showingPlaylist.attributes.description && (
             <div>
               <Row>
-                <h3>{$root.getLz("term.about")}</h3>
+                <h3>{t("term.about")}</h3>
               </Row>
               <Row>
                 <div>{$root.showingPlaylist.attributes.description.standard}</div>
@@ -93,7 +96,7 @@ const RecordLabel = ({ data }: { data: string }) => {
             <>
               <Row>
                 <Col>
-                  <h3>{$root.getLz("term.playlists")}</h3>
+                  <h3>{t("term.playlists")}</h3>
                 </Col>
               </Row>
               {data.relationships.playlists.data.limit(5).map((item) => (

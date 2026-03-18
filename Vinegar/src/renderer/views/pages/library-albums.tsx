@@ -3,8 +3,10 @@ import Pagination from "../components/pagination";
 import MediaItemSquare from "../components/mediaitem-square";
 import MediaItemListItem from "../components/mediaitem-list-item";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
-const Component = () => {
+const LibraryAlbums = () => {
+  const { t } = useTranslation();
   const pageSize = this.$root.cfg.libraryPrefs.pageSize;
   const library = this.$root.library;
   const mediaItemSize = "compact";
@@ -38,14 +40,14 @@ const Component = () => {
       <div className={"content-inner"}>
         <Row className={"row"}>
           <Col style={{ padding: 0 }}>
-            <h1 className={"header-text"}>{$root.getLz("term.albums")}</h1>
+            <h1 className={"header-text"}>{t("term.albums")}</h1>
           </Col>
           <Col auto>
             {library.albums.downloadState === 2 && (
               <button
                 onClick={() => $root.getLibraryAlbumsFull(true, 1)}
                 className={"reload-btn"}
-                aria-label={app.getLz("menubar.options.reload")}>
+                aria-label={t("menubar.options.reload")}>
                 {import("../svg/redo.svg")}
               </button>
             )}
@@ -61,7 +63,7 @@ const Component = () => {
                 type={"search"}
                 style={{ width: "100%" }}
                 spellCheck={false}
-                placeholder={$root.getLz("term.search") + "..."}
+                placeholder={t("term.search") + "..."}
                 input={$root.searchLibraryAlbums}
                 v-model={library.albums.search}
                 className={"search-input"}
@@ -80,7 +82,7 @@ const Component = () => {
                     library.albums.sorting[1] = prefs.sort;
                     $root.searchLibraryAlbums(1);
                   }}>
-                  <optgroup label={$root.getLz("term.sortBy")}>
+                  <optgroup label={t("term.sortBy")}>
                     {library.albums.sortingOptions.map((sort, index) => (
                       <option
                         key={index}
@@ -99,9 +101,9 @@ const Component = () => {
                     library.albums.sortOrder[1] = prefs.sortOrder;
                     $root.searchLibraryAlbums(1);
                   }}>
-                  <optgroup label={$root.getLz("term.sortOrder")}>
-                    <option value={"asc"}>{$root.getLz("term.sortOrder.ascending")}</option>
-                    <option value={"desc"}>{$root.getLz("term.sortOrder.descending")}</option>
+                  <optgroup label={t("term.sortOrder")}>
+                    <option value={"asc"}>{t("term.sortOrder.ascending")}</option>
+                    <option value={"desc"}>{t("term.sortOrder.descending")}</option>
                   </optgroup>
                 </select>
               </Col>
@@ -109,9 +111,9 @@ const Component = () => {
                 <select
                   className={"md-select"}
                   v-model={prefs.viewAs}>
-                  <optgroup label={$root.getLz("term.viewAs")}>
-                    <option value={"covers"}>{$root.getLz("term.viewAs.coverArt")}</option>
-                    <option value={"list"}>{$root.getLz("term.viewAs.list")}</option>
+                  <optgroup label={t("term.viewAs")}>
+                    <option value={"covers"}>{t("term.viewAs.coverArt")}</option>
+                    <option value={"list"}>{t("term.viewAs.list")}</option>
                   </optgroup>
                 </select>
               </Col>
@@ -119,9 +121,9 @@ const Component = () => {
                 <select
                   className={"md-select"}
                   v-model={prefs.scroll}>
-                  <optgroup label={app.getLz("term.scroll")}>
-                    <option value={"infinite"}>{app.getLz("term.scroll.infinite")}</option>
-                    <option value={"paged"}>{app.getLz("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
+                  <optgroup label={t("term.scroll")}>
+                    <option value={"infinite"}>{t("term.scroll.infinite")}</option>
+                    <option value={"paged"}>{t("term.scroll.paged").replace("${songsPerPage}", pageSize)}</option>
                   </optgroup>
                 </select>
               </Col>
@@ -168,3 +170,4 @@ const Component = () => {
     </div>
   );
 };
+export default LibraryAlbums;

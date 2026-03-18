@@ -6,8 +6,10 @@ import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
 const PlaylistInline = ({ data }: { data: object }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   let editorialNotesExpanded = false;
   const drag = false;
@@ -179,7 +181,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
       normal: [
         {
           icon: "./assets/feather/x-circle.svg",
-          name: app.getLz("action.removeFromPlaylist"),
+          name: t("action.removeFromPlaylist"),
           action: () => {
             remove();
           },
@@ -188,7 +190,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
       multiple: [
         {
           icon: "./assets/feather/x-circle.svg",
-          name: app.getLz("action.removeFromPlaylist"),
+          name: t("action.removeFromPlaylist"),
           action: () => {
             remove();
           },
@@ -259,7 +261,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
     const menuItems = {
       items: {
         share: {
-          name: app.getLz("term.share"),
+          name: t("term.share"),
           icon: "./assets/feather/share.svg",
           action: () => {
             let route = "";
@@ -287,7 +289,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
           },
         },
         follow: {
-          name: app.getLz("action.follow"),
+          name: t("action.follow"),
           icon: "./assets/feather/plus-circle.svg",
           hidden: false,
           action: () => {
@@ -295,7 +297,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
           },
         },
         unfollow: {
-          name: app.getLz("action.unfollow"),
+          name: t("action.unfollow"),
           icon: "./assets/feather/x-circle.svg",
           hidden: true,
           action: () => {
@@ -331,13 +333,13 @@ const PlaylistInline = ({ data }: { data: object }) => {
     if (date === null || date === "") return "";
     switch (date) {
       case data.attributes.releaseDate:
-        prefix = app.getLz("term.time.released") + " ";
+        prefix = t("term.time.released") + " ";
         break;
       case data.attributes.lastModifiedDate:
-        prefix = app.getLz("term.time.updated") + " ";
+        prefix = t("term.time.updated") + " ";
         break;
       case data.attributes.dateAdded:
-        prefix = app.getLz("term.time.added") + " ";
+        prefix = t("term.time.added") + " ";
         break;
     }
     // let month, year;
@@ -355,8 +357,8 @@ const PlaylistInline = ({ data }: { data: object }) => {
         }).format(releaseDate);
       } catch (e) {
         // use the format in json instead
-        if (app.getLz("date.format") !== null) {
-          formatted = new app.getLz("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
+        if (t("date.format") !== null) {
+          formatted = new t("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
         } else {
           formatted = new Intl.DateTimeFormat("en-US", {
             day: "numeric",
@@ -510,7 +512,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                                   <>
                                     {/*{((data.attributes.description?.short ?? data.attributes.editorialNotes?.short ) !== null) ? <button  className="more-btn"}
                                                 onClick={() =>openInfoModal()}>
-                                            {app.getLz('term.showMore')}
+                                            {t('term.showMore')}
                                         </button> : */}
                                   </>
                                 )}
@@ -529,7 +531,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               onClick={() => {
                                 editorialNotesExpanded = !editorialNotesExpanded;
                               }}>
-                              {app.getLz("term.showLess")}
+                              {t("term.showLess")}
                             </button>
                           </div>
                         )}
@@ -544,7 +546,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               play();
                             }}>
                             <img className={"md-ico-play"} />
-                            {app.getLz("term.play")}
+                            {t("term.play")}
                           </button>
                           <button
                             className={"md-btn md-btn-primary md-btn-icon"}
@@ -554,7 +556,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               play();
                             }}>
                             <img className={"md-ico-shuffle"} />
-                            {app.getLz("term.shuffle")}
+                            {t("term.shuffle")}
                           </button>
                           {inLibrary !== null && !confirm && (
                             <button
@@ -562,7 +564,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               style={{ minWidth: "180px" }}
                               onClick={() => confirmButton()}>
                               <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                              {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                              {!inLibrary ? t("action.addToLibrary") : t("action.removeFromLibrary")}
                             </button>
                           )}
                           {confirm && (
@@ -571,14 +573,14 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               style={{ minWidth: "180px" }}
                               onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
                               <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                              {app.getLz("term.confirm")}
+                              {t("term.confirm")}
                             </button>
                           )}
                           <button
                             className={"more-btn-round"}
                             style={{ float: "right" }}
                             onClick={() => menu}
-                            aria-label={app.getLz("term.more")}>
+                            aria-label={t("term.more")}>
                             <div className={"svg-icon"} />
                           </button>
                         </div>
@@ -614,7 +616,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             play();
                           }}>
                           <img className={"md-ico-play"} />
-                          {app.getLz("term.play")}
+                          {t("term.play")}
                         </button>
                         <button
                           className={"md-btn md-btn-primary  md-btn-icon"}
@@ -624,7 +626,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             play();
                           }}>
                           <img className={"md-ico-shuffle"} />
-                          {app.getLz("term.shuffle")}
+                          {t("term.shuffle")}
                         </button>
                         {inLibrary !== null && !confirm && (
                           <button
@@ -632,7 +634,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             style={{ minWidth: "180px" }}
                             onClick={() => confirmButton()}>
                             <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                            {!inLibrary ? app.getLz("action.addToLibrary") : app.getLz("action.removeFromLibrary")}
+                            {!inLibrary ? t("action.addToLibrary") : t("action.removeFromLibrary")}
                           </button>
                         )}
                         {confirm && (
@@ -641,7 +643,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             style={{ minWidth: "180px" }}
                             onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
                             <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
-                            {app.getLz("term.confirm")}
+                            {t("term.confirm")}
                           </button>
                         )}
                       </div>
@@ -687,7 +689,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               : nestedPlaylist.map((disc) =>
                                   disc.tracks.map((item, index) => (
                                     <div key={index}>
-                                      <div className={"playlist-time"}>{($root.getLz("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                      <div className={"playlist-time"}>{(t("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
                                       <MediaItemListItem
                                         item={item}
                                         parent={getItemParent(data)}
@@ -735,7 +737,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                           className={"playlist-time showExtended item-navigate"}
                           style={{ color: "#fa586a", fontWeight: "bold" }}
                           onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                          {$root.getLz("action.showAlbum")}
+                          {t("action.showAlbum")}
                         </div>
                       )}
                       <hr />

@@ -3,8 +3,10 @@ import MediaItemScrollerHorizontalLarge from "../components/mediaitem-scroller-h
 import MediaItemScrollerHorizontalMVView from "../components/mediaitem-scroller-horizontal-mvview.jsx";
 import ListitemHorizontal from "../components/listitem-horizontal.jsx";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Browse = ({ data }: { data: object }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   useEffect(() => {
     this.$root.getBrowsePage();
@@ -12,7 +14,7 @@ const Browse = ({ data }: { data: object }) => {
   return (
     <div id={"cider-browse"}>
       <div className={"content-inner"}>
-        <h1 className={"header-text"}>{$root.getLz("term.browse")}</h1>
+        <h1 className={"header-text"}>{t("term.browse")}</h1>
         {data.relationships &&
           data.relationships.tabs &&
           data.relationships.tabs.data[0].relationships.children.data.map((recom, index) => (
@@ -31,13 +33,13 @@ const Browse = ({ data }: { data: object }) => {
                       <button
                         className={"cd-btn-seeall"}
                         onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
-                        {app.getLz("term.seeAll")}
+                        {t("term.seeAll")}
                       </button>
                     ) : (
                       <button
                         className={"cd-btn-seeall"}
                         onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                        {app.getLz("term.seeAll")}
+                        {t("term.seeAll")}
                       </button>
                     )}
                   </Col>

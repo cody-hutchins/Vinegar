@@ -8,6 +8,8 @@
     // "outDir": "../../dist/renderer",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "noEmit": true
   },
   "include": ["./**/*.tsx", "./**/*.ts", "../types/**/*.d.ts"]
 }

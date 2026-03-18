@@ -6,9 +6,12 @@ import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
 import { useChromeStore } from "../../store/chrome.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { OverlayTrigger, Popover, Tooltip } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const ChromeTop = ({ search = {} }: { search?: object }) => {
   const chrome = useChromeStore((state) => state.chrome);
+  const { t } = useTranslation();
+
   return (
     <div
       className={"app-chrome"}
@@ -45,7 +48,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               onBlur={() => mainMenuVisibility(false)}
               onClick={() => mainMenuVisibility(true)}
               onContextMenu={() => mainMenuVisibility(true)}
-              aria-label={$root.getLz("term.quickNav")}
+              aria-label={t("term.quickNav")}
             />
           </div>
         )}
@@ -53,7 +56,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
           <>
             {getThemeDirective("windowLayout") === "twopanel" && <div className={"vdiv"} />}
             <div className={"app-chrome-item"}>
-              <OverlayTrigger overlay={<Tooltip id={"navigation-back"}>{$root.getLz("term.navigateBack")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"navigation-back"}>{t("term.navigateBack")}</Tooltip>}>
                 <button
                   className={"playback-button navigation"}
                   onClick={() => navigateBack()}>
@@ -62,7 +65,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               </OverlayTrigger>
             </div>
             <div className={"app-chrome-item"}>
-              <OverlayTrigger overlay={<Tooltip id={"navigation-forward"}>{$root.getLz("term.navigateForward")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"navigation-forward"}>{t("term.navigateForward")}</Tooltip>}>
                 <button
                   className={"playback-button navigation"}
                   onClick={() => navigateForward()}>
@@ -92,7 +95,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
           <div className={"app-chrome-item playback-control-buttons"}>
             <div className={"app-chrome-item display--large"}>
               {mk.shuffleMode === 0 ? (
-                <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{t("term.enableShuffle")}</Tooltip>}>
                   <button
                     className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                     onClick={() => {
@@ -101,7 +104,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                   />
                 </OverlayTrigger>
               ) : (
-                <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{t("term.disableShuffle")}</Tooltip>}>
                   <button
                     className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                     onClick={() => {
@@ -112,7 +115,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               )}
             </div>
             <div className={"app-chrome-item display--large"}>
-              <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"previous"}>{t("term.previous")}</Tooltip>}>
                 <button
                   className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                   onClick={() => prevButton()}
@@ -121,14 +124,14 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             </div>
             <div className={"app-chrome-item display--large"}>
               {mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"stop"}>{t("term.stop")}</Tooltip>}>
                   <button
                     className={"playback-button stop"}
                     onClick={() => mk.stop()}
                   />
                 </OverlayTrigger>
               ) : (
-                <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"play"}>{t("term.play")}</Tooltip>}>
                   <button
                     className={"playback-button play"}
                     onClick={() => mk.play()}
@@ -137,7 +140,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               )}
             </div>
             <div className={"app-chrome-item display--large"}>
-              <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"next"}>{t("term.next")}</Tooltip>}>
                 <button
                   className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                   onClick={() => skipToNextItem()}
@@ -210,7 +213,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                           drawer.open = false;
                           miniPlayer(true);
                         }}>
-                        {$root.getLz("term.miniplayer")}
+                        {t("term.miniplayer")}
                       </button>
                       <button
                         className={"md-btn md-btn-small"}
@@ -219,7 +222,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                           drawer.open = false;
                           fullscreen(true);
                         }}>
-                        {$root.getLz("term.fullscreenView")}
+                        {t("term.fullscreenView")}
                       </button>
                     </div>
                   </div>
@@ -227,12 +230,12 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                 <div className={"playback-info"}>
                   <div className={"chrome-icon-container"}>
                     {cfg.general.privateEnabled && (
-                      <OverlayTrigger overlay={<Tooltip id={"private"}>{$root.getLz("term.privateSession")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"private"}>{t("term.privateSession")}</Tooltip>}>
                         <div className={"audio-type private-icon"} />
                       </OverlayTrigger>
                     )}
                     {cfg.audio.maikiwiAudio.spatial && (
-                      <OverlayTrigger overlay={<Tooltip id={"spatial"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"spatial"}>{t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
                         <div className={"audio-type spatial-icon"} />
                       </OverlayTrigger>
                     )}
@@ -242,12 +245,12 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                       </OverlayTrigger>
                     )}
                     {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
-                      <OverlayTrigger overlay={<Tooltip id={"lossless"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"lossless"}>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
                         <div className={"audio-type ppe-icon"} />
                       </OverlayTrigger>
                     )}
                     {mk.nowPlayingItem?.attributes?.isLive && (
-                      <OverlayTrigger overlay={<Tooltip id={"live"}>{$root.getLz("term.live")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"live"}>{t("term.live")}</Tooltip>}>
                         <svg
                           className={"audio-type live-icon"}
                           xmlns={"http://www.w3.org/2000/svg"}
@@ -348,7 +351,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                 </div>
                 {mk.nowPlayingItem["attributes"]["playParams"] && (
                   <div className={"actions"}>
-                    <OverlayTrigger overlay={<Tooltip id={"more"}>{$root.getLz("term.more")}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip id={"more"}>{t("term.more")}</Tooltip>}>
                       <button
                         className={"lcdMenu"}
                         onClick={nowPlayingContextMenu}>
@@ -376,25 +379,25 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
           <div className={"app-chrome-item"}>
             <div className={"top-nav-group"}>
               <SidebarLibraryItem
-                name={$root.getLz("home.title")}
+                name={t("home.title")}
                 svg-icon={"./assets/feather/home.svg"}
                 svg-icon-name={"home"}
                 page={"home"}
               />
               <SidebarLibraryItem
-                name={$root.getLz("term.listenNow")}
+                name={t("term.listenNow")}
                 svg-icon={"./assets/feather/play-circle.svg"}
                 svg-icon-name={"listenNow"}
                 page={"listen_now"}
               />
               <SidebarLibraryItem
-                name={$root.getLz("term.browse")}
+                name={t("term.browse")}
                 svg-icon={"./assets/feather/globe.svg"}
                 svg-icon-name={"browse"}
                 page={"browse"}
               />
               <SidebarLibraryItem
-                name={$root.getLz("term.radio")}
+                name={t("term.radio")}
                 svg-icon={"./assets/feather/radio.svg"}
                 svg-icon-name={"radio"}
                 page={"radio"}
@@ -407,7 +410,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
         {getThemeDirective("windowLayout") !== "twopanel" ? (
           <>
             <div className={"app-chrome-item volume display--large"}>
-              <OverlayTrigger overlay={<Tooltip id={"more"}>{cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"more"}>{cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
                 <button
                   className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
                   onClick={() => muteButtonPressed()}
@@ -428,7 +431,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               )}
             </div>
             <div className={"app-chrome-item generic"}>
-              <OverlayTrigger overlay={<Tooltip id={"cast"}>{$root.getLz("term.cast")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"cast"}>{t("term.cast")}</Tooltip>}>
                 <button
                   className={"playback-button--small cast"}
                   onClick={() => {
@@ -438,7 +441,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
               </OverlayTrigger>
             </div>
             <div className={"app-chrome-item generic"}>
-              <OverlayTrigger overlay={<Tooltip id={"queue"}>{$root.getLz("term.queue")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"queue"}>{t("term.queue")}</Tooltip>}>
                 <button
                   className={classNames("playback-button--small queue", { active: drawer.panel === "queue" })}
                   onClick={() => invokeDrawer("queue")}
@@ -447,7 +450,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             </div>
             <div className={"app-chrome-item generic"}>
               {lyrics && lyrics !== [] && lyrics.length > 0 ? (
-                <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{$root.getLz("term.lyrics")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{t("term.lyrics")}</Tooltip>}>
                   <button
                     className={classNames("playback-button--small lyrics", { active: drawer.panel === "lyrics" })}
                     onClick={() => invokeDrawer("lyrics")}
@@ -491,7 +494,7 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                 }}
                 onChange={() => $root.appRoute("search")}
                 onInput={() => getSearchHints()}
-                placeholder={$root.getLz("term.search") + "..."}
+                placeholder={t("term.search") + "..."}
                 v-model={search.term}
                 ref={"searchInput"}
                 className={"search-input"}

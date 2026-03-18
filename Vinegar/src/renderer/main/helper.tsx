@@ -1,3 +1,5 @@
+import { notyf } from "..";
+
 const helpers = {
   _fetch(url, opts = {}) {
     if (app.cfg.advanced.experiments.includes("cider_mirror")) {
@@ -70,7 +72,7 @@ const helpers = {
     });
   },
   getAppStyle() {
-    const finalStyle = {};
+    const finalStyle: Record<string, any> = {};
     if (this.cfg.visual.window_background_style === "color") {
       finalStyle["background-color"] = this.cfg.visual.windowColor;
     }
@@ -81,9 +83,6 @@ const helpers = {
       finalStyle["--songProgressColor"] = "#6929D0";
     }
     return finalStyle;
-  },
-  setTimeout(func, time) {
-    return setTimeout(func, time);
   },
   songLinkShare(amUrl) {
     notyf.open({

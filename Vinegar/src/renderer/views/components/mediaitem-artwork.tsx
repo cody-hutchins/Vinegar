@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import AnimatedartworkView from "./animatedartwork-view.jsx";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 const MediaItemArtwork = ({ imagesize = 120, width, bgcolor = "", url = "", type = "", video, videoPriority, shadow = "", upscaling = false }: { imagesize?: string | number; width?: string | number; bgcolor?: string; url?: string; type?: string; video?: string; videoPriority?: boolean; shadow?: string; upscaling?: boolean }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   const isVisible = false;
   const style = {
@@ -51,7 +53,7 @@ const MediaItemArtwork = ({ imagesize = 120, width, bgcolor = "", url = "", type
       {
         items: {
           save: {
-            name: app.getLz("action.openArtworkInBrowser"),
+            name: t("action.openArtworkInBrowser"),
             action: () => {
               window.open(app.getMediaItemArtwork(url, 1024, 1024));
             },

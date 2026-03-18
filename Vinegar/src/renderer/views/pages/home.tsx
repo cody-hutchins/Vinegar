@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import MediaItemScrollerHorizontal from "../components/mediaitem-scroller-horizontal.jsx";
 import MediaItemListItem from "../components/mediaitem-list-item.jsx";
 import { Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t } = useTranslation();
   const app = this.$root;
   const followedArtists = this.$root.cfg.home.followedArtists;
   const favoriteItems = this.$root.cfg.home.favoriteItems;
@@ -49,13 +51,13 @@ const Home = () => {
       "include[albums]": "catalog,tracks,artists",
       "include[songs]": "catalog,artists",
     });
-    app.showCollection(hist.data, app.getLz("home.recentlyPlayed"));
+    app.showCollection(hist.data, t("home.recentlyPlayed"));
   }
   async function seeAllHistory() {
     const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
       l: this.$root.mklang,
     });
-    app.showCollection(hist.data, app.getLz("term.history"));
+    app.showCollection(hist.data, t("term.history"));
   }
   function isSectionReady(section) {
     return sectionsReady.includes(section);
@@ -181,7 +183,7 @@ const Home = () => {
               <Col>
                 <Row>
                   <Col className={"nopadding"}>
-                    <h3>{app.getLz("home.recentlyPlayed")}</h3>
+                    <h3>{t("home.recentlyPlayed")}</h3>
                   </Col>
                   <Col
                     auto
@@ -189,12 +191,12 @@ const Home = () => {
                     <button
                       className={"cd-btn-seeall"}
                       onClick={() => seeAllHistory()}>
-                      {app.getLz("term.history")}
+                      {t("term.history")}
                     </button>
                     <button
                       className={"cd-btn-seeall"}
                       onClick={() => seeAllRecentlyPlayed()}>
-                      {app.getLz("term.seeAll")}
+                      {t("term.seeAll")}
                     </button>
                   </Col>
                 </Row>
@@ -214,7 +216,7 @@ const Home = () => {
               <Col>
                 <Row>
                   <Col className={"nopadding"}>
-                    <h3>{app.getLz("home.artistsFeed")}</h3>
+                    <h3>{t("home.artistsFeed")}</h3>
                   </Col>
                   <Col
                     auto
@@ -223,7 +225,7 @@ const Home = () => {
                       <button
                         className={"cd-btn-seeall"}
                         onClick={() => syncFavorites()}>
-                        {app.getLz("home.syncFavorites")}
+                        {t("home.syncFavorites")}
                       </button>
                     ) : (
                       <div
@@ -234,7 +236,7 @@ const Home = () => {
                     <button
                       className={"cd-btn-seeall"}
                       onClick={() => app.appRoute("artist-feed")}>
-                      {app.getLz("term.seeAll")}
+                      {t("term.seeAll")}
                     </button>
                   </Col>
                 </Row>
@@ -251,7 +253,7 @@ const Home = () => {
                   ) : followedArtists.length > 0 ? (
                     <div className={"spinner"} />
                   ) : (
-                    <div className={"no-artist"}> {app.getLz("home.artistsFeed.noArtist")}</div>
+                    <div className={"no-artist"}> {t("home.artistsFeed.noArtist")}</div>
                   )}
                 </div>
               </Col>
@@ -274,7 +276,7 @@ const Home = () => {
                   <button
                     className={"md-btn md-btn-block md-btn-replay--hero"}
                     onClick={() => $root.appRoute("replay")}>
-                    {$root.getLz("term.replay")} {year}
+                    {t("term.replay")} {year}
                   </button>
                 </Col>
               </Row>
@@ -283,7 +285,7 @@ const Home = () => {
               <Col>
                 <Row>
                   <Col className={"nopadding"}>
-                    <h3>{app.getLz("home.madeForYou")}</h3>
+                    <h3>{t("home.madeForYou")}</h3>
                   </Col>
                   <Col
                     auto
@@ -292,7 +294,7 @@ const Home = () => {
                       <button
                         className={"md-btn md-btn-replay"}
                         onClick={() => $root.appRoute("replay")}>
-                        {$root.getLz("term.replay")} {year}
+                        {t("term.replay")} {year}
                       </button>
                     )}
                   </Col>
@@ -305,7 +307,7 @@ const Home = () => {
                 <Col>
                   <Row>
                     <Col className={"nopadding"}>
-                      <h3>{app.getLz("home.friendsListeningTo")}</h3>
+                      <h3>{t("home.friendsListeningTo")}</h3>
                     </Col>
                     <Col
                       auto
@@ -313,7 +315,7 @@ const Home = () => {
                       <button
                         className={"cd-btn-seeall"}
                         onClick={() => app.showSocialListeningTo()}>
-                        {app.getLz("term.seeAll")}
+                        {t("term.seeAll")}
                       </button>
                     </Col>
                   </Row>

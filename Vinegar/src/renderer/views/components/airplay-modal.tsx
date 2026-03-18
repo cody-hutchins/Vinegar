@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const AirplayModal = () => {
   const [passcode, setPasscode] = useState("");
+  const { t } = useTranslation();
+
   const close = () => {
     this.$root.modals.airplayPW = false;
   };
@@ -31,7 +34,7 @@ const AirplayModal = () => {
           <button
             className={"close-btn"}
             onClick={close}
-            aria-label={this.$root.getLz("action.close")}
+            aria-label={t("action.close")}
           />
         </div>
         <div

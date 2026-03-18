@@ -1,5 +1,4 @@
-// src/renderer/main.jsx
-import "./style.less"; // Vite handles the Less compilation for you!
+import "./style.less";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";

@@ -2,9 +2,11 @@ import { Col, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
 import { useChromeStore } from "../../store/chrome.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
+
 export const ChromeBottom = () => {
   const chrome = useChromeStore((state) => state.chrome);
-
+  const { t } = useTranslation();
   return (
     getThemeDirective("windowLayout") === "twopanel" && (
       <div
@@ -66,7 +68,7 @@ export const ChromeBottom = () => {
                               drawer.open = false;
                               miniPlayer(true);
                             }}>
-                            {$root.getLz("term.miniplayer")}
+                            {t("term.miniplayer")}
                           </button>
                           <button
                             className={"md-btn md-btn-small"}
@@ -75,7 +77,7 @@ export const ChromeBottom = () => {
                               drawer.open = false;
                               fullscreen(true);
                             }}>
-                            {$root.getLz("term.fullscreenView")}
+                            {t("term.fullscreenView")}
                           </button>
                         </div>
                       </div>
@@ -107,7 +109,7 @@ export const ChromeBottom = () => {
                   <div className={"chrome-icon-container"}>
                     {cfg.general.privateEnabled && <div className={"audio-type private-icon"} />}
                     {cfg.audio.maikiwiAudio.spatial && (
-                      <OverlayTrigger overlay={<Tooltip id={"spatial-icon"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"spatial-icon"}>{t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
                         <div className={"audio-type spatial-icon"} />
                       </OverlayTrigger>
                     )}
@@ -117,12 +119,12 @@ export const ChromeBottom = () => {
                       </OverlayTrigger>
                     )}
                     {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
-                      <OverlayTrigger overlay={<Tooltip id={"ppe-icon"}>{$root.getLz("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"ppe-icon"}>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
                         <div className={"audio-type ppe-icon"} />
                       </OverlayTrigger>
                     )}
                     {mk.nowPlayingItem?.attributes?.isLive && (
-                      <OverlayTrigger overlay={<Tooltip id={"live-icon"}>{$root.getLz("term.live")}</Tooltip>}>
+                      <OverlayTrigger overlay={<Tooltip id={"live-icon"}>{t("term.live")}</Tooltip>}>
                         <svg
                           className={"audio-type live-icon"}
                           xmlns={"http://www.w3.org/2000/svg"}
@@ -150,7 +152,7 @@ export const ChromeBottom = () => {
                 </div>
                 {mk.nowPlayingItem["attributes"]["playParams"] && (
                   <div className={"actions"}>
-                    <OverlayTrigger overlay={<Tooltip id={"lcdMenu-icon"}>{$root.getLz("term.more")}</Tooltip>}>
+                    <OverlayTrigger overlay={<Tooltip id={"lcdMenu-icon"}>{t("term.more")}</Tooltip>}>
                       <button
                         className={"lcdMenu"}
                         onClick={nowPlayingContextMenu}>
@@ -217,7 +219,7 @@ export const ChromeBottom = () => {
           <div className={"app-chrome-playback-controls"}>
             <div className={"app-chrome-item"}>
               {mk.shuffleMode === 0 ? (
-                <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{$root.getLz("term.enableShuffle")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"enable-shuffle"}>{t("term.enableShuffle")}</Tooltip>}>
                   <button
                     className={classNames("playback-button--small", "shuffle", { disabled: isDisabled() })}
                     onClick={() => {
@@ -226,7 +228,7 @@ export const ChromeBottom = () => {
                   />
                 </OverlayTrigger>
               ) : (
-                <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{$root.getLz("term.disableShuffle")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"disable-shuffle"}>{t("term.disableShuffle")}</Tooltip>}>
                   <button
                     className={classNames("playback-button--small", "shuffle", "active", { disabled: isDisabled() })}
                     onClick={() => (mk.shuffleMode = 0)}
@@ -235,7 +237,7 @@ export const ChromeBottom = () => {
               )}
             </div>
             <div className={"app-chrome-item"}>
-              <OverlayTrigger overlay={<Tooltip id={"previous"}>{$root.getLz("term.previous")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"previous"}>{t("term.previous")}</Tooltip>}>
                 <button
                   className={classNames("playback-button", "previous", { disabled: isPrevDisabled() })}
                   onClick={prevButton}
@@ -244,14 +246,14 @@ export const ChromeBottom = () => {
             </div>
             <div className={"app-chrome-item"}>
               {mk.isPlaying && mk.nowPlayingItem.attributes.playParams.kind === "radioStation" ? (
-                <OverlayTrigger overlay={<Tooltip id={"stop"}>{$root.getLz("term.stop")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"stop"}>{t("term.stop")}</Tooltip>}>
                   <button
                     className={"playback-button stop"}
                     onClick={mk.stop}
                   />
                 </OverlayTrigger>
               ) : (
-                <OverlayTrigger overlay={<Tooltip id={"play"}>{$root.getLz("term.play")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"play"}>{t("term.play")}</Tooltip>}>
                   <button
                     className={"playback-button play"}
                     onClick={mk.play}
@@ -260,7 +262,7 @@ export const ChromeBottom = () => {
               )}
             </div>
             <div className={"app-chrome-item"}>
-              <OverlayTrigger overlay={<Tooltip id={"next"}>{$root.getLz("term.next")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"next"}>{t("term.next")}</Tooltip>}>
                 <button
                   className={classNames("playback-button", "next", { disabled: isNextDisabled() })}
                   onClick={skipToNextItem}
@@ -279,7 +281,7 @@ export const ChromeBottom = () => {
         </div>
         <div className={"app-chrome--right"}>
           <div className={"app-chrome-item volume"}>
-            <OverlayTrigger overlay={<Tooltip id={"volume"}>{cfg.audio.muted ? $root.getLz("term.unmute") : $root.getLz("term.mute")}</Tooltip>}>
+            <OverlayTrigger overlay={<Tooltip id={"volume"}>{cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
               <button
                 className={"volume-button--small volume " + (cfg.audio.volume === 0 ? "active" : "")}
                 onClick={muteButtonPressed}
@@ -300,7 +302,7 @@ export const ChromeBottom = () => {
             )}
           </div>
           <div className={"app-chrome-item generic"}>
-            <OverlayTrigger overlay={<Tooltip id={"cast"}>{$root.getLz("term.cast")}</Tooltip>}>
+            <OverlayTrigger overlay={<Tooltip id={"cast"}>{t("term.cast")}</Tooltip>}>
               <button
                 className={"playback-button--small cast"}
                 onClick={() => {
@@ -310,7 +312,7 @@ export const ChromeBottom = () => {
             </OverlayTrigger>
           </div>
           <div className={"app-chrome-item generic"}>
-            <OverlayTrigger overlay={<Tooltip id={"queue"}>{$root.getLz("term.queue")}</Tooltip>}>
+            <OverlayTrigger overlay={<Tooltip id={"queue"}>{t("term.queue")}</Tooltip>}>
               <button
                 className={"playback-button--small queue " + (drawer.panel === "queue" ? "active" : "")}
                 onClick={() => invokeDrawer("queue")}
@@ -319,7 +321,7 @@ export const ChromeBottom = () => {
           </div>
           <div className={"app-chrome-item generic"}>
             {lyrics && lyrics !== [] && lyrics.length > 0 ? (
-              <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{$root.getLz("term.lyrics")}</Tooltip>}>
+              <OverlayTrigger overlay={<Tooltip id={"lyrics"}>{t("term.lyrics")}</Tooltip>}>
                 <button
                   className={"playback-button--small lyrics " + (drawer.panel === "lyrics" ? "active" : "")}
                   onClick={() => invokeDrawer("lyrics")}

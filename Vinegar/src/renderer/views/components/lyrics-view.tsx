@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation?: string; onindex?: () => void; yoffset?: number }) => {
+  const { t } = useTranslation();
   const app = this.$root;
   useEffect(() => {
     if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview) {
@@ -207,7 +209,7 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             ),
           )
         ) : (
-          <div className={"no-lyrics"}>{app.getLz("term.noLyrics")}</div>
+          <div className={"no-lyrics"}>{t("term.noLyrics")}</div>
         )}
       </div>
     </div>
