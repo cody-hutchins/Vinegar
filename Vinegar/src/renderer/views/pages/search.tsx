@@ -10,7 +10,65 @@ import { useTranslation } from "react-i18next";
 
 const Search = ({ search }: { search: object }) => {
   const { t } = useTranslation();
-
+  const friendlyTypes = (type: string) => {
+    // use switch statement to return friendly name for media types "songs,artists,albums,playlists,music-videos,stations,apple-curators,curators"
+    switch (type) {
+      case "library-songs":
+        return t("term.songs");
+        break;
+      case "library-artists":
+        return t("term.artists");
+        break;
+      case "library-albums":
+        return t("term.albums");
+        break;
+      case "library-playlists":
+        return t("term.playlists");
+        break;
+      case "song":
+        return t("term.songs");
+        break;
+      case "artist":
+        return t("term.artists");
+        break;
+      case "album":
+        return t("term.albums");
+        break;
+      case "playlist":
+        return t("term.playlists");
+        break;
+      case "music_video":
+        return t("term.musicVideos");
+        break;
+      case "station":
+        return t("term.stations");
+        break;
+      case "apple-curator":
+        return t("term.appleCurators");
+        break;
+      case "radio_show":
+        return t("term.radioShows");
+        break;
+      case "record_label":
+        return t("term.recordLabels");
+        break;
+      case "radio_episode":
+        return t("podcast.episodes");
+        break;
+      case "video_extra":
+        return t("term.videoExtras");
+        break;
+      case "curator":
+        return t("term.curators");
+        break;
+      case "top":
+        return t("term.top");
+        break;
+      default:
+        return type;
+        break;
+    }
+  };
   const app = this.$root;
   let recentlyPlayed = [];
   let categoriesView = [];
@@ -177,10 +235,10 @@ const Search = ({ search }: { search: object }) => {
                         <div key={section.id}>
                           <Row>
                             <Col>
-                              <h3>{app.friendlyTypes(section)}</h3>
+                              <h3>{friendlyTypes(section)}</h3>
                             </Col>
                           </Row>
-                          {!app.friendlyTypes(section).includes("Video") ? (
+                          {!friendlyTypes(section).includes("Video") ? (
                             <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
                           ) : (
                             <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
@@ -214,7 +272,7 @@ const Search = ({ search }: { search: object }) => {
                 <h1>{t("term.library")}</h1>
                 {$root.search.resultsLibrary.map((section, key) => (
                   <div key={key}>
-                    <h3>{app.friendlyTypes(key)}</h3>
+                    <h3>{friendlyTypes(key)}</h3>
                     {key.includes("songs") ? (
                       <div className={"mediaitem-list-item__grid"}>
                         <ListitemHorizontal items={section.data} />

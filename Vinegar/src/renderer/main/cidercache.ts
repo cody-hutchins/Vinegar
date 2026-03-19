@@ -1,3 +1,5 @@
+import { isJson } from "./helpers.js";
+
 const CiderCache = {
   async getCache(file) {
     let cache = await window.electronAPI.sendSync("get-cache", file);

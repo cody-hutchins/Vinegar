@@ -8,7 +8,7 @@ import { Modal, Tab } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import { useTranslation } from "react-i18next";
-import { notyf } from "../../index.js";
+import { notyf } from "../../main/helpers.js";
 
 const SettingsWindow = () => {
   const { t } = useTranslation();

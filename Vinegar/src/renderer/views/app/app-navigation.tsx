@@ -134,23 +134,6 @@ const AppNavigation = () => {
                   </span>
                   <span className={"usermenu-item-name"}>{t("term.quit")}</span>
                 </button>
-                {!chrome.noC2Upgrade && (
-                  <button
-                    className={"usermenu-item"}
-                    onClick={() => c2offer()}>
-                    <span
-                      className={"usermenu-item-icon"}
-                      style={{ right: "1.5px" }}>
-                      <img
-                        className={"sidebar-user-icon"}
-                        loading={"lazy"}
-                        style={{ height: "16px", width: "16px" }}
-                        src={"./assets/logocut.png"}
-                      />
-                    </span>
-                    <span className={"usermenu-item-name"}>Cider 2 Upgrade</span>
-                  </button>
-                )}
               </div>
             </div>
           )}

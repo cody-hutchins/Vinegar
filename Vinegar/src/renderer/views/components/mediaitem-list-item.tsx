@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
 import classNames from "classnames";
 import { useOnInView } from "react-intersection-observer";
-import { uuidv4 } from "../../index.js";
+import { uuidv4 } from "../../main/helpers.js";
 import { useTranslation } from "react-i18next";
 
 const MediaItemListItem = ({

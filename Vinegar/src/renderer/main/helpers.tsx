@@ -18,12 +18,195 @@ export const MusicKitObjects = {
     this.playlists = [];
   },
 };
+export const _rgbToRgb = (rgb = [0, 0, 0]) => {
+  // if rgb
+  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+};
+export const saveFile = (fileName, urlFile) => {
+  const a = document.createElement("a");
+  a.style = "display: none";
+  document.body.appendChild(a);
+  a.href = urlFile;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+  a.remove();
+};
+/**
+ * Converts seconds to dd:hh:mm:ss / Days:Hours:Minutes:Seconds
+ * @param {number} seconds
+ * @param {string} format (short, long)
+ * @returns {string}
+ * @author Core#1034
+ * @memberOf app
+ */
+export const convertTime = (seconds, format = "short") => {
+  // if (this.mk?.nowPlayingItem?.type === "radioStation") return;
+  if (isNaN(seconds) || seconds === Infinity) {
+    seconds = 0;
+  }
+
+  const datetime = new Date(seconds * 1000);
+
+  if (format === "long") {
+    const d = Math.floor(seconds / (3600 * 24));
+    const h = Math.floor((seconds % (3600 * 24)) / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+
+    const dDisplay = d > 0 ? `${d} ${this.getLz("term.time.day", { count: d })}` : "";
+    const hDisplay = h > 0 ? `${h} ${this.getLz("term.time.hour", { count: h })}` : "";
+    const mDisplay = m > 0 ? `${m} ${this.getLz("term.time.minute", { count: m })}` : "";
+
+    return dDisplay + (dDisplay && hDisplay ? ", " : "") + hDisplay + (hDisplay && mDisplay ? ", " : "") + mDisplay;
+  } else {
+    return MusicKit.formatMediaTime(seconds);
+  }
+};
+export const stringTemplateParser = (expression: string, valueObj) => {
+  const templateMatcher = /{{\s?([^{}\s]*)\s?}}/g;
+  const text = expression.replace(templateMatcher, (_substring, value, _index) => {
+    value = valueObj[value];
+    return value;
+  });
+  return text;
+};
+export const hashCode = (str: string) => {
+  let hash = 0,
+    i,
+    chr;
+  if (str.length === 0) return hash;
+  for (i = 0; i < str.length; i++) {
+    chr = str.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+export const getSvgIcon = async (url: string) => {
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+};
 
 // limit an array to a certain number of items
 Array.prototype.limit = function (n) {
   return this.slice(0, n);
 };
+export const formatTimezoneOffset = (e = new Date()) => {
+  const leadingZeros = (e, s = 2) => {
+    let n = "" + e;
+    for (; n.length < s; ) n = "0" + n;
+    return n;
+  };
 
+  const s = e.getTimezoneOffset(),
+    n = Math.floor(Math.abs(s) / 60),
+    d = Math.round(Math.abs(s) % 60);
+  let h = "+";
+  return (0 !== s && (h = s > 0 ? "-" : "+"), `${h}${leadingZeros(n, 2)}:${leadingZeros(d, 2)}`);
+};
+export const arrayToChunk = (arr: Array<any>, chunkSize: number) => {
+  const R = [];
+  for (let i = 0, len = arr.length; i < len; i += chunkSize) {
+    R.push(arr.slice(i, i + chunkSize));
+  }
+  return R;
+};
+export const apiCall = async (url, callback) => {
+  const xmlHttp = new XMLHttpRequest();
+
+  xmlHttp.onreadystatechange = (e) => {
+    if (xmlHttp.readyState !== 4) {
+      return;
+    }
+
+    if (xmlHttp.status === 200) {
+      // console.log('SUCCESS', xmlHttp.responseText);
+      callback(JSON.parse(xmlHttp.responseText));
+    } else {
+      console.warn("request_error");
+    }
+  };
+
+  xmlHttp.open("GET", url);
+  xmlHttp.setRequestHeader("Authorization", "Bearer " + MusicKit.getInstance().developerToken);
+  xmlHttp.setRequestHeader("Music-User-Token", "" + MusicKit.getInstance().musicUserToken);
+  xmlHttp.setRequestHeader("Accept", "application/json");
+  xmlHttp.setRequestHeader("Content-Type", "application/json");
+  xmlHttp.responseType = "text";
+  xmlHttp.send();
+};
+
+export const getMediaItemArtwork = (url, height = 64, width) => {
+  try {
+    if (typeof url === "undefined" || url === "") {
+      return "./assets/MissingArtwork.svg";
+    }
+    height = parseInt(height * window.devicePixelRatio);
+    if (width) {
+      width = parseInt(width * window.devicePixelRatio);
+    }
+    let newurl = `${(url ?? "")
+      .replace("{w}", width ?? height)
+      .replace("{h}", height)
+      .replace("{f}", "webp")
+      .replace("{c}", width === 900 || width === 380 || width === 600 ? "sr" : "cc")}`;
+
+    if (newurl.includes("900x516")) {
+      newurl = newurl.replace("900x516cc", "900x516sr").replace("900x516bb", "900x516sr");
+    }
+    return newurl;
+  } catch (e) {
+    console.log("error:", e);
+    console.log(url);
+    return "./assets/MissingArtwork.svg";
+  }
+};
+export const checkScrollDirectionIsUp = (event) => {
+  if (event.wheelDelta) {
+    return event.wheelDelta > 0;
+  }
+  return event.deltaY < 0;
+};
+export const toMS = (str: string) => {
+  const rawTime = str.match(/(\d+:)?(\d+:)?(\d+)(\.\d+)?/);
+  const hours = rawTime[2] !== null ? rawTime[1].replace(":", "") : 0;
+  const minutes =
+    rawTime[2] !== null ? hours * 60 + rawTime[2].replace(":", "") * 1 : rawTime[1] !== null ? rawTime[1].replace(":", "") : 0;
+  const seconds = rawTime[3] !== null ? rawTime[3] : 0;
+  const milliseconds = rawTime[4] !== null ? rawTime[4].replace(".", "") : 0;
+  return parseFloat(`${minutes * 60 + seconds * 1}.${milliseconds * 1}`);
+};
+export const stringToXml = (st: string) => {
+  // string to xml
+  const xml = new DOMParser().parseFromString(st, "text/xml");
+  return xml;
+};
+
+export const parseTime = (value: number) => {
+  const minutes = Math.floor(value / 60000);
+  const seconds = ((value % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+};
+export const parseTimeDecimal = (value: number) => {
+  const minutes = Math.floor(value / 60000);
+  const seconds = ((value % 60000) / 1000).toFixed(0);
+  return minutes + "." + (seconds < 10 ? "0" : "") + seconds;
+};
+
+export const hmsToSecondsOnly = (str: string) => {
+  const p = str.split(":");
+  let s = 0,
+    m = 1;
+
+  while (p.length > 0) {
+    s += m * parseInt(p.pop(), 10);
+    m *= 60;
+  }
+
+  return s;
+};
 export const AnimatedNumber = ({ number }: { number: 0 }) => {
   let displayNumber = number ? number : 0;
   let interval = -1;

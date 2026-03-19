@@ -10,7 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "skipLibCheck": true, /* Skip type checking of declaration files. */
+    "skipLibCheck": true /* Skip type checking of declaration files. */,
     "target": "ESNext",
     "module": "nodenext",
     "moduleResolution": "nodenext"

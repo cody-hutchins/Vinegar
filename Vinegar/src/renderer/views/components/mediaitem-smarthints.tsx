@@ -1,7 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import classNames from "classnames";
 import MediaItemArtwork from "./mediaitem-artwork.jsx";
-import { uuidv4 } from "../../index.js";
+import { uuidv4 } from "../../main/helpers.js";
 import { useTranslation } from "react-i18next";
 
 const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; position: number }) => {

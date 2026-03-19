@@ -33,7 +33,6 @@ const Panels = () => {
         <motion.div name={"wpfade"}>
           <div className={"bg-artwork--placeholder"} />
         </motion.div>
-        <motion.div name={"modal"}>{modals.c2Upgrade && <c2-upgrade></c2-upgrade>}</motion.div>
         <motion.div name={"modal"}>{modals.addToPlaylist && <AddToPlaylist playlists={playlists.listing} />}</motion.div>
         <motion.div name={"modal"}>{modals.audioControls && <audio-controls></audio-controls>}</motion.div>
         <motion.div name={"modal"}>{modals.audioPlaybackRate && <audio-playbackrate></audio-playbackrate>}</motion.div>

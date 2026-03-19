@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import InlineCollectionList from "../components/inline-collection-list.jsx";
 import { Col } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
-import { uuidv4 } from "../../index.js";
+import { uuidv4 } from "../../main/helpers.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { useTranslation } from "react-i18next";
 
