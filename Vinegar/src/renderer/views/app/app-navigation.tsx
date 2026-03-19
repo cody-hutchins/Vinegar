@@ -5,9 +5,11 @@ import LyricsView from "../components/lyrics-view.jsx";
 import Queue from "../components/queue.jsx";
 import Sidebar from "../components/sidebar.jsx";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const AppNavigation = () => {
-  const chrome = useChromeStore((state) => state.chrome);
+  const chrome = useChromeStore();
+  const { cfg } = useCfgStore();
   const { t } = useTranslation();
 
   return (

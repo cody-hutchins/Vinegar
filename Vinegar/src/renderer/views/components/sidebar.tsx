@@ -6,20 +6,22 @@ import MediaItemSmarthints from "./mediaitem-smarthints.jsx";
 import SidebarPlaylist from "./sidebar-playlist.jsx";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const Sidebar = () => {
   const { t } = useTranslation();
+  const { cfg } = useCfgStore();
 
   const switchArtworkDisplayLayout = () => {
-    switch (app.cfg.visual.artworkDisplayLayout) {
+    switch (cfg.visual.artworkDisplayLayout) {
       case "default":
-        app.cfg.visual.artworkDisplayLayout = "sidebar";
+        cfg.visual.artworkDisplayLayout = "sidebar";
         break;
       case "sidebar":
-        app.cfg.visual.artworkDisplayLayout = "default";
+        cfg.visual.artworkDisplayLayout = "default";
         break;
       default:
-        app.cfg.visual.artworkDisplayLayout = "default";
+        cfg.visual.artworkDisplayLayout = "default";
         break;
     }
   };
@@ -108,13 +110,13 @@ const Sidebar = () => {
             style={{ display: $root.getThemeDirective("windowLayout") !== "twopanel" ? "inherit" : "none" }}
             className={"sidebarCatalogSection"}>
             <div
-              className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.cider })}
+              className={classNames("app-sidebar-header-text", { collapsed: cfg.general.sidebarCollapsed.cider })}
               onClick={() => {
-                $root.cfg.general.sidebarCollapsed.cider = !$root.cfg.general.sidebarCollapsed.cider;
+                cfg.general.sidebarCollapsed.cider = !cfg.general.sidebarCollapsed.cider;
               }}>
               {t("app.name")}
             </div>
-            {!$root.cfg.general.sidebarCollapsed.cider && (
+            {!cfg.general.sidebarCollapsed.cider && (
               <SidebarLibraryItem
                 name={t("home.title")}
                 svg-icon={"./assets/feather/home.svg"}
@@ -123,13 +125,13 @@ const Sidebar = () => {
               />
             )}
             <div
-              className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.applemusic })}
+              className={classNames("app-sidebar-header-text", { collapsed: cfg.general.sidebarCollapsed.applemusic })}
               onClick={() => {
-                $root.cfg.general.sidebarCollapsed.applemusic = !$root.cfg.general.sidebarCollapsed.applemusic;
+                cfg.general.sidebarCollapsed.applemusic = !cfg.general.sidebarCollapsed.applemusic;
               }}>
               {t("term.appleMusic")}
             </div>
-            {!$root.cfg.general.sidebarCollapsed.applemusic && (
+            {!cfg.general.sidebarCollapsed.applemusic && (
               <>
                 <SidebarLibraryItem
                   name={t("term.listenNow")}
@@ -153,15 +155,15 @@ const Sidebar = () => {
             )}
           </div>
           <div
-            className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.library })}
+            className={classNames("app-sidebar-header-text", { collapsed: cfg.general.sidebarCollapsed.library })}
             onClick={() => {
-              $root.cfg.general.sidebarCollapsed.library = !$root.cfg.general.sidebarCollapsed.library;
+              cfg.general.sidebarCollapsed.library = !cfg.general.sidebarCollapsed.library;
             }}>
             {t("term.library")}
           </div>
-          {!$root.cfg.general.sidebarCollapsed.library && (
+          {!cfg.general.sidebarCollapsed.library && (
             <>
-              {$root.cfg.general.sidebarItems.recentlyAdded && (
+              {cfg.general.sidebarItems.recentlyAdded && (
                 <SidebarLibraryItem
                   name={t("term.recentlyAdded")}
                   svg-icon={"./assets/feather/plus-circle.svg"}
@@ -169,7 +171,7 @@ const Sidebar = () => {
                   page={"library-recentlyadded"}
                 />
               )}
-              {$root.cfg.general.sidebarItems.songs && (
+              {cfg.general.sidebarItems.songs && (
                 <SidebarLibraryItem
                   name={t("term.songs")}
                   svg-icon={"./assets/feather/music.svg"}
@@ -177,7 +179,7 @@ const Sidebar = () => {
                   page={"library-songs"}
                 />
               )}
-              {$root.cfg.general.sidebarItems.albums && (
+              {cfg.general.sidebarItems.albums && (
                 <SidebarLibraryItem
                   name={t("term.albums")}
                   svg-icon={"./assets/feather/disc.svg"}
@@ -185,7 +187,7 @@ const Sidebar = () => {
                   page={"library-albums"}
                 />
               )}
-              {$root.cfg.general.sidebarItems.artists && (
+              {cfg.general.sidebarItems.artists && (
                 <SidebarLibraryItem
                   name={t("term.artists")}
                   svg-icon={"./assets/feather/user.svg"}
@@ -193,7 +195,7 @@ const Sidebar = () => {
                   page={"library-artists"}
                 />
               )}
-              {$root.cfg.general.sidebarItems.videos && (
+              {cfg.general.sidebarItems.videos && (
                 <SidebarLibraryItem
                   name={t("term.videos")}
                   svg-icon={"./assets/feather/video.svg"}
@@ -201,7 +203,7 @@ const Sidebar = () => {
                   page={"library-videos"}
                 />
               )}
-              {$root.cfg.general.sidebarItems.podcasts && (
+              {cfg.general.sidebarItems.podcasts && (
                 <SidebarLibraryItem
                   name={t("term.podcasts")}
                   svg-icon={"./assets/feather/mic.svg"}
@@ -211,25 +213,25 @@ const Sidebar = () => {
               )}
             </>
           )}
-          {/*{($root.cfg.libraryPrefs.localPaths.length !== 0) && <><div className="app-sidebar-header-text"
-                onClick={() =>{$root.cfg.general.sidebarCollapsed.localLibrary = !$root.cfg.general.sidebarCollapsed.localLibrary}}
-                className="{collapsed: $root.cfg.general.sidebarCollapsed.localLibrary}">
+          {/*{(cfg.libraryPrefs.localPaths.length !== 0) && <><div className="app-sidebar-header-text"
+                onClick={() =>{cfg.general.sidebarCollapsed.localLibrary = !cfg.general.sidebarCollapsed.localLibrary}}
+                className="{collapsed: cfg.general.sidebarCollapsed.localLibrary}">
               Local Library
-          </div>{(!$root.cfg.general.sidebarCollapsed.localLibrary) && <>
+          </div>{(!cfg.general.sidebarCollapsed.localLibrary) && <>
               <SidebarPlaylist item={{attributes: { name:'Songs'} , id:'ciderlocal'}} />
           </>}</>}*/}
           {$root.getPlaylistFolderChildren("p.applemusic").length !== 0 && (
             <>
               <div
-                className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.amplaylists })}
+                className={classNames("app-sidebar-header-text", { collapsed: cfg.general.sidebarCollapsed.amplaylists })}
                 onClick={() => {
-                  $root.cfg.general.sidebarCollapsed.amplaylists = !$root.cfg.general.sidebarCollapsed.amplaylists;
+                  cfg.general.sidebarCollapsed.amplaylists = !cfg.general.sidebarCollapsed.amplaylists;
                 }}
                 contextMenu={$root.playlistHeaderContextMenu}>
                 {t("term.appleMusic")}
                 {t("term.playlists")}
               </div>
-              {!$root.cfg.general.sidebarCollapsed.amplaylists &&
+              {!cfg.general.sidebarCollapsed.amplaylists &&
                 $root.getPlaylistFolderChildren("p.applemusic").map((item) => (
                   <SidebarPlaylist
                     key={item.id}
@@ -239,14 +241,14 @@ const Sidebar = () => {
             </>
           )}
           <div
-            className={classNames("app-sidebar-header-text", { collapsed: $root.cfg.general.sidebarCollapsed.playlists })}
+            className={classNames("app-sidebar-header-text", { collapsed: cfg.general.sidebarCollapsed.playlists })}
             onClick={() => {
-              $root.cfg.general.sidebarCollapsed.playlists = !$root.cfg.general.sidebarCollapsed.playlists;
+              cfg.general.sidebarCollapsed.playlists = !cfg.general.sidebarCollapsed.playlists;
             }}
             contextMenu={$root.playlistHeaderContextMenu}>
             {t("term.playlists")}
           </div>
-          {!$root.cfg.general.sidebarCollapsed.playlists && (
+          {!cfg.general.sidebarCollapsed.playlists && (
             <>
               <button
                 className={"app-sidebar-item"}
@@ -263,7 +265,7 @@ const Sidebar = () => {
               ))}
             </>
           )}
-          {$root.cfg.visual.artworkDisplayLayout === "sidebar" && (
+          {cfg.visual.artworkDisplayLayout === "sidebar" && (
             <div
               onClick={(e) => {
                 e.preventDefault();
@@ -355,9 +357,9 @@ const Sidebar = () => {
             </div>
             <div className={"app-chrome-item volume"}>
               <div className={"input-container"}>
-                <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
+                <OverlayTrigger overlay={<Tooltip id={"repeat"}>{cfg.audio.muted ? t("term.unmute") : t("term.mute")}</Tooltip>}>
                   <button
-                    className={classNames("volume-button--small volume", { active: $root.cfg.audio.volume === 0 })}
+                    className={classNames("volume-button--small volume", { active: cfg.audio.volume === 0 })}
                     onClick={() => $root.muteButtonPressed()}
                   />
                 </OverlayTrigger>
@@ -367,9 +369,9 @@ const Sidebar = () => {
                       type={"range"}
                       className={""}
                       onWheel={$root.volumeWheel}
-                      step={$root.cfg.audio.volumeStep}
+                      step={cfg.audio.volumeStep}
                       min={"0"}
-                      max={$root.cfg.audio.maxVolume}
+                      max={cfg.audio.maxVolume}
                       v-model={$root.mk.volume}
                       onChange={() => $root.checkMuteChange()}
                     />

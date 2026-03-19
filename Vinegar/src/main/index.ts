@@ -31,7 +31,7 @@ app.on("ready", async () => {
   console.log("[Cider] Application is Ready. Creating Window.");
   if (!app.isPackaged) {
     console.info("[Cider] Running in development mode.");
-    // @ts-ignore
+    // @ts-expect-error no direct imports
     (await import("vue-devtools")).default.install();
   }
   components.whenReady().then(async () => {

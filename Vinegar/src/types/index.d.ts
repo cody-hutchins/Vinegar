@@ -1,3 +1,5 @@
+import { CfgStore } from "../main/base/store";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IElectronAPI {
   send: (channel: string, ...data: any[]) => void;
@@ -5,6 +7,7 @@ export interface IElectronAPI {
   on: (channel: string, callback: (...args: any[]) => void) => Electron.IpcRenderer;
   invoke: (channel: string, ...data: any[]) => Promise<any>;
   once: (channel: string, listener: (event: Electron.IpcRendererEvent) => void) => Electron.IpcRenderer;
+  getStore: () => Promise<CfgStore>;
 }
 declare global {
   interface Window {

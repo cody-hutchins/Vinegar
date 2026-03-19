@@ -3,9 +3,11 @@ import { useChromeStore } from "../../store/chrome.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 export const ChromeBottom = () => {
-  const chrome = useChromeStore((state) => state.chrome);
+  const chrome = useChromeStore();
+  const { cfg } = useCfgStore();
   const { t } = useTranslation();
   return (
     getThemeDirective("windowLayout") === "twopanel" && (

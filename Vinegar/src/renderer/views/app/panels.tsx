@@ -10,9 +10,11 @@ import QRCodeModal from "../components/qrcode-modal.jsx";
 import SettingsWindow from "../components/settings-window.jsx";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const Panels = () => {
-  const chrome = useChromeStore((state) => state.chrome);
+  const chrome = useChromeStore((state) => state);
+  const { cfg } = useCfgStore();
   const { t } = useTranslation();
 
   return (

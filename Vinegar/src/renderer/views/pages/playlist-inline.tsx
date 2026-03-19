@@ -7,9 +7,12 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const PlaylistInline = ({ data }: { data: object }) => {
   const { t } = useTranslation();
+  const { cfg } = useCfgStore();
+
   const app = this.$root;
   let editorialNotesExpanded = false;
   const drag = false;
@@ -374,7 +377,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
       // year = releaseDate.getFullYear();
       let formatted = "";
       try {
-        formatted = new Intl.DateTimeFormat(app.cfg.general.language?.replace("_", "-") ?? "en-US", {
+        formatted = new Intl.DateTimeFormat(cfg.general.language?.replace("_", "-") ?? "en-US", {
           day: "numeric",
           month: "long",
           year: "numeric",
@@ -382,7 +385,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
       } catch (e) {
         // use the format in json instead
         if (t("date.format") !== null) {
-          formatted = new t("date.format")
+          formatted = t("date.format")
             .replace("${d}", releaseDate.getDate())
             .replace("${m}", releaseDate.getMonth())
             .replace("${y}", releaseDate.getFullYear());

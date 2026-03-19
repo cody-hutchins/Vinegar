@@ -7,9 +7,11 @@ import { useChromeStore } from "../../store/chrome.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { OverlayTrigger, Popover, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const ChromeTop = ({ search = {} }: { search?: object }) => {
-  const chrome = useChromeStore((state) => state.chrome);
+  const chrome = useChromeStore((state) => state);
+  const { cfg } = useCfgStore();
   const { t } = useTranslation();
 
   return (

@@ -1,11 +1,11 @@
 import { Col, Row } from "react-bootstrap";
-import { useAppStore } from "../../store/app.js";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 const OOBE = () => {
   const { t } = useTranslation();
+  const { cfg } = useCfgStore((state) => state);
   let screen = "before_we_start";
-  const cfg = useAppStore((state) => state.cfg);
   function signIn() {
     if (localStorage.getItem("music.ampwebplay.media-user-token")) {
       localStorage.setItem("seenOOBE", 1);
@@ -14,7 +14,7 @@ const OOBE = () => {
     screen = "signin";
     capiInit();
   }
-  function getLz(...args) {
+  function getLz(...args: any[]) {
     return t(args);
   }
   function getLanguages() {

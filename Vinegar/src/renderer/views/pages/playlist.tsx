@@ -9,9 +9,11 @@ import Pagination from "../components/pagination.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const Playlist = ({ data }: { data: MusicKit.Item }) => {
   const { t } = useTranslation();
+  const { cfg } = useCfgStore();
   const app = this.$root;
   let editorialNotesExpanded = false;
   const drag = false;
@@ -32,10 +34,10 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
   let displayListing = [];
   let hasNestedPlaylist = false;
   let showSearch = false;
-  const pageSize = this.$root.cfg.libraryPrefs.pageSize;
+  const pageSize = cfg.libraryPrefs.pageSize;
   let start = 0;
   let end = pageSize;
-  const prefs = this.$root.cfg.libraryPrefs.playlists;
+  const prefs = cfg.libraryPrefs.playlists;
 
   const mounted = () => {
     setTimeout(function () {
@@ -584,7 +586,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       // year = releaseDate.getFullYear();
       let formatted = "";
       try {
-        formatted = new Intl.DateTimeFormat(app.cfg.general.language?.replace("_", "-") ?? "en-US", {
+        formatted = new Intl.DateTimeFormat(cfg.general.language?.replace("_", "-") ?? "en-US", {
           day: "numeric",
           month: "long",
           year: "numeric",
@@ -592,7 +594,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       } catch (e) {
         // use the format in json instead
         if (t("date.format") !== null) {
-          formatted = new t("date.format")
+          formatted = t("date.format")
             .replace("${d}", releaseDate.getDate())
             .replace("${m}", releaseDate.getMonth())
             .replace("${y}", releaseDate.getFullYear());

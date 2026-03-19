@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const AudioControls = () => {
-  const app = this.$root;
+  const { cfg } = useCfgStore();
   const { t } = useTranslation();
 
-  let maxVolume: number = this.$root.cfg.audio.maxVolume * 100;
-  let volumeStep: number = this.$root.cfg.audio.volumeStep * 100;
-  let volume: number = this.$root.cfg.audio.volume * 100;
+  let maxVolume: number = cfg.audio.maxVolume * 100;
+  let volumeStep: number = cfg.audio.volumeStep * 100;
+  let volume: number = cfg.audio.volume * 100;
 
   useEffect(() => {
     if (newValue > 100) {
@@ -15,7 +16,7 @@ const AudioControls = () => {
     } else {
       newValue = Math.round(newValue);
     }
-    this.$root.cfg.audio.maxVolume = newValue / 100;
+    cfg.audio.maxVolume = newValue / 100;
     maxVolume = newValue;
     console.log(newValue, _oldValue);
   }, [maxVolume]);
@@ -37,7 +38,7 @@ const AudioControls = () => {
     } else {
       newValue = Math.round(newValue);
     }
-    this.$root.cfg.audio.volumeStep = newValue / 100;
+    cfg.audio.volumeStep = newValue / 100;
     volumeStep = newValue;
     console.log(newValue, _oldValue);
   }, [volumeStep]);

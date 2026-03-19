@@ -7,10 +7,13 @@ import FullscreenView from "./components/fullscreen-view.jsx";
 import OOBE from "./pages/oobe.jsx";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useCfgStore } from "../store/cfg.js";
 const App = () => {
+  const { cfg, hydrate } = useCfgStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    hydrate().then();
     // TODO Perform IPC check for Electron Main process is ready
     const checkReady = setTimeout(() => {
       setIsLoading(false);
@@ -27,10 +30,7 @@ const App = () => {
       ) : (
         <div
           className={"notransparency"}
-          onContextMenu={() => false}
-          loading={1}
-          os-release={parseInt(process.env.osRelease)}
-          platform={process.env.platform}>
+          onContextMenu={() => false}>
           <script
             type={"module"}
             src={"./main/app.js"}

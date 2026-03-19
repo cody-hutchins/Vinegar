@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
 const Keybinds = () => {
   const { t } = useTranslation();
-  const app = this.$root;
+  const { cfg } = useCfgStore();
 
   const keyBindUpdate = (action) => {
     const blur = document.createElement("div");
@@ -41,7 +42,7 @@ const Keybinds = () => {
           }
           if (keyBind.length === 2) {
             if (keyBind[0] !== keyBind[1]) {
-              app.cfg.general.keybindings[action] = keyBind;
+              cfg.general.keybindings[action] = keyBind;
               document.body.removeChild(blur);
               clearTimeout(keyBindTimeout);
               notyf.success(t("settings.notyf.general.keybindings.update.success"));
@@ -58,39 +59,39 @@ const Keybinds = () => {
     document.addEventListener("keydown", keyBindUpdate);
   };
   const keyBindReset = () => {
-    app.cfg.general.keybindings.search = [app.platform === "darwin" ? "Command" : "Control", "F"];
-    app.cfg.general.keybindings.listnow = [app.platform === "darwin" ? "Command" : "Control", "L"];
-    app.cfg.general.keybindings.browse = [app.platform === "darwin" ? "Command" : "Control", "B"];
-    app.cfg.general.keybindings.recentAdd = [app.platform === "darwin" ? "Command" : "Control", "G"];
-    app.cfg.general.keybindings.songs = [app.platform === "darwin" ? "Command" : "Control", "J"];
-    app.cfg.general.keybindings.albums = [app.platform === "darwin" ? "Command" : "Control", "A"];
-    app.cfg.general.keybindings.artists = [app.platform === "darwin" ? "Command" : "Control", "D"];
-    app.cfg.general.keybindings.togglePrivateSession = [app.platform === "darwin" ? "Command" : "Control", "P"];
-    app.cfg.general.keybindings.webRemote = [
+    cfg.general.keybindings.search = [app.platform === "darwin" ? "Command" : "Control", "F"];
+    cfg.general.keybindings.listnow = [app.platform === "darwin" ? "Command" : "Control", "L"];
+    cfg.general.keybindings.browse = [app.platform === "darwin" ? "Command" : "Control", "B"];
+    cfg.general.keybindings.recentAdd = [app.platform === "darwin" ? "Command" : "Control", "G"];
+    cfg.general.keybindings.songs = [app.platform === "darwin" ? "Command" : "Control", "J"];
+    cfg.general.keybindings.albums = [app.platform === "darwin" ? "Command" : "Control", "A"];
+    cfg.general.keybindings.artists = [app.platform === "darwin" ? "Command" : "Control", "D"];
+    cfg.general.keybindings.togglePrivateSession = [app.platform === "darwin" ? "Command" : "Control", "P"];
+    cfg.general.keybindings.webRemote = [
       app.platform === "darwin" ? "Command" : "Control",
       app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
       "W",
     ];
-    app.cfg.general.keybindings.audioSettings = [
+    cfg.general.keybindings.audioSettings = [
       app.platform === "darwin" ? "Command" : "Control",
       app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
       "A",
     ];
-    app.cfg.general.keybindings.pluginMenu = [
+    cfg.general.keybindings.pluginMenu = [
       app.platform === "darwin" ? "Command" : "Control",
       app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
       "P",
     ];
-    app.cfg.general.keybindings.castToDevices = [
+    cfg.general.keybindings.castToDevices = [
       app.platform === "darwin" ? "Command" : "Control",
       app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
       "C",
     ];
-    app.cfg.general.keybindings.settings = [app.platform === "darwin" ? "Command" : "Control", ","];
-    app.cfg.general.keybindings.zoomn = [app.platform === "darwin" ? "Command" : "Control", "numadd"];
-    app.cfg.general.keybindings.zoomt = [app.platform === "darwin" ? "Command" : "Control", "numsub"];
-    app.cfg.general.keybindings.zoomrst = [app.platform === "darwin" ? "Command" : "Control", "num0"];
-    app.cfg.general.keybindings.openDeveloperTools = [
+    cfg.general.keybindings.settings = [app.platform === "darwin" ? "Command" : "Control", ","];
+    cfg.general.keybindings.zoomn = [app.platform === "darwin" ? "Command" : "Control", "numadd"];
+    cfg.general.keybindings.zoomt = [app.platform === "darwin" ? "Command" : "Control", "numsub"];
+    cfg.general.keybindings.zoomrst = [app.platform === "darwin" ? "Command" : "Control", "num0"];
+    cfg.general.keybindings.openDeveloperTools = [
       app.platform === "darwin" ? "Command" : "Control",
       app.platform === "darwin" ? "Option" : "Shift",
       "I",

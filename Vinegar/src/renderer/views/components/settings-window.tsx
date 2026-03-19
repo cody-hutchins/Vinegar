@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import { useTranslation } from "react-i18next";
 import { notyf } from "../../main/helpers.js";
+import { useCfgStore } from "../../store/cfg.js";
 
 const SettingsWindow = () => {
   const { t } = useTranslation();
-  const app = this.$root;
+  const { cfg } = useCfgStore();
   const themes = window.electronAPI.sendSync("get-themes");
   const tabIndex = 0;
   const canChangeHash = false;
@@ -37,7 +38,7 @@ const SettingsWindow = () => {
   }
   function windowBgStyleChange() {
     this.$root.getNowPlayingArtworkBG(undefined, true);
-    if (this.$root.cfg.visual.window_background_style === "mica") {
+    if (cfg.visual.window_background_style === "mica") {
       this.$root.spawnMica();
     }
   }
@@ -59,7 +60,7 @@ const SettingsWindow = () => {
     window.electronAPI.send("open-appdata");
   }
   function changeDisplayTheme() {
-    window.electronAPI.send("changeDisplayTheme", app.cfg.visual.overrideDisplayTheme);
+    window.electronAPI.send("changeDisplayTheme", cfg.visual.overrideDisplayTheme);
   }
   const getLanguages = () => {
     const langs = this.$root.lzListing;
@@ -85,31 +86,31 @@ const SettingsWindow = () => {
     return categories;
   };
   function addExperiment(flag) {
-    app.cfg.advanced.experiments.push(flag);
+    cfg.advanced.experiments.push(flag);
   }
   function removeExperiment(flag) {
-    app.cfg.advanced.experiments.splice(app.cfg.advanced.experiments.indexOf(flag), 1);
+    cfg.advanced.experiments.splice(cfg.advanced.experiments.indexOf(flag), 1);
   }
   const toggleNormalization = () => {
-    if (app.cfg.audio.normalization) {
+    if (cfg.audio.normalization) {
       CiderAudio.normalizerOn();
     } else {
       CiderAudio.normalizerOff();
     }
   };
   const changeAudioQuality = () => {
-    app.mk.bitrate = MusicKit.PlaybackBitrate[app.cfg.audio.quality];
+    app.mk.bitrate = MusicKit.PlaybackBitrate[cfg.audio.quality];
   };
   const toggleUserInfo = () => {
-    app.chrome.hideUserInfo = !app.cfg.visual.showuserinfo;
+    app.chrome.hideUserInfo = !cfg.visual.showuserinfo;
   };
   const sendDataToMTT = async () => {
-    await window.electronAPI.invoke("setStoreValue", "general.close_behavior", app.cfg.general.close_behavior);
+    await window.electronAPI.invoke("setStoreValue", "general.close_behavior", cfg.general.close_behavior);
     //  setStoreValue does not change plugin store values somehow
-    await window.electronAPI.invoke("update-store-mtt", app.cfg.general.close_behavior);
+    await window.electronAPI.invoke("update-store-mtt", cfg.general.close_behavior);
   };
   function checkIfUpdateDisabled() {
-    if (app.cfg.main.UPDATABLE) return;
+    if (cfg.main.UPDATABLE) return;
 
     const updateFields = document.getElementsByClassName("update-check");
     for (let i = 0; i < updateFields.length; i++) {
@@ -134,9 +135,9 @@ const SettingsWindow = () => {
     window.electronAPI.send("discordrpc:reload");
   }
   function lfmDisconnect() {
-    this.$root.cfg.connectivity.lastfm.enabled = false;
-    this.$root.cfg.connectivity.lastfm.secrets.username = "";
-    this.$root.cfg.connectivity.lastfm.secrets.key = "";
+    cfg.connectivity.lastfm.enabled = false;
+    cfg.connectivity.lastfm.secrets.username = "";
+    cfg.connectivity.lastfm.secrets.key = "";
     window.electronAPI.send("lastfm:disconnect");
   }
   async function lfmAuthorize() {
@@ -146,7 +147,7 @@ const SettingsWindow = () => {
 
     /* Just a timeout for the button */
     setTimeout(() => {
-      if (!this.$root.cfg.connectivity.lastfm.enabled) {
+      if (!cfg.connectivity.lastfm.enabled) {
         app.notyf.error(t("settings.notyf.connectivity.lastfmScrobble.connectError"));
         console.warn("[lastfm:authorize] Last.fm authorization timed out.");
         lastfmConnecting = false;
@@ -154,15 +155,15 @@ const SettingsWindow = () => {
     }, 40000);
 
     window.electronAPI.once("lastfm:authenticated", (_e, session) => {
-      this.$root.cfg.connectivity.lastfm.secrets.username = session.username;
-      this.$root.cfg.connectivity.lastfm.secrets.key = session.key;
-      this.$root.cfg.connectivity.lastfm.enabled = true;
+      cfg.connectivity.lastfm.secrets.username = session.username;
+      cfg.connectivity.lastfm.secrets.key = session.key;
+      cfg.connectivity.lastfm.enabled = true;
       lastfmConnecting = false;
       app.notyf.success(t("settings.notyf.connectivity.lastfmScrobble.connectSuccess"));
     });
   }
   function filterChange(e) {
-    this.$root.cfg.connectivity.lastfm.filter_types[e.target.value] = e.target.checked;
+    cfg.connectivity.lastfm.filter_types[e.target.value] = e.target.checked;
   }
   function submitToken() {
     const token = document.getElementById("lfmToken").value;
@@ -219,7 +220,7 @@ const SettingsWindow = () => {
                         $root.setLz("");
                         $root.setLzManual();
                       }}
-                      v-model={app.cfg.general.language}>
+                      v-model={cfg.general.language}>
                       {getLanguages().map((categories, index) => (
                         <optgroup
                           key={index}
@@ -253,8 +254,8 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={$root.cfg.general.privateEnabled}
-                      onChange={() => ($root.mk.privateEnabled = $root.cfg.general.privateEnabled)}
+                      v-model={cfg.general.privateEnabled}
+                      onChange={() => ($root.mk.privateEnabled = cfg.general.privateEnabled)}
                     />
                   </label>
                 </div>
@@ -267,20 +268,20 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.general.onStartup.enabled}
+                      v-model={cfg.general.onStartup.enabled}
                     />
                   </label>
                 </div>
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.general.onStartup.enabled ? "inherit" : "none" }}>
+                style={{ display: cfg.general.onStartup.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>{t("settings.option.window.openOnStartup.hidden")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.general.onStartup.hidden}
+                      v-model={cfg.general.onStartup.hidden}
                     />
                   </label>
                 </div>
@@ -304,7 +305,7 @@ const SettingsWindow = () => {
                     <select
                       className={"md-select"}
                       style={{ width: "180px" }}
-                      v-model={$root.cfg.general.resumeOnStartupBehavior}>
+                      v-model={cfg.general.resumeOnStartupBehavior}>
                       <option value={"disabled"}>{t("term.disabled")}</option>
                       <option value={"local"}>{t("settings.option.general.resumebehavior.locally")}</option>
                       <option value={"history"}>{t("settings.option.general.resumebehavior.history")}</option>
@@ -328,7 +329,7 @@ const SettingsWindow = () => {
                     <select
                       className={"md-select"}
                       style={{ width: "180px" }}
-                      v-model={$root.cfg.general.resumeTabs.tab}>
+                      v-model={cfg.general.resumeTabs.tab}>
                       <option value={"dynamic"}>{t("settings.option.general.resumetabs.dynamic")}</option>
                       <option value={"home"}>{t("home.title")}</option>
                       <option value={"listen_now"}>{t("term.listenNow")}</option>
@@ -366,7 +367,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type={"checkbox"}
-                            v-model={app.cfg.general.sidebarItems.recentlyAdded}
+                            v-model={cfg.general.sidebarItems.recentlyAdded}
                           />
                         </label>
                       </div>
@@ -377,7 +378,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type={"checkbox"}
-                            v-model={app.cfg.general.sidebarItems.songs}
+                            v-model={cfg.general.sidebarItems.songs}
                           />
                         </label>
                       </div>
@@ -388,7 +389,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type={"checkbox"}
-                            v-model={app.cfg.general.sidebarItems.albums}
+                            v-model={cfg.general.sidebarItems.albums}
                           />
                         </label>
                       </div>
@@ -399,7 +400,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type={"checkbox"}
-                            v-model={app.cfg.general.sidebarItems.artists}
+                            v-model={cfg.general.sidebarItems.artists}
                           />
                         </label>
                       </div>
@@ -410,7 +411,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type={"checkbox"}
-                            v-model={app.cfg.general.sidebarItems.videos}
+                            v-model={cfg.general.sidebarItems.videos}
                           />
                         </label>
                       </div>
@@ -421,7 +422,7 @@ const SettingsWindow = () => {
                         <label>
                           <input
                             type={"checkbox"}
-                            v-model={app.cfg.general.sidebarItems.podcasts}
+                            v-model={cfg.general.sidebarItems.podcasts}
                           />
                         </label>
                       </div>
@@ -445,7 +446,7 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.general.themeUpdateNotification}
+                      v-model={cfg.general.themeUpdateNotification}
                     />
                   </label>
                 </div>
@@ -456,7 +457,7 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.general.showLovedTracksInline}
+                      v-model={cfg.general.showLovedTracksInline}
                     />
                   </label>
                 </div>
@@ -500,7 +501,7 @@ const SettingsWindow = () => {
                     <select
                       className={"md-select"}
                       style={{ width: "180px" }}
-                      v-model={app.cfg.audio.quality}
+                      v-model={cfg.audio.quality}
                       onChange={changeAudioQuality}>
                       {/* // <option value="">{t('settings.header.audio.quality.hireslossless')}</option>  */}
                       {/* <option value="">{t('settings.header.audio.quality.lossless')}</option>  */}
@@ -540,8 +541,8 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.audio.seamless_audio}
-                      onChange={() => (app.mk._bag.features["seamless-audio-transitions"] = app.cfg.audio.seamless_audio)}
+                      v-model={cfg.audio.seamless_audio}
+                      onChange={() => (app.mk._bag.features["seamless-audio-transitions"] = cfg.audio.seamless_audio)}
                     />
                   </label>
                 </div>
@@ -562,7 +563,7 @@ const SettingsWindow = () => {
                   style={{ whiteSpace: "pre-line" }}>
                   {t("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
                   <small>
-                    {app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE
+                    {cfg.audio.equalizer.vibrantBass !== 0 || cfg.audio.maikiwiAudio.spatial || cfg.audio.maikiwiAudio.ciderPPE
                       ? `${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}`
                       : t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}
                   </small>
@@ -571,13 +572,13 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.audio.normalization}
+                      v-model={cfg.audio.normalization}
                       onChange={toggleNormalization}
                       disabled={
-                        app.cfg.audio.maikiwiAudio.spatial ||
-                        app.cfg.audio.maikiwiAudio.ciderPPE ||
-                        app.cfg.audio.maikiwiAudio.atmosphereRealizer1 ||
-                        app.cfg.audio.maikiwiAudio.atmosphereRealizer2
+                        cfg.audio.maikiwiAudio.spatial ||
+                        cfg.audio.maikiwiAudio.ciderPPE ||
+                        cfg.audio.maikiwiAudio.atmosphereRealizer1 ||
+                        cfg.audio.maikiwiAudio.atmosphereRealizer2
                       }
                     />
                   </label>
@@ -585,7 +586,7 @@ const SettingsWindow = () => {
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.audio.normalization && app.cfg.audio.advanced ? "inherit" : "none" }}>
+                style={{ display: cfg.audio.normalization && cfg.audio.advanced ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
                   {t("settings.option.audio.dbspl.display")}
                   <br />
@@ -595,14 +596,14 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.audio.dBSPL}
+                      v-model={cfg.audio.dBSPL}
                     />
                   </label>
                 </div>
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.audio.dBSPL ? "inherit" : "none" }}>
+                style={{ display: cfg.audio.dBSPL ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
                   {t("settings.option.audio.dbfs.calibration")}
                   <br />
@@ -612,7 +613,7 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"number"}
-                      v-model={app.cfg.audio.dBSPLcalibration}
+                      v-model={cfg.audio.dBSPLcalibration}
                     />
                   </label>
                 </div>
@@ -677,7 +678,7 @@ const SettingsWindow = () => {
               <label>
                 <select
                   className={"md-select"}
-                  v-model={$root.cfg.visual.directives.windowLayout}>
+                  v-model={cfg.visual.directives.windowLayout}>
                   <option value={"default"}>Maverick</option>
                   <option value={"twopanel"}>Mojave</option>
                 </select>
@@ -690,7 +691,7 @@ const SettingsWindow = () => {
               <label>
                 <select
                   className={"md-select"}
-                  v-model={$root.cfg.visual.overrideDisplayTheme}
+                  v-model={cfg.visual.overrideDisplayTheme}
                   onChange={changeDisplayTheme}>
                   <option value={"system"}>System</option>
                   <option value={"dark"}>Dark</option>
@@ -706,7 +707,7 @@ const SettingsWindow = () => {
                 <select
                   className={"md-select"}
                   onChange={windowBgStyleChange}
-                  v-model={app.cfg.visual.window_background_style}>
+                  v-model={cfg.visual.window_background_style}>
                   <option value={"none"}>{t("settings.header.visual.windowBackgroundStyle.none")}</option>
                   <option value={"artwork"}>{t("settings.header.visual.windowBackgroundStyle.artwork")}</option>
                   <option value={"image"}>{t("settings.header.visual.windowBackgroundStyle.image")}</option>
@@ -716,13 +717,13 @@ const SettingsWindow = () => {
               </label>
             </div>
           </div>
-          {app.cfg.visual.window_background_style === "color" && (
+          {cfg.visual.window_background_style === "color" && (
             <div className={"md-option-line child"}>
               <div className={"md-option-segment"}>{t("settings.option.visual.windowColor")}</div>
               <div className={"md-option-segment_auto"}>
                 <input
                   type={"color"}
-                  v-model={app.cfg.visual.windowColor}
+                  v-model={cfg.visual.windowColor}
                 />
               </div>
             </div>
@@ -732,18 +733,18 @@ const SettingsWindow = () => {
             <div className={"md-option-segment_auto"}>
               <input
                 type={"checkbox"}
-                v-model={app.cfg.visual.customAccentColor}
-                disabled={app.cfg.visual.purplePodcastPlaybackBar}
+                v-model={cfg.visual.customAccentColor}
+                disabled={cfg.visual.purplePodcastPlaybackBar}
               />
             </div>
           </div>
-          {app.cfg.visual.customAccentColor && (
+          {cfg.visual.customAccentColor && (
             <div className={"md-option-line child"}>
               <div className={"md-option-segment"}>{t("settings.option.visual.accentColor")}</div>
               <div className={"md-option-segment_auto"}>
                 <input
                   type={"color"}
-                  v-model={app.cfg.visual.accentColor}
+                  v-model={cfg.visual.accentColor}
                 />
               </div>
             </div>
@@ -753,8 +754,8 @@ const SettingsWindow = () => {
             <div className={"md-option-segment_auto"}>
               <input
                 type={"checkbox"}
-                v-model={app.cfg.visual.purplePodcastPlaybackBar}
-                disabled={app.cfg.visual.customAccentColor}
+                v-model={cfg.visual.purplePodcastPlaybackBar}
+                disabled={cfg.visual.customAccentColor}
               />
             </div>
           </div>
@@ -763,7 +764,7 @@ const SettingsWindow = () => {
             <div className={"md-option-segment_auto"}>
               <input
                 type={"checkbox"}
-                v-model={app.cfg.visual.compactArtistHeader}
+                v-model={cfg.visual.compactArtistHeader}
               />
             </div>
           </div>
@@ -778,7 +779,7 @@ const SettingsWindow = () => {
                 <select
                   className={"md-select"}
                   style={{ width: " 180px" }}
-                  v-model={app.cfg.visual.hw_acceleration}
+                  v-model={cfg.visual.hw_acceleration}
                   onChange={() => promptForRelaunch()}>
                   <option value={"default"}>{t("settings.header.visual.hardwareAcceleration.default")}</option>
                   <option value={"webgpu"}>{t("settings.header.visual.hardwareAcceleration.webGPU")}</option>
@@ -793,7 +794,7 @@ const SettingsWindow = () => {
               <label>
                 <input
                   type={"checkbox"}
-                  v-model={app.cfg.visual.showuserinfo}
+                  v-model={cfg.visual.showuserinfo}
                   onChange={toggleUserInfo}
                 />
               </label>
@@ -820,7 +821,7 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.general.close_button_hide}
+              v-model={cfg.general.close_button_hide}
             />
           </label>
         </div>
@@ -837,7 +838,7 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.visual.nativeTitleBar}
+              v-model={cfg.visual.nativeTitleBar}
               onChange={() => promptForRelaunch()}
             />
           </label>
@@ -845,13 +846,13 @@ const SettingsWindow = () => {
       </div>
       <div
         className={"md-option-line"}
-        style={{ display: app.platform !== "darwin" && !app.cfg.visual.nativeTitleBar ? "inherit" : "none" }}>
+        style={{ display: app.platform !== "darwin" && !cfg.visual.nativeTitleBar ? "inherit" : "none" }}>
         <div className={"md-option-segment"}>{t("settings.option.window.windowControlStyle")}</div>
         <div className={"md-option-segment md-option-segment_auto"}>
           <label>
             <select
               className={"md-select"}
-              v-model={app.cfg.visual.windowControlPosition}>
+              v-model={cfg.visual.windowControlPosition}>
               <option value={"0"}>{t("settings.option.window.windowControlStyle.right")}</option>
               <option value={"1"}>{t("settings.option.window.windowControlStyle.left")}</option>
             </select>
@@ -869,7 +870,7 @@ const SettingsWindow = () => {
             <label>
               <select
                 className={"md-select"}
-                v-model={app.cfg.visual.animated_artwork}>
+                v-model={cfg.visual.animated_artwork}>
                 <option value={"always"}>{t("settings.header.visual.animatedArtwork.always")}</option>
                 <option value={"limited"}>{t("settings.header.visual.animatedArtwork.limited")}</option>
                 <option value={"disabled"}>{t("settings.header.visual.animatedArtwork.disable")}</option>
@@ -877,14 +878,14 @@ const SettingsWindow = () => {
             </label>
           </div>
         </div>
-        {(app.cfg.visual.animated_artwork === "always" || app.cfg.visual.animated_artwork === "limited") && (
+        {(cfg.visual.animated_artwork === "always" || cfg.visual.animated_artwork === "limited") && (
           <div className={"md-option-line"}>
             <div className={"md-option-segment"}>{t("settings.option.visual.animatedArtworkQuality")}</div>
             <div className={"md-option-segment md-option-segment_auto"}>
               <label>
                 <select
                   className={"md-select"}
-                  v-model={app.cfg.visual.animated_artwork_qualityLevel}>
+                  v-model={cfg.visual.animated_artwork_qualityLevel}>
                   <option value={"0"}>{t("settings.header.visual.animatedArtworkQuality.low")}</option>
                   <option value={"1"}>{t("settings.header.visual.animatedArtworkQuality.medium")}</option>
                   <option value={"2"}>{t("settings.header.visual.animatedArtworkQuality.high")}</option>
@@ -901,7 +902,7 @@ const SettingsWindow = () => {
             <label>
               <input
                 type={"checkbox"}
-                v-model={app.cfg.visual.bg_artwork_rotation}
+                v-model={cfg.visual.bg_artwork_rotation}
               />
             </label>
           </div>
@@ -942,19 +943,19 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.lyrics.enable_mxm}
+                      v-model={cfg.lyrics.enable_mxm}
                     />
                   </label>
                 </div>
               </div>
-              {app.cfg.lyrics.enable_mxm && (
+              {cfg.lyrics.enable_mxm && (
                 <div className={"md-option-line"}>
                   <div className={"md-option-segment"}>{t("settings.option.lyrics.enableMusixmatchKaraoke")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
                     <label>
                       <input
                         type={"checkbox"}
-                        v-model={app.cfg.lyrics.mxm_karaoke}
+                        v-model={cfg.lyrics.mxm_karaoke}
                       />
                     </label>
                   </div>
@@ -966,7 +967,7 @@ const SettingsWindow = () => {
                   <label>
                     <select
                       className={"md-select"}
-                      v-model={app.cfg.lyrics.mxm_language}>
+                      v-model={cfg.lyrics.mxm_language}>
                       <option value={"disabled"}>Disabled</option>
                       <option value={"ab"}>Abkhazian</option>
                       <option value={"aa"}>Afar</option>
@@ -1243,7 +1244,7 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.lyrics.enable_yt}
+                      v-model={cfg.lyrics.enable_yt}
                     />
                   </label>
                 </div>
@@ -1254,7 +1255,7 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.lyrics.enable_qq}
+                      v-model={cfg.lyrics.enable_qq}
                     />
                   </label>
                 </div>
@@ -1285,7 +1286,7 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.general.playbackNotifications}
+                      v-model={cfg.general.playbackNotifications}
                     />
                   </label>
                 </div>
@@ -1298,13 +1299,13 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.connectivity.discord_rpc.enabled}
+                      v-model={cfg.connectivity.discord_rpc.enabled}
                     />
                   </label>
                 </div>
               </div>
 
-              <div style={{ display: app.cfg.connectivity.discord_rpc.enabled ? "inherit" : "none" }}>
+              <div style={{ display: cfg.connectivity.discord_rpc.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-line"}>
                   <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.reload")}</div>
                   <div className={"md-option-segment md-option-segment_auto"}>
@@ -1322,7 +1323,7 @@ const SettingsWindow = () => {
                     <label>
                       <select
                         className={"md-select"}
-                        v-model={app.cfg.connectivity.discord_rpc.client}>
+                        v-model={cfg.connectivity.discord_rpc.client}>
                         <option value={"Cider"}>{t("app.name")}</option>
                         <option value={"AppleMusic"}>{t("term.appleMusic")}</option>
                       </select>
@@ -1336,7 +1337,7 @@ const SettingsWindow = () => {
                     <label>
                       <input
                         type={"checkbox"}
-                        v-model={app.cfg.connectivity.discord_rpc.clear_on_pause}
+                        v-model={cfg.connectivity.discord_rpc.clear_on_pause}
                       />
                     </label>
                   </div>
@@ -1348,7 +1349,7 @@ const SettingsWindow = () => {
                     <label>
                       <input
                         type={"checkbox"}
-                        v-model={app.cfg.connectivity.discord_rpc.activity.hide_timestamp}
+                        v-model={cfg.connectivity.discord_rpc.activity.hide_timestamp}
                       />
                     </label>
                   </div>
@@ -1366,7 +1367,7 @@ const SettingsWindow = () => {
                     <label>
                       <input
                         type={"text"}
-                        v-model={app.cfg.connectivity.discord_rpc.activity.details_format}
+                        v-model={cfg.connectivity.discord_rpc.activity.details_format}
                       />
                     </label>
                   </div>
@@ -1383,7 +1384,7 @@ const SettingsWindow = () => {
                     <label>
                       <input
                         type={"text"}
-                        v-model={app.cfg.connectivity.discord_rpc.activity.state_format}
+                        v-model={cfg.connectivity.discord_rpc.activity.state_format}
                       />
                     </label>
                   </div>
@@ -1395,28 +1396,28 @@ const SettingsWindow = () => {
                     <label>
                       <input
                         type={"checkbox"}
-                        v-model={app.cfg.connectivity.discord_rpc.activity.buttons.enabled}
+                        v-model={cfg.connectivity.discord_rpc.activity.buttons.enabled}
                       />
                     </label>
                   </div>
                 </div>
 
-                <div style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.enabled ? "inherit" : "none" }}>
+                <div style={{ display: cfg.connectivity.discord_rpc.activity.buttons.enabled ? "inherit" : "none" }}>
                   <div className={"md-option-line"}>
                     <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.firstButton")}</div>
                     <div className={"md-option-segment md-option-segment_auto"}>
                       <label>
                         <select
                           className={"md-select"}
-                          v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
+                          v-model={cfg.connectivity.discord_rpc.activity.buttons.first}
                           onChange={(e) =>
-                            e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : ""
+                            e.target.value === "disabled" ? (cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : ""
                           }>
-                          {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
+                          {cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                             <option
                               key={option.id}
                               value={"option"}
-                              style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.second !== option ? "inherit" : "none" }}>
+                              style={{ display: cfg.connectivity.discord_rpc.activity.buttons.second !== option ? "inherit" : "none" }}>
                               {t(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                             </option>
                           ))}
@@ -1428,18 +1429,18 @@ const SettingsWindow = () => {
 
                   <div
                     className={"md-option-line"}
-                    style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled" ? "inherit" : "none" }}>
+                    style={{ display: cfg.connectivity.discord_rpc.activity.buttons.first !== "disabled" ? "inherit" : "none" }}>
                     <div className={"md-option-segment"}>{t("settings.option.connectivity.discordRPC.secondButton")}</div>
                     <div className={"md-option-segment md-option-segment_auto"}>
                       <label>
                         <select
                           className={"md-select"}
-                          v-model={app.cfg.connectivity.discord_rpc.activity.buttons.second}>
-                          {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
+                          v-model={cfg.connectivity.discord_rpc.activity.buttons.second}>
+                          {cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                             <option
                               key={option.id}
                               value={"option"}
-                              style={{ display: app.cfg.connectivity.discord_rpc.activity.buttons.first !== option ? "inherit" : "none" }}>
+                              style={{ display: cfg.connectivity.discord_rpc.activity.buttons.first !== option ? "inherit" : "none" }}>
                               {t(`settings.option.connectivity.discordRPC.buttons.${option}`)}
                             </option>
                           ))}
@@ -1458,13 +1459,13 @@ const SettingsWindow = () => {
                   <button
                     className={"md-btn"}
                     id={"lfmConnect"}
-                    onClick={() => (app.cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize())}>
-                    {t(`term.${$root.cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
+                    onClick={() => (cfg.connectivity.lastfm.enabled ? lfmDisconnect() : lfmAuthorize())}>
+                    {t(`term.${cfg.connectivity.lastfm.enabled ? "disconnect" : "connect"}`)}
                     <br />
                     <small>
-                      {app.cfg.connectivity.lastfm.enabled
+                      {cfg.connectivity.lastfm.enabled
                         ? `${t("term.authed")}:
-                                                ${$root.cfg.connectivity.lastfm.secrets.username}`
+                                                ${cfg.connectivity.lastfm.secrets.username}`
                         : ""}
                     </small>
                   </button>
@@ -1503,7 +1504,7 @@ const SettingsWindow = () => {
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
+                style={{ display: cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>{t("settings.option.connectivity.lastfmScrobble.delay")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -1511,14 +1512,14 @@ const SettingsWindow = () => {
                       type={"number"}
                       min={"50"}
                       max={"100"}
-                      v-model={app.cfg.connectivity.lastfm.scrobble_after}
+                      v-model={cfg.connectivity.lastfm.scrobble_after}
                     />
                   </label>
                 </div>
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
+                style={{ display: cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
                   {t("settings.option.connectivity.lastfmScrobble.filterLoop")}
                   <small>{t("settings.option.connectivity.lastfmScrobble.filterLoop.description")}</small>
@@ -1527,27 +1528,27 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.connectivity.lastfm.filter_loop}
+                      v-model={cfg.connectivity.lastfm.filter_loop}
                     />
                   </label>
                 </div>
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
+                style={{ display: cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>{t("settings.option.connectivity.lastfmScrobble.removeFeatured")}</div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.connectivity.lastfm.remove_featured}
+                      v-model={cfg.connectivity.lastfm.remove_featured}
                     />
                   </label>
                 </div>
               </div>
               <div
                 className={"md-option-line"}
-                style={{ display: app.cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
+                style={{ display: cfg.connectivity.lastfm.enabled ? "inherit" : "none" }}>
                 <div className={"md-option-segment"}>
                   {t("settings.option.connectivity.lastfmScrobble.filterTypes")}
                   <small>{t("settings.option.connectivity.lastfmScrobble.filterTypes.description")}</small>
@@ -1556,13 +1557,13 @@ const SettingsWindow = () => {
                   <label>
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.connectivity.lastfm.filter_types["song"]}
+                      v-model={cfg.connectivity.lastfm.filter_types["song"]}
                     />
                     {t("term.songs")}
                     <br />
                     <input
                       type={"checkbox"}
-                      v-model={app.cfg.connectivity.lastfm.filter_types["musicVideo"]}
+                      v-model={cfg.connectivity.lastfm.filter_types["musicVideo"]}
                     />
                     {t("term.musicVideos")}
                   </label>
@@ -1615,7 +1616,7 @@ const SettingsWindow = () => {
               <label>
                 <input
                   type={"checkbox"}
-                  v-model={app.cfg.advanced.disableLogging}
+                  v-model={cfg.advanced.disableLogging}
                 />
               </label>
             </div>
@@ -1653,9 +1654,9 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.advanced.experiments.includes("immersive-preview")}
+              v-model={cfg.advanced.experiments.includes("immersive-preview")}
               onClick={() =>
-                app.cfg.advanced.experiments.includes("immersive-preview")
+                cfg.advanced.experiments.includes("immersive-preview")
                   ? removeExperiment("immersive-preview")
                   : addExperiment("immersive-preview")
               }
@@ -1673,9 +1674,9 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.advanced.experiments.includes("unknown-sources")}
+              v-model={cfg.advanced.experiments.includes("unknown-sources")}
               onClick={() =>
-                app.cfg.advanced.experiments.includes("unknown-sources")
+                cfg.advanced.experiments.includes("unknown-sources")
                   ? removeExperiment("unknown-sources")
                   : addExperiment("unknown-sources")
               }
@@ -1692,9 +1693,9 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.advanced.experiments.includes("cider_mirror")}
+              v-model={cfg.advanced.experiments.includes("cider_mirror")}
               onClick={() =>
-                app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror")
+                cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror")
               }
             />
           </label>
@@ -1710,7 +1711,7 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.advanced.playlistTrackMapping}
+              v-model={cfg.advanced.playlistTrackMapping}
             />
           </label>
         </div>
@@ -1724,9 +1725,9 @@ const SettingsWindow = () => {
           <label>
             <input
               type={"checkbox"}
-              v-model={app.cfg.advanced.experiments.includes("compactui")}
+              v-model={cfg.advanced.experiments.includes("compactui")}
               onClick={() =>
-                app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui")
+                cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui")
               }
               disabled={!!app.getThemeDirective("forceUI")}
             />
@@ -1740,9 +1741,9 @@ const SettingsWindow = () => {
             <input
               type={"checkbox"}
               disabled
-              v-model={app.cfg.advanced.experiments.includes("inline-playlists")}
+              v-model={cfg.advanced.experiments.includes("inline-playlists")}
               onClick={() =>
-                app.cfg.advanced.experiments.includes("inline-playlists")
+                cfg.advanced.experiments.includes("inline-playlists")
                   ? removeExperiment("inline-playlists")
                   : addExperiment("inline-playlists")
               }
@@ -1761,7 +1762,7 @@ const SettingsWindow = () => {
             <label>
               <input
                 type={"checkbox"}
-                v-model={app.cfg.visual.transparent}
+                v-model={cfg.visual.transparent}
                 onChange={() => promptForRelaunch()}
               />
             </label>
@@ -1797,19 +1798,19 @@ const SettingsWindow = () => {
                     <div className="md-option-header">
                         <span>{t('settings.header.connect')}</span>
                     </div>
-                    <div className="settings-option-body">{(app.cfg.connectUser.auth === null) && <div className="md-option-line update-check" >
+                    <div className="settings-option-body">{(cfg.connectUser.auth === null) && <div className="md-option-line update-check" >
                             <div className="md-option-segment">
                                 {t('settings.option.connect.link_account')}
                                 <small>{t('settings.option.connect.link_account.description')}</small>
                                 <br/>
-                                <small>Debug Status: { app.cfg.connectUser }</small>
+                                <small>Debug Status: { cfg.connectUser }</small>
                             </div>
                             <div className="md-option-segment md-option-segment_auto">
                                 <button className="md-btn" id='settings.option.general.updateCider.check' onClick={() =>authCC()}>
                                     {t('term.connect')}
                                 </button>
                             </div>
-                        </div>}{(app.cfg.connectUser.auth !== null) && <div>
+                        </div>}{(cfg.connectUser.auth !== null) && <div>
                             <div className="md-option-line">
                                 <div className="md-option-segment">
                                     {t('settings.option.connect.link_account')}
@@ -1825,8 +1826,8 @@ const SettingsWindow = () => {
                                 </div>
                             </div>
                             <div className="md-option-header" style={{marginLeft: -0.55em}}>
-                                <span>{app.cfg.connectUser.username}</span>
-                                <img src="https://cdn.discordapp.com/avatars/' + app.cfg.connectUser.id + '/' + app.cfg.connectUser.avatar + '.png?size=32' alt="Discord Avatar" />
+                                <span>{cfg.connectUser.username}</span>
+                                <img src="https://cdn.discordapp.com/avatars/' + cfg.connectUser.id + '/' + cfg.connectUser.avatar + '.png?size=32' alt="Discord Avatar" />
                             </div>
 
                             <div className="md-option-line">
@@ -1835,8 +1836,8 @@ const SettingsWindow = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
-                                        <input type="checkbox" a-v-model={app.cfg.connectUser.sync.settings}
-                                               onClick={() =>app.cfg.connectUser.sync.settings = !app.cfg.connectUser.sync.settings}
+                                        <input type="checkbox" a-v-model={cfg.connectUser.sync.settings}
+                                               onClick={() =>cfg.connectUser.sync.settings = !cfg.connectUser.sync.settings}
                                                switch/>
                                     </label>
                                 </div>
@@ -1848,8 +1849,8 @@ const SettingsWindow = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
-                                        <input type="checkbox" disabled a-v-model={app.cfg.connectUser.sync.themes}
-                                               onClick={() =>app.cfg.connectUser.sync.themes = !app.cfg.connectUser.sync.themes}
+                                        <input type="checkbox" disabled a-v-model={cfg.connectUser.sync.themes}
+                                               onClick={() =>cfg.connectUser.sync.themes = !cfg.connectUser.sync.themes}
                                                switch/>
                                     </label>
                                 </div>
@@ -1861,8 +1862,8 @@ const SettingsWindow = () => {
                                 </div>
                                 <div className="md-option-segment md-option-segment_auto">
                                     <label>
-                                        <input type="checkbox" disabled a-v-model={app.cfg.connectUser.sync.plugins}
-                                               onClick={() =>app.cfg.connectUser.sync.plugins = !app.cfg.connectUser.sync.plugins}
+                                        <input type="checkbox" disabled a-v-model={cfg.connectUser.sync.plugins}
+                                               onClick={() =>cfg.connectUser.sync.plugins = !cfg.connectUser.sync.plugins}
                                                switch/>
                                     </label>
                                 </div>

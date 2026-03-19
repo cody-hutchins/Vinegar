@@ -359,9 +359,10 @@ const MusicKitInterop = {
 contextBridge.exposeInMainWorld("electronAPI", {
   send: (channel: string, ...data: any) => ipcRenderer.send(channel, data),
   sendSync: (channel: string, ...data: any) => ipcRenderer.sendSync(channel, data),
-  on: (callback: (...args: any[]) => void) => ipcRenderer.on("update-status", (event, ...args) => callback(...args)),
+  on: (chanel: string, callback: (...args: any[]) => void) => ipcRenderer.on(chanel, (event, ...args) => callback(...args)),
   invoke: (eventName: string, ...data: any[]) => ipcRenderer.invoke(eventName, data),
-  once: (channel: string, listener: () => void) => ipcRenderer.once(channel, listener),
+  once: (channel: string, listener: (event: Electron.IpcRendererEvent) => void) => ipcRenderer.once(channel, listener),
+  getStore: () => ipcRenderer.invoke("getStoreValue"),
 } as IElectronAPI);
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

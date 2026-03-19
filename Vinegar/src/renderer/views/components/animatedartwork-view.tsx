@@ -1,12 +1,13 @@
 import { useEffect } from "react";
+import { useCfgStore } from "../../store/cfg.js";
 
 const AnimatedArtworkView = ({ video, priority = false }: { video: string; priority: boolean }) => {
-  const app = this.$root;
+  const { cfg } = useCfgStore();
   let hls = null;
   const mounted = () => {
-    if (!priority && app.cfg.visual.animated_artwork === "limited") {
+    if (!priority && cfg.visual.animated_artwork === "limited") {
       return;
-    } else if (app.cfg.visual.animated_artwork === "disabled") {
+    } else if (cfg.visual.animated_artwork === "disabled") {
       return;
     }
     if (video) {
@@ -40,7 +41,7 @@ const AnimatedArtworkView = ({ video, priority = false }: { video: string; prior
           hls.attachMedia(this.$refs.video);
           hls.loadSource(video, p);
           const u = hls;
-          let quality = app.cfg.visual.animated_artwork_qualityLevel;
+          let quality = cfg.visual.animated_artwork_qualityLevel;
           setTimeout(() => {
             const levelsnum = u.levels.map((level) => {
               return level.width;

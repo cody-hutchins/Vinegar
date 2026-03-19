@@ -2,9 +2,11 @@ import { Col, Row } from "react-bootstrap";
 import { CiderAudio } from "../../audio/audio";
 import { notyf } from "../..";
 import { useTranslation } from "react-i18next";
+import { useCfgStore } from "../../store/cfg.js";
 
-const EQView = ({ src, url }: { src: string; url: string }) => {
+const EQView = ({ src, url }: { src?: string; url?: string }) => {
   const { t } = useTranslation();
+  const { cfg } = useCfgStore();
   const app = this.$root;
   const eqPreset = () => ({
     preset: uuidv4(),
@@ -144,7 +146,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       },
     };
 
-    if (!this.$root.cfg.audio.equalizer.userGenerated) {
+    if (!cfg.audio.equalizer.userGenerated) {
       delete menu.items.delete;
     }
 
@@ -174,7 +176,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   };
 
   const deletePreset = () => {
-    const presets = this.$root.cfg.audio.equalizer.presets;
+    const presets = cfg.audio.equalizer.presets;
     app.confirm(t("term.deletepreset.warn"), (result) => {
       if (result) {
         changePreset("default");
@@ -191,11 +193,11 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   };
 
   const changeVibrantBass = () => {
-    if (app.cfg.audio.equalizer.vibrantBass !== "0") {
+    if (cfg.audio.equalizer.vibrantBass !== "0") {
       try {
         for (let i = 0; i < 21; i++) {
           CiderAudio.audioNodes.vibrantbassNode[i].gain.value =
-            app.cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (app.cfg.audio.equalizer.vibrantBass / 10);
+            cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (cfg.audio.equalizer.vibrantBass / 10);
         }
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {
@@ -207,10 +209,10 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     }
   };
   const changeMix = () => {
-    if (Math.max(...app.cfg.audio.equalizer.gain) !== 0) {
+    if (Math.max(...cfg.audio.equalizer.gain) !== 0) {
       try {
         for (let i = 0; i < 10; i++) {
-          CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+          CiderAudio.audioNodes.audioBands[i].gain.value = cfg.audio.equalizer.gain[i] * cfg.audio.equalizer.mix;
         }
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {
@@ -220,9 +222,9 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     }
   };
   const changeGain = (i) => {
-    if (Math.max(...app.cfg.audio.equalizer.gain) !== 0) {
+    if (Math.max(...cfg.audio.equalizer.gain) !== 0) {
       try {
-        CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+        CiderAudio.audioNodes.audioBands[i].gain.value = cfg.audio.equalizer.gain[i] * cfg.audio.equalizer.mix;
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {
         console.log(e);
@@ -234,11 +236,11 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   };
 
   const changeFreq = (i) => {
-    CiderAudio.audioNodes.audioBands[i].frequency.value = app.cfg.audio.equalizer.frequencies[i];
+    CiderAudio.audioNodes.audioBands[i].frequency.value = cfg.audio.equalizer.frequencies[i];
   };
 
   const changeQ = (i) => {
-    CiderAudio.audioNodes.audioBands[i].Q.value = app.cfg.audio.equalizer.Q[i];
+    CiderAudio.audioNodes.audioBands[i].Q.value = cfg.audio.equalizer.Q[i];
   };
 
   const resetGain = () => {
@@ -249,7 +251,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       mix: 1,
       vibrantBass: 0,
     });
-    if (app.cfg.audio.equalizer.userGenerated) {
+    if (cfg.audio.equalizer.userGenerated) {
       saveSelectedPreset();
     }
   };
@@ -257,7 +259,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
   const addPreset = () => {
     app.prompt(t("term.newpreset.name"), (res) => {
       if (res) {
-        const eqSettings = Clone(app.cfg.audio.equalizer);
+        const eqSettings = Clone(cfg.audio.equalizer);
         const newPreset = new eqPreset();
         newPreset.name = res;
         newPreset.frequencies = eqSettings.frequencies;
@@ -265,7 +267,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         newPreset.Q = eqSettings.Q;
         newPreset.mix = eqSettings.mix;
         newPreset.vibrantBass = eqSettings.vibrantBass;
-        app.cfg.audio.equalizer.presets.push(newPreset);
+        cfg.audio.equalizer.presets.push(newPreset);
         notyf.success(t("term.addedpreset"));
         changePreset(newPreset.preset);
       }
@@ -274,18 +276,18 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
 
   const saveSelectedPreset = () => {
     // TODO ERROR Save the current settings to the selected preset
-    //let preset = app.cfg.audio.equalizer.presets[app.cfg.audio.equalizer.preset]
+    //let preset = cfg.audio.equalizer.presets[cfg.audio.equalizer.preset]
     // find the preset by its id (preset)
-    const preset = app.cfg.audio.equalizer.presets.find((p) => p.preset === app.cfg.audio.equalizer.preset);
-    preset.frequencies = app.cfg.audio.equalizer.frequencies;
-    preset.gain = app.cfg.audio.equalizer.gain;
-    preset.Q = app.cfg.audio.equalizer.Q;
-    preset.mix = app.cfg.audio.equalizer.mix;
-    preset.vibrantBass = app.cfg.audio.equalizer.vibrantBass;
+    const preset = cfg.audio.equalizer.presets.find((p) => p.preset === cfg.audio.equalizer.preset);
+    preset.frequencies = cfg.audio.equalizer.frequencies;
+    preset.gain = cfg.audio.equalizer.gain;
+    preset.Q = cfg.audio.equalizer.Q;
+    preset.mix = cfg.audio.equalizer.mix;
+    preset.vibrantBass = cfg.audio.equalizer.vibrantBass;
     notyf.success("Saved Preset");
   };
   const exportPreset = () => {
-    const preset = app.cfg.audio.equalizer.presets.find((p) => p.preset === app.cfg.audio.equalizer.preset);
+    const preset = cfg.audio.equalizer.presets.find((p) => p.preset === cfg.audio.equalizer.preset);
     this.$root.copyToClipboard(btoa(JSON.stringify(preset)));
   };
   const importPreset = () => {
@@ -294,7 +296,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
         const preset = JSON.parse(atob(res));
         if (preset.frequencies && preset.gain && preset.Q && preset.mix && preset.vibrantBass) {
           // applyPreset(preset)
-          app.cfg.audio.equalizer.presets.push(preset);
+          cfg.audio.equalizer.presets.push(preset);
           notyf.success(`${preset.name} has been imported.`);
         } else {
           notyf.error("Invalid Preset");
@@ -303,24 +305,24 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     });
   };
   const applyPreset = (preset) => {
-    Object.assign(this.$root.cfg.audio.equalizer, preset);
+    Object.assign(cfg.audio.equalizer, preset);
     changeVibrantBass();
     for (let i = 0; i < 10; i++) {
       try {
-        CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+        CiderAudio.audioNodes.audioBands[i].gain.value = cfg.audio.equalizer.gain[i] * cfg.audio.equalizer.mix;
       } catch (e) {
         console.log(e);
         CiderAudio.hierarchical_loading();
-        CiderAudio.audioNodes.audioBands[i].gain.value = app.cfg.audio.equalizer.gain[i] * app.cfg.audio.equalizer.mix;
+        CiderAudio.audioNodes.audioBands[i].gain.value = cfg.audio.equalizer.gain[i] * cfg.audio.equalizer.mix;
       }
 
-      CiderAudio.audioNodes.audioBands[i].frequency.value = app.cfg.audio.equalizer.frequencies[i];
-      CiderAudio.audioNodes.audioBands[i].Q.value = app.cfg.audio.equalizer.Q[i];
+      CiderAudio.audioNodes.audioBands[i].frequency.value = cfg.audio.equalizer.frequencies[i];
+      CiderAudio.audioNodes.audioBands[i].Q.value = cfg.audio.equalizer.Q[i];
     }
     CiderAudio.intelliGainComp_n0_0();
   };
   const changePreset = (id) => {
-    const userPresets = app.cfg.audio.equalizer.presets;
+    const userPresets = cfg.audio.equalizer.presets;
     const defaultPresets = Clone(defaultPresets);
 
     const presets = defaultPresets.concat(userPresets);
@@ -359,10 +361,10 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
               <select
                 className={"md-select"}
                 style={{ width: "220px", textAlign: "center", marginRight: "245px" }}
-                v-model={$root.cfg.audio.equalizer.preset}
-                onChange={() => changePreset($root.cfg.audio.equalizer.preset)}>
+                v-model={cfg.audio.equalizer.preset}
+                onChange={() => changePreset(cfg.audio.equalizer.preset)}>
                 <optgroup label={t("term.userPresets")}>
-                  {$root.cfg.audio.equalizer.presets.map((preset) => (
+                  {cfg.audio.equalizer.presets.map((preset) => (
                     <option
                       key={preset.id}
                       value={preset.preset}>
@@ -386,7 +388,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
             {/* BANDS = [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000];  */}
             <div className={"inputs-container"}>
               <div className={"input-container mini"}>
-                {$root.cfg.audio.equalizer.vibrantBass}
+                {cfg.audio.equalizer.vibrantBass}
                 <input
                   tabIndex={0}
                   type={"range"}
@@ -395,13 +397,13 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-15"}
                   max={"15"}
                   step={"1"}
-                  v-model={$root.cfg.audio.equalizer.vibrantBass}
+                  v-model={cfg.audio.equalizer.vibrantBass}
                   onChange={() => changeVibrantBass()}
                 />
                 Vibrant Bass
               </div>
               <div className={"input-container mini"}>
-                {$root.cfg.audio.equalizer.mix}
+                {cfg.audio.equalizer.mix}
                 <input
                   tabIndex={0}
                   type={"range"}
@@ -410,7 +412,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"2"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.mix}
+                  v-model={cfg.audio.equalizer.mix}
                   onChange={() => changeMix()}
                 />
                 Mix
@@ -437,7 +439,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[0]}
+                  v-model={cfg.audio.equalizer.gain[0]}
                   onChange={() => changeGain(0)}
                 />
                 <input
@@ -448,7 +450,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[0]}
+                  v-model={cfg.audio.equalizer.gain[0]}
                   onChange={() => changeGain(0)}
                 />
                 <input
@@ -458,7 +460,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"22"}
                   max={"44"}
                   step={"2"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[0]}
+                  v-model={cfg.audio.equalizer.frequencies[0]}
                   onChange={() => changeFreq(0)}
                 />
                 <input
@@ -468,7 +470,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[0]}
+                  v-model={cfg.audio.equalizer.Q[0]}
                   onChange={() => changeQ(0)}
                 />
               </div>
@@ -481,7 +483,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[1]}
+                  v-model={cfg.audio.equalizer.gain[1]}
                   onChange={() => changeGain(1)}
                 />
                 <input
@@ -492,7 +494,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[1]}
+                  v-model={cfg.audio.equalizer.gain[1]}
                   onChange={() => changeGain(1)}
                 />
                 <input
@@ -502,7 +504,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"44"}
                   max={"88"}
                   step={"4"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[1]}
+                  v-model={cfg.audio.equalizer.frequencies[1]}
                   onChange={() => changeFreq(1)}
                 />
                 <input
@@ -512,7 +514,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[1]}
+                  v-model={cfg.audio.equalizer.Q[1]}
                   onChange={() => changeQ(1)}
                 />
               </div>
@@ -525,7 +527,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[2]}
+                  v-model={cfg.audio.equalizer.gain[2]}
                   onChange={() => changeGain(2)}
                 />
                 <input
@@ -536,7 +538,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[2]}
+                  v-model={cfg.audio.equalizer.gain[2]}
                   onChange={() => changeGain(2)}
                 />
                 <input
@@ -546,7 +548,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"88"}
                   max={"177"}
                   step={"8"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[2]}
+                  v-model={cfg.audio.equalizer.frequencies[2]}
                   onChange={() => changeFreq(2)}
                 />
                 <input
@@ -556,7 +558,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[2]}
+                  v-model={cfg.audio.equalizer.Q[2]}
                   onChange={() => changeQ(2)}
                 />
               </div>
@@ -569,7 +571,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[3]}
+                  v-model={cfg.audio.equalizer.gain[3]}
                   onChange={() => changeGain(3)}
                 />
                 <input
@@ -580,7 +582,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[3]}
+                  v-model={cfg.audio.equalizer.gain[3]}
                   onChange={() => changeGain(3)}
                 />
                 <input
@@ -590,7 +592,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"177"}
                   max={"355"}
                   step={"16"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[3]}
+                  v-model={cfg.audio.equalizer.frequencies[3]}
                   onChange={() => changeFreq(3)}
                 />
                 <input
@@ -600,7 +602,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[3]}
+                  v-model={cfg.audio.equalizer.Q[3]}
                   onChange={() => changeQ(3)}
                 />
               </div>
@@ -613,7 +615,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[4]}
+                  v-model={cfg.audio.equalizer.gain[4]}
                   onChange={() => changeGain(4)}
                 />
                 <input
@@ -624,7 +626,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[4]}
+                  v-model={cfg.audio.equalizer.gain[4]}
                   onChange={() => changeGain(4)}
                 />
                 <input
@@ -634,7 +636,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"355"}
                   max={"710"}
                   step={"32"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[4]}
+                  v-model={cfg.audio.equalizer.frequencies[4]}
                   onChange={() => changeFreq(4)}
                 />
                 <input
@@ -644,7 +646,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[4]}
+                  v-model={cfg.audio.equalizer.Q[4]}
                   onChange={() => changeQ(4)}
                 />
               </div>
@@ -657,7 +659,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[5]}
+                  v-model={cfg.audio.equalizer.gain[5]}
                   onChange={() => changeGain(5)}
                 />
                 <input
@@ -668,7 +670,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[5]}
+                  v-model={cfg.audio.equalizer.gain[5]}
                   onChange={() => changeGain(5)}
                 />
                 <input
@@ -678,7 +680,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"710"}
                   max={"1420"}
                   step={"64"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[5]}
+                  v-model={cfg.audio.equalizer.frequencies[5]}
                   onChange={() => changeFreq(5)}
                 />
                 <input
@@ -688,7 +690,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[5]}
+                  v-model={cfg.audio.equalizer.Q[5]}
                   onChange={() => changeQ(5)}
                 />
               </div>
@@ -701,7 +703,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[6]}
+                  v-model={cfg.audio.equalizer.gain[6]}
                   onChange={() => changeGain(6)}
                 />
                 <input
@@ -712,7 +714,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[6]}
+                  v-model={cfg.audio.equalizer.gain[6]}
                   onChange={() => changeGain(6)}
                 />
                 <input
@@ -722,7 +724,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"1420"}
                   max={"2840"}
                   step={"128"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[6]}
+                  v-model={cfg.audio.equalizer.frequencies[6]}
                   onChange={() => changeFreq(6)}
                 />
                 <input
@@ -732,7 +734,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[6]}
+                  v-model={cfg.audio.equalizer.Q[6]}
                   onChange={() => changeQ(6)}
                 />
               </div>
@@ -745,7 +747,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[7]}
+                  v-model={cfg.audio.equalizer.gain[7]}
                   onChange={() => changeGain(7)}
                 />
                 <input
@@ -756,7 +758,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[7]}
+                  v-model={cfg.audio.equalizer.gain[7]}
                   onChange={() => changeGain(7)}
                 />
                 <input
@@ -766,7 +768,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"2840"}
                   max={"5680"}
                   step={"256"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[7]}
+                  v-model={cfg.audio.equalizer.frequencies[7]}
                   onChange={() => changeFreq(7)}
                 />
                 <input
@@ -776,7 +778,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[7]}
+                  v-model={cfg.audio.equalizer.Q[7]}
                   onChange={() => changeQ(7)}
                 />
               </div>
@@ -789,7 +791,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[8]}
+                  v-model={cfg.audio.equalizer.gain[8]}
                   onChange={() => changeGain(8)}
                 />
                 <input
@@ -800,7 +802,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[8]}
+                  v-model={cfg.audio.equalizer.gain[8]}
                   onChange={() => changeGain(8)}
                 />
                 <input
@@ -810,7 +812,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"5680"}
                   max={"11360"}
                   step={"512"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[8]}
+                  v-model={cfg.audio.equalizer.frequencies[8]}
                   onChange={() => changeFreq(8)}
                 />
                 <input
@@ -820,7 +822,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.Q[8]}
+                  v-model={cfg.audio.equalizer.Q[8]}
                   onChange={() => changeQ(8)}
                 />
               </div>
@@ -833,7 +835,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[9]}
+                  v-model={cfg.audio.equalizer.gain[9]}
                   onChange={() => changeGain(9)}
                 />
                 <input
@@ -844,7 +846,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"-12"}
                   max={"12"}
                   step={0.1}
-                  v-model={$root.cfg.audio.equalizer.gain[9]}
+                  v-model={cfg.audio.equalizer.gain[9]}
                   onChange={() => changeGain(9)}
                 />
                 <input
@@ -854,7 +856,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"11360"}
                   max={"22720"}
                   step={"1024"}
-                  v-model={$root.cfg.audio.equalizer.frequencies[9]}
+                  v-model={cfg.audio.equalizer.frequencies[9]}
                   onChange={() => changeFreq(9)}
                 />
                 <input
@@ -864,7 +866,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
                   min={"0"}
                   max={"5"}
                   step={""}
-                  v-model={$root.cfg.audio.equalizer.Q[9]}
+                  v-model={cfg.audio.equalizer.Q[9]}
                   onChange={() => changeQ(9)}
                 />
               </div>
