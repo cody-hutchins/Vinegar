@@ -56,7 +56,6 @@ export default class DiscordRPC {
    * Set up ipc listeners for the plugin
    */
   onRendererReady() {
-    const self = this;
     ipcMain.on("discordrpc:updateImage", async (_event, artworkUrl) => {
       if (this._utils.getStoreValue("general.privateEnabled")) return;
 
@@ -68,8 +67,8 @@ export default class DiscordRPC {
         },
       }).then(async (res) => {
         const json = (await res.json()) as { imageUrl: string };
-        self._activityCache.largeImageKey = "https://images.weserv.nl/?url=" + json.imageUrl + "&w=1024&h=1024&output=jpg";
-        self._client.setActivity(self._activityCache);
+        this._activityCache.largeImageKey = "https://images.weserv.nl/?url=" + json.imageUrl + "&w=1024&h=1024&output=jpg";
+        this._client.setActivity(this._activityCache);
       });
     });
     ipcMain.on("discordrpc:reload", (_event, configUpdate = null) => {

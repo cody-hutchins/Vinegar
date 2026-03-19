@@ -48,7 +48,7 @@ const MediaItemMVViewSP = ({ item, imagesize, badge }: { item: MusicKit.MediaIte
                         : ""
                     : ""
                 }
-                size={"516"}
+                imagesize={"516"}
                 width={"900"}
               />
             </div>

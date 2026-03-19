@@ -19,10 +19,9 @@ export class CiderReceiver extends Application {
 
     this.media.on("status", onstatus);
 
-    const self = this;
 
     function onstatus(status: string) {
-      self.emit("status", status);
+      this.emit("status", status);
     }
   }
 

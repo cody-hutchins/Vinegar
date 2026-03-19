@@ -24,7 +24,7 @@ const MediaItemMVView = ({ item, imagesize }: { item: MusicKit.MediaItem; images
                       : ""
                   : ""
               }
-              size={imagesize ?? 300}
+              imagesize={imagesize ?? 300}
             />
           </div>
           <div

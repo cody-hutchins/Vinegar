@@ -251,7 +251,7 @@ const Artist = ({ data }: { data: object }) => {
               <MediaItemArtwork
                 shadow={"none"}
                 url={hasHero()}
-                size={"2048"}
+                imagesize={"2048"}
               />
             </div>
           )}

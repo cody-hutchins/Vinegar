@@ -218,19 +218,19 @@ export const ChromeBottom = () => {
                     step={0.01}
                     min={"0"}
                     style={progressBarStyle()}
-                    onInput={() => {
-                      playerLCD.desiredDuration = $event.target.value;
+                    onInput={(e) => {
+                      playerLCD.desiredDuration = e.target.value;
                       playerLCD.userInteraction = true;
                     }}
-                    onMouseUp={() => {
-                      mk.seekToTime($event.target.value);
+                    onMouseUp={(e) => {
+                      mk.seekToTime(e.target.value);
                       setTimeout(() => {
                         playerLCD.desiredDuration = 0;
                         playerLCD.userInteraction = false;
                       }, 1000);
                     }}
-                    onTouchEnd={() => {
-                      mk.seekToTime($event.target.value);
+                    onTouchEnd={(e) => {
+                      mk.seekToTime(e.target.value);
                       setTimeout(() => {
                         playerLCD.desiredDuration = 0;
                         playerLCD.userInteraction = false;
@@ -243,7 +243,7 @@ export const ChromeBottom = () => {
                 {!mk.nowPlayingItem?.isLiveRadioStation ? (
                   <Col sm={"auto"}>{convertTime(mk.currentPlaybackDuration)}</Col>
                 ) : (
-                  <Col sm={"auto"}>{getLz("term.live")}</Col>
+                  <Col sm={"auto"}>{t("term.live")}</Col>
                 )}
               </Row>
             )}

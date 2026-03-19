@@ -3,11 +3,12 @@ import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { Clone } from "../../main/helpers.js";
 
 export const PodcastEpisode = ({ item, isSelected }: { item: object; isSelected: boolean }) => {
   function msToMinSec(ms: number) {
     const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    const seconds = parseInt(((ms % 60000) / 1000).toFixed(0));
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
   return (
@@ -31,7 +32,7 @@ export const PodcastTab = ({ item, isSelected }: { item: object; isSelected: boo
       <div className={"artwork"}>
         <MediaItemArtwork
           url={item.attributes.artwork.url}
-          size={"50"}
+          imagesize={"50"}
           type={"podcast"}
         />
       </div>
@@ -107,7 +108,7 @@ export const Podcasts = () => {
 
   function msToMinSec(ms) {
     const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    const seconds = parseInt(((ms % 60000) / 1000).toFixed(0));
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
 
@@ -230,7 +231,7 @@ export const Podcasts = () => {
                       <MediaItemArtwork
                         shadow={"large"}
                         url={podcastSelected.attributes.artwork.url}
-                        size={"300"}
+                        imagesize={"300"}
                       />
                     </div>
                   </Col>
@@ -285,7 +286,7 @@ export const Podcasts = () => {
                     <MediaItemArtwork
                       shadow={"large"}
                       url={selected.attributes.artwork.url}
-                      size={"300"}
+                      imagesize={"300"}
                     />
                   </div>
                   <h3 className={"podcast-header"}>{selected.attributes.name}</h3>
@@ -329,7 +330,7 @@ export const Podcasts = () => {
           <div className={"artwork"}>
             <MediaItemArtwork
               url={item.attributes.artwork.url}
-              size={"50"}
+              imagesize={"50"}
               type={"podcast"}
             />
           </div>

@@ -173,7 +173,7 @@ const FullscreenView = ({
                 className={classNames("artwork", { playing: $root.mk.isPlaying })}
                 onClick={() => app.fullscreen(false)}>
                 <MediaItemArtwork
-                  size={"600"}
+                  imagesize={"600"}
                   video={"video"}
                   videoPriority={true}
                   url={(image ?? "").replace("{w}", "600").replace("{h}", "600")}
@@ -230,12 +230,12 @@ const FullscreenView = ({
                           step={0.01}
                           min={"0"}
                           style={app.progressBarStyle()}
-                          onInput={() => {
-                            app.playerLCD.desiredDuration = $event.target.value;
+                          onInput={(e) => {
+                            app.playerLCD.desiredDuration = e.target.value;
                             app.playerLCD.userInteraction = true;
                           }}
-                          onMouseUp={() => {
-                            app.mk.seekToTime($event.target.value);
+                          onMouseUp={(e) => {
+                            app.mk.seekToTime(e.target.value);
                             app.playerLCD.desiredDuration = 0;
                             app.playerLCD.userInteraction = false;
                           }}

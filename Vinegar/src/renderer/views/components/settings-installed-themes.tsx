@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export const StylestackEditor = ({ themes }: { themes: object[] }) => {
-  const { t } = useTranslation();
   const selected = null;
   const newTheme = null;
   let themeList = [];
@@ -100,6 +99,7 @@ export const StylestackEditor = ({ themes }: { themes: object[] }) => {
 };
 
 export const InstalledThemes = () => {
+  const { t } = useTranslation();
   let repos = [];
   let openRepo = {
     id: -1,
@@ -306,7 +306,9 @@ export const InstalledThemes = () => {
                 <div key={theme.id}>
                   <li
                     onClick={() => addStyle(theme.file)}
-                    contextMenu={"contextMenu($event, theme)"}
+                    onContextMenu={(e) => {
+                      contextMenu(e, theme);
+                    }}
                     className={classNames("list-group-item list-group-item-dark", {
                       applied: $root.cfg.visual.styles.includes(theme.file),
                     })}>
@@ -348,7 +350,9 @@ export const InstalledThemes = () => {
                     theme.pack.amp((packEntry) => (
                       <li
                         onClick={() => addStyle(packEntry.file)}
-                        contextMenu={"contextMenu($event, theme)"}
+                        onContextMenu={(e) => {
+                          contextMenu(e, theme);
+                        }}
                         className={classNames("list-group-item list-group-item-dark addon", {
                           applied: $root.cfg.visual.styles.includes(packEntry.file),
                         })}>

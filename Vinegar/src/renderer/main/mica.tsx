@@ -14,12 +14,12 @@ async function spawnMica() {
   micaDiv.style.left = "0";
   micaDiv.style.right = "0";
   micaDiv.style.bottom = "0";
-  micaDiv.style.zIndex = -1;
+  micaDiv.style.zIndex = "-1";
 
-  let lastScreenX;
-  let lastScreenY;
-  let lastScreenWidth;
-  let lastScreenHeight;
+  let lastScreenX: number;
+  let lastScreenY: number;
+  let lastScreenWidth: number;
+  let lastScreenHeight: number;
 
   let imgSrc = "";
   let micaCache = await CiderCache.getCache("mica-cache");
@@ -43,7 +43,7 @@ async function spawnMica() {
   micaDiv.style.backgroundImage = `url(${imgSrc.data})`;
   document.body.appendChild(micaDiv);
 
-  function onScreenMove(cb) {
+  function onScreenMove(cb: () => void) {
     function detectScreenMove() {
       if (lastScreenY !== window.screenY || lastScreenX !== window.screenX) {
         lastScreenY = window.screenY;
@@ -56,14 +56,10 @@ async function spawnMica() {
         lastScreenHeight = window.innerHeight;
         cb();
       }
-      if (true) {
-        requestAnimationFrame(detectScreenMove);
-      }
-    }
-
-    if (true) {
       requestAnimationFrame(detectScreenMove);
     }
+
+    requestAnimationFrame(detectScreenMove);
   }
 
   onScreenMove(function () {

@@ -63,7 +63,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                     {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
                       <MediaItemArtwork
                         url={recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork?.url}
-                        size={"100"}
+                        imagesize={"100"}
                       />
                     )}
                   </div>

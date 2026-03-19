@@ -1312,8 +1312,8 @@ export class BrowserWindow {
         const t = e.length;
         const sampleRate = 96.0;
         const outputSampleRate = 48.0;
-        let s = 0,
-          o = sampleRate / outputSampleRate,
+        let s = 0;
+        const o = sampleRate / outputSampleRate,
           u = Math.ceil((t * outputSampleRate) / sampleRate),
           a = new Int16Array(u);
         for (let i = 0; i < u; i++) {

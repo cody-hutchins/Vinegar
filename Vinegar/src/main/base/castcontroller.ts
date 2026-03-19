@@ -6,9 +6,8 @@ export class CiderCastController extends RequestResponseController {
   constructor(client: string, sourceId: string, destinationId: string) {
     super(client, sourceId, destinationId, "urn:x-cast:com.ciderapp.customdata");
     this.once("close", onclose);
-    const self = this;
     function onclose() {
-      self.stop();
+      this.stop();
     }
   }
 

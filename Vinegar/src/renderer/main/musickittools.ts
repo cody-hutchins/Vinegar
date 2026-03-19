@@ -7,11 +7,11 @@ const MusicKitTools = {
       GETBody: getBody,
     });
   },
-  async v3Continuous({ href, options = {}, reqOptions = {}, onProgress = () => {}, onError = () => {}, onSuccess = () => {} } = {}) {
+  async v3Continuous({ href, options = {}, reqOptions = {}, onProgress = (_) => {}, onError = (_) => {}, onSuccess = (_) => {} } = {}) {
     let returnData = [];
 
     async function sendReq(href, options) {
-      const response = await app.mk.api.v3.music(href, options).catch((error) => onError);
+      const response = await app.mk.api.v3.music(href, options).catch(onError);
 
       returnData = returnData.concat(response.data.data);
       if (response.data.next) {

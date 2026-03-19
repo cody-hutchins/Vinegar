@@ -512,7 +512,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                                     : ""
                                 : ""
                             }
-                            size={"260"}
+                            imagesize={"260"}
                           />
                         </div>
                       </Col>
@@ -798,7 +798,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
                                   key={badge.id}>
                                   <MediaItemArtwork
                                     url={badge.attributes.artwork.url}
-                                    size={"60"}
+                                    imagesize={"60"}
                                   />
                                 </div>
                               ))}

@@ -211,7 +211,7 @@ const LibraryArtistItem = ({
                 <div className={"artwork"}>
                   <MediaItemArtwork
                     url={getArtwork()}
-                    size={"50"}
+                    imagesize={"50"}
                     type={item.type}
                   />
                 </div>

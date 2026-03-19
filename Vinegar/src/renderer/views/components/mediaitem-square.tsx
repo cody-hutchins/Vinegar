@@ -604,7 +604,7 @@ const MediaItemSquare = ({
                         : ""
                     : ""
                 }
-                size={imagesize}
+                imagesize={imagesize}
                 upscaling={true}
                 shadow={"subtle"}
                 bgcolor={getBgColor()}
@@ -635,7 +635,7 @@ const MediaItemSquare = ({
                   key={badge.id}>
                   <MediaItemArtwork
                     url={badge.attributes.artwork ? badge.attributes.artwork.url : ""}
-                    size={"32"}
+                    imagesize={"32"}
                   />
                 </div>
               ))}

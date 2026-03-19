@@ -1,5 +1,4 @@
 const PluginRenderer = () => {
-  const app = this.$root;
   function getPage() {
     return this.$root.pluginPages.page;
   }

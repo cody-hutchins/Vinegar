@@ -14,9 +14,6 @@ const OOBE = () => {
     screen = "signin";
     capiInit();
   }
-  function getLz(...args: any[]) {
-    return t(args);
-  }
   function getLanguages() {
     const langs = this.$root.lzListing;
     const categories = {
@@ -42,9 +39,9 @@ const OOBE = () => {
         {/*<transition name="">*/}
         {screen === "before_we_start" && (
           <div className={"oobe-view"}>
-            <div className={"oobe-header"}>{getLz("oobe.amupsell.title")}</div>
+            <div className={"oobe-header"}>{t("oobe.amupsell.title")}</div>
             <div className={"oobe-body text"}>
-              {getLz("oobe.amupsell.text")}
+              {t("oobe.amupsell.text")}
 
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>{t("term.language")}</div>
@@ -80,7 +77,7 @@ const OOBE = () => {
                 <div
                   className={"md-btn md-btn-primary"}
                   onClick={() => (screen = "welcome")}>
-                  {getLz("oobe.next")}
+                  {t("oobe.next")}
                 </div>
               </div>
             </div>
@@ -92,19 +89,19 @@ const OOBE = () => {
         {/*<transition name="">*/}
         {screen === "welcome" && (
           <div className={"oobe-view"}>
-            <div className={"oobe-header"}>{getLz("oobe.intro.title")}</div>
-            <div className={"oobe-body text"}>{getLz("oobe.intro.text")}</div>
+            <div className={"oobe-header"}>{t("oobe.intro.title")}</div>
+            <div className={"oobe-body text"}>{t("oobe.intro.text")}</div>
             <div className={"oobe-footer"}>
               <div className={"btn-group"}>
                 <div
                   className={"md-btn"}
                   onClick={() => (screen = "before_we_start")}>
-                  {getLz("oobe.previous")}
+                  {t("oobe.previous")}
                 </div>
                 <div
                   className={"md-btn md-btn-primary"}
                   onClick={() => (screen = "visual")}>
-                  {getLz("oobe.next")}
+                  {t("oobe.next")}
                 </div>
               </div>
             </div>
@@ -116,19 +113,19 @@ const OOBE = () => {
         {/*<transition name="">*/}
         {screen === "general" && (
           <div className={"oobe-view"}>
-            <div className={"oobe-header"}>{getLz("oobe.general.title")}</div>
+            <div className={"oobe-header"}>{t("oobe.general.title")}</div>
             <div className={"oobe-body text"} />
             <div className={"oobe-footer"}>
               <div className={"btn-group"}>
                 <div
                   className={"md-btn"}
                   onClick={() => (screen = "welcome")}>
-                  {getLz("oobe.previous")}
+                  {t("oobe.previous")}
                 </div>
                 <div
                   className={"md-btn md-btn-primary"}
                   onClick={() => (screen = "visual")}>
-                  {getLz("oobe.next")}
+                  {t("oobe.next")}
                 </div>
               </div>
             </div>
@@ -140,7 +137,7 @@ const OOBE = () => {
         {/*<transition name="">*/}
         {screen === "visual" && (
           <div className={"oobe-view"}>
-            <div className={"oobe-header"}>{getLz("oobe.visual.title")}</div>
+            <div className={"oobe-header"}>{t("oobe.visual.title")}</div>
             <div className={"oobe-body visual"}>
               <Row>
                 <Col>
@@ -176,19 +173,19 @@ const OOBE = () => {
                   </div>
                 </Col>
               </Row>
-              <div className={"blurb"}>{getLz("oobe.visual.layout.text")}</div>
+              <div className={"blurb"}>{t("oobe.visual.layout.text")}</div>
             </div>
             <div className={"oobe-footer"}>
               <div className={"btn-group"}>
                 <div
                   className={"md-btn"}
                   onClick={() => (screen = "welcome")}>
-                  {getLz("oobe.previous")}
+                  {t("oobe.previous")}
                 </div>
                 <div
                   className={"md-btn md-btn-primary"}
                   onClick={() => (screen = "audio")}>
-                  {getLz("oobe.next")}
+                  {t("oobe.next")}
                 </div>
               </div>
             </div>
@@ -200,9 +197,9 @@ const OOBE = () => {
         {/*<transition name="">*/}
         {screen === "audio" && (
           <div className={"oobe-view"}>
-            <div className={"oobe-header"}>{getLz("oobe.audio.title")}</div>
+            <div className={"oobe-header"}>{t("oobe.audio.title")}</div>
             <div className={"oobe-body"}>
-              <div className={"blurb"}>{getLz("oobe.audio.text")}</div>
+              <div className={"blurb"}>{t("oobe.audio.text")}</div>
               <div className={"md-option-container"}>
                 <div className={"settings-option-body"}>
                   <div className={"md-option-line"}>
@@ -226,12 +223,12 @@ const OOBE = () => {
                 <div
                   className={"md-btn"}
                   onClick={() => (screen = "visual")}>
-                  {getLz("oobe.previous")}
+                  {t("oobe.previous")}
                 </div>
                 <div
                   className={"md-btn md-btn-primary"}
                   onClick={() => signIn()}>
-                  {getLz("oobe.next")}
+                  {t("oobe.next")}
                 </div>
               </div>
             </div>
@@ -249,7 +246,7 @@ const OOBE = () => {
                 <div
                   className={"md-btn"}
                   onClick={() => (app.appMode = "player")}>
-                  {getLz("oobe.done")}
+                  {t("oobe.done")}
                 </div>
               </div>
             </div>
@@ -260,11 +257,11 @@ const OOBE = () => {
             <div className={"button-group"}>
               <button
                 className={"min"}
-                onClick={() => $root.window.electronAPI.send("minimize")}
+                onClick={() => window.electronAPI.send("minimize")}
               />
               <button
                 className={"close"}
-                onClick={() => $root.window.electronAPI.send("close")}
+                onClick={() => window.electronAPI.send("close")}
               />
             </div>
           )}

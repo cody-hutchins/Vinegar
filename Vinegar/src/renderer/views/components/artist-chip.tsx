@@ -43,7 +43,7 @@ export const ArtistChip = ({ item }: { item: object }) => {
             {artist.id !== null && (
               <MediaItemArtwork
                 url={artist.attributes.artwork.url}
-                size={"80"}
+                imagesize={"80"}
               />
             )}
           </div>

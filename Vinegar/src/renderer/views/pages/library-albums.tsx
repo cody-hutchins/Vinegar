@@ -146,7 +146,7 @@ const LibraryAlbums = () => {
                   prefs.viewAs === "covers" && (
                     <MediaItemSquare
                       key={item.id}
-                      size={"300"}
+                      imagesize={"300"}
                       item={item}
                     />
                   ),

@@ -202,7 +202,7 @@ const init = async () => {
 
   window.electronAPI.on("theme-update", async (event, arg) => {
     await less.refresh(true, true, true);
-    this.setTheme(self.cfg.visual.theme, true);
+    this.setTheme(this.cfg.visual.theme, true);
     if (app.cfg.visual.styles.length !== 0) {
       app.reloadStyles();
     }
@@ -233,7 +233,7 @@ const init = async () => {
   });
 
   window.electronAPI.on("SoundCheckTag", (event, tag) => {
-    // let replaygain = self.parseSCTagToRG(tag)
+    // let replaygain = this.parseSCTagToRG(tag)
     try {
       if (app.mk.nowPlayingItem.type !== "song") {
         CiderAudio.audioNodes.gainNode.gain.value = 0.70794578438;
@@ -272,7 +272,7 @@ const init = async () => {
 
   window.electronAPI.on("play", function (_event, mode, id) {
     if (mode !== "url") {
-      self.mk.setQueue({ [mode]: id, parameters: { l: self.mklang } }).then(() => {
+      this.mk.setQueue({ [mode]: id, parameters: { l: this.mklang } }).then(() => {
         app.mk.play();
       });
     } else {
@@ -286,21 +286,21 @@ const init = async () => {
   });
 
   this.mk.addEventListener(MusicKit.Events.playbackTimeDidChange, (a) => {
-    // self.lyriccurrenttime = self.mk.currentPlaybackTime - app.lyricOffset
+    // this.lyriccurrenttime = this.mk.currentPlaybackTime - app.lyricOffset
     this.currentSongInfo = a;
-    self.playerLCD.playbackDuration = self.mk.currentPlaybackTime;
+    this.playerLCD.playbackDuration = this.mk.currentPlaybackTime;
     // wsapi
     window.electronAPI.send("wsapi-updatePlaybackState", wsapi.getAttributes());
   });
 
   this.mk.addEventListener(MusicKit.Events.queueItemsDidChange, () => {
-    if (self.$refs.queue || self.$refs.fsView?.$refs?.queue) {
+    if (this.$refs.queue || this.$refs.fsView?.$refs?.queue) {
       setTimeout(() => {
-        if (self.$refs.fsView?.$refs?.queue) {
-          self.$refs.fsView?.$refs?.queue.updateQueue();
+        if (this.$refs.fsView?.$refs?.queue) {
+          this.$refs.fsView?.$refs?.queue.updateQueue();
         }
-        if (self.$refs?.queue) {
-          self.$refs.queue.updateQueue();
+        if (this.$refs?.queue) {
+          this.$refs.queue.updateQueue();
         }
       }, 100);
     }
@@ -323,11 +323,11 @@ const init = async () => {
   });
 
   this.mk.addEventListener(MusicKit.Events.nowPlayingItemDidChange, (a) => {
-    if (self.$refs.fsView?.$refs?.queue) {
-      self.$refs.fsView?.$refs?.queue.updateQueue();
+    if (this.$refs.fsView?.$refs?.queue) {
+      this.$refs.fsView?.$refs?.queue.updateQueue();
     }
-    if (self.$refs?.queue) {
-      self.$refs.queue.updateQueue();
+    if (this.$refs?.queue) {
+      this.$refs.queue.updateQueue();
     }
     this.currentSongInfo = a;
     if (this.currentSongInfo === null || this.currentSongInfo === undefined) {
@@ -440,13 +440,13 @@ const init = async () => {
     try {
       a = a.item.attributes;
     } catch (_) {}
-    const type = self.mk.nowPlayingItem !== null ? (self.mk.nowPlayingItem["type"] ?? "") : "";
+    const type = this.mk.nowPlayingItem !== null ? (this.mk.nowPlayingItem["type"] ?? "") : "";
 
     if (
       type.includes("musicVideo") ||
       type.includes("uploadedVideo") ||
       type.includes("music-movie") ||
-      (self.mk.nowPlayingItem?.type === "radioStation") & (self.mk.nowPlayingItem?.attributes?.mediaKind === "video")
+      (this.mk.nowPlayingItem?.type === "radioStation") & (this.mk.nowPlayingItem?.attributes?.mediaKind === "video")
     ) {
       document.getElementById("apple-music-video-container").style.display = "block";
       document.body.setAttribute("video-playing", "true");
@@ -456,9 +456,9 @@ const init = async () => {
       document.getElementById("apple-music-video-container").style.display = "none";
       // app.chrome.topChromeVisible = true
     }
-    self.chrome.artworkReady = false;
-    self.lyrics = [];
-    self.richlyrics = [];
+    this.chrome.artworkReady = false;
+    this.lyrics = [];
+    this.richlyrics = [];
     app.getCurrentArtURL().then((urls) => {
       app.currentArtUrl = urls?.currentArtUrl ?? "";
       app.currentArtUrlRaw = urls?.currentArtUrlRaw ?? "";

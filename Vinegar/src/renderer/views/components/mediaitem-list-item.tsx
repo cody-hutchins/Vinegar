@@ -695,7 +695,7 @@ const MediaItemListItem = ({
             <div className={"artwork"}>
               <MediaItemArtwork
                 url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-                size={"48"}
+                imagesize={"48"}
                 bgcolor={getBgColor()}
                 type={item.type}
               />

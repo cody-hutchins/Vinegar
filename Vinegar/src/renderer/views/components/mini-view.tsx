@@ -174,12 +174,12 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                       step={0.01}
                       min={"0"}
                       style={app.progressBarStyle()}
-                      onInput={() => {
-                        app.playerLCD.desiredDuration = $event.target.value;
+                      onInput={(e) => {
+                        app.playerLCD.desiredDuration = e.target.value;
                         app.playerLCD.userInteraction = true;
                       }}
-                      onMouseUp={() => {
-                        app.mk.seekToTime($event.target.value);
+                      onMouseUp={(e) => {
+                        app.mk.seekToTime(e.target.value);
                         app.playerLCD.desiredDuration = 0;
                         app.playerLCD.userInteraction = false;
                       }}

@@ -1221,7 +1221,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                                   title={`${badge.attributes.name} - ${badge.attributes.handle}`}>
                                   <MediaItemArtwork
                                     url={badge.attributes.artwork.url}
-                                    size={"60"}
+                                    imagesize={"60"}
                                   />
                                 </div>
                               ))}
