@@ -25,36 +25,59 @@ const Browse = ({ data }: { data: object }) => {
                     <h3>{recom.attributes.name ?? ""}</h3>
                   </Col>
                 )}
-                {index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
-                  <Col
-                    auto
-                    className={"cider-flex-center"}>
-                    {recom.relationships.room ? (
-                      <button
-                        className={"cd-btn-seeall"}
-                        onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
-                        {t("term.seeAll")}
-                      </button>
-                    ) : (
-                      <button
-                        className={"cd-btn-seeall"}
-                        onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                        {t("term.seeAll")}
-                      </button>
-                    )}
-                  </Col>
-                )}
+                {index !== 0 &&
+                  recom.relationships &&
+                  ((recom.relationships.children && recom.relationships.children.data.length > 10) ||
+                    (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
+                    <Col
+                      auto
+                      className={"cider-flex-center"}>
+                      {recom.relationships.room ? (
+                        <button
+                          className={"cd-btn-seeall"}
+                          onClick={() => app.showRoom(recom.relationships.room?.data[0].href)}>
+                          {t("term.seeAll")}
+                        </button>
+                      ) : (
+                        <button
+                          className={"cd-btn-seeall"}
+                          onClick={() =>
+                            app.showCollection(
+                              recom.relationships.children ? recom.relationships.children : recom.relationships.contents,
+                              recom.attributes.name ?? "",
+                              "listen_now",
+                            )
+                          }>
+                          {t("term.seeAll")}
+                        </button>
+                      )}
+                    </Col>
+                  )}
               </Row>
-              {recom.relationships !== null && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data)) ? (
+              {recom.relationships !== null &&
+              ((recom.relationships.children && recom.relationships.children.data) ||
+                (recom.relationships.contents && recom.relationships.contents.data)) ? (
                 index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1) ? (
                   <MediaItemScrollerHorizontalMVView
                     imagesize={"800"}
-                    browsesp={"index === 0|| (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)"}
+                    browsesp={
+                      "index === 0|| (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)"
+                    }
                     kind={recom.attributes.editorialElementKind}
-                    items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
+                    items={
+                      recom.relationships.children
+                        ? recom.relationships.children.data.limit(10)
+                        : recom.relationships.contents.data.limit(10)
+                    }
                   />
                 ) : (
-                  <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
+                  <MediaItemScrollerHorizontalLarge
+                    items={
+                      recom.relationships.children
+                        ? recom.relationships.children.data.limit(10)
+                        : recom.relationships.contents.data.limit(10)
+                    }
+                  />
                 )
               ) : (
                 recom.attributes.links &&

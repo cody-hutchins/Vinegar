@@ -5,7 +5,27 @@ import classNames from "classnames";
 import { uuidv4 } from "../../index.js";
 import { useTranslation } from "react-i18next";
 
-const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false, reasonShown = false, noScale = false, imageformat = "cc", removeamtext = false, contextExt }: { item: MusicKit.MediaItem; kind?: string; imagesize?: number; forceVideo?: boolean; reasonShown?: boolean; noScale?: boolean; imageformat?: string; removeamtext?: boolean; contextExt?: { type: object; required: false } }) => {
+const MediaItemSquare = ({
+  item,
+  kind = "",
+  imagesize = 190,
+  forceVideo = false,
+  reasonShown = false,
+  noScale = false,
+  imageformat = "cc",
+  removeamtext = false,
+  contextExt,
+}: {
+  item: MusicKit.MediaItem;
+  kind?: string;
+  imagesize?: number;
+  forceVideo?: boolean;
+  reasonShown?: boolean;
+  noScale?: boolean;
+  imageformat?: string;
+  removeamtext?: boolean;
+  contextExt?: { type: object; required: false };
+}) => {
   const { t } = useTranslation();
   let isVisible = false;
   let addedToLibrary = false;
@@ -111,7 +131,10 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
       if (truekind === "musicVideos") {
         truekind = "music-videos";
       }
-      let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`, params);
+      let res = await app.mk.api.v3.music(
+        `/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`,
+        params,
+      );
       res = res.data.data[0];
       addedToLibrary = res && res.attributes && res.attributes.inLibrary ? res.attributes.inLibrary : false;
     } else {
@@ -129,9 +152,18 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
     if (truekind === "musicVideos") {
       truekind = "music-videos";
     }
-    let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`, params);
+    let res = await app.mk.api.v3.music(
+      `/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`,
+      params,
+    );
     res = res.data.data[0];
-    if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
+    if (
+      res &&
+      res.relationships &&
+      res.relationships.library &&
+      res.relationships.library.data &&
+      res.relationships.library.data.length > 0
+    ) {
       id = res.relationships.library.data[0].id;
     }
 
@@ -148,7 +180,9 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
   }
 
   function getArtworkUrl(size = -1, includeUrl = false) {
-    let artwork = item?.attributes?.artwork ? item?.attributes?.artwork?.url : (item?.attributes?.editorialArtwork?.subscriptionCover?.url ?? "");
+    let artwork = item?.attributes?.artwork
+      ? item?.attributes?.artwork?.url
+      : (item?.attributes?.editorialArtwork?.subscriptionCover?.url ?? "");
     if (size !== -1) {
       artwork = artwork
         .replace("{w}", size)
@@ -158,7 +192,12 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
     }
     switch (kind) {
       case "385":
-        artwork = (item.attributes.editorialArtwork?.subscriptionHero?.url ?? item.attributes.artwork?.url ?? item.relationships?.contents?.data[0]?.attributes?.editorialArtwork?.subscriptionHero?.url ?? "").replace("{c}", size === 900 || size === 380 || size === 600 ? "sr" : imageformat);
+        artwork = (
+          item.attributes.editorialArtwork?.subscriptionHero?.url ??
+          item.attributes.artwork?.url ??
+          item.relationships?.contents?.data[0]?.attributes?.editorialArtwork?.subscriptionHero?.url ??
+          ""
+        ).replace("{c}", size === 900 || size === 380 || size === 600 ? "sr" : imageformat);
         break;
     }
     if (!includeUrl) {
@@ -220,7 +259,13 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
     let useMenu = "normal";
     if (app.selectedMediaItems.length <= 1) {
       app.selectedMediaItems = [];
-      app.select_selectMediaItem(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, index, guid, item.attributes.playParams.isLibrary ?? false);
+      app.select_selectMediaItem(
+        item.attributes.playParams.id ?? item.id,
+        item.attributes.playParams.kind ?? item.type,
+        index,
+        guid,
+        item.attributes.playParams.isLibrary ?? false,
+      );
     } else {
       useMenu = "multiple";
     }
@@ -375,7 +420,9 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
                   app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
-                    app.copyToClipboard(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+                    app.copyToClipboard(
+                      u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url,
+                    );
                   });
                 }
               } else {
@@ -390,7 +437,9 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
                   app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
-                    app.songLinkShare(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+                    app.songLinkShare(
+                      u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url,
+                    );
                   });
                 }
               } else {
@@ -546,7 +595,15 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
               onClick={() => app.routeView(item)}>
               <MediaItemArtwork
                 url={getArtworkUrl()}
-                video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                video={
+                  item.attributes !== null && item.attributes.editorialVideo !== null
+                    ? item.attributes.editorialVideo.motionDetailSquare
+                      ? item.attributes.editorialVideo.motionDetailSquare.video
+                      : item.attributes.editorialVideo.motionSquareVideo1x1
+                        ? item.attributes.editorialVideo.motionSquareVideo1x1.video
+                        : ""
+                    : ""
+                }
                 size={imagesize}
                 upscaling={true}
                 shadow={"subtle"}
@@ -589,13 +646,34 @@ const MediaItemSquare = ({ item, kind = "", imagesize = 190, forceVideo = false,
             {(item.attributes.artistNames === null || kind !== "card") && (
               <div
                 className={"title"}
-                title={item.attributes?.name ?? item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? ""}
+                title={
+                  item.attributes?.name ??
+                  item.relationships?.contents?.data[0]?.attributes?.name ??
+                  item.attributes?.editorialNotes?.name ??
+                  ""
+                }
                 onClick={() => app.routeView(item)}>
-                <div className={"item-navigate text-overflow-elipsis"}>{item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null ? item.relationships?.contents?.data[0]?.attributes?.shortName : item.attributes?.name ? (removeamtext ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "") : item.attributes?.name.replace(/&nbsp;/g, " ")) : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}</div>
+                <div className={"item-navigate text-overflow-elipsis"}>
+                  {item.attributes?.editorialElementKind === "394" && item.relationships?.contents?.data[0]?.attributes?.shortName !== null
+                    ? item.relationships?.contents?.data[0]?.attributes?.shortName
+                    : item.attributes?.name
+                      ? removeamtext
+                        ? item.attributes?.name.replace(/&nbsp;/g, " ").replace(/Apple Music |^Apple |/g, "")
+                        : item.attributes?.name.replace(/&nbsp;/g, " ")
+                      : (item.relationships?.contents?.data[0]?.attributes?.name ?? item.attributes?.editorialNotes?.name ?? "")}
+                </div>
                 {item.attributes && item.attributes.contentRating === "explicit" && (
                   <div
                     className={"explicit-icon"}
-                    style={{ backgroundImage: "url(./assets/explicit.svg)", height: "12px", width: "12px", filter: "contrast(0)", backgroundRepeat: "no-repeat", marginTop: "2.63px", marginLeft: "4px" }}
+                    style={{
+                      backgroundImage: "url(./assets/explicit.svg)",
+                      height: "12px",
+                      width: "12px",
+                      filter: "contrast(0)",
+                      backgroundRepeat: "no-repeat",
+                      marginTop: "2.63px",
+                      marginLeft: "4px",
+                    }}
                   />
                 )}
               </div>

@@ -201,7 +201,9 @@ const Queue = () => {
                           </div>
                         )}
                         <Col className={"queue-duration-info"}>
-                          <div className={"queue-duration cider-flex-center"}>{app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}</div>
+                          <div className={"queue-duration cider-flex-center"}>
+                            {app.convertTime(queueItem.item.attributes.durationInMillis / 1000)}
+                          </div>
                         </Col>
                       </Row>
                     </div>

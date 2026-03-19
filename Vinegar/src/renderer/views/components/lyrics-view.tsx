@@ -2,7 +2,21 @@ import { useEffect } from "react";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
-const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }: { time: number; lyrics: object[]; richlyrics: object[]; translation?: string; onindex?: () => void; yoffset?: number }) => {
+const LyricsView = ({
+  time,
+  lyrics,
+  richlyrics,
+  translation,
+  onindex,
+  yoffset,
+}: {
+  time: number;
+  lyrics: object[];
+  richlyrics: object[];
+  translation?: string;
+  onindex?: () => void;
+  yoffset?: number;
+}) => {
   const { t } = useTranslation();
   const app = this.$root;
   useEffect(() => {
@@ -19,7 +33,8 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
           } catch (e) {
             console.log(e);
           }
-          currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+          currentLine.getElementsByClassName("WaitingDot1")[0].style.animation =
+            `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
           currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot2")[0].style.opacity = 0.25;
@@ -32,7 +47,8 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
           } catch (e) {
             console.log(e);
           }
-          currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+          currentLine.getElementsByClassName("WaitingDot2")[0].style.animation =
+            `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
@@ -45,7 +61,8 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
           } catch (e) {
             console.log(e);
           }
-          currentLine.getElementsByClassName("WaitingDot3")[0].style.animation = `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
+          currentLine.getElementsByClassName("WaitingDot3")[0].style.animation =
+            `dotOpacity ${0.25 * duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot2")[0].style.animation = ``;
           currentLine.getElementsByClassName("WaitingDot1")[0].style.opacity = 1;
@@ -77,7 +94,10 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
       if (time + delayfix >= lyrics[i].startTime && time + delayfix <= app.lyrics[i].endTime) {
         if (app.currentLyricsLine !== i) {
           app.currentLyricsLine = i;
-          if (((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") && this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`)) {
+          if (
+            ((app.lyricon && app.drawer.open) || app.appMode === "fullscreen") &&
+            this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${i}}]`)
+          ) {
             if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${prevLine}}]`)) {
               this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${prevLine}}]`).classList.remove("active");
             }
@@ -109,7 +129,11 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
             }
           }
         } else if (app.currentLyricsLine === 0 && app.drawer.open) {
-          if (this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`) && !this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.contains("active")) this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.add("active");
+          if (
+            this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`) &&
+            !this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.contains("active")
+          )
+            this.$refs.lyricsview.querySelector(`.lyric-line[line-index="0"]`).classList.add("active");
         }
         break;
       }
@@ -121,7 +145,9 @@ const LyricsView = ({ time, lyrics, richlyrics, translation, onindex, yoffset }:
         } catch (e) {
           console.log(e);
         }
-        for (child of this.$refs.lyricsview.querySelector(`.lyric-line[line-index={${app.currentLyricsLine}}]`).querySelectorAll(".verse")) {
+        for (child of this.$refs.lyricsview
+          .querySelector(`.lyric-line[line-index={${app.currentLyricsLine}}]`)
+          .querySelectorAll(".verse")) {
           if (time + delayfix >= child.getAttribute("lyricstart") * 1 + child.getAttribute("versestart") * 1) {
             child.classList.add("verse-active");
           } else {

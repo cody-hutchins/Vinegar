@@ -18,7 +18,10 @@ const Audiolabs = () => {
     return {
       ciderPPE: [
         { name: "MAIKIWI", displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.adaptive") },
-        { name: "MAIKIWI_LEGACY", displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
+        {
+          name: "MAIKIWI_LEGACY",
+          displayName: "Maikiwi " + t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy"),
+        },
         { name: "NATURAL", displayName: t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.standard") },
         { name: "LEGACY", displayName: t("settings.option.audio.enableAdvancedFunctionality.ciderPPEStrength.legacy") },
       ],
@@ -78,7 +81,9 @@ const Audiolabs = () => {
               <div className={"md-option-segment"}>
                 Cider Opportunistic Correction System
                 <br />
-                <small>Takes advantage of the sonic characteristics of a specific equipment and adapts it to be more &apos;Cider&apos; oriented.</small>
+                <small>
+                  Takes advantage of the sonic characteristics of a specific equipment and adapts it to be more &apos;Cider&apos; oriented.
+                </small>
               </div>
               <div className={"md-option-segment md-option-segment_auto"}>
                 <select

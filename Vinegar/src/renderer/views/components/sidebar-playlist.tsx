@@ -4,7 +4,15 @@ import { useEffect } from "react";
 import MusicKit from "@musickit-js";
 import { useTranslation } from "react-i18next";
 
-const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item: MusicKit.MediaItem; playlistSelect?: (playlist: object) => void; relateMediaItems?: string[] }) => {
+const SidebarPlaylist = ({
+  item,
+  playlistSelect,
+  relateMediaItems = [],
+}: {
+  item: MusicKit.MediaItem;
+  playlistSelect?: (playlist: object) => void;
+  relateMediaItems?: string[];
+}) => {
   const { t } = useTranslation();
   let folderOpened = false;
   let children = [];
@@ -247,7 +255,13 @@ const SidebarPlaylist = ({ item, playlistSelect, relateMediaItems = [] }: { item
         key={item.id}>
         <button
           key={item.id}
-          className={classNames("app-sidebar-item", "app-sidebar-item-playlist", item.type !== "library-playlist-folders" ? { active: $root.page.includes(item.id) } : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected])}
+          className={classNames(
+            "app-sidebar-item",
+            "app-sidebar-item-playlist",
+            item.type !== "library-playlist-folders"
+              ? { active: $root.page.includes(item.id) }
+              : ["playlist-folder", { "folder-button-active": folderOpened }, isPlaylistSelected],
+          )}
           onContextMenu={(e) => playlistContextMenu(e, item.id)}
           onDragStart={(e) => startDrag(e, item)}
           onDragOver={dragOver}

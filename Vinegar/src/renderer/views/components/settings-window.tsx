@@ -561,7 +561,11 @@ const SettingsWindow = () => {
                   className={"md-option-segment"}
                   style={{ whiteSpace: "pre-line" }}>
                   {t("settings.option.audio.enableAdvancedFunctionality.audioNormalization")}
-                  <small>{app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE ? `${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}` : t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}</small>
+                  <small>
+                    {app.cfg.audio.equalizer.vibrantBass !== 0 || app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE
+                      ? `${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}\n${t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.disabled")}`
+                      : t("settings.option.audio.enableAdvancedFunctionality.audioNormalization.description")}
+                  </small>
                 </div>
                 <div className={"md-option-segment md-option-segment_auto"}>
                   <label>
@@ -569,7 +573,12 @@ const SettingsWindow = () => {
                       type={"checkbox"}
                       v-model={app.cfg.audio.normalization}
                       onChange={toggleNormalization}
-                      disabled={app.cfg.audio.maikiwiAudio.spatial || app.cfg.audio.maikiwiAudio.ciderPPE || app.cfg.audio.maikiwiAudio.atmosphereRealizer1 || app.cfg.audio.maikiwiAudio.atmosphereRealizer2}
+                      disabled={
+                        app.cfg.audio.maikiwiAudio.spatial ||
+                        app.cfg.audio.maikiwiAudio.ciderPPE ||
+                        app.cfg.audio.maikiwiAudio.atmosphereRealizer1 ||
+                        app.cfg.audio.maikiwiAudio.atmosphereRealizer2
+                      }
                     />
                   </label>
                 </div>
@@ -1400,7 +1409,9 @@ const SettingsWindow = () => {
                         <select
                           className={"md-select"}
                           v-model={app.cfg.connectivity.discord_rpc.activity.buttons.first}
-                          onChange={(e) => (e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : "")}>
+                          onChange={(e) =>
+                            e.target.value === "disabled" ? (app.cfg.connectivity.discord_rpc.activity.buttons.second = "disabled") : ""
+                          }>
                           {app.cfg.connectivity.discord_rpc.activity.buttons.options.map((option) => (
                             <option
                               key={option.id}
@@ -1643,7 +1654,11 @@ const SettingsWindow = () => {
             <input
               type={"checkbox"}
               v-model={app.cfg.advanced.experiments.includes("immersive-preview")}
-              onClick={() => (app.cfg.advanced.experiments.includes("immersive-preview") ? removeExperiment("immersive-preview") : addExperiment("immersive-preview"))}
+              onClick={() =>
+                app.cfg.advanced.experiments.includes("immersive-preview")
+                  ? removeExperiment("immersive-preview")
+                  : addExperiment("immersive-preview")
+              }
             />
           </label>
         </div>
@@ -1659,7 +1674,11 @@ const SettingsWindow = () => {
             <input
               type={"checkbox"}
               v-model={app.cfg.advanced.experiments.includes("unknown-sources")}
-              onClick={() => (app.cfg.advanced.experiments.includes("unknown-sources") ? removeExperiment("unknown-sources") : addExperiment("unknown-sources"))}
+              onClick={() =>
+                app.cfg.advanced.experiments.includes("unknown-sources")
+                  ? removeExperiment("unknown-sources")
+                  : addExperiment("unknown-sources")
+              }
             />
           </label>
         </div>
@@ -1674,7 +1693,9 @@ const SettingsWindow = () => {
             <input
               type={"checkbox"}
               v-model={app.cfg.advanced.experiments.includes("cider_mirror")}
-              onClick={() => (app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror"))}
+              onClick={() =>
+                app.cfg.advanced.experiments.includes("cider_mirror") ? removeExperiment("cider_mirror") : addExperiment("cider_mirror")
+              }
             />
           </label>
         </div>
@@ -1704,7 +1725,9 @@ const SettingsWindow = () => {
             <input
               type={"checkbox"}
               v-model={app.cfg.advanced.experiments.includes("compactui")}
-              onClick={() => (app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui"))}
+              onClick={() =>
+                app.cfg.advanced.experiments.includes("compactui") ? removeExperiment("compactui") : addExperiment("compactui")
+              }
               disabled={!!app.getThemeDirective("forceUI")}
             />
           </label>
@@ -1718,7 +1741,11 @@ const SettingsWindow = () => {
               type={"checkbox"}
               disabled
               v-model={app.cfg.advanced.experiments.includes("inline-playlists")}
-              onClick={() => (app.cfg.advanced.experiments.includes("inline-playlists") ? removeExperiment("inline-playlists") : addExperiment("inline-playlists"))}
+              onClick={() =>
+                app.cfg.advanced.experiments.includes("inline-playlists")
+                  ? removeExperiment("inline-playlists")
+                  : addExperiment("inline-playlists")
+              }
             />
           </label>
         </div>

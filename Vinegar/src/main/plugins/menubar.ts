@@ -47,14 +47,26 @@ export default class Thumbar {
           {
             label: utils.getLocale(utils.getStoreValue("general.language"), "term.toggleprivate"),
             accelerator: utils.getStoreValue("general.keybindings.togglePrivateSession").join("+"),
-            click: () => utils.getWindow().webContents.executeJavaScript(`app.cfg.general.privateEnabled = !app.cfg.general.privateEnabled`),
+            click: () =>
+              utils.getWindow().webContents.executeJavaScript(`app.cfg.general.privateEnabled = !app.cfg.general.privateEnabled`),
           },
           {
             label: utils.getLocale(utils.getStoreValue("general.language"), "term.settings"),
             accelerator: utils.getStoreValue("general.keybindings.settings").join("+"),
             click: () => utils.getWindow().webContents.executeJavaScript(`app.openSettingsPage()`),
           },
-          ...(this.isMac ? [{ type: "separator" }, { role: "services" }, { type: "separator" }, { role: "hide" }, { role: "hideOthers" }, { role: "unhide" }, { type: "separator" }, { role: "quit" }] : []),
+          ...(this.isMac
+            ? [
+                { type: "separator" },
+                { role: "services" },
+                { type: "separator" },
+                { role: "hide" },
+                { role: "hideOthers" },
+                { role: "unhide" },
+                { type: "separator" },
+                { role: "quit" },
+              ]
+            : []),
           ...(this.isNotMac
             ? [
                 { type: "separator" },
@@ -70,7 +82,20 @@ export default class Thumbar {
       {
         label: utils.getLocale(utils.getStoreValue("general.language"), "menubar.options.view"),
         submenu: [
-          ...(this.isMac ? [{ role: "reload" }, { role: "forceReload" }, { role: "toggleDevTools" }, { type: "separator" }, { role: "resetZoom" }, { role: "zoomIn" }, { role: "zoomOut" }, { type: "separator" }, { role: "togglefullscreen" }, { type: "separator" }] : []),
+          ...(this.isMac
+            ? [
+                { role: "reload" },
+                { role: "forceReload" },
+                { role: "toggleDevTools" },
+                { type: "separator" },
+                { role: "resetZoom" },
+                { role: "zoomIn" },
+                { role: "zoomOut" },
+                { type: "separator" },
+                { role: "togglefullscreen" },
+                { type: "separator" },
+              ]
+            : []),
           {
             label: utils.getLocale(utils.getStoreValue("general.language"), "term.search"),
             accelerator: utils.getStoreValue("general.keybindings.search").join("+"),
@@ -130,7 +155,14 @@ export default class Thumbar {
                 { role: "close" },
                 {
                   label: "Edit",
-                  submenu: [{ role: "undo" }, { role: "redo" }, { type: "separator" }, { role: "cut" }, { role: "copy" }, { role: "paste" }],
+                  submenu: [
+                    { role: "undo" },
+                    { role: "redo" },
+                    { type: "separator" },
+                    { role: "cut" },
+                    { role: "copy" },
+                    { role: "paste" },
+                  ],
                 },
                 { type: "separator" },
               ]
@@ -271,15 +303,26 @@ export default class Thumbar {
             submenu: [
               {
                 label: utils.getLocale(utils.getStoreValue("general.language"), "menubar.options.bug"),
-                click: () => shell.openExternal("https://github.com/ciderapp/Cider/issues/new?assignees=&labels=bug%2Ctriage&template=bug_report.yaml&title=%5BBug%5D%3A+").catch(console.error),
+                click: () =>
+                  shell
+                    .openExternal(
+                      "https://github.com/ciderapp/Cider/issues/new?assignees=&labels=bug%2Ctriage&template=bug_report.yaml&title=%5BBug%5D%3A+",
+                    )
+                    .catch(console.error),
               },
               {
                 label: utils.getLocale(utils.getStoreValue("general.language"), "menubar.options.feature"),
-                click: () => shell.openExternal("https://github.com/ciderapp/Cider/discussions/new?category=feature-request").catch(console.error),
+                click: () =>
+                  shell.openExternal("https://github.com/ciderapp/Cider/discussions/new?category=feature-request").catch(console.error),
               },
               {
                 label: utils.getLocale(utils.getStoreValue("general.language"), "menubar.options.trans"),
-                click: () => shell.openExternal("https://github.com/ciderapp/Cider/issues/new?assignees=&labels=%F0%9F%8C%90+Translations&template=translation.yaml&title=%5BTranslation%5D%3A+").catch(console.error),
+                click: () =>
+                  shell
+                    .openExternal(
+                      "https://github.com/ciderapp/Cider/issues/new?assignees=&labels=%F0%9F%8C%90+Translations&template=translation.yaml&title=%5BTranslation%5D%3A+",
+                    )
+                    .catch(console.error),
               },
             ],
           },

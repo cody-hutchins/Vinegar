@@ -49,7 +49,11 @@ const Sidebar = () => {
                 }
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
-                    $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+                    $root.searchQuery(
+                      $root.search.hints[$root.search.cursor]?.content ??
+                        $root.search.hints[$root.search.cursor]?.searchTerm ??
+                        $root.search.term,
+                    );
                     $root.search.showHints = false;
                     $root.search.showSearchView = true;
                     $root.search.cursor = -1;
@@ -378,7 +382,8 @@ const Sidebar = () => {
         {$root.library.backgroundNotification.show && (
           <div className={"app-sidebar-notification backgroundNotification"}>
             <div className={"message"}>
-              {$root.library.backgroundNotification.message} ({$root.library.backgroundNotification.progress} / {$root.library.backgroundNotification.total})
+              {$root.library.backgroundNotification.message} ({$root.library.backgroundNotification.progress} /{" "}
+              {$root.library.backgroundNotification.total})
             </div>
           </div>
         )}

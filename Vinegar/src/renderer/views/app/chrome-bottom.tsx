@@ -85,7 +85,15 @@ export const ChromeBottom = () => {
                   </div>
                 )}
                 <div className={"playback-info"}>
-                  <div className={"song-name" + isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""}>
+                  <div
+                    className={
+                      "song-name" +
+                      isElementOverflowing(
+                        "#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name",
+                      )
+                        ? "marquee"
+                        : ""
+                    }>
                     {mk.nowPlayingItem["attributes"]["name"]}
                     {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
                       <div
@@ -109,17 +117,35 @@ export const ChromeBottom = () => {
                   <div className={"chrome-icon-container"}>
                     {cfg.general.privateEnabled && <div className={"audio-type private-icon"} />}
                     {cfg.audio.maikiwiAudio.spatial && (
-                      <OverlayTrigger overlay={<Tooltip id={"spatial-icon"}>{t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
+                      <OverlayTrigger
+                        overlay={
+                          <Tooltip id={"spatial-icon"}>
+                            {t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") +
+                              " (" +
+                              getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) +
+                              ")"}
+                          </Tooltip>
+                        }>
                         <div className={"audio-type spatial-icon"} />
                       </OverlayTrigger>
                     )}
                     {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) && (
-                      <OverlayTrigger overlay={<Tooltip id={"lossless-icon"}>{mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}</Tooltip>}>
+                      <OverlayTrigger
+                        overlay={
+                          <Tooltip id={"lossless-icon"}>
+                            {mk.nowPlayingItem?.localFilesMetadata?.bitDepth +
+                              "-bit / " +
+                              mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 +
+                              " kHz " +
+                              mk.nowPlayingItem.localFilesMetadata.container}
+                          </Tooltip>
+                        }>
                         <div className={"audio-type lossless-icon"} />
                       </OverlayTrigger>
                     )}
                     {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
-                      <OverlayTrigger overlay={<Tooltip id={"ppe-icon"}>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
+                      <OverlayTrigger
+                        overlay={<Tooltip id={"ppe-icon"}>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
                         <div className={"audio-type ppe-icon"} />
                       </OverlayTrigger>
                     )}
@@ -212,7 +238,11 @@ export const ChromeBottom = () => {
                     value={getSongProgress()}
                   />
                 </Col>
-                {!mk.nowPlayingItem?.isLiveRadioStation ? <Col sm={"auto"}>{convertTime(mk.currentPlaybackDuration)}</Col> : <Col sm={"auto"}>{getLz("term.live")}</Col>}
+                {!mk.nowPlayingItem?.isLiveRadioStation ? (
+                  <Col sm={"auto"}>{convertTime(mk.currentPlaybackDuration)}</Col>
+                ) : (
+                  <Col sm={"auto"}>{getLz("term.live")}</Col>
+                )}
               </Row>
             )}
           </div>
@@ -272,7 +302,13 @@ export const ChromeBottom = () => {
             <div className={"app-chrome-item"}>
               <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.lz.repeat[mk.repeatMode]}</Tooltip>}>
                 <button
-                  className={classNames("playback-button--small", "repeat", { repeatOne: mk.repeatMode === 1 }, { active: mk.repeatMode === 2 }, { disabled: isDisabled() })}
+                  className={classNames(
+                    "playback-button--small",
+                    "repeat",
+                    { repeatOne: mk.repeatMode === 1 },
+                    { active: mk.repeatMode === 2 },
+                    { disabled: isDisabled() },
+                  )}
                   onClick={repeatIncrement}
                 />
               </OverlayTrigger>

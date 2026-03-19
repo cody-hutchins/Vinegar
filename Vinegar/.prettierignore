@@ -1,6 +1,7 @@
-src/renderer/*hls*.js
+*.js
+*.css
+*.less
 build/*
 dist/*
-src/renderer/lib/*
-*.min.*
+node_modules/*
 .pnpm-store

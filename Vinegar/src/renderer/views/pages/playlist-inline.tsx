@@ -38,7 +38,12 @@ const PlaylistInline = ({ data }: { data: object }) => {
     app.moreinfodata = {
       title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title) || "" : "",
       subtitle: data?.attributes?.artistName ?? "",
-      content: data?.attributes?.editorialNotes !== null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
+      content:
+        data?.attributes?.editorialNotes !== null
+          ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "")
+          : data.attributes?.description
+            ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "")
+            : "",
     };
     app.modals.moreInfo = true;
   }
@@ -123,8 +128,16 @@ const PlaylistInline = ({ data }: { data: object }) => {
         "fields[albums]": "inLibrary",
         relate: "library",
       };
-      const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
-      inLibrary = res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary ? res.data.data[0].attributes.inLibrary : false;
+      const res = await app.mkapi(
+        data.attributes.playParams.kind ?? data.type,
+        data.attributes.playParams.isLibrary ?? false,
+        data.attributes.playParams.id ?? data.id,
+        params,
+      );
+      inLibrary =
+        res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary
+          ? res.data.data[0].attributes.inLibrary
+          : false;
       console.log(res);
     } else {
       inLibrary = true;
@@ -147,8 +160,19 @@ const PlaylistInline = ({ data }: { data: object }) => {
   async function removeFromLibrary(id) {
     const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
     let id = data.id ?? data.attributes.playParams.id;
-    const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
-    if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
+    const res = await app.mkapi(
+      data.attributes.playParams.kind ?? data.type,
+      data.attributes.playParams.isLibrary ?? false,
+      data.attributes.playParams.id ?? data.id,
+      params,
+    );
+    if (
+      res.data.data[0] &&
+      res.data.data[0].relationships &&
+      res.data.data[0].relationships.library &&
+      res.data.data[0].relationships.library.data &&
+      res.data.data[0].relationships.library.data.length > 0
+    ) {
       id = res.data.data[0].relationships.library.data[0].id;
     }
     const kind = data.attributes.playParams.kind ?? data.type ?? "";
@@ -358,7 +382,10 @@ const PlaylistInline = ({ data }: { data: object }) => {
       } catch (e) {
         // use the format in json instead
         if (t("date.format") !== null) {
-          formatted = new t("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
+          formatted = new t("date.format")
+            .replace("${d}", releaseDate.getDate())
+            .replace("${m}", releaseDate.getMonth())
+            .replace("${y}", releaseDate.getFullYear());
         } else {
           formatted = new Intl.DateTimeFormat("en-US", {
             day: "numeric",
@@ -427,7 +454,9 @@ const PlaylistInline = ({ data }: { data: object }) => {
                 aria-role={"presentation"}
                 focusable={false}>
                 <path
-                  d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
+                  d={
+                    "M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
+                  }
                   fillRule={"nonzero"}
                 />
               </svg>
@@ -441,7 +470,16 @@ const PlaylistInline = ({ data }: { data: object }) => {
               <>
                 <div
                   className={"playlist-display"}
-                  style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "", textColor: data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null ? "#" + data.attributes.artwork.textColor1 : "" }}>
+                  style={{
+                    backgroundColor:
+                      data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null
+                        ? "#" + data.attributes.artwork.bgColor
+                        : "",
+                    textColor:
+                      data.attributes.artwork !== null && data.attributes.artwork["textColor1"] !== null
+                        ? "#" + data.attributes.artwork.textColor1
+                        : "",
+                  }}>
                   <div className={"playlistInfo"}>
                     <Row>
                       <Col
@@ -451,8 +489,26 @@ const PlaylistInline = ({ data }: { data: object }) => {
                           <MediaItemArtwork
                             shadow={"large"}
                             video-priority={true}
-                            url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
-                            video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                            url={
+                              data.attributes !== null && data.attributes.artwork !== null
+                                ? data.attributes.artwork.url
+                                : data.relationships !== null &&
+                                    data.relationships.tracks.data.length > 0 &&
+                                    data.relationships.tracks.data[0].attributes !== null
+                                  ? data.relationships.tracks.data[0].attributes.artwork !== null
+                                    ? data.relationships.tracks.data[0].attributes.artwork.url
+                                    : ""
+                                  : ""
+                            }
+                            video={
+                              data.attributes !== null && data.attributes.editorialVideo !== null
+                                ? data.attributes.editorialVideo.motionDetailSquare
+                                  ? data.attributes.editorialVideo.motionDetailSquare.video
+                                  : data.attributes.editorialVideo.motionSquareVideo1x1
+                                    ? data.attributes.editorialVideo.motionSquareVideo1x1.video
+                                    : ""
+                                : ""
+                            }
                             size={"260"}
                           />
                         </div>
@@ -489,7 +545,9 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             {getArtistName(data) !== "" && !useArtistChip && (
                               <div
                                 className={"playlist-artist item-navigate"}
-                                onClick={() => (data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : "")}>
+                                onClick={() =>
+                                  data.attributes && data.attributes.artistName ? app.searchAndNavigate(data, "artist") : ""
+                                }>
                                 {getArtistName(data)}
                               </div>
                             )}
@@ -500,12 +558,17 @@ const PlaylistInline = ({ data }: { data: object }) => {
                                   item={artist}
                                 />
                               ))}
-                            {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
+                            {((data.attributes.description &&
+                              (data.attributes.description.standard || data.attributes.description.short)) ||
+                              (data.attributes.editorialNotes &&
+                                (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
                               <div className={"playlist-desc"}>
                                 {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                   <div
                                     className={"content"}
-                                    dangerouslySetInnerHTML={{ __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short }}
+                                    dangerouslySetInnerHTML={{
+                                      __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short,
+                                    }}
                                     onClick={() => openInfoModal()}
                                   />
                                 ) : (
@@ -524,7 +587,13 @@ const PlaylistInline = ({ data }: { data: object }) => {
                           <div className={"playlist-desc-expanded"}>
                             <div
                               className={"content"}
-                              dangerouslySetInnerHTML={{ __html: data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : "" }}
+                              dangerouslySetInnerHTML={{
+                                __html: data.attributes.editorialNotes
+                                  ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "")
+                                  : data.attributes.description
+                                    ? (data.attributes.description.standard ?? data.attributes.description.short ?? "")
+                                    : "",
+                              }}
                             />
                             <button
                               className={"more-btn"}
@@ -571,7 +640,11 @@ const PlaylistInline = ({ data }: { data: object }) => {
                             <button
                               className={"md-btn md-btn-icon"}
                               style={{ minWidth: "180px" }}
-                              onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                              onClick={() =>
+                                !inLibrary
+                                  ? addToLibrary(data.attributes.playParams.id.toString())
+                                  : removeFromLibrary(data.attributes.playParams.id.toString())
+                              }>
                               <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                               {t("term.confirm")}
                             </button>
@@ -641,7 +714,11 @@ const PlaylistInline = ({ data }: { data: object }) => {
                           <button
                             className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
-                            onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                            onClick={() =>
+                              !inLibrary
+                                ? addToLibrary(data.attributes.playParams.id.toString())
+                                : removeFromLibrary(data.attributes.playParams.id.toString())
+                            }>
                             <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                             {t("term.confirm")}
                           </button>
@@ -689,7 +766,9 @@ const PlaylistInline = ({ data }: { data: object }) => {
                               : nestedPlaylist.map((disc) =>
                                   disc.tracks.map((item, index) => (
                                     <div key={index}>
-                                      <div className={"playlist-time"}>{(t("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                      <div className={"playlist-time"}>
+                                        {(t("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}
+                                      </div>
                                       <MediaItemListItem
                                         item={item}
                                         parent={getItemParent(data)}
@@ -732,14 +811,17 @@ const PlaylistInline = ({ data }: { data: object }) => {
                         style={{ width: "50%" }}>
                         {data.attributes.copyright}
                       </div>
-                      {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
-                        <div
-                          className={"playlist-time showExtended item-navigate"}
-                          style={{ color: "#fa586a", fontWeight: "bold" }}
-                          onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                          {t("action.showAlbum")}
-                        </div>
-                      )}
+                      {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") &&
+                        data.relationships.catalog !== null &&
+                        data.relationships.catalog !== null &&
+                        data.relationships.catalog.data.length > 0 && (
+                          <div
+                            className={"playlist-time showExtended item-navigate"}
+                            style={{ color: "#fa586a", fontWeight: "bold" }}
+                            onClick={() => app.routeView(data.relationships.catalog.data[0])}>
+                            {t("action.showAlbum")}
+                          </div>
+                        )}
                       <hr />
                     </Tab>
                     {typeof data.views !== "undefined" &&
@@ -785,7 +867,9 @@ const PlaylistInline = ({ data }: { data: object }) => {
                 aria-role={"presentation"}
                 focusable={false}>
                 <path
-                  d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
+                  d={
+                    "M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
+                  }
                   fillRule={"nonzero"}
                 />
               </svg>

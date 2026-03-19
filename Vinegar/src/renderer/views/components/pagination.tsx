@@ -1,6 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 
-const Pagination = ({ length, pageSize, scroll, scrollSelector }: { length: number; pageSize: number; scroll: string; scrollSelector: string }) => {
+const Pagination = ({
+  length,
+  pageSize,
+  scroll,
+  scrollSelector,
+}: {
+  length: number;
+  pageSize: number;
+  scroll: string;
+  scrollSelector: string;
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   function mounted() {
     document.querySelector(scrollSelector).addEventListener("scroll", handleScroll);

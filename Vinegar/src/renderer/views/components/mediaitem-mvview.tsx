@@ -15,7 +15,15 @@ const MediaItemMVView = ({ item, imagesize }: { item: MusicKit.MediaItem; images
           <div className={"artwork"}>
             <MediaItemArtwork
               url={item.attributes.artwork ? item.attributes.artwork.url : ""}
-              video={item.attributes !== null && item.attributes.editorialVideo !== null ? (item.attributes.editorialVideo.motionDetailSquare ? item.attributes.editorialVideo.motionDetailSquare.video : item.attributes.editorialVideo.motionSquareVideo1x1 ? item.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+              video={
+                item.attributes !== null && item.attributes.editorialVideo !== null
+                  ? item.attributes.editorialVideo.motionDetailSquare
+                    ? item.attributes.editorialVideo.motionDetailSquare.video
+                    : item.attributes.editorialVideo.motionSquareVideo1x1
+                      ? item.attributes.editorialVideo.motionSquareVideo1x1.video
+                      : ""
+                  : ""
+              }
               size={imagesize ?? 300}
             />
           </div>
@@ -28,7 +36,16 @@ const MediaItemMVView = ({ item, imagesize }: { item: MusicKit.MediaItem; images
             }}>
             <div
               className={"button"}
-              style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
+              style={{
+                ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes(
+                  "radioStation",
+                ) &&
+                !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song")
+                  ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" }
+                  : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }),
+                borderRadius: "50%",
+                background: "rgba(50,50,50,0.7)",
+              }}
               onClick={() => app.playMediaItem(item)}>
               {import("../svg/play.svg")}
             </div>
@@ -59,7 +76,15 @@ const MediaItemMVView = ({ item, imagesize }: { item: MusicKit.MediaItem; images
           tabIndex={0}>
           <div
             className={"button"}
-            style={{ ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("radioStation") && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song") ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" } : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }), borderRadius: "50%", background: "rgba(50,50,50,0.7)" }}
+            style={{
+              ...(!(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes(
+                "radioStation",
+              ) && !(item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "")).includes("song")
+                ? { margin: "140px", marginLeft: "250px", width: "40px", height: "40px" }
+                : { margin: "35px", marginLeft: "95px", width: "120px", height: "120px" }),
+              borderRadius: "50%",
+              background: "rgba(50,50,50,0.7)",
+            }}
             onClick={() => app.playMediaItem(item)}>
             {import("../svg/play.svg")}
           </div>

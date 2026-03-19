@@ -26,7 +26,9 @@ const MusicKitInterop = {
       ipcRenderer.send("wsapi-updatePlaybackState", attributes);
       // lastfm call
       if (app.mk.currentPlaybackProgress === app.cfg.connectivity.lastfm.scrobble_after / 100) {
-        attributes.primaryArtist = app.cfg.connectivity.lastfm.remove_featured ? await this.fetchSongRelationships() : attributes.artistName;
+        attributes.primaryArtist = app.cfg.connectivity.lastfm.remove_featured
+          ? await this.fetchSongRelationships()
+          : attributes.artistName;
         ipcRenderer.send("lastfm:scrobbleTrack", attributes);
       }
     });
@@ -160,7 +162,9 @@ const MusicKitInterop = {
     attributes.playParams.id = attributes?.playParams?.id ?? "no-id-found";
     attributes.url = {
       cider: `https://cider.sh/link?play/s/${nowPlayingItem?._songId ?? nowPlayingItem?.songId ?? "no-id-found"}`,
-      appleMusic: attributes.websiteUrl ? attributes.websiteUrl : `https://music.apple.com/${mk.storefrontId}/song/${nowPlayingItem?._songId ?? nowPlayingItem?.songId ?? "no-id-found"}`,
+      appleMusic: attributes.websiteUrl
+        ? attributes.websiteUrl
+        : `https://music.apple.com/${mk.storefrontId}/song/${nowPlayingItem?._songId ?? nowPlayingItem?.songId ?? "no-id-found"}`,
       songLink: "https://song.link/i/" + attributes.songId,
     };
     if (attributes.playParams.id === "no-id-found") {
@@ -174,7 +178,11 @@ const MusicKitInterop = {
     attributes.currentPlaybackTime = mk?.currentPlaybackTime ?? 0;
     attributes.currentPlaybackProgress = currentPlaybackProgress ?? 0;
     attributes.startTime = Date.now();
-    attributes.endTime = Math.round(attributes?.playParams?.id === cache.playParams.id ? Date.now() + attributes?.remainingTime : attributes?.startTime + attributes?.durationInMillis);
+    attributes.endTime = Math.round(
+      attributes?.playParams?.id === cache.playParams.id
+        ? Date.now() + attributes?.remainingTime
+        : attributes?.startTime + attributes?.durationInMillis,
+    );
 
     if (attributes.name === "no-title-found") {
       return;
@@ -352,7 +360,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   send: (channel: string, ...data: any) => ipcRenderer.send(channel, data),
   sendSync: (channel: string, ...data: any) => ipcRenderer.sendSync(channel, data),
   on: (callback: (...args: any[]) => void) => ipcRenderer.on("update-status", (event, ...args) => callback(...args)),
-  invoke: (...data: any[]) => ipcRenderer.invoke("perform-task", data),
+  invoke: (eventName: string, ...data: any[]) => ipcRenderer.invoke(eventName, data),
   once: (channel: string, listener: () => void) => ipcRenderer.once(channel, listener),
 } as IElectronAPI);
 /* eslint-enable @typescript-eslint/no-explicit-any */

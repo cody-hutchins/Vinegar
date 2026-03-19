@@ -24,14 +24,27 @@ const AppNavigation = () => {
                   <img
                     className={"sidebar-user-icon"}
                     loading={"lazy"}
-                    src={getMediaItemArtwork(chrome.hideUserInfo ? "./assets/logocut.png" : chrome.userinfo.attributes["artwork"] ? chrome.userinfo.attributes["artwork"]["url"] : "", 26)}
+                    src={getMediaItemArtwork(
+                      chrome.hideUserInfo
+                        ? "./assets/logocut.png"
+                        : chrome.userinfo.attributes["artwork"]
+                          ? chrome.userinfo.attributes["artwork"]["url"]
+                          : "",
+                      26,
+                    )}
                   />
                   {!chrome.hideUserInfo ? (
                     <div className={"sidebar-user-text"}>
                       {chrome.userinfo.id || mk.isAuthorized ? (
                         <>
-                          <div className={"fullname text-overflow-elipsis"}>{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.name ?? "") : ""}</div>
-                          <div className={"handle-text text-overflow-elipsis"}>{chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.handle ?? "") : ""}</div>
+                          <div className={"fullname text-overflow-elipsis"}>
+                            {chrome.userinfo !== null && chrome.userinfo.attributes !== null ? (chrome.userinfo.attributes.name ?? "") : ""}
+                          </div>
+                          <div className={"handle-text text-overflow-elipsis"}>
+                            {chrome.userinfo !== null && chrome.userinfo.attributes !== null
+                              ? (chrome.userinfo.attributes.handle ?? "")
+                              : ""}
+                          </div>
                         </>
                       ) : (
                         <div onClick={() => mk.authorize()}>{t("term.login")}</div>
@@ -188,7 +201,11 @@ const AppNavigation = () => {
             </div>
           )}
         </motion.div>
-        <motion.div name={"drawertransition"}>{drawer.open && drawer.panel === "queue" && <div className={"app-drawer"}>{drawer.panel === "queue" && <Queue ref={"queue"} />}</div>}</motion.div>
+        <motion.div name={"drawertransition"}>
+          {drawer.open && drawer.panel === "queue" && (
+            <div className={"app-drawer"}>{drawer.panel === "queue" && <Queue ref={"queue"} />}</div>
+          )}
+        </motion.div>
       </AnimatePresence>
     </div>
   );

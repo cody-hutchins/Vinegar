@@ -39,7 +39,9 @@ const Search = ({ search }: { search: object }) => {
       return await true;
     } else {
       await seeAllHistory();
-      const response = await app.mk.api.v3.music(`/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
+      const response = await app.mk.api.v3.music(
+        `/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`,
+      );
       categoriesView = response.data.data;
       console.log(categoriesView);
       categoriesReady = true;
@@ -52,7 +54,8 @@ const Search = ({ search }: { search: object }) => {
     for (let i = 0; i < categoriesView.length; i++) {
       if (categoriesView[i].relationships && categoriesView[i].relationships.contents && categoriesView[i].relationships.contents.data) {
         for (let j = 0; j < categoriesView[i].relationships.contents.data.length; j++) {
-          if (categoriesView[i].relationships.contents.data[j].type !== "editorial-items") flattened.push(categoriesView[i].relationships.contents.data[j]);
+          if (categoriesView[i].relationships.contents.data[j].type !== "editorial-items")
+            flattened.push(categoriesView[i].relationships.contents.data[j]);
         }
       }
     }
@@ -80,7 +83,11 @@ const Search = ({ search }: { search: object }) => {
               }
               onKeyUp={(e) => {
                 if (e.key === "Enter") {
-                  $root.searchQuery($root.search.hints[$root.search.cursor]?.content ?? $root.search.hints[$root.search.cursor]?.searchTerm ?? $root.search.term);
+                  $root.searchQuery(
+                    $root.search.hints[$root.search.cursor]?.content ??
+                      $root.search.hints[$root.search.cursor]?.searchTerm ??
+                      $root.search.term,
+                  );
                   $root.search.showHints = false;
                   $root.search.showSearchView = true;
                 }
@@ -173,7 +180,11 @@ const Search = ({ search }: { search: object }) => {
                               <h3>{app.friendlyTypes(section)}</h3>
                             </Col>
                           </Row>
-                          {!app.friendlyTypes(section).includes("Video") ? <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} /> : <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />}
+                          {!app.friendlyTypes(section).includes("Video") ? (
+                            <MediaItemScrollerHorizontalLarge items={search.results[section].data.limit(10)} />
+                          ) : (
+                            <MediaItemScrollerHorizontalMVView items={search.results[section].data.limit(10)} />
+                          )}
                         </div>
                       ),
                   )}
@@ -223,16 +234,19 @@ const Search = ({ search }: { search: object }) => {
             {(categoriesReady || getCategories()) && (
               <div>
                 <div>
-                  {categoriesView !== null && categoriesView !== [] && categoriesView[0]?.attributes !== null && categoriesView[0]?.attributes.title !== null && (
-                    <Col>
-                      <h3>{t("home.recentlyPlayed")}</h3>
-                      <div className={"mediaitem-list-item__grid"}>
-                        <ListitemHorizontal items={recentlyPlayed.limit(10)} />
-                      </div>
-                      {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="385" size="600" item="item" imagesize"800" />)} */}
-                      <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
-                    </Col>
-                  )}
+                  {categoriesView !== null &&
+                    categoriesView !== [] &&
+                    categoriesView[0]?.attributes !== null &&
+                    categoriesView[0]?.attributes.title !== null && (
+                      <Col>
+                        <h3>{t("home.recentlyPlayed")}</h3>
+                        <div className={"mediaitem-list-item__grid"}>
+                          <ListitemHorizontal items={recentlyPlayed.limit(10)} />
+                        </div>
+                        {/* {recentlyPlayed.limit(10).map((item) => <MediaItemSquare kind="385" size="600" item="item" imagesize"800" />)} */}
+                        <h3>{categoriesView[0]?.attributes?.title?.stringForDisplay ?? ""}</h3>
+                      </Col>
+                    )}
                 </div>
                 <div className={"categories"}>
                   {getFlattenedCategories().map((item) => (
@@ -241,7 +255,15 @@ const Search = ({ search }: { search: object }) => {
                       kind={"385"}
                       imageformat={"bb"}
                       removeamtext={true}
-                      item={item ? (item.attributes.kind ? item : item.relationships && item.relationships.contents ? item.relationships.contents.data[0] : item) : []}
+                      item={
+                        item
+                          ? item.attributes.kind
+                            ? item
+                            : item.relationships && item.relationships.contents
+                              ? item.relationships.contents.data[0]
+                              : item
+                          : []
+                      }
                       imagesize={800}
                     />
                   ))}

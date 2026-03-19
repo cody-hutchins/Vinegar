@@ -164,7 +164,9 @@ const ThemesGithub = () => {
                         <div>⭐ {repo.stargazers_count}</div>
                       </div>
                     </Col>
-                    <Col auto>{themesInstalled.includes(repo.full_name.toLowerCase()) && <span className={"codicon codicon-cloud-download"} />}</Col>
+                    <Col auto>
+                      {themesInstalled.includes(repo.full_name.toLowerCase()) && <span className={"codicon codicon-cloud-download"} />}
+                    </Col>
                   </Row>
                 </li>
               ))}
@@ -199,7 +201,11 @@ const ThemesGithub = () => {
                     <button
                       className={"md-btn md-btn-primary"}
                       onClick={() => installThemeRepo(openRepo)}>
-                      {!themesInstalled.includes(openRepo.full_name.toLowerCase()) ? <span>{t("action.install")}</span> : <span>{t("action.update")}</span>}
+                      {!themesInstalled.includes(openRepo.full_name.toLowerCase()) ? (
+                        <span>{t("action.install")}</span>
+                      ) : (
+                        <span>{t("action.update")}</span>
+                      )}
                     </button>
                   </Col>
                 </Row>

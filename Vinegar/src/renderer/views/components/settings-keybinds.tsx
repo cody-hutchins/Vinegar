@@ -66,15 +66,35 @@ const Keybinds = () => {
     app.cfg.general.keybindings.albums = [app.platform === "darwin" ? "Command" : "Control", "A"];
     app.cfg.general.keybindings.artists = [app.platform === "darwin" ? "Command" : "Control", "D"];
     app.cfg.general.keybindings.togglePrivateSession = [app.platform === "darwin" ? "Command" : "Control", "P"];
-    app.cfg.general.keybindings.webRemote = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "W"];
-    app.cfg.general.keybindings.audioSettings = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "A"];
-    app.cfg.general.keybindings.pluginMenu = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "P"];
-    app.cfg.general.keybindings.castToDevices = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt", "C"];
+    app.cfg.general.keybindings.webRemote = [
+      app.platform === "darwin" ? "Command" : "Control",
+      app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
+      "W",
+    ];
+    app.cfg.general.keybindings.audioSettings = [
+      app.platform === "darwin" ? "Command" : "Control",
+      app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
+      "A",
+    ];
+    app.cfg.general.keybindings.pluginMenu = [
+      app.platform === "darwin" ? "Command" : "Control",
+      app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
+      "P",
+    ];
+    app.cfg.general.keybindings.castToDevices = [
+      app.platform === "darwin" ? "Command" : "Control",
+      app.platform === "darwin" ? "Option" : app.platform === "linux" ? "Shift" : "Alt",
+      "C",
+    ];
     app.cfg.general.keybindings.settings = [app.platform === "darwin" ? "Command" : "Control", ","];
     app.cfg.general.keybindings.zoomn = [app.platform === "darwin" ? "Command" : "Control", "numadd"];
     app.cfg.general.keybindings.zoomt = [app.platform === "darwin" ? "Command" : "Control", "numsub"];
     app.cfg.general.keybindings.zoomrst = [app.platform === "darwin" ? "Command" : "Control", "num0"];
-    app.cfg.general.keybindings.openDeveloperTools = [app.platform === "darwin" ? "Command" : "Control", app.platform === "darwin" ? "Option" : "Shift", "I"];
+    app.cfg.general.keybindings.openDeveloperTools = [
+      app.platform === "darwin" ? "Command" : "Control",
+      app.platform === "darwin" ? "Option" : "Shift",
+      "I",
+    ];
     notyf.success(t("settings.notyf.general.keybindings.update.success"));
     app.confirm(t("settings.prompt.general.keybindings.update.success"), (ok) => {
       if (ok) window.electronAPI.invoke("relaunchApp").then();

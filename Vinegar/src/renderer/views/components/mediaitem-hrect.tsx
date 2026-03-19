@@ -5,7 +5,14 @@ const MediaItemHrect = ({ item }: { item: MusicKit.MediaItem }) => {
   return (
     <div id={"mediaitem-hrect"}>
       <div
-        onClick={() => app.playMediaItemById(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.url)}
+        onClick={() =>
+          app.playMediaItemById(
+            item.attributes.playParams.id ?? item.id,
+            item.attributes.playParams.kind ?? item.type,
+            item.attributes.playParams.isLibrary ?? false,
+            item.attributes.url,
+          )
+        }
         className={"cd-mediaitem-hrect"}>
         <div className={"artwork"}>
           <MediaItemArtwork

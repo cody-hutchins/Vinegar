@@ -162,7 +162,12 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
     app.moreinfodata = {
       title: data?.attributes ? (data?.attributes?.name ?? data?.attributes?.title) || "" : "",
       subtitle: data?.attributes?.artistName ?? "",
-      content: data?.attributes?.editorialNotes !== null ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "") : data.attributes?.description ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "") : "",
+      content:
+        data?.attributes?.editorialNotes !== null
+          ? (data?.attributes?.editorialNotes?.standard ?? data?.attributes?.editorialNotes?.short ?? "")
+          : data.attributes?.description
+            ? (data.attributes?.description?.standard ?? data?.attributes?.description?.short ?? "")
+            : "",
     };
     app.modals.moreInfo = true;
   }
@@ -270,8 +275,16 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         "fields[albums]": "inLibrary",
         relate: "library",
       };
-      const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
-      inLibrary = res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary ? res.data.data[0].attributes.inLibrary : false;
+      const res = await app.mkapi(
+        data.attributes.playParams.kind ?? data.type,
+        data.attributes.playParams.isLibrary ?? false,
+        data.attributes.playParams.id ?? data.id,
+        params,
+      );
+      inLibrary =
+        res.data.data[0] && res.data.data[0].attributes && res.data.data[0].attributes.inLibrary
+          ? res.data.data[0].attributes.inLibrary
+          : false;
       console.log(res);
     } else {
       inLibrary = true;
@@ -306,8 +319,19 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
   async function removeFromLibrary(id) {
     const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
     let id = data.id ?? data.attributes.playParams.id;
-    const res = await app.mkapi(data.attributes.playParams.kind ?? data.type, data.attributes.playParams.isLibrary ?? false, data.attributes.playParams.id ?? data.id, params);
-    if (res.data.data[0] && res.data.data[0].relationships && res.data.data[0].relationships.library && res.data.data[0].relationships.library.data && res.data.data[0].relationships.library.data.length > 0) {
+    const res = await app.mkapi(
+      data.attributes.playParams.kind ?? data.type,
+      data.attributes.playParams.isLibrary ?? false,
+      data.attributes.playParams.id ?? data.id,
+      params,
+    );
+    if (
+      res.data.data[0] &&
+      res.data.data[0].relationships &&
+      res.data.data[0].relationships.library &&
+      res.data.data[0].relationships.library.data &&
+      res.data.data[0].relationships.library.data.length > 0
+    ) {
       id = res.data.data[0].relationships.library.data[0].id;
     }
     const kind = data.attributes.playParams.kind ?? data.type ?? "";
@@ -474,7 +498,13 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
           icon: "./assets/feather/list.svg",
           action: () => {
             app.selectedMediaItems = [];
-            app.select_selectMediaItem(data.attributes.playParams.id ?? data.id, data.attributes.playParams.kind ?? data.type, 0, 0, data.attributes.playParams.isLibrary ?? false);
+            app.select_selectMediaItem(
+              data.attributes.playParams.id ?? data.id,
+              data.attributes.playParams.kind ?? data.type,
+              0,
+              0,
+              data.attributes.playParams.isLibrary ?? false,
+            );
             app.promptAddToPlaylist();
           },
         },
@@ -562,7 +592,10 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       } catch (e) {
         // use the format in json instead
         if (t("date.format") !== null) {
-          formatted = new t("date.format").replace("${d}", releaseDate.getDate()).replace("${m}", releaseDate.getMonth()).replace("${y}", releaseDate.getFullYear());
+          formatted = new t("date.format")
+            .replace("${d}", releaseDate.getDate())
+            .replace("${m}", releaseDate.getMonth())
+            .replace("${y}", releaseDate.getFullYear());
         } else {
           formatted = new Intl.DateTimeFormat("en-US", {
             day: "numeric",
@@ -629,10 +662,12 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       const urls = [];
       app.selectedMediaItems.forEach((item) => {
         app.mk.api.v3.music(`/v1/me/library/songs/${item.id}`).then((response) => {
-          app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${response.data.data[0].attributes.playParams.catalogId}`).then((response1) => {
-            urls.push(response1.data.data[0].attributes.url);
-            navigator.clipboard.writeText(urls);
-          });
+          app.mk.api.v3
+            .music(`/v1/catalog/${app.mk.storefrontId}/songs/${response.data.data[0].attributes.playParams.catalogId}`)
+            .then((response1) => {
+              urls.push(response1.data.data[0].attributes.url);
+              navigator.clipboard.writeText(urls);
+            });
         });
       });
       notyf.success(t("term.share.success"));
@@ -735,7 +770,10 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         <div
           className={classNames("content-inner playlist-page", classes)}
           is-album={isAlbum()}
-          style={{ backgroundColor: data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "" }}>
+          style={{
+            backgroundColor:
+              data.attributes.artwork !== null && data.attributes.artwork["bgColor"] !== null ? "#" + data.attributes.artwork.bgColor : "",
+          }}>
           {app.playlists.loadingState === 0 && (
             <div className={"content-inner centered"}>
               <div className={"spinner"} />
@@ -774,8 +812,26 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                         <MediaItemArtwork
                           shadow={"large"}
                           video-priority={true}
-                          url={data.attributes !== null && data.attributes.artwork !== null ? data.attributes.artwork.url : data.relationships !== null && data.relationships.tracks.data.length > 0 && data.relationships.tracks.data[0].attributes !== null ? (data.relationships.tracks.data[0].attributes.artwork !== null ? data.relationships.tracks.data[0].attributes.artwork.url : "") : ""}
-                          video={data.attributes !== null && data.attributes.editorialVideo !== null ? (data.attributes.editorialVideo.motionDetailSquare ? data.attributes.editorialVideo.motionDetailSquare.video : data.attributes.editorialVideo.motionSquareVideo1x1 ? data.attributes.editorialVideo.motionSquareVideo1x1.video : "") : ""}
+                          url={
+                            data.attributes !== null && data.attributes.artwork !== null
+                              ? data.attributes.artwork.url
+                              : data.relationships !== null &&
+                                  data.relationships.tracks.data.length > 0 &&
+                                  data.relationships.tracks.data[0].attributes !== null
+                                ? data.relationships.tracks.data[0].attributes.artwork !== null
+                                  ? data.relationships.tracks.data[0].attributes.artwork.url
+                                  : ""
+                                : ""
+                          }
+                          video={
+                            data.attributes !== null && data.attributes.editorialVideo !== null
+                              ? data.attributes.editorialVideo.motionDetailSquare
+                                ? data.attributes.editorialVideo.motionDetailSquare.video
+                                : data.attributes.editorialVideo.motionSquareVideo1x1
+                                  ? data.attributes.editorialVideo.motionSquareVideo1x1.video
+                                  : ""
+                              : ""
+                          }
                           imagesize={"500"}
                         />
                       </div>
@@ -787,7 +843,11 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                             className={"playlist-name"}
                             onMouseOver={() => minClass(false)}
                             onClick={() => editPlaylistName()}
-                            style={{ display: nameEditing ? "none" : "inherit", color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject()?.textColor1 : "", filter: `drop-shadow(${hasHeroObject()?.textColor4 ? "1px 3px 8px #" + hasHeroObject()?.textColor4 : ""})` }}>
+                            style={{
+                              display: nameEditing ? "none" : "inherit",
+                              color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject()?.textColor1 : "",
+                              filter: `drop-shadow(${hasHeroObject()?.textColor4 ? "1px 3px 8px #" + hasHeroObject()?.textColor4 : ""})`,
+                            }}>
                             {data.attributes ? (data.attributes.name ?? data.attributes.title) || "" : ""}
                           </div>
                           <div
@@ -826,14 +886,18 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                                 item={artist}
                               />
                             ))}
-                          {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) || (data.attributes.editorialNotes && (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
+                          {((data.attributes.description && (data.attributes.description.standard || data.attributes.description.short)) ||
+                            (data.attributes.editorialNotes &&
+                              (data.attributes.editorialNotes.standard || data.attributes.editorialNotes.short))) && (
                             <div
                               className={"playlist-desc"}
                               style={{ color: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "" }}>
                               {(data.attributes.description?.short ?? data.attributes.editorialNotes?.short) !== null ? (
                                 <div
                                   className={"content"}
-                                  dangerouslySetInnerHTML={{ __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short }}
+                                  dangerouslySetInnerHTML={{
+                                    __html: data.attributes.description?.short ?? data.attributes.editorialNotes?.short,
+                                  }}
                                   onClick={() => openInfoModal()}
                                 />
                               ) : (
@@ -852,7 +916,13 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                         <div className={"playlist-desc-expanded"}>
                           <div
                             className={"content"}
-                            dangerouslySetInnerHTML={{ __html: data.attributes.editorialNotes ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "") : data.attributes.description ? (data.attributes.description.standard ?? data.attributes.description.short ?? "") : "" }}
+                            dangerouslySetInnerHTML={{
+                              __html: data.attributes.editorialNotes
+                                ? (data.attributes.editorialNotes.standard ?? data.attributes.editorialNotes.short ?? "")
+                                : data.attributes.description
+                                  ? (data.attributes.description.standard ?? data.attributes.description.short ?? "")
+                                  : "",
+                            }}
                           />
                           <button
                             className={"more-btn"}
@@ -867,7 +937,12 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                         style={{ zIndex: 20 }}>
                         <button
                           className={"md-btn md-btn-primary md-btn-icon"}
-                          style={{ minWidth: "100px", background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "", borderTop: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "", border: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}
+                          style={{
+                            minWidth: "100px",
+                            background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "",
+                            borderTop: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "",
+                            border: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "",
+                          }}
                           onClick={() => {
                             app.mk.shuffleMode = 0;
                             play();
@@ -877,7 +952,12 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                         </button>
                         <button
                           className={"md-btn md-btn-primary md-btn-icon"}
-                          style={{ minWidth: "100px", background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "", borderTop: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "", border: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "" }}
+                          style={{
+                            minWidth: "100px",
+                            background: hasHeroObject()?.textColor4 ? "#" + hasHeroObject().textColor4 : "",
+                            borderTop: hasHeroObject()?.textColor3 ? "#" + hasHeroObject().textColor3 : "",
+                            border: hasHeroObject()?.textColor2 ? "#" + hasHeroObject().textColor2 : "",
+                          }}
                           onClick={() => {
                             app.mk.shuffleMode = 1;
                             play();
@@ -898,7 +978,11 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                           <button
                             className={"md-btn md-btn-icon"}
                             style={{ minWidth: "180px" }}
-                            onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                            onClick={() =>
+                              !inLibrary
+                                ? addToLibrary(data.attributes.playParams.id.toString())
+                                : removeFromLibrary(data.attributes.playParams.id.toString())
+                            }>
                             <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                             {t("term.confirm")}
                           </button>
@@ -1010,7 +1094,11 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                         <button
                           className={"md-btn md-btn-icon"}
                           style={{ minWidth: "180px" }}
-                          onClick={() => (!inLibrary ? addToLibrary(data.attributes.playParams.id.toString()) : removeFromLibrary(data.attributes.playParams.id.toString()))}>
+                          onClick={() =>
+                            !inLibrary
+                              ? addToLibrary(data.attributes.playParams.id.toString())
+                              : removeFromLibrary(data.attributes.playParams.id.toString())
+                          }>
                           <img className={!inLibrary ? "md-ico-add" : "md-ico-remove"} />
                           {t("term.confirm")}
                         </button>
@@ -1101,7 +1189,9 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                                 ))
                               : nestedSlices.map((disc) => (
                                   <div key={disc.id}>
-                                    <div className={"playlist-time"}>{(t("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}</div>
+                                    <div className={"playlist-time"}>
+                                      {(t("term.discNumber") ?? "").replace("${discNumber}", disc.disc)}
+                                    </div>
                                     {disc.tracks.map((item, index) => (
                                       <MediaItemListItem
                                         item={item}
@@ -1145,14 +1235,17 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
                         style={{ width: "50%" }}>
                         {data.attributes.copyright}
                       </div>
-                      {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") && data.relationships.catalog !== null && data.relationships.catalog !== null && data.relationships.catalog.data.length > 0 && (
-                        <div
-                          className={"playlist-time showExtended item-navigate"}
-                          style={{ color: "#fa586a", fontWeight: "bold" }}
-                          onClick={() => app.routeView(data.relationships.catalog.data[0])}>
-                          {t("action.showAlbum")}
-                        </div>
-                      )}
+                      {(data.attributes?.playParams?.kind ?? data.type ?? "").includes("album") &&
+                        data.relationships.catalog !== null &&
+                        data.relationships.catalog !== null &&
+                        data.relationships.catalog.data.length > 0 && (
+                          <div
+                            className={"playlist-time showExtended item-navigate"}
+                            style={{ color: "#fa586a", fontWeight: "bold" }}
+                            onClick={() => app.routeView(data.relationships.catalog.data[0])}>
+                            {t("action.showAlbum")}
+                          </div>
+                        )}
                     </div>
                   </Tab>
                   {typeof data.views !== "undefined" &&

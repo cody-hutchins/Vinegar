@@ -75,7 +75,12 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             </div>
             {getThemeDirective("windowLayout") === "twopanel" && (
               <div className={"app-chrome-item"}>
-                <OverlayTrigger overlay={<Tooltip id={"show-library"}>{chrome.sidebarCollapsed ? getLz("action.showLibrary") : getLz("action.hideLibrary")}</Tooltip>}>
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id={"show-library"}>
+                      {chrome.sidebarCollapsed ? getLz("action.showLibrary") : getLz("action.hideLibrary")}
+                    </Tooltip>
+                  }>
                   <button
                     className={"playback-button collapseLibrary"}
                     onClick={() => {
@@ -150,7 +155,13 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
             <div className={"app-chrome-item display--large"}>
               <OverlayTrigger overlay={<Tooltip id={"repeat"}>{$root.lz.repeat[mk.repeatMode]}</Tooltip>}>
                 <button
-                  className={classNames("playback-button--small", "repeat", { repeatOne: mkdir.repeatMode === 1 }, { active: mk.repeatMode === 2 }, { disabled: isDisabled() })}
+                  className={classNames(
+                    "playback-button--small",
+                    "repeat",
+                    { repeatOne: mkdir.repeatMode === 1 },
+                    { active: mk.repeatMode === 2 },
+                    { disabled: isDisabled() },
+                  )}
                   onClick={() => repeatIncrement()}
                 />
               </OverlayTrigger>
@@ -235,17 +246,35 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                       </OverlayTrigger>
                     )}
                     {cfg.audio.maikiwiAudio.spatial && (
-                      <OverlayTrigger overlay={<Tooltip id={"spatial"}>{t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") + " (" + getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) + ")"}</Tooltip>}>
+                      <OverlayTrigger
+                        overlay={
+                          <Tooltip id={"spatial"}>
+                            {t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization") +
+                              " (" +
+                              getProfileLz("CTS", cfg.audio.maikiwiAudio.spatialProfile) +
+                              ")"}
+                          </Tooltip>
+                        }>
                         <div className={"audio-type spatial-icon"} />
                       </OverlayTrigger>
                     )}
                     {(mk.nowPlayingItem?.localFilesMetadata?.lossless ?? false) && (
-                      <OverlayTrigger overlay={<Tooltip id={"lossless"}>{mk.nowPlayingItem?.localFilesMetadata?.bitDepth + "-bit / " + mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 + " kHz " + mk.nowPlayingItem.localFilesMetadata.container}</Tooltip>}>
+                      <OverlayTrigger
+                        overlay={
+                          <Tooltip id={"lossless"}>
+                            {mk.nowPlayingItem?.localFilesMetadata?.bitDepth +
+                              "-bit / " +
+                              mk.nowPlayingItem?.localFilesMetadata?.sampleRate / 1000 +
+                              " kHz " +
+                              mk.nowPlayingItem.localFilesMetadata.container}
+                          </Tooltip>
+                        }>
                         <div className={"audio-type lossless-icon"} />
                       </OverlayTrigger>
                     )}
                     {mk.nowPlayingItem.localFilesMetadata === null && cfg.audio.maikiwiAudio.ciderPPE && (
-                      <OverlayTrigger overlay={<Tooltip id={"lossless"}>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
+                      <OverlayTrigger
+                        overlay={<Tooltip id={"lossless"}>{t("settings.option.audio.enableAdvancedFunctionality.ciderPPE")}</Tooltip>}>
                         <div className={"audio-type ppe-icon"} />
                       </OverlayTrigger>
                     )}
@@ -276,7 +305,8 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                     )}
                   </div>
                   <div className={"info-rect"}>
-                    <div className={`song-name ${[isElementOverflowing("#app-main >div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""]}`}>
+                    <div
+                      className={`song-name ${[isElementOverflowing("#app-main >div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name") ? "marquee" : ""]}`}>
                       {mk.nowPlayingItem["attributes"]["name"]}
                       {mk.nowPlayingItem["attributes"]["contentRating"] === "explicit" && (
                         <div
@@ -287,7 +317,16 @@ const ChromeTop = ({ search = {} }: { search?: object }) => {
                     </div>
                     <div className={"song-artist-album"}>
                       <div
-                        className={"song-artist-album-content " + [isElementOverflowing("#app-main >.app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content") ? "marquee" : ""]}
+                        className={
+                          "song-artist-album-content " +
+                          [
+                            isElementOverflowing(
+                              "#app-main >.app-chrome .app-chrome-item > .app-playback-controls > div >.song-artist-album > .song-artist-album-content",
+                            )
+                              ? "marquee"
+                              : "",
+                          ]
+                        }
                         style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap" }}>
                         <div
                           className={"item-navigate song-artist"}

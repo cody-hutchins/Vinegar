@@ -1,7 +1,15 @@
 import { ReactNode } from "react";
 import MediaItemSquare from "./mediaitem-square.jsx";
 
-const MediaItemScrollerHorizontal = ({ children, items, kind = "" }: { children?: ReactNode | ReactNode[]; items?: MusicKit.MediaItem[]; kind?: string }) => {
+const MediaItemScrollerHorizontal = ({
+  children,
+  items,
+  kind = "",
+}: {
+  children?: ReactNode | ReactNode[];
+  items?: MusicKit.MediaItem[];
+  kind?: string;
+}) => {
   const app = this.$root;
   return (
     <div id={"mediaitem-scroller-horizontal"}>

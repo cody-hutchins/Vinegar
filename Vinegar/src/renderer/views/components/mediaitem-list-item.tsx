@@ -5,7 +5,31 @@ import { useOnInView } from "react-intersection-observer";
 import { uuidv4 } from "../../index.js";
 import { useTranslation } from "react-i18next";
 
-const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, showIndex, showIndexPlaylist, contextExt, classList = "" }: { item: MusicKit.MediaItem; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; showIndex?: boolean; showIndexPlaylist?: boolean; contextExt?: object; classList?: string }) => {
+const MediaItemListItem = ({
+  item,
+  parent,
+  index = -1,
+  showArtwork = true,
+  showLibraryStatus = true,
+  showMetadata = false,
+  showDuration = true,
+  showIndex,
+  showIndexPlaylist,
+  contextExt,
+  classList = "",
+}: {
+  item: MusicKit.MediaItem;
+  parent?: string;
+  index?: number;
+  showArtwork?: boolean;
+  showLibraryStatus?: boolean;
+  showMetadata?: boolean;
+  showDuration?: boolean;
+  showIndex?: boolean;
+  showIndexPlaylist?: boolean;
+  contextExt?: object;
+  classList?: string;
+}) => {
   const { t } = useTranslation();
   let showInLibrary = false;
   let isVisible = false;
@@ -120,21 +144,39 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           for (let i = index; i <= endIndex; i++) {
             const item = allMediaItems[i];
             if (item) {
-              (app.select_selectMediaItem(item.getAttribute("data-id"), item.getAttribute("data-type"), item.getAttribute("data-index"), item.getAttribute("data-guid")), item.getAttribute("data-islibrary"));
+              (app.select_selectMediaItem(
+                item.getAttribute("data-id"),
+                item.getAttribute("data-type"),
+                item.getAttribute("data-index"),
+                item.getAttribute("data-guid"),
+              ),
+                item.getAttribute("data-islibrary"));
             }
           }
         } else if (index > endIndex) {
           for (let i = startIndex; i <= index; i++) {
             const item = allMediaItems[i];
             if (item) {
-              (app.select_selectMediaItem(item.getAttribute("data-id"), item.getAttribute("data-type"), item.getAttribute("data-index"), item.getAttribute("data-guid")), item.getAttribute("data-islibrary"));
+              (app.select_selectMediaItem(
+                item.getAttribute("data-id"),
+                item.getAttribute("data-type"),
+                item.getAttribute("data-index"),
+                item.getAttribute("data-guid"),
+              ),
+                item.getAttribute("data-islibrary"));
             }
           }
         } else {
           for (let i = startIndex; i <= endIndex; i++) {
             const item = allMediaItems[i];
             if (item) {
-              (app.select_selectMediaItem(item.getAttribute("data-id"), item.getAttribute("data-type"), item.getAttribute("data-index"), item.getAttribute("data-guid")), item.getAttribute("data-islibrary"));
+              (app.select_selectMediaItem(
+                item.getAttribute("data-id"),
+                item.getAttribute("data-type"),
+                item.getAttribute("data-index"),
+                item.getAttribute("data-guid"),
+              ),
+                item.getAttribute("data-islibrary"));
             }
           }
         }
@@ -351,7 +393,8 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               const _item = item;
               if (!_item.attributes.url) {
                 if (_item.type.includes("library")) {
-                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`)).data.data[0];
+                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`))
+                    .data.data[0];
                   if (result.attributes.url) {
                     app.copyToClipboard(result.attributes.url);
                   } else {
@@ -374,7 +417,8 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
               }
               if (!_item.attributes.url) {
                 if (_item.type.includes("library")) {
-                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`)).data.data[0];
+                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`))
+                    .data.data[0];
                   if (result.attributes.url) {
                     app.copyToClipboard(result.attributes.url);
                   } else {
@@ -464,8 +508,19 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
     const _item = item;
     const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
     let id = _item.id ?? _item.attributes.playParams?.id;
-    const res = await app.mkapi(_item.attributes.playParams?.kind ?? _item.type, _item.attributes.playParams?.isLibrary ?? false, _item.attributes.playParams?.id ?? _item.id, params);
-    if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
+    const res = await app.mkapi(
+      _item.attributes.playParams?.kind ?? _item.type,
+      _item.attributes.playParams?.isLibrary ?? false,
+      _item.attributes.playParams?.id ?? _item.id,
+      params,
+    );
+    if (
+      res &&
+      res.relationships &&
+      res.relationships.library &&
+      res.relationships.library.data &&
+      res.relationships.library.data.length > 0
+    ) {
       id = res.relationships.library.data[0].id;
     }
     const kind = _item.attributes.playParams?.kind ?? data.item ?? "";
@@ -555,7 +610,12 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
             });
           });
       } else {
-        app.playMediaItemById(item.attributes.playParams?.id ?? item.id, item.attributes.playParams?.kind ?? item.type, item.attributes.playParams?.isLibrary ?? false, item.attributes.url);
+        app.playMediaItemById(
+          item.attributes.playParams?.id ?? item.id,
+          item.attributes.playParams?.kind ?? item.type,
+          item.attributes.playParams?.isLibrary ?? false,
+          item.attributes.url,
+        );
       }
     });
   }
@@ -610,18 +670,25 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
                   ) : null}
                 </div>
               )}
-              {!(app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id)) && showIndex && (
-                <div style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
-                  <div>
-                    <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : index ? index * 1 + 1 : ""}</div>
+              {!(
+                app.mk.isPlaying &&
+                ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId ||
+                  app.mk.nowPlayingItem.id === item.id)
+              ) &&
+                showIndex && (
+                  <div style={{ display: showIndex && !showInLibrary ? "block" : "none", marginLeft: "11px" }}>
+                    <div>
+                      <div>{item.attributes && !showIndexPlaylist ? (item.attributes.trackNumber ?? "") : index ? index * 1 + 1 : ""}</div>
+                    </div>
                   </div>
-                </div>
-              )}
-              {app.mk.isPlaying && ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId || app.mk.nowPlayingItem.id === item.id) && (
-                <div style={{ display: showInLibrary ? "none" : "block" }}>
-                  <div className={"loadbar-sound"} />
-                </div>
-              )}
+                )}
+              {app.mk.isPlaying &&
+                ((app.mk.nowPlayingItem._songId ?? app.mk.nowPlayingItem.songId ?? app.mk.nowPlayingItem.id) === itemId ||
+                  app.mk.nowPlayingItem.id === item.id) && (
+                  <div style={{ display: showInLibrary ? "none" : "block" }}>
+                    <div className={"loadbar-sound"} />
+                  </div>
+                )}
             </div>
           )}
           {showArtwork && (!showIndex || (showIndex && showIndexPlaylist)) && (
@@ -685,7 +752,9 @@ const MediaItemListItem = ({ item, parent, index = -1, showArtwork = true, showL
           {item.attributes && item.attributes.contentRating === "explicit" && <div className={"explicit-icon"} />}
           {showMetadata && (
             <template onDoubleClick={route}>
-              <div className={"metainfo"}>{item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}</div>
+              <div className={"metainfo"}>
+                {item.attributes.releaseDate ? new Date(item.attributes.releaseDate).toLocaleDateString() : ""}
+              </div>
               <div className={"metainfo"}>{item.attributes.genreNames[0] ?? ""}</div>
             </template>
           )}

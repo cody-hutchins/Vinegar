@@ -130,7 +130,9 @@ export const Clone = (obj: object) => {
 };
 
 export const uuidv4 = () => {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),
+  );
 };
 
 export const xmlToJson = (xml) => {
@@ -186,7 +188,9 @@ export const checkIfScrollIsStatic = setInterval(() => {
       // do something
     }
     position = document.getElementsByClassName("lyric-body")[0].scrollTop;
-  } catch (e) {console.log(e);}
+  } catch (e) {
+    console.log(e);
+  }
 }, 50);
 
 // WebGPU Console Notification
@@ -239,7 +243,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 document.addEventListener(
   "contextmenu",
   function (e) {
-    if (e.target.tagName.toLowerCase() === "textarea" || (e.target.tagName.toLowerCase() === "input" && e.target.type !== "checkbox" && e.target.type !== "radio" && !e.target.disabled)) {
+    if (
+      e.target.tagName.toLowerCase() === "textarea" ||
+      (e.target.tagName.toLowerCase() === "input" && e.target.type !== "checkbox" && e.target.type !== "radio" && !e.target.disabled)
+    ) {
       e.preventDefault();
       const menuPanel = {
         items: {

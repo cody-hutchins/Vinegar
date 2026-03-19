@@ -111,7 +111,13 @@ const Home = () => {
       chunks.push(artists.slice(artistIdx, artistIdx + 50));
     }
     try {
-      const chunkArtistData = await Promise.all(chunks.map((chunk) => app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`)));
+      const chunkArtistData = await Promise.all(
+        chunks.map((chunk) =>
+          app.mk.api.v3.music(
+            `/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`,
+          ),
+        ),
+      );
       chunkArtistData.forEach((chunkResult) =>
         chunkResult.data.data.forEach((item) => {
           if (item.views["latest-release"].data.length !== 0) {
@@ -299,7 +305,9 @@ const Home = () => {
                     )}
                   </Col>
                 </Row>
-                <div className={"well"}>{isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={madeForYou} /> : <div className={"spinner"} />}</div>
+                <div className={"well"}>
+                  {isSectionReady("madeForYou") ? <MediaItemScrollerHorizontal items={madeForYou} /> : <div className={"spinner"} />}
+                </div>
               </Col>
             </Row>
             {friendsListeningTo && friendsListeningTo.length > 0 && (
@@ -319,7 +327,13 @@ const Home = () => {
                       </button>
                     </Col>
                   </Row>
-                  <div className={"well"}>{isSectionReady("friendsListeningTo") ? <MediaItemScrollerHorizontal items={friendsListeningTo} /> : <div className={"spinner"} />}</div>
+                  <div className={"well"}>
+                    {isSectionReady("friendsListeningTo") ? (
+                      <MediaItemScrollerHorizontal items={friendsListeningTo} />
+                    ) : (
+                      <div className={"spinner"} />
+                    )}
+                  </div>
                 </Col>
               </Row>
             )}

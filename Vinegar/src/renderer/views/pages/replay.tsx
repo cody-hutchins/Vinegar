@@ -18,7 +18,9 @@ const Replay = () => {
   let musicTypeGenre = "";
   async function mounted() {
     // Get available years
-    const year = await app.mk.api.v3.music("/v1/me/music-summaries/search?extend=inLibrary&period=year&fields[music-summaries]=period%2Cyear&include[music-summaries]=playlist");
+    const year = await app.mk.api.v3.music(
+      "/v1/me/music-summaries/search?extend=inLibrary&period=year&fields[music-summaries]=period%2Cyear&include[music-summaries]=playlist",
+    );
     years = year.data.data;
     years.reverse();
     localStorage.setItem("seenReplay", true);
@@ -68,10 +70,14 @@ const Replay = () => {
   }
   async function getReplayYear(year = new Date().getFullYear()) {
     loaded.id = -1;
-    const response = await app.mk.api.v3.music(`/v1/me/music-summaries/year-${year}?extend=inLibrary&views=top-artists%2Ctop-albums%2Ctop-songs&include[music-summaries]=playlist&include[playlists]=tracks&includeOnly=playlist%2Ctracks%2Csong%2Cartist%2Calbum`);
+    const response = await app.mk.api.v3.music(
+      `/v1/me/music-summaries/year-${year}?extend=inLibrary&views=top-artists%2Ctop-albums%2Ctop-songs&include[music-summaries]=playlist&include[playlists]=tracks&includeOnly=playlist%2Ctracks%2Csong%2Cartist%2Calbum`,
+    );
     const replayData = response.data.data[0];
     // extended playlist
-    const playlist = await app.mk.api.v3.music(replayData.relationships.playlist.data[0].href, { extend: "editorialArtwork,editorialVideo" });
+    const playlist = await app.mk.api.v3.music(replayData.relationships.playlist.data[0].href, {
+      extend: "editorialArtwork,editorialVideo",
+    });
     replayData.playlist = playlist.data.data[0];
     loaded = replayData;
   }

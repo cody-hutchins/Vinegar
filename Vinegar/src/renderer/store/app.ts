@@ -133,7 +133,24 @@ interface AppState {
   selectedMediaItems: string[];
   routes: string[];
   musicBaseUrl: string;
-  modals: Record<"addToPlaylist" | "spatialProperties" | "qrcode" | "equalizer" | "audioSettings" | "pluginMenu" | "audioControls" | "audioPlaybackRate" | "showPlaylist" | "castMenu" | "pathMenu" | "moreInfo" | "airplayPW" | "settings" | "c2Upgrade", boolean>;
+  modals: Record<
+    | "addToPlaylist"
+    | "spatialProperties"
+    | "qrcode"
+    | "equalizer"
+    | "audioSettings"
+    | "pluginMenu"
+    | "audioControls"
+    | "audioPlaybackRate"
+    | "showPlaylist"
+    | "castMenu"
+    | "pathMenu"
+    | "moreInfo"
+    | "airplayPW"
+    | "settings"
+    | "c2Upgrade",
+    boolean
+  >;
   socialBadges: {
     badgeMap: Record<string, any>;
     version: string;

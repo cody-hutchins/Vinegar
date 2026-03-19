@@ -475,7 +475,13 @@ export class BrowserWindow {
    */
   private static verifyFiles(): void {
     const expectedDirectories = ["CiderCache"];
-    const expectedFiles = ["library-songs.json", "library-artists.json", "library-albums.json", "library-playlists.json", "library-recentlyAdded.json"];
+    const expectedFiles = [
+      "library-songs.json",
+      "library-artists.json",
+      "library-albums.json",
+      "library-playlists.json",
+      "library-recentlyAdded.json",
+    ];
     for (let i = 0; i < expectedDirectories.length; i++) {
       if (!existsSync(join(app.getPath("userData"), expectedDirectories[i]))) {
         mkdirSync(join(app.getPath("userData"), expectedDirectories[i]));
@@ -504,7 +510,12 @@ export class BrowserWindow {
         console.error("Req not defined");
         return;
       }
-      if (req.url.includes("api") || req.url.includes("audio.wav") || (req.headers.host.includes("localhost") && (this.devMode || req.headers["user-agent"].includes("Electron"))) || req.url.includes("/connect")) {
+      if (
+        req.url.includes("api") ||
+        req.url.includes("audio.wav") ||
+        (req.headers.host.includes("localhost") && (this.devMode || req.headers["user-agent"].includes("Electron"))) ||
+        req.url.includes("/connect")
+      ) {
         next();
       } else {
         res.redirect("https://discord.gg/applemusic");
@@ -557,11 +568,15 @@ export class BrowserWindow {
           res.send("Stopped");
           break;
         case "next":
-          BrowserWindow.win.webContents.executeJavaScript("if (MusicKit.getInstance().queue.nextPlayableItemIndex != -1 && MusicKit.getInstance().queue.nextPlayableItemIndex != null) {MusicKit.getInstance().changeToMediaAtIndex(MusicKit.getInstance().queue.nextPlayableItemIndex);}");
+          BrowserWindow.win.webContents.executeJavaScript(
+            "if (MusicKit.getInstance().queue.nextPlayableItemIndex != -1 && MusicKit.getInstance().queue.nextPlayableItemIndex != null) {MusicKit.getInstance().changeToMediaAtIndex(MusicKit.getInstance().queue.nextPlayableItemIndex);}",
+          );
           res.send("Next");
           break;
         case "previous":
-          BrowserWindow.win.webContents.executeJavaScript("if (MusicKit.getInstance().queue.previousPlayableItemIndex != -1 && MusicKit.getInstance().queue.previousPlayableItemIndex != null) {MusicKit.getInstance().changeToMediaAtIndex(MusicKit.getInstance().queue.previousPlayableItemIndex);}");
+          BrowserWindow.win.webContents.executeJavaScript(
+            "if (MusicKit.getInstance().queue.previousPlayableItemIndex != -1 && MusicKit.getInstance().queue.previousPlayableItemIndex != null) {MusicKit.getInstance().changeToMediaAtIndex(MusicKit.getInstance().queue.previousPlayableItemIndex);}",
+          );
           res.send("Previous");
           break;
         default: {
@@ -696,7 +711,9 @@ export class BrowserWindow {
             redirectURL: `http://localhost:${this.clientPort}/apple-hls.js`,
           });
         } else if (details.url.includes("ciderlocal") && !details.url.includes("https://apic-desktop.musixmatch.com")) {
-          const text = details.url.toString().includes("ids=") ? decodeURIComponent(details.url.toString()).split("?ids=")[1] : decodeURIComponent(details.url.toString().substring(details.url.toString().lastIndexOf("/") + 1));
+          const text = details.url.toString().includes("ids=")
+            ? decodeURIComponent(details.url.toString()).split("?ids=")[1]
+            : decodeURIComponent(details.url.toString().substring(details.url.toString().lastIndexOf("/") + 1));
           //console.log('localurl',text)
           callback({
             redirectURL: `http://localhost:${this.clientPort}/ciderlocal/${Buffer.from(text).toString("base64url")}`,
@@ -709,37 +726,49 @@ export class BrowserWindow {
       },
     );
 
-    BrowserWindow.win.webContents.session.webRequest.onBeforeSendHeaders(async (details: { url: string; requestHeaders: { [x: string]: string } }, callback: (arg0: { requestHeaders: any }) => void) => {
-      if (details.url === "https://buy.itunes.apple.com/account/web/info") {
-        details.requestHeaders["sec-fetch-site"] = "same-site";
-        details.requestHeaders["DNT"] = "1";
-        const itspod = await BrowserWindow.win.webContents.executeJavaScript(`window.localStorage.getItem("music.ampwebplay.itspod")`);
-        if (itspod != null) details.requestHeaders["Cookie"] = `itspod=${itspod}`;
-      }
-      if (details.url.includes("apple.com")) {
-        details.requestHeaders["DNT"] = "1";
-        details.requestHeaders["authority"] = "amp-api.music.apple.com";
-        details.requestHeaders["origin"] = "https://beta.music.apple.com";
-        details.requestHeaders["referer"] = "https://beta.music.apple.com";
-        details.requestHeaders["sec-fetch-dest"] = "empty";
-        details.requestHeaders["sec-fetch-mode"] = "cors";
-        details.requestHeaders["sec-fetch-site"] = "same-site";
-      }
-      if (details.url.startsWith("https://music.163.com")) {
-        details.requestHeaders["Referer"] = "https://music.163.com/";
-        details.requestHeaders["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cider/1.0.0 Chrome/96.0.4664.45 Electron/16.0.0 Safari/537.36";
-      }
-      if (details.url.includes("https://qq.com")) {
-        ((details.requestHeaders["Accept"] = "*/*"), (details.requestHeaders["Accept-Encoding"] = "gzip, deflate, br"), (details.requestHeaders["Accept-Language"] = "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"), (details.requestHeaders["Referer"] = "https://y.qq.com/"), (details.requestHeaders["User-Agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X; zh-CN) AppleWebKit/537.51.1 ("));
-        ("KHTML, like Gecko) Mobile/17D50 UCBrowser/12.8.2.1268 Mobile AliApp(TUnionSDK/0.1.20.3) ");
-      }
-      if (details.url.includes("https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg")) {
-        ((details.requestHeaders["Accept"] = "*/*"), (details.requestHeaders["Accept-Encoding"] = "gzip, deflate, br"), (details.requestHeaders["Accept-Language"] = "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"), (details.requestHeaders["User-Agent"] = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X; zh-CN) AppleWebKit/537.51.1 ("));
-        ("KHTML, like Gecko) Mobile/17D50 UCBrowser/12.8.2.1268 Mobile AliApp(TUnionSDK/0.1.20.3) ");
-        details.requestHeaders["Referer"] = "https://y.qq.com/portal/player.html";
-      }
-      callback({ requestHeaders: details.requestHeaders });
-    });
+    BrowserWindow.win.webContents.session.webRequest.onBeforeSendHeaders(
+      async (details: { url: string; requestHeaders: { [x: string]: string } }, callback: (arg0: { requestHeaders: any }) => void) => {
+        if (details.url === "https://buy.itunes.apple.com/account/web/info") {
+          details.requestHeaders["sec-fetch-site"] = "same-site";
+          details.requestHeaders["DNT"] = "1";
+          const itspod = await BrowserWindow.win.webContents.executeJavaScript(`window.localStorage.getItem("music.ampwebplay.itspod")`);
+          if (itspod != null) details.requestHeaders["Cookie"] = `itspod=${itspod}`;
+        }
+        if (details.url.includes("apple.com")) {
+          details.requestHeaders["DNT"] = "1";
+          details.requestHeaders["authority"] = "amp-api.music.apple.com";
+          details.requestHeaders["origin"] = "https://beta.music.apple.com";
+          details.requestHeaders["referer"] = "https://beta.music.apple.com";
+          details.requestHeaders["sec-fetch-dest"] = "empty";
+          details.requestHeaders["sec-fetch-mode"] = "cors";
+          details.requestHeaders["sec-fetch-site"] = "same-site";
+        }
+        if (details.url.startsWith("https://music.163.com")) {
+          details.requestHeaders["Referer"] = "https://music.163.com/";
+          details.requestHeaders["user-agent"] =
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cider/1.0.0 Chrome/96.0.4664.45 Electron/16.0.0 Safari/537.36";
+        }
+        if (details.url.includes("https://qq.com")) {
+          ((details.requestHeaders["Accept"] = "*/*"),
+            (details.requestHeaders["Accept-Encoding"] = "gzip, deflate, br"),
+            (details.requestHeaders["Accept-Language"] = "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"),
+            (details.requestHeaders["Referer"] = "https://y.qq.com/"),
+            (details.requestHeaders["User-Agent"] =
+              "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X; zh-CN) AppleWebKit/537.51.1 ("));
+          ("KHTML, like Gecko) Mobile/17D50 UCBrowser/12.8.2.1268 Mobile AliApp(TUnionSDK/0.1.20.3) ");
+        }
+        if (details.url.includes("https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg")) {
+          ((details.requestHeaders["Accept"] = "*/*"),
+            (details.requestHeaders["Accept-Encoding"] = "gzip, deflate, br"),
+            (details.requestHeaders["Accept-Language"] = "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"),
+            (details.requestHeaders["User-Agent"] =
+              "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X; zh-CN) AppleWebKit/537.51.1 ("));
+          ("KHTML, like Gecko) Mobile/17D50 UCBrowser/12.8.2.1268 Mobile AliApp(TUnionSDK/0.1.20.3) ");
+          details.requestHeaders["Referer"] = "https://y.qq.com/portal/player.html";
+        }
+        callback({ requestHeaders: details.requestHeaders });
+      },
+    );
 
     const location = `http://localhost:${this.clientPort}/`;
 
@@ -781,7 +810,8 @@ export class BrowserWindow {
             path: options.route,
             authority: "amp-api.music.apple.com",
             "media-user-token": options.mediaToken,
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cider/1.4.2 Chrome/100.0.4896.75 Electron/18.0.3 Safari/537.36",
+            "user-agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Cider/1.4.2 Chrome/100.0.4896.75 Electron/18.0.3 Safari/537.36",
           },
         },
       );
@@ -1299,7 +1329,14 @@ export class BrowserWindow {
       //let newaudio = [leftpcm, rightpcm];
       // console.log(newaudio.length);
 
-      const pcmData = Buffer.from(new Uint8Array(interleave16(bitratechange(Int16Array.from(newaudio[0], (x) => convert(x))), bitratechange(Int16Array.from(newaudio[1], (x) => convert(x)))).buffer));
+      const pcmData = Buffer.from(
+        new Uint8Array(
+          interleave16(
+            bitratechange(Int16Array.from(newaudio[0], (x) => convert(x))),
+            bitratechange(Int16Array.from(newaudio[1], (x) => convert(x))),
+          ).buffer,
+        ),
+      );
 
       if (!this.headerSent) {
         console.log("new header");
@@ -1328,14 +1365,20 @@ export class BrowserWindow {
     ipcMain.handle("showQR", async (_event, _) => {
       //macOS
       const url = `http://${BrowserWindow.getIP()}:${this.remotePort}`;
-      BrowserWindow.win.webContents.send("send-remote-pair-url", `https://cider.sh/remote/pair?url=${Buffer.from(encodeURI(url)).toString("base64")}`.toString());
+      BrowserWindow.win.webContents.send(
+        "send-remote-pair-url",
+        `https://cider.sh/remote/pair?url=${Buffer.from(encodeURI(url)).toString("base64")}`.toString(),
+      );
     });
 
     ipcMain.on("get-remote-pair-url", (_event, _) => {
       // Linux and Windows
       const url = `http://${BrowserWindow.getIP()}:${this.remotePort}`;
       //if (app.isPackaged) {
-      BrowserWindow.win.webContents.send("send-remote-pair-url", `https://cider.sh/remote/pair?url=${Buffer.from(encodeURI(url)).toString("base64")}`.toString());
+      BrowserWindow.win.webContents.send(
+        "send-remote-pair-url",
+        `https://cider.sh/remote/pair?url=${Buffer.from(encodeURI(url)).toString("base64")}`.toString(),
+      );
       //} else {
       //    BrowserWindow.win.webContents.send('send-remote-pair-url', (`http://127.0.0.1:5500/pair-remote.html?url=${Buffer.from(encodeURI(url)).toString('base64')}`).toString());
       //}
@@ -1435,7 +1478,9 @@ export class BrowserWindow {
       authWindow.webContents.session.clearStorageData();
 
       // set user agent
-      authWindow.webContents.setUserAgent(`Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15`);
+      authWindow.webContents.setUserAgent(
+        `Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15`,
+      );
 
       // show the window
       authWindow.loadURL("https://beta.music.apple.com/");
@@ -1643,8 +1688,20 @@ export class BrowserWindow {
       ifaces[dev].forEach((details: any) => {
         if (details.family === "IPv4" && !details.internal) {
           if (!/(loopback|vmware|internal|hamachi|vboxnet|virtualbox)/gi.test(dev + (alias ? ":" + alias : ""))) {
-            if (details.address.substring(0, 8) === "192.168." || details.address.substring(0, 7) === "172.16." || details.address.substring(0, 3) === "10.") {
-              if (!ip.startsWith("192.168.") || (String(ip2).startsWith("192.168.") && !ip.startsWith("192.168.") && String(ip2).startsWith("172.16.") && !ip.startsWith("192.168.") && !ip.startsWith("172.16.")) || (String(ip2).startsWith("10.") && !ip.startsWith("192.168.") && !ip.startsWith("172.16.") && !ip.startsWith("10."))) {
+            if (
+              details.address.substring(0, 8) === "192.168." ||
+              details.address.substring(0, 7) === "172.16." ||
+              details.address.substring(0, 3) === "10."
+            ) {
+              if (
+                !ip.startsWith("192.168.") ||
+                (String(ip2).startsWith("192.168.") &&
+                  !ip.startsWith("192.168.") &&
+                  String(ip2).startsWith("172.16.") &&
+                  !ip.startsWith("192.168.") &&
+                  !ip.startsWith("172.16.")) ||
+                (String(ip2).startsWith("10.") && !ip.startsWith("192.168.") && !ip.startsWith("172.16.") && !ip.startsWith("10."))
+              ) {
                 ip = details.address;
               }
               ++alias;

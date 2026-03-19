@@ -145,7 +145,9 @@ const OOBE = () => {
               <Row>
                 <Col>
                   <div
-                    className={classNames("card bg-dark text-white stylePicker", { "style-active": cfg.visual.directives.windowLayout === "twopanel" })}
+                    className={classNames("card bg-dark text-white stylePicker", {
+                      "style-active": cfg.visual.directives.windowLayout === "twopanel",
+                    })}
                     onClick={() => (cfg.visual.directives.windowLayout = "twopanel")}>
                     <div className={"card-body"}>
                       <img
@@ -159,7 +161,9 @@ const OOBE = () => {
                 </Col>
                 <Col>
                   <div
-                    className={classNames("card bg-dark text-white stylePicker", { "style-active": cfg.visual.directives.windowLayout === "default" })}
+                    className={classNames("card bg-dark text-white stylePicker", {
+                      "style-active": cfg.visual.directives.windowLayout === "default",
+                    })}
                     onClick={() => (cfg.visual.directives.windowLayout = "default")}>
                     <div className={"card-body"}>
                       <img

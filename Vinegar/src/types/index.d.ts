@@ -2,8 +2,8 @@
 export interface IElectronAPI {
   send: (channel: string, ...data: any[]) => void;
   sendSync: (channel: string, ...data: any[]) => Promise<void>;
-  on: (callback: (...args: any[]) => void) => Electron.IpcRenderer;
-  invoke: (...data: any[]) => Promise<any>;
+  on: (channel: string, callback: (...args: any[]) => void) => Electron.IpcRenderer;
+  invoke: (channel: string, ...data: any[]) => Promise<any>;
   once: (channel: string, listener: (event: Electron.IpcRendererEvent) => void) => Electron.IpcRenderer;
 }
 declare global {

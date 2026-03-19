@@ -8,7 +8,17 @@ import { Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import AppContentArea from "./app-content-area.js";
 import { useTranslation } from "react-i18next";
 
-const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?: string[]; richlyrics?: string[]; image?: string }) => {
+const FullscreenView = ({
+  time,
+  lyrics,
+  richlyrics,
+  image,
+}: {
+  time?: number;
+  lyrics?: string[];
+  richlyrics?: string[];
+  image?: string;
+}) => {
   const { t } = useTranslation();
   const app = this.$root;
   let tabMode = "lyrics";
@@ -19,9 +29,12 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
     if (app.mk.nowPlayingItem._container.type === "albums") {
       try {
         const result = (
-          await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/${app.mk.nowPlayingItem._container.type}/${app.mk.nowPlayingItem._container.id}`, {
-            fields: "editorialArtwork,editorialVideo",
-          })
+          await app.mk.api.v3.music(
+            `/v1/catalog/${app.mk.storefrontId}/${app.mk.nowPlayingItem._container.type}/${app.mk.nowPlayingItem._container.id}`,
+            {
+              fields: "editorialArtwork,editorialVideo",
+            },
+          )
         ).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
         if (result) {
           video = result;
@@ -35,7 +48,11 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
       }
     } else if (app.mk.nowPlayingItem._container.type === "library-albums") {
       try {
-        const result = (await app.mk.api.v3.music(`/v1/me/library/albums/${app.mk.nowPlayingItem._container.id}/catalog`, { fields: "editorialArtwork,editorialVideo" })).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
+        const result = (
+          await app.mk.api.v3.music(`/v1/me/library/albums/${app.mk.nowPlayingItem._container.id}/catalog`, {
+            fields: "editorialArtwork,editorialVideo",
+          })
+        ).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;
         if (result) {
           video = result;
         } else {
@@ -175,7 +192,14 @@ const FullscreenView = ({ time, lyrics, richlyrics, image }: { time?: number; ly
                     contextMenu={app.nowPlayingContextMenu}>
                     <div className={"playback-info"}>
                       <div className={"song-name"}>{app.mk.nowPlayingItem["attributes"]["name"]}</div>
-                      <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden" }}>
+                      <div
+                        style={{
+                          display: "inline-block",
+                          "-webkit-box-orient": "horizontal",
+                          whiteSpace: "nowrap",
+                          marginTop: "0.25vh",
+                          overflow: "hidden",
+                        }}>
                         <div
                           className={"item-navigate song-artist"}
                           style={{ display: "inline-block" }}

@@ -4,7 +4,25 @@ import { useOnInView } from "react-intersection-observer";
 import { uuidv4 } from "../..";
 import { useTranslation } from "react-i18next";
 
-const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showLibraryStatus = true, showMetadata = false, showDuration = true, contextExt }: { item: object; parent?: string; index?: number; showArtwork?: boolean; showLibraryStatus?: boolean; showMetadata?: boolean; showDuration?: boolean; contextExt?: object }) => {
+const LibraryArtistItem = ({
+  item,
+  parent,
+  index = -1,
+  showArtwork = true,
+  showLibraryStatus = true,
+  showMetadata = false,
+  showDuration = true,
+  contextExt,
+}: {
+  item: object;
+  parent?: string;
+  index?: number;
+  showArtwork?: boolean;
+  showLibraryStatus?: boolean;
+  showMetadata?: boolean;
+  showDuration?: boolean;
+  contextExt?: object;
+}) => {
   const { t } = useTranslation();
   let isVisible = false;
   let addedToLibrary = false;
@@ -85,7 +103,9 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
                   app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
-                    app.copyToClipboard(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+                    app.copyToClipboard(
+                      u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url,
+                    );
                   });
                 }
               } else {
@@ -128,8 +148,19 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     const item = item;
     const params = { "fields[songs]": "inLibrary", "fields[albums]": "inLibrary", relate: "library" };
     let id = item.id ?? item.attributes.playParams.id;
-    const res = await app.mkapi(item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.playParams.id ?? item.id, params);
-    if (res && res.relationships && res.relationships.library && res.relationships.library.data && res.relationships.library.data.length > 0) {
+    const res = await app.mkapi(
+      item.attributes.playParams.kind ?? item.type,
+      item.attributes.playParams.isLibrary ?? false,
+      item.attributes.playParams.id ?? item.id,
+      params,
+    );
+    if (
+      res &&
+      res.relationships &&
+      res.relationships.library &&
+      res.relationships.library.data &&
+      res.relationships.library.data.length > 0
+    ) {
       id = res.relationships.library.data[0].id;
     }
     const kind = item.attributes.playParams.kind ?? data.item ?? "";
@@ -152,7 +183,12 @@ const LibraryArtistItem = ({ item, parent, index = -1, showArtwork = true, showL
     if (parent !== null && childIndex !== null) {
       app.queueParentandplayChild(parent, childIndex, item);
     } else {
-      app.playMediaItemById(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, item.attributes.playParams.isLibrary ?? false, item.attributes.url);
+      app.playMediaItemById(
+        item.attributes.playParams.id ?? item.id,
+        item.attributes.playParams.kind ?? item.type,
+        item.attributes.playParams.isLibrary ?? false,
+        item.attributes.url,
+      );
     }
   };
   return (

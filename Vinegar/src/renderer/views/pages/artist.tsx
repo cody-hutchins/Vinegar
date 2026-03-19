@@ -16,7 +16,10 @@ const Artist = ({ data }: { data: object }) => {
   const app = this.$root;
   let headerVisible = true;
   function hasAnimated() {
-    if (data.attributes?.editorialVideo && (data.attributes?.editorialVideo?.motionArtistWide16x9 || data.attributes?.editorialVideo?.motionArtistFullscreen16x9)) {
+    if (
+      data.attributes?.editorialVideo &&
+      (data.attributes?.editorialVideo?.motionArtistWide16x9 || data.attributes?.editorialVideo?.motionArtistFullscreen16x9)
+    ) {
       return true;
     }
     return false;
@@ -138,7 +141,16 @@ const Artist = ({ data }: { data: object }) => {
   }
   return (
     <div id={"cider-artist"}>
-      <div className={classNames("content-inner", "artist-page", (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() ? "animated" : "")}>
+      <div
+        className={classNames(
+          "content-inner",
+          "artist-page",
+          (data.attributes.editorialVideo &&
+            (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) ||
+            hasHero()
+            ? "animated"
+            : "",
+        )}>
         <div
           ref={ref}
           className={classNames("artist-header", { "artist-header-compact": app.cfg.visual.compactArtistHeader })}
@@ -146,7 +158,11 @@ const Artist = ({ data }: { data: object }) => {
           {hasAnimated() && (
             <AnimatedArtworkView
               priority={true}
-              video={data.attributes.editorialVideo.motionArtistWide16x9.video ?? data.attributes.editorialVideo.motionArtistFullscreen16x9.video ?? ""}
+              video={
+                data.attributes.editorialVideo.motionArtistWide16x9.video ??
+                data.attributes.editorialVideo.motionArtistFullscreen16x9.video ??
+                ""
+              }
             />
           )}
           <div
@@ -156,29 +172,38 @@ const Artist = ({ data }: { data: object }) => {
               <Col
                 auto
                 style={{ width: "auto" }}>
-                {!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero() && (
-                  <div className={"artist-image"}>
-                    <MediaItemArtwork
-                      shadow={"large"}
-                      url={data.attributes.artwork ? data.attributes.artwork.url : ""}
-                      imagesize={"190"}
-                      type={"artists"}
-                    />
-                    <button
-                      className={"overlay-play"}
-                      onClick={() =>
-                        app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
-                          app.mk.play();
-                        })
-                      }
-                      aria-label={t("term.play")}>
-                      {import("../svg/play.svg")}
-                    </button>
-                  </div>
-                )}
+                {!(
+                  data.attributes.editorialVideo &&
+                  (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)
+                ) &&
+                  !hasHero() && (
+                    <div className={"artist-image"}>
+                      <MediaItemArtwork
+                        shadow={"large"}
+                        url={data.attributes.artwork ? data.attributes.artwork.url : ""}
+                        imagesize={"190"}
+                        type={"artists"}
+                      />
+                      <button
+                        className={"overlay-play"}
+                        onClick={() =>
+                          app.mk.setStationQueue({ artist: "a-" + data.id }).then(() => {
+                            app.mk.play();
+                          })
+                        }
+                        aria-label={t("term.play")}>
+                        {import("../svg/play.svg")}
+                      </button>
+                    </div>
+                  )}
               </Col>
               <Col
-                className={classNames("cider-flex-center artist-title", { "artist-animation-on": (data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) || hasHero() })}
+                className={classNames("cider-flex-center artist-title", {
+                  "artist-animation-on":
+                    (data.attributes.editorialVideo &&
+                      (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) ||
+                    hasHero(),
+                })}
                 style={{ color: hasHeroObject()?.textColor1 ? "#" + hasHeroObject().textColor1 : "" }}>
                 <button
                   className={"artist-play"}
@@ -208,15 +233,19 @@ const Artist = ({ data }: { data: object }) => {
               <div className={"svg-icon"} />
             </button>
           </div>
-          {!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)) && !hasHero() && (
-            <div className={"artworkContainer"}>
-              <ArtworkMaterial
-                url={data.attributes.artwork.url}
-                size={"190"}
-                images={"1"}
-              />
-            </div>
-          )}
+          {!(
+            data.attributes.editorialVideo &&
+            (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9)
+          ) &&
+            !hasHero() && (
+              <div className={"artworkContainer"}>
+                <ArtworkMaterial
+                  url={data.attributes.artwork.url}
+                  size={"190"}
+                  images={"1"}
+                />
+              </div>
+            )}
           {hasHero() && !hasAnimated() && (
             <div className={"artist-hero"}>
               <MediaItemArtwork
@@ -310,7 +339,14 @@ const Artist = ({ data }: { data: object }) => {
                           <h3>{data.views[view].attributes.title ? data.views[view].attributes.title : "???"}</h3>
                         </Col>
                       </Row>
-                      {!((data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") || (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See")) ? <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)} /> : <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)} />}
+                      {!(
+                        (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("Video") ||
+                        (data.views[view].attributes.title ? data.views[view].attributes.title : "???").includes("More To See")
+                      ) ? (
+                        <MediaItemScrollerHorizontalLarge items={data.views[view].data.limit(10)} />
+                      ) : (
+                        <MediaItemScrollerHorizontalMVView items={data.views[view].data.limit(10)} />
+                      )}
                     </>
                   ),
               )}

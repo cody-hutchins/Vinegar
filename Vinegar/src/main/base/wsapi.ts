@@ -215,7 +215,9 @@ export class wsapi {
             response.message = "Previous";
             break;
           case "musickit-api":
-            this._win.webContents.executeJavaScript(`wsapi.musickitApi(\`${data.method}\`, \`${data.id}\`, ${JSON.stringify(data.params)} , ${data.library})`);
+            this._win.webContents.executeJavaScript(
+              `wsapi.musickitApi(\`${data.method}\`, \`${data.id}\`, ${JSON.stringify(data.params)} , ${data.library})`,
+            );
             break;
           case "musickit-library-api":
             break;

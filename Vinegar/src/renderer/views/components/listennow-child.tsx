@@ -55,7 +55,9 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
               {recom?.relationships["primary-content"]?.data?.length > 0 ? (
                 <Col style={{ display: "flex", marginBlock: "1rem" }}>
                   <div
-                    onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                    onClick={() =>
+                      navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")
+                    }
                     className={"listennow-chip" + recom?.relationships["primary-content"]?.data[0]?.type === "artists" ? "circle" : ""}>
                     style={{ height: "40px", width: "40px", alignSelf: center, marginRight: "10px" }}
                     {recom?.relationships["primary-content"]?.data[0]?.attributes?.artwork !== null && (
@@ -66,19 +68,35 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
                     )}
                   </div>
                   <div
-                    onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                    onClick={() =>
+                      navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")
+                    }
                     style={{ width: "fit-content" }}
-                    className={(recom?.attributes?.title?.contentIds?.length ?? 0) > 0 || recom?.relationships["primary-content"]?.data?.length > 0 ? "item-navigate" : ""}>
+                    className={
+                      (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 || recom?.relationships["primary-content"]?.data?.length > 0
+                        ? "item-navigate"
+                        : ""
+                    }>
                     <span style={{ opacity: 0.5, fontWeight: "bold" }}>{recom.attributes.titleWithoutName.stringForDisplay}</span>
-                    <h3 style={{ marginBlock: 0 }}> {recom?.relationships["primary-content"]?.data[0].attributes?.name ?? recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}</h3>
+                    <h3 style={{ marginBlock: 0 }}>
+                      {" "}
+                      {recom?.relationships["primary-content"]?.data[0].attributes?.name ??
+                        recom.attributes.title.stringForDisplay.replace(recom.attributes.titleWithoutName.stringForDisplay, "")}
+                    </h3>
                   </div>
                 </Col>
               ) : (
                 <Col style={{ display: "flex", marginBlock: "1rem" }}>
                   <h3
-                    onClick={() => navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")}
+                    onClick={() =>
+                      navigateContent(recom?.relationships["primary-content"]?.data[0] ?? recom?.attributes?.title?.contentIds[0] ?? "")
+                    }
                     style={{ width: "fit-content", marginBlock: 0 }}
-                    className={(recom?.attributes?.title?.contentIds?.length ?? 0) > 0 || recom?.relationships["primary-content"]?.data?.length > 0 ? "item-navigate" : ""}>
+                    className={
+                      (recom?.attributes?.title?.contentIds?.length ?? 0) > 0 || recom?.relationships["primary-content"]?.data?.length > 0
+                        ? "item-navigate"
+                        : ""
+                    }>
                     {recom.attributes.title ? recom.attributes.title.stringForDisplay : " "}
                   </h3>
                 </Col>

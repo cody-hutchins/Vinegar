@@ -55,7 +55,8 @@ const Radio = ({ data }: { data: object }) => {
                   )}
                   {index !== 0 &&
                     recom.relationships &&
-                    ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) &&
+                    ((recom.relationships.children && recom.relationships.children.data.length > 10) ||
+                      (recom.relationships.contents && recom.relationships.contents.data.length > 10)) &&
                     (recom.relationships.room ? (
                       <button
                         className={"cd-btn-seeall"}
@@ -65,7 +66,13 @@ const Radio = ({ data }: { data: object }) => {
                     ) : (
                       <button
                         className={"cd-btn-seeall"}
-                        onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
+                        onClick={() =>
+                          app.showCollection(
+                            recom.relationships.children ? recom.relationships.children : recom.relationships.contents,
+                            recom.attributes.name ?? "",
+                            "listen_now",
+                          )
+                        }>
                         {t("term.seeAll")}
                       </button>
                     ))}
@@ -75,7 +82,9 @@ const Radio = ({ data }: { data: object }) => {
                 <div>
                   <MediaItemScrollerHorizontalMVView
                     imagesize={800}
-                    browsesp={index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)}
+                    browsesp={
+                      index === 0 || (data.relationships.tabs.data[0].relationships.children.data[0].relationships === null && index === 1)
+                    }
                     kind={recom.attributes.editorialElementKind}
                     items={recent.limit(10)}
                   />

@@ -65,7 +65,9 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
               fill={"none"}
               className={"feather feather-pin-slashed"}>
               <path
-                d={"M9.271 3.459c-.659 0-1.107.43-1.107 1.01 0 .282.114.59.352.897.448.59 1.494 1.415 2.777 2.162l-.07 1.02 8.99 8.991c.458-.202.722-.615.722-1.178 0-1.89-1.503-3.832-3.947-4.746l-.29-4.087c1.275-.747 2.312-1.555 2.76-2.144.246-.308.37-.633.37-.914 0-.58-.45-1.011-1.108-1.011H9.27ZM5.15 6.061l16.076 16.057c.272.281.73.273.993 0a.703.703 0 0 0 0-.984L6.15 5.076a.716.716 0 0 0-1.002 0 .711.711 0 0 0 0 .985Zm1.908 10.3c0 .791.536 1.319 1.37 1.319h4.703v4.157c0 1.24.624 2.487.861 2.487.246 0 .87-1.248.87-2.487V17.81h.413l-5.537-5.545c-1.678 1.002-2.68 2.557-2.68 4.095Z"}
+                d={
+                  "M9.271 3.459c-.659 0-1.107.43-1.107 1.01 0 .282.114.59.352.897.448.59 1.494 1.415 2.777 2.162l-.07 1.02 8.99 8.991c.458-.202.722-.615.722-1.178 0-1.89-1.503-3.832-3.947-4.746l-.29-4.087c1.275-.747 2.312-1.555 2.76-2.144.246-.308.37-.633.37-.914 0-.58-.45-1.011-1.108-1.011H9.27ZM5.15 6.061l16.076 16.057c.272.281.73.273.993 0a.703.703 0 0 0 0-.984L6.15 5.076a.716.716 0 0 0-1.002 0 .711.711 0 0 0 0 .985Zm1.908 10.3c0 .791.536 1.319 1.37 1.319h4.703v4.157c0 1.24.624 2.487.861 2.487.246 0 .87-1.248.87-2.487V17.81h.413l-5.537-5.545c-1.678 1.002-2.68 2.557-2.68 4.095Z"
+                }
                 fill={"#ff2654"}
               />
             </svg>
@@ -101,7 +103,9 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
               </radialGradient>
             </defs>
             <path
-              d={"M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"}
+              d={
+                "M10.5 21C4.724 21 0 16.275 0 10.5S4.724 0 10.5 0 21 4.725 21 10.5 16.276 21 10.5 21zm-3.543-5.967a.96.96 0 00.693-.295l2.837-2.842 2.85 2.842c.167.167.41.295.693.295.552 0 1.001-.461 1.001-1.012 0-.281-.115-.512-.295-.704L11.899 10.5l2.85-2.855a.875.875 0 00.295-.68c0-.55-.45-.998-1.001-.998a.871.871 0 00-.668.295l-2.888 2.855-2.862-2.843a.891.891 0 00-.668-.281.99.99 0 00-1.001.986c0 .269.116.512.295.678L9.088 10.5l-2.837 2.843a.926.926 0 00-.295.678c0 .551.45 1.012 1.001 1.012z"
+              }
               fillRule={"nonzero"}
               style={{ strokeMiterlimit: 11, vectorEffect: "non-scaling-stroke", strokeWidth: "31px", fill: "url(#gradient-0)" }}
             />
@@ -129,7 +133,15 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                 onContextMenu={app.nowPlayingContextMenu}>
                 <div className={"playback-info"}>
                   <div className={"song-name"}>{app.mk.nowPlayingItem["attributes"]["name"]}</div>
-                  <div style={{ display: "inline-block", "-webkit-box-orient": "horizontal", whiteSpace: "nowrap", marginTop: "0.25vh", overflow: "hidden", marginBottom: "5px" }}>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      "-webkit-box-orient": "horizontal",
+                      whiteSpace: "nowrap",
+                      marginTop: "0.25vh",
+                      overflow: "hidden",
+                      marginBottom: "5px",
+                    }}>
                     <div
                       className={"item-navigate song-artist"}
                       style={{ display: "inline-block" }}
@@ -147,7 +159,12 @@ const MiniView = ({ time, lyrics, richlyrics, image }: { time?: number; lyrics?:
                   <div className={"song-progress"}>
                     <div
                       className={"song-duration"}
-                      style={{ justifyContent: "space-between", height: "1px", marginBottom: "1px", display: app.chrome.progresshover ? "flex" : "none" }}>
+                      style={{
+                        justifyContent: "space-between",
+                        height: "1px",
+                        marginBottom: "1px",
+                        display: app.chrome.progresshover ? "flex" : "none",
+                      }}>
                       <p style={{ width: "auto" }}>{app.convertTime(app.getSongProgress())}</p>
                       <p style={{ width: "auto" }}>{app.convertTime(app.mk.currentPlaybackDuration)}</p>
                     </div>

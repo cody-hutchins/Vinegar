@@ -1,7 +1,19 @@
 import { useEffect } from "react";
 import SVGIcon from "./svg-icon";
 
-const SidebarLibraryItem = ({ name, page, svgIcon = "", svgIconName, cdClick }: { name: string; page: string; svgIcon?: string; svgIconName?: string; cdClick?: () => void }) => {
+const SidebarLibraryItem = ({
+  name,
+  page,
+  svgIcon = "",
+  svgIconName,
+  cdClick,
+}: {
+  name: string;
+  page: string;
+  svgIcon?: string;
+  svgIconName?: string;
+  cdClick?: () => void;
+}) => {
   const app = app;
   let svgIconData = "";
 

@@ -45,7 +45,10 @@ export default class ChromecastPlugin {
       browser.on("update", (service: any) => {
         if (service.addresses && service.fullname && service.fullname.includes("_googlecast._tcp")) {
           const a = service.txt.filter((u: any) => String(u).startsWith("fn="));
-          const name = (a[0] ?? "").substring(3) != "" ? (a[0] ?? "").substring(3) : service.fullname.substring(0, service.fullname.indexOf("._googlecast"));
+          const name =
+            (a[0] ?? "").substring(3) != ""
+              ? (a[0] ?? "").substring(3)
+              : service.fullname.substring(0, service.fullname.indexOf("._googlecast"));
           this.ondeviceup(service.addresses[0], name + " (" + (service.type[0]?.description ?? "") + ")", "", "googlecast");
         }
       });
@@ -94,7 +97,11 @@ export default class ChromecastPlugin {
   }
 
   private ondeviceup(host: any, name: any, location: any, type: any) {
-    if (this.castDevices.findIndex((item: any) => item.host === host && item.name === name && item.location === location && item.type === type) === -1) {
+    if (
+      this.castDevices.findIndex(
+        (item: any) => item.host === host && item.name === name && item.location === location && item.type === type,
+      ) === -1
+    ) {
       this.castDevices.push({
         name: name,
         host: host,
@@ -105,11 +112,15 @@ export default class ChromecastPlugin {
         this.devices.push(host);
       }
       if (name) {
-        this._win.webContents.executeJavaScript(`console.log('deviceFound','ip: ${host} name:${name}')`).catch((err: any) => console.error(err));
+        this._win.webContents
+          .executeJavaScript(`console.log('deviceFound','ip: ${host} name:${name}')`)
+          .catch((err: any) => console.error(err));
         console.log("deviceFound", host, name);
       }
     } else {
-      this._win.webContents.executeJavaScript(`console.log('deviceFound (added)','ip: ${host} name:${name}')`).catch((err: any) => console.error(err));
+      this._win.webContents
+        .executeJavaScript(`console.log('deviceFound (added)','ip: ${host} name:${name}')`)
+        .catch((err: any) => console.error(err));
       console.log("deviceFound (added)", host, name);
     }
   }
@@ -200,8 +211,20 @@ export default class ChromecastPlugin {
       ifaces[dev].forEach((details: any) => {
         if (details.family === "IPv4" && !details.internal) {
           if (!/(loopback|vmware|internal|hamachi|vboxnet|virtualbox)/gi.test(dev + (alias ? ":" + alias : ""))) {
-            if (details.address.substring(0, 8) === "192.168." || details.address.substring(0, 7) === "172.16." || details.address.substring(0, 3) === "10.") {
-              if (!ip.startsWith("192.168.") || (ip2.startsWith("192.168.") && !ip.startsWith("192.168.") && ip2.startsWith("172.16.") && !ip.startsWith("192.168.") && !ip.startsWith("172.16.")) || (ip2.startsWith("10.") && !ip.startsWith("192.168.") && !ip.startsWith("172.16.") && !ip.startsWith("10."))) {
+            if (
+              details.address.substring(0, 8) === "192.168." ||
+              details.address.substring(0, 7) === "172.16." ||
+              details.address.substring(0, 3) === "10."
+            ) {
+              if (
+                !ip.startsWith("192.168.") ||
+                (ip2.startsWith("192.168.") &&
+                  !ip.startsWith("192.168.") &&
+                  ip2.startsWith("172.16.") &&
+                  !ip.startsWith("192.168.") &&
+                  !ip.startsWith("172.16.")) ||
+                (ip2.startsWith("10.") && !ip.startsWith("192.168.") && !ip.startsWith("172.16.") && !ip.startsWith("10."))
+              ) {
                 ip = details.address;
               }
               ++alias;

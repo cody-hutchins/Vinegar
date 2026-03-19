@@ -26,7 +26,10 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
       if (truekind === "musicVideos") {
         truekind = "music-videos";
       }
-      let res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`, params);
+      let res = await app.mk.api.v3.music(
+        `/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`,
+        params,
+      );
       res = res.data.data[0];
       addedToLibrary = res && res.attributes && res.attributes.inLibrary ? res.attributes.inLibrary : false;
     } else {
@@ -65,7 +68,13 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
     let useMenu = "normal";
     if (app.selectedMediaItems.length <= 1) {
       app.selectedMediaItems = [];
-      app.select_selectMediaItem(item.attributes.playParams.id ?? item.id, item.attributes.playParams.kind ?? item.type, index, guid, item.attributes.playParams.isLibrary ?? false);
+      app.select_selectMediaItem(
+        item.attributes.playParams.id ?? item.id,
+        item.attributes.playParams.kind ?? item.type,
+        index,
+        guid,
+        item.attributes.playParams.isLibrary ?? false,
+      );
     } else {
       useMenu = "multiple";
     }
@@ -220,7 +229,9 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
                   app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
-                    app.copyToClipboard(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+                    app.copyToClipboard(
+                      u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url,
+                    );
                   });
                 }
               } else {
@@ -235,7 +246,9 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
               if (!item.attributes.url && item.relationships) {
                 if (item.relationships.catalog) {
                   app.mkapi(item.attributes.playParams.kind, false, item.relationships.catalog.data[0].id).then((u) => {
-                    app.songLinkShare(u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url);
+                    app.songLinkShare(
+                      u.data.data.length && u.data.data.length > 0 ? u.data.data[0].attributes.url : u.data.data.attributes.url,
+                    );
                   });
                 }
               } else {
@@ -438,7 +451,12 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
             });
           });
       } else {
-        app.playMediaItemById(item.attributes.playParams?.id ?? item.id, item.attributes.playParams?.kind ?? item.type, item.attributes.playParams?.isLibrary ?? false, item.attributes.url);
+        app.playMediaItemById(
+          item.attributes.playParams?.id ?? item.id,
+          item.attributes.playParams?.kind ?? item.type,
+          item.attributes.playParams?.isLibrary ?? false,
+          item.attributes.url,
+        );
       }
     });
   }

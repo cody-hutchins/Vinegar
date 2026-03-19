@@ -95,7 +95,7 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
       gain: [2.7, 2.2, 1.6, 1.4, 0.6, 0, 0, 0, 0, 0],
       Q: [1.4, 1.4, 1.4, 1.4, 1.4, 1, 1, 1, 1, 1],
       mix: 1,
-      vibrantBass: 0, 
+      vibrantBass: 0,
       userGenerated: false,
     },
     {
@@ -194,7 +194,8 @@ const EQView = ({ src, url }: { src: string; url: string }) => {
     if (app.cfg.audio.equalizer.vibrantBass !== "0") {
       try {
         for (let i = 0; i < 21; i++) {
-          CiderAudio.audioNodes.vibrantbassNode[i].gain.value = app.cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (app.cfg.audio.equalizer.vibrantBass / 10);
+          CiderAudio.audioNodes.vibrantbassNode[i].gain.value =
+            app.cfg.audio.maikiwiAudio.vibrantBass.gain[i] * (app.cfg.audio.equalizer.vibrantBass / 10);
         }
         CiderAudio.intelliGainComp_n0_0();
       } catch (e) {

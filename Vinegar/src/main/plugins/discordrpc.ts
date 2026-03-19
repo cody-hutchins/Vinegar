@@ -150,7 +150,12 @@ export default class DiscordRPC {
     this._client.once("ready", () => {
       console.info(`[DiscordRPC][connect] Successfully Connected to Discord. Authed for user: ${this._client.user.id}.`);
 
-      if (this._activityCache && this._activityCache.details && this._activityCache.state && !this._utils.getStoreValue("general.privateEnabled")) {
+      if (
+        this._activityCache &&
+        this._activityCache.details &&
+        this._activityCache.state &&
+        !this._utils.getStoreValue("general.privateEnabled")
+      ) {
         console.info(`[DiscordRPC][connect] Restoring activity cache.`);
         this._client.setActivity(this._activityCache);
       }
@@ -211,28 +216,54 @@ export default class DiscordRPC {
    */
   private filterActivity(activity: any, attributes: any): object {
     // Handling Activity Buttons
-    if (this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.enabled") && this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first") != "disabled") {
+    if (
+      this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.enabled") &&
+      this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first") != "disabled"
+    ) {
       const activityUrls: { [key: string]: any } = {
         listenOnCider: "cider",
         viewOnAppleMusic: "appleMusic",
         viewOnOtherMusicServices: "songLink",
       };
 
-      const firstActivity = this._utils.getLocale(this._utils.getStoreValue("general.language"), `settings.option.connectivity.discordRPC.buttons.${this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first")}`);
-      const secondActivity = this._utils.getLocale(this._utils.getStoreValue("general.language"), `settings.option.connectivity.discordRPC.buttons.${this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.second")}`);
+      const firstActivity = this._utils.getLocale(
+        this._utils.getStoreValue("general.language"),
+        `settings.option.connectivity.discordRPC.buttons.${this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first")}`,
+      );
+      const secondActivity = this._utils.getLocale(
+        this._utils.getStoreValue("general.language"),
+        `settings.option.connectivity.discordRPC.buttons.${this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.second")}`,
+      );
 
       if (this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.second") != "disabled") {
         activity.buttons = [
-          { label: firstActivity, url: attributes.url[activityUrls[this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first")]] },
-          { label: secondActivity, url: attributes.url[activityUrls[this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.second")]] },
+          {
+            label: firstActivity,
+            url: attributes.url[activityUrls[this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first")]],
+          },
+          {
+            label: secondActivity,
+            url: attributes.url[activityUrls[this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.second")]],
+          },
         ];
       } else {
-        activity.buttons = [{ label: firstActivity, url: attributes.url[activityUrls[this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first")]] }];
+        activity.buttons = [
+          {
+            label: firstActivity,
+            url: attributes.url[activityUrls[this._utils.getStoreValue("connectivity.discord_rpc.activity.buttons.first")]],
+          },
+        ];
       }
     }
 
     // Add the timestamp if its playing and people want them
-    if (!this._utils.getStoreValue("connectivity.discord_rpc.hide_timestamp") && attributes.status && new Date(attributes.endTime).getTime() > 0 && isFinite(attributes.endTime) && isFinite(attributes.startTime)) {
+    if (
+      !this._utils.getStoreValue("connectivity.discord_rpc.hide_timestamp") &&
+      attributes.status &&
+      new Date(attributes.endTime).getTime() > 0 &&
+      isFinite(attributes.endTime) &&
+      isFinite(attributes.startTime)
+    ) {
       activity.startTimestamp = Date.now() - (attributes?.durationInMillis - attributes?.remainingTime);
       activity.endTimestamp = attributes.endTime;
     }

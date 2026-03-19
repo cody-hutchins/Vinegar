@@ -185,7 +185,11 @@ const PluginsGithub = () => {
                     <button
                       className={"md-btn md-btn-primary"}
                       onClick={() => installThemeRepo(openRepo)}>
-                      {!themesInstalled.includes(openRepo.full_name) ? <span>{t("action.install")}</span> : <span>{t("action.update")}</span>}
+                      {!themesInstalled.includes(openRepo.full_name) ? (
+                        <span>{t("action.install")}</span>
+                      ) : (
+                        <span>{t("action.update")}</span>
+                      )}
                     </button>
                   </Col>
                 </Row>

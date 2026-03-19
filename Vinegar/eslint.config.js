@@ -1,5 +1,5 @@
 import globals from "globals";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
 import reactPlugin from "eslint-plugin-react";
 
@@ -10,7 +10,7 @@ import tseslint from "typescript-eslint";
 
 const config = defineConfig([
   { settings: { react: { version: "19" } } },
-  { ignores: ["node_modules", "**/lib"] },
+  globalIgnores(["node_modules", "**/lib", "**/*.js"]),
   {
     files: ["**/*.{jsx,tsx}"],
     plugins: { js },

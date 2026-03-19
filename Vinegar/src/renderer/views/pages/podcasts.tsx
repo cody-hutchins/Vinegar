@@ -296,9 +296,12 @@ export const Podcasts = () => {
                   </button>
                   <div className={"podcast-genre"}>{selected.attributes.genreNames[0]}</div>
                   <div className={"podcast-metainfo"}>
-                    {msToMinSec(selected.attributes.durationInMilliseconds)} • {new Date(selected.attributes.releaseDateTime).toLocaleString()}
+                    {msToMinSec(selected.attributes.durationInMilliseconds)} •{" "}
+                    {new Date(selected.attributes.releaseDateTime).toLocaleString()}
                   </div>
-                  {selected.attributes.description.standard && <div className={"well podcast-description"}>{selected.attributes.description.standard}</div>}
+                  {selected.attributes.description.standard && (
+                    <div className={"well podcast-description"}>{selected.attributes.description.standard}</div>
+                  )}
                   <Row>
                     <Col>
                       <button

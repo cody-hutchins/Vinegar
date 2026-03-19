@@ -53,7 +53,12 @@ export default class lastfm {
     });
 
     this._utils.getIPCMain().on("lastfm:nowPlayingChange", (event: any, attributes: any) => {
-      if (this._utils.getStoreValue("connectivity.lastfm.filter_loop") || this._utils.getStoreValue("general.privateEnabled") || attributes.kind === "radioStation") return;
+      if (
+        this._utils.getStoreValue("connectivity.lastfm.filter_loop") ||
+        this._utils.getStoreValue("general.privateEnabled") ||
+        attributes.kind === "radioStation"
+      )
+        return;
       this.updateNowPlayingTrack(attributes);
     });
 
@@ -82,7 +87,10 @@ export default class lastfm {
     });
 
     if (this._utils.getStoreValue("connectivity.lastfm.secrets.username") && this._utils.getStoreValue("connectivity.lastfm.secrets.key")) {
-      this._lfm.setSessionCredentials(this._utils.getStoreValue("connectivity.lastfm.secrets.username"), this._utils.getStoreValue("connectivity.lastfm.secrets.key"));
+      this._lfm.setSessionCredentials(
+        this._utils.getStoreValue("connectivity.lastfm.secrets.username"),
+        this._utils.getStoreValue("connectivity.lastfm.secrets.key"),
+      );
       this._authenticated = true;
     } else {
       this.authenticateLastFM(token);
@@ -172,7 +180,14 @@ export default class lastfm {
       return;
     }
 
-    if (!this._authenticated || !attributes || this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.playParams.kind] || this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.kind] || (this._utils.getStoreValue("connectivity.lastfm.filter_loop") && this._scrobbleCache.track === attributes.lfmTrack.name)) return;
+    if (
+      !this._authenticated ||
+      !attributes ||
+      this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.playParams.kind] ||
+      this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.kind] ||
+      (this._utils.getStoreValue("connectivity.lastfm.filter_loop") && this._scrobbleCache.track === attributes.lfmTrack.name)
+    )
+      return;
 
     // Scrobble
     const scrobble = {
@@ -212,7 +227,14 @@ export default class lastfm {
       return;
     }
 
-    if (!this._authenticated || !attributes || this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.playParams.kind] || this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.kind] || (this._utils.getStoreValue("connectivity.lastfm.filter_loop") && this._nowPlayingCache.track === attributes.lfmTrack.name)) return;
+    if (
+      !this._authenticated ||
+      !attributes ||
+      this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.playParams.kind] ||
+      this._utils.getStoreValue("connectivity.lastfm.filter_types")[attributes.kind] ||
+      (this._utils.getStoreValue("connectivity.lastfm.filter_loop") && this._nowPlayingCache.track === attributes.lfmTrack.name)
+    )
+      return;
     console.log(this._utils.getStoreValue("connectivity.lastfm.filter_types"));
 
     const nowPlaying = {

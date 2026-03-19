@@ -144,7 +144,9 @@ const CastMenu = () => {
                           xmlSpace={"preserve"}
                           className={"castPlayIndicator"}>
                           <path
-                            d={"M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"}
+                            d={
+                              "M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"
+                            }
                             style={{ fillRule: "nonzero" }}
                           />
                         </svg>
@@ -166,7 +168,8 @@ const CastMenu = () => {
               style={{ marginTop: "12px", marginBottom: "12px", overflowY: "scroll" }}>
               <div className={"md-option-line"}>
                 <div className={"md-option-segment"}>
-                  Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to &quot;Everyone&quot; or &quot;Anyone on the same network&quot;.
+                  Supports AirPlay 1 & AirPlay 2. Please set your device access in the Home app to &quot;Everyone&quot; or &quot;Anyone on
+                  the same network&quot;.
                   {/* {t('action.cast.airplay.underdevelopment')}  */}
                   {devices.airplay.map((device) => (
                     <div key={device.id}>
@@ -215,7 +218,9 @@ const CastMenu = () => {
                               xmlSpace={"preserve"}
                               className={"castPlayIndicator"}>
                               <path
-                                d={"M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"}
+                                d={
+                                  "M28.228,18.327l-16.023,8.983c-0.99,0.555 -2.205,-0.17 -2.205,-1.318l0,-17.984c0,-1.146 1.215,-1.873 2.205,-1.317l16.023,8.982c1.029,0.577 1.029,2.077 0,2.654Z"
+                                }
                                 style={{ fillRule: "nonzero" }}
                               />
                             </svg>

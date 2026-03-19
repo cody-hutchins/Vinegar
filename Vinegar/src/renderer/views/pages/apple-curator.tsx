@@ -24,33 +24,54 @@ const AppleCurator = ({ data }: { data: object }) => {
                     <h3>{recom.attributes.name ?? ""}</h3>
                   </Col>
                 )}
-                {index !== 0 && recom.relationships && ((recom.relationships.children && recom.relationships.children.data.length > 10) || (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
-                  <Col
-                    auto
-                    className={"cider-flex-center"}>
-                    <button
-                      className={"cd-btn-seeall"}
-                      onClick={() => app.showCollection(recom.relationships.children ? recom.relationships.children : recom.relationships.contents, recom.attributes.name ?? "", "listen_now")}>
-                      {t("term.seeAll")}
-                    </button>
-                  </Col>
-                )}
-              </Row>
-              {recom.relationships && ((recom.relationships.children && recom.relationships.children.data) || (recom.relationships.contents && recom.relationships.contents.data)) && (
-                <div>
-                  {(recom.attributes.name && recom.attributes.name.includes("ideo")) || index === 0 ? (
-                    <MediaItemScrollerHorizontalMVView
-                      imagesize={800}
-                      browsesp={index === 0}
-                      items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)}
-                    />
-                  ) : recom.attributes.name === "Chart Set" ? (
-                    <div />
-                  ) : (
-                    <MediaItemScrollerHorizontalLarge items={recom.relationships.children ? recom.relationships.children.data.limit(10) : recom.relationships.contents.data.limit(10)} />
+                {index !== 0 &&
+                  recom.relationships &&
+                  ((recom.relationships.children && recom.relationships.children.data.length > 10) ||
+                    (recom.relationships.contents && recom.relationships.contents.data.length > 10)) && (
+                    <Col
+                      auto
+                      className={"cider-flex-center"}>
+                      <button
+                        className={"cd-btn-seeall"}
+                        onClick={() =>
+                          app.showCollection(
+                            recom.relationships.children ? recom.relationships.children : recom.relationships.contents,
+                            recom.attributes.name ?? "",
+                            "listen_now",
+                          )
+                        }>
+                        {t("term.seeAll")}
+                      </button>
+                    </Col>
                   )}
-                </div>
-              )}
+              </Row>
+              {recom.relationships &&
+                ((recom.relationships.children && recom.relationships.children.data) ||
+                  (recom.relationships.contents && recom.relationships.contents.data)) && (
+                  <div>
+                    {(recom.attributes.name && recom.attributes.name.includes("ideo")) || index === 0 ? (
+                      <MediaItemScrollerHorizontalMVView
+                        imagesize={800}
+                        browsesp={index === 0}
+                        items={
+                          recom.relationships.children
+                            ? recom.relationships.children.data.limit(10)
+                            : recom.relationships.contents.data.limit(10)
+                        }
+                      />
+                    ) : recom.attributes.name === "Chart Set" ? (
+                      <div />
+                    ) : (
+                      <MediaItemScrollerHorizontalLarge
+                        items={
+                          recom.relationships.children
+                            ? recom.relationships.children.data.limit(10)
+                            : recom.relationships.contents.data.limit(10)
+                        }
+                      />
+                    )}
+                  </div>
+                )}
             </div>
           ))}
       </div>

@@ -9,7 +9,8 @@ const LibrarySongs = ({ data }: { data: object }) => {
   let loaded = false;
   useEffect(() => {
     setTimeout(async () => {
-      if (videos === null || videos.length === 0) videos = (await this.$root.mk.api.v3.music("/v1/me/library/music-videos")).data?.data ?? [];
+      if (videos === null || videos.length === 0)
+        videos = (await this.$root.mk.api.v3.music("/v1/me/library/music-videos")).data?.data ?? [];
       loaded = true;
     });
   }, []);

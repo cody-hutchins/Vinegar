@@ -4,7 +4,17 @@ import MediaItemListItem from "./mediaitem-list-item";
 import MediaItemSquare from "./mediaitem-square";
 import { useTranslation } from "react-i18next";
 
-const InlineCollectionList = ({ data, title, type, parentSelector = null }: { data: object; title?: string; type?: string; parentSelector?: string | null }) => {
+const InlineCollectionList = ({
+  data,
+  title,
+  type,
+  parentSelector = null,
+}: {
+  data: object;
+  title?: string;
+  type?: string;
+  parentSelector?: string | null;
+}) => {
   const { t } = useTranslation();
   let triggerEnabled = true;
   let canSeeTrigger = false;

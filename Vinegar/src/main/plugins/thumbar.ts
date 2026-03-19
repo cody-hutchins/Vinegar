@@ -21,10 +21,18 @@ export default class Thumbar {
    * Thumbnail Toolbar Assets
    */
   private icons: { [key: string]: Electron.NativeImage } = {
-    pause: nativeImage.createFromPath(join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_pause.png`)),
-    play: nativeImage.createFromPath(join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_play.png`)),
-    next: nativeImage.createFromPath(join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_next.png`)),
-    previous: nativeImage.createFromPath(join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_previous.png`)),
+    pause: nativeImage.createFromPath(
+      join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_pause.png`),
+    ),
+    play: nativeImage.createFromPath(
+      join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_play.png`),
+    ),
+    next: nativeImage.createFromPath(
+      join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_next.png`),
+    ),
+    previous: nativeImage.createFromPath(
+      join(utils.getPath("resourcePath"), "icons/thumbar", `${nativeTheme.shouldUseDarkColors ? "light" : "dark"}_previous.png`),
+    ),
   };
 
   /*******************************************************************************************

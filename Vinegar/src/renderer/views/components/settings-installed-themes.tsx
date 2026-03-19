@@ -307,7 +307,9 @@ export const InstalledThemes = () => {
                   <li
                     onClick={() => addStyle(theme.file)}
                     contextMenu={"contextMenu($event, theme)"}
-                    className={classNames("list-group-item list-group-item-dark", { applied: $root.cfg.visual.styles.includes(theme.file) })}>
+                    className={classNames("list-group-item list-group-item-dark", {
+                      applied: $root.cfg.visual.styles.includes(theme.file),
+                    })}>
                     <Row>
                       <Col className={"themeLabel"}>{theme.name}</Col>
                       {$root.cfg.visual.styles.includes(theme.file) ? (
@@ -347,7 +349,9 @@ export const InstalledThemes = () => {
                       <li
                         onClick={() => addStyle(packEntry.file)}
                         contextMenu={"contextMenu($event, theme)"}
-                        className={classNames("list-group-item list-group-item-dark addon", { applied: $root.cfg.visual.styles.includes(packEntry.file) })}>
+                        className={classNames("list-group-item list-group-item-dark addon", {
+                          applied: $root.cfg.visual.styles.includes(packEntry.file),
+                        })}>
                         <Row>
                           <Col className={"themeLabel"}>{packEntry.name}</Col>
                           {$root.cfg.visual.styles.includes(packEntry.file) ? (
