@@ -3,11 +3,11 @@ import SVGIcon from "../../main/components/svg-icon.jsx";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import MediaItemSmarthints from "../components/mediaitem-smarthints.jsx";
 import SidebarLibraryItem from "../../main/components/sidebar-library-item.jsx";
-import { useChromeStore } from "../../store/chrome.js";
+import { useChromeStore } from "../../store/chrome.slice.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { OverlayTrigger, Popover, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const ChromeTop = ({ search = {} }: { search?: object }) => {
   const chrome = useChromeStore((state) => state);

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import SVGIcon from "../../main/components/svg-icon.jsx";
 import { useTranslation } from "react-i18next";
 import { notyf } from "../../main/helpers.js";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const SettingsWindow = () => {
   const { t } = useTranslation();

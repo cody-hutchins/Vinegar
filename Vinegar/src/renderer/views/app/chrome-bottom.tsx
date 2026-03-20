@@ -1,9 +1,9 @@
 import { Col, OverlayTrigger, Popover, Row, Tooltip } from "react-bootstrap";
-import { useChromeStore } from "../../store/chrome.js";
+import { useChromeStore } from "../../store/chrome.slice.js";
 import MediaItemArtwork from "../components/mediaitem-artwork.jsx";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 export const ChromeBottom = () => {
   const chrome = useChromeStore();

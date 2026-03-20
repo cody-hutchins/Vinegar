@@ -1,88 +1,13 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { StateCreator } from "zustand";
 import { asyncForEach, notyf } from "../main/helpers.js";
 import { CiderCache } from "../main/cidercache.js";
 import { MusicKitTools } from "../main/musickittools.js";
+import { GeneralState, LibraryState } from "./store.js";
 
-interface LibraryState {
-  backgroundNotification: {
-    show: boolean;
-    message: string;
-    total: number;
-    progress: number;
-  };
-  selectedMediaItems: MusicKit.MediaItem[];
-  songs: {
-    sortingOptions: {
-      albumName: string;
-      artistName: string;
-      name: string;
-      genre: string;
-      releaseDate: string;
-      durationInMillis: string;
-      dateAdded: string;
-    };
-    sorting: "dateAdded" | "name";
-    sortOrder: "asc" | "desc";
-    listing: MusicKit.Songs[];
-    meta: { total: number; progress: number };
-    search: string;
-    displayListing: MusicKit.Songs[];
-    downloadState: number; // 0 = not started, 1 = in progress, 2 = complete, 3 = empty library
-  };
-  albums: {
-    sortingOptions: {
-      artistName: string;
-      name: string;
-      genre: string;
-      releaseDate: string;
-    };
-    viewAs: string;
-    sorting: "dateAdded" | "name"; // [0] = recentlyadded page, [1] = albums page
-    sortOrder: "desc" | "asc"; // [0] = recentlyadded page, [1] = albums page
-    listing: MusicKit.LibraryAlbums[];
-    meta: { total: number; progress: number };
-    search: string;
-    displayListing: MusicKit.LibraryAlbums[];
-    downloadState: number; // 0 = not started, 1 = in progress, 2 = complete, 3 = empty library
-  };
-  artists: {
-    sortingOptions: {
-      artistName: string;
-      name: string;
-      genre: string;
-      releaseDate: string;
-    };
-    viewAs: string;
-    sorting: "dateAdded" | "name"; // [0] = recentlyadded page, [1] = albums page
-    sortOrder: "desc" | "asc"; // [0] = recentlyadded page, [1] = albums page
-    listing: MusicKit.Artists[];
-    meta: { total: number; progress: number };
-    search: string;
-    displayListing: MusicKit.Artists[];
-    downloadState: number; // 0 = not started, 1 = in progress, 2 = complete, 3 = empty library
-  };
-  playlists: {
-    listing: MusicKit.Playlists[];
-    details: Record<string, any>;
-    loadingState: number; // 0 loading, 1 loaded, 2 error
-    id: string;
-    trackMapping: Record<string, any>;
-  };
+type LibraryStateCreator = StateCreator<GeneralState, [["zustand/immer", never], never], [], { library: LibraryState }>;
 
-  socialBadges: {
-    badgeMap: Record<string, any>;
-    version: string;
-    mediaItems: string[];
-    mediaItemDLState: number; // 0 = not started, 1 = in progress, 2 = complete
-  };
-  localsongs: string[];
-  getLibraryGenres: () => Array<string>;
-  sortPlaylists: () => void;
-}
-
-export const useLibraryStore = create<LibraryState>()(
-  immer((set, get) => ({
+export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
+  library: {
     selectedMediaItems: [],
     backgroundNotification: {
       show: false,
@@ -1406,5 +1331,5 @@ export const useLibraryStore = create<LibraryState>()(
       this.getArtistFromID(id);
       //this.getTypeFromID("artist",id,isLibrary,query)
     },
-  })),
-);
+  },
+});

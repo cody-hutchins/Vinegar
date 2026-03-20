@@ -7,7 +7,7 @@ import FullscreenView from "./components/fullscreen-view.jsx";
 import OOBE from "./pages/oobe.jsx";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCfgStore } from "../store/cfg.js";
+import { useCfgStore } from "../store/cfg.slice.js";
 const App = () => {
   const { cfg, hydrate } = useCfgStore();
   const [isLoading, setIsLoading] = useState(true);

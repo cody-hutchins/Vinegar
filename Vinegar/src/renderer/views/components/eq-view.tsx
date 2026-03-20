@@ -2,7 +2,7 @@ import { Col, Row } from "react-bootstrap";
 import { CiderAudio } from "../../audio/audio";
 import { notyf } from "../..";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const EQView = ({ src, url }: { src?: string; url?: string }) => {
   const { t } = useTranslation();

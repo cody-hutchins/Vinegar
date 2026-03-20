@@ -1,41 +1,10 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { StateCreator } from "zustand";
+import { ChromeState, GeneralState } from "./store.js";
 
-interface ChromeState {
-  sidebarCollapsed: boolean;
-  nativeControls: boolean;
-  contentScrollPosY: number;
-  appliedTheme: {
-    location: string;
-    info: Record<string, any>;
-  };
-  windowState: string;
-  desiredPageTransition: string;
-  hideUserInfo: boolean;
-  artworkReady: boolean;
-  userinfo: {
-    id: string;
-    attributes: {
-      name: string;
-      handle: string;
-      artwork: { url: string };
-    };
-  };
-  forceDirectives: Record<string, any>;
-  menuOpened: boolean;
-  maximized: boolean;
-  drawerOpened: boolean;
-  drawerState: string;
-  topChromeVisible: boolean;
-  progresshover: boolean;
-  windowControlPosition: "left" | "right";
-  contentAreaScrolling: boolean;
-  showCursor: boolean;
-  setContentScrollPos: (scroll) => void;
-}
+type ChromeStateCreator = StateCreator<GeneralState, [["zustand/immer", never], never], [], { chrome: ChromeState }>;
 
-export const useChromeStore = create<ChromeState>()(
-  immer((set) => ({
+export const createChromeSlice: ChromeStateCreator = (set, get) => ({
+  chrome: {
     sidebarCollapsed: false,
     nativeControls: false,
     contentScrollPosY: 0,
@@ -67,51 +36,25 @@ export const useChromeStore = create<ChromeState>()(
     showCursor: false,
     setContentScrollPos: (scroll) =>
       set((state) => {
-        state.contentScrollPosY = scroll.target.scrollTop;
+        state.chrome.contentScrollPosY = scroll.target.scrollTop;
       }),
-    mainMenuVisibility(val) {
-      if (val) {
-        this.mk.isAuthorized ? (this.chrome.menuOpened = !this.chrome.menuOpened) : false;
-        if (!this.mk.isAuthorized) {
-          window.electronAPI.send("auth-window");
+    mainMenuVisibility: (val) =>
+      set((state) => {
+        if (val) {
+          if (state.app.mk.isAuthorized) {
+            state.chrome.menuOpened = !state.chrome.menuOpened;
+          } else {
+            window.electronAPI.send("auth-window");
+          }
+        } else {
+          setTimeout(() => {
+            state.chrome.menuOpened = false;
+          }, 100);
         }
-      } else {
-        setTimeout(() => {
-          this.chrome.menuOpened = false;
-        }, 100);
-      }
-    },
-    async setTheme(theme = "", onlyPrefs = false) {
-      console.debug(theme);
-      if (this.cfg.visual.theme === "") {
-        this.cfg.visual.theme = "default.less";
-      }
-      if (theme === "") {
-        theme = this.cfg.visual.theme;
-      } else {
-        this.cfg.visual.theme = "";
-        this.cfg.visual.theme = theme;
-      }
-      const info = {};
-      try {
-        const infoResponse = await fetch("themes/" + this.cfg.visual.theme.replace("index.less", "theme.json"));
-        this.chrome.appliedTheme.info = await infoResponse.json();
-      } catch (e) {
-        e = null;
-        console.warn("failed to get theme.json");
-        this.chrome.appliedTheme.info = {};
-      }
+      }),
 
-      if (!onlyPrefs) {
-        document.querySelector("#userTheme").href = `themes/${this.cfg.visual.theme}`;
-        document.querySelectorAll(`[id*='less']`).forEach((el) => {
-          el.remove();
-        });
-        await less.refresh();
-      }
-    },
     async reloadStyles() {
-      const styles = this.cfg.visual.styles;
+      const styles = get().cfg.visual.styles;
       document.querySelectorAll(`[id*='less']`).forEach((el) => {
         if (el.id !== "less:style") {
           el.remove();
@@ -119,7 +62,7 @@ export const useChromeStore = create<ChromeState>()(
       });
 
       this.chrome.appliedTheme.info = {};
-      await asyncForEach(styles, async (style) => {
+      for (const style of styles) {
         const styleEl = document.createElement("link");
         styleEl.id = `less-${style.replace(".less", "")}`;
         styleEl.rel = "stylesheet/less";
@@ -129,31 +72,31 @@ export const useChromeStore = create<ChromeState>()(
         try {
           const infoResponse = await fetch("themes/" + style.replace("index.less", "theme.json"));
           this.chrome.appliedTheme.info = Object.assign(this.chrome.appliedTheme.info, await infoResponse.json());
-        } catch (e) {
-          e = null;
+        } catch {
           console.warn("failed to get theme.json");
         }
-      });
+      }
       less.registerStylesheetsImmediately();
       await less.refresh(true, true, true);
       return;
     },
-    macOSEmu() {
-      this.chrome.forceDirectives["macosemu"] = {
-        value: true,
-      };
-      this.chrome.windowControlPosition = "left";
-    },
+    macOSEmu: () =>
+      set((state) => {
+        state.chrome.forceDirectives["macosemu"] = {
+          value: true,
+        };
+        state.chrome.windowControlPosition = "left";
+      }),
     getThemeDirective(directive = "") {
-      let directives = {};
-      if (typeof this.chrome.appliedTheme.info.directives === "object") {
-        directives = this.chrome.appliedTheme.info.directives;
+      let directives: Record<string, any> = {};
+      if (typeof get().chrome.appliedTheme.info.directives === "object") {
+        directives = get().chrome.appliedTheme.info.directives;
       }
-      directives = Object.assign(directives, this.chrome.forceDirectives);
+      directives = Object.assign(directives, get().chrome.forceDirectives);
       if (directives[directive]) {
         return directives[directive].value;
-      } else if (this.cfg.visual.directives[directive]) {
-        return this.cfg.visual.directives[directive];
+      } else if (get().cfg.visual.directives[directive]) {
+        return get().cfg.visual.directives[directive];
       } else {
         return false;
       }
@@ -216,5 +159,5 @@ export const useChromeStore = create<ChromeState>()(
         this.chrome.hideUserInfo = true;
       }
     },
-  })),
-);
+  },
+});

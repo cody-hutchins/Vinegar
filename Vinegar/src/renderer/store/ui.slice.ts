@@ -1,102 +1,13 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { StateCreator } from "zustand";
 import { asyncForEach, clamp, convertTime, getBase64FromUrl, notyf, stringTemplateParser } from "../main/helpers.js";
 import { ContextMenuEvent } from "electron";
 import { NotyfEvent } from "notyf";
-interface UIState {
-  windowRelativeScale: number;
-  pageState: {
-    recentlyAdded: {
-      loaded: boolean;
-      nextUrl: string | null;
-      items: string[];
-      size: string;
-    };
-    settings: {
-      currentTabIndex: number;
-      fullscreen: boolean;
-    };
-    scrollPos: {
-      limit: number;
-      pos: {
-        href: string;
-        position: number;
-      }[];
-    };
-  };
-  lyricon: boolean;
-  page: string;
-  pageHistory: string[];
-  pluginPages: {
-    page: string;
-    pages: string[];
-  };
-  artwork: {
-    playerLCD: string;
-  };
-  playerLCD: {
-    playbackDuration: number;
-    desiredDuration: number;
-    userInteraction: boolean;
-  };
-  drawertest: boolean;
-  drawer: {
-    open: boolean;
-    panel: string;
-  };
-  artistPage: {
-    data: Record<string, any>;
-  };
-  modals: Record<
-    | "addToPlaylist"
-    | "spatialProperties"
-    | "qrcode"
-    | "equalizer"
-    | "audioSettings"
-    | "pluginMenu"
-    | "audioControls"
-    | "audioPlaybackRate"
-    | "showPlaylist"
-    | "castMenu"
-    | "pathMenu"
-    | "moreInfo"
-    | "airplayPW"
-    | "settings",
-    boolean
-  >;
-  showingPlaylist: MusicKit.Playlists | MusicKit.LibraryPlaylists;
-  search: {
-    term: string;
-    cursor: number;
-    hints: string[];
-    showHints: boolean;
-    showSearchView: boolean;
-    results: Record<string, any>;
-    resultsSocial: Record<string, any>;
-    resultsLibrary: Record<string, any>;
-    limit: number;
-  };
-  menuPanel: {
-    visible: boolean;
-    event: Event | null;
-    content: {
-      name: string;
-      items: Record<string, any>;
-      headerItems: Record<string, any>;
-    };
-  };
-  setPage: (value: string) => void;
-  setShowingPlaylist: (value: string[]) => void;
-  setArtistPage: (value: { data: Record<string, any> }) => void;
-  resetSimpleState: () => void;
-  resetRecentlyAdded: () => void;
-  setLCDArtwork: (artwork: string) => void;
-  setPagePos: (pageState?: Record<string, any>) => void;
-  invokeDrawer: (panel: string) => void;
-}
+import { GeneralState, UIState } from "./store.js";
 
-export const useUIStore = create<UIState>()(
-  immer((set, get) => ({
+type UIStateCreator = StateCreator<GeneralState, [["zustand/immer", never], never], [], { ui: UIState }>;
+
+export const createUISlice: UIStateCreator = (set, get) => ({
+  ui: {
     windowRelativeScale: 1,
     artwork: {
       playerLCD: "",
@@ -1474,5 +1385,5 @@ export const useUIStore = create<UIState>()(
     darwinShare(url: string) {
       window.electronAPI.send("share-menu", url);
     },
-  })),
-);
+  },
+});

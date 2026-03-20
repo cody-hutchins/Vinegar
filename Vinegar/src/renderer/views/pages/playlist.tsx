@@ -9,7 +9,7 @@ import Pagination from "../components/pagination.jsx";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { useOnInView } from "react-intersection-observer";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const Playlist = ({ data }: { data: MusicKit.Playlists | MusicKit.LibraryPlaylists }) => {
   const { t } = useTranslation();

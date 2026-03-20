@@ -6,7 +6,7 @@ import MediaItemSmarthints from "./mediaitem-smarthints.jsx";
 import SidebarPlaylist from "./sidebar-playlist.jsx";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const Sidebar = () => {
   const { t } = useTranslation();

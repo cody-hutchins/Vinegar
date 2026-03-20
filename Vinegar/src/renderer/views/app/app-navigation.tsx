@@ -1,11 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useChromeStore } from "../../store/chrome.js";
+import { useChromeStore } from "../../store/chrome.slice.js";
 import AppContentArea from "../components/app-content-area.jsx";
 import LyricsView from "../components/lyrics-view.jsx";
 import Queue from "../components/queue.jsx";
 import Sidebar from "../components/sidebar.jsx";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const AppNavigation = () => {
   const chrome = useChromeStore();

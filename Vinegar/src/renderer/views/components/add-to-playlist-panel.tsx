@@ -1,5 +1,5 @@
 import SidebarPlaylist from "./sidebar-playlist.jsx";
-import { useAppStore } from "../../store/app.js";
+import { useAppStore } from "../../store/app.slice.js";
 import { useTranslation } from "react-i18next";
 
 const AddToPlaylistPanel = ({ playlists }: { playlists: string[] }) => {

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const AnimatedArtworkView = ({ video, priority = false }: { video: string; priority: boolean }) => {
   const { cfg } = useCfgStore();

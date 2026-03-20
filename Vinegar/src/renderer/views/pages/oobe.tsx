@@ -1,7 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 const OOBE = () => {
   const { t } = useTranslation();
   const { cfg } = useCfgStore((state) => state);

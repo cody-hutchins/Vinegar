@@ -187,7 +187,7 @@ export const defaults: CfgStore = {
     },
   },
   visual: {
-    theme: "",
+    theme: "default.less",
     styles: [],
     scrollbars: 0, // 0 = show on hover, 2 = always hide, 3 = always show
     refresh_rate: 0,

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const Keybinds = () => {
   const { t } = useTranslation();

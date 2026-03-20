@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { StateCreator } from "zustand";
+
 import {
   checkScrollDirectionIsUp,
   formatTimezoneOffset,
@@ -11,97 +11,12 @@ import {
   toMS,
   xmlToJson,
 } from "../main/helpers.js";
-interface AppState {
-  version: string;
-  appMode: string;
-  mk: MusicKit.MusicKitInstance;
-  isDev: boolean;
-  clientPort: number;
-  platform: string;
-  pluginInstalled: boolean;
-  pluginMenuEntries: string[];
-  pluginMenuTopEntries: string[];
-  lz: string[];
-  lzListing: string;
-  radiohls: Record<string, any>;
-  fullscreenLyrics: boolean;
-  fullscreenState: Record<string, any>;
-  browsepage: Record<string, any>;
-  listennow: { timestamp: number };
-  madeforyou: string[];
-  radio: Record<string, any>;
-  mklang: string;
-  webview: {
-    url: string;
-    title: string;
-    loading: boolean;
-  };
-  appleCurator: string[];
-  multiroom: string[];
-  webremoteurl: string;
-  webremoteqr: string;
-  mxmtoken: string;
-  mkIsReady: boolean;
-  animateBackground: boolean;
-  currentArtUrl: string;
-  currentArtUrlRaw: string;
-  mvViewMode: string;
-  currentTrackID: string;
-  lyrics: { startTime: number; endTime: number; line: string; translation?: string }[];
-  currentLyricsLine: number;
-  richlyrics: { startTime: number; endTime: number; line: string; translation?: string }[];
-  lyricsMediaItem: string;
-  lyricsDebug: {
-    current: number;
-    start: number;
-    end: number;
-  };
-  lyricOffset: number;
-  v3: {
-    requestBody: {
-      platform: "web";
-    };
-  };
-  tmpHeight: string;
-  tmpWidth: string;
-  tmpX: string;
-  tmpY: string;
-  miniTmpX: string;
-  miniTmpY: string;
-  tmpVar: string[];
-  notification: boolean;
-  hintscontext: boolean;
-  collectionList: {
-    response: Record<string, any>;
-    title: string;
-    type: string;
-  };
-  MVsource: string | null;
-  currentSongInfo: Record<string, any>;
-  songstest: boolean;
-  hangtimer: string | null;
-  routes: string[];
-  musicBaseUrl: string;
+import { AppState, GeneralState } from "./store.js";
 
-  pauseButtonTimer: number | null;
-  activeCasts: string[];
+type AppStateCreator = StateCreator<GeneralState, [["zustand/immer", never], never], [], { app: AppState }>;
 
-  moreinfodata: string[];
-  idleTimer?: NodeJS.Timeout;
-  idleState: boolean;
-  appVisible: boolean;
-  currentAirPlayCodeID: string;
-  airplayTrys: { id: string; attempts: number }[];
-  loadMXM: () => void;
-  loadNeteaseLyrics: () => void;
-  loadYTLyrics: () => void;
-  loadQQLyrics: () => void;
-  parseTTML: () => void;
-  loadAMLyrics: () => void;
-}
-
-export const useAppStore = create<AppState>()(
-  immer((set, get) => ({
+export const createAppSlice: AppStateCreator = (set, get) => ({
+  app: {
     // --- STATE (from vuex-store) ---
     version: ipcRenderer.sendSync("get-version"),
     appMode: "player",
@@ -2057,5 +1972,5 @@ export const useAppStore = create<AppState>()(
       // });
     },
     // end mk stuff
-  })),
-);
+  },
+});

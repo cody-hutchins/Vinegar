@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import classNames from "classnames";
-import { useChromeStore } from "../../store/chrome.js";
+import { useChromeStore } from "../../store/chrome.slice.js";
 import AddToPlaylist from "../components/add-to-playlist-panel.jsx";
 import EQView from "../components/eq-view.jsx";
 import MenuPanel from "../components/menu-panel.jsx";
@@ -10,7 +10,7 @@ import QRCodeModal from "../components/qrcode-modal.jsx";
 import SettingsWindow from "../components/settings-window.jsx";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useCfgStore } from "../../store/cfg.js";
+import { useCfgStore } from "../../store/cfg.slice.js";
 
 const Panels = () => {
   const chrome = useChromeStore((state) => state);
