@@ -106,7 +106,7 @@ const MediaItemSquare = ({
       const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
-          app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+          app.mk.api.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
             itemBadges.push(data.data.data[0]);
           });
         });
@@ -131,7 +131,7 @@ const MediaItemSquare = ({
       if (truekind === "musicVideos") {
         truekind = "music-videos";
       }
-      let res = await app.mk.api.v3.music(
+      let res = await app.mk.api.music(
         `/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`,
         params,
       );
@@ -141,7 +141,7 @@ const MediaItemSquare = ({
       addedToLibrary = true;
     }
   }
-  async function removeFromLibrary(id) {
+  async function removeFromLibrary(id: number) {
     const params = {
       relate: "library",
       fields: "inLibrary",
@@ -152,7 +152,7 @@ const MediaItemSquare = ({
     if (truekind === "musicVideos") {
       truekind = "music-videos";
     }
-    let res = await app.mk.api.v3.music(
+    let res = await app.mk.api.music(
       `/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`,
       params,
     );
@@ -167,7 +167,7 @@ const MediaItemSquare = ({
       id = res.relationships.library.data[0].id;
     }
 
-    app.mk.api.v3.music(
+    app.mk.api.music(
       `v1/me/library/${truekind}/${id.toString()}`,
       {},
       {

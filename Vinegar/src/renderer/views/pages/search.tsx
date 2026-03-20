@@ -85,7 +85,7 @@ const Search = ({ search }: { search: object }) => {
   }
 
   async function seeAllHistory() {
-    const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+    const hist = await app.mk.api.music(`/v1/me/recent/played/tracks`, {
       l: this.$root.mklang,
     });
     recentlyPlayed = hist.data.data;
@@ -97,7 +97,7 @@ const Search = ({ search }: { search: object }) => {
       return await true;
     } else {
       await seeAllHistory();
-      const response = await app.mk.api.v3.music(
+      const response = await app.mk.api.music(
         `/v1/recommendations/${app.mk.storefrontId}?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=search-landing&platform=web&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`,
       );
       categoriesView = response.data.data;

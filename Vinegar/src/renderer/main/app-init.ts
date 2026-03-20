@@ -51,7 +51,7 @@ const init = async () => {
   this.mk._playbackController._storekit.overrideRestrictEnabled(false);
   try {
     // Set profile name
-    this.chrome.userinfo = (await app.mk.api.v3.music(`/v1/me/social-profile`)).data.data[0];
+    this.chrome.userinfo = (await app.mk.api.music(`/v1/me/social-profile`)).data.data[0];
     // check if this.chrome.userinfo.attributes.artwork exists
     if (this.chrome.userinfo.attributes.artwork && !this.chrome.hideUserInfo) {
       document.documentElement.style.setProperty(
@@ -169,7 +169,7 @@ const init = async () => {
       }
       break;
     case "history":
-      const history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: app.mklang });
+      const history = await app.mk.api.music(`/v1/me/recent/played/tracks`, { l: app.mklang });
       if (history.data.data.length > 0) {
         const lastItem = history.data.data[0];
         const kind = lastItem.attributes.playParams.kind;
@@ -395,7 +395,7 @@ const init = async () => {
           (app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id) !==
             -1
         ) {
-          app.mk.api.v3
+          app.mk.api
             .music(
               `/v1/catalog/${app.mk.storefrontId}/songs/${app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id}`,
             )

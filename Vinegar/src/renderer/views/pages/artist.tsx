@@ -89,7 +89,7 @@ const Artist = ({ data }: { data: object }) => {
     //   followAction = "unfollow";
     // }
     const inFavorites = (
-      await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${app.artistPage.data.id}`, {
+      await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/artists/${app.artistPage.data.id}`, {
         "fields[artists]": "inFavorites",
       })
     ).data.data[0].attributes?.inFavorites;

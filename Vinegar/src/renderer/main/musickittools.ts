@@ -11,7 +11,7 @@ const MusicKitTools = {
     let returnData = [];
 
     async function sendReq(href, options) {
-      const response = await app.mk.api.v3.music(href, options).catch(onError);
+      const response = await app.mk.api.music(href, options).catch(onError);
 
       returnData = returnData.concat(response.data.data);
       if (response.data.next) {

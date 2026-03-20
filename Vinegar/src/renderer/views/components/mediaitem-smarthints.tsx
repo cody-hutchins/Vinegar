@@ -26,7 +26,7 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
       if (truekind === "musicVideos") {
         truekind = "music-videos";
       }
-      let res = await app.mk.api.v3.music(
+      let res = await app.mk.api.music(
         `/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${item.attributes.playParams.id ?? item.id}`,
         params,
       );
@@ -408,9 +408,9 @@ const MediaItemSmarthints = ({ item, position }: { item: MusicKit.MediaItem; pos
 
               function getPlaylist(id, isLibrary) {
                 if (isLibrary) {
-                  return app.mk.api.v3.music(`/v1/me/library/playlists/${id}`);
+                  return app.mk.api.music(`/v1/me/library/playlists/${id}`);
                 } else {
-                  return app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/playlists/${id}`);
+                  return app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/playlists/${id}`);
                 }
               }
 

@@ -1,5 +1,5 @@
 import { CfgStore } from "../main/base/store";
-
+import MusicKit from "@types/musickit-js";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IElectronAPI {
   send: (channel: string, ...data: any[]) => void;
@@ -23,5 +23,5 @@ declare global {
   }
 }
 
-export {};
+export { MusicKit };
 /* eslint-enable @typescript-eslint/no-explicit-any */

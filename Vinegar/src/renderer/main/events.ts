@@ -45,7 +45,7 @@ const Events = {
       }
       // CTRL+SHIFT+H
       if (event.ctrlKey && event.shiftKey && event.keyCode === 72) {
-        const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+        const hist = await app.mk.api.music(`/v1/me/recent/played/tracks`, {
           l: app.mklang,
         });
         app.showCollection(hist.data, app.getLz("term.history"));

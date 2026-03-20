@@ -30,7 +30,7 @@ const Groupings = () => {
     //   query += queryDefaults;
     // }
     console.debug(query);
-    const result = await this.$root.mk.api.v3.music(
+    const result = await this.$root.mk.api.music(
       `/v1/editorial/${this.$root.mk.storefrontId}/groupings/${query}`,
       !query.includes("&") ? queryDefaults : { platform: "web" },
     );

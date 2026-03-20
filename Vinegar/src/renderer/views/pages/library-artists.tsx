@@ -41,7 +41,7 @@ const LibraryArtistItem = ({
   }
   async function select(e) {
     const u = item;
-    const u1 = await app.mk.api.v3.music(`/v1/me/library/artists/${u.id}/albums`, {
+    const u1 = await app.mk.api.music(`/v1/me/library/artists/${u.id}/albums`, {
       platform: "web",
       "include[library-albums]": "artists,tracks",
       "include[library-artists]": "catalog",

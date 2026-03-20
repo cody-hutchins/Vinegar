@@ -5,7 +5,7 @@ const wsapi = {
     const decoded = atob(encoded);
     const json = JSON.parse(decoded);
     console.log(json);
-    const response = await MusicKit.getInstance().api.v3.music(json.route, json.body, json.options);
+    const response = await MusicKit.getInstance().api.music(json.route, json.body, json.options);
     const ret = response.data;
     return JSON.stringify(ret);
   },
@@ -138,7 +138,7 @@ const wsapi = {
     if (kind === undefined || id === "no-id-found") return;
 
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    app.mk.api.v3
+    app.mk.api
       .music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${id}`, {
         relate: "library",
         fields: "inLibrary",
@@ -158,7 +158,7 @@ const wsapi = {
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
     if (rating === 0) {
-      app.mk.api.v3
+      app.mk.api
         .music(
           `/v1/me/ratings/${truekind}/${id}`,
           {},
@@ -176,7 +176,7 @@ const wsapi = {
         window.electronAPI.send("wsapi-rate", kind, id, rating);
       });
     } else {
-      app.mk.api.v3
+      app.mk.api
         .music(
           `/v1/me/ratings/${truekind}/${id}`,
           {},
@@ -204,7 +204,7 @@ const wsapi = {
     } else {
       const truekind = !kind.endsWith("s") ? kind + "s" : kind;
 
-      app.mk.api.v3
+      app.mk.api
         .music(`/v1/catalog/${app.mk.storefrontId}/?ids[${truekind}]=${id}`, {
           relate: "library",
           fields: "inLibrary",

@@ -103,11 +103,11 @@ const MusicKitInterop = {
 
   async fetchSongRelationships({ id = this.getAttributes().songId, relationship = "primaryName" } = {}) {
     if (!id) return null;
-    const res = await MusicKit.getInstance().api.v3.music("/v1/catalog/" + MusicKit.getInstance().storefrontId + `/songs/${id}`, {
+    const res = (await MusicKit.getInstance().api.music("/v1/catalog/" + MusicKit.getInstance().storefrontId + `/songs/${id}`, {
       include: {
         songs: ["artists"],
       },
-    });
+    })) as MusicKit.SongSearchResponse;
 
     if (!res || !res.data) {
       console.warn("[cider:preload] fetchSongRelationships: no response");
@@ -146,10 +146,10 @@ const MusicKitInterop = {
 
   getAttributes: function () {
     const mk = MusicKit.getInstance();
-    const nowPlayingItem = mk.nowPlayingItem;
-    const isPlayingExport = mk.isPlaying;
-    const remainingTimeExport = mk.currentPlaybackTimeRemaining;
-    const currentPlaybackProgress = mk.currentPlaybackProgress;
+    const nowPlayingItem = mk.player.nowPlayingItem;
+    const isPlayingExport = mk.player.isPlaying;
+    const remainingTimeExport = mk.player.currentPlaybackTimeRemaining;
+    const currentPlaybackProgress = mk.player.currentPlaybackProgress;
     const attributes = nowPlayingItem != null ? nowPlayingItem.attributes : {};
 
     attributes.songId = attributes.songId ?? attributes.playParams?.catalogId ?? attributes.playParams?.id;
@@ -175,7 +175,7 @@ const MusicKitInterop = {
     attributes.genreNames = attributes?.genreNames ?? [];
     attributes.remainingTime = remainingTimeExport ? remainingTimeExport * 1000 : 0;
     attributes.durationInMillis = attributes?.durationInMillis ?? 0;
-    attributes.currentPlaybackTime = mk?.currentPlaybackTime ?? 0;
+    attributes.currentPlaybackTime = mk?.player.currentPlaybackTime ?? 0;
     attributes.currentPlaybackProgress = currentPlaybackProgress ?? 0;
     attributes.startTime = Date.now();
     attributes.endTime = Math.round(
@@ -190,7 +190,7 @@ const MusicKitInterop = {
     return attributes;
   },
 
-  filterTrack: function (a, playbackCheck, mediaCheck) {
+  filterTrack: function (a, playbackCheck: boolean, mediaCheck: boolean) {
     if (a.name === "no-title-found" || a.playParams.id === "no-id-found") {
       return;
     } else if (mediaCheck && a.playParams.id === cache.playParams.id) {
@@ -215,9 +215,9 @@ const MusicKitInterop = {
   },
 
   playPause: () => {
-    if (MusicKit.getInstance().isPlaying) {
+    if (MusicKit.getInstance().player.isPlaying) {
       MusicKit.getInstance().pause();
-    } else if (MusicKit.getInstance().nowPlayingItem != null) {
+    } else if (MusicKit.getInstance().player.nowPlayingItem != null) {
       MusicKit.getInstance().play().catch(console.error);
     }
   },
@@ -256,14 +256,14 @@ const MusicKitInterop = {
       });
       navigator.mediaSession.setActionHandler("seekbackward", (details) => {
         if (details.seekOffset) {
-          MusicKit.getInstance().seekToTime(Math.max(MusicKit.getInstance().currentPlaybackTime - details.seekOffset, 0));
+          MusicKit.getInstance().seekToTime(Math.max(MusicKit.getInstance().player.currentPlaybackTime - details.seekOffset, 0));
         } else {
           MusicKit.getInstance().seekBackward();
         }
       });
       navigator.mediaSession.setActionHandler("seekforward", (details) => {
         if (details.seekOffset) {
-          MusicKit.getInstance().seekToTime(Math.max(MusicKit.getInstance().currentPlaybackTime + details.seekOffset, 0));
+          MusicKit.getInstance().seekToTime(Math.max(MusicKit.getInstance().player.currentPlaybackTime + details.seekOffset, 0));
         } else {
           MusicKit.getInstance().seekForward();
         }

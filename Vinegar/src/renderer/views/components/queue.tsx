@@ -26,7 +26,7 @@ const Queue = () => {
     updateQueue();
   }, []);
   async function geory() {
-    const _history = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, { l: this.$root.mklang });
+    const _history = await app.mk.api.music(`/v1/me/recent/played/tracks`, { l: this.$root.mklang });
     history = _history.data.data;
   }
   function select(e, id) {

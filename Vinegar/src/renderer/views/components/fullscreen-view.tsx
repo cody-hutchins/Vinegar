@@ -29,7 +29,7 @@ const FullscreenView = ({
     if (app.mk.nowPlayingItem._container.type === "albums") {
       try {
         const result = (
-          await app.mk.api.v3.music(
+          await app.mk.api.music(
             `/v1/catalog/${app.mk.storefrontId}/${app.mk.nowPlayingItem._container.type}/${app.mk.nowPlayingItem._container.id}`,
             {
               fields: "editorialArtwork,editorialVideo",
@@ -49,7 +49,7 @@ const FullscreenView = ({
     } else if (app.mk.nowPlayingItem._container.type === "library-albums") {
       try {
         const result = (
-          await app.mk.api.v3.music(`/v1/me/library/albums/${app.mk.nowPlayingItem._container.id}/catalog`, {
+          await app.mk.api.music(`/v1/me/library/albums/${app.mk.nowPlayingItem._container.id}/catalog`, {
             fields: "editorialArtwork,editorialVideo",
           })
         ).data.data[0].attributes?.editorialVideo?.motionDetailSquare?.video;

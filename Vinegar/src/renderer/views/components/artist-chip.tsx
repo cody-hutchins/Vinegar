@@ -12,7 +12,7 @@ export const ArtistChip = ({ item }: { item: object }) => {
     if (typeof item.relationships === "object") {
       artistId = item.relationships.catalog.data[0].id;
     }
-    app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artistId}`).then((response) => {
+    app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artistId}`).then((response) => {
       artist = response.data.data[0];
       image = true;
     });

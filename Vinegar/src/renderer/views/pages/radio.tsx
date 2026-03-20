@@ -16,7 +16,7 @@ const Radio = ({ data }: { data: object }) => {
     //   debugger
   }, []);
   const getRecentlyPlayed = async (next = null) => {
-    const recent = await app.mk.api.v3.music(`${next ?? "/v1/me/recent/radio-stations"}`, {
+    const recent = await app.mk.api.music(`${next ?? "/v1/me/recent/radio-stations"}`, {
       platform: "web",
       "art[url]": "f",
       l: app.mklang,

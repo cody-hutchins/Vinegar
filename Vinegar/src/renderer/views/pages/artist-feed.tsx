@@ -33,7 +33,7 @@ const ArtistFeed = () => {
     if (index2 > -1) {
       artists.splice(index2, 1);
     }
-    await app.mk.api.v3.music(
+    await app.mk.api.music(
       `/v1/me/favorites`,
       {
         "art[url]": "f",
@@ -63,7 +63,7 @@ const ArtistFeed = () => {
     try {
       const chunkArtistData = await Promise.all(
         chunks.map((chunk) =>
-          app.mk.api.v3.music(
+          app.mk.api.music(
             `/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`,
           ),
         ),

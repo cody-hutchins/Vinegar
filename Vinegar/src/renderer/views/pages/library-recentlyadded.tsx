@@ -21,7 +21,7 @@ const LibraryRecentlyAdded = () => {
   async function mounted() {
     if (this.$store.state.pageState["recentlyAdded"].items.length !== 0) return;
 
-    const firstResult = await app.mk.api.v3.music(firstRoute);
+    const firstResult = await app.mk.api.music(firstRoute);
     this.$store.state.pageState["recentlyAdded"].items = firstResult.data.data;
     this.$store.state.pageState["recentlyAdded"].nextUrl = firstResult.data.next;
   }
@@ -44,7 +44,7 @@ const LibraryRecentlyAdded = () => {
   async function getNextData() {
     if (this.$store.state.pageState["recentlyAdded"].nextUrl) {
       loading = true;
-      const nextResult = await app.mk.api.v3.music(this.$store.state.pageState["recentlyAdded"].nextUrl);
+      const nextResult = await app.mk.api.music(this.$store.state.pageState["recentlyAdded"].nextUrl);
       this.$store.state.pageState["recentlyAdded"].items = this.$store.state.pageState["recentlyAdded"].items.concat(nextResult.data.data);
       if (nextResult.data.next) {
         this.$store.state.pageState["recentlyAdded"].nextUrl = nextResult.data.next;

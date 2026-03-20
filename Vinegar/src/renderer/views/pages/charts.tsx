@@ -20,7 +20,7 @@ const Charts = () => {
   }, []);
 
   async function getData() {
-    const res = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
+    const res = await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
       types: "albums,songs,music-videos,playlists",
       l: "en-gb",
       platform: "auto",

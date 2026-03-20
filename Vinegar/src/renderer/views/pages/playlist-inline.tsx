@@ -90,7 +90,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
       const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
-          app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+          app.mk.api.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
             itemBadges.push(data.data.data[0]);
           });
         });
@@ -180,7 +180,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
     }
     const kind = data.attributes.playParams.kind ?? data.type ?? "";
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    app.mk.api.v3.music(
+    app.mk.api.music(
       `v1/me/library/${truekind}/${id.toString()}`,
       {},
       {
@@ -230,7 +230,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
       return;
     }
     console.log("sds", convert());
-    await app.mk.api.v3.music(
+    await app.mk.api.music(
       `/v1/me/library/playlists/${data.attributes.playParams.id}/tracks`,
       {},
       {
@@ -309,7 +309,7 @@ const PlaylistInline = ({ data }: { data: object }) => {
             if (route === "") {
               return;
             }
-            app.mk.api.v3.music(route).then((res) => {
+            app.mk.api.music(route).then((res) => {
               console.log(res.data.data[0].attributes.url);
               app.copyToClipboard(res.data.data[0].attributes.url);
             });

@@ -393,7 +393,7 @@ const MediaItemListItem = ({
               const _item = item;
               if (!_item.attributes.url) {
                 if (_item.type.includes("library")) {
-                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`))
+                  const result = (await app.mk.api.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`))
                     .data.data[0];
                   if (result.attributes.url) {
                     app.copyToClipboard(result.attributes.url);
@@ -417,7 +417,7 @@ const MediaItemListItem = ({
               }
               if (!_item.attributes.url) {
                 if (_item.type.includes("library")) {
-                  const result = (await app.mk.api.v3.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`))
+                  const result = (await app.mk.api.music(`/v1/me/library/${_item.type.replace("library-", "")}/${_item.id}/catalog`))
                     .data.data[0];
                   if (result.attributes.url) {
                     app.copyToClipboard(result.attributes.url);
@@ -567,9 +567,9 @@ const MediaItemListItem = ({
 
               function getPlaylist(id, isLibrary) {
                 if (isLibrary) {
-                  return app.mk.api.v3.music(`/v1/me/library/playlists/${id}`);
+                  return app.mk.api.music(`/v1/me/library/playlists/${id}`);
                 } else {
-                  return app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/playlists/${id}`);
+                  return app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/playlists/${id}`);
                 }
               }
 

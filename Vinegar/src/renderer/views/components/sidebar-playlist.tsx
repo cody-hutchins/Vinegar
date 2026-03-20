@@ -66,7 +66,7 @@ const SidebarPlaylist = ({
   async function move(item, sendTo) {
     const type = item.type.replace("library-", "");
     const typeTo = sendTo.type;
-    $root.mk.api.v3.music(
+    $root.mk.api.music(
       `/v1/me/library/${type}/${item.id}/parent`,
       {},
       {
@@ -217,7 +217,7 @@ const SidebarPlaylist = ({
     getChildren();
     toggleFolder();
 
-    $root.mk.api.v3.music(`v1/me/library/playlist-folders/${item.id}/children`).then((data) => {
+    $root.mk.api.music(`v1/me/library/playlist-folders/${item.id}/children`).then((data) => {
       const children = data.data.data;
       children.forEach((child) => {
         if (!$root.playlists.listing.find((listing) => listing.id === child.id)) {

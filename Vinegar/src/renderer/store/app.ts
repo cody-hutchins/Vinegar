@@ -1,12 +1,20 @@
 import { ipcRenderer } from "electron";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { CfgStore } from "../../main/base/store.js";
-import { hmsToSecondsOnly, parseTime } from "../main/helpers.js";
+import {
+  checkScrollDirectionIsUp,
+  formatTimezoneOffset,
+  hmsToSecondsOnly,
+  notyf,
+  parseTime,
+  stringToXml,
+  toMS,
+  xmlToJson,
+} from "../main/helpers.js";
 interface AppState {
   version: string;
   appMode: string;
-  cfg: CfgStore;
+  mk: MusicKit.MusicKitInstance;
   isDev: boolean;
   clientPort: number;
   platform: string;
@@ -15,13 +23,13 @@ interface AppState {
   pluginMenuTopEntries: string[];
   lz: string[];
   lzListing: string;
-  radiohls: string | null;
+  radiohls: Record<string, any>;
   fullscreenLyrics: boolean;
   fullscreenState: Record<string, any>;
-  browsepage: string[];
+  browsepage: Record<string, any>;
   listennow: { timestamp: number };
   madeforyou: string[];
-  radio: string[];
+  radio: Record<string, any>;
   mklang: string;
   webview: {
     url: string;
@@ -30,7 +38,6 @@ interface AppState {
   };
   appleCurator: string[];
   multiroom: string[];
-
   webremoteurl: string;
   webremoteqr: string;
   mxmtoken: string;
@@ -40,10 +47,10 @@ interface AppState {
   currentArtUrlRaw: string;
   mvViewMode: string;
   currentTrackID: string;
-  lyrics: { startTime: any; endTime: any; line: any }[];
+  lyrics: { startTime: number; endTime: number; line: string; translation?: string }[];
   currentLyricsLine: number;
-  richlyrics: { startTime: any; endTime: any; line: any }[];
-  lyricsMediaItem: Record<string, any>;
+  richlyrics: { startTime: number; endTime: number; line: string; translation?: string }[];
+  lyricsMediaItem: string;
   lyricsDebug: {
     current: number;
     start: number;
@@ -80,13 +87,11 @@ interface AppState {
   activeCasts: string[];
 
   moreinfodata: string[];
-  idleTimer: string | null;
+  idleTimer?: NodeJS.Timeout;
   idleState: boolean;
   appVisible: boolean;
   currentAirPlayCodeID: string;
-  airplayTrys: string[];
-  setCfg: (value: CfgStore) => void;
-  setCfgConnectivityDiscord_rpcEnabled: (newValue: boolean) => void;
+  airplayTrys: { id: string; attempts: number }[];
   loadMXM: () => void;
   loadNeteaseLyrics: () => void;
   loadYTLyrics: () => void;
@@ -100,35 +105,22 @@ export const useAppStore = create<AppState>()(
     // --- STATE (from vuex-store) ---
     version: ipcRenderer.sendSync("get-version"),
     appMode: "player",
-    cfg: ipcRenderer.sendSync("getStore"),
-    setCfg: (value) =>
-      set((state) => {
-        state.cfg = value;
-        console.debug(`Config changed: ${JSON.stringify(value)}`);
-        ipcRenderer.send("setStore", value);
-      }),
-    setCfgConnectivityDiscord_rpcEnabled: (newValue) =>
-      set((state) => {
-        state.cfg.connectivity.discord_rpc.enabled = newValue;
-        ipcRenderer.send("discordrpc:reload", newValue);
-      }),
-
     isDev: ipcRenderer.sendSync("is-dev"),
     clientPort: ipcRenderer.sendSync("get-port"),
     platform: "",
-    mk: {},
+    mk: ipcRenderer.sendSync("get-mk-instance"),
     pluginInstalled: false,
     pluginMenuEntries: [],
     pluginMenuTopEntries: [],
     lz: ipcRenderer.sendSync("get-i18n", "en"),
     lzListing: ipcRenderer.sendSync("get-i18n-listing"),
-    radiohls: null,
+    radiohls: {},
     fullscreenLyrics: false,
     fullscreenState: ipcRenderer.sendSync("getFullScreen"),
-    browsepage: [],
+    browsepage: {},
     listennow: { timestamp: 0 },
     madeforyou: [],
-    radio: [],
+    radio: {},
     mklang: "en",
     webview: {
       url: "",
@@ -151,7 +143,7 @@ export const useAppStore = create<AppState>()(
     lyrics: [],
     currentLyricsLine: 0,
     richlyrics: [],
-    lyricsMediaItem: {},
+    lyricsMediaItem: "",
     lyricsDebug: {
       current: 0,
       start: 0,
@@ -187,7 +179,6 @@ export const useAppStore = create<AppState>()(
     pauseButtonTimer: null,
     activeCasts: [],
     moreinfodata: [],
-    idleTimer: null,
     idleState: false,
     appVisible: true,
     currentAirPlayCodeID: "",
@@ -197,7 +188,7 @@ export const useAppStore = create<AppState>()(
       set((state) => {
         state.lyrics = [];
         const preLrc = [];
-        const xml = get().stringToXml(get().lyricsMediaItem);
+        const xml = stringToXml(get().lyricsMediaItem);
         const lyricsLines = xml.getElementsByTagName("p");
         let synced = true;
         const endTimes = [];
@@ -207,8 +198,8 @@ export const useAppStore = create<AppState>()(
         endTimes.push(0);
         if (synced) {
           for (const element of lyricsLines) {
-            const start = this.toMS(element.getAttribute("begin"));
-            const end = this.toMS(element.getAttribute("end"));
+            const start = toMS(element.getAttribute("begin") || "");
+            const end = toMS(element.getAttribute("end") || "");
             if (start - endTimes[endTimes.length - 1] > 5 && endTimes[endTimes.length - 1] !== 0) {
               preLrc.push({
                 startTime: endTimes[endTimes.length - 1],
@@ -243,18 +234,19 @@ export const useAppStore = create<AppState>()(
       }),
     parseLyrics: () =>
       set((state) => {
-        const xml = this.stringToXml(this.lyricsMediaItem);
+        const xml = stringToXml(get().lyricsMediaItem);
         const json = xmlToJson(xml);
-        state.lyrics = json;
+        state.lyrics = json as typeof state.lyrics;
       }),
     loadLyrics() {
-      const musicType = MusicKit.getInstance().nowPlayingItem !== null ? (MusicKit.getInstance().nowPlayingItem["type"] ?? "") : "";
+      const musicType =
+        MusicKit.getInstance().player.nowPlayingItem !== null ? (MusicKit.getInstance().player.nowPlayingItem["type"] ?? "") : "";
       // console.log("mt", musicType)
       if (musicType === "musicVideo") {
         get().loadYTLyrics();
       } else {
         // only load MXM lyrics if AM lyrics failed to load
-        if (app.cfg.lyrics.enable_mxm) {
+        if (this.cfg.lyrics.enable_mxm) {
           get().loadMXM();
         } else {
           get().loadAMLyrics();
@@ -264,24 +256,27 @@ export const useAppStore = create<AppState>()(
     loadAMLyrics: () =>
       set((state) => {
         const songID =
-          get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem["_songId"] ?? get().mk.nowPlayingItem["songId"] ?? -1) : -1;
+          get().mk.player.nowPlayingItem !== null
+            ? (get().mk.player.nowPlayingItem["_songId"] ?? get().mk.player.nowPlayingItem["songId"] ?? -1)
+            : -1;
         // get().getMXM( trackName, artistName, 'en', duration);
         if (songID !== -1) {
           get()
-            .mk.api.v3.music(`v1/catalog/${get().mk.storefrontId}/songs/${songID}/lyrics`)
+            .mk.api.music(`v1/catalog/${get().mk.storefrontId}/songs/${songID}/lyrics`)
             .then((response) => {
-              state.lyricsMediaItem = response.data?.data[0]?.attributes["ttml"];
+              const res = response as MusicKit.SongSearchResponse;
+              state.lyricsMediaItem = res.data.results.songs.data[0]?.attributes?.attribution || "";
               get().parseTTML();
             })
             .catch(() => {
-              if (app.cfg.lyrics.enable_mxm) {
+              if (this.cfg.lyrics.enable_mxm) {
                 get().loadQQLyrics();
               } else {
                 get().loadMXM();
               }
             });
         } else {
-          if (get().cfg.lyrics.enable_mxm) {
+          if (this.cfg.lyrics.enable_mxm) {
             get().loadQQLyrics(); // since mxm is already prioritized, we can just load qq lyrics if am fails
           } else {
             get().loadMXM();
@@ -290,17 +285,17 @@ export const useAppStore = create<AppState>()(
       }),
     loadYTLyrics: () =>
       set((state) => {
-        const track = get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.title ?? "") : "";
-        const artist = get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.artistName ?? "") : "";
+        const track = get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "";
+        const artist = get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "";
         const time =
-          get().mk.nowPlayingItem !== null
-            ? (Math.round((get().mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          get().mk.player.nowPlayingItem !== null
+            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1;
         window.electronAPI.invoke("getYTLyrics", track, artist).then((result) => {
           if (result.length > 0) {
             const ytid = result[0]["id"]["videoId"];
-            if (get().cfg.lyrics.enable_yt) {
-              loadYT(ytid, get().cfg.lyrics.mxm_language ?? "en");
+            if (this.cfg.lyrics.enable_yt) {
+              loadYT(ytid, this.cfg.lyrics.mxm_language ?? "en");
             } else {
               get().loadMXM();
             }
@@ -308,7 +303,7 @@ export const useAppStore = create<AppState>()(
             get().loadMXM();
           }
 
-          function loadYT(id, lang) {
+          function loadYT(id: string, lang: string) {
             const req = new XMLHttpRequest();
             const url = `https://www.youtube.com/watch?&v=${id}`;
             req.open("GET", url, true);
@@ -354,19 +349,21 @@ export const useAppStore = create<AppState>()(
     loadMXM: () =>
       set((state) => {
         let attempt = 0;
-        const track = encodeURIComponent(get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.title ?? "") : "");
-        const artist = encodeURIComponent(get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.artistName ?? "") : "");
+        const track = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "");
+        const artist = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "");
         const time = encodeURIComponent(
-          get().mk.nowPlayingItem !== null
-            ? (Math.round((get().mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          get().mk.player.nowPlayingItem !== null
+            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1,
         );
         const id = encodeURIComponent(
-          get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem._songId ?? get().mk.nowPlayingItem["songId"] ?? "") : "",
+          get().mk.player.nowPlayingItem !== null
+            ? (get().mk.player.nowPlayingItem._songId ?? get().mk.player.nowPlayingItem["songId"] ?? "")
+            : "",
         );
         let lrcfile = "";
-        let richsync = [];
-        const lang = get().cfg.lyrics.mxm_language; //  translation language
+        let richsync: { startTime: number; endTime: number; line: string; translation?: string }[] = [];
+        const lang = this.cfg.lyrics.mxm_language; //  translation language
         function revisedRandId() {
           return Math.random()
             .toString(36)
@@ -375,7 +372,7 @@ export const useAppStore = create<AppState>()(
         }
 
         /* get token */
-        function getToken(mode, track, artist, songid, lang, time, id) {
+        function getToken(mode: number, track: string, artist: string, songid: string, lang: string, time: string, id?: string) {
           if (attempt > 2) {
             get().loadNeteaseLyrics();
             // app.loadAMLyrics();
@@ -398,9 +395,9 @@ export const useAppStore = create<AppState>()(
                     state.mxmtoken = token;
 
                     if (mode === 1) {
-                      getMXMSubs(track, artist, app.mxmtoken, lang, time, id);
+                      getMXMSubs(track, artist, state.mxmtoken, lang, time, id);
                     } else {
-                      getMXMTrans(songid, lang, app.mxmtoken);
+                      getMXMTrans(songid, lang, state.mxmtoken);
                     }
                   } else {
                     console.debug("fake 200 token");
@@ -425,9 +422,9 @@ export const useAppStore = create<AppState>()(
           }
         }
 
-        function getMXMSubs(track, artist, token, lang, time, id) {
+        function getMXMSubs(track: string, artist: string, token: string, lang: string, time: string, id?: string) {
           const usertoken = encodeURIComponent(token);
-          const richsyncQuery = app.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
+          const richsyncQuery = this.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
           const timecustom =
             !time || (time && time < 0) ? "" : `&f_subtitle_length=${time}&q_duration=${time}&f_subtitle_length_max_deviation=40`;
           const itunesid = id && id !== "" ? `&track_itunes_id=${id}` : "";
@@ -481,19 +478,19 @@ export const useAppStore = create<AppState>()(
                     get().loadQQLyrics();
                     // app.loadAMLyrics()
                   } else {
-                    if (richsync === [] || richsync.length === 0) {
+                    if (richsync.length === 0) {
                       console.log("ok");
                       // process lrcfile to json here
                       state.lyricsMediaItem = lrcfile;
-                      const u = app.lyricsMediaItem.split(/[\r\n]/);
+                      const u = get().lyricsMediaItem.split(/[\r\n]/);
                       const preLrc = [];
                       for (let i = u.length - 1; i >= 0; i--) {
                         const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
-                        const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
+                        const end: number = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                         preLrc.push({
-                          startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
+                          startTime: toMS(xline![1].substring(1, xline![1].length - 2)) ?? 0,
                           endTime: end,
-                          line: xline[2],
+                          line: xline![2],
                           translation: "",
                         });
                       }
@@ -508,9 +505,9 @@ export const useAppStore = create<AppState>()(
                     } else {
                       const preLrc = richsync.map(function (item) {
                         return {
-                          startTime: item.ts,
-                          endTime: item.te,
-                          line: item.x,
+                          startTime: item.startTime,
+                          endTime: item.endTime,
+                          line: item.line,
                           translation: "",
                         };
                       });
@@ -542,19 +539,19 @@ export const useAppStore = create<AppState>()(
               }
             } catch (e) {
               console.log(e);
-              app.loadQQLyrics();
+              get().loadQQLyrics();
               //app.loadAMLyrics()
             }
           };
           req.onerror = function () {
-            app.loadQQLyrics();
+            get().loadQQLyrics();
             console.log("error");
-            // app.loadAMLyrics();
+            // get().loadAMLyrics();
           };
           req.send();
         }
 
-        function getMXMTrans(id, lang, token) {
+        function getMXMTrans(id: string, lang: string, token: string) {
           if (lang !== "disabled" && id !== "") {
             const usertoken = encodeURIComponent(token);
             const url2 =
@@ -578,7 +575,7 @@ export const useAppStore = create<AppState>()(
                 if (status2 === 200) {
                   try {
                     const preTrans = [];
-                    const u = app.lyrics;
+                    const u = get().lyrics;
                     const translation_list = jsonResponse2["message"]["body"]["translations_list"];
                     if (translation_list.length > 0) {
                       for (let i = 0; i < u.length - 1; i++) {
@@ -610,9 +607,9 @@ export const useAppStore = create<AppState>()(
           }
         }
 
-        if ((track !== "") & (track !== "No Title Found")) {
-          if (app.mxmtoken !== null && app.mxmtoken !== "") {
-            getMXMSubs(track, artist, app.mxmtoken, lang, time, id);
+        if (track !== "" && track !== "No Title Found") {
+          if (get().mxmtoken !== null && get().mxmtoken !== "") {
+            getMXMSubs(track, artist, get().mxmtoken, lang, time, id);
           } else {
             getToken(1, track, artist, "", lang, time);
           }
@@ -620,11 +617,11 @@ export const useAppStore = create<AppState>()(
       }),
     loadNeteaseLyrics: () =>
       set((state) => {
-        const track = encodeURIComponent(get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.title ?? "") : "");
-        const artist = encodeURIComponent(get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.artistName ?? "") : "");
+        const track = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "");
+        const artist = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "");
         const time = encodeURIComponent(
-          get().mk.nowPlayingItem !== null
-            ? (Math.round((get().mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          get().mk.player.nowPlayingItem !== null
+            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1,
         );
         const url = `http://music.163.com/api/search/get/?csrf_token=hlpretag=&hlposttag=&s=${track + " " + artist}&type=1&offset=0&total=true&limit=6`;
@@ -644,14 +641,14 @@ export const useAppStore = create<AppState>()(
                 const jsonResponse2 = JSON.parse(req2.responseText);
                 const lrcfile = jsonResponse2["lrc"]["lyric"];
                 state.lyricsMediaItem = lrcfile;
-                const u = app.lyricsMediaItem.split(/[\n]/);
+                const u = get().lyricsMediaItem.split(/[\n]/);
                 const preLrc = [];
                 for (let i = u.length - 1; i >= 0; i--) {
                   const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
                   if (xline !== null) {
                     const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                     preLrc.push({
-                      startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
+                      startTime: toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
                       endTime: end,
                       line: xline[2],
                       translation: "",
@@ -667,13 +664,13 @@ export const useAppStore = create<AppState>()(
                   });
                 state.lyrics = preLrc.reverse();
               } catch (e) {
-                state.lyrics = "";
+                state.lyrics = [];
               }
             };
             req2.onerror = function () {};
             req2.send();
           } catch (e) {
-            state.lyrics = "";
+            state.lyrics = [];
           }
         };
         req.send();
@@ -681,12 +678,12 @@ export const useAppStore = create<AppState>()(
       }),
     loadQQLyrics: () =>
       set((state) => {
-        if (!get().cfg.lyrics.enable_qq) return;
-        const track = encodeURIComponent(get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.title ?? "") : "");
-        const artist = encodeURIComponent(get().mk.nowPlayingItem !== null ? (get().mk.nowPlayingItem.artistName ?? "") : "");
+        if (!this.cfg.lyrics.enable_qq) return;
+        const track = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "");
+        const artist = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "");
         const time = encodeURIComponent(
-          get().mk.nowPlayingItem !== null
-            ? (Math.round((get().mk.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          get().mk.player.nowPlayingItem !== null
+            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1,
         );
         const url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=${track + " " + artist}&t=0&n=1&page=1&cr=1&new_json=1&format=json&platform=yqq.json`;
@@ -706,26 +703,26 @@ export const useAppStore = create<AppState>()(
             req2.open("GET", url2, true);
             req2.onload = function () {
               try {
-                function b64_to_utf8(str) {
+                function b64_to_utf8(str: string) {
                   return decodeURIComponent(escape(window.atob(str)));
                 }
 
-                const htmlDecode = (input) => {
+                const htmlDecode = (input: string) => {
                   const doc = new DOMParser().parseFromString(input, "text/html");
                   return doc.documentElement.textContent;
                 };
                 const jsonResponse2 = JSON.parse(req2.responseText.replace("MusicJsonCallback(", "").replace("})", "}"));
                 const lrcfile = htmlDecode(b64_to_utf8(jsonResponse2["lyric"]));
                 state.lyricsMediaItem = lrcfile;
-                const u = app.lyricsMediaItem.split(/[\n]/);
+                const u = state.lyricsMediaItem.split(/[\n]/);
 
                 const preLrc = [];
                 for (let i = u.length - 1; i >= 0; i--) {
                   const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
                   if (xline !== null) {
-                    const end = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
+                    const end: number = preLrc.length > 0 ? (preLrc[preLrc.length - 1].startTime ?? 99999) : 99999;
                     preLrc.push({
-                      startTime: app.toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
+                      startTime: toMS(xline[1].substring(1, xline[1].length - 2)) ?? 0,
                       endTime: end,
                       line: xline[2],
                       translation: "",
@@ -746,7 +743,7 @@ export const useAppStore = create<AppState>()(
               } catch (e) {
                 console.log(e);
                 get().loadNeteaseLyrics();
-                state.lyrics = "";
+                state.lyrics = [];
               }
             };
             req2.onerror = function () {
@@ -756,7 +753,7 @@ export const useAppStore = create<AppState>()(
           } catch (e) {
             console.log(e);
             get().loadNeteaseLyrics();
-            state.lyrics = "";
+            state.lyrics = [];
           }
         };
         req.onerror = function () {
@@ -765,7 +762,7 @@ export const useAppStore = create<AppState>()(
         req.send();
       }),
     // end lyrics stuff
-    _fetch(url, opts = {}) {
+    _fetch(url: string, opts = {}) {
       if (this.cfg.advanced.experiments.includes("cider_mirror")) {
         if (url.includes("api.github.com/")) {
           return fetch(url.replace("api.github.com/", "mirror.api.cider.sh/v2/api/"), opts);
@@ -791,7 +788,7 @@ export const useAppStore = create<AppState>()(
       clearTimeout(this.hangtimer);
       document.body.removeAttribute("loading");
       await window.electronAPI.invoke("renderer-ready", true);
-      document.querySelector("#LOADER").remove();
+      document.querySelector("#LOADER")!.remove();
 
       window.electronAPI.on("recv-cookies", function (_event, cookies) {
         console.log("[appIPC] recv-cookies");
@@ -802,20 +799,7 @@ export const useAppStore = create<AppState>()(
         window.location.reload();
       });
     },
-    getAppStyle() {
-      const finalStyle: Record<string, any> = {};
-      if (this.cfg.visual.window_background_style === "color") {
-        finalStyle["background-color"] = this.cfg.visual.windowColor;
-      }
-      if (this.cfg.visual.customAccentColor) {
-        finalStyle["--keyColor"] = this.cfg.visual.accentColor;
-        finalStyle["--songProgressColor"] = this.cfg.visual.accentColor;
-      } else if (this.cfg.visual.purplePodcastPlaybackBar && MusicKit.getInstance().nowPlayingItem?.type === "podcast-episodes") {
-        finalStyle["--songProgressColor"] = "#6929D0";
-      }
-      return finalStyle;
-    },
-    songLinkShare(amUrl) {
+    songLinkShare(amUrl: string) {
       notyf.open({
         type: "info",
         className: "notyf-info",
@@ -837,19 +821,13 @@ export const useAppStore = create<AppState>()(
         }
       };
     },
-    formatVolumeTooltip() {
-      const advancedTooltip = this.cfg.audio.dBSPL
-        ? (Number(this.cfg.audio.dBSPLcalibration) + Math.log10(this.mk.volume) * 20).toFixed(2) + " dB SPL"
-        : (Math.log10(this.mk.volume) * 20).toFixed(2) + " dBFS";
-      return this.cfg.audio.advanced ? advancedTooltip : (this.mk.volume * 100).toFixed(0) + "%";
-    },
 
-    async setLz(lang) {
+    async setLz(lang: string) {
       if (lang === "") {
         lang = this.cfg.general.language;
       }
       this.lz = window.electronAPI.sendSync("get-i18n", lang);
-      this.mklang = await this.MKJSLang();
+      get().mklang = await get().mkJSLang();
       try {
         this.listennow.timestamp = 0;
         this.browsepage.timestamp = 0;
@@ -865,7 +843,7 @@ export const useAppStore = create<AppState>()(
      * @author booploops#7139
      * @memberOf app
      */
-    getLz(message, options = {}) {
+    getLz(message: string, options: Record<string, number> = {}) {
       if (this.lz[message]) {
         if (options["count"]) {
           if (typeof this.lz[message] === "object") {
@@ -890,7 +868,7 @@ export const useAppStore = create<AppState>()(
         return message;
       }
     },
-    getProfileLz(type, name) {
+    getProfileLz(type: string, name: string) {
       // For Spatial and CAR.
       let result = "";
 
@@ -934,7 +912,7 @@ export const useAppStore = create<AppState>()(
       }
     },
     setLzManual() {
-      this.$data.library.songs.sortingOptions = {
+      this.library.songs.sortingOptions = {
         albumName: this.getLz("term.sortBy.album"),
         artistName: this.getLz("term.sortBy.artist"),
         name: this.getLz("term.sortBy.name"),
@@ -944,7 +922,7 @@ export const useAppStore = create<AppState>()(
         dateAdded: this.getLz("term.sortBy.dateAdded"),
       };
 
-      this.$data.library.albums.sortingOptions = {
+      this.library.library.albums.sortingOptions = {
         artistName: this.getLz("term.sortBy.artist"),
         name: this.getLz("term.sortBy.name"),
         genre: this.getLz("term.sortBy.genre"),
@@ -952,7 +930,7 @@ export const useAppStore = create<AppState>()(
         dateAdded: this.getLz("term.sortBy.dateAdded"),
       };
 
-      this.$data.library.artists.sortingOptions = {
+      this.library.library.artists.sortingOptions = {
         artistName: this.getLz("term.sortBy.artist"),
         name: this.getLz("term.sortBy.name"),
         genre: this.getLz("term.sortBy.genre"),
@@ -966,11 +944,11 @@ export const useAppStore = create<AppState>()(
       };
     },
 
-    quit() {
+    async quit() {
       await window.electronAPI.invoke("quit-app");
     },
 
-    modularUITest(val = false) {
+    modularUITest(val: boolean = false) {
       this.fullscreenLyrics = val;
       if (val) {
         document.querySelector("#app-main").classList.add("modular-fs");
@@ -992,15 +970,15 @@ export const useAppStore = create<AppState>()(
     },
 
     unauthorize() {
-      this.confirm(this.getLz("term.confirmLogout"), function (result) {
+      this.confirm(this.getLz("term.confirmLogout"), function (result: boolean) {
         if (result) {
-          this.mk.unauthorize();
+          get().mk.unauthorize();
           document.location.reload();
         }
       });
     },
 
-    copyToClipboard(str) {
+    copyToClipboard(str: string) {
       // if (navigator.userAgent.includes('Darwin') || navigator.appVersion.indexOf("Mac") !== -1) {
       // this.darwinShare(str)
       // } else {
@@ -1048,52 +1026,46 @@ export const useAppStore = create<AppState>()(
         return;
       }
       try {
-        this.listennow = (
-          await this.mk.api.v3.music(
-            `v1/me/recommendations?timezone=${encodeURIComponent(this.formatTimezoneOffset())}`,
-            {
-              name: "listen-now",
-              with: "friendsMix,library,social",
-              "art[social-profiles:url]": "c",
-              "art[url]": "c,f",
-              "omit[resource]": "autos",
-              "relate[editorial-items]": "contents",
-              extend: ["editorialCard", "editorialVideo"],
-              "extend[albums]": ["artistUrl"],
-              "extend[library-albums]": ["artistUrl", "editorialVideo"],
-              "extend[playlists]": ["artistNames", "editorialArtwork", "editorialVideo"],
-              "extend[library-playlists]": ["artistNames", "editorialArtwork", "editorialVideo"],
-              "extend[social-profiles]": "topGenreNames",
-              "include[albums]": "artists",
-              "include[songs]": "artists",
-              "include[music-videos]": "artists",
-              "include[personal-recommendation]": "primary-content",
-              "fields[albums]": [
-                "artistName",
-                "artistUrl",
-                "artwork",
-                "contentRating",
-                "editorialArtwork",
-                "editorialVideo",
-                "name",
-                "playParams",
-                "releaseDate",
-                "url",
-              ],
-              "fields[artists]": ["name", "url", "artwork"],
-              "extend[stations]": ["airDate", "supportsAirTimeUpdates"],
-              "meta[stations]": "inflectionPoints",
-              types:
-                "artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells",
-              platform: "web",
-              l: this.mklang,
-            },
-            {
-              includeResponseMeta: !0,
-              reload: !0,
-            },
-          )
-        ).data;
+        const _listennow = await get().mk.api.music(`v1/me/recommendations?timezone=${encodeURIComponent(formatTimezoneOffset())}`, {
+          name: "listen-now",
+          with: "friendsMix,library,social",
+          "art[social-profiles:url]": "c",
+          "art[url]": "c,f",
+          "omit[resource]": "autos",
+          "relate[editorial-items]": "contents",
+          extend: ["editorialCard", "editorialVideo"],
+          "extend[albums]": ["artistUrl"],
+          "extend[library-albums]": ["artistUrl", "editorialVideo"],
+          "extend[playlists]": ["artistNames", "editorialArtwork", "editorialVideo"],
+          "extend[library-playlists]": ["artistNames", "editorialArtwork", "editorialVideo"],
+          "extend[social-profiles]": "topGenreNames",
+          "include[albums]": "artists",
+          "include[songs]": "artists",
+          "include[music-videos]": "artists",
+          "include[personal-recommendation]": "primary-content",
+          "fields[albums]": [
+            "artistName",
+            "artistUrl",
+            "artwork",
+            "contentRating",
+            "editorialArtwork",
+            "editorialVideo",
+            "name",
+            "playParams",
+            "releaseDate",
+            "url",
+          ],
+          "fields[artists]": ["name", "url", "artwork"],
+          "extend[stations]": ["airDate", "supportsAirTimeUpdates"],
+          "meta[stations]": "inflectionPoints",
+          types:
+            "artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells",
+          platform: "web",
+          l: get().mklang,
+          includeResponseMeta: !0,
+          reload: !0,
+        });
+        this.listennow.response = (_listennow as MusicKit.SongSearchResponse).data.results.songs.data;
         this.listennow.timestamp = Date.now();
         console.debug(this.listennow);
       } catch (e) {
@@ -1109,8 +1081,8 @@ export const useAppStore = create<AppState>()(
         return;
       }
       try {
-        this.mk.api.v3
-          .music(`/v1/editorial/${this.mk.storefrontId}/groupings`, {
+        get()
+          .mk.api.music(`/v1/editorial/${get().mk.storefrontId}/groupings`, {
             platform: "web",
             name: "radio",
             "omit[resource:artists]": "relationships",
@@ -1120,7 +1092,7 @@ export const useAppStore = create<AppState>()(
             extend: "editorialArtwork,artistUrl",
             "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
             "art[url]": "f",
-            l: this.mklang,
+            l: get().mklang,
           })
           .then((radio) => {
             this.radio = radio.data.data[0];
@@ -1141,7 +1113,7 @@ export const useAppStore = create<AppState>()(
         return;
       }
       try {
-        const browse = await this.mk.api.v3.music(`/v1/editorial/${this.mk.storefrontId}/groupings`, {
+        const browse = await get().mk.api.music(`/v1/editorial/${get().mk.storefrontId}/groupings`, {
           platform: "web",
           name: "music",
           "omit[resource:artists]": "relationships",
@@ -1151,7 +1123,7 @@ export const useAppStore = create<AppState>()(
           extend: "editorialArtwork,artistUrl",
           "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
           "art[url]": "f",
-          l: this.mklang,
+          l: get().mklang,
         });
         this.browsepage = browse.data.data[0];
         this.browsepage.timestamp = Date.now();
@@ -1166,27 +1138,33 @@ export const useAppStore = create<AppState>()(
         return;
       }
       try {
-        const mfu = await this.mk.api.v3.music(
+        const mfu = await get().mk.api.music(
           "/v1/me/library/playlists?platform=web&extend=editorialVideo&fields%5Bplaylists%5D=lastModifiedDate&filter%5Bfeatured%5D=made-for-you&include%5Blibrary-playlists%5D=catalog&fields%5Blibrary-playlists%5D=artwork%2Cname%2CplayParams%2CdateAdded",
         );
-        this.madeforyou = mfu.data;
+        this.madeforyou = (mfu as MusicKit.SearchResponse<MusicKit.Curators>).data.results.Curators.data[0];
       } catch (e) {
         console.log(e);
         this.getMadeForYou(attempt + 1);
       }
     },
-    async getTypeFromID(kind, id, isLibrary = false, params = {}, params2 = {}) {
+    async getTypeFromID(
+      kind: string,
+      id: number,
+      isLibrary = false,
+      params: Record<string, string> = {},
+      params2: Record<string, string> = {},
+    ) {
       let a;
-      if ((kind === "album") | (kind === "albums")) {
-        params["include"] = "tracks,artists,record-labels,catalog";
+      if (kind === "album" || kind === "albums") {
+        params.include = "tracks,artists,record-labels,catalog";
       }
-      params["l"] = this.mklang;
+      params.l = get().mklang;
       try {
-        a = await this.mkapi(kind.toString(), isLibrary, id.toString(), params, params2);
+        a = await get().mkapi(kind.toString(), isLibrary, id.toString(), params, params2);
       } catch (e) {
         console.debug(e);
         try {
-          a = await this.mkapi(kind.toString(), !isLibrary, id.toString(), params, params2);
+          a = await get().mkapi(kind.toString(), !isLibrary, id.toString(), params, params2);
         } catch (err) {
           console.log(err);
           a = [];
@@ -1209,32 +1187,17 @@ export const useAppStore = create<AppState>()(
         }
       }
     },
-    switchArtworkDisplayLayout() {
-      switch (this.cfg.visual.artworkDisplayLayout) {
-        case "default":
-          this.cfg.visual.artworkDisplayLayout = "sidebar";
-          break;
-        case "sidebar":
-          this.cfg.visual.artworkDisplayLayout = "default";
-          break;
-        default:
-          this.cfg.visual.artworkDisplayLayout = "default";
-          break;
-      }
-    },
 
-    followingArtist(id) {
-      console.debug(`check for ${id}`);
-      return this.cfg.home.followedArtists.includes(id);
-    },
     getCurrentTime() {
       return parseFloat(
-        hmsToSecondsOnly(parseTime(this.mk.nowPlayingItem.attributes.durationInMillis - this.mk.currentPlaybackTimeRemaining * 1000)),
+        hmsToSecondsOnly(
+          parseTime(get().mk.player.nowPlayingItem.attributes.durationInMillis - get().mk.player.currentPlaybackTimeRemaining * 1000),
+        ) + "",
       );
     },
-    getLyricBGStyle(start, end) {
+    getLyricBGStyle(start: string, end: string) {
       const currentTime = this.getCurrentTime();
-      // let duration = this.mk.nowPlayingItem.attributes.durationInMillis
+      // let duration = get().mk.player.nowPlayingItem.attributes.durationInMillis
       const start2 = hmsToSecondsOnly(start);
       const end2 = hmsToSecondsOnly(end);
       // let currentProgress = ((100 * (currentTime)) / (end2))
@@ -1250,7 +1213,7 @@ export const useAppStore = create<AppState>()(
         return {};
       }
     },
-    setAirPlayCodeUI(identifier) {
+    setAirPlayCodeUI(identifier: string) {
       this.modals.airplayPW = true;
       this.currentAirPlayCodeID = identifier;
     },
@@ -1259,110 +1222,119 @@ export const useAppStore = create<AppState>()(
         notyf.success("Device paired successfully!");
       }
       console.log("delete idx-pre", identifier);
-      const idx = this.airplayTrys.findIndex((a) => {
+      const idx = get().airplayTrys.findIndex((a) => {
         return a.id === identifier;
       });
       console.log("delete idx", idx);
       if (idx !== -1) delete this.airplayTrys[idx];
-      this.airplayTrys = this.airplayTrys.filter((n) => n);
+      get().airplayTrys = get().airplayTrys.filter((n) => n);
     },
     sendAirPlayFailed() {
       notyf.success("Device paring failed!");
     },
-    airplayDisconnect(dropped, array = [], identifier = "") {
-      console.log("airplay dropped", dropped, array, identifier);
-      if (dropped) {
-        const [ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv] = array;
-        console.log(ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv);
-        let idx = this.airplayTrys.findIndex((a) => {
-          return a.id === ipv4 + ":" + ipport + "ap";
-        });
-        if (idx === -1) {
-          this.airplayTrys.push({
-            id: ipv4 + ":" + ipport + "ap",
-            attempts: 1,
+    airplayDisconnect: (dropped: boolean, array = [], identifier = "") =>
+      set((state) => {
+        console.log("airplay dropped", dropped, array, identifier);
+        if (dropped) {
+          const [ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv] = array;
+          console.log(ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv);
+          let idx = state.airplayTrys.findIndex((a) => {
+            return a.id === ipv4 + ":" + ipport + "ap";
           });
-        }
-        idx = this.airplayTrys.findIndex((a) => {
-          return a.id === ipv4 + ":" + ipport + "ap";
-        });
-        if (this.airplayTrys[idx].attempts > 3) {
-          delete this.airplayTrys[idx];
-          this.airplayTrys = this.airplayTrys.filter((n) => n);
-          console.log("delete idx", idx);
-          return;
+          if (idx === -1) {
+            state.airplayTrys.push({
+              id: ipv4 + ":" + ipport + "ap",
+              attempts: 1,
+            });
+          }
+          idx = state.airplayTrys.findIndex((a) => {
+            return a.id === ipv4 + ":" + ipport + "ap";
+          });
+          if (state.airplayTrys[idx].attempts > 3) {
+            delete state.airplayTrys[idx];
+            state.airplayTrys = state.airplayTrys.filter((n) => n);
+            console.log("delete idx", idx);
+            return;
+          } else {
+            state.airplayTrys[idx].attempts = state.airplayTrys[idx].attempts + 1;
+            setTimeout(() => {
+              window.electronAPI.send(
+                "performAirplayPCM",
+                ipv4,
+                ipport,
+                sepassword,
+                title,
+                artist,
+                album,
+                artworkURL,
+                txt,
+                airplay2dv,
+                true,
+              );
+            }, 1000);
+          }
         } else {
-          this.airplayTrys[idx].attempts = this.airplayTrys[idx].attempts + 1;
-          setTimeout(() => {
-            window.electronAPI.send("performAirplayPCM", ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv, true);
-          }, 1000);
-        }
-      } else {
-        if (identifier === "") {
-          this.activeCasts = [];
+          state.activeCasts = [];
           notyf.error("Devices disconnected!");
-        } else {
-          this.activeCasts;
-          notyf.error("Device disconnected!");
         }
-      }
-    },
+      }),
     authCC() {
       window.electronAPI.send("cc-auth");
     },
-    _playRadioStream(e) {
-      const xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = process;
-      xhr.open("GET", e, true);
-      xhr.send();
+    _playRadioStream: (e) =>
+      set((state) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = process;
+        xhr.open("GET", e, true);
+        xhr.send();
 
-      function process() {
-        if (xhr.readyState === 4) {
-          const sources = xhr.responseText.match(/^(?!#)(?!\s).*$/gm).filter(function (element) {
-            return element;
-          });
-          // Load first source
-          const src = sources[0];
-          if (src.includes("http")) {
-            this.mk._services.mediaItemPlayback._currentPlayer._playAssetURL(src, false);
-          } else {
-            if (Hls.isSupported()) {
-              const d = "WIDEVINE_SOFTWARE";
-              const h = {
-                initDataTypes: ["cenc", "keyids"],
-                distinctiveIdentifier: "optional",
-                persistentState: "required",
-              };
-              const p = {
-                platformInfo: { requiresCDMAttachOnStart: !0, maxSecurityLevel: d, keySystemConfig: h },
-                appData: { serviceName: "Apple Music" },
-              };
-              if (this.radiohls !== null && this.radiohls.destroy !== null) {
-                this.radiohls.destroy();
-                this.radiohls = null;
-                this.radiohls = new CiderHls();
-                this.radiohls.loadSource(e);
-                this.radiohls.attachMedia(this.mk._services.mediaItemPlayback._currentPlayer._targetElement);
-                this.mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
-              } else {
-                this.radiohls = null;
-                this.radiohls = new CiderHls();
-                this.radiohls.loadSource(e);
-                this.radiohls.attachMedia(this.mk._services.mediaItemPlayback._currentPlayer._targetElement);
-                this.mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
+        function process() {
+          if (xhr.readyState === 4) {
+            const sources = xhr.responseText.match(/^(?!#)(?!\s).*$/gm)?.filter(function (element) {
+              return element;
+            });
+            // Load first source
+            const src = sources![0];
+            if (src.includes("http")) {
+              get().mk._services.mediaItemPlayback._currentPlayer._playAssetURL(src, false);
+            } else {
+              if (Hls.isSupported()) {
+                const d = "WIDEVINE_SOFTWARE";
+                const h = {
+                  initDataTypes: ["cenc", "keyids"],
+                  distinctiveIdentifier: "optional",
+                  persistentState: "required",
+                };
+                const p = {
+                  platformInfo: { requiresCDMAttachOnStart: !0, maxSecurityLevel: d, keySystemConfig: h },
+                  appData: { serviceName: "Apple Music" },
+                };
+                if (state.radiohls !== null && state.radiohls.destroy !== null) {
+                  state.radiohls.destroy();
+                  state.radiohls = null;
+                  state.radiohls = new CiderHls();
+                  state.radiohls.loadSource(e);
+                  state.radiohls.attachMedia(get().mk._services.mediaItemPlayback._currentPlayer._targetElement);
+                  get().mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
+                } else {
+                  state.radiohls = null;
+                  state.radiohls = new CiderHls();
+                  state.radiohls.loadSource(e);
+                  state.radiohls.attachMedia(get().mk._services.mediaItemPlayback._currentPlayer._targetElement);
+                  get().mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
+                }
               }
             }
           }
         }
-      }
-    },
-    confirm(message, callback) {
+      }),
+    confirm(message: string, callback: (...args: any[]) => void) {
       bootbox.confirm(this.getBootboxParams(null, message, callback));
     },
-    prompt(title, callback) {
+    prompt(title: string, callback: (...args: any[]) => void) {
       bootbox.prompt(this.getBootboxParams(title, null, callback));
     },
-    getBootboxParams(title, message, callback) {
+    getBootboxParams(title: string, message: string, callback: (...args: any[]) => void) {
       return {
         title: title,
         message: message,
@@ -1410,18 +1382,680 @@ export const useAppStore = create<AppState>()(
         this.appMode = "player";
       }
     },
-    pinMiniPlayer(status = false) {
-      if (!status) {
-        if (!this.cfg.visual.miniplayer_top_toggle) {
-          window.electronAPI.send("windowontop", true);
-          this.cfg.visual.miniplayer_top_toggle = true;
-        } else {
-          window.electronAPI.send("windowontop", false);
-          this.cfg.visual.miniplayer_top_toggle = false;
-        }
+
+    setMkPrivateEnabled: (newValue) =>
+      set((state) => {
+        state.mk.privateEnabled = newValue;
+        ipcRenderer.send("onPrivacyModeChange", newValue);
+      }),
+
+    // mk stuff
+    prevButton() {
+      if (get().mk.player.nowPlayingItem && get().mk.player.currentPlaybackTime > 2) {
+        get().mk.player.seekToTime(0);
       } else {
-        window.electronAPI.send("windowontop", this.cfg.visual.miniplayer_top_toggle ?? false);
+        get().mk.player.skipToPreviousItem();
       }
     },
+    isDisabled() {
+      return !get().mk.player.nowPlayingItem || get().mk.player.nowPlayingItem.attributes.playParams.kind === "radioStation";
+    },
+    isPrevDisabled() {
+      return get().isDisabled() || (get().mk.player.queue._position === 0 && get().mk.player.currentPlaybackTime <= 2);
+    },
+    isNextDisabled() {
+      return get().isDisabled() || get().mk.player.queue._position + 1 === get().mk.player.queue.length;
+    },
+    skipToNextItem() {
+      if (get().mk.player.queue.nextPlayableItemIndex !== -1 && get().queue.nextPlayableItemIndex !== null)
+        get().mk.player.changeToMediaAtIndex(get().mk.player.queue.nextPlayableItemIndex);
+    },
+    skipToPreviousItem() {
+      if (get().mk.player.queue.previousPlayableItemIndex !== -1 && get().queue.mk.player.previousPlayableItemIndex !== null)
+        get().mk.player.changeToMediaAtIndex(get().mk.player.queue.previousPlayableItemIndex);
+    },
+    monitorMusickit() {
+      if (!this.cfg.musickit) return;
+
+      for (const [attr, value] of Object.entries(this.cfg.musickit["stored-attributes"])) {
+        console.log(`Musickit value: ` + get().mk[attr]);
+        console.log(`Config value: ` + value);
+        if (value !== "" && get().mk[attr] !== value) {
+          get().mk[attr] = value;
+        }
+        this.$watch(`mk.${attr}`, (val) => {
+          console.log(`MK ${attr} changed to ${val}`);
+          this.cfg.musickit["stored-attributes"][attr] = val;
+        });
+      }
+      const ERROR_CODES = ["drmUnsupported", "mediaPlaybackError"];
+      /* MusicKit.Events */
+      ERROR_CODES.forEach((code) => {
+        MusicKit.getInstance().addEventListener(MusicKit.Events[code], (e) => {
+          console.error(`[MusicKit] MusicKit Error ${code}`);
+          console.error({ e: e });
+          this.notyf.open({
+            duration: 20000,
+            type: "error",
+            className: "notyf-info",
+            message: `<small>${this.getLz("error.musickitError")} \n</small><code>${code.toUpperCase()}</code>`,
+          });
+        });
+      });
+    },
+    async mkapi(method, library = false, term, params = {}, params2 = {}, attempts = 0) {
+      if (method.includes(`recordLabel`)) {
+        method = `record-labels`;
+      }
+      if (method.includes(`appleCurator`)) {
+        method = `apple-curators`;
+      }
+      if (attempts > 3) {
+        return;
+      }
+      const truemethod = !method.endsWith("s") ? method + "s" : method;
+      try {
+        if (method.includes(`room`)) {
+          return await get().mk.api.music(`v1/editorial/${get().mk.storefrontId}/${truemethod}/${term.toString()}`, params, params2);
+        } else if (library) {
+          return await get().mk.api.music(`v1/me/library/${truemethod}/${term.toString()}`, params, params2);
+        } else {
+          return await get().mk.api.music(`/v1/catalog/${get().mk.storefrontId}/${truemethod}/${term.toString()}`, params, params2);
+        }
+      } catch (e) {
+        console.debug(e);
+        return await get().mkapi(method, library, term, params, params2, attempts + 1);
+      }
+    },
+    playMediaItem(item) {
+      const kind = item.attributes.playParams ? (item.attributes.playParams.kind ?? item.type ?? "") : (item.type ?? "");
+      const id = item.attributes.playParams ? (item.attributes.playParams.id ?? item.id ?? "") : (item.id ?? "");
+      const isLibrary = item.attributes.playParams ? (item.attributes.playParams.isLibrary ?? false) : false;
+      const truekind = !kind.endsWith("s") ? kind + "s" : kind;
+      // console.log(kind, id, isLibrary)
+      get().mk.stop();
+      if (kind.includes("artist")) {
+        get()
+          .mk.player.setStationQueue({ artist: "a-" + id })
+          .then(() => {
+            get().mk.play();
+          });
+      } else {
+        this.playMediaItemById(id, kind, isLibrary, item.attributes.url ?? "");
+      }
+    },
+    playMediaItemById(id, kind, isLibrary, raurl = "") {
+      const truekind = !kind.endsWith("s") ? kind + "s" : kind;
+      console.debug(id, truekind, isLibrary);
+      try {
+        if (truekind.includes("artist")) {
+          get()
+            .mk.player.setStationQueue({ artist: "a-" + id })
+            .then(() => {
+              get().mk.play();
+            });
+        } else if (truekind === "radioStations") {
+          get()
+            .mk.player.setStationQueue({ url: raurl })
+            .then(function (queue) {
+              MusicKit.getInstance().play();
+            });
+        } else {
+          get()
+            .mk.setQueue({
+              [truekind]: [id],
+              parameters: { l: get().mklang },
+            })
+            .then(function (queue) {
+              MusicKit.getInstance().play();
+            });
+        }
+      } catch (err) {
+        console.log(err);
+        this.playMediaItemById(id, kind, isLibrary, raurl);
+      }
+    },
+    queueParentandplayChild(parent: string, childIndex: number, item) {
+      /* Randomize array in-place using Durstenfeld shuffle algorithm */
+      function shuffleArray(array: Array<any>) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+        }
+      }
+
+      const kind = parent.substring(0, parent.indexOf(":"));
+      const id = parent.substring(parent.indexOf(":") + 1, parent.length);
+      const truekind = !kind.endsWith("s") ? kind + "s" : kind;
+      console.log(truekind, id);
+
+      try {
+        if (parent === "playlist:ciderlocal") {
+          const u = this.library.localsongs.map((i) => {
+            return i.id;
+          });
+          get()
+            .mk.setQueue({ episodes: u })
+            .then(() => {
+              const id = get().mk.player.queue._itemIDs.findIndex((element) => element === item.id);
+              get().mk.changeToMediaAtIndex(id);
+            });
+        } else if (this.library.songs.displayListing.length > childIndex && parent === "librarysongs") {
+          console.log(item);
+          if (item && this.library.songs.displayListing[childIndex].id !== item.id) {
+            childIndex = this.library.songs.displayListing.indexOf(item);
+          }
+
+          const query = this.library.songs.displayListing.map((item) => new MusicKit.MediaItem(item));
+
+          get().mk.stop();
+          if (item) {
+            get()
+              .mk.setQueue({
+                [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id,
+                parameters: { l: get().mklang },
+              })
+              .then(function () {
+                get()
+                  .mk.play()
+                  .then(() => {
+                    if (get().mk.player.shuffleMode === 1) {
+                      shuffleArray(query);
+                    } else {
+                      for (let i = 0; i < query.length; i++) {
+                        if (query[i].id === item.id) {
+                          query.splice(0, i + 1);
+                          break;
+                        }
+                      }
+                    }
+                    get().mk.player.queue.append(query);
+                  });
+              });
+          } else {
+            get().mk.player.queue.splice(0, get().mk.player.queue._itemIDs.length);
+            if (get().mk.player.shuffleMode === 1) {
+              shuffleArray(query);
+            }
+            get().mk.player.queue.append(query);
+            if (childIndex !== -1) {
+              get().mk.changeToMediaAtIndex(childIndex);
+            } else {
+              get().mk.play();
+            }
+          }
+        } else if (parent.startsWith("listitem-hr")) {
+          get().mk.stop();
+          if (get().mk.player.shuffleMode === 1) {
+            get()
+              .mk.setQueue({
+                [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id,
+              })
+              .then(function () {
+                get()
+                  .mk.play()
+                  .then(() => {
+                    const data: Record<string, string>[] = JSON.parse(parent.split("listitem-hr")[1] ?? "[]");
+                    const itemsToPlay: Record<string, string[]> = {};
+                    const u = data.map((x) => x.id);
+                    try {
+                      data.splice(u.indexOf(item.attributes.playParams.id ?? item.id), 1);
+                    } catch (e) {
+                      console.log(e);
+                    }
+                    if (get().mk.player.shuffleMode === 1) {
+                      shuffleArray(data);
+                    }
+                    data.forEach((item) => {
+                      if (!itemsToPlay[item.kind]) {
+                        itemsToPlay[item.kind] = [];
+                      }
+                      itemsToPlay[item.kind].push(item.id);
+                    });
+                    // loop through itemsToPlay
+                    for (const kind in itemsToPlay) {
+                      const ids = itemsToPlay[kind];
+                      if (ids.length > 0) {
+                        get().mk.playLater({ [kind + "s"]: itemsToPlay[kind] });
+                      }
+                    }
+                  });
+              });
+          } else {
+            const data: Record<string, string>[] = JSON.parse(parent.split("listitem-hr")[1] ?? "[]");
+            const itemsToPlay: Record<string, string[]> = {};
+            data.forEach((item) => {
+              if (!itemsToPlay[item.kind]) {
+                itemsToPlay[item.kind] = [];
+              }
+              itemsToPlay[item.kind].push(item.id);
+            });
+            // loop through itemsToPlay
+            get().mk.player.queue.splice(0, get().mk.player.queue._itemIDs.length);
+            let ind = 0;
+            for (const kind in itemsToPlay) {
+              const ids = itemsToPlay[kind];
+              if (ids.length > 0) {
+                if (get().mk.player.queue._itemIDs.length > 0) {
+                  get()
+                    .mk.playLater({ [kind + "s"]: itemsToPlay[kind] })
+                    .then(function () {
+                      ind += 1;
+                      console.log(ind, Object.keys(itemsToPlay).length);
+                      if (ind >= Object.keys(itemsToPlay).length) {
+                        get().mk.changeToMediaAtIndex(get().mk.player.queue._itemIDs.indexOf(item.attributes.playParams.id ?? item.id));
+                      }
+                    });
+                } else {
+                  get()
+                    .mk.setQueue({ [kind + "s"]: itemsToPlay[kind] })
+                    .then(function () {
+                      ind += 1;
+                      console.log(ind, Object.keys(itemsToPlay).length);
+                      if (ind >= Object.keys(itemsToPlay).length) {
+                        get().mk.changeToMediaAtIndex(get().mk.player.queue._itemIDs.indexOf(item.attributes.playParams.id ?? item.id));
+                      }
+                    });
+                }
+              }
+            }
+          }
+        } else {
+          get().mk.stop();
+          if (truekind === "playlists" && (id.startsWith("p.") || id.startsWith("pl.u"))) {
+            get()
+              .mk.setQueue({
+                [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id,
+                parameters: { l: get().mklang },
+              })
+              .then(function () {
+                get()
+                  .mk.changeToMediaAtIndex(get().mk.player.queue._itemIDs.indexOf(item.id) ?? 1)
+                  .then(function () {
+                    if (this.showingPlaylist && this.showingPlaylist.id === id) {
+                      const query = this.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+                      const u = query;
+                      if (get().mk.player.shuffleMode === 1) {
+                        shuffleArray(u);
+                      } else {
+                        for (let i = 0; i < this.showingPlaylist.relationships.tracks.data.length; i++) {
+                          if (this.showingPlaylist.relationships.tracks.data[i].id === item.id) {
+                            u.splice(0, i + 1);
+                            break;
+                          }
+                        }
+                      }
+                      get().mk.player.queue.append(u);
+                    } else {
+                      this.getPlaylistFromID(id, true).then(function () {
+                        const query = this.showingPlaylist.relationships.tracks.data.map((item) => new MusicKit.MediaItem(item));
+                        const u = query;
+                        if (get().mk.player.shuffleMode === 1) {
+                          shuffleArray(u);
+                        } else {
+                          for (let i = 0; i < this.showingPlaylist.relationships.tracks.data.length; i++) {
+                            if (this.showingPlaylist.relationships.tracks.data[i].id === item.id) {
+                              u.splice(0, i + 1);
+                              break;
+                            }
+                          }
+                        }
+                        get().mk.player.queue.append(u);
+                      });
+                    }
+                  });
+              });
+          } else {
+            get()
+              .mk.setQueue({
+                [truekind]: [id],
+                parameters: { l: get().mklang },
+              })
+              .then(function (queue) {
+                if (item && queue._itemIDs[childIndex] !== item.id) {
+                  childIndex = queue._itemIDs.indexOf(item.id);
+                }
+                if (childIndex !== -1) {
+                  get().mk.changeToMediaAtIndex(childIndex);
+                } else if (item) {
+                  get()
+                    .mk.playNext({
+                      [item.attributes.playParams.kind ?? item.type]: item.attributes.playParams.id ?? item.id,
+                    })
+                    .then(function () {
+                      get().mk.changeToMediaAtIndex(get().mk.player.queue._itemIDs.indexOf(item.id) ?? 1);
+                      get().mk.play();
+                    });
+                } else {
+                  get().mk.play();
+                }
+              });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        try {
+          get().mk.stop();
+        } catch (e) {
+          console.log(e);
+        }
+        this.playMediaItemById(
+          item.attributes.playParams.id ?? item.id,
+          item.attributes.playParams.kind ?? item.type,
+          item.attributes.playParams.isLibrary ?? false,
+          item.attributes.url,
+        );
+      }
+    },
+    seekTo: (time: number) => {
+      get().mk.seekToTime(time);
+    },
+    volumeUp() {
+      if (get().mk.player.volume + this.cfg.audio.volumeStep > this.cfg.audio.maxVolume) {
+        get().mk.player.volume = this.cfg.audio.maxVolume;
+      } else {
+        get().mk.player.volume = (Math.floor(get().mk.player.volume * 100) + this.cfg.audio.volumeStep * 100) / 100;
+      }
+    },
+    volumeDown() {
+      if (get().mk.player.volume - this.cfg.audio.volumeStep < 0) {
+        get().mk.player.volume = 0;
+      } else {
+        get().mk.player.volume = (Math.floor(get().mk.player.volume * 100) - this.cfg.audio.volumeStep * 100) / 100;
+      }
+    },
+    volumeWheel(event: MouseEvent) {
+      return checkScrollDirectionIsUp(event) ? this.volumeUp() : this.volumeDown();
+    },
+    muteButtonPressed() {
+      if (this.cfg.audio.muted) {
+        get().mk.player.volume = this.cfg.audio.lastVolume;
+        this.cfg.audio.muted = false;
+      } else {
+        this.cfg.audio.lastVolume = this.cfg.audio.volume;
+        get().mk.player.volume = 0;
+        this.cfg.audio.muted = true;
+      }
+    },
+    checkMuteChange() {
+      if (this.cfg.audio.muted) {
+        this.cfg.audio.muted = false;
+      }
+    },
+    repeatIncrement() {
+      switch (get().mk.player.repeatMode) {
+        default:
+        case MusicKit.PlayerRepeatMode.none:
+          get().mk.player.repeatMode = MusicKit.PlayerRepeatMode.all;
+          break;
+
+        case MusicKit.PlayerRepeatMode.all:
+          get().mk.player.repeatMode = MusicKit.PlayerRepeatMode.one;
+          break;
+
+        case MusicKit.PlayerRepeatMode.one:
+          get().mk.player.repeatMode = MusicKit.PlayerRepeatMode.none;
+          break;
+      }
+    },
+    mkReady: () => !!get().mk.player.nowPlayingItem,
+    quickPlay(query: string) {
+      MusicKit.getInstance()
+        .api.search(query, { limit: 2, types: "songs" })
+        .then(function (data) {
+          MusicKit.getInstance()
+            .setQueue({
+              song: data.songs?.data[0].id,
+              parameters: { l: get().mklang },
+            })
+            .then(function (queue) {
+              MusicKit.getInstance().play();
+            });
+        });
+    },
+    async getRating(item: MusicKit.MediaItem) {
+      let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
+      let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
+      if (item.id !== null && item.id.toString().startsWith("i.")) {
+        if (!type.startsWith("library-")) {
+          type = "library-" + type;
+        }
+        id = item.id;
+      }
+      const response = (await get().mk.api.music(
+        `/v1/me/ratings/${type}?platform=web&ids=${type.includes("library") ? item.id : id}`,
+      )) as MusicKit.SearchResponse<MusicKit.ContentRating>;
+      if (response.data.results) {
+        const value = response.data.results[0];
+        return value;
+      } else {
+        return 0;
+      }
+    },
+    love(item: MusicKit.MediaItem) {
+      let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
+      let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
+      if (item.id !== null && item.id.toString().startsWith("i.")) {
+        if (!type.startsWith("library-")) {
+          type = "library-" + type;
+        }
+        id = item.id;
+      }
+      get().mk.api.music(`/v1/me/ratings/${type}/${id}`, {
+        fetchOptions: {
+          method: "PUT",
+          body: JSON.stringify({
+            type: "rating",
+            attributes: {
+              value: 1,
+            },
+          }),
+        },
+      });
+    },
+    dislike(item: MusicKit.MediaItem) {
+      let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
+      let id = item.attributes?.playParams?.catalogId ? item.attributes.playParams.catalogId : (item.attributes?.playParams?.id ?? item.id);
+      if (item.id !== null && item.id.toString().startsWith("i.")) {
+        if (!type.startsWith("library-")) {
+          type = "library-" + type;
+        }
+        id = item.id;
+      }
+      get().mk.api.music(`/v1/me/ratings/${type}/${id}`, {
+        fetchOptions: {
+          method: "PUT",
+          body: JSON.stringify({
+            type: "rating",
+            attributes: {
+              value: -1,
+            },
+          }),
+        },
+      });
+    },
+    unlove(item: MusicKit.MediaItem) {
+      let type = item.type.slice(-1) === "s" ? item.type : item.type + "s";
+      let id = item.attributes.playParams.catalogId ? item.attributes.playParams.catalogId : item.id;
+      if (item.id.startsWith("i.")) {
+        if (!type.startsWith("library-")) {
+          type = "library-" + type;
+        }
+        id = item.id;
+      }
+      get().mk.api.music(`/v1/me/ratings/${type}/${id}`, {
+        fetchOptions: {
+          method: "DELETE",
+        },
+      });
+    },
+    fetchPlaylist(id: string | number, callback: (...args: any[]) => void) {
+      // id can be found in playlist.attributes.playParams.globalId
+      // get().mk.api.
+      get()
+        .mk.api.music(`/v1/catalog/${get().mk.storefrontId}/playlists/${id}`)
+        .then((res) => {
+          callback(res.data.data[0]);
+        });
+
+      // tracks are found in relationship.data
+    },
+    SpacePause() {
+      const elems = document.querySelectorAll("input");
+      for (const elem of elems) {
+        if (elem === document.activeElement) {
+          return;
+        }
+      }
+      if (!this.isDev) {
+        // disable in dev mode to keep my sanity
+        MusicKitInterop.playPause();
+      }
+    },
+    async MKJSLang() {
+      const u = this.cfg.general.language;
+      // use MusicKit.getInstance or crash
+      try {
+        const item = (await MusicKit.getInstance().api.music(
+          `v1/storefronts/${get().mk.storefrontId}`,
+        )) as MusicKit.SearchResponse<MusicKit.Storefronts>;
+        let langcodes = item.data.results.Storefronts.data[0].attributes?.supportedLanguageTags || [];
+        if (langcodes)
+          langcodes = langcodes.map(function (u) {
+            return u.replace(/-Han[s|t]/i, "").toLowerCase();
+          });
+        console.log(langcodes);
+        let sellang = "";
+        if (u && langcodes.includes(u.toLowerCase().replace("_", "-"))) {
+          sellang = u.toLowerCase().replace("_", "-");
+        } else if (u && u.includes("_") && langcodes.includes(u.toLowerCase().replace("_", "-").split("-")[0])) {
+          sellang = u.toLowerCase().replace("_", "-").split("-")[0];
+        }
+        if (sellang === "") sellang = item.data.results[0].data[0].attributes?.defaultLanguageTag.toLowerCase() || "";
+
+        // Fix weird locales:
+        if (sellang === "iw") sellang = "iw-il";
+        sellang = sellang.replace(/-Han[s|t]/i, "").toLowerCase();
+
+        console.log(sellang);
+        return await sellang;
+      } catch (err) {
+        console.log("locale err", err);
+        const langcodes = [
+          "af",
+          "sq",
+          "ar",
+          "eu",
+          "bg",
+          "be",
+          "ca",
+          "zh",
+          "zh-tw",
+          "zh-cn",
+          "zh-hk",
+          "zh-sg",
+          "hr",
+          "cs",
+          "da",
+          "nl",
+          "nl-be",
+          "en",
+          "en-us",
+          "en-eg",
+          "en-au",
+          "en-gb",
+          "en-ca",
+          "en-nz",
+          "en-ie",
+          "en-za",
+          "en-jm",
+          "en-bz",
+          "en-tt",
+          "en-001",
+          "et",
+          "fo",
+          "fa",
+          "fi",
+          "fr",
+          "fr-ca",
+          "gd",
+          "de",
+          "de-ch",
+          "el",
+          "he",
+          "hi",
+          "hu",
+          "is",
+          "id",
+          "it",
+          "ja",
+          "ko",
+          "lv",
+          "lt",
+          "mk",
+          "mt",
+          "no",
+          "nb",
+          "nn",
+          "pl",
+          "pt-br",
+          "pt",
+          "rm",
+          "ro",
+          "ru",
+          "sr",
+          "sk",
+          "sl",
+          "es",
+          "es-mx",
+          "es-419",
+          "sv",
+          "th",
+          "ts",
+          "tn",
+          "tr",
+          "uk",
+          "ur",
+          "ve",
+          "vi",
+          "xh",
+          "yi",
+          "zu",
+          "ms",
+          "iw",
+          "lo",
+          "tl",
+          "kk",
+          "ta",
+          "te",
+          "bn",
+          "ga",
+          "ht",
+          "la",
+          "pa",
+          "sa",
+        ];
+        let sellang = "en";
+        if (u && langcodes.includes(u.toLowerCase().replace("_", "-"))) {
+          sellang = u.toLowerCase().replace("_", "-");
+        } else if (u && u.includes("_") && langcodes.includes(u.toLowerCase().replace("_", "-").split("-")[0])) {
+          sellang = u.toLowerCase().replace("_", "-").split("-")[0];
+        }
+        if (sellang.startsWith("en") && get().mk.storefrontId !== "us") sellang = "en-gb";
+        return await sellang;
+      }
+    },
+    mediaKeyFixes() {
+      MusicKitInterop.initMediaSession();
+      // navigator.mediaSession.setActionHandler("previoustrack", function () {
+      //   this.skipToPreviousItem();
+      // });
+      // navigator.mediaSession.setActionHandler("nexttrack", function () {
+      //   this.skipToNextItem();
+      // });
+    },
+    // end mk stuff
   })),
 );

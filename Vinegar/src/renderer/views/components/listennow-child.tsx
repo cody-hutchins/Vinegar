@@ -20,17 +20,17 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
       app.routeView(id);
     } else {
       try {
-        const a = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[albums]=${id}`);
+        const a = await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}?ids[albums]=${id}`);
         const q1 = a.data?.data[0];
         if (q1) {
           app.routeView(q1);
         } else {
-          const b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
+          const b = await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
           const q2 = b.data?.data[0];
           if (q2) {
             app.routeView(q2);
           } else {
-            const c = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[playlists]=${id}`);
+            const c = await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}?ids[playlists]=${id}`);
             const q3 = c.data?.data[0];
             if (q3) {
               app.routeView(q3);
@@ -38,7 +38,7 @@ const ListenNowChild = ({ recom, index }: { recom: object; index: number }) => {
           }
         }
       } catch (e) {
-        const b = await app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
+        const b = await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}?ids[artists]=${id}`);
         const q2 = b.data?.data[0];
         if (q2) {
           app.routeView(q2);

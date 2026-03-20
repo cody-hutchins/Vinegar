@@ -45,7 +45,7 @@ const Home = () => {
     syncingFavs = false;
   }
   async function seeAllRecentlyPlayed() {
-    const hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+    const hist = await app.mk.api.music(`/v1/me/recent/played`, {
       l: this.$root.mklang,
       include: "tracks",
       "include[albums]": "catalog,tracks,artists",
@@ -54,7 +54,7 @@ const Home = () => {
     app.showCollection(hist.data, t("home.recentlyPlayed"));
   }
   async function seeAllHistory() {
-    const hist = await app.mk.api.v3.music(`/v1/me/recent/played/tracks`, {
+    const hist = await app.mk.api.music(`/v1/me/recent/played/tracks`, {
       l: this.$root.mklang,
     });
     app.showCollection(hist.data, t("term.history"));
@@ -85,7 +85,7 @@ const Home = () => {
       }
     }
     if (playlists.length !== 0) {
-      app.mk.api.v3
+      app.mk.api
         .music(`/v1/catalog/${app.mk.storefrontId}/playlists/${playlists.toString()}`, {
           l: this.$root.mklang,
         })
@@ -94,7 +94,7 @@ const Home = () => {
         });
     }
     if (libraryPlaylists.length !== 0) {
-      app.mk.api.v3
+      app.mk.api
         .music(`v1/me/library/playlists/${playlists.toString()}`, {
           l: this.$root.mklang,
         })
@@ -113,7 +113,7 @@ const Home = () => {
     try {
       const chunkArtistData = await Promise.all(
         chunks.map((chunk) =>
-          app.mk.api.v3.music(
+          app.mk.api.music(
             `/v1/catalog/${app.mk.storefrontId}/artists?ids=${chunk.toString()}&views=latest-release&include[songs]=albums&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount&limit[artists:top-songs]=2&art[url]=f`,
           ),
         ),
@@ -136,7 +136,7 @@ const Home = () => {
     }
   }
   async function getRecentlyPlayed() {
-    const hist = await app.mk.api.v3.music(`/v1/me/recent/played`, {
+    const hist = await app.mk.api.music(`/v1/me/recent/played`, {
       l: this.$root.mklang,
       include: "tracks",
       "include[albums]": "catalog,tracks,artists",
@@ -145,7 +145,7 @@ const Home = () => {
     recentlyPlayed = hist.data.data;
   }
   function getListenNowData() {
-    app.mk.api.v3
+    app.mk.api
       .music(
         `/v1/me/recommendations?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=listen-now&with=friendsMix,library,social&art[social-profiles:url]=c&art[url]=c,f&omit[resource]=autos&relate[editorial-items]=contents&extend=editorialCard,editorialVideo&extend[albums]=artistUrl&extend[library-albums]=artistUrl,editorialVideo&extend[playlists]=artistNames,editorialArtwork,editorialVideo&extend[library-playlists]=artistNames,editorialArtwork,editorialVideo&extend[social-profiles]=topGenreNames&include[albums]=artists&include[songs]=artists&include[music-videos]=artists&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url&fields[artists]=name,url&extend[stations]=airDate,supportsAirTimeUpdates&meta[stations]=inflectionPoints&types=artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells&platform=web&l=${this.$root.mklang}`,
       )
@@ -175,7 +175,7 @@ const Home = () => {
         sectionsReady.push("friendsListeningTo");
       });
 
-    app.mk.api.v3.music("/v1/me/social/profile/").then((response) => {
+    app.mk.api.music("/v1/me/social/profile/").then((response) => {
       profile = response.data.data[0];
     });
   }

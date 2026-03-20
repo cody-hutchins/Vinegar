@@ -6,7 +6,7 @@ const Zoo = () => {
   let artistLoaded = false;
   let artist = {};
   function mounted() {
-    app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/artists/669831761`).then((response) => {
+    app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/artists/669831761`).then((response) => {
       artist = response.data.data[0];
       artistLoaded = true;
     });

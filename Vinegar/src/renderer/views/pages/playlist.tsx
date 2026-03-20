@@ -11,7 +11,7 @@ import { useOnInView } from "react-intersection-observer";
 import { useTranslation } from "react-i18next";
 import { useCfgStore } from "../../store/cfg.js";
 
-const Playlist = ({ data }: { data: MusicKit.Item }) => {
+const Playlist = ({ data }: { data: MusicKit.Playlists | MusicKit.LibraryPlaylists }) => {
   const { t } = useTranslation();
   const { cfg } = useCfgStore();
   const app = this.$root;
@@ -236,7 +236,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       const friends = badges[id];
       if (friends) {
         friends.forEach(function (friend) {
-          app.mk.api.v3.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
+          app.mk.api.music(`/v1/social/${app.mk.storefrontId}/social-profiles/${friend}`).then((data) => {
             itemBadges.push(data.data.data[0]);
           });
         });
@@ -338,7 +338,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
     }
     const kind = data.attributes.playParams.kind ?? data.type ?? "";
     const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-    app.mk.api.v3.music(
+    app.mk.api.music(
       `v1/me/library/${truekind}/${id.toString()}`,
       {},
       {
@@ -396,7 +396,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
       return;
     }
     console.log("sds", convert());
-    await app.mk.api.v3.music(
+    await app.mk.api.music(
       `/v1/me/library/playlists/${data.attributes.playParams.id}/tracks`,
       {},
       {
@@ -532,7 +532,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
             if (route === "") {
               return;
             }
-            app.mk.api.v3.music(route).then((res) => {
+            app.mk.api.music(route).then((res) => {
               console.log(res.data.data[0].attributes.url);
               app.copyToClipboard(res.data.data[0].attributes.url);
             });
@@ -663,8 +663,8 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
     if (event.ctrlKey && event.keyCode === 67) {
       const urls = [];
       app.selectedMediaItems.forEach((item) => {
-        app.mk.api.v3.music(`/v1/me/library/songs/${item.id}`).then((response) => {
-          app.mk.api.v3
+        app.mk.api.music(`/v1/me/library/songs/${item.id}`).then((response) => {
+          app.mk.api
             .music(`/v1/catalog/${app.mk.storefrontId}/songs/${response.data.data[0].attributes.playParams.catalogId}`)
             .then((response1) => {
               urls.push(response1.data.data[0].attributes.url);
@@ -688,7 +688,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         });
       });
 
-      app.mk.api.v3
+      app.mk.api
         .music(
           `/v1/me/library/playlists/${data.id}/tracks`,
           {},
@@ -703,7 +703,7 @@ const Playlist = ({ data }: { data: MusicKit.Item }) => {
         )
         .then((response) => {
           songs.forEach((item) => {
-            app.mk.api.v3.music(`/v1/catalog/${app.mk.storefrontId}/songs/${item.id}`).then((response1) => {
+            app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/songs/${item.id}`).then((response1) => {
               displayListing.push(response1.data.data[0]);
             });
           });

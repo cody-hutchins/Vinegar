@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { clamp, convertTime, getBase64FromUrl, notyf, stringTemplateParser } from "../main/helpers.js";
+import { asyncForEach, clamp, convertTime, getBase64FromUrl, notyf, stringTemplateParser } from "../main/helpers.js";
+import { ContextMenuEvent } from "electron";
+import { NotyfEvent } from "notyf";
 interface UIState {
   windowRelativeScale: number;
   pageState: {
@@ -62,7 +64,7 @@ interface UIState {
     | "settings",
     boolean
   >;
-  showingPlaylist: string[];
+  showingPlaylist: MusicKit.Playlists | MusicKit.LibraryPlaylists;
   search: {
     term: string;
     cursor: number;
@@ -96,7 +98,6 @@ interface UIState {
 export const useUIStore = create<UIState>()(
   immer((set, get) => ({
     windowRelativeScale: 1,
-
     artwork: {
       playerLCD: "",
     },
@@ -157,7 +158,7 @@ export const useUIStore = create<UIState>()(
         headerItems: {},
       },
     },
-    showingPlaylist: [],
+    showingPlaylist: {} as MusicKit.Playlists,
     modals: {
       addToPlaylist: false,
       spatialProperties: false,
@@ -186,18 +187,17 @@ export const useUIStore = create<UIState>()(
         }
         document.documentElement.style.setProperty("--windowRelativeScale", scale);
       }),
-    getPagePos: (href = "") =>
-      set((state) => {
-        const _state = state.pageState.scrollPos.pos.find((page) => {
-          return page.href === href;
-        });
-        return (
-          _state ?? {
-            page: href,
-            position: 0,
-          }
-        );
-      }),
+    getPagePos: (href = "") => {
+      const _state = get().pageState.scrollPos.pos.find((page) => {
+        return page.href === href;
+      });
+      return (
+        _state ?? {
+          page: href,
+          position: 0,
+        }
+      );
+    },
     setPage: (value) =>
       set((state) => {
         state.page = value;
@@ -317,7 +317,7 @@ export const useUIStore = create<UIState>()(
           state.drawer.panel = panel;
         }
       }),
-    showMenuPanel: (data, event) =>
+    showMenuPanel: (data: { name: string; items: Record<string, any>; headerItems: Record<string, any> }, event: ContextMenuEvent) =>
       set((state) => {
         state.menuPanel.visible = true;
         state.menuPanel.content.name = data.name ?? "";
@@ -354,7 +354,7 @@ export const useUIStore = create<UIState>()(
         return;
       }
       const hints = await (
-        await this.mk.api.v3.music(`/v1/catalog/${this.mk.storefrontId}/search/suggestions?term=${encodeURIComponent(this.search.term)}`, {
+        await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/search/suggestions?term=${encodeURIComponent(this.search.term)}`, {
           "fields[albums]": "artwork,name,playParams,url,artistName,id",
           "fields[artists]": "url,name,artwork,id",
           "fields[songs]": "artwork,name,playParams,url,artistName,id",
@@ -383,7 +383,7 @@ export const useUIStore = create<UIState>()(
       }
     },
 
-    appRoute(route) {
+    appRoute(route: string) {
       if (route === "" || route === "#" || route === "/") {
         return;
       }
@@ -438,7 +438,7 @@ export const useUIStore = create<UIState>()(
         $("#app-content").scrollTop(this.getPagePos(window.location.hash).position);
       }, 100);
     },
-    routeView(item) {
+    routeView(item: MusicKit.Albums) {
       this.setPagePos();
       let kind = item.attributes?.playParams ? (item.attributes?.playParams?.kind ?? item.type ?? "") : (item.type ?? "");
       let id = item.attributes?.playParams ? (item.attributes?.playParams?.id ?? item.id ?? "") : (item.id ?? "");
@@ -461,14 +461,14 @@ export const useUIStore = create<UIState>()(
         console.debug(item);
         if (item.relationships?.contents?.data !== null && item.relationships?.contents?.data.length > 0) {
           this.routeView(item.relationships.contents.data[0]);
-        } else if (item.attributes?.link?.url !== null) {
-          if (item.attributes.link.url.includes("viewMultiRoom") || item.attributes.link.url.includes("/collection/")) {
-            const params = new Proxy(new URLSearchParams(new URL(item.attributes.link.url).search), {
-              get: (searchParams, prop) => searchParams.get(prop),
+        } else if (item.attributes && item.attributes.url !== null) {
+          if (item.attributes.url.includes("viewMultiRoom") || item.attributes.url.includes("/collection/")) {
+            const params = new Proxy(new URLSearchParams(new URL(item.attributes.url).search), {
+              get: (searchParams, prop) => searchParams.get(prop as string),
             });
-            id = params.fcId;
+            id = params.get("fcId");
             kind = "multiroom";
-            if (item.attributes.link.url.includes("viewMultiRoom")) {
+            if (item.attributes.url.includes("viewMultiRoom")) {
               kind = "multiroom";
             } else {
               kind = "room";
@@ -482,23 +482,23 @@ export const useUIStore = create<UIState>()(
             });
 
             return;
-          } else if (item.attributes.link.url.includes("viewFeature")) {
-            const params = new Proxy(new URLSearchParams(new URL(item.attributes.link.url).search), {
-              get: (searchParams, prop) => searchParams.get(prop),
+          } else if (item.attributes.url.includes("viewFeature")) {
+            const params = new Proxy(new URLSearchParams(new URL(item.attributes.url).search), {
+              get: (searchParams, prop) => searchParams.get(prop as string),
             });
-            id = params.id;
-            this.mk.api.v3
+            id = params.get("id");
+            this.mk.api
               .music(`/v1/editorial/${this.mk.storefrontId}/multiplex/${id}?art%5Burl%5D=f&format%5Bresources%5D=map&platform=web`)
               .then((data) => {
                 const item = data.data.results?.target ?? [];
                 this.routeView(item);
               });
           } else {
-            window.open(item.attributes.link.url);
+            window.open(item.attributes.url);
           }
         }
       } else if (kind === "multiplex") {
-        this.mk.api.v3
+        this.mk.api
           .music(`/v1/editorial/${this.mk.storefrontId}/multiplex/${id}?art%5Burl%5D=f&format%5Bresources%5D=map&platform=web`)
           .then((data) => {
             const item = data.data.results?.target ?? [];
@@ -506,16 +506,14 @@ export const useUIStore = create<UIState>()(
           });
       }
       if (kind === "multirooms") {
-        app
-          .getTypeFromID("multiroom", id, false, {
-            platform: "web",
-            extend: "editorialArtwork,uber,lockupStyle",
-          })
-          .then(() => {
-            kind = "multiroom";
-            window.location.hash = `${kind}/${id}`;
-            // document.querySelector("#app-content").scrollTop = 0;
-          });
+        this.getTypeFromID("multiroom", id, false, {
+          platform: "web",
+          extend: "editorialArtwork,uber,lockupStyle",
+        }).then(() => {
+          kind = "multiroom";
+          window.location.hash = `${kind}/${id}`;
+          // document.querySelector("#app-content").scrollTop = 0;
+        });
         this.resumePagePos();
       } else if (kind.toString().includes("artist")) {
         this.getArtistInfo(id, isLibrary);
@@ -534,11 +532,11 @@ export const useUIStore = create<UIState>()(
           views: "top-releases,latest-releases,top-artists",
         });
         window.location.hash = `${kind}/${id}`;
-        document.querySelector("#app-content").scrollTop = 0;
+        document.querySelector("#app-content")!.scrollTop = 0;
         this.resumePagePos();
       } else if (kind.toString().includes("social-profiles")) {
         this.page = kind + "_" + id;
-        this.mk.api.v3
+        this.mk.api
           .music(`/v1/social/${this.mk.storefrontId}/social-profiles/${id}`, {
             include: "shared-playlists",
           })
@@ -546,7 +544,7 @@ export const useUIStore = create<UIState>()(
             console.log(data);
             this.showingPlaylist = data.data?.data[0];
             window.location.hash = `${kind}/${id}`;
-            document.querySelector("#app-content").scrollTop = 0;
+            document.querySelector("#app-content")!.scrollTop = 0;
           });
         // this.getTypeFromID((kind), (id), (isLibrary), {
         //     extend: "editorialVideo",
@@ -593,14 +591,14 @@ export const useUIStore = create<UIState>()(
           if (data && data.type === "albums" && data.id) {
             window.location.hash = `album/${data.id}${isLibrary ? "/" + isLibrary : ""}`;
           } else {
-            this.playMediaItemById(id, kind, isLibrary, item.attributes.url ?? "");
+            this.playMediaItemById(id, kind, isLibrary, item.attributes!.url ?? "");
           }
         });
       } else {
-        this.playMediaItemById(id, kind, isLibrary, item.attributes.url ?? "");
+        this.playMediaItemById(id, kind, isLibrary, item.attributes!.url ?? "");
       }
     },
-    async showSearchView(term, group, title) {
+    async showSearchView(term: string, group: string, title: string) {
       const requestBody = {
         platform: "web",
         groups: group,
@@ -629,7 +627,7 @@ export const useUIStore = create<UIState>()(
         },
         l: this.mklang,
       };
-      const response = await this.mk.api.v3.music(`/v1/catalog/${this.mk.storefrontId}/search?term=${term}`, requestBody, {
+      const response = await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/search?term=${term}`, requestBody, {
         includeResponseMeta: !0,
       });
 
@@ -641,13 +639,12 @@ export const useUIStore = create<UIState>()(
       };
       await this.showCollection(responseFormat, title, "search", requestBody);
     },
-    async showRecordLabelView(label, title, view) {
-      const response = (
-        await this.mk.api.v3.music(`/v1/catalog/${this.mk.storefrontId}/record-labels/${label}/view/${view}?l=${this.mklang}`)
-      ).data;
+    async showRecordLabelView(label: string, title: string, view: string) {
+      const response = (await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/record-labels/${label}/view/${view}?l=${this.mklang}`))
+        .data;
       await this.showCollection(response, title, "record-labels");
     },
-    async showCollection(response, title, type, requestBody = {}) {
+    async showCollection(response: Record<string, any>, title: string, type?: string, requestBody = {}) {
       console.debug(response);
       this.collectionList.requestBody = {};
       this.collectionList.response = response;
@@ -656,9 +653,9 @@ export const useUIStore = create<UIState>()(
       this.collectionList.requestBody = requestBody;
       this.appRoute("collection-list");
     },
-    async showArtistView(artist, title, view) {
+    async showArtistView(artist: string, title: string, view: string) {
       const response = (
-        await this.mk.api.v3.music(
+        await this.mk.api.music(
           `/v1/catalog/${this.mk.storefrontId}/artists/${artist}/view/${view}?l=${this.mklang}`,
           {},
           { includeResponseMeta: !0 },
@@ -671,8 +668,8 @@ export const useUIStore = create<UIState>()(
      * @param {string} url, href for the initial request
      * @memberof app
      */
-    async showRoom(url) {
-      const response = await this.mk.api.v3.music(url);
+    async showRoom(url: string) {
+      const response = await this.mk.api.music(url);
       const room = response.data.data[0];
       this.showCollection(room.relationships.contents, room.attributes.title);
     },
@@ -705,19 +702,17 @@ export const useUIStore = create<UIState>()(
           window.location.hash = `#groupings/${id}`;
         } else {
           const params = new Proxy(new URLSearchParams(new URL(url).search), {
-            get: (searchParams, prop) => searchParams.get(prop),
+            get: (searchParams, prop) => searchParams.get(prop as string),
           });
-          const id = params.fcId;
-          app
-            .getTypeFromID("room", id, false, {
-              platform: "web",
-              extend: "editorialArtwork,uber,lockupStyle",
-            })
-            .then(() => {
-              const kind = "multiroom";
-              window.location.hash = `${kind}/${id}`;
-              document.querySelector("#app-content").scrollTop = 0;
-            });
+          const id = params.get("fcId");
+          this.getTypeFromID("room", id, false, {
+            platform: "web",
+            extend: "editorialArtwork,uber,lockupStyle",
+          }).then(() => {
+            const kind = "multiroom";
+            window.location.hash = `${kind}/${id}`;
+            document.querySelector("#app-content")!.scrollTop = 0;
+          });
         }
       }
     },
@@ -729,7 +724,7 @@ export const useUIStore = create<UIState>()(
     resetState: () =>
       set((state) => {
         state.menuPanel.visible = false;
-        state.selectedMediaItems = [];
+        this.library.selectedMediaItems = [];
         this.chrome.contentAreaScrolling = true;
         for (const key in Object.keys(state.modals)) {
           state.modals[key as keyof typeof state.modals] = false;
@@ -742,7 +737,7 @@ export const useUIStore = create<UIState>()(
         this.appRoute(this.cfg.general.resumeTabs.tab);
       }
     },
-    playlistHeaderContextMenu(event) {
+    playlistHeaderContextMenu(event: ContextMenuEvent) {
       const menu = {
         items: [
           {
@@ -769,17 +764,17 @@ export const useUIStore = create<UIState>()(
     },
     async checkForThemeUpdates() {
       const themes = window.electronAPI.sendSync("get-themes");
-      await asyncForEach(themes, async (theme) => {
+      await asyncForEach(themes, async (theme: { commit: string; github_repo: string; name: string }) => {
         if (theme.commit !== "") {
           if (theme.commit !== "") {
-            this._fetch(`https://api.github.com/repos/${theme.github_repo}/commits`).then((res) => res.json());
+            const res = (await this._fetch(`https://api.github.com/repos/${theme.github_repo}/commits`)).toJSON();
             if (res[0].sha !== theme.commit) {
               const notify = notyf.open({
                 className: "notyf-info",
                 type: "info",
                 message: stringTemplateParser(this.getLz("settings.notyf.visual.theme.updateAvailable"), { theme: theme.name }),
               });
-              notify.on("click", () => {
+              notify.on(NotyfEvent.Click, () => {
                 this.openSettingsPage("github-themes");
                 notyf.dismiss(notify);
               });
@@ -873,7 +868,7 @@ export const useUIStore = create<UIState>()(
 
           if (artistId === "") {
             const artistQuery = (
-              await this.mk.api.v3.music(`v1/catalog/${this.mk.storefrontId}/search?term=${item.attributes.artistName}`, {
+              await this.mk.api.music(`v1/catalog/${this.mk.storefrontId}/search?term=${item.attributes.artistName}`, {
                 limit: 1,
                 types: "artists",
               })
@@ -916,7 +911,7 @@ export const useUIStore = create<UIState>()(
           if (albumId === "") {
             try {
               const albumQuery = (
-                await this.mk.api.v3.music(
+                await this.mk.api.music(
                   `v1/catalog/${this.mk.storefrontId}/search?term=${(item.attributes.albumName ?? item.attributes.name ?? "") + " " + (item.attributes.artistName ?? "")}`,
                   {
                     limit: 1,
@@ -945,7 +940,7 @@ export const useUIStore = create<UIState>()(
           if (labelId === "") {
             try {
               const labelQuery = (
-                await this.mk.api.v3.music(`v1/catalog/${this.mk.storefrontId}/search?term=${item.attributes.recordLabel}`, {
+                await this.mk.api.music(`v1/catalog/${this.mk.storefrontId}/search?term=${item.attributes.recordLabel}`, {
                   limit: 1,
                   types: "record-labels",
                 })
@@ -992,7 +987,7 @@ export const useUIStore = create<UIState>()(
     },
     exitMV() {
       MusicKit.getInstance().stop();
-      document.getElementById("apple-music-video-container").style.display = "none";
+      document.getElementById("apple-music-video-container")!.style.display = "none";
     },
     searchCursor(e) {
       if (e.keyCode === "40") {
@@ -1016,8 +1011,8 @@ export const useUIStore = create<UIState>()(
       if (term === "") {
         return;
       }
-      //this.mk.api.v3.music(`/v1/catalog/${this.mk.storefrontId}/search?term=${this.search.term}`
-      this.mk.api.v3
+      //this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/search?term=${this.search.term}`
+      this.mk.api
         .music(`/v1/catalog/${this.mk.storefrontId}/search?term=${encodeURIComponent(this.search.term)}`, {
           types:
             "activities,albums,apple-curators,artists,curators,editorial-items,music-movies,music-videos,playlists,songs,stations,tv-episodes,uploaded-videos,record-labels",
@@ -1042,7 +1037,7 @@ export const useUIStore = create<UIState>()(
           this.search.results = results.data.results;
         });
 
-      this.mk.api.v3
+      this.mk.api
         .music(
           `v1/social/${this.mk.storefrontId}/search?term=${this.search.term}`,
           {
@@ -1074,7 +1069,7 @@ export const useUIStore = create<UIState>()(
       }
       const mediaItem =
         (this.mk?.nowPlayingItem?.attributes?.artwork?.url ? this?.mk?.nowPlayingItem : null) ??
-        (await this.mk.api.v3.music(`/v1/me/library/songs/${this.mk?.nowPlayingItem?.id}`)?.data?.data?.data[0]) ??
+        (await this.mk.api.music(`/v1/me/library/songs/${this.mk?.nowPlayingItem?.id}`)?.data?.data?.data[0]) ??
         {};
       return {
         currentArtUrlRaw: mediaItem?.attributes?.artwork?.url ?? "",
@@ -1085,7 +1080,7 @@ export const useUIStore = create<UIState>()(
     async setLibraryArtBG() {
       if (typeof this.mk.nowPlayingItem === "undefined") return;
       try {
-        let data = await this.mk.api.v3.music(`/v1/me/library/songs/${this.mk.nowPlayingItem.id}`);
+        let data = await this.mk.api.music(`/v1/me/library/songs/${this.mk.nowPlayingItem.id}`);
         data = data.data.data[0];
 
         if (data !== null && data !== "") {
@@ -1103,7 +1098,7 @@ export const useUIStore = create<UIState>()(
     async setLibraryArt() {
       if (typeof this.mk.nowPlayingItem === "undefined") return;
       try {
-        let data = await this.mk.api.v3.music(`/v1/me/library/songs/${this.mk.nowPlayingItem.id}`);
+        let data = await this.mk.api.music(`/v1/me/library/songs/${this.mk.nowPlayingItem.id}`);
         data = data.data.data[0];
 
         if (data !== null && data !== "") {
@@ -1442,12 +1437,12 @@ export const useUIStore = create<UIState>()(
         }
       }, 200);
     },
-    isElementOverflowing(selector) {
+    isElementOverflowing(selector: string) {
       try {
         const element = document.querySelector(selector);
-        const overflowX = element.offsetWidth < element.scrollWidth,
-          overflowY = element.offsetHeight < element.scrollHeight;
-        element.setAttribute("data-value", "\xa0\xa0\xa0\xa0" + element.textContent);
+        const overflowX = element!.offsetWidth < element!.scrollWidth,
+          overflowY = element!.offsetHeight < element!.scrollHeight;
+        element!.setAttribute("data-value", "\xa0\xa0\xa0\xa0" + element!.textContent);
 
         return overflowX || overflowY;
       } catch (e) {
@@ -1460,11 +1455,15 @@ export const useUIStore = create<UIState>()(
       //this.modals.qrcode = true;
     },
     checkMarquee() {
-      if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-artist")) {
+      if (
+        this.isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-artist")
+      ) {
         document.getElementsByClassName("song-artist")[0].classList.add("marquee");
         document.getElementsByClassName("song-artist")[1].classList.add("marquee-after");
       }
-      if (isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name")) {
+      if (
+        this.isElementOverflowing("#app-main > div.app-chrome > div.app-chrome--center > div > div > div.playback-info > div.song-name")
+      ) {
         document.getElementsByClassName("song-name")[0].classList.add("marquee");
         document.getElementsByClassName("song-name")[1].classList.add("marquee-after");
       }
@@ -1472,7 +1471,7 @@ export const useUIStore = create<UIState>()(
     closeWindow() {
       window.electronAPI.send("close");
     },
-    darwinShare(url) {
+    darwinShare(url: string) {
       window.electronAPI.send("share-menu", url);
     },
   })),

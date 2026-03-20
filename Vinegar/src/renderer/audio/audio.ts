@@ -83,7 +83,7 @@ const CiderAudio = {
         previewURL == null &&
         (app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id) != -1
       ) {
-        app.mk.api.v3
+        app.mk.api
           .music(
             `/v1/catalog/${app.mk.storefrontId}/songs/${app.mk.nowPlayingItem?._songId ?? app.mk.nowPlayingItem["songId"] ?? app.mk.nowPlayingItem.relationships.catalog.data[0].id}`,
           )
