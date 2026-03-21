@@ -82,14 +82,14 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
     // Actually fills the store doesn't return
     getLibrarySongs: () =>
       set((state) => {
-        this.mkapi("songs", true, "", { limit: 100, l: this.mklang }, { includeResponseMeta: !0 }).then((response) => {
-          state.songs.listing = response.data.data;
-          state.songs.meta = response.data.meta;
+        state.app.mkapi("songs", true, "", { limit: 100, l: state.app.mklang, includeResponseMeta: !0 }).then((response) => {
+          state.library.songs.listing = response.data.data;
+          state.library.songs.meta = response.data.meta;
         });
       }),
     getLibraryGenres: () => {
       const genres: string[] = [];
-      get().songs.listing.forEach((item) => {
+      get().library.songs.listing.forEach((item) => {
         item.attributes.genreNames.forEach((genre) => {
           if (!genres.includes(genre)) {
             genres.push(genre);
@@ -101,9 +101,9 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
     // Actually fills the store doesn't return
     getLibraryAlbums: () =>
       set(async (state) => {
-        this.mkapi("albums", true, "", { limit: 100, l: this.mklang }, { includeResponseMeta: !0 }).then((response) => {
-          state.albums.listing = response.data.data;
-          state.albums.meta = response.data.meta;
+        state.app.mk.api("albums", true, "", { limit: 100, l: state.app.mklang }, { includeResponseMeta: !0 }).then((response) => {
+          state.library.albums.listing = response.data.data;
+          state.library.albums.meta = response.data.meta;
         });
       }),
     isInLibrary(playParams?: { isLibrary: boolean; catalogId: string; id: string }) {
@@ -119,7 +119,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
       } else if (playParams["id"]) {
         id = playParams["id"];
       }
-      const found = get().songs.listing.filter((item) => {
+      const found = get().library.songs.listing.filter((item) => {
         if (item["attributes"]) {
           if (item["attributes"]["playParams"] && item["attributes"]["playParams"]["catalogId"] === id) {
             return item;
@@ -134,12 +134,12 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
     },
     searchLibrarySongs: () =>
       set((state) => {
-        const prefs = this.cfg.libraryPrefs.songs;
+        const prefs = get().cfg.libraryPrefs.songs;
 
         function sortSongs() {
           // sort get().songs.displayListing by song.attributes[get().songs.sorting] in descending or ascending order based on alphabetical order and numeric order
           // check if song.attributes[get().songs.sorting] is a number and if so, sort by number if not, sort by alphabetical order ignoring case
-          state.songs.displayListing.sort((a, b) => {
+          state.library.songs.displayListing.sort((a, b) => {
             if (!a.attributes && !b.attributes) return 0;
             else if (!a.attributes) return -1;
             else if (!b.attributes) return 1;
@@ -193,13 +193,13 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
           });
         }
 
-        if (get().songs.search === "") {
-          state.songs.displayListing = get().songs.listing;
+        if (get().library.songs.search === "") {
+          state.library.songs.displayListing = get().library.songs.listing;
           sortSongs();
         } else {
-          state.songs.displayListing = get().songs.listing.filter((item) => {
+          state.library.songs.displayListing = get().library.songs.listing.filter((item) => {
             let itemName = item.attributes!.name.toLowerCase();
-            let searchTerm = get().songs.search.toLowerCase();
+            let searchTerm = get().library.songs.search.toLowerCase();
             let artistName = "";
             let albumName = "";
             if (item.attributes!.artistName !== null) {
@@ -225,22 +225,22 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
     // Actually sets the album sorting from the config
     getAlbumSort: () =>
       set((state) => {
-        state.albums.sortOrder = this.cfg.libraryPrefs.albums.sortOrder;
-        state.albums.sorting = this.cfg.libraryPrefs.albums.sort;
+        state.library.albums.sortOrder = state.cfg.libraryPrefs.albums.sortOrder;
+        state.library.albums.sorting = state.cfg.libraryPrefs.albums.sort;
       }),
     // make a copy of searchLibrarySongs except use Albums instead of Songs
     searchLibraryAlbums: (index: number) =>
       set((state) => {
         function sortAlbums() {
-          // sort get().albums.displayListing by album.attributes[get().albums.sorting[index]] in descending or ascending order based on alphabetical order and numeric order
-          // check if album.attributes[get().albums.sorting[index]] is a number and if so, sort by number if not, sort by alphabetical order ignoring case
-          state.albums.displayListing.sort((a, b) => {
-            let aa = a.attributes[get().albums.sorting[index]];
-            let bb = b.attributes[get().albums.sorting[index]];
-            if (get().albums.sorting[index] === "genre") {
+          // sort get().library.albums.displayListing by album.attributes[get().library.albums.sorting[index]] in descending or ascending order based on alphabetical order and numeric order
+          // check if album.attributes[get().library.albums.sorting[index]] is a number and if so, sort by number if not, sort by alphabetical order ignoring case
+          state.library.albums.displayListing.sort((a, b) => {
+            let aa = a.attributes[state.library.albums.sorting[index]];
+            let bb = b.attributes[state.library.albums.sorting[index]];
+            if (state.library.albums.sorting[index] === "genre") {
               aa = a.attributes.genreNames[0];
               bb = b.attributes.genreNames[0];
-            } else if (get().albums.sorting[index] === "dateAdded") {
+            } else if (state.library.albums.sorting[index] === "dateAdded") {
               aa = a.attributes?.dateAdded;
               bb = b.attributes?.dateAdded;
             }
@@ -250,13 +250,13 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             if (bb === null) {
               bb = "";
             }
-            if (get().albums.sortOrder[index] === "asc") {
+            if (state.library.albums.sortOrder[index] === "asc") {
               if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
                 return aa - bb;
               } else {
                 return aa.toString().toLowerCase().localeCompare(bb.toString().toLowerCase());
               }
-            } else if (get().albums.sortOrder[index] === "desc") {
+            } else if (state.library.albums.sortOrder[index] === "desc") {
               if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
                 return bb - aa;
               } else {
@@ -266,13 +266,13 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
           });
         }
 
-        if (get().albums.search === "") {
-          state.albums.displayListing = get().albums.listing;
+        if (state.library.albums.search === "") {
+          state.library.albums.displayListing = state.library.albums.listing;
           sortAlbums();
         } else {
-          state.albums.displayListing = get().albums.listing.filter((item) => {
+          state.library.albums.displayListing = state.library.albums.listing.filter((item) => {
             let itemName = item.attributes.name.toLowerCase();
-            let searchTerm = get().albums.search.toLowerCase();
+            let searchTerm = state.library.albums.search.toLowerCase();
             let artistName = "";
             let albumName = "";
             if (item.attributes.artistName !== null) {
@@ -301,10 +301,10 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         function sortArtists() {
           // sort get().albums.displayListing by album.attributes[get().albums.sorting[index]] in descending or ascending order based on alphabetical order and numeric order
           // check if album.attributes[get().albums.sorting[index]] is a number and if so, sort by number if not, sort by alphabetical order ignoring case
-          state.artists.displayListing.sort((a, b) => {
-            let aa = a.attributes[get().artists.sorting[index]];
-            let bb = b.attributes[get().artists.sorting[index]];
-            if (get().artists.sorting[index] === "genre") {
+          state.library.artists.displayListing.sort((a, b) => {
+            let aa = a.attributes[state.library.artists.sorting[index]];
+            let bb = b.attributes[state.library.artists.sorting[index]];
+            if (state.library.artists.sorting[index] === "genre") {
               aa = a.attributes.genreNames[0];
               bb = b.attributes.genreNames[0];
             }
@@ -314,13 +314,13 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             if (bb === null) {
               bb = "";
             }
-            if (get().artists.sortOrder[index] === "asc") {
+            if (state.library.artists.sortOrder[index] === "asc") {
               if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
                 return aa - bb;
               } else {
                 return aa.toString().toLowerCase().localeCompare(bb.toString().toLowerCase());
               }
-            } else if (get().artists.sortOrder[index] === "desc") {
+            } else if (state.library.artists.sortOrder[index] === "desc") {
               if (aa.toString().match(/^\d+$/) && bb.toString().match(/^\d+$/)) {
                 return bb - aa;
               } else {
@@ -330,13 +330,13 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
           });
         }
 
-        if (get().artists.search === "") {
-          state.artists.displayListing = get().artists.listing;
+        if (state.library.artists.search === "") {
+          state.library.artists.displayListing = state.library.artists.listing;
           sortArtists();
         } else {
-          state.artists.displayListing = get().artists.listing.filter((item) => {
+          state.library.artists.displayListing = state.library.artists.listing.filter((item) => {
             let itemName = item.attributes!.name.toLowerCase();
-            let searchTerm = get().artists.search.toLowerCase();
+            let searchTerm = state.library.artists.search.toLowerCase();
             const artistName = "";
             const albumName = "";
             // if (item.attributes.artistName !== null) {
@@ -362,24 +362,24 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         let library = [];
         const cacheId = "library-songs";
         const downloaded = null;
-        this.resetRecentlyAdded();
-        if (get().songs.downloadState === 2 && !force) {
+        state.ui.resetRecentlyAdded();
+        if (state.library.songs.downloadState === 2 && !force) {
           return;
         }
-        if (get().songs.downloadState === 1) {
+        if (state.library.songs.downloadState === 1) {
           return;
         }
         const librarySongs = await CiderCache.getCache(cacheId);
         if (librarySongs) {
-          state.songs.listing.data = librarySongs;
-          this.searchLibrarySongs();
+          state.library.songs.listing.data = librarySongs;
+          state.library.searchLibrarySongs();
         }
-        if (this.songstest) {
+        if (state.app.songstest) {
           return;
         }
-        state.songs.downloadState = 1;
-        state.backgroundNotification.show = true;
-        state.backgroundNotification.message = this.getLz("notification.updatingLibrarySongs");
+        state.library.songs.downloadState = 1;
+        state.library.backgroundNotification.show = true;
+        state.library.backgroundNotification.message = this.getLz("notification.updatingLibrarySongs");
 
         library = await MusicKitTools.v3Continuous({
           href: `/v1/me/library/songs/`,
@@ -391,22 +391,22 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             "fields[catalog]": "artistUrl,albumUrl",
             "fields[songs]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
             limit: 100,
-            l: this.mklang,
+            l: state.app.mklang,
           },
           onProgress: (data) => {
             console.debug(`${data.total}/${data.response.data.meta.total}`);
-            state.backgroundNotification.show = true;
-            state.backgroundNotification.message = this.getLz("notification.updatingLibrarySongs");
-            state.backgroundNotification.total = data.response.data.meta.total;
-            state.backgroundNotification.progress = data.total;
+            state.library.backgroundNotification.show = true;
+            state.library.backgroundNotification.message = this.getLz("notification.updatingLibrarySongs");
+            state.library.backgroundNotification.total = data.response.data.meta.total;
+            state.library.backgroundNotification.progress = data.total;
           },
           onSuccess: () => {},
         });
 
-        state.songs.listing = library;
-        state.songs.downloadState = 2;
-        state.backgroundNotification.show = false;
-        this.searchLibrarySongs();
+        state.library.songs.listing = library;
+        state.library.songs.downloadState = 2;
+        state.library.backgroundNotification.show = false;
+        state.library.searchLibrarySongs();
         CiderCache.putCache(cacheId, library);
         console.debug("Done!");
 
@@ -418,23 +418,23 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         let library = [];
         const cacheId = "library-albums";
         let downloaded = null;
-        if ((get().albums.downloadState === 2 || get().albums.downloadState === 1) && !force) {
+        if ((state.library.albums.downloadState === 2 || state.library.albums.downloadState === 1) && !force) {
           return;
         }
         const libraryAlbums = await CiderCache.getCache(cacheId);
         if (libraryAlbums) {
-          state.albums.listing = libraryAlbums;
-          this.searchLibraryAlbums(index);
+          state.library.albums.listing = libraryAlbums;
+          state.library.searchLibraryAlbums(index);
         }
-        if (this.songstest) {
+        if (state.app.songstest) {
           return;
         }
-        state.albums.downloadState = 1;
-        state.backgroundNotification.show = true;
-        state.backgroundNotification.message = this.getLz("notification.updatingLibraryAlbums");
+        state.library.albums.downloadState = 1;
+        state.library.backgroundNotification.show = true;
+        state.library.backgroundNotification.message = this.getLz("notification.updatingLibraryAlbums");
 
         function downloadChunk() {
-          state.albums.downloadState = 1;
+          state.library.albums.downloadState = 1;
           const params = {
             "include[library-albums]": "catalog,artists,albums",
             "fields[artists]": "name,url,id",
@@ -443,7 +443,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             "fields[catalog]": "artistUrl,albumUrl",
             "fields[albums]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
             limit: 100,
-            l: this.mklang,
+            l: state.app.mklang,
           };
           const safeparams = {
             platform: "web",
@@ -456,42 +456,42 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             includeOnly: "catalog,artists",
           };
           if (downloaded === null) {
-            this.mk.api
+            state.app.mk.api
               .music(`/v1/me/library/albums/`, params)
               .then((response) => {
                 processChunk(response.data);
               })
               .catch((error) => {
                 console.debug("safe loading");
-                this.mk.api
+                state.app.mk.api
                   .music(`/v1/me/library/albums/`, safeparams)
                   .then((response) => {
                     processChunk(response.data);
                   })
                   .catch((error) => {
                     console.log("safe loading failed", error);
-                    this.library.albums.downloadState = 2;
-                    this.library.backgroundNotification.show = false;
+                    state.library.albums.downloadState = 2;
+                    state.library.backgroundNotification.show = false;
                   });
               });
           } else {
             if (downloaded.next !== null) {
-              this.mk.api
+              state.app.mk.api
                 .music(downloaded.next, params)
                 .then((response) => {
                   processChunk(response.data);
                 })
                 .catch((error) => {
                   console.debug("safe loading");
-                  this.mk.api
+                  state.app.mk.api
                     .music(downloaded.next, safeparams)
                     .then((response) => {
                       processChunk(response.data);
                     })
                     .catch((error) => {
                       console.log("safe loading failed", error);
-                      this.library.albums.downloadState = 2;
-                      this.library.backgroundNotification.show = false;
+                      state.library.albums.downloadState = 2;
+                      state.library.backgroundNotification.show = false;
                     });
                 });
             } else {
@@ -503,31 +503,31 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         function processChunk(response) {
           downloaded = response;
           library = library.concat(downloaded.data);
-          state.backgroundNotification.show = true;
-          state.backgroundNotification.message = this.getLz("notification.updatingLibraryAlbums");
-          state.backgroundNotification.total = downloaded.meta.total;
-          state.backgroundNotification.progress = library.length;
+          state.library.backgroundNotification.show = true;
+          state.library.backgroundNotification.message = this.getLz("notification.updatingLibraryAlbums");
+          state.library.backgroundNotification.total = downloaded.meta.total;
+          state.library.backgroundNotification.progress = library.length;
           if (downloaded.meta.total === 0) {
-            state.albums.downloadState = 3;
+            state.library.albums.downloadState = 3;
             return;
           }
           if (typeof downloaded.next === "undefined") {
             console.debug("downloaded.next is undefined");
-            state.albums.listing = library;
-            state.albums.downloadState = 2;
-            state.backgroundNotification.show = false;
+            state.library.albums.listing = library;
+            state.library.albums.downloadState = 2;
+            state.library.backgroundNotification.show = false;
             CiderCache.putCache(cacheId, library);
-            this.searchLibraryAlbums(index);
+            state.library.searchLibraryAlbums(index);
           }
           if (downloaded.meta.total > library.length || typeof downloaded.meta.next !== "undefined") {
             console.debug(`downloading next chunk - ${library.length} albums so far`);
             downloadChunk();
           } else {
-            state.albums.listing = library;
-            state.albums.downloadState = 2;
-            state.backgroundNotification.show = false;
+            state.library.albums.listing = library;
+            state.library.albums.downloadState = 2;
+            state.library.backgroundNotification.show = false;
             CiderCache.putCache(cacheId, library);
-            this.searchLibraryAlbums(index);
+            state.library.searchLibraryAlbums(index);
             // console.log(library)
           }
         }
@@ -540,23 +540,23 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         let library = [];
         const cacheId = "library-artists";
         let downloaded = null;
-        if ((get().artists.downloadState === 2 || get().artists.downloadState === 1) && !force) {
+        if ((state.library.artists.downloadState === 2 || state.library.artists.downloadState === 1) && !force) {
           return;
         }
         const libraryArtists = await CiderCache.getCache(cacheId);
         if (libraryArtists) {
-          state.artists.listing = libraryArtists;
-          this.searchLibraryArtists(index);
+          state.library.artists.listing = libraryArtists;
+          state.library.searchLibraryArtists(index);
         }
-        if (this.songstest) {
+        if (state.app.songstest) {
           return;
         }
-        state.artists.downloadState = 1;
-        state.backgroundNotification.show = true;
-        state.backgroundNotification.message = this.getLz("notification.updatingLibraryArtists");
+        state.library.artists.downloadState = 1;
+        state.library.backgroundNotification.show = true;
+        state.library.backgroundNotification.message = this.getLz("notification.updatingLibraryArtists");
 
         function downloadChunk() {
-          state.artists.downloadState = 1;
+          state.library.artists.downloadState = 1;
           const params = {
             include: "catalog",
             // "include[library-artists]": "catalog,artists,albums",
@@ -566,7 +566,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             // "fields[catalog]": "artistUrl,albumUrl",
             // "fields[artists]": "artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url",
             limit: 100,
-            l: this.mklang,
+            l: state.app.mklang,
           };
           const safeparams = {
             include: "catalog",
@@ -574,42 +574,42 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             limit: 50,
           };
           if (downloaded === null) {
-            this.mk.api
+            state.app.mk.api
               .music(`/v1/me/library/artists/`, params)
               .then((response) => {
                 processChunk(response.data);
               })
               .catch((error) => {
                 console.debug("safe loading");
-                this.mk.api
+                state.app.mk.api
                   .music(`/v1/me/library/artists/`, safeparams)
                   .then((response) => {
                     processChunk(response.data);
                   })
                   .catch((error) => {
                     console.log("safe loading failed", error);
-                    this.library.artists.downloadState = 2;
-                    this.library.backgroundNotification.show = false;
+                    state.library.artists.downloadState = 2;
+                    state.library.backgroundNotification.show = false;
                   });
               });
           } else {
             if (downloaded.next !== null) {
-              this.mk.api
+              state.app.mk.api
                 .music(downloaded.next, params)
                 .then((response) => {
                   processChunk(response.data);
                 })
                 .catch((error) => {
                   console.log("safe loading");
-                  this.mk.api
+                  state.app.mk.api
                     .music(downloaded.next, safeparams)
                     .then((response) => {
                       processChunk(response.data);
                     })
                     .catch((error) => {
                       console.log("safe loading failed", error);
-                      this.library.artists.downloadState = 2;
-                      this.library.backgroundNotification.show = false;
+                      state.library.artists.downloadState = 2;
+                      state.library.backgroundNotification.show = false;
                     });
                 });
             } else {
@@ -621,60 +621,58 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         function processChunk(response) {
           downloaded = response;
           library = library.concat(downloaded.data);
-          state.backgroundNotification.show = true;
-          state.backgroundNotification.message = this.getLz("notification.updatingLibraryArtists");
-          state.backgroundNotification.total = downloaded.meta.total;
-          state.backgroundNotification.progress = library.length;
+          state.library.backgroundNotification.show = true;
+          state.library.backgroundNotification.message = this.getLz("notification.updatingLibraryArtists");
+          state.library.backgroundNotification.total = downloaded.meta.total;
+          state.library.backgroundNotification.progress = library.length;
           if (downloaded.meta.total === 0) {
-            state.albums.downloadState = 3;
+            state.library.albums.downloadState = 3;
             return;
           }
           if (typeof downloaded.next === "undefined") {
             console.log("downloaded.next is undefined");
-            state.artists.listing = library;
-            state.artists.downloadState = 2;
-            state.artists.show = false;
+            state.library.artists.listing = library;
+            state.library.artists.downloadState = 2;
+            state.library.artists.show = false;
             CiderCache.putCache(cacheId, library);
-            this.searchLibraryArtists(index);
+            state.library.searchLibraryArtists(index);
           }
           if (downloaded.meta.total > library.length || typeof downloaded.meta.next !== "undefined") {
             console.log(`downloading next chunk - ${library.length} artists so far`);
             downloadChunk();
           } else {
-            state.artists.listing = library;
-            state.artists.downloadState = 2;
-            state.backgroundNotification.show = false;
+            state.library.artists.listing = library;
+            state.library.artists.downloadState = 2;
+            state.library.backgroundNotification.show = false;
             CiderCache.putCache(cacheId, library);
-            this.searchLibraryArtists(index);
+            state.library.searchLibraryArtists(index);
             // console.log(library)
           }
         }
 
         downloadChunk();
       }),
-    addToLibrary(id) {
-      this.mk.addToLibrary(id).then((data) => {
-        this.getLibrarySongsFull(true);
-      });
-      notyf.success(this.getLz("action.addToLibrary.success"));
-    },
-    removeFromLibrary(kind, id) {
-      const truekind = !kind.endsWith("s") ? kind + "s" : kind;
-      this.mk.api
-        .music(
-          `v1/me/library/${truekind}/${id.toString()}`,
-          {},
-          {
+    addToLibrary: (id) =>
+      set((state) => {
+        state.app.mk.addToLibrary(id).then((data) => {
+          state.library.getLibrarySongsFull(true);
+        });
+        notyf.success(this.getLz("action.addToLibrary.success"));
+      }),
+    removeFromLibrary: (kind: string, id: string) =>
+      set((state) => {
+        const truekind = !kind.endsWith("s") ? kind + "s" : kind;
+        state.app.mk.api
+          .music(`v1/me/library/${truekind}/${id.toString()}`, {
             fetchOptions: {
               method: "DELETE",
             },
-          },
-        )
-        .then((data) => {
-          this.getLibrarySongsFull(true);
-        });
-      notyf.success(this.getLz("action.removeFromLibrary.success"));
-    },
+          })
+          .then(() => {
+            state.library.getLibrarySongsFull(true);
+          });
+        notyf.success(this.getLz("action.removeFromLibrary.success"));
+      }),
     async inLibrary(items: MusicKit.MediaItem[] = []) {
       const types = [];
 
@@ -706,7 +704,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         return result;
       }, {});
       return (
-        await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}`, {
+        await get().app.mk.api.music(`/v1/catalog/${state.app.mk.storefrontId}`, {
           ...{
             "omit[resource]": "autos",
             relate: "library",
@@ -720,87 +718,97 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
     addSelectedToNewPlaylist: () =>
       set(async (state) => {
         let pl_items: { id: string; type: string }[] = [];
-        for (let i = 0; i < state.selectedMediaItems.length; i++) {
-          if (state.selectedMediaItems[i].kind === "song" || state.selectedMediaItems[i].kind === "songs") {
-            state.selectedMediaItems[i].kind = "songs";
+        for (let i = 0; i < state.library.selectedMediaItems.length; i++) {
+          if (state.library.selectedMediaItems[i].kind === "song" || state.library.selectedMediaItems[i].kind === "songs") {
+            state.library.selectedMediaItems[i].kind = "songs";
             pl_items.push({
-              id: state.selectedMediaItems[i].id,
-              type: state.selectedMediaItems[i].kind,
+              id: state.library.selectedMediaItems[i].id,
+              type: state.library.selectedMediaItems[i].kind,
             });
           } else if (
-            (state.selectedMediaItems[i].kind === "album" || state.selectedMediaItems[i].kind === "albums") &&
-            !state.selectedMediaItems[i].isLibrary
+            (state.library.selectedMediaItems[i].kind === "album" || state.library.selectedMediaItems[i].kind === "albums") &&
+            !state.library.selectedMediaItems[i].isLibrary
           ) {
-            state.selectedMediaItems[i].kind = "albums";
-            const res = await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/albums/${state.selectedMediaItems[i].id}/tracks`);
+            state.library.selectedMediaItems[i].kind = "albums";
+            const res = await state.app.mk.api.music(
+              `/v1/catalog/${state.app.mk.storefrontId}/albums/${state.library.selectedMediaItems[i].id}/tracks`,
+            );
             const ids = res.data.data.map(function (i) {
               return { id: i.id, type: i.type };
             });
             pl_items = pl_items.concat(ids);
-          } else if (state.selectedMediaItems[i].kind === "library-song" || state.selectedMediaItems[i].kind === "library-songs") {
-            state.selectedMediaItems[i].kind = "library-songs";
+          } else if (
+            state.library.selectedMediaItems[i].kind === "library-song" ||
+            state.library.selectedMediaItems[i].kind === "library-songs"
+          ) {
+            state.library.selectedMediaItems[i].kind = "library-songs";
             pl_items.push({
-              id: state.selectedMediaItems[i].id,
-              type: state.selectedMediaItems[i].kind,
+              id: state.library.selectedMediaItems[i].id,
+              type: state.library.selectedMediaItems[i].kind,
             });
           } else if (
-            state.selectedMediaItems[i].kind === "library-album" ||
-            state.selectedMediaItems[i].kind === "library-albums" ||
-            (state.selectedMediaItems[i].kind === "album" && state.selectedMediaItems[i].isLibrary)
+            state.library.selectedMediaItems[i].kind === "library-album" ||
+            state.library.selectedMediaItems[i].kind === "library-albums" ||
+            (state.library.selectedMediaItems[i].kind === "album" && state.library.selectedMediaItems[i].isLibrary)
           ) {
-            state.selectedMediaItems[i].kind = "library-albums";
-            const res = await this.mk.api.music(`/v1/me/library/albums/${state.selectedMediaItems[i].id}/tracks`);
+            state.library.selectedMediaItems[i].kind = "library-albums";
+            const res = await state.app.mk.api.music(`/v1/me/library/albums/${state.library.selectedMediaItems[i].id}/tracks`);
             const ids = res.data.data.map(function (i) {
               return { id: i.id, type: i.type };
             });
             pl_items = pl_items.concat(ids);
           } else {
             pl_items.push({
-              id: state.selectedMediaItems[i].id,
-              type: state.selectedMediaItems[i].kind,
+              id: state.library.selectedMediaItems[i].id,
+              type: state.library.selectedMediaItems[i].kind,
             });
           }
         }
-        this.modals.addToPlaylist = false;
-        this.newPlaylist(this.getLz("term.newPlaylist"), pl_items);
+        state.ui.modals.addToPlaylist = false;
+        state.library.newPlaylist(this.getLz("term.newPlaylist"), pl_items);
       }),
     addSelectedToPlaylist: async (playlist_id) =>
       set((state) => {
         let pl_items: { id: string; type: string }[] = [];
         const song_ids = [];
-        for (let i = 0; i < state.selectedMediaItems.length; i++) {
-          if (state.selectedMediaItems[i].kind === "song" || state.selectedMediaItems[i].kind === "songs") {
-            state.selectedMediaItems[i].kind = "songs";
+        for (let i = 0; i < state.library.selectedMediaItems.length; i++) {
+          if (state.library.selectedMediaItems[i].kind === "song" || state.library.selectedMediaItems[i].kind === "songs") {
+            state.library.selectedMediaItems[i].kind = "songs";
             pl_items.push({
-              id: state.selectedMediaItems[i].id,
-              type: state.selectedMediaItems[i].kind,
+              id: state.library.selectedMediaItems[i].id,
+              type: state.library.selectedMediaItems[i].kind,
             });
-            song_ids.push(state.selectedMediaItems[i].id);
+            song_ids.push(state.library.selectedMediaItems[i].id);
           } else if (
-            (state.selectedMediaItems[i].kind === "album" || state.selectedMediaItems[i].kind === "albums") &&
-            !state.selectedMediaItems[i].isLibrary
+            (state.library.selectedMediaItems[i].kind === "album" || state.library.selectedMediaItems[i].kind === "albums") &&
+            !state.library.selectedMediaItems[i].isLibrary
           ) {
-            state.selectedMediaItems[i].kind = "albums";
-            const res = await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/albums/${state.selectedMediaItems[i].id}/tracks`);
+            state.library.selectedMediaItems[i].kind = "albums";
+            const res = await state.app.mk.api.music(
+              `/v1/catalog/${state.app.mk.storefrontId}/albums/${state.library.selectedMediaItems[i].id}/tracks`,
+            );
             const ids = res.data.data.map(function (i) {
               return { id: i.id, type: i.type };
             });
             pl_items = pl_items.concat(ids);
             song_ids.push(...ids.map((id) => id.id));
-          } else if (state.selectedMediaItems[i].kind === "library-song" || state.selectedMediaItems[i].kind === "library-songs") {
-            state.selectedMediaItems[i].kind = "library-songs";
-            pl_items.push({
-              id: state.selectedMediaItems[i].id,
-              type: state.selectedMediaItems[i].kind,
-            });
-            song_ids.push(state.selectedMediaItems[i].id);
           } else if (
-            state.selectedMediaItems[i].kind === "library-album" ||
-            state.selectedMediaItems[i].kind === "library-albums" ||
-            (state.selectedMediaItems[i].kind === "album" && state.selectedMediaItems[i].isLibrary)
+            state.library.selectedMediaItems[i].kind === "library-song" ||
+            state.library.selectedMediaItems[i].kind === "library-songs"
           ) {
-            state.selectedMediaItems[i].kind = "library-albums";
-            const res = await this.mk.api.music(`/v1/me/library/albums/${state.selectedMediaItems[i].id}/tracks`);
+            state.library.selectedMediaItems[i].kind = "library-songs";
+            pl_items.push({
+              id: state.library.selectedMediaItems[i].id,
+              type: state.library.selectedMediaItems[i].kind,
+            });
+            song_ids.push(state.library.selectedMediaItems[i].id);
+          } else if (
+            state.library.selectedMediaItems[i].kind === "library-album" ||
+            state.library.selectedMediaItems[i].kind === "library-albums" ||
+            (state.library.selectedMediaItems[i].kind === "album" && state.library.selectedMediaItems[i].isLibrary)
+          ) {
+            state.library.selectedMediaItems[i].kind = "library-albums";
+            const res = await state.app.mk.api.music(`/v1/me/library/albums/${state.library.selectedMediaItems[i].id}/tracks`);
             const ids = res.data.data.map(function (i) {
               return { id: i.id, type: i.type };
             });
@@ -808,88 +816,79 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             song_ids.push(...ids.map((id) => id.id));
           } else {
             pl_items.push({
-              id: state.selectedMediaItems[i].id,
-              type: state.selectedMediaItems[i].kind,
+              id: state.library.selectedMediaItems[i].id,
+              type: state.library.selectedMediaItems[i].kind,
             });
-            song_ids.push(state.selectedMediaItems[i].id);
+            song_ids.push(state.library.selectedMediaItems[i].id);
           }
         }
-        state.modals.addToPlaylist = false;
+        state.ui.modals.addToPlaylist = false;
 
-        if (await this.isSongInPlaylist(song_ids, playlist_id)) {
-          this.confirm(this.getLz("action.addToPlaylist.duplicate"), (result) => {
+        if (await state.app.isSongInPlaylist(song_ids, playlist_id)) {
+          state.app.confirm(state.app.getLz("action.addToPlaylist.duplicate"), (result) => {
             if (result) {
-              this.addToPlaylist(playlist_id, pl_items);
+              state.library.addToPlaylist(playlist_id, pl_items);
             }
           });
         } else {
-          this.addToPlaylist(playlist_id, pl_items);
+          state.library.addToPlaylist(playlist_id, pl_items);
         }
       }),
     async isSongInPlaylist(song_ids: number[], playlist_id: string) {
-      let isInPlaylist = false;
       const playlistTracks = (
-        await this.mk.api.music(`/v1/me/library/playlists/${playlist_id}/tracks`, {
+        await get().app.mk.api.music(`/v1/me/library/playlists/${playlist_id}/tracks`, {
           platform: "web",
-          l: this.mklang,
+          l: get().app.mklang,
         })
       ).data?.data;
 
-      playlistTracks.forEach((track) => {
-        if (song_ids.includes(track.id)) {
-          isInPlaylist = true;
-        }
-      });
-      return isInPlaylist;
+      return playlistTracks.some((track) => song_ids.includes(track.id));
     },
     addToPlaylist(pid, pitems) {
-      this.mk.api
-        .music(
-          `/v1/me/library/playlists/${pid}/tracks`,
-          {},
-          {
-            fetchOptions: {
-              method: "POST",
-              body: JSON.stringify({
-                data: pitems,
-              }),
-            },
+      get()
+        .app.mk.api.music(`/v1/me/library/playlists/${pid}/tracks`, {
+          fetchOptions: {
+            method: "POST",
+            body: JSON.stringify({
+              data: pitems,
+            }),
           },
-        )
+        })
         .then(() => {
-          if (this.page === "playlist_" + pid) {
-            this.getPlaylistFromID(this.showingPlaylist.id, true);
+          if (get().ui.page === "playlist_" + pid) {
+            get().library.getPlaylistFromID(get().ui.showingPlaylist.id, true);
           }
         });
     },
     select_removeMediaItem(id) {
-      this.selectedMediaItems
-        .filter((item) => item.guid === id)
+      get()
+        .library.selectedMediaItems.filter((item) => item.guid === id)
         .forEach((item) => {
-          this.selectedMediaItems.splice(this.selectedMediaItems.indexOf(item), 1);
+          get().library.selectedMediaItems.splice(get().library.selectedMediaItems.indexOf(item), 1);
         });
     },
     select_hasMediaItem(id) {
-      const found = this.selectedMediaItems.find((item) => item.guid === id);
+      const found = get().library.selectedMediaItems.find((item) => item.guid === id);
       if (found) {
         return true;
       } else {
         return false;
       }
     },
-    select_selectMediaItem(id, kind, index, guid, library) {
-      if (!this.select_hasMediaItem(guid)) {
-        this.selectedMediaItems.push({
-          id: id,
-          kind: kind,
-          index: index,
-          guid: guid,
-          isLibrary: library,
-        });
-      }
-    },
+    select_selectMediaItem: (id, kind, index, guid, library) =>
+      set((state) => {
+        if (!get().library.select_hasMediaItem(guid)) {
+          state.library.selectedMediaItems.push({
+            id: id,
+            kind: kind,
+            index: index,
+            guid: guid,
+            isLibrary: library,
+          });
+        }
+      }),
     getPlaylistFolderChildren(id) {
-      return this.playlists.listing.filter((playlist) => {
+      return get().library.playlists.listing.filter((playlist) => {
         if (playlist.parent === id) {
           return playlist;
         }
@@ -904,114 +903,104 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
         "include[library-songs]": "catalog,artists,albums,playParams,name,artwork,url",
         "fields[catalog]": "artistUrl,albumUrl,url",
         "fields[songs]": "artistUrl,albumUrl,playParams,name,artwork,url,artistName,albumName,durationInMillis",
-        l: this.mklang,
+        l: get().app.mklang,
       };
       if (!transient) {
-        this.playlists.loadingState = 0;
+        get().library.playlists.loadingState = 0;
       }
-      this.mk.api
-        .music(`/v1/me/library/playlists/${id}`, params)
+      get()
+        .app.mk.api.music(`/v1/me/library/playlists/${id}`, params)
         .then((res) => {
-          this.getPlaylistContinuous(res, transient);
+          get().library.getPlaylistContinuous(res, transient);
         })
         .catch((e) => {
           console.debug(e);
           try {
-            this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/playlists/${id}`, params).then((res) => {
-              this.getPlaylistContinuous(res, transient);
-            });
+            get()
+              .app.mk.api.music(`/v1/catalog/${get().app.mk.storefrontId}/playlists/${id}`, params)
+              .then((res) => {
+                get().library.getPlaylistContinuous(res, transient);
+              });
           } catch (err) {
             console.debug(err);
           }
         });
     },
     async getArtistFromID(id) {
-      this.page = "";
-      const artistData = await this.mkapi(
-        "artists",
-        false,
-        id,
-        {
-          views:
-            "featured-release,full-albums,appears-on-albums,featured-albums,featured-on-albums,singles,compilation-albums,live-albums,latest-release,top-music-videos,similar-artists,top-songs,playlists,more-to-hear,more-to-see",
-          extend: "centeredFullscreenBackground,artistBio,bornOrFormed,editorialArtwork,editorialVideo,isGroup,origin,hero",
-          "extend[playlists]": "trackCount",
-          "include[songs]": "albums",
-          "fields[albums]":
-            "artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount",
-          "limit[artists:top-songs]": 20,
-          "art[url]": "f",
-          l: this.mklang,
-        },
-        { includeResponseMeta: !0 },
-      );
+      const artistData = await get().app.mkapi("artists", false, id, {
+        views:
+          "featured-release,full-albums,appears-on-albums,featured-albums,featured-on-albums,singles,compilation-albums,live-albums,latest-release,top-music-videos,similar-artists,top-songs,playlists,more-to-hear,more-to-see",
+        extend: "centeredFullscreenBackground,artistBio,bornOrFormed,editorialArtwork,editorialVideo,isGroup,origin,hero",
+        "extend[playlists]": "trackCount",
+        "include[songs]": "albums",
+        "fields[albums]":
+          "artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url,trackCount",
+        "limit[artists:top-songs]": 20,
+        "art[url]": "f",
+        l: get().app.mklang,
+        includeResponseMeta: !0,
+      });
       console.debug(artistData.data.data[0]);
-      this.artistPage.data = artistData.data.data[0];
-      this.page = "artist-page";
+      set((state) => {
+        state.ui.artistPage.data = artistData.data.data[0];
+        state.ui.page = "artist-page";
+      });
     },
-    newPlaylist(name = this.getLz("term.newPlaylist"), tracks = []) {
-      const request = {
+    newPlaylist(name = this.getLz("term.newPlaylist"), tracks: string[] = []) {
+      const request: Record<string, any> = {
         name: name,
       };
       if (tracks.length > 0) {
         request.tracks = tracks;
       }
-      this.mk.api
-        .music(
-          `/v1/me/library/playlists`,
-          {},
-          {
-            fetchOptions: {
-              method: "POST",
-              body: JSON.stringify({
-                attributes: { name: name },
-                relationships: {
-                  tracks: { data: tracks },
-                },
-              }),
-            },
+      get()
+        .app.mk.api.music(`/v1/me/library/playlists`, {
+          fetchOptions: {
+            method: "POST",
+            body: JSON.stringify({
+              attributes: { name: name },
+              relationships: {
+                tracks: { data: tracks },
+              },
+            }),
           },
-        )
+        })
         .then((res) => {
           res = res.data.data[0];
           console.debug(res);
-          this.appRoute(`playlist_` + res.id);
-          this.showingPlaylist = [];
-          this.getPlaylistFromID(this.page.substring(9), true);
-          this.playlists.listing.push({
+          get().app.appRoute(`playlist_` + res.id);
+          get().ui.showingPlaylist = [];
+          get().library.getPlaylistFromID(get().app.page.substring(9), true);
+          get().library.playlists.listing.push({
             id: res.id,
             attributes: {
               name: name,
             },
             parent: "p.playlistsroot",
           });
-          this.sortPlaylists();
+          get().library.sortPlaylists();
           setTimeout(() => {
-            this.refreshPlaylists(false, false);
+            get().library.refreshPlaylists(false, false);
           }, 8000);
         });
     },
-    deletePlaylist(id) {
-      this.confirm(this.getLz("term.deletePlaylist"), (ok) => {
+    deletePlaylist(id: string) {
+      get().app.confirm(this.getLz("term.deletePlaylist"), (ok) => {
         if (ok) {
-          this.mk.api
-            .music(
-              `/v1/me/library/playlists/${id}`,
-              {},
-              {
-                fetchOptions: {
-                  method: "DELETE",
-                },
+          get()
+            .app.mk.api.music(`/v1/me/library/playlists/${id}`, {
+              fetchOptions: {
+                method: "DELETE",
               },
-            )
-            .then((res) => {
+            })
+            .then(() => {
               // remove this playlist from playlists.listing if it exists
-              const found = get().playlists.listing.find((item) => item.id === id);
+              const found = get().library.playlists.listing.find((item) => item.id === id);
               if (found) {
-                this.playlists.listing.splice(this.playlists.listing.indexOf(found), 1);
+                get().library.playlists.listing.splice(get().library.playlists.listing.indexOf(found), 1);
               }
               setTimeout(() => {
-                this.refreshPlaylists(false, false);
+                get().library.refreshPlaylists(false, false);
               }, 8000);
             });
         }
@@ -1021,23 +1010,23 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
     async getPlaylistContinuous(response: MusicKit.Playlists, transient = false) {
       response = response.data.data[0];
       const playlistId = response.id;
-      this.playlists.loadingState = !transient ? 0 : 1;
-      this.showingPlaylist = response;
+      get().library.playlists.loadingState = !transient ? 0 : 1;
+      get().ui.showingPlaylist = response;
       if (!response.relationships?.tracks?.next) {
-        this.playlists.loadingState = 1;
+        get().library.playlists.loadingState = 1;
         return;
       }
 
-      function getPlaylistTracks(next) {
-        this.apiCall(this.musicBaseUrl + next, (res) => {
-          if (this.showingPlaylist.id !== playlistId) {
+      function getPlaylistTracks(next: string) {
+        get().app.apiCall(get().app.musicBaseUrl + next, (res) => {
+          if (get().ui.showingPlaylist.id !== playlistId) {
             return;
           }
-          this.showingPlaylist.relationships.tracks.data = this.showingPlaylist.relationships.tracks.data.concat(res.data);
+          get().ui.showingPlaylist.relationships.tracks.data = get().ui.showingPlaylist.relationships.tracks.data.concat(res.data);
           if (res.next) {
             getPlaylistTracks(res.next);
           } else {
-            this.playlists.loadingState = 1;
+            get().library.playlists.loadingState = 1;
           }
         });
       }
@@ -1045,8 +1034,8 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
       getPlaylistTracks(response.relationships.tracks.next);
     },
     async editPlaylistFolder(id: string, name = this.getLz("term.newPlaylist")) {
-      this.mk.api
-        .music(`/v1/me/library/playlist-folders/${id}`, {
+      get()
+        .app.mk.api.music(`/v1/me/library/playlist-folders/${id}`, {
           fetchOptions: {
             method: "PATCH",
             body: JSON.stringify({
@@ -1054,13 +1043,13 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             }),
           },
         })
-        .then((res) => {
-          this.refreshPlaylists(false, false);
+        .then(() => {
+          get().library.refreshPlaylists(false, false);
         });
     },
     async editPlaylist(id: string, name = this.getLz("term.newPlaylist")) {
-      this.mk.api
-        .music(`/v1/me/library/playlists/${id}`, {
+      get()
+        .app.mk.api.music(`/v1/me/library/playlists/${id}`, {
           fetchOptions: {
             method: "PATCH",
             body: JSON.stringify({
@@ -1068,31 +1057,27 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             }),
           },
         })
-        .then((res) => {
-          this.refreshPlaylists(false, false);
+        .then(() => {
+          get().library.refreshPlaylists(false, false).then();
         });
     },
     async editPlaylistDescription(id: string, name = this.getLz("term.newPlaylist")) {
-      this.mk.api
-        .music(
-          `/v1/me/library/playlists/${id}`,
-          {},
-          {
-            fetchOptions: {
-              method: "PATCH",
-              body: JSON.stringify({
-                attributes: { description: name },
-              }),
-            },
+      get()
+        .app.mk.api.music(`/v1/me/library/playlists/${id}`, {
+          fetchOptions: {
+            method: "PATCH",
+            body: JSON.stringify({
+              attributes: { description: name },
+            }),
           },
-        )
-        .then((res) => {
-          this.refreshPlaylists(false, false);
+        })
+        .then(() => {
+          get().library.refreshPlaylists(false, false).then();
         });
     },
     refreshPlaylists: async (localOnly = false, useCachedPlaylists = true) =>
       set(async (state) => {
-        const trackMap = this.cfg.advanced.playlistTrackMapping;
+        const trackMap = state.cfg.advanced.playlistTrackMapping;
         const newListing: MusicKit.Playlists[] = [];
         const trackMapping: Record<string, any> = {};
 
@@ -1102,23 +1087,23 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
 
           if (cachedPlaylist) {
             console.debug("[CiderCache] Using cached playlist");
-            state.playlists.listing = cachedPlaylist;
-            state.sortPlaylists();
+            state.library.playlists.listing = cachedPlaylist;
+            state.library.sortPlaylists();
           } else {
             console.debug("[CiderCache] Playlist has no cache");
           }
 
           if (cachedTrackMapping) {
             console.debug("[CiderCache] Using cached track mapping");
-            state.playlists.trackMapping = cachedTrackMapping;
+            state.library.playlists.trackMapping = cachedTrackMapping;
           }
           if (localOnly) {
             return;
           }
         }
 
-        state.backgroundNotification.message = this.getLz("notification.buildingPlaylistCache");
-        state.backgroundNotification.show = true;
+        state.library.backgroundNotification.message = this.getLz("notification.buildingPlaylistCache");
+        state.library.backgroundNotification.show = true;
 
         async function deepScan(parent = "p.playlistsroot") {
           console.debug(`scanning ${parent}`);
@@ -1136,10 +1121,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             playlist.tracks = [];
             try {
               if (trackMap) {
-                const tracks = await this.mk.api.music(playlist.href + "/tracks").catch((e) => {
-                  // no tracks
-                  e = null;
-                });
+                const tracks = await get().app.mk.api.music(playlist.href + "/tracks");
                 tracks.data.data.forEach((track) => {
                   if (!trackMapping[track.id]) {
                     trackMapping[track.id] = [];
@@ -1159,7 +1141,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
             }
             if (playlist.type === "library-playlist-folders") {
               try {
-                await deepScan(playlist.id).catch((e) => {});
+                await deepScan(playlist.id);
               } catch (e) {
                 console.log(e);
               }
@@ -1170,18 +1152,18 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
 
         await deepScan();
 
-        state.backgroundNotification.show = false;
-        get().playlists.listing = newListing;
-        state.sortPlaylists();
+        state.library.backgroundNotification.show = false;
+        state.library.playlists.listing = newListing;
+        state.library.sortPlaylists();
         if (trackMap) {
           CiderCache.putCache("library-playlists-tracks", trackMapping);
-          state.playlists.trackMapping = trackMapping;
+          state.library.playlists.trackMapping = trackMapping;
         }
         CiderCache.putCache("library-playlists", newListing);
       }),
     sortPlaylists: () =>
       set((state) => {
-        state.playlists.listing.sort((a, b) => {
+        state.library.playlists.listing.sort((a, b) => {
           if (a.type === "library-playlist-folders" && b.type !== "library-playlist-folders") {
             return -1;
           } else if (a.type !== "library-playlist-folders" && b.type === "library-playlist-folders") {
@@ -1191,118 +1173,44 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
           }
         });
       }),
-    getSocialBadges(cb = () => {}) {
-      try {
-        this.mk.api.music("/v1/social/badging-map").then((data) => {
-          this.socialBadges.badgeMap = data.data.results.badgingMap;
-          cb(data.data.results.badgingMap);
-        });
-      } catch (ex) {
-        this.socialBadges.badgeMap = {};
-      }
-    },
-    addFavorite(id, type) {
-      this.cfg.home.favoriteItems.push({
-        id: id,
-        type: type,
-      });
-    },
-
-    async syncFavorites() {
-      const notify = notyf.open({
-        className: "notyf-info",
-        type: "info",
-        message: `[${this.getLz("home.syncFavorites")}] ${this.getLz("home.syncFavorites.gettingArtists")}`,
-      });
-      const results = await MusicKitTools.v3Continuous({
-        href: "/v1/me/library/artists",
-        options: {
-          include: ["catalog"],
-          "fields[artists]": ["inFavorites"],
-        },
-      });
-      const favs = [];
-      // for each result
-      results.forEach((result) => {
+    getSocialBadges: (cb = () => {}) =>
+      set((state) => {
         try {
-          if (result.relationships?.catalog?.data[0]?.attributes?.inFavorites) {
-            if (!favs.includes(result.relationships?.catalog?.data[0].id)) {
-              favs.push(result.relationships?.catalog?.data[0].id);
+          state.app.mk.api.music("/v1/social/badging-map").then((data) => {
+            state.library.socialBadges.badgeMap = data.data.results.badgingMap;
+            cb(data.data.results.badgingMap);
+          });
+        } catch {
+          state.library.socialBadges.badgeMap = {};
+        }
+      }),
+    showSocialListeningTo: () =>
+      set((state) => {
+        const contentIds = Object.keys(state.library.socialBadges.badgeMap);
+        state.ui.showCollection({ data: state.library.socialBadges.mediaItems }, "Friends Listening To", "albums");
+        if (state.library.socialBadges.mediaItemDLState === 1 || state.library.socialBadges.mediaItemDLState === 2) {
+          return;
+        }
+        state.library.socialBadges.mediaItemDLState = 2;
+        for (const item of contentIds) {
+          try {
+            let type = "albums";
+            if (item.includes("pl.")) {
+              type = "playlists";
             }
+            if (item.includes("ra.")) {
+              type = "stations";
+            }
+            const found = await state.app.mk.api.music(`/v1/catalog/${state.app.mk.storefrontId}/${type}/${item}`);
+            state.library.socialBadges.mediaItems.push(found.data.data[0]);
+          } catch (e) {
+            console.log(e);
           }
-        } catch (e) {
-          e = null;
         }
-      });
-      notyf.success(`[${this.getLz("home.syncFavorites")}] ${this.getLz("action.done")}`);
-      this.cfg.home.followedArtists = favs;
-      return favs;
-    },
-    async setArtistFavorite(id, val = true) {
-      if (val) {
-        if (!this.cfg.home.followedArtists.includes(id)) {
-          this.cfg.home.followedArtists.push(id);
-        }
-        await this.mk.api.music(
-          `/v1/me/favorites`,
-          {
-            "art[url]": "f",
-            "ids[artists]": this.artistPage.data.id,
-            l: this.mklang,
-            platform: "web",
-          },
-          {
-            fetchOptions: {
-              method: "POST",
-            },
-          },
-        );
-      } else {
-        if (this.cfg.home.followedArtists.includes(id)) {
-          this.cfg.home.followedArtists.splice(this.cfg.home.followedArtists.indexOf(id), 1);
-        }
-        await this.mk.api.music(
-          `/v1/me/favorites`,
-          {
-            "art[url]": "f",
-            "ids[artists]": this.artistPage.data.id,
-            l: this.mklang,
-            platform: "web",
-          },
-          {
-            fetchOptions: {
-              method: "DELETE",
-            },
-          },
-        );
-      }
-    },
-    async showSocialListeningTo() {
-      const contentIds = Object.keys(this.socialBadges.badgeMap);
-      this.showCollection({ data: this.socialBadges.mediaItems }, "Friends Listening To", "albums");
-      if (this.socialBadges.mediaItemDLState === 1 || this.socialBadges.mediaItemDLState === 2) {
-        return;
-      }
-      this.socialBadges.mediaItemDLState = 2;
-      await asyncForEach(contentIds, async (item) => {
-        try {
-          let type = "albums";
-          if (item.includes("pl.")) {
-            type = "playlists";
-          }
-          if (item.includes("ra.")) {
-            type = "stations";
-          }
-          const found = await this.mk.api.music(`/v1/catalog/${this.mk.storefrontId}/${type}/${item}`);
-          this.socialBadges.mediaItems.push(found.data.data[0]);
-        } catch (e) {
-          console.log(e);
-        }
-      });
-    },
+      }),
     newPlaylistFolder: (name = this.getLz("term.newPlaylistFolder")) =>
       set((state) => {
-        this.mk.api
+        state.app.mk.api
           .music("/v1/me/library/playlist-folders/", {
             fetchOptions: {
               method: "POST",
@@ -1313,7 +1221,7 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
           })
           .then((res) => {
             const playlist = res.data.data[0];
-            state.playlists.listing.push({
+            state.library.playlists.listing.push({
               id: playlist.id,
               attributes: {
                 name: playlist.attributes.name,
@@ -1321,15 +1229,15 @@ export const createLibrarySlice: LibraryStateCreator = (set, get) => ({
               type: "library-playlist-folders",
               parent: "p.playlistsroot",
             });
-            state.sortPlaylists();
+            state.library.sortPlaylists();
             setTimeout(() => {
-              state.refreshPlaylists(false, false);
+              state.library.refreshPlaylists(false, false);
             }, 13000);
           });
       }),
-    getArtistInfo(id: string, _isLibrary: boolean) {
-      this.getArtistFromID(id);
-      //this.getTypeFromID("artist",id,isLibrary,query)
-    },
+    // getArtistInfo(id: string, _isLibrary: boolean) {
+    //   this.getArtistFromID(id);
+    //   this.getTypeFromID("artist",id,isLibrary,query)
+    // },
   },
 });

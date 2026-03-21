@@ -11,6 +11,7 @@ export interface AppState {
   version: string;
   appMode: string;
   mk: MusicKit.MusicKitInstance;
+  mkapi: (method: string, library: boolean | undefined, term: string, params?: MusicKit.QueryParameters, attempts?: number) => Promise<any>;
   isDev: boolean;
   clientPort: number;
   platform: string;
@@ -94,6 +95,7 @@ export interface AppState {
   loadQQLyrics: () => void;
   parseTTML: () => void;
   loadAMLyrics: () => void;
+  confirm: (title: string, callback: (...args: any[]) => void) => Promise<void>;
 }
 
 export interface ChromeState {
@@ -127,6 +129,7 @@ export interface ChromeState {
   contentAreaScrolling: boolean;
   showCursor: boolean;
   setContentScrollPos: (scroll) => void;
+  getThemeDirective: (directive?: string) => string;
 }
 export interface LibraryState {
   backgroundNotification: {
@@ -203,6 +206,39 @@ export interface LibraryState {
   localsongs: string[];
   getLibraryGenres: () => Array<string>;
   sortPlaylists: () => void;
+  refreshPlaylists: (localOnly: boolean | undefined, cachedOnly: boolean | undefined) => Promise<void>;
+  getLibrarySongs: () => void;
+  getLibraryAlbums: () => void;
+  isInLibrary: (playParams?: { isLibrary: boolean; catalogId: string; id: string }) => boolean;
+  searchLibrarySongs: () => void;
+  getAlbumSort: () => void;
+  searchLibraryAlbums: (index: number) => void;
+  searchLibraryArtists: (index: number) => void;
+  getLibrarySongsFull: (force: boolean | undefined) => Promise<void>;
+  getLibraryAlbumsFull: (force: boolean | undefined, index: number) => Promise<void>;
+  getLibraryArtistsFull: (force: boolean | undefined, index: number) => void;
+  addToLibrary: (id: string) => void;
+  removeFromLibrary: (kind: string, id: string) => void;
+  inLibrary: (items: MusicKit.MediaItem[]) => Promise<MusicKit.MediaItem[]>;
+  addSelectedToNewPlaylist: () => void;
+  addSelectedToPlaylist: (playlist_id: number) => Promise<void>;
+  isSongInPlaylist: (song_ids: number[], playlist_id: string) => Promise<boolean>;
+  addToPlaylist: (pid: string, pitems: string[]) => void;
+  select_removeMediaItem: (id: string) => void;
+  select_hasMediaItem: (id: string) => boolean;
+  select_selectMediaItem: (id: string, kind: string, index: number, guid: string, library: boolean) => void;
+  getPlaylistFolderChildren: (id: string) => MusicKit.Playlists[];
+  getPlaylistFromID: (id: string, transient: boolean | undefined) => Promise<void>;
+  getArtistFromID: (id: string) => void;
+  newPlaylist: (name: string, tracks: string[]) => void;
+  deletePlaylist: (id: string) => void;
+  getPlaylistContinuous: (response: MusicKit.Playlists, transient: boolean | undefined) => Promise<void>,
+  editPlaylistFolder: (id: string, name: string | undefined) => Promise<void>,
+  editPlaylist: (id: string, name: string | undefined) => Promise<void>;
+  editPlaylistDescription: (id: string, name: string | undefined) => Promise<void>;
+  getSocialBadges: (cb: (..._args: any[]) => void) => void;
+  showSocialListeningTo: () => void;
+  newPlaylistFolder: (name: string) => void;
 }
 
 export interface UIState {

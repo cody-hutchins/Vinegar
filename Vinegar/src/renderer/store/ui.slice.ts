@@ -885,14 +885,14 @@ export const createUISlice: UIStateCreator = (set, get) => ({
         nowPlayingItem.id = this.mk.nowPlayingItem.id;
       }
       try {
-        const u = await this.mkapi(
+        const u = await get().app.mkapi(
           nowPlayingItem.playParams.kind,
           nowPlayingItem.songId === -1,
           nowPlayingItem.songId !== -1 ? nowPlayingItem.songId : nowPlayingItem["id"],
           { "include[songs]": "albums,artists", l: this.mklang },
         );
         this.searchAndNavigate(u.data.data[0], target);
-      } catch (e) {
+      } catch {
         this.searchAndNavigate(nowPlayingItem, target);
       }
     },
@@ -1168,11 +1168,11 @@ export const createUISlice: UIStateCreator = (set, get) => ({
               icon: "./assets/feather/share.svg",
               name: this.getLz("action.share"),
               action: function () {
-                app
-                  .mkapi(
-                    this.mk.nowPlayingItem.attributes?.playParams?.kind ?? this.mk.nowPlayingItem.type ?? "songs",
+                get()
+                  .app.mkapi(
+                    get().app.mk.nowPlayingItem.attributes?.playParams?.kind ?? get().app.mk.nowPlayingItem.type ?? "songs",
                     false,
-                    this.mk.nowPlayingItem._songId ?? this.mk.nowPlayingItem.songId ?? this.mk.nowPlayingItem.id ?? "",
+                    get().app.mk.nowPlayingItem._songId ?? get().app.mk.nowPlayingItem.songId ?? get().app.mk.nowPlayingItem.id ?? "",
                   )
                   .then((u) => {
                     this.copyToClipboard(
@@ -1185,11 +1185,11 @@ export const createUISlice: UIStateCreator = (set, get) => ({
               icon: "./assets/feather/share.svg",
               name: `${this.getLz("action.share")} (song.link)`,
               action: function () {
-                app
-                  .mkapi(
-                    this.mk.nowPlayingItem.attributes?.playParams?.kind ?? this.mk.nowPlayingItem.type ?? "songs",
+                get()
+                  .app.mkapi(
+                    get().app.mk.nowPlayingItem.attributes?.playParams?.kind ?? get().app.mk.nowPlayingItem.type ?? "songs",
                     false,
-                    this.mk.nowPlayingItem._songId ?? this.mk.nowPlayingItem.songId ?? this.mk.nowPlayingItem.id ?? "",
+                    get().app.mk.nowPlayingItem._songId ?? get().app.mk.nowPlayingItem.songId ?? get().app.mk.nowPlayingItem.id ?? "",
                   )
                   .then((u) => {
                     this.songLinkShare(
@@ -1203,10 +1203,11 @@ export const createUISlice: UIStateCreator = (set, get) => ({
               icon: "../views/svg/speaker.svg",
               name: this.getLz("term.equalizer"),
               hidden: false,
-              action: function () {
-                this.modals.equalizer = true;
-                this.modals.audioSettings = false;
-              },
+              action: () =>
+                set((state) => {
+                  state.ui.modals.equalizer = true;
+                  state.ui.modals.audioSettings = false;
+                }),
             },
             {
               id: "audioLab",

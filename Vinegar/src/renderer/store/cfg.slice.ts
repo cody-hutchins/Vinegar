@@ -1,6 +1,8 @@
 import { StateCreator } from "zustand";
 import { CfgStore, defaults } from "../../main/base/store.js";
 import { GeneralState } from "./store.js";
+import { MusicKitTools } from "../main/musickittools.js";
+import { notyf } from "../main/helpers.js";
 
 type CfgStateCreator = StateCreator<GeneralState, [["zustand/immer", never], never], [], { cfg: CfgStore }>;
 export const createCfgSlice: CfgStateCreator = (set, get) => ({
@@ -80,11 +82,84 @@ export const createCfgSlice: CfgStateCreator = (set, get) => ({
         if (info) state.chrome.appliedTheme = info;
       });
       if (!onlyPrefs) {
-        document.querySelector("#userTheme").href = `themes/${theme}`;
+        document.querySelector("#userTheme")!.href = `themes/${theme}`;
         document.querySelectorAll(`[id*='less']`).forEach((el) => {
           el.remove();
         });
         await less.refresh();
+      }
+    },
+    addFavorite: (id: string, type: string) =>
+      set((state) => {
+        state.cfg.home.favoriteItems.push({
+          id: id,
+          type: type,
+        });
+      }),
+
+    async syncFavorites() {
+      notyf.open({
+        className: "notyf-info",
+        type: "info",
+        message: `[${this.getLz("home.syncFavorites")}] ${this.getLz("home.syncFavorites.gettingArtists")}`,
+      });
+      const results = await MusicKitTools.v3Continuous({
+        href: "/v1/me/library/artists",
+        options: {
+          include: ["catalog"],
+          "fields[artists]": ["inFavorites"],
+        },
+      });
+      const favs: { id: string; type: string }[] = [];
+      // for each result
+      results.forEach((result) => {
+        try {
+          if (result.relationships?.catalog?.data[0]?.attributes?.inFavorites) {
+            if (!favs.includes(result.relationships?.catalog?.data[0].id)) {
+              favs.push(result.relationships?.catalog?.data[0].id);
+            }
+          }
+        } catch (e) {
+          e = null;
+        }
+      });
+      notyf.success(`[${this.getLz("home.syncFavorites")}] ${this.getLz("action.done")}`);
+      set((state) => {
+        state.cfg.home.followedArtists = favs;
+      });
+      return favs;
+    },
+    async setArtistFavorite(id: string, val = true) {
+      if (val) {
+        set((state) => {
+          if (!state.cfg.home.followedArtists.includes(id)) {
+            state.cfg.home.followedArtists.push(id);
+          }
+        });
+        await get().app.mk.api.music(`/v1/me/favorites`, {
+          "art[url]": "f",
+          "ids[artists]": get().ui.artistPage.data.id,
+          l: get().app.mklang,
+          platform: "web",
+          fetchOptions: {
+            method: "POST",
+          },
+        });
+      } else {
+        set((state) => {
+          if (state.cfg.home.followedArtists.includes(id)) {
+            state.cfg.home.followedArtists.splice(state.cfg.home.followedArtists.indexOf(id), 1);
+          }
+        });
+        await get().app.mk.api.music(`/v1/me/favorites`, {
+          "art[url]": "f",
+          "ids[artists]": get().ui.artistPage.data.id,
+          l: get().app.mklang,
+          platform: "web",
+          fetchOptions: {
+            method: "DELETE",
+          },
+        });
       }
     },
   },

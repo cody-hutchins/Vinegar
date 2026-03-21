@@ -1,5 +1,6 @@
 import { StateCreator } from "zustand";
 import { ChromeState, GeneralState } from "./store.js";
+import less from "less";
 
 type ChromeStateCreator = StateCreator<GeneralState, [["zustand/immer", never], never], [], { chrome: ChromeState }>;
 
@@ -38,7 +39,7 @@ export const createChromeSlice: ChromeStateCreator = (set, get) => ({
       set((state) => {
         state.chrome.contentScrollPosY = scroll.target.scrollTop;
       }),
-    mainMenuVisibility: (val) =>
+    mainMenuVisibility: (val: boolean) =>
       set((state) => {
         if (val) {
           if (state.app.mk.isAuthorized) {
@@ -54,14 +55,15 @@ export const createChromeSlice: ChromeStateCreator = (set, get) => ({
       }),
 
     async reloadStyles() {
-      const styles = get().cfg.visual.styles;
+      const styles: string[] = get().cfg.visual.styles;
       document.querySelectorAll(`[id*='less']`).forEach((el) => {
         if (el.id !== "less:style") {
           el.remove();
         }
       });
 
-      this.chrome.appliedTheme.info = {};
+      // this.chrome.appliedTheme.info = {};
+      let infoResponse: Response;
       for (const style of styles) {
         const styleEl = document.createElement("link");
         styleEl.id = `less-${style.replace(".less", "")}`;
@@ -70,15 +72,16 @@ export const createChromeSlice: ChromeStateCreator = (set, get) => ({
         styleEl.type = "text/css";
         document.head.appendChild(styleEl);
         try {
-          const infoResponse = await fetch("themes/" + style.replace("index.less", "theme.json"));
-          this.chrome.appliedTheme.info = Object.assign(this.chrome.appliedTheme.info, await infoResponse.json());
+          infoResponse = await fetch("themes/" + style.replace("index.less", "theme.json"));
         } catch {
           console.warn("failed to get theme.json");
         }
       }
+      set((state) => {
+        if (infoResponse) state.chrome.appliedTheme.info = { ...infoResponse.json() };
+      });
       less.registerStylesheetsImmediately();
       await less.refresh(true, true, true);
-      return;
     },
     macOSEmu: () =>
       set((state) => {
@@ -101,63 +104,65 @@ export const createChromeSlice: ChromeStateCreator = (set, get) => ({
         return false;
       }
     },
-    getAppClasses() {
-      const classes: Record<string, boolean> = {};
-      switch (this.getThemeDirective("forceUI") ?? "none") {
-        case "compact":
-          classes.compact = true;
-          break;
-        case "standard":
-          classes.compact = false;
-          break;
-        default:
-          if (this.cfg.advanced.experiments.includes("compactui")) {
+    getAppClasses: () =>
+      set((state) => {
+        const classes: Record<string, boolean> = {};
+        switch (state.chrome.getThemeDirective("forceUI") ?? "none") {
+          case "compact":
             classes.compact = true;
-          }
-          break;
-      }
-
-      if (this.cfg.visual.window_background_style === "none") {
-        classes.simplebg = true;
-      }
-
-      if (this.platform !== "darwin") {
-        switch (parseInt(this.cfg.visual.windowControlPosition)) {
-          default:
-          case 0:
-            this.chrome.windowControlPosition = "right";
-            this.chrome.forceDirectives["macosemu"] = {
-              value: false,
-            };
             break;
-          case 1:
-            this.chrome.windowControlPosition = "left";
-            this.chrome.forceDirectives["macosemu"] = {
-              value: true,
-            };
+          case "standard":
+            classes.compact = false;
+            break;
+          default:
+            if (state.cfg.advanced.experiments.includes("compactui")) {
+              classes.compact = true;
+            }
             break;
         }
-      }
 
-      if (this.getThemeDirective("windowLayout") === "twopanel") {
-        classes.twopanel = true;
-      }
-      if (this.getThemeDirective("appNavigation") === "seperate") {
-        classes.navbar = true;
-      }
-      if (this.getThemeDirective("macosemu")) {
-        classes.macosemu = true;
-      }
-      return classes;
-    },
-    toggleHideUserInfo() {
-      if (this.chrome.hideUserInfo) {
-        this.cfg.visual.showuserinfo = true;
-        this.chrome.hideUserInfo = false;
-      } else {
-        this.cfg.visual.showuserinfo = false;
-        this.chrome.hideUserInfo = true;
-      }
-    },
+        if (state.cfg.visual.window_background_style === "none") {
+          classes.simplebg = true;
+        }
+
+        if (state.app.platform !== "darwin") {
+          switch (state.cfg.visual.windowControlPosition) {
+            default:
+            case 0:
+              state.chrome.windowControlPosition = "right";
+              state.chrome.forceDirectives["macosemu"] = {
+                value: false,
+              };
+              break;
+            case 1:
+              state.chrome.windowControlPosition = "left";
+              state.chrome.forceDirectives["macosemu"] = {
+                value: true,
+              };
+              break;
+          }
+        }
+
+        if (state.chrome.getThemeDirective("windowLayout") === "twopanel") {
+          classes.twopanel = true;
+        }
+        if (state.chrome.getThemeDirective("appNavigation") === "seperate") {
+          classes.navbar = true;
+        }
+        if (state.chrome.getThemeDirective("macosemu")) {
+          classes.macosemu = true;
+        }
+        return classes;
+      }),
+    toggleHideUserInfo: () =>
+      set((state) => {
+        if (state.chrome.hideUserInfo) {
+          state.cfg.visual.showuserinfo = true;
+          state.chrome.hideUserInfo = false;
+        } else {
+          state.cfg.visual.showuserinfo = false;
+          state.chrome.hideUserInfo = true;
+        }
+      }),
   },
 });

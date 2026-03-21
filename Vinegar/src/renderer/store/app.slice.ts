@@ -1075,11 +1075,11 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       }
       params.l = get().mklang;
       try {
-        a = await get().mkapi(kind.toString(), isLibrary, id.toString(), params, params2);
+        a = await get().app.mkapi(kind.toString(), isLibrary, id.toString(), params, params2);
       } catch (e) {
         console.debug(e);
         try {
-          a = await get().mkapi(kind.toString(), !isLibrary, id.toString(), params, params2);
+          a = await get().app.mkapi(kind.toString(), !isLibrary, id.toString(), params, params2);
         } catch (err) {
           console.log(err);
           a = [];
@@ -1358,7 +1358,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         });
       });
     },
-    async mkapi(method, library = false, term, params = {}, params2 = {}, attempts = 0) {
+    async mkapi(method: string, library = false, term: string, params = {}, attempts = 0) {
       if (method.includes(`recordLabel`)) {
         method = `record-labels`;
       }
@@ -1371,15 +1371,15 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       const truemethod = !method.endsWith("s") ? method + "s" : method;
       try {
         if (method.includes(`room`)) {
-          return await get().mk.api.music(`v1/editorial/${get().mk.storefrontId}/${truemethod}/${term.toString()}`, params, params2);
+          return await get().app.mk.api.music(`v1/editorial/${get().app.mk.storefrontId}/${truemethod}/${term.toString()}`, params);
         } else if (library) {
-          return await get().mk.api.music(`v1/me/library/${truemethod}/${term.toString()}`, params, params2);
+          return await get().app.mk.api.music(`v1/me/library/${truemethod}/${term.toString()}`, params);
         } else {
-          return await get().mk.api.music(`/v1/catalog/${get().mk.storefrontId}/${truemethod}/${term.toString()}`, params, params2);
+          return await get().app.mk.api.music(`/v1/catalog/${get().app.mk.storefrontId}/${truemethod}/${term.toString()}`, params);
         }
       } catch (e) {
         console.debug(e);
-        return await get().mkapi(method, library, term, params, params2, attempts + 1);
+        return await get().app.mkapi(method, library, term, params, attempts + 1);
       }
     },
     playMediaItem(item) {

@@ -204,6 +204,9 @@ importers:
       '@types/express':
         specifier: ^4.17.25
         version: 4.17.25
+      '@types/less':
+        specifier: ^3.0.8
+        version: 3.0.8
       '@types/musickit-js':
         specifier: ^1.0.11
         version: 1.0.11
@@ -2062,6 +2065,9 @@ packages:
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
+
+  '@types/less@3.0.8':
+    resolution: {integrity: sha512-Gjm4+H9noDJgu5EdT3rUw5MhPBag46fiOy27BefvWkNL8mlZnKnCaVVVTLKj6RYXed9b62CPKnPav9govyQDzA==}
 
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
@@ -9986,6 +9992,8 @@ snapshots:
   '@types/keyv@3.1.4':
     dependencies:
       '@types/node': 20.19.35
+
+  '@types/less@3.0.8': {}
 
   '@types/linkify-it@5.0.0': {}
 
