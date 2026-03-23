@@ -1280,12 +1280,13 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           state.app.tmpY = window.screenY + "";
           window.electronAPI.send("unmaximize");
           window.electronAPI.send("windowmin", 250, 250);
-          if (state.app.miniTmpX !== "" && state.app.miniTmpY !== "") window.electronAPI.send("windowmove", state.app.miniTmpX, state.app.miniTmpY);
+          if (state.app.miniTmpX !== "" && state.app.miniTmpY !== "")
+            window.electronAPI.send("windowmove", state.app.miniTmpX, state.app.miniTmpY);
           window.electronAPI.send("windowresize", 300, 300, false);
           state.app.appMode = "mini";
         } else {
-          state.app.miniTmpX = window.screenX + '';
-          state.app.miniTmpY = window.screenY + '';
+          state.app.miniTmpX = window.screenX + "";
+          state.app.miniTmpY = window.screenY + "";
           window.electronAPI.send("windowmin", 844, 410);
           window.electronAPI.send("windowresize", state.app.tmpWidth, state.app.tmpHeight, false);
           window.electronAPI.send("windowmove", state.app.tmpX, state.app.tmpY);
@@ -1969,5 +1970,23 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       // });
     },
     // end mk stuff
+    showCollection: (response, title, type, requestBody = {}) =>
+      set((state) => {
+        console.debug(response);
+        state.app.collectionList.requestBody = {};
+        state.app.collectionList.response = response;
+        state.app.collectionList.title = title;
+        state.app.collectionList.type = type ?? "";
+        state.app.collectionList.requestBody = requestBody;
+        state.ui.appRoute("collection-list");
+      }),
+    showWebRemoteQR: async () => {
+      const webremoteurl = await window.electronAPI.invoke("showQR", "");
+      // const webremoteurl = await window.electronAPI.invoke('setRemoteQR','')
+      set((state) => {
+        state.app.webremoteurl = webremoteurl;
+        // state.ui.modals.qrcode = true;
+      });
+    },
   },
 });

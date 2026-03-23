@@ -6,6 +6,7 @@ import { createCfgSlice } from "./cfg.slice.js";
 import { createLibrarySlice } from "./library.slice.js";
 import { createChromeSlice } from "./chrome.slice.js";
 import { createAppSlice } from "./app.slice.js";
+import { ContextMenuEvent } from "electron";
 
 export interface AppState {
   version: string;
@@ -72,6 +73,7 @@ export interface AppState {
     response: Record<string, any>;
     title: string;
     type: string;
+    requestBody: Record<string, any>;
   };
   MVsource: string | null;
   currentSongInfo: Record<string, any>;
@@ -179,6 +181,8 @@ export interface AppState {
   SpacePause: () => void;
   MKJSLang: () => Promise<string>;
   mediaKeyFixes: () => void;
+  showCollection: (response: Record<string, any>, title: string, type?: string, requestBody?: Record<string, any>) => void;
+  showWebRemoteQR: () => Promise<void>;
 }
 
 export interface ChromeState {
@@ -211,8 +215,13 @@ export interface ChromeState {
   windowControlPosition: "left" | "right";
   contentAreaScrolling: boolean;
   showCursor: boolean;
-  setContentScrollPos: (scroll) => void;
+  setContentScrollPos: (scroll: WheelEvent) => void;
   getThemeDirective: (directive?: string) => string;
+  mainMenuVisibility: (val: boolean) => void;
+  reloadStyles: () => Promise<void>;
+  macOSEmu: () => void;
+  getAppClasses: () => Record<string, boolean>;
+  toggleHideUserInfo: () => void;
 }
 export interface LibraryState {
   backgroundNotification: {
@@ -290,7 +299,7 @@ export interface LibraryState {
   localsongs: string[];
   getLibraryGenres: () => Array<string>;
   sortPlaylists: () => void;
-  refreshPlaylists: (localOnly: boolean | undefined, cachedOnly: boolean | undefined) => Promise<void>;
+  refreshPlaylists: (localOnly?: boolean, cachedOnly?: boolean) => Promise<void>;
   getLibrarySongs: () => void;
   getLibraryAlbums: () => void;
   isInLibrary: (playParams?: { isLibrary: boolean; catalogId: string; id: string }) => boolean;
@@ -314,7 +323,7 @@ export interface LibraryState {
   getPlaylistFolderChildren: (id: string) => MusicKit.Playlists[];
   getPlaylistFromID: (id: string, transient: boolean | undefined) => Promise<void>;
   getArtistFromID: (id: string) => void;
-  newPlaylist: (name: string, tracks: string[]) => void;
+  newPlaylist: (name?: string, tracks?: string[]) => void;
   deletePlaylist: (id: string) => void;
   getPlaylistContinuous: (response: MusicKit.Playlists, transient: boolean | undefined) => Promise<void>;
   editPlaylistFolder: (id: string, name: string | undefined) => Promise<void>;
@@ -322,7 +331,7 @@ export interface LibraryState {
   editPlaylistDescription: (id: string, name: string | undefined) => Promise<void>;
   getSocialBadges: (cb: (..._args: any[]) => void) => void;
   showSocialListeningTo: () => void;
-  newPlaylistFolder: (name: string) => void;
+  newPlaylistFolder: (name?: string) => void;
 }
 
 export interface UIState {
@@ -408,13 +417,57 @@ export interface UIState {
     };
   };
   setPage: (value: string) => void;
-  setShowingPlaylist: (value: string[]) => void;
+  setShowingPlaylist: (value: MusicKit.Playlists) => void;
   setArtistPage: (value: { data: Record<string, any> }) => void;
   resetSimpleState: () => void;
   resetRecentlyAdded: () => void;
   setLCDArtwork: (artwork: string) => void;
   setPagePos: (pageState?: Record<string, any>) => void;
   invokeDrawer: (panel: string) => void;
+  setWindowScaleFactor: () => void;
+  getPagePos: (href?: string) => { page: string; position: number };
+  openSettingsPage: (page: string) => void;
+  showMenuPanel: (data: { name: string; items: Record<string, any>; headerItems: Record<string, any> }, event: ContextMenuEvent) => void;
+  promptAddToPlaylist: () => void;
+  setWindowHash: (route?: string) => void;
+  navigateBack: () => void;
+  getSearchHints: () => Promise<void>;
+  getSongProgress: () => void;
+  appRoute: (route: string) => void;
+  resumePagePos: () => void;
+  routeView: (item: MusicKit.Albums) => Promise<void>;
+  showSearchView: (term: string, group: string, title: string) => Promise<void>;
+  showRecordLabelView: (label: string, title: string, view: string) => Promise<void>;
+  showArtistView: (artist: string, title: string, view: string) => Promise<void>;
+  showRoom: (url: string) => Promise<void>;
+  progressBarStyle: () => { background: string };
+  goToGrouping: (url?: string) => void;
+  navigateForward: () => void;
+  resetState: () => void;
+  resumeTabs: () => void;
+  playlistHeaderContextMenu: (event: ContextMenuEvent) => void;
+  checkForThemeUpdates: () => Promise<void>;
+  openAppleMusicURL: (url: string) => Promise<void>;
+  showSearch: () => void;
+  getTotalTime: () => string;
+  focusSearch: () => void;
+  getSidebarItemClass: (page: string) => string[];
+  searchAndNavigate: (item: string, target: string) => Promise<void>;
+  getNowPlayingItemDetailed: (target: string) => Promise<void>;
+  exitMV: () => void;
+  searchCursor: (e: KeyboardEvent) => void;
+  searchQuery: (term?: string) => Promise<void>;
+  getCurrentArtURL: () => Promise<{ currentArtUrl: string; currentArtUrlRaw: string }>;
+  setLibraryArtBG: () => void;
+  setLibraryArt: () => Promise<void>;
+  windowFocus: (val: string) => void;
+  nowPlayingContextMenu: (event: string) => Promise<void>;
+  fullscreen: (flag: boolean, mv?: boolean) => void;
+  getNowPlayingArtworkBG: (size?: number, force?: boolean) => void;
+  isElementOverflowing: (selector: string) => boolean;
+  checkMarquee: () => void;
+  closeWindow: () => void;
+  darwinShare: (url: string) => void;
 }
 
 export interface GeneralState {

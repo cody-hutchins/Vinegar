@@ -104,27 +104,27 @@ export const createChromeSlice: ChromeStateCreator = (set, get) => ({
         return false;
       }
     },
-    getAppClasses: () =>
-      set((state) => {
-        const classes: Record<string, boolean> = {};
-        switch (state.chrome.getThemeDirective("forceUI") ?? "none") {
-          case "compact":
+    getAppClasses: () => {
+      const classes: Record<string, boolean> = {};
+      switch (get().chrome.getThemeDirective("forceUI") ?? "none") {
+        case "compact":
+          classes.compact = true;
+          break;
+        case "standard":
+          classes.compact = false;
+          break;
+        default:
+          if (get().cfg.advanced.experiments.includes("compactui")) {
             classes.compact = true;
-            break;
-          case "standard":
-            classes.compact = false;
-            break;
-          default:
-            if (state.cfg.advanced.experiments.includes("compactui")) {
-              classes.compact = true;
-            }
-            break;
-        }
+          }
+          break;
+      }
 
-        if (state.cfg.visual.window_background_style === "none") {
-          classes.simplebg = true;
-        }
+      if (get().cfg.visual.window_background_style === "none") {
+        classes.simplebg = true;
+      }
 
+      set((state) => {
         if (state.app.platform !== "darwin") {
           switch (state.cfg.visual.windowControlPosition) {
             default:
@@ -142,18 +142,18 @@ export const createChromeSlice: ChromeStateCreator = (set, get) => ({
               break;
           }
         }
-
-        if (state.chrome.getThemeDirective("windowLayout") === "twopanel") {
-          classes.twopanel = true;
-        }
-        if (state.chrome.getThemeDirective("appNavigation") === "seperate") {
-          classes.navbar = true;
-        }
-        if (state.chrome.getThemeDirective("macosemu")) {
-          classes.macosemu = true;
-        }
-        return classes;
-      }),
+      });
+      if (get().chrome.getThemeDirective("windowLayout") === "twopanel") {
+        classes.twopanel = true;
+      }
+      if (get().chrome.getThemeDirective("appNavigation") === "seperate") {
+        classes.navbar = true;
+      }
+      if (get().chrome.getThemeDirective("macosemu")) {
+        classes.macosemu = true;
+      }
+      return classes;
+    },
     toggleHideUserInfo: () =>
       set((state) => {
         if (state.chrome.hideUserInfo) {
