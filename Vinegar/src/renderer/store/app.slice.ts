@@ -1,5 +1,6 @@
 import { ipcRenderer } from "electron";
 import { StateCreator } from "zustand";
+import i18n from "../main/i18n.js";
 
 import {
   checkScrollDirectionIsUp,
@@ -44,7 +45,6 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
     },
     appleCurator: [],
     multiroom: [],
-
     webremoteurl: "",
     webremoteqr: "",
     mxmtoken: "",
@@ -90,7 +90,6 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
     hangtimer: null,
     routes: ["browse", "listen_now", "radio"],
     musicBaseUrl: "https://api.music.apple.com/",
-
     pauseButtonTimer: null,
     activeCasts: [],
     moreinfodata: [],
@@ -98,12 +97,13 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
     appVisible: true,
     currentAirPlayCodeID: "",
     airplayTrys: [],
+
     // lyrics stuff
     parseTTML: () =>
       set((state) => {
-        state.lyrics = [];
+        state.app.lyrics = [];
         const preLrc = [];
-        const xml = stringToXml(get().lyricsMediaItem);
+        const xml = stringToXml(state.app.lyricsMediaItem);
         const lyricsLines = xml.getElementsByTagName("p");
         let synced = true;
         const endTimes = [];
@@ -149,73 +149,73 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       }),
     parseLyrics: () =>
       set((state) => {
-        const xml = stringToXml(get().lyricsMediaItem);
+        const xml = stringToXml(state.app.lyricsMediaItem);
         const json = xmlToJson(xml);
-        state.lyrics = json as typeof state.lyrics;
+        state.app.lyrics = json as typeof state.app.lyrics;
       }),
     loadLyrics() {
       const musicType =
         MusicKit.getInstance().player.nowPlayingItem !== null ? (MusicKit.getInstance().player.nowPlayingItem["type"] ?? "") : "";
       // console.log("mt", musicType)
       if (musicType === "musicVideo") {
-        get().loadYTLyrics();
+        get().app.loadYTLyrics();
       } else {
         // only load MXM lyrics if AM lyrics failed to load
-        if (this.cfg.lyrics.enable_mxm) {
-          get().loadMXM();
+        if (get().cfg.lyrics.enable_mxm) {
+          get().app.loadMXM();
         } else {
-          get().loadAMLyrics();
+          get().app.loadAMLyrics();
         }
       }
     },
     loadAMLyrics: () =>
       set((state) => {
         const songID =
-          get().mk.player.nowPlayingItem !== null
-            ? (get().mk.player.nowPlayingItem["_songId"] ?? get().mk.player.nowPlayingItem["songId"] ?? -1)
+          state.app.mk.player.nowPlayingItem !== null
+            ? (state.app.mk.player.nowPlayingItem["_songId"] ?? state.app.mk.player.nowPlayingItem["songId"] ?? -1)
             : -1;
         // get().getMXM( trackName, artistName, 'en', duration);
         if (songID !== -1) {
-          get()
-            .mk.api.music(`v1/catalog/${get().mk.storefrontId}/songs/${songID}/lyrics`)
+          state.app.mk.api
+            .music(`v1/catalog/${state.app.mk.storefrontId}/songs/${songID}/lyrics`)
             .then((response) => {
               const res = response as MusicKit.SongSearchResponse;
-              state.lyricsMediaItem = res.data.results.songs.data[0]?.attributes?.attribution || "";
-              get().parseTTML();
+              state.app.lyricsMediaItem = res.data.results.songs.data[0]?.attributes?.attribution || "";
+              state.app.parseTTML();
             })
             .catch(() => {
-              if (this.cfg.lyrics.enable_mxm) {
-                get().loadQQLyrics();
+              if (state.cfg.lyrics.enable_mxm) {
+                state.app.loadQQLyrics();
               } else {
-                get().loadMXM();
+                state.app.loadMXM();
               }
             });
         } else {
-          if (this.cfg.lyrics.enable_mxm) {
-            get().loadQQLyrics(); // since mxm is already prioritized, we can just load qq lyrics if am fails
+          if (state.cfg.lyrics.enable_mxm) {
+            state.app.loadQQLyrics(); // since mxm is already prioritized, we can just load qq lyrics if am fails
           } else {
-            get().loadMXM();
+            state.app.loadMXM();
           }
         }
       }),
     loadYTLyrics: () =>
       set((state) => {
-        const track = get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "";
-        const artist = get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "";
+        const track = state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.title ?? "") : "";
+        const artist = state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.artistName ?? "") : "";
         const time =
-          get().mk.player.nowPlayingItem !== null
-            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          state.app.mk.player.nowPlayingItem !== null
+            ? (Math.round((state.app.mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1;
         window.electronAPI.invoke("getYTLyrics", track, artist).then((result) => {
           if (result.length > 0) {
             const ytid = result[0]["id"]["videoId"];
-            if (this.cfg.lyrics.enable_yt) {
-              loadYT(ytid, this.cfg.lyrics.mxm_language ?? "en");
+            if (state.cfg.lyrics.enable_yt) {
+              loadYT(ytid, state.cfg.lyrics.mxm_language ?? "en");
             } else {
-              get().loadMXM();
+              state.app.loadMXM();
             }
           } else {
-            get().loadMXM();
+            state.app.loadMXM();
           }
 
           function loadYT(id: string, lang: string) {
@@ -223,7 +223,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
             const url = `https://www.youtube.com/watch?&v=${id}`;
             req.open("GET", url, true);
             req.onerror = function (e) {
-              get().loadMXM();
+              state.app.loadMXM();
             };
             req.onload = function () {
               const res = this.responseText;
@@ -239,22 +239,22 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
 
                 req2.open("GET", newurl, true);
                 req2.onerror = function (e) {
-                  get().loadMXM();
+                  state.app.loadMXM();
                 };
                 req2.onload = function () {
                   try {
                     const ttmlLyrics = this.responseText;
                     if (ttmlLyrics) {
                       state.lyricsMediaItem = ttmlLyrics;
-                      get().parseTTML();
+                      state.app.parseTTML();
                     }
                   } catch (e) {
-                    get().loadMXM();
+                    state.app.loadMXM();
                   }
                 };
                 req2.send();
               } else {
-                get().loadMXM();
+                state.app.loadMXM();
               }
             };
             req.send();
@@ -264,21 +264,25 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
     loadMXM: () =>
       set((state) => {
         let attempt = 0;
-        const track = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "");
-        const artist = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "");
+        const track = encodeURIComponent(
+          state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.title ?? "") : "",
+        );
+        const artist = encodeURIComponent(
+          state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.artistName ?? "") : "",
+        );
         const time = encodeURIComponent(
-          get().mk.player.nowPlayingItem !== null
-            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          state.app.mk.player.nowPlayingItem !== null
+            ? (Math.round((state.app.mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1,
         );
         const id = encodeURIComponent(
-          get().mk.player.nowPlayingItem !== null
-            ? (get().mk.player.nowPlayingItem._songId ?? get().mk.player.nowPlayingItem["songId"] ?? "")
+          state.app.mk.player.nowPlayingItem !== null
+            ? (state.app.mk.player.nowPlayingItem._songId ?? state.app.mk.player.nowPlayingItem["songId"] ?? "")
             : "",
         );
         let lrcfile = "";
         let richsync: { startTime: number; endTime: number; line: string; translation?: string }[] = [];
-        const lang = this.cfg.lyrics.mxm_language; //  translation language
+        const lang = state.cfg.lyrics.mxm_language; //  translation language
         function revisedRandId() {
           return Math.random()
             .toString(36)
@@ -289,7 +293,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         /* get token */
         function getToken(mode: number, track: string, artist: string, songid: string, lang: string, time: string, id?: string) {
           if (attempt > 2) {
-            get().loadNeteaseLyrics();
+            state.app.loadNeteaseLyrics();
             // app.loadAMLyrics();
           } else {
             attempt = attempt + 1;
@@ -307,12 +311,12 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                   if (token !== "" && token !== "UpgradeOnlyUpgradeOnlyUpgradeOnlyUpgradeOnly") {
                     console.debug("200 token", mode);
                     // token good
-                    state.mxmtoken = token;
+                    state.app.mxmtoken = token;
 
                     if (mode === 1) {
-                      getMXMSubs(track, artist, state.mxmtoken, lang, time, id);
+                      getMXMSubs(track, artist, state.app.mxmtoken, lang, time, id);
                     } else {
-                      getMXMTrans(songid, lang, state.mxmtoken);
+                      getMXMTrans(songid, lang, state.app.mxmtoken);
                     }
                   } else {
                     console.debug("fake 200 token");
@@ -324,13 +328,13 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                 }
               } catch (e) {
                 console.log("error");
-                get().loadQQLyrics();
+                state.app.loadQQLyrics();
                 //app.loadAMLyrics();
               }
             };
             req.onerror = function () {
               console.log("error");
-              get().loadQQLyrics();
+              state.app.loadQQLyrics();
               // app.loadAMLyrics();
             };
             req.send();
@@ -339,7 +343,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
 
         function getMXMSubs(track: string, artist: string, token: string, lang: string, time: string, id?: string) {
           const usertoken = encodeURIComponent(token);
-          const richsyncQuery = this.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
+          const richsyncQuery = state.cfg.lyrics.mxm_karaoke ? "&optional_calls=track.richsync" : "";
           const timecustom =
             !time || (time && time < 0) ? "" : `&f_subtitle_length=${time}&q_duration=${time}&f_subtitle_length_max_deviation=40`;
           const itunesid = id && id !== "" ? `&track_itunes_id=${id}` : "";
@@ -385,19 +389,19 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                           "richsync_body"
                         ];
                       richsync = JSON.parse(lrcrich);
-                      state.richlyrics = richsync;
-                    } catch (_) {}
+                      state.app.richlyrics = richsync;
+                    } catch {}
                   }
 
                   if (lrcfile === "") {
-                    get().loadQQLyrics();
+                    state.app.loadQQLyrics();
                     // app.loadAMLyrics()
                   } else {
                     if (richsync.length === 0) {
                       console.log("ok");
                       // process lrcfile to json here
-                      state.lyricsMediaItem = lrcfile;
-                      const u = get().lyricsMediaItem.split(/[\r\n]/);
+                      state.app.lyricsMediaItem = lrcfile;
+                      const u = state.app.lyricsMediaItem.split(/[\r\n]/);
                       const preLrc = [];
                       for (let i = u.length - 1; i >= 0; i--) {
                         const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
@@ -416,7 +420,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                           line: "lrcInstrumental",
                           translation: "",
                         });
-                      state.lyrics = preLrc.reverse();
+                      state.app.lyrics = preLrc.reverse();
                     } else {
                       const preLrc = richsync.map(function (item) {
                         return {
@@ -433,19 +437,19 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                           line: "lrcInstrumental",
                           translation: "",
                         });
-                      state.lyrics = preLrc;
+                      state.app.lyrics = preLrc;
                     }
                     if (lrcfile !== null && lrcfile !== "") {
                       // load translation
                       getMXMTrans(id, lang, token);
                     } else {
                       // app.loadAMLyrics()
-                      get().loadQQLyrics();
+                      get().app.loadQQLyrics();
                     }
                   }
                 } catch (e) {
                   console.log(e);
-                  get().loadQQLyrics();
+                  state.app.loadQQLyrics();
                   //  app.loadAMLyrics()
                 }
               } else {
@@ -454,12 +458,12 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
               }
             } catch (e) {
               console.log(e);
-              get().loadQQLyrics();
+              state.app.loadQQLyrics();
               //app.loadAMLyrics()
             }
           };
           req.onerror = function () {
-            get().loadQQLyrics();
+            state.app.loadQQLyrics();
             console.log("error");
             // get().loadAMLyrics();
           };
@@ -490,7 +494,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                 if (status2 === 200) {
                   try {
                     const preTrans = [];
-                    const u = get().lyrics;
+                    const u = state.app.lyrics;
                     const translation_list = jsonResponse2["message"]["body"]["translations_list"];
                     if (translation_list.length > 0) {
                       for (let i = 0; i < u.length - 1; i++) {
@@ -505,9 +509,9 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                           }
                         }
                       }
-                      state.lyrics = u;
+                      state.app.lyrics = u;
                     }
-                  } catch (e) {
+                  } catch {
                     /// not found trans -> ignore
                   }
                 } else {
@@ -523,8 +527,8 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         }
 
         if (track !== "" && track !== "No Title Found") {
-          if (get().mxmtoken !== null && get().mxmtoken !== "") {
-            getMXMSubs(track, artist, get().mxmtoken, lang, time, id);
+          if (state.app.mxmtoken !== null && state.app.mxmtoken !== "") {
+            getMXMSubs(track, artist, state.app.mxmtoken, lang, time, id);
           } else {
             getToken(1, track, artist, "", lang, time);
           }
@@ -532,11 +536,15 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       }),
     loadNeteaseLyrics: () =>
       set((state) => {
-        const track = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "");
-        const artist = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "");
+        const track = encodeURIComponent(
+          state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.title ?? "") : "",
+        );
+        const artist = encodeURIComponent(
+          state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.artistName ?? "") : "",
+        );
         const time = encodeURIComponent(
-          get().mk.player.nowPlayingItem !== null
-            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          state.app.mk.player.nowPlayingItem !== null
+            ? (Math.round((state.app.mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1,
         );
         const url = `http://music.163.com/api/search/get/?csrf_token=hlpretag=&hlposttag=&s=${track + " " + artist}&type=1&offset=0&total=true&limit=6`;
@@ -555,8 +563,8 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
               try {
                 const jsonResponse2 = JSON.parse(req2.responseText);
                 const lrcfile = jsonResponse2["lrc"]["lyric"];
-                state.lyricsMediaItem = lrcfile;
-                const u = get().lyricsMediaItem.split(/[\n]/);
+                state.app.lyricsMediaItem = lrcfile;
+                const u = state.app.lyricsMediaItem.split(/[\n]/);
                 const preLrc = [];
                 for (let i = u.length - 1; i >= 0; i--) {
                   const xline = /(\[[0-9.:\[\]]*\])+(.*)/.exec(u[i]);
@@ -577,15 +585,15 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                     line: "lrcInstrumental",
                     translation: "",
                   });
-                state.lyrics = preLrc.reverse();
-              } catch (e) {
-                state.lyrics = [];
+                state.app.lyrics = preLrc.reverse();
+              } catch {
+                state.app.lyrics = [];
               }
             };
             req2.onerror = function () {};
             req2.send();
           } catch (e) {
-            state.lyrics = [];
+            state.app.lyrics = [];
           }
         };
         req.send();
@@ -594,11 +602,15 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
     loadQQLyrics: () =>
       set((state) => {
         if (!this.cfg.lyrics.enable_qq) return;
-        const track = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.title ?? "") : "");
-        const artist = encodeURIComponent(get().mk.player.nowPlayingItem !== null ? (get().mk.player.nowPlayingItem.artistName ?? "") : "");
+        const track = encodeURIComponent(
+          state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.title ?? "") : "",
+        );
+        const artist = encodeURIComponent(
+          state.app.mk.player.nowPlayingItem !== null ? (state.app.mk.player.nowPlayingItem.artistName ?? "") : "",
+        );
         const time = encodeURIComponent(
-          get().mk.player.nowPlayingItem !== null
-            ? (Math.round((get().mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
+          state.app.mk.player.nowPlayingItem !== null
+            ? (Math.round((state.app.mk.player.nowPlayingItem.attributes["durationInMillis"] ?? -1000) / 1000) ?? -1)
             : -1,
         );
         const url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?w=${track + " " + artist}&t=0&n=1&page=1&cr=1&new_json=1&format=json&platform=yqq.json`;
@@ -628,8 +640,8 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                 };
                 const jsonResponse2 = JSON.parse(req2.responseText.replace("MusicJsonCallback(", "").replace("})", "}"));
                 const lrcfile = htmlDecode(b64_to_utf8(jsonResponse2["lyric"]));
-                state.lyricsMediaItem = lrcfile;
-                const u = state.lyricsMediaItem.split(/[\n]/);
+                state.app.lyricsMediaItem = lrcfile;
+                const u = state.app.lyricsMediaItem.split(/[\n]/);
 
                 const preLrc = [];
                 for (let i = u.length - 1; i >= 0; i--) {
@@ -651,34 +663,34 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                     line: "lrcInstrumental",
                     translation: "",
                   });
-                state.lyrics = preLrc.reverse();
-                if (state.lyrics[5].line === "") {
-                  get().loadNeteaseLyrics();
+                state.app.lyrics = preLrc.reverse();
+                if (state.app.lyrics[5].line === "") {
+                  state.app.loadNeteaseLyrics();
                 } // Detect incomplete QQ lyrics.
               } catch (e) {
                 console.log(e);
-                get().loadNeteaseLyrics();
-                state.lyrics = [];
+                state.app.loadNeteaseLyrics();
+                state.app.lyrics = [];
               }
             };
             req2.onerror = function () {
-              get().loadNeteaseLyrics();
+              state.app.loadNeteaseLyrics();
             };
             req2.send();
           } catch (e) {
             console.log(e);
-            get().loadNeteaseLyrics();
-            state.lyrics = [];
+            state.app.loadNeteaseLyrics();
+            state.app.lyrics = [];
           }
         };
         req.onerror = function () {
-          get().loadNeteaseLyrics();
+          state.app.loadNeteaseLyrics();
         };
         req.send();
       }),
     // end lyrics stuff
     _fetch(url: string, opts = {}) {
-      if (this.cfg.advanced.experiments.includes("cider_mirror")) {
+      if (get().cfg.advanced.experiments.includes("cider_mirror")) {
         if (url.includes("api.github.com/")) {
           return fetch(url.replace("api.github.com/", "mirror.api.cider.sh/v2/api/"), opts);
         } else if (url.includes("raw.githubusercontent.com/")) {
@@ -691,17 +703,19 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       }
     },
     async oobeInit() {
-      this.appMode = "oobe";
-      for (const [k, v] of Object.entries(window.electronAPI.sendSync("get-i18n-listing"))) {
-        if (v.code === navigator.language.replace("-", "_")) {
-          this.cfg.general.language = v.code;
-          break;
+      set((state) => {
+        state.app.appMode = "oobe";
+        for (const [k, v] of Object.entries(window.electronAPI.sendSync("get-i18n-listing"))) {
+          if (v.code === navigator.language.replace("-", "_")) {
+            state.cfg.general.language = v.code;
+            break;
+          }
         }
-      }
-      this.setLz(this.cfg.general.language);
-      this.setLzManual();
-      clearTimeout(this.hangtimer);
-      document.body.removeAttribute("loading");
+        state.app.setLz(state.cfg.general.language);
+        state.app.setLzManual();
+        clearTimeout(state.app.hangtimer);
+        document.body.removeAttribute("loading");
+      });
       await window.electronAPI.invoke("renderer-ready", true);
       document.querySelector("#LOADER")!.remove();
 
@@ -718,7 +732,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       notyf.open({
         type: "info",
         className: "notyf-info",
-        message: this.getLz("term.song.link.generate"),
+        message: i18n.t("term.song.link.generate"),
       });
       const httpRequest = new XMLHttpRequest();
       httpRequest.open("GET", `https://api.song.link/v1-alpha.1/links?url=${amUrl}&userCountry=US`, true);
@@ -728,10 +742,10 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           if (httpRequest.status === 200) {
             const response = JSON.parse(httpRequest.responseText);
             console.debug(response);
-            this.copyToClipboard(response.pageUrl);
+            get().app.copyToClipboard(response.pageUrl);
           } else {
             console.warn("There was a problem with the request.");
-            notyf.error(this.getLz("term.requestError"));
+            notyf.error(i18n.t("term.requestError"));
           }
         }
       };
@@ -739,49 +753,17 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
 
     async setLz(lang: string) {
       if (lang === "") {
-        lang = this.cfg.general.language;
+        lang = get().cfg.general.language;
       }
-      this.lz = window.electronAPI.sendSync("get-i18n", lang);
-      get().mklang = await get().mkJSLang();
-      try {
-        this.listennow.timestamp = 0;
-        this.browsepage.timestamp = 0;
-        this.radio.timestamp = 0;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    /**
-     * Grabs translation for localization.
-     * @param {string} message - The key to grab the translated term
-     * @param {object} options - Optional options
-     * @author booploops#7139
-     * @memberOf app
-     */
-    getLz(message: string, options: Record<string, number> = {}) {
-      if (this.lz[message]) {
-        if (options["count"]) {
-          if (typeof this.lz[message] === "object") {
-            const type = window.fastPluralRules.getPluralFormNameForCardinalByLocale(
-              this.cfg.general.language.replace("_", "-"),
-              options["count"],
-            );
-            return this.lz[message][type] ?? this.lz[message][Object.keys(this.lz[message])[0]] ?? this.lz[message];
-          } else {
-            // fallback English plural forms ( old i18n )
-            if (options["count"] > 1) {
-              return this.lz[message + "s"] ?? this.lz[message];
-            } else {
-              return this.lz[message] ?? this.lz[message + "s"];
-            }
-          }
-        } else if (typeof this.lz[message] === "object") {
-          return this.lz[message][Object.keys(this.lz[message])[0]];
-        }
-        return this.lz[message];
-      } else {
-        return message;
-      }
+      const _lz = await window.electronAPI.sendSync("get-i18n", lang);
+      const _mklang = await get().app.MKJSLang();
+      set((state) => {
+        state.app.lz = _lz;
+        state.app.mklang = _mklang;
+        state.app.listennow.timestamp = 0;
+        state.app.browsepage.timestamp = 0;
+        state.app.radio.timestamp = 0;
+      });
     },
     getProfileLz(type: string, name: string) {
       // For Spatial and CAR.
@@ -798,7 +780,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           break;
 
         case "Minimal+":
-          return this.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile.minimal") + "+";
+          return i18n.t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile.minimal") + "+";
           break;
 
         case "live":
@@ -807,7 +789,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       }
       switch (type) {
         case "CAR":
-          result = this.getLz("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode." + name);
+          result = i18n.t("settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode." + name);
           if (result === "settings.option.audio.enableAdvancedFunctionality.atmosphereRealizerMode." + name) {
             return name;
           } else {
@@ -815,7 +797,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           }
           break;
         case "CTS":
-          result = this.getLz("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile." + name.toLowerCase());
+          result = i18n.t("settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile." + name.toLowerCase());
           if (result === "settings.option.audio.enableAdvancedFunctionality.tunedAudioSpatialization.profile." + name.toLowerCase()) {
             return name;
           } else {
@@ -826,68 +808,71 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           return name;
       }
     },
-    setLzManual() {
-      this.library.songs.sortingOptions = {
-        albumName: this.getLz("term.sortBy.album"),
-        artistName: this.getLz("term.sortBy.artist"),
-        name: this.getLz("term.sortBy.name"),
-        genre: this.getLz("term.sortBy.genre"),
-        releaseDate: this.getLz("term.sortBy.releaseDate"),
-        durationInMillis: this.getLz("term.sortBy.duration"),
-        dateAdded: this.getLz("term.sortBy.dateAdded"),
-      };
+    setLzManual: () =>
+      set((state) => {
+        state.library.songs.sortingOptions = {
+          albumName: i18n.t("term.sortBy.album"),
+          artistName: i18n.t("term.sortBy.artist"),
+          name: i18n.t("term.sortBy.name"),
+          genre: i18n.t("term.sortBy.genre"),
+          releaseDate: i18n.t("term.sortBy.releaseDate"),
+          durationInMillis: i18n.t("term.sortBy.duration"),
+          dateAdded: i18n.t("term.sortBy.dateAdded"),
+        };
 
-      this.library.library.albums.sortingOptions = {
-        artistName: this.getLz("term.sortBy.artist"),
-        name: this.getLz("term.sortBy.name"),
-        genre: this.getLz("term.sortBy.genre"),
-        releaseDate: this.getLz("term.sortBy.releaseDate"),
-        dateAdded: this.getLz("term.sortBy.dateAdded"),
-      };
+        state.library.albums.sortingOptions = {
+          artistName: i18n.t("term.sortBy.artist"),
+          name: i18n.t("term.sortBy.name"),
+          genre: i18n.t("term.sortBy.genre"),
+          releaseDate: i18n.t("term.sortBy.releaseDate"),
+          dateAdded: i18n.t("term.sortBy.dateAdded"),
+        };
 
-      this.library.library.artists.sortingOptions = {
-        artistName: this.getLz("term.sortBy.artist"),
-        name: this.getLz("term.sortBy.name"),
-        genre: this.getLz("term.sortBy.genre"),
-        releaseDate: this.getLz("term.sortBy.releaseDate"),
-      };
+        state.library.artists.sortingOptions = {
+          artistName: i18n.t("term.sortBy.artist"),
+          name: i18n.t("term.sortBy.name"),
+          genre: i18n.t("term.sortBy.genre"),
+          releaseDate: i18n.t("term.sortBy.releaseDate"),
+        };
 
-      this.lz.repeat = {
-        0: this.lz["term.repeat.all"] ?? this.lz["term.repeat"],
-        1: this.lz["term.repeat.none"] ?? this.lz["term.disableRepeat"],
-        2: this.lz["term.repeat.one"] ?? this.lz["term.enableRepeatOne"],
-      };
-    },
+        state.app.lz.repeat = {
+          0: i18n.t("term.repeat.all") ?? i18n.t("term.repeat"),
+          1: i18n.t("term.repeat.none") ?? i18n.t("term.disableRepeat"),
+          2: i18n.t("term.repeat.one") ?? i18n.t("term.enableRepeatOne"),
+        };
+      }),
 
     async quit() {
       await window.electronAPI.invoke("quit-app");
     },
 
-    modularUITest(val: boolean = false) {
-      this.fullscreenLyrics = val;
-      if (val) {
-        document.querySelector("#app-main").classList.add("modular-fs");
-      } else {
-        document.querySelector("#app-main").classList.remove("modular-fs");
-      }
-    },
+    modularUITest: (val = false) =>
+      set((state) => {
+        state.app.fullscreenLyrics = val;
+        if (val) {
+          document.querySelector("#app-main")!.classList.add("modular-fs");
+        } else {
+          document.querySelector("#app-main")!.classList.remove("modular-fs");
+        }
+      }),
 
-    showFoo(querySelector, time) {
-      clearTimeout(this.idleTimer);
-      if (this.idleState) {
-        document.querySelector(querySelector).classList.remove("inactive");
-      }
-      this.idleState = false;
-      this.idleTimer = setTimeout(() => {
-        document.querySelector(querySelector).classList.add("inactive");
-        this.idleState = true;
-      }, time);
-    },
+    showFoo: (querySelector, time) =>
+      set((state) => {
+        clearTimeout(state.app.idleTimer);
+        if (state.app.idleState) {
+          document.querySelector(querySelector)!.classList.remove("inactive");
+        }
+        state.app.idleState = false;
+        state.app.idleTimer = setTimeout(() => {
+          document.querySelector(querySelector)!.classList.add("inactive");
+          state.app.idleState = true;
+        }, time);
+      }),
 
     unauthorize() {
-      this.confirm(this.getLz("term.confirmLogout"), function (result: boolean) {
+      this.confirm(i18n.t("term.confirmLogout"), function (result: boolean) {
         if (result) {
-          get().mk.unauthorize();
+          get().app.mk.unauthorize();
           document.location.reload();
         }
       });
@@ -897,7 +882,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       // if (navigator.userAgent.includes('Darwin') || navigator.appVersion.indexOf("Mac") !== -1) {
       // this.darwinShare(str)
       // } else {
-      notyf.success(this.getLz("term.share.success"));
+      notyf.success(i18n.t("term.share.success"));
       navigator.clipboard.writeText(str).then((r) => console.debug("Copied to clipboard."));
       // }
     },
@@ -916,7 +901,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       return executeRequest();
     },
     async getRecursive2(response, sendTo) {
-      const returnData = {
+      const returnData: { data: string[]; meta: Record<string, any> } = {
         data: [],
         meta: {},
       };
@@ -924,7 +909,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         console.debug("has next");
         returnData.data.concat(response.data);
         returnData.meta = response.meta;
-        return await this.getRecursive(await response.next());
+        return await get().app.getRecursive(await response.next());
       } else {
         console.debug("no next");
         returnData.data.concat(response.data);
@@ -941,7 +926,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         return;
       }
       try {
-        const _listennow = await get().mk.api.music(`v1/me/recommendations?timezone=${encodeURIComponent(formatTimezoneOffset())}`, {
+        const _listennow = await get().app.mk.api.music(`v1/me/recommendations?timezone=${encodeURIComponent(formatTimezoneOffset())}`, {
           name: "listen-now",
           with: "friendsMix,library,social",
           "art[social-profiles:url]": "c",
@@ -976,59 +961,59 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           types:
             "artists,albums,editorial-items,library-albums,library-playlists,music-movies,music-videos,playlists,stations,uploaded-audios,uploaded-videos,activities,apple-curators,curators,tv-shows,social-upsells",
           platform: "web",
-          l: get().mklang,
+          l: get().app.mklang,
           includeResponseMeta: !0,
           reload: !0,
         });
-        this.listennow.response = (_listennow as MusicKit.SongSearchResponse).data.results.songs.data;
-        this.listennow.timestamp = Date.now();
-        console.debug(this.listennow);
+        set((state) => {
+          state.app.listennow.response = (_listennow as MusicKit.SongSearchResponse).data.results.songs.data;
+          state.app.listennow.timestamp = Date.now();
+          console.debug(state.app.listennow);
+        });
       } catch (e) {
         console.log(e);
-        this.getListenNow(attempt + 1);
+        get().app.getListenNow(attempt + 1);
       }
     },
     async getRadioPage(attempt = 0) {
-      if (this.radio.timestamp > Date.now() - 120000) {
+      if (get().app.radio.timestamp > Date.now() - 120000) {
         return;
       }
       if (attempt > 3) {
         return;
       }
       try {
-        get()
-          .mk.api.music(`/v1/editorial/${get().mk.storefrontId}/groupings`, {
-            platform: "web",
-            name: "radio",
-            "omit[resource:artists]": "relationships",
-            "include[albums]": "artists",
-            "include[songs]": "artists",
-            "include[music-videos]": "artists",
-            extend: "editorialArtwork,artistUrl",
-            "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
-            "art[url]": "f",
-            l: get().mklang,
-          })
-          .then((radio) => {
-            this.radio = radio.data.data[0];
-            console.debug(this.radio);
-          });
-
-        this.radio.timestamp = Date.now();
+        const radio = await get().app.mk.api.music(`/v1/editorial/${get().app.mk.storefrontId}/groupings`, {
+          platform: "web",
+          name: "radio",
+          "omit[resource:artists]": "relationships",
+          "include[albums]": "artists",
+          "include[songs]": "artists",
+          "include[music-videos]": "artists",
+          extend: "editorialArtwork,artistUrl",
+          "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
+          "art[url]": "f",
+          l: get().app.mklang,
+        });
+        set((state) => {
+          state.app.radio = radio.data.data[0];
+          state.app.radio.timestamp = Date.now();
+          console.debug(state.app.radio);
+        });
       } catch (e) {
         console.log(e);
-        this.getRadioPage(attempt + 1);
+        get().app.getRadioPage(attempt + 1);
       }
     },
     async getBrowsePage(attempt = 0) {
-      if (this.browsepage.timestamp > Date.now() - 120000) {
+      if (get().app.browsepage.timestamp > Date.now() - 120000) {
         return;
       }
       if (attempt > 3) {
         return;
       }
       try {
-        const browse = await get().mk.api.music(`/v1/editorial/${get().mk.storefrontId}/groupings`, {
+        const browse = await get().app.mk.api.music(`/v1/editorial/${get().app.mk.storefrontId}/groupings`, {
           platform: "web",
           name: "music",
           "omit[resource:artists]": "relationships",
@@ -1038,14 +1023,16 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
           extend: "editorialArtwork,artistUrl",
           "fields[artists]": "name,url,artwork,editorialArtwork,genreNames,editorialNotes",
           "art[url]": "f",
-          l: get().mklang,
+          l: get().app.mklang,
         });
-        this.browsepage = browse.data.data[0];
-        this.browsepage.timestamp = Date.now();
-        console.debug(this.browsepage);
+        set((state) => {
+          state.app.browsepage = browse.data.data[0];
+          state.app.browsepage.timestamp = Date.now();
+          console.debug(state.app.browsepage);
+        });
       } catch (e) {
         console.log(e);
-        this.getBrowsePage(attempt + 1);
+        get().app.getBrowsePage(attempt + 1);
       }
     },
     async getMadeForYou(attempt = 0) {
@@ -1056,70 +1043,74 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         const mfu = await get().mk.api.music(
           "/v1/me/library/playlists?platform=web&extend=editorialVideo&fields%5Bplaylists%5D=lastModifiedDate&filter%5Bfeatured%5D=made-for-you&include%5Blibrary-playlists%5D=catalog&fields%5Blibrary-playlists%5D=artwork%2Cname%2CplayParams%2CdateAdded",
         );
-        this.madeforyou = (mfu as MusicKit.SearchResponse<MusicKit.Curators>).data.results.Curators.data[0];
+        set((state) => {
+          state.app.madeforyou = (mfu as MusicKit.SearchResponse<MusicKit.Curators>).data.results.Curators.data[0];
+        });
       } catch (e) {
         console.log(e);
-        this.getMadeForYou(attempt + 1);
+        get().app.getMadeForYou(attempt + 1);
       }
     },
-    async getTypeFromID(
-      kind: string,
-      id: number,
-      isLibrary = false,
-      params: Record<string, string> = {},
-      params2: Record<string, string> = {},
-    ) {
+    async getTypeFromID(kind: string, id: number, isLibrary = false, params: Record<string, string> = {}) {
       let a;
       if (kind === "album" || kind === "albums") {
         params.include = "tracks,artists,record-labels,catalog";
       }
-      params.l = get().mklang;
+      params.l = get().app.mklang;
       try {
-        a = await get().app.mkapi(kind.toString(), isLibrary, id.toString(), params, params2);
+        a = await get().app.mkapi(kind.toString(), isLibrary, id.toString(), params);
       } catch (e) {
         console.debug(e);
         try {
-          a = await get().app.mkapi(kind.toString(), !isLibrary, id.toString(), params, params2);
+          a = await get().app.mkapi(kind.toString(), !isLibrary, id.toString(), params);
         } catch (err) {
           console.log(err);
           a = [];
         } finally {
-          if (kind === "appleCurator") {
-            this.appleCurator = a.data.data[0];
-          } else if (kind === "multiroom" || kind === "room") {
-            this.multiroom = a.data.data[0];
-          } else {
-            this.getPlaylistContinuous(a, true);
-          }
+          set((state) => {
+            if (kind === "appleCurator") {
+              state.app.appleCurator = a.data.data[0];
+            } else if (kind === "multiroom" || kind === "room") {
+              state.app.multiroom = a.data.data[0];
+            } else {
+              state.library.getPlaylistContinuous(a, true);
+            }
+          });
         }
       } finally {
-        if (kind === "appleCurator") {
-          this.appleCurator = a.data.data[0];
-        } else if (kind === "multiroom" || kind === "room") {
-          this.multiroom = a.data.data[0];
-        } else {
-          this.getPlaylistContinuous(a, true);
-        }
+        set((state) => {
+          if (kind === "appleCurator") {
+            state.app.appleCurator = a.data.data[0];
+          } else if (kind === "multiroom" || kind === "room") {
+            state.app.multiroom = a.data.data[0];
+          } else {
+            state.library.getPlaylistContinuous(a, true);
+          }
+        });
       }
     },
 
     getCurrentTime() {
       return parseFloat(
         hmsToSecondsOnly(
-          parseTime(get().mk.player.nowPlayingItem.attributes.durationInMillis - get().mk.player.currentPlaybackTimeRemaining * 1000),
+          parseTime(
+            get().app.mk.player.nowPlayingItem.attributes.durationInMillis - get().app.mk.player.currentPlaybackTimeRemaining * 1000,
+          ),
         ) + "",
       );
     },
-    getLyricBGStyle(start: string, end: string) {
-      const currentTime = this.getCurrentTime();
+    getLyricBGStyle: (start: string, end: string) => {
+      const currentTime = get().app.getCurrentTime();
       // let duration = get().mk.player.nowPlayingItem.attributes.durationInMillis
       const start2 = hmsToSecondsOnly(start);
       const end2 = hmsToSecondsOnly(end);
-      // let currentProgress = ((100 * (currentTime)) / (end2))
-      // check if currenttime is between start and end
-      this.player.lyricsDebug.start = start2;
-      this.player.lyricsDebug.end = end2;
-      this.player.lyricsDebug.current = currentTime;
+      set((state) => {
+        // let currentProgress = ((100 * (currentTime)) / (end2))
+        // check if currenttime is between start and end
+        state.app.lyricsDebug.start = start2;
+        state.app.lyricsDebug.end = end2;
+        state.app.lyricsDebug.current = currentTime;
+      });
       if (currentTime >= start2 && currentTime <= end2) {
         return {
           "--bgSpeed": `${end2 - start2}s`,
@@ -1128,22 +1119,24 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         return {};
       }
     },
-    setAirPlayCodeUI(identifier: string) {
-      this.modals.airplayPW = true;
-      this.currentAirPlayCodeID = identifier;
-    },
-    sendAirPlaySuccess(silent = false, identifier = "") {
-      if (!silent) {
-        notyf.success("Device paired successfully!");
-      }
-      console.log("delete idx-pre", identifier);
-      const idx = get().airplayTrys.findIndex((a) => {
-        return a.id === identifier;
-      });
-      console.log("delete idx", idx);
-      if (idx !== -1) delete this.airplayTrys[idx];
-      get().airplayTrys = get().airplayTrys.filter((n) => n);
-    },
+    setAirPlayCodeUI: (identifier: string) =>
+      set((state) => {
+        state.ui.modals.airplayPW = true;
+        state.app.currentAirPlayCodeID = identifier;
+      }),
+    sendAirPlaySuccess: (silent = false, identifier = "") =>
+      set((state) => {
+        if (!silent) {
+          notyf.success("Device paired successfully!");
+        }
+        console.log("delete idx-pre", identifier);
+        const idx = state.app.airplayTrys.findIndex((a) => {
+          return a.id === identifier;
+        });
+        console.log("delete idx", idx);
+        if (idx !== -1) delete state.app.airplayTrys[idx];
+        state.app.airplayTrys = state.app.airplayTrys.filter((n) => n);
+      }),
     sendAirPlayFailed() {
       notyf.success("Device paring failed!");
     },
@@ -1153,25 +1146,25 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         if (dropped) {
           const [ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv] = array;
           console.log(ipv4, ipport, sepassword, title, artist, album, artworkURL, txt, airplay2dv);
-          let idx = state.airplayTrys.findIndex((a) => {
+          let idx = state.app.airplayTrys.findIndex((a) => {
             return a.id === ipv4 + ":" + ipport + "ap";
           });
           if (idx === -1) {
-            state.airplayTrys.push({
+            state.app.airplayTrys.push({
               id: ipv4 + ":" + ipport + "ap",
               attempts: 1,
             });
           }
-          idx = state.airplayTrys.findIndex((a) => {
+          idx = state.app.airplayTrys.findIndex((a) => {
             return a.id === ipv4 + ":" + ipport + "ap";
           });
-          if (state.airplayTrys[idx].attempts > 3) {
-            delete state.airplayTrys[idx];
-            state.airplayTrys = state.airplayTrys.filter((n) => n);
+          if (state.app.airplayTrys[idx].attempts > 3) {
+            delete state.app.airplayTrys[idx];
+            state.app.airplayTrys = state.app.airplayTrys.filter((n) => n);
             console.log("delete idx", idx);
             return;
           } else {
-            state.airplayTrys[idx].attempts = state.airplayTrys[idx].attempts + 1;
+            state.app.airplayTrys[idx].attempts = state.app.airplayTrys[idx].attempts + 1;
             setTimeout(() => {
               window.electronAPI.send(
                 "performAirplayPCM",
@@ -1189,7 +1182,7 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
             }, 1000);
           }
         } else {
-          state.activeCasts = [];
+          state.app.activeCasts = [];
           notyf.error("Devices disconnected!");
         }
       }),
@@ -1224,19 +1217,19 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
                   platformInfo: { requiresCDMAttachOnStart: !0, maxSecurityLevel: d, keySystemConfig: h },
                   appData: { serviceName: "Apple Music" },
                 };
-                if (state.radiohls !== null && state.radiohls.destroy !== null) {
-                  state.radiohls.destroy();
-                  state.radiohls = null;
-                  state.radiohls = new CiderHls();
-                  state.radiohls.loadSource(e);
-                  state.radiohls.attachMedia(get().mk._services.mediaItemPlayback._currentPlayer._targetElement);
+                if (state.app.radiohls !== null && state.app.radiohls.destroy !== null) {
+                  state.app.radiohls.destroy();
+                  state.app.radiohls = null;
+                  state.app.radiohls = new CiderHls();
+                  state.app.radiohls.loadSource(e);
+                  state.app.radiohls.attachMedia(get().mk._services.mediaItemPlayback._currentPlayer._targetElement);
                   get().mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
                 } else {
-                  state.radiohls = null;
-                  state.radiohls = new CiderHls();
-                  state.radiohls.loadSource(e);
-                  state.radiohls.attachMedia(get().mk._services.mediaItemPlayback._currentPlayer._targetElement);
-                  get().mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
+                  state.app.radiohls = null;
+                  state.app.radiohls = new CiderHls();
+                  state.app.radiohls.loadSource(e);
+                  state.app.radiohls.attachMedia(get().mk._services.mediaItemPlayback._currentPlayer._targetElement);
+                  state.app.mk._services.mediaItemPlayback._currentPlayer._targetElement.play();
                 }
               }
             }
@@ -1244,103 +1237,107 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         }
       }),
     confirm(message: string, callback: (...args: any[]) => void) {
-      bootbox.confirm(this.getBootboxParams(null, message, callback));
+      const { message: _message, callback: _callback } = get().app.getBootboxParams(null, message, callback);
+      bootbox.confirm(_message, _callback);
     },
     prompt(title: string, callback: (...args: any[]) => void) {
-      bootbox.prompt(this.getBootboxParams(title, null, callback));
+      const { title: _title, callback: _callback } = get().app.getBootboxParams(title, null, callback);
+      bootbox.prompt(_title, _callback);
     },
-    getBootboxParams(title: string, message: string, callback: (...args: any[]) => void) {
+    getBootboxParams: (title, message, callback) => {
       return {
         title: title,
         message: message,
         buttons: {
           confirm: {
-            label: this.getLz("dialog.ok"),
+            label: i18n.t("dialog.ok"),
           },
           cancel: {
-            label: this.getLz("dialog.cancel"),
+            label: i18n.t("dialog.cancel"),
           },
         },
-        callback: function (result) {
+        callback: (result: boolean) => {
           if (callback) callback(result);
         },
       };
     },
-    pip() {
-      // document.querySelector("video#apple-music-video-player").requestPictureInPicture();
-      // // .then(pictureInPictureWindow => {
-      // //     pictureInPictureWindow.addEventListener("resize", () => {
-      // //         console.log("[PIP] Resized")
-      // //     }, false);
-      // //   })
-      this.mvViewMode = this.mvViewMode === "mini" ? "full" : "mini";
-    },
-    miniPlayer(flag) {
-      if (flag) {
-        this.tmpWidth = window.innerWidth;
-        this.tmpHeight = window.innerHeight;
-        this.tmpX = window.screenX;
-        this.tmpY = window.screenY;
-        window.electronAPI.send("unmaximize");
-        window.electronAPI.send("windowmin", 250, 250);
-        if (this.miniTmpX !== "" && this.miniTmpY !== "") window.electronAPI.send("windowmove", this.miniTmpX, this.miniTmpY);
-        window.electronAPI.send("windowresize", 300, 300, false);
-        this.appMode = "mini";
-      } else {
-        this.miniTmpX = window.screenX;
-        this.miniTmpY = window.screenY;
-        window.electronAPI.send("windowmin", 844, 410);
-        window.electronAPI.send("windowresize", this.tmpWidth, this.tmpHeight, false);
-        window.electronAPI.send("windowmove", this.tmpX, this.tmpY);
-        window.electronAPI.send("windowontop", false);
-        //this.cfg.visual.miniplayer_top_toggle = true;
-        this.appMode = "player";
-      }
-    },
+    pip: () =>
+      set((state) => {
+        // document.querySelector("video#apple-music-video-player").requestPictureInPicture();
+        // // .then(pictureInPictureWindow => {
+        // //     pictureInPictureWindow.addEventListener("resize", () => {
+        // //         console.log("[PIP] Resized")
+        // //     }, false);
+        // //   })
+        state.app.mvViewMode = state.app.mvViewMode === "mini" ? "full" : "mini";
+      }),
+    miniPlayer: (flag) =>
+      set((state) => {
+        if (flag) {
+          state.app.tmpWidth = window.innerWidth + "";
+          state.app.tmpHeight = window.innerHeight + "";
+          state.app.tmpX = window.screenX + "";
+          state.app.tmpY = window.screenY + "";
+          window.electronAPI.send("unmaximize");
+          window.electronAPI.send("windowmin", 250, 250);
+          if (state.app.miniTmpX !== "" && state.app.miniTmpY !== "") window.electronAPI.send("windowmove", state.app.miniTmpX, state.app.miniTmpY);
+          window.electronAPI.send("windowresize", 300, 300, false);
+          state.app.appMode = "mini";
+        } else {
+          state.app.miniTmpX = window.screenX + '';
+          state.app.miniTmpY = window.screenY + '';
+          window.electronAPI.send("windowmin", 844, 410);
+          window.electronAPI.send("windowresize", state.app.tmpWidth, state.app.tmpHeight, false);
+          window.electronAPI.send("windowmove", state.app.tmpX, state.app.tmpY);
+          window.electronAPI.send("windowontop", false);
+          //this.cfg.visual.miniplayer_top_toggle = true;
+          state.app.appMode = "player";
+        }
+      }),
 
     setMkPrivateEnabled: (newValue) =>
       set((state) => {
-        state.mk.privateEnabled = newValue;
+        state.app.mk.privateEnabled = newValue;
         ipcRenderer.send("onPrivacyModeChange", newValue);
       }),
 
     // mk stuff
     prevButton() {
-      if (get().mk.player.nowPlayingItem && get().mk.player.currentPlaybackTime > 2) {
-        get().mk.player.seekToTime(0);
+      if (get().app.mk.player.nowPlayingItem && get().app.mk.player.currentPlaybackTime > 2) {
+        get().app.mk.player.seekToTime(0);
       } else {
-        get().mk.player.skipToPreviousItem();
+        get().app.mk.player.skipToPreviousItem();
       }
     },
     isDisabled() {
-      return !get().mk.player.nowPlayingItem || get().mk.player.nowPlayingItem.attributes.playParams.kind === "radioStation";
+      return !get().app.mk.player.nowPlayingItem || get().app.mk.player.nowPlayingItem.attributes.playParams.kind === "radioStation";
     },
     isPrevDisabled() {
-      return get().isDisabled() || (get().mk.player.queue._position === 0 && get().mk.player.currentPlaybackTime <= 2);
+      return get().app.isDisabled() || (get().app.mk.player.queue._position === 0 && get().app.mk.player.currentPlaybackTime <= 2);
     },
     isNextDisabled() {
-      return get().isDisabled() || get().mk.player.queue._position + 1 === get().mk.player.queue.length;
+      return get().app.isDisabled() || get().app.mk.player.queue._position + 1 === get().app.mk.player.queue.length;
     },
     skipToNextItem() {
-      if (get().mk.player.queue.nextPlayableItemIndex !== -1 && get().queue.nextPlayableItemIndex !== null)
-        get().mk.player.changeToMediaAtIndex(get().mk.player.queue.nextPlayableItemIndex);
+      if (get().app.mk.player.queue.nextPlayableItemIndex !== -1 && get().app.queue.nextPlayableItemIndex !== null)
+        get().app.mk.player.changeToMediaAtIndex(get().app.mk.player.queue.nextPlayableItemIndex);
     },
     skipToPreviousItem() {
-      if (get().mk.player.queue.previousPlayableItemIndex !== -1 && get().queue.mk.player.previousPlayableItemIndex !== null)
-        get().mk.player.changeToMediaAtIndex(get().mk.player.queue.previousPlayableItemIndex);
+      if (get().app.mk.player.queue.previousPlayableItemIndex !== -1 && get().app.queue.nextPlayableItemIndex !== null)
+        get().app.mk.player.changeToMediaAtIndex(get().app.mk.player.queue.previousPlayableItemIndex);
     },
     monitorMusickit() {
       if (!this.cfg.musickit) return;
 
       for (const [attr, value] of Object.entries(this.cfg.musickit["stored-attributes"])) {
-        console.log(`Musickit value: ` + get().mk[attr]);
+        console.log(`Musickit value: ` + get().app.mk[attr]);
         console.log(`Config value: ` + value);
-        if (value !== "" && get().mk[attr] !== value) {
-          get().mk[attr] = value;
+        if (value !== "" && get().app.mk[attr] !== value) {
+          get().app.mk[attr] = value;
         }
         this.$watch(`mk.${attr}`, (val) => {
           console.log(`MK ${attr} changed to ${val}`);
-          this.cfg.musickit["stored-attributes"][attr] = val;
+          get().cfg.musickit["stored-attributes"][attr] = val;
         });
       }
       const ERROR_CODES = ["drmUnsupported", "mediaPlaybackError"];
@@ -1349,11 +1346,11 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
         MusicKit.getInstance().addEventListener(MusicKit.Events[code], (e) => {
           console.error(`[MusicKit] MusicKit Error ${code}`);
           console.error({ e: e });
-          this.notyf.open({
+          notyf.open({
             duration: 20000,
             type: "error",
             className: "notyf-info",
-            message: `<small>${this.getLz("error.musickitError")} \n</small><code>${code.toUpperCase()}</code>`,
+            message: `<small>${i18n.t("error.musickitError")} \n</small><code>${code.toUpperCase()}</code>`,
           });
         });
       });
@@ -1388,12 +1385,12 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       const isLibrary = item.attributes.playParams ? (item.attributes.playParams.isLibrary ?? false) : false;
       const truekind = !kind.endsWith("s") ? kind + "s" : kind;
       // console.log(kind, id, isLibrary)
-      get().mk.stop();
+      get().app.mk.stop();
       if (kind.includes("artist")) {
         get()
-          .mk.player.setStationQueue({ artist: "a-" + id })
+          .app.mk.player.setStationQueue({ artist: "a-" + id })
           .then(() => {
-            get().mk.play();
+            get().app.mk.play();
           });
       } else {
         this.playMediaItemById(id, kind, isLibrary, item.attributes.url ?? "");
@@ -1405,21 +1402,21 @@ export const createAppSlice: AppStateCreator = (set, get) => ({
       try {
         if (truekind.includes("artist")) {
           get()
-            .mk.player.setStationQueue({ artist: "a-" + id })
+            .app.mk.player.setStationQueue({ artist: "a-" + id })
             .then(() => {
-              get().mk.play();
+              get().app.mk.play();
             });
         } else if (truekind === "radioStations") {
           get()
-            .mk.player.setStationQueue({ url: raurl })
+            .app.mk.player.setStationQueue({ url: raurl })
             .then(function (queue) {
               MusicKit.getInstance().play();
             });
         } else {
           get()
-            .mk.setQueue({
+            .app.mk.setQueue({
               [truekind]: [id],
-              parameters: { l: get().mklang },
+              parameters: { l: get().app.mklang },
             })
             .then(function (queue) {
               MusicKit.getInstance().play();

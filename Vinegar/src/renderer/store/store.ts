@@ -24,7 +24,7 @@ export interface AppState {
   fullscreenLyrics: boolean;
   fullscreenState: Record<string, any>;
   browsepage: Record<string, any>;
-  listennow: { timestamp: number };
+  listennow: { timestamp: number; response: MusicKit.Songs[] };
   madeforyou: string[];
   radio: Record<string, any>;
   mklang: string;
@@ -89,13 +89,96 @@ export interface AppState {
   appVisible: boolean;
   currentAirPlayCodeID: string;
   airplayTrys: { id: string; attempts: number }[];
+  // loadMXM: () => void;
+  // loadNeteaseLyrics: () => void;
+  // loadYTLyrics: () => void;
+  // loadQQLyrics: () => void;
+  // parseTTML: () => void;
+  // loadAMLyrics: () => void;
+  // confirm: (title: string, callback: (...args: any[]) => void) => Promise<void>;
+  parseTTML: () => void;
+  parseLyrics: () => void;
+  loadLyrics: () => void;
+  loadAMLyrics: () => void;
+  loadYTLyrics: () => void;
   loadMXM: () => void;
   loadNeteaseLyrics: () => void;
-  loadYTLyrics: () => void;
   loadQQLyrics: () => void;
-  parseTTML: () => void;
-  loadAMLyrics: () => void;
-  confirm: (title: string, callback: (...args: any[]) => void) => Promise<void>;
+  _fetch: (url: string, opts: Record<string, any> | null) => Promise<Response>;
+  oobeInit: () => Promise<void>;
+  songLinkShare: (amUrl: string) => void;
+  setLz: (lang: string) => Promise<void>;
+  getProfileLz: (type: string, name: string) => string;
+  setLzManual: () => void;
+  quit: () => Promise<void>;
+  modularUITest: (val?: boolean) => void;
+  showFoo: (querySelector: string, time: number) => void;
+  unauthorize: () => void;
+  copyToClipboard: (str: string) => void;
+  getRecursive: (response: Record<string, any>) => Promise<{ data: string[]; meta: Record<string, any> }>;
+  getRecursive2: (response: Record<string, any>, sendTo: string) => Promise<{ data: string[]; meta: Record<string, any> }>;
+  getListenNow: (attempt?: number) => Promise<void>;
+  getRadioPage: (attempt?: number) => Promise<void>;
+  getBrowsePage: (attempt?: number) => Promise<void>;
+  getMadeForYou: (attempt?: number) => Promise<void>;
+  getTypeFromID: (kind: string, id: number, isLibrary?: boolean, params?: Record<string, string>) => Promise<void>;
+  getCurrentTime: () => number;
+  getLyricBGStyle: (start: string, end: string) => Record<string, string>;
+  setAirPlayCodeUI: (identifier: string) => void;
+  sendAirPlaySuccess: (silent: boolean | null, identifier: string | null) => void;
+  sendAirPlayFailed: () => void;
+  airplayDisconnect: (dropped: boolean, array?: Array<string>, identifier?: string) => void;
+  authCC: () => void;
+  _playRadioStream: (e) => void;
+  confirm: (message: string, callback: (...args: any[]) => void) => void;
+  prompt: (title: string, callback: (...args: any[]) => void) => void;
+  getBootboxParams: (
+    title: string | null,
+    message: string | null,
+    callback: ((...args: any[]) => void) | null,
+  ) => {
+    title: string | null;
+    message: string | null;
+    buttons: {
+      confirm: {
+        label: string;
+      };
+      cancel: {
+        label: string;
+      };
+    };
+    callback: (...args: any[]) => void;
+  };
+  pip: () => void;
+  miniPlayer: (flag: boolean) => void;
+  setMkPrivateEnabled: (newValue: boolean) => void;
+  prevButton: () => void;
+  isDisabled: () => boolean;
+  isPrevDisabled: () => boolean;
+  isNextDisabled: () => boolean;
+  skipToNextItem: () => void;
+  skipToPreviousItem: () => void;
+  monitorMusickit: () => void;
+  playMediaItem: (item: MusicKit.MediaItem) => void;
+  playMediaItemById: (id: string | number, kind: string, isLibrary: boolean, raurl?: string) => void;
+  queueParentandplayChild: (parent: string, childIndex: number, item: MusicKit.MediaItem) => void;
+  seekTo: (time: number) => void;
+  volumeUp: () => void;
+  volumeDown: () => void;
+  volumeWheel: (event: MouseEvent) => void;
+  muteButtonPressed: () => void;
+  checkMuteChange: () => void;
+  repeatIncrement: () => void;
+  mkReady: () => boolean;
+  quickPlay: (query: string) => void;
+  getRating: (item: MusicKit.MediaItem) => Promise<string>;
+  love: (item: MusicKit.MediaItem) => void;
+  dislike: (item: MusicKit.MediaItem) => void;
+  unlove: (item: MusicKit.MediaItem) => void;
+  fetchPlaylist: (id: string | number, callback: (...args: any[]) => void) => void;
+  SpacePause: () => void;
+  MKJSLang: () => Promise<string>;
+  mediaKeyFixes: () => void;
 }
 
 export interface ChromeState {
@@ -163,6 +246,7 @@ export interface LibraryState {
       name: string;
       genre: string;
       releaseDate: string;
+      dateAdded: string;
     };
     viewAs: string;
     sorting: "dateAdded" | "name"; // [0] = recentlyadded page, [1] = albums page
@@ -232,8 +316,8 @@ export interface LibraryState {
   getArtistFromID: (id: string) => void;
   newPlaylist: (name: string, tracks: string[]) => void;
   deletePlaylist: (id: string) => void;
-  getPlaylistContinuous: (response: MusicKit.Playlists, transient: boolean | undefined) => Promise<void>,
-  editPlaylistFolder: (id: string, name: string | undefined) => Promise<void>,
+  getPlaylistContinuous: (response: MusicKit.Playlists, transient: boolean | undefined) => Promise<void>;
+  editPlaylistFolder: (id: string, name: string | undefined) => Promise<void>;
   editPlaylist: (id: string, name: string | undefined) => Promise<void>;
   editPlaylistDescription: (id: string, name: string | undefined) => Promise<void>;
   getSocialBadges: (cb: (..._args: any[]) => void) => void;
